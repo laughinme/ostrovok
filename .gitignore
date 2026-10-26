@@ -179,3 +179,26 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+
+# ---------------------------------------------------------------------------
+# Project-specific
+# ---------------------------------------------------------------------------
+
+# Raw chat exports, hackathon video and other private material (local only)
+.private/
+*.mp4
+*.m4a
+*.wav
+
+# Secrets
+.env.*
+!.env.example
+secrets/
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/
+
+# Node
+node_modules/
