@@ -4,6 +4,7 @@ import hashlib
 import json
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit
 
 import httpx
 import pyogrio
@@ -15,6 +16,7 @@ from pipeline.storage import ROOT, USER_AGENT, write_json
 OSM_CACHE = ROOT / ".cache" / "osm"
 SNAPSHOT = "south-fed-district-261026.osm.pbf"
 SOURCE = f"https://download.geofabrik.de/russia/{SNAPSHOT}"
+COAST_SOURCE = "https://download.geofabrik.de/europe/georgia-261026.osm.pbf"
 CONFIG = Path(__file__).with_name("osmconf.ini")
 LAYERS = ("points", "lines", "multipolygons")
 KEYS = (
@@ -38,10 +40,10 @@ def checksum(path: Path) -> str:
         return hashlib.file_digest(stream, "md5").hexdigest()
 
 
-def snapshot() -> Path:
+def snapshot(url: str = SOURCE) -> Path:
     """Download atomically and verify upstream MD5; reject an in-flight/partial download."""
     OSM_CACHE.mkdir(parents=True, exist_ok=True)
-    path = OSM_CACHE / SNAPSHOT
+    path = OSM_CACHE / Path(urlsplit(url).path).name
     stamp = path.with_suffix(".source.json")
     if path.exists() and stamp.exists():
         metadata = json.loads(stamp.read_text())
@@ -50,7 +52,7 @@ def snapshot() -> Path:
     with httpx.Client(
         headers={"User-Agent": USER_AGENT}, follow_redirects=True, timeout=120
     ) as client:
-        response = client.get(SOURCE + ".md5")
+        response = client.get(url + ".md5")
         response.raise_for_status()
         expected = response.text.split()[0]
         if path.exists():
@@ -58,7 +60,7 @@ def snapshot() -> Path:
                 raise ValueError(f"Incomplete OSM snapshot (download still running?): {path}")
         else:
             temporary = path.with_suffix(".download")
-            with client.stream("GET", SOURCE) as response:
+            with client.stream("GET", url) as response:
                 response.raise_for_status()
                 with temporary.open("wb") as stream:
                     for chunk in response.iter_bytes(1024 * 1024):
@@ -66,7 +68,7 @@ def snapshot() -> Path:
             if checksum(temporary) != expected:
                 raise ValueError("Geofabrik snapshot checksum mismatch")
             temporary.replace(path)
-    write_json(stamp, {"url": SOURCE, "md5": expected, "bytes": path.stat().st_size})
+    write_json(stamp, {"url": url, "md5": expected, "bytes": path.stat().st_size})
     return path
 
 
@@ -74,7 +76,7 @@ def regional_cache(source: Path | None = None) -> Path:
     """Cache tagged points/ways/polygons intersecting the region + 40 km for peaks."""
     source = source or snapshot()
     digest = hashlib.sha256(CONFIG.read_bytes() + str(REGION_BOUNDS).encode()).hexdigest()[:12]
-    target = OSM_CACHE / f"region-{digest}.gpkg"
+    target = OSM_CACHE / f"{source.stem}-{digest}.gpkg"
     metadata = target.with_suffix(".json")
     identity = {"source_md5": checksum(source), "config": digest}
     if target.exists() and metadata.exists() and json.loads(metadata.read_text()) == identity:
@@ -124,3 +126,13 @@ def records(cache: Path, layer: str, *, where: str | None = None) -> list[dict[s
             {"osm_id": ref, "tags": json.loads(row.get("all_tags") or "{}"), "geometry": shape}
         )
     return result
+
+
+def regional_records(layer: str, *, where: str | None = None) -> list[dict[str, Any]]:
+    """Merge neighbouring snapshots by native OSM ref; the Russian snapshot wins ties."""
+    result = {}
+    for url in (SOURCE, COAST_SOURCE):
+        cache = regional_cache(snapshot(url))
+        for record in records(cache, layer, where=where):
+            result.setdefault(record["osm_id"], record)
+    return list(result.values())
