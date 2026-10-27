@@ -124,6 +124,31 @@ class Tracer:
         await self._events.publish(run_channel(self.run_id), step_event(self.run_id, step))
 
 
+async def create_run(
+    uow: UnitOfWork,
+    clock: Clock,
+    *,
+    agent: AgentKind,
+    goal: str,
+    planner: Planner,
+    subject: dict[str, Any] | None = None,
+    parent_run_id: UUID | None = None,
+) -> UUID:
+    """A queued run without a job: for the CLI and for agents started inside another run."""
+    run_id = uuid4()
+    uow.agents.add_run(
+        run_id=run_id,
+        agent=agent,
+        goal=goal,
+        planner=planner,
+        subject=subject or {},
+        parent_run_id=parent_run_id,
+        now=clock.now(),
+    )
+    await uow.flush()
+    return run_id
+
+
 async def launch(
     uow: UnitOfWork,
     clock: Clock,
@@ -138,17 +163,15 @@ async def launch(
     parent_run_id: UUID | None = None,
 ) -> UUID:
     """Create a queued run and its job in the caller's transaction (transactional outbox)."""
-    run_id = uuid4()
-    uow.agents.add_run(
-        run_id=run_id,
+    run_id = await create_run(
+        uow,
+        clock,
         agent=agent,
         goal=goal,
         planner=planner,
-        subject=subject or {},
+        subject=subject,
         parent_run_id=parent_run_id,
-        now=clock.now(),
     )
-    await uow.flush()
     await uow.jobs.enqueue(
         NewJob(job, {**payload, "run_id": str(run_id)}, dedupe_key=dedupe_key, run_id=run_id),
         now=clock.now(),
