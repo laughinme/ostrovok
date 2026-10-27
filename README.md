@@ -22,4 +22,9 @@ npm run start  # production server на порту 5175
 и `frontend-2` (React, Vite, React Router; порт 5174). Запускаются так же: `cd archive/<папка>`, `npm ci`, `npm run dev`;
 проверка: `npm run check`, для браузерных тестов `frontend-2` сначала `npx playwright install chromium`.
 
+## Backend
+
+В разработке. Архитектура — [`docs/research/09-backend-architecture.md`](docs/research/09-backend-architecture.md),
+порядок работы сессий, решения и задачи — [`docs/backend/`](docs/backend/README.md).
+
 Исследование, дизайн-система и прототип находятся в `docs/research/`, `DESIGN.md` и `design/prototype/`.
