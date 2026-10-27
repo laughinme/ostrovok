@@ -68,6 +68,8 @@ def positive_number(value: str | None) -> float | None:
 
 def height(tags: dict[str, str]) -> tuple[float, float, str]:
     levels = positive_number(tags.get("building:levels"))
+    if levels is not None and levels.is_integer():
+        levels = int(levels)
     explicit = positive_number(tags.get("height"))
     if explicit is not None:
         return explicit, levels or max(1, round(explicit / 3)), "osm_height"
