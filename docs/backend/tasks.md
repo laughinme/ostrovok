@@ -42,7 +42,8 @@
 Готово, когда: `ruff check`, `mypy`, `pytest tests/unit` зелёные; в дереве нет секретов шаблона и упоминаний S3.
 
 ### B0.2 · PostGIS и GeoAlchemy2
-Статус: в работе · claude-core · 28.10 02:45 МСК
+Статус: done · claude-core · 28.10 03:30 МСК
+Итог: PostGIS в первой миграции, GeoAlchemy2-хелперы и фильтр чужих таблиц (tiger, topology) в autogenerate, `docker-compose.test.yml` на `imresamu/postgis:17-3.5` (D-34), тест `ST_DWithin`, миграции вниз и вверх (коммит de71c57).
 Зависит от: B0.1
 Что: образ PostGIS 17 (точный тег; проверить, есть ли arm64), миграция с `CREATE EXTENSION postgis`,
 GeoAlchemy2 для колонок и autogenerate, тестовая БД в `docker-compose.test.yml` на том же образе.
@@ -60,7 +61,8 @@ healthcheck, `depends_on`, наружу только `8080:8080`. Корнево
 записано в progress.md.
 
 ### B0.4 · Очередь задач с арендой вместо outbox
-Статус: todo
+Статус: done · claude-core · 28.10 03:30 МСК
+Итог: `jobs` с арендой и частичным уникальным `dedupe_key`, `JobRunner` (продление аренды, повторы, dead), воркер со слотами и периодическими задачами; тесты на дубли, отложенные задачи, перехват аренды, повторы (коммит 5d7f2e7).
 Зависит от: B0.1, B0.2
 Что: таблица `jobs` (kind, payload, status, attempts, available_at, lease_until, dedupe_key, run_id);
 постановка в той же транзакции через UoW; захват `FOR UPDATE SKIP LOCKED` с арендой; реестр обработчиков;
@@ -69,7 +71,7 @@ healthcheck, `depends_on`, наружу только `8080:8080`. Корнево
 аренды; отложенную задачу не берут раньше времени.
 
 ### B0.5 · Стык: доменные типы и порты
-Статус: todo
+Статус: в работе · claude-core · 28.10 03:30 МСК
 Зависит от: B0.1
 Что: `Scope` (канонический ключ, разворот на сетку, сжатие), `Facade` (8 румбов), `Observation`, `Fact`,
 подписи уверенности; модели рецептов (Pydantic, размеченное объединение методов из 09 §5.2); протокол
