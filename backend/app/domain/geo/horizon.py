@@ -46,6 +46,12 @@ def batch_horizon(
     angles = elevation_angle(heights, scene.distances_m, eyes[:, None, None])
     land = np.where(scene.sea[None], -np.inf, angles)
     roof_grid = _roof_grid(scene, eyes, roofs, angles.shape)
+    return _summarize(scene, angles, land, roof_grid)
+
+
+def _summarize(
+    scene: Scene, angles: FloatArray, land: FloatArray, roof_grid: FloatArray
+) -> Horizon:
     obstruction = np.maximum(
         np.maximum.accumulate(land, axis=2), np.maximum.accumulate(roof_grid, axis=2)
     )

@@ -13,6 +13,7 @@ def test_probability_extremes_reproducibility_and_uncertain_boundary() -> None:
     result = monte_carlo([scene], 30, runs=64)
     assert 0 < result.probability < 1
     np.testing.assert_array_equal(result.fractions, monte_carlo([scene], 30, runs=64).fractions)
+    assert monte_carlo([scene], 32, runs=64).probability >= result.probability
 
 
 def test_window_geometry_is_sampled_and_never_reused_at_wrong_origin() -> None:
