@@ -1,19 +1,27 @@
 'use client';
 
+import { useQuery } from '@tanstack/react-query';
+import { QueryState } from '@/shared/ui/query-state';
+
 import { useState } from 'react';
 import Link from 'next/link';
 import { useParams, useSearchParams, useRouter } from 'next/navigation';
 import { Header } from '@/widgets/site-chrome';
 import { Demo, Icon, Mark } from '@/shared/ui/primitives';
 import { Panorama, Photo } from '@/shared/ui/visuals';
-import { byId } from '@/entities/hotel/api/demo';
+import { hotelQueries, type Hotel } from '@/entities/hotel';
 import { FACADE_NAME } from '@/shared/lib/building';
 import { rub } from '@/shared/lib/format';
 
 const EXTRA = ['ранний заезд', 'место для собаки 30 кг', 'кроватка для ребёнка'];
 
 export default function BookPage() {
-  const h = byId(useParams<{ id: string }>()?.id);
+  const id = useParams<{ id: string }>()?.id ?? '';
+  const query = useQuery(hotelQueries.detail(id));
+  return <QueryState query={query}>{(hotel) => <BookContent key={hotel.id} h={hotel} />}</QueryState>;
+}
+
+function BookContent({ h }: { h: Hotel }) {
   const sp = useSearchParams();
   const nav = useRouter();
   const room = h.rooms.find((r) => r.id === sp?.get('room')) ?? h.rooms.find((r) => r.recommended) ?? h.rooms[0];

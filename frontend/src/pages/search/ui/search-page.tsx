@@ -11,7 +11,8 @@ import { Demo, Icon, Mark, SrcTag } from '@/shared/ui/primitives';
 import { Photo } from '@/shared/ui/visuals';
 import { WishBox } from '@/features/search-hotels';
 import { CHARACTERISTICS, DEFAULT_INTENT, EXAMPLES, MOODS, parseIntent } from '@/entities/intent';
-import { HOTELS } from '@/entities/hotel/api/demo';
+import { hotelQueries } from '@/entities/hotel';
+import { useQuery } from '@tanstack/react-query';
 import { rub } from '@/shared/lib/format';
 import { setVariantsEnabled, useVariantsEnabled } from '@/features/landing-variants';
 import { rank } from '@/features/search-hotels';
@@ -28,6 +29,7 @@ const AGENT_SCRIPTS: Record<string, { run: string; done: string; steps: [string,
 
 export default function SearchPage() {
   const pathname = usePathname() ?? '/';
+  const hotelsQuery = useQuery(hotelQueries.all());
   const nav = useRouter();
   const { query, setQuery, chips, setChips, known, learn } = useSearchState();
   const [phase, setPhase] = useState<Phase>(pathname === '/' ? 'landing' : 'results');
@@ -49,8 +51,9 @@ export default function SearchPage() {
     if (pathname === '/search' && !chips.length) setChips(DEFAULT_INTENT.map((c) => ({ ...c })));
   }, [pathname]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const ranked = useMemo(() => rank(HOTELS, chips, known), [chips, known]);
+  const ranked = useMemo(() => rank(hotelsQuery.data ?? [], chips, known), [hotelsQuery.data, chips, known]);
   const app = phase !== 'landing' && phase !== 'thinking';
+  const loading = phase === 'loading' || hotelsQuery.isPending;
 
   function start(placeholder: string, preset?: typeof chips, text?: string) {
     // плейсхолдер печатается по буквам — берём пример целиком
@@ -150,7 +153,7 @@ export default function SearchPage() {
             <section className="list" aria-live="polite">
               <div className="list-head">
                 <h2>{query ? `«${query.length > 60 ? query.slice(0, 58) + '…' : query}»` : 'Подходят'}</h2>
-                <span className="cnt num">{phase === 'loading' ? 'ищем среди 214 отелей…' : `${ranked.length} из 214 отелей Большого Сочи`}</span>
+                <span className="cnt num">{loading ? 'ищем среди 214 отелей…' : `${ranked.length} из 214 отелей Большого Сочи`}</span>
                 <span className="sort">по совпадению</span>
               </div>
               {agent && script && (
@@ -162,14 +165,14 @@ export default function SearchPage() {
                   {agent.open && <ol>{script.steps.map(([t, s]) => <li key={t}><span className="tool">{t}</span><span>{s}</span></li>)}</ol>}
                 </div>
               )}
-              {phase === 'loading'
+              {hotelsQuery.isError ? <div className="card-w" role="alert"><p>Не удалось загрузить отели.</p><button className="btn btn-primary" onClick={() => void hotelsQuery.refetch()}>Повторить</button></div> : loading
                 ? [0, 1, 2].map((i) => <div key={i} className="skel" />)
                 : ranked.map((m, i) => <HotelCard key={m.hotel.id} m={m} chips={chips} known={known} index={i} flash={flash} hl={hover === m.hotel.id} onHover={setHover} />)}
             </section>
             <aside className="map-col">
               <MapView className="results-map" hover={hover} onHover={setHover} onPick={(id) => nav.push(`/hotels/${id}`)}
-                pins={phase === 'loading' ? [] : ranked.map((m, i) => ({ id: m.hotel.id, lngLat: m.hotel.lngLat, label: `${m.score}%`, sub: rub(m.hotel.priceFrom), top: i === 0 }))} />
-              {(() => { const m = ranked.find((x) => x.hotel.id === hover) ?? ranked[0]; return phase !== 'loading' && m && (
+                pins={loading ? [] : ranked.map((m, i) => ({ id: m.hotel.id, lngLat: m.hotel.lngLat, label: `${m.score}%`, sub: rub(m.hotel.priceFrom), top: i === 0 }))} />
+              {(() => { const m = ranked.find((x) => x.hotel.id === hover) ?? ranked[0]; return !loading && m && (
                 <Link className="map-card" href={`/hotels/${m.hotel.id}`}>
                   <Photo k={m.hotel.photos[0]} alt="" credit={false} />
                   <span><b>{m.hotel.name}</b><small>{m.hotel.district} · {m.score}% совпадение</small><small className="num">{rub(m.hotel.priceFrom)} за ночь</small></span>

@@ -5,7 +5,9 @@ import { useState, type FormEvent } from 'react';
 import { Header } from '@/widgets/site-chrome';
 import { Conf, Demo, Icon, Mark, SrcTag, Toast, useToast } from '@/shared/ui/primitives';
 import { Building, Panorama, Photo } from '@/shared/ui/visuals';
-import { byId } from '@/entities/hotel/api/demo';
+import { hotelQueries, type Hotel } from '@/entities/hotel';
+import { useQuery } from '@tanstack/react-query';
+import { QueryState } from '@/shared/ui/query-state';
 import type { Facade } from '@/shared/model';
 import { FACADE_NAME } from '@/shared/lib/building';
 import { verdict } from '@/features/search-hotels';
@@ -20,7 +22,11 @@ const NAV = [['questions', 'Вопросы', 3], ['conflict', 'Расхожде�
 type Msg = { who: 'bot' | 'me' | 'parsed'; text: string };
 
 export default function PartnerPage() {
-  const h = byId('mayak');
+  const query = useQuery(hotelQueries.detail('mayak'));
+  return <QueryState query={query}>{(hotel) => <PartnerContent h={hotel} />}</QueryState>;
+}
+
+function PartnerContent({ h }: { h: Hotel }) {
   const [toast, show] = useToast();
   const [done, setDone] = useState<Set<string>>(new Set());
   const [conflictFixed, setConflictFixed] = useState(false);

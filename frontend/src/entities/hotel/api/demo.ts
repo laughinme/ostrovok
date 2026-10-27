@@ -147,4 +147,3 @@ export const HOTELS: Hotel[] = [
   },
 ];
 
-export const byId = (id: string | undefined) => HOTELS.find((h) => h.id === id) ?? HOTELS[0];

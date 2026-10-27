@@ -1,5 +1,8 @@
 'use client';
 
+import { useQuery } from '@tanstack/react-query';
+import { QueryState } from '@/shared/ui/query-state';
+
 import { Drawer } from '@/shared/ui/drawer';
 
 import { motion } from 'motion/react';
@@ -12,7 +15,7 @@ import { Lightbox, WhyPanel, type GalleryItem } from '@/widgets/hotel-evidence';
 import { Conf, Demo, Icon, Mark, Ring, SrcTag, Stars, Toast, useToast } from '@/shared/ui/primitives';
 import { Building, Panorama, Photo } from '@/shared/ui/visuals';
 import { CHARACTERISTICS, DEFAULT_INTENT } from '@/entities/intent';
-import { byId } from '@/entities/hotel/api/demo';
+import { hotelQueries, type Hotel } from '@/entities/hotel';
 import type { Facade } from '@/shared/model';
 import type { Fact } from '@/entities/hotel';
 import { FACADE_NAME } from '@/shared/lib/building';
@@ -30,7 +33,12 @@ const NOISE = {
 const DAYS = [['пн', 10, 17, '16:58', 18, 10], ['вт', 11, 16, '16:57', 18, 25], ['ср', 12, 15, '16:56', 17, 40], ['чт', 13, 16, '16:55', 17, 20], ['пт', 14, 17, '16:54', 17, 10], ['сб', 15, 16, '16:53', 17, 15]] as const;
 
 export default function HotelPage() {
-  const h = byId(useParams<{ id: string }>()?.id);
+  const id = useParams<{ id: string }>()?.id ?? '';
+  const query = useQuery(hotelQueries.detail(id));
+  return <QueryState query={query}>{(hotel) => <HotelContent key={hotel.id} h={hotel} />}</QueryState>;
+}
+
+function HotelContent({ h }: { h: Hotel }) {
   const nav = useRouter();
   const { chips: storeChips, known } = useSearchState();
   const { favorites, toggleFavorite, compare, toggleCompare } = useHotelSelection();
