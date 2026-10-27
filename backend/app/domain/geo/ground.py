@@ -2,7 +2,7 @@ from collections.abc import Sequence
 from dataclasses import replace
 
 import numpy as np
-from shapely import STRtree, points
+from shapely import STRtree, get_coordinates, line_interpolate_point, points
 
 from app.domain.geo.projection import FloatArray
 from app.domain.geo.scene import Building
@@ -10,14 +10,13 @@ from app.domain.geo.scene import Building
 
 def ground_probe_points(buildings: Sequence[Building]) -> FloatArray:
     """32 probes on a 35 m buffered perimeter, for a low-quantile DSM ground proxy."""
-    result = []
-    for building in buildings:
-        ring = building.footprint.buffer(35).boundary
-        probes = [
-            ring.interpolate(f, normalized=True) for f in np.linspace(0, 1, 32, endpoint=False)
-        ]
-        result.append([(point.x, point.y) for point in probes])
-    return np.asarray(result, dtype=np.float64).reshape(len(buildings), 32, 2)
+    rings = np.array(
+        [building.footprint.buffer(35).boundary for building in buildings], dtype=object
+    )
+    probes = line_interpolate_point(
+        rings[:, None], np.linspace(0, 1, 32, endpoint=False)[None], normalized=True
+    )
+    return np.asarray(get_coordinates(probes), dtype=np.float64).reshape(len(buildings), 32, 2)
 
 
 def estimate_bases(

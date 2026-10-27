@@ -1,7 +1,7 @@
 from collections.abc import Sequence
 
 import numpy as np
-from shapely import contains, points
+from shapely import contains_xy
 from shapely.geometry.base import BaseGeometry
 
 from app.domain.geo.earth import ray_coordinates
@@ -49,7 +49,7 @@ class ViewSceneBuilder:
         terrain = self._sample(xy)
         near = self._distances <= _DSM_CORRECTION_RANGE_M
         terrain[:, near] = correct_dsm(xy[:, near], terrain[:, near], buildings)
-        water = np.asarray(contains(sea, points(xy)), dtype=np.bool_)
+        water = np.asarray(contains_xy(sea, xy[..., 0], xy[..., 1]), dtype=np.bool_)
         hits = building_intersections(
             origin_xy, azimuths, buildings, max_m=min(2000, self._distances[-1])
         )
