@@ -3,9 +3,11 @@ import logging
 import os
 import signal
 import socket
+import tempfile
 from contextlib import suppress
 from dataclasses import dataclass
 from datetime import datetime, timedelta
+from pathlib import Path
 
 from app.core.config import Settings, get_settings
 from app.core.logging import configure_logging
@@ -17,6 +19,8 @@ from app.service.ports import Clock, SystemClock
 logger = logging.getLogger("app.worker")
 
 _KEEP_DEAD_SESSIONS = timedelta(days=7)
+# The Compose healthcheck reads this file's age: a stuck event loop stops touching it.
+HEARTBEAT = Path(tempfile.gettempdir()) / "okno-worker-alive"
 
 
 @dataclass(frozen=True, slots=True)
@@ -54,6 +58,7 @@ class Worker:
 
     async def run(self, stop: asyncio.Event) -> None:
         while not stop.is_set():
+            HEARTBEAT.touch()
             claimed = 0
             try:
                 await self._tick_periodic()

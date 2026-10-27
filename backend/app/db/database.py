@@ -25,6 +25,14 @@ class Database:
         )
         self._sessions = async_sessionmaker(self.engine, expire_on_commit=False, autoflush=False)
 
+    @classmethod
+    def for_url(cls, database_url: str) -> "Database":
+        """For one-shot scripts (init, seed) that have only a database URL."""
+        db = cls.__new__(cls)
+        db.engine = create_async_engine(database_url, pool_pre_ping=True)
+        db._sessions = async_sessionmaker(db.engine, expire_on_commit=False, autoflush=False)
+        return db
+
     @asynccontextmanager
     async def unit_of_work(self) -> AsyncIterator[UnitOfWork]:
         """Commit on success, roll back on any error (unless the error says to keep changes)."""
