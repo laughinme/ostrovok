@@ -4,6 +4,7 @@ from enum import StrEnum
 from typing import Any
 
 from app.domain.knowledge.sources import Authority
+from app.domain.knowledge.statements import StatementTemplate
 from app.domain.knowledge.values import ValueType
 
 
@@ -56,13 +57,14 @@ class Characteristic:
     recipe: Mapping[str, Any]
     ttl_days: int
     authority: Authority
-    statement: str
+    statement: StatementTemplate
     version: int = 1
     status: CharacteristicStatus = CharacteristicStatus.PUBLISHED
     synonyms: tuple[str, ...] = ()
     question: str | None = None
     unit: str | None = None
     learned_from: str | None = None
+    caveats: tuple[str, ...] = ()
     extra: Mapping[str, Any] = field(default_factory=dict)
 
     @property

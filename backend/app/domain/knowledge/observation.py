@@ -64,3 +64,23 @@ class Observation:
     def source_key(self) -> tuple[SourceKind, str, str]:
         """Same source key + same scope → the newer observation supersedes the older one."""
         return self.source, self.source_ref.split("@")[0], self.scope.key
+
+
+def evidence_to_json(evidence: Evidence) -> dict[str, Any]:
+    return {
+        "kind": evidence.kind.value,
+        "summary": evidence.summary,
+        "params": dict(evidence.params),
+        "osmRefs": list(evidence.osm_refs),
+        "attribution": evidence.attribution,
+    }
+
+
+def evidence_from_json(data: Mapping[str, Any]) -> Evidence:
+    return Evidence(
+        kind=EvidenceKind(data["kind"]),
+        summary=data["summary"],
+        attribution=data.get("attribution", ""),
+        params=data.get("params", {}),
+        osm_refs=tuple(data.get("osmRefs", ())),
+    )
