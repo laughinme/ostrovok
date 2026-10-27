@@ -71,7 +71,8 @@ healthcheck, `depends_on`, наружу только `8080:8080`. Корнево
 аренды; отложенную задачу не берут раньше времени.
 
 ### B0.5 · Стык: доменные типы и порты
-Статус: в работе · claude-core · 28.10 03:30 МСК
+Статус: done · claude-core · 28.10 04:05 МСК
+Итог: `app/domain/knowledge/*` (Facade, Scope, Grid, compress, уверенность, Observation, Fact, Characteristic), `app/domain/geo/types.py`, рецепты `app/service/recipes/models.py`, инструмент `app/service/tools/base.py`, порты `app/service/ports.py`, шов хранилища `app/service/knowledge/store.py`; тесты Scope с hypothesis (коммит ab44c8b).
 Зависит от: B0.1
 Что: `Scope` (канонический ключ, разворот на сетку, сжатие), `Facade` (8 румбов), `Observation`, `Fact`,
 подписи уверенности; модели рецептов (Pydantic, размеченное объединение методов из 09 §5.2); протокол
