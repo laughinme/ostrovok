@@ -1,9 +1,11 @@
 from collections.abc import Sequence
 from dataclasses import dataclass
+from typing import Literal
 
 import numpy as np
 
 from app.domain.geo.horizon import batch_horizon
+from app.domain.geo.peaks import mountain_visibility
 from app.domain.geo.projection import FloatArray
 from app.domain.geo.scene import Building, IntArray, Scene
 
@@ -35,8 +37,9 @@ def monte_carlo(
     runs: int = 16,
     min_fraction: float = 0.01,
     seed: int = 0,
+    target: Literal["sea", "mountains"] = "sea",
 ) -> VisibilityProbability:
-    """P(sea fraction ≥ threshold), sampling prepared window positions and uncertain heights."""
+    """P(target fraction ≥ threshold), sampling prepared windows and uncertain heights."""
     if not scenes or runs < 1 or not 0 < min_fraction <= 1:
         raise ValueError("Expected prepared windows, positive runs and threshold within (0,1]")
     refs = tuple(b.ref for b in scenes[0].buildings)
@@ -59,5 +62,13 @@ def monte_carlo(
             roofs_m=roofs,
             terrain_bias_m=terrain_bias[selected],
         )
-        fractions[selected] = np.mean(profile.sea_visible, axis=1)
+        visible = profile.sea_visible
+        if target == "mountains":
+            visible = mountain_visibility(
+                scene,
+                eye_m + terrain_bias[selected],
+                profile,
+                terrain_bias_m=terrain_bias[selected],
+            )
+        fractions[selected] = np.mean(visible, axis=1)
     return VisibilityProbability(float(np.mean(fractions >= min_fraction)), fractions, windows)
