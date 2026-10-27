@@ -12,8 +12,8 @@
 
 | Файл | Кто | С какого времени |
 |---|---|---|
-| `backend/pyproject.toml`, `backend/uv.lock` | — | |
-| `backend/migrations/` | — | |
+| `backend/pyproject.toml`, `backend/uv.lock` | claude-core | 28.10 02:15 |
+| `backend/migrations/` | claude-core | 28.10 02:15 |
 | `docker-compose.yml`, `compose.dev.yml`, `.env.example`, `Makefile` | — | |
 | `frontend/` | владелец фронта | постоянно |
 
@@ -25,14 +25,14 @@
 - O4 · Прогнать задания R1–R8 в ChatGPT или Codex и положить ответы по путям из `research-tasks.md`.
   Когда: R5, R6 — сейчас; R1, R2, R4 — до этапа 3; R3, R8 — до этапа 4; R7 — после B1.6. Статус: todo
 - O5 · Дать «да» на перенос истории в репозиторий сдачи и тег. Когда: этап 6. Статус: todo
-- O6 · Решить, кто делает фронтовые задачи F1–F8. Когда: сейчас. Статус: todo
+- O6 · Решить, кто делает фронтовые задачи F1–F8. Когда: сейчас. Статус: done · F1–F8 делает фронтендер команды (28.10)
 
 ---
 
 ## Этап 0. Каркас и стык
 
 ### B0.1 · Каркас бэкенда из шаблона
-Статус: todo
+Статус: в работе · claude-core · 28.10 02:15 МСК
 Зависит от: —
 Что: перенести `backend/` из `~/Code/python/Monolith-backend-template` без `.git`, `.env`, `secrets/`,
 кэшей, `fly.toml`. Убрать S3 (RustFS, `infra/storage.py`, аватары, presign), админку пользователей и бота.
