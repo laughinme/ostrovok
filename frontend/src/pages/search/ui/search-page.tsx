@@ -243,8 +243,8 @@ function useVariant(): [Variant, (v: Variant) => void, boolean] {
   // без включённого режима всегда салатовый C
   const v: Variant = !enabled ? 'lime' : fromUrl && VARIANTS.some(([k]) => k === fromUrl) ? fromUrl : stored && VARIANTS.some(([k]) => k === stored) ? stored : 'lime';
   // вариант из ссылки запоминаем, чтобы выдача после перехода на /search была в том же стиле
-  useEffect(() => { if (enabled && fromUrl && fromUrl !== stored) { try { localStorage.setItem('okno-variant', v); } catch { /* приватный режим */ } } }, [enabled, fromUrl, stored, v]);
-  return [v, (n) => { try { localStorage.setItem('okno-variant', n); } catch { /* приватный режим */ } const params = new URLSearchParams(sp?.toString()); params.set('v', n); router.replace(`${pathname}?${params}`, { scroll: false }); }, enabled];
+  useEffect(() => { if (enabled && fromUrl && fromUrl !== stored) { try { localStorage.setItem('okno-variant', v); setStored(v); } catch { /* приватный режим */ } } }, [enabled, fromUrl, stored, v]);
+  return [v, (n) => { setStored(n); try { localStorage.setItem('okno-variant', n); } catch { /* приватный режим */ } const params = new URLSearchParams(sp?.toString()); params.set('v', n); router.replace(`${pathname}?${params}`, { scroll: false }); }, enabled];
 }
 
 function VariantSwitch({ value, onChange }: { value: Variant; onChange(v: Variant): void }) {

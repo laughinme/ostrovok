@@ -8,8 +8,10 @@
     "build": "next build",
     "start": "next start --port 5175",
     "typecheck": "next typegen && tsc --noEmit",
-    "lint": "oxlint",
-    "check": "npm run typecheck && npm run lint && npm run build"
+    "lint": "oxlint && npm run lint:architecture",
+    "check": "npm run typecheck && npm run lint && npm run build",
+    "lint:architecture": "node scripts/check-architecture.mjs",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.105.0",
