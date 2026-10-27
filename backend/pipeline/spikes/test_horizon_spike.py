@@ -96,9 +96,9 @@ def test_coastline_direction_selects_only_water_side(monkeypatch):
         "elements": [
             {
                 "geometry": [
-                    {"lon": 39.8, "lat": 42.8},
-                    {"lon": 39.8, "lat": 43.5},
                     {"lon": 39.8, "lat": 44.4},
+                    {"lon": 39.8, "lat": 43.5},
+                    {"lon": 39.8, "lat": 42.8},
                 ]
             }
         ]
@@ -106,5 +106,12 @@ def test_coastline_direction_selects_only_water_side(monkeypatch):
     monkeypatch.setattr(horizon_data, "osm_query", lambda *_: coastline)
     projection, _ = horizon_data.local_projection(39.8, 43.6)
     water = horizon_data.sea_polygon(projection)
-    assert water.contains(Point(projection.transform(40.0, 43.6)))
-    assert not water.contains(Point(projection.transform(39.6, 43.6)))
+    assert water.contains(Point(projection.transform(39.6, 43.6)))
+    assert not water.contains(Point(projection.transform(40.0, 43.6)))
+
+
+def test_short_seaward_end_of_long_hotel_is_not_discarded():
+    polygon = box(-8.5, -75, 8.5, 75)
+    facades = facade_windows(polygon, 0)
+    assert facades[0][2] == 0
+    assert facades[1][2] == 180
