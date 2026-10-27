@@ -4,14 +4,15 @@
 
 ## Frontend
 
-Основной фронтенд — [`frontend`](frontend/README.md): «О!кно», React, Vite, React Router, Motion, MapLibre, по `DESIGN.md`
-и прототипу `design/prototype/`. Работает на демо-данных, backend и ключи API не нужны. Нужны Node.js 22.12+ и npm.
+Основной фронтенд — [`frontend`](frontend/README.md): «О!кно», Next.js App Router, React, TypeScript, TanStack Query, Motion, MapLibre, по `DESIGN.md`
+и прототипу `design/prototype/`. Архитектура FSD: [`frontend/ARCHITECTURE.md`](frontend/ARCHITECTURE.md). Работает на демо-данных, backend и ключи API не нужны. Нужны Node.js 22.12+ и npm.
 
 ```sh
 cd frontend
 npm ci
 npm run dev    # http://127.0.0.1:5175
-npm run build  # dist/
+npm run check  # типы, линтер, архитектура FSD, сборка
+npm run start  # production server на порту 5175
 ```
 
 Пуш в `main` с изменениями в `frontend/` автоматически деплоится на Vercel (https://ostrovok-okno.vercel.app/)
