@@ -53,6 +53,12 @@ def test_invalid_footprint_and_floor_count() -> None:
         window_points(extract_facades(box(0, 0, 10, 10)), 0, 0)
 
 
-def test_merge_almost_collinear_edges() -> None:
-    walls = extract_facades(Polygon([(0, 0), (5, 0.01), (10, 0), (10, 10), (0, 10)]))
+@pytest.mark.parametrize("bend", [-0.1, 0.1])
+def test_merge_almost_collinear_edges_preserves_window_geometry(bend: float) -> None:
+    footprint = Polygon([(0, 0), (5, bend), (10, 0), (10, 10), (0, 10)])
+    walls = extract_facades(footprint)
     assert len(walls) == 4
+    assert all(
+        footprint.boundary.distance(Point(window.xy)) < 1e-8
+        for window in window_points(walls, 1, 0)
+    )
