@@ -9,7 +9,7 @@
 Требуется Node.js 22.12+ и npm. Проверено на Node.js 25.6.1.
 
 ```sh
-cd frontend-2
+cd archive/frontend-2
 npm ci
 npm run dev
 ```
