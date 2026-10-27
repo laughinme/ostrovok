@@ -13,6 +13,7 @@ from app.core.config import Settings, get_settings
 from app.core.logging import configure_logging
 from app.core.security.tokens import TokenCodec
 from app.db.database import Database
+from app.infra.events import RedisEventBus
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -27,6 +28,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         app.state.db = Database(settings)
         app.state.redis = Redis.from_url(settings.redis_url, decode_responses=True)
+        app.state.events = RedisEventBus(app.state.redis)
         try:
             yield
         finally:
