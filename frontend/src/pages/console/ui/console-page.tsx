@@ -1,12 +1,15 @@
 'use client';
 
+import { useQuery } from '@tanstack/react-query';
+import { QueryState } from '@/shared/ui/query-state';
+
 import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { Header } from '@/widgets/site-chrome';
 import { Demo, Mark, Toast, useToast } from '@/shared/ui/primitives';
 import { MapView } from '@/shared/ui/map';
-import { HOTELS } from '@/entities/hotel/api/demo';
+import { hotelQueries, type Hotel } from '@/entities/hotel';
 
 type Reg = { n: string; sub: string; kind: 'calc' | 'open' | 'hotel'; kl: string; cov: number; c: string; r: string; fresh?: boolean };
 const REG: Reg[] = [
@@ -54,6 +57,11 @@ const RECIPE = [['osm_query', 'пешеходные пути без ступен
 const NAV = [['registry', 'Характеристики'], ['new', 'Новая характеристика'], ['agents', 'Работа агентов'], ['conflicts', 'Конфликты'], ['changes', 'Изменения мира'], ['quality', 'Качество']];
 
 export default function ConsolePage() {
+  const query = useQuery(hotelQueries.all());
+  return <QueryState query={query}>{(hotels) => <ConsoleContent hotels={hotels} />}</QueryState>;
+}
+
+function ConsoleContent({ hotels: catalog }: { hotels: Hotel[] }) {
   const [toast, show] = useToast();
   const [reg, setReg] = useState(REG);
   const [desc, setDesc] = useState('Можно дойти с коляской до моря без ступеней');
@@ -104,7 +112,7 @@ export default function ConsolePage() {
         <main className="page console">
           <div className="page-h"><h1>Знания об отелях Сочи</h1><p>Что умеем узнавать, откуда, насколько уверены и когда перепроверим</p></div>
           <div className="cov-map card-w">
-            <MapView pins={HOTELS.map((h) => ({ id: h.id, lngLat: h.lngLat, label: h.name }))} className="cmap" />
+            <MapView pins={catalog.map((h) => ({ id: h.id, lngLat: h.lngLat, label: h.name }))} className="cmap" />
             <div className="cov-legend"><b className="num">214</b><span>отелей посчитано по фасадам и этажам</span><b className="num">92%</b><span>фактов без вопросов отелю</span></div>
           </div>
 

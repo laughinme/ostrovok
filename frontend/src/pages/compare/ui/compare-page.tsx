@@ -1,12 +1,15 @@
 'use client';
 
+import { useQuery } from '@tanstack/react-query';
+import { QueryState } from '@/shared/ui/query-state';
+
 import { motion } from 'motion/react';
 import { useState } from 'react';
 import Link from 'next/link';
 import { Footer, Header } from '@/widgets/site-chrome';
 import { Demo, Mark, Ring } from '@/shared/ui/primitives';
 import { Photo } from '@/shared/ui/visuals';
-import { HOTELS } from '@/entities/hotel/api/demo';
+import { hotelQueries, type Hotel } from '@/entities/hotel';
 import { rub } from '@/shared/lib/format';
 import { verdict } from '@/features/search-hotels';
 import { useHotelSelection } from '@/features/select-hotels';
@@ -17,13 +20,18 @@ const CRIT = [
 ];
 
 export default function ComparePage() {
+  const query = useQuery(hotelQueries.all());
+  return <QueryState query={query}>{(hotels) => <CompareContent hotels={hotels} />}</QueryState>;
+}
+
+function CompareContent({ hotels: catalog }: { hotels: Hotel[] }) {
   const { compare, toggleCompare } = useHotelSelection();
   const [on, setOn] = useState(new Set(['sunset', 'quiet', 'beach']));
-  const hotels = (compare.length ? compare : ['mayak', 'kiparis', 'lazur']).map((id) => HOTELS.find((h) => h.id === id)!).filter(Boolean);
+  const hotels = (compare.length ? compare : ['mayak', 'kiparis', 'lazur']).map((id) => catalog.find((h) => h.id === id)!).filter(Boolean);
   const crit = CRIT.filter((c) => on.has(c.k));
   const scored = hotels.map((h) => ({ h, s: crit.length ? Math.round(100 * crit.reduce((a, c) => a + h.wish[c.k][0], 0) / crit.length) : 0 })).sort((a, b) => b.s - a.s);
   const best = scored[0];
-  const winner = Object.fromEntries(crit.map((c) => [c.k, hotels.reduce((a, h) => (h.wish[c.k][0] > a.wish[c.k][0] ? h : a)).id]));
+  const winner = Object.fromEntries(crit.map((c) => [c.k, hotels.reduce<Hotel | undefined>((a, h) => !a || h.wish[c.k][0] > a.wish[c.k][0] ? h : a, undefined)?.id]));
 
   return (
     <div className="canvas-page">

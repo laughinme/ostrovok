@@ -1,11 +1,14 @@
 'use client';
 
+import { useQuery } from '@tanstack/react-query';
+import { QueryState } from '@/shared/ui/query-state';
+
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { Footer, Header } from '@/widgets/site-chrome';
 import { Demo, Icon } from '@/shared/ui/primitives';
 import { Panorama, Photo } from '@/shared/ui/visuals';
-import { byId } from '@/entities/hotel/api/demo';
+import { hotelQueries, type Hotel } from '@/entities/hotel';
 
 const PROMISES = [
   ['Закат над морем из окна', 'обещали: ЮЗ-сторона, этаж ≥ 4'],
@@ -14,7 +17,12 @@ const PROMISES = [
 ];
 
 export default function TripPage() {
-  const h = byId(useParams<{ id: string }>()?.id);
+  const id = useParams<{ id: string }>()?.id ?? '';
+  const query = useQuery(hotelQueries.detail(id));
+  return <QueryState query={query}>{(hotel) => <TripContent key={hotel.id} h={hotel} />}</QueryState>;
+}
+
+function TripContent({ h }: { h: Hotel }) {
   const [confirmed, setConfirmed] = useState(false);
   const [post, setPost] = useState(false);
   const [answers, setAnswers] = useState<Record<number, string>>({});
