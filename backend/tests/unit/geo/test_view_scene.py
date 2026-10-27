@@ -19,6 +19,7 @@ class FlatTerrain:
 
 def test_prepare_view_with_injected_terrain_and_building_base_estimation() -> None:
     builder = ViewSceneBuilder(FlatTerrain(), LocalProjection(LonLat(39.7, 43.6)), max_km=1)
+    assert builder.buildings_with_bases([]) == ()
     buildings = builder.buildings_with_bases([Building("way/1", box(-10, -10, 10, 0), 999, 30)])
     assert buildings[0].base_elevation_m == 0
     scene = builder.prepare((0, 0), 0, buildings, box(-2000, 100, 2000, 2000))
