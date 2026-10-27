@@ -1,16 +1,14 @@
-"""Fetch OSM in small grid cells and clip by union of metric hotel buffers."""
+"""Export contracted WGS84 CSV files from the regional Geofabrik cache."""
 
 import json
-import math
 from typing import Any
 
-from shapely import Point, box
+from shapely import Point, box, make_valid
 from shapely.ops import unary_union
 
-from pipeline import sea
-from pipeline.catalog import select_hotels
-from pipeline.geography import REGION_BOUNDS, geometry, height, identifier, metric, wgs84
-from pipeline.storage import CACHE, MIRROR, REGION, overpass, read_csv, write_csv
+from pipeline import pbf, sea
+from pipeline.geography import REGION_BOUNDS, height, metric
+from pipeline.storage import REGION, read_csv, write_csv
 
 
 def hotel_buffers(radius: float) -> Any:
@@ -20,19 +18,6 @@ def hotel_buffers(radius: float) -> Any:
             for h in read_csv("hotels.csv.gz")
         ]
     )
-
-
-def tiles(area: Any, step: float = 0.04) -> list[tuple[float, float, float, float]]:
-    west, south, east, north = wgs84(area).bounds
-    result = []
-    for x in range(math.floor(west / step), math.ceil(east / step)):
-        for y in range(math.floor(south / step), math.ceil(north / step)):
-            bounds = tuple(
-                round(v, 6) for v in (x * step, y * step, (x + 1) * step, (y + 1) * step)
-            )
-            if metric(box(*bounds)).intersects(area):
-                result.append(bounds)
-    return result
 
 
 def kind(tags: dict[str, str]) -> str | None:
@@ -58,37 +43,23 @@ def kind(tags: dict[str, str]) -> str | None:
     return next((name for matches, name in rules if matches), None)
 
 
-def export(elements: list[dict[str, Any]]) -> None:
+def export(records: list[dict[str, Any]]) -> None:
     zones = {radius: hotel_buffers(radius) for radius in (1500, 2000, 2500)}
-    member_ids = {
-        m["ref"]
-        for e in elements
-        if e["type"] == "relation" and e.get("tags", {}).get("building")
-        for m in e.get("members", [])
-        if m["type"] == "way"
-    }
+    region = box(*REGION_BOUNDS)
     buildings, features = [], []
-    for element in sorted(elements, key=identifier):
-        tags = element.get("tags", {})
-        is_building = tags.get("building") not in (None, "no")
-        is_area = (
-            is_building
-            or any(key in tags for key in ("landuse", "leisure", "amenity", "shop"))
-            or tags.get("natural") == "beach"
-        )
-        shape = geometry(element, area=is_area)
-        if shape.is_empty:
-            continue
+    for record in sorted(records, key=lambda row: row["osm_id"]):
+        tags = record["tags"]
+        shape = make_valid(record["geometry"])
         projected = metric(shape)
         if (
-            is_building
+            tags.get("building") not in (None, "no")
             and shape.geom_type in ("Polygon", "MultiPolygon")
             and projected.intersects(zones[2000])
-        ) and not (element["type"] == "way" and element["id"] in member_ids):
+        ):
             h, levels, source = height(tags)
             buildings.append(
                 {
-                    "osm_id": identifier(element),
+                    "osm_id": record["osm_id"],
                     "wkb": shape.wkb_hex,
                     "height_m": h,
                     "levels": levels,
@@ -97,16 +68,13 @@ def export(elements: list[dict[str, Any]]) -> None:
                 }
             )
         feature_kind = kind(tags)
-        if feature_kind is None:
-            continue
-        radius = 1500 if feature_kind in ("road", "railway") else 2500
-        if feature_kind not in ("beach", "runway", "peak") and not projected.intersects(
-            zones[radius]
+        if feature_kind is None or not include(
+            feature_kind, tags, shape, projected, zones, region=region
         ):
             continue
         features.append(
             {
-                "osm_id": identifier(element),
+                "osm_id": record["osm_id"],
                 "kind": feature_kind,
                 "name": tags.get("name", ""),
                 "tags": json.dumps(tags, ensure_ascii=False, sort_keys=True),
@@ -122,33 +90,26 @@ def export(elements: list[dict[str, Any]]) -> None:
     print(f"OSM: {len(buildings):,} buildings, {len(features):,} features", flush=True)
 
 
+def include(
+    feature_kind: str,
+    tags: dict[str, str],
+    shape: Any,
+    projected: Any,
+    zones: dict[int, Any],
+    *,
+    region: Any,
+) -> bool:
+    if feature_kind == "peak":
+        return bool(tags.get("ele"))
+    if feature_kind in ("beach", "runway"):
+        return bool(shape.intersects(region))
+    radius = 1500 if feature_kind in ("road", "railway") else 2500
+    return bool(projected.intersects(zones[radius]))
+
+
 def run() -> None:
     if not (REGION / "hotels.csv.gz").exists():
-        select_hotels()
-    # Resume using the last mirror that actually supplied OSM data in this cache.
-    for metadata in sorted(CACHE.glob("*.request.json"), key=lambda p: p.stat().st_mtime):
-        endpoint = json.loads(metadata.read_text())["url"]
-        if endpoint.endswith("/api/interpreter"):
-            MIRROR["endpoint"] = endpoint
-    elements = {}
-    cells = tiles(hotel_buffers(2500))
-    for index, (west, south, east, north) in enumerate(cells, 1):
-        bbox = f"({south},{west},{north},{east})"
-        selectors = [
-            'nwr["building"]',
-            'nwr["highway"]',
-            'nwr["railway"]',
-            *[f'nwr["{key}"]' for key in ("amenity", "shop", "tourism", "leisure", "healthcare")],
-            'nwr["landuse"="construction"]',
-        ]
-        data = overpass(
-            "(" + "".join(s + bbox + ";" for s in selectors) + ")", seconds=30, memory=134217728
-        )
-        elements.update((identifier(e), e) for e in data["elements"])
-        print(f"OSM cell {index}/{len(cells)}: {len(elements):,} unique objects", flush=True)
-    west, south, east, north = REGION_BOUNDS
-    bbox = f"({south},{west},{north},{east})"
-    data = overpass(f'(nwr["natural"~"^(peak|beach)$"]{bbox};nwr["aeroway"="runway"]{bbox};)')
-    elements.update((identifier(e), e) for e in data["elements"])
-    export(list(elements.values()))
-    sea.run()
+        raise FileNotFoundError("Keep the selected hotels.csv.gz catalog; it is an input snapshot")
+    records = [record for layer in pbf.LAYERS for record in pbf.regional_records(layer)]
+    export(records)
+    sea.run([r["geometry"] for r in records if r["tags"].get("natural") == "coastline"])

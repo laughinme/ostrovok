@@ -1,23 +1,26 @@
 """Build a sea mask from directed OSM coastlines (land on the left)."""
 
 import gzip
+from typing import Any
 
-from shapely import Point, box, union_all
+from shapely import Point, box, orient_polygons, union_all
 from shapely.ops import polygonize, unary_union
 
 from pipeline.geography import REGION_BOUNDS, line, metric, polygons, wgs84
 from pipeline.storage import REGION, overpass
 
 
-def run() -> None:
-    west, south, east, north = REGION_BOUNDS
-    elements = overpass(f'way["natural"="coastline"]({south},{west},{north},{east})', seconds=30)[
-        "elements"
-    ]
+def run(coastlines: list[Any] | None = None) -> None:
+    if coastlines is None:
+        west, south, east, north = REGION_BOUNDS
+        elements = overpass(
+            f'way["natural"="coastline"]({south},{west},{north},{east})', seconds=30
+        )["elements"]
+        coastlines = [line(e["geometry"]) for e in elements]
     bounds = metric(box(*REGION_BOUNDS))
     lines, probes = [], []
-    for element in elements:
-        shape = metric(line(element["geometry"]))
+    for coastline in coastal_lines(coastlines):
+        shape = metric(coastline)
         lines.append(shape.intersection(bounds))
         coords = list(shape.coords)
         for index in range(0, len(coords) - 1, 10):
@@ -36,3 +39,17 @@ def run() -> None:
     with gzip.GzipFile(filename=str(REGION / "sea.wkb.gz"), mode="wb", mtime=0) as stream:
         stream.write(sea.wkb_hex.encode("ascii"))
     print(f"Sea mask: {len(sea.geoms)} polygons", flush=True)
+
+
+def coastal_lines(shapes: list[Any]) -> list[Any]:
+    """Keep directed open ways; orient closed island boundaries with land on the left."""
+    result = []
+    for shape in shapes:
+        if shape.geom_type == "LineString":
+            result.append(shape)
+        elif shape.geom_type == "Polygon":
+            polygon = orient_polygons(shape)
+            result.extend([polygon.exterior, *polygon.interiors])
+        else:
+            result.extend(coastal_lines(list(shape.geoms)))
+    return result
