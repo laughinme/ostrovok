@@ -30,3 +30,18 @@ def test_deduplicate_sources_and_explicit_activity() -> None:
     airport = NoiseFeature("way/2", Point(0, 0), {"aeroway": "aerodrome"})
     assert noise_sources([airport]).unmodelled_refs == ("way/2",)
     assert noise_sources([airport], aircraft_power_db=80).sources[0].night_db == 80
+
+
+def test_nightlife_uses_parsed_hours_without_guessing() -> None:
+    late = NoiseFeature(
+        "node/1", Point(0, 1), {"amenity": "bar", "opening_hours": "Mo-Su 20:00-04:00"}
+    )
+    early = NoiseFeature(
+        "node/2", Point(0, 1), {"amenity": "bar", "opening_hours": "Mo-Su 08:00-23:00"}
+    )
+    unknown = NoiseFeature(
+        "node/3", Point(0, 1), {"amenity": "nightclub", "opening_hours": "variable"}
+    )
+    result = noise_sources([late, early, unknown])
+    assert [source.osm_ref for source in result.sources] == ["node/1"]
+    assert result.unmodelled_refs == ("node/3",)
