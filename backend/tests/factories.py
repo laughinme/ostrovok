@@ -1,0 +1,83 @@
+from dataclasses import dataclass
+from itertools import count
+from typing import Any
+
+from httpx import AsyncClient
+from sqlalchemy import update
+
+from app.db.database import Database
+from app.db.models import User
+from app.domain.users import Role
+
+DEFAULT_PASSWORD = "correct-horse-42"
+_sequence = count(1)
+
+
+@dataclass(frozen=True)
+class Account:
+    id: str
+    email: str
+    password: str
+    access_token: str
+    refresh_token: str | None
+
+    @property
+    def headers(self) -> dict[str, str]:
+        return {"Authorization": f"Bearer {self.access_token}"}
+
+
+def unique_email(prefix: str = "user") -> str:
+    return f"{prefix}{next(_sequence)}@example.com"
+
+
+async def register(
+    client: AsyncClient,
+    *,
+    email: str | None = None,
+    password: str = DEFAULT_PASSWORD,
+    client_kind: str = "mobile",
+    **extra: Any,
+) -> Account:
+    email = email or unique_email()
+    response = await client.post(
+        "/api/v1/auth/register",
+        json={"email": email, "password": password, **extra},
+        headers={"X-Client": client_kind},
+    )
+    assert response.status_code == 201, response.text
+    tokens = response.json()
+    me = await client.get(
+        "/api/v1/me", headers={"Authorization": f"Bearer {tokens['access_token']}"}
+    )
+    return Account(
+        id=me.json()["id"],
+        email=email,
+        password=password,
+        access_token=tokens["access_token"],
+        refresh_token=tokens["refresh_token"],
+    )
+
+
+async def login(client: AsyncClient, email: str, password: str = DEFAULT_PASSWORD) -> Account:
+    response = await client.post(
+        "/api/v1/auth/login",
+        json={"email": email, "password": password},
+        headers={"X-Client": "mobile"},
+    )
+    assert response.status_code == 200, response.text
+    tokens = response.json()
+    me = await client.get(
+        "/api/v1/me", headers={"Authorization": f"Bearer {tokens['access_token']}"}
+    )
+    return Account(
+        id=me.json()["id"],
+        email=email,
+        password=password,
+        access_token=tokens["access_token"],
+        refresh_token=tokens["refresh_token"],
+    )
+
+
+async def promote(db: Database, email: str, role: Role = Role.OPERATOR) -> None:
+    async with db.unit_of_work() as uow:
+        await uow.session.execute(update(User).where(User.email == email).values(role=role))
