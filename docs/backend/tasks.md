@@ -14,7 +14,8 @@
 |---|---|---|
 | `backend/pyproject.toml`, `backend/uv.lock` | claude-core | 28.10 02:15 |
 | `backend/migrations/` | claude-core | 28.10 02:15 |
-| `docker-compose.yml`, `compose.dev.yml`, `.env.example`, `Makefile` | — | |
+| `docker-compose.yml`, `compose.dev.yml`, `.env.example` | — | |
+| `Makefile` | — | |
 | `frontend/` | владелец фронта | постоянно |
 
 ## Задачи владельца (не для сессий)
@@ -127,7 +128,8 @@ SQLAlchemy, Pydantic, `db`, `infra`), независимость контекс�
 Готово, когда: панорамы правдоподобны (сверили глазами с публичными панорамами); выводы и грабли — в progress.md.
 
 ### B1.1 · Каркас пайплайна
-Статус: в работе · codex-pipeline · 28.10 02:19 МСК
+Статус: done · codex-pipeline · 28.10 02:20 МСК
+Итог: CLI, кэш по SHA-256, детерминированный CSV.gz и MANIFEST; make data и ruff проходят (коммит 06b787b).
 Зависит от: B0.1
 Что: `backend/pipeline/` с группой зависимостей `pipeline` (osmnx, geopandas, rasterio, pyogrio, httpx);
 кэш сырых выгрузок в `backend/.cache/` (в `.gitignore`); `make data`; генерация `backend/data/MANIFEST.md`
