@@ -1,0 +1,119 @@
+# `cp .env.example .env && docker compose up --build` → http://localhost:8080 (organizers' rules).
+# Only the gateway is published. Development overrides live in compose.dev.yml (D-18).
+x-backend: &backend
+  build: ./backend
+  image: okno-backend:local
+  platform: linux/amd64
+  env_file: .env
+  environment:
+    DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+    REDIS_URL: redis://redis:6379/0
+    JWT_PRIVATE_KEY_PATH: /keys/jwt_private_key.pem
+    JWT_PUBLIC_KEY_PATH: /keys/jwt_public_key.pem
+  volumes:
+    - jwt-keys:/keys
+  restart: unless-stopped
+
+services:
+  db:
+    image: postgis/postgis:17-3.5
+    platform: linux/amd64
+    env_file: .env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 3s
+      timeout: 3s
+      retries: 40
+    restart: unless-stopped
+
+  redis:
+    image: redis:8.2.2-alpine3.22
+    platform: linux/amd64
+    env_file: .env
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  init:
+    <<: *backend
+    command: ["python", "-m", "app.init"]
+    restart: "no"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      disable: true
+
+  backend:
+    <<: *backend
+    depends_on:
+      init:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
+
+  worker:
+    <<: *backend
+    command: ["python", "-m", "app.worker"]
+    depends_on:
+      init:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import os, sys, tempfile, time; p = os.path.join(tempfile.gettempdir(), 'okno-worker-alive'); sys.exit(time.time() - os.path.getmtime(p) > 60)"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 15s
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_API_BASE_URL: /api/v1
+    image: okno-frontend:local
+    platform: linux/amd64
+    env_file: .env
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
+    restart: unless-stopped
+
+  gateway:
+    build: ./gateway
+    image: okno-gateway:local
+    platform: linux/amd64
+    env_file: .env
+    ports:
+      - "8080:8080"
+    depends_on:
+      backend:
+        condition: service_healthy
+      frontend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8080/health | grep -q ok"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  jwt-keys:

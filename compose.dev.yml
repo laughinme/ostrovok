@@ -1,0 +1,12 @@
+# Local development: `make dev` publishes PostGIS and Redis for `make run` / `make worker`.
+# Native arm64 images on Apple Silicon (D-34); the jury stack stays linux/amd64.
+services:
+  db:
+    image: imresamu/postgis:17-3.5
+    platform: !reset null
+    ports:
+      - "5432:5432"
+  redis:
+    platform: !reset null
+    ports:
+      - "6379:6379"

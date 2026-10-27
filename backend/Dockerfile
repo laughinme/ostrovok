@@ -23,7 +23,8 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 FROM python:3.13-slim-trixie
 
 RUN groupadd --system --gid 999 app \
- && useradd --system --gid 999 --uid 999 --no-create-home app
+ && useradd --system --gid 999 --uid 999 --no-create-home app \
+ && mkdir -p /keys && chown app:app /keys
 
 COPY --from=builder --chown=app:app /app /app
 
@@ -32,9 +33,9 @@ ENV PATH="/app/.venv/bin:$PATH" \
 
 WORKDIR /app
 USER app
-EXPOSE 8080
+EXPOSE 8000
 
-# Migrations are a separate step (compose `migrate` service, Fly release_command),
-# so several API replicas never race to migrate the same database.
-CMD ["uvicorn", "app.main:create_app", "--factory", "--host", "0.0.0.0", "--port", "8080", \
+# Migrations, JWT keys and the seed are the one-shot `init` service (`python -m app.init`),
+# so API and worker replicas never race to migrate the same database.
+CMD ["uvicorn", "app.main:create_app", "--factory", "--host", "0.0.0.0", "--port", "8000", \
      "--proxy-headers", "--forwarded-allow-ips", "*", "--no-access-log"]
