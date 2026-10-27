@@ -22,7 +22,8 @@ body { background: var(--surface); }
 .hero h1 { font-weight: 800; font-size: clamp(44px, 5vw, var(--fs-display)); line-height: 1; letter-spacing: -.035em; color: var(--ink); }
 .hero h1 em { font-style: normal; color: var(--primary); }
 .lede { font-size: var(--fs-lede); color: #23324F; max-width: 560px; margin-top: 18px; }
-.hero-copy { margin-bottom: 30px; }
+.hero-copy { margin-bottom: 30px; transition: opacity 700ms var(--ease-out), transform 700ms var(--ease-out), filter 700ms; }
+.hero-copy.fading { opacity: 0; transform: translateY(-14px); filter: blur(3px); }
 
 /* поле желания */
 .wish { color: var(--ink); border-radius: var(--r-lg); padding: 14px 14px 14px 20px; position: relative; isolation: isolate; border: 3px solid transparent;
@@ -321,7 +322,7 @@ body { background: var(--surface); }
 .t-rating { display: flex; gap: 12px; align-items: center; }
 .rating-v { background: var(--rating); color: #fff; font-weight: 800; font-size: 20px; border-radius: 10px 10px 10px 2px; padding: 8px 10px; }
 .t-rating b { display: block; font-size: 17px; }
-.t-rating span { font-size: 13.5px; color: var(--muted); }
+.t-rating div span { font-size: 13.5px; color: var(--muted); }
 .t-title { font-size: 17px; font-weight: 700; margin: 16px 0 10px; }
 .trio .t-title:first-child { margin-top: 0; }
 .amen { list-style: none; display: grid; gap: 8px; font-size: 14.5px; }

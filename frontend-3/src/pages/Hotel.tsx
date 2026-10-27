@@ -42,7 +42,7 @@ export default function HotelPage() {
   const gallery: GalleryItem[] = useMemo(() => [...h.photos.map((key) => ({ kind: 'photo' as const, key })), { kind: 'view' as const }, { kind: 'noise' as const }], [h]);
   const route = useMemo(() => {
     const [x, y] = h.lngLat;
-    const coords: [number, number][] = [[x, y], [x - 0.0009, y - 0.0003], [x - 0.0016, y - 0.0011], [x - 0.0024, y - 0.0017], [x - 0.0031, y - 0.0026]];
+    const coords: [number, number][] = [[x, y], [x - 0.0004, y - 0.00015], [x - 0.0007, y - 0.0005], [x - 0.001, y - 0.0008], [x - 0.0013, y - 0.0011]];
     return { line: { coords }, pois: [
       { lngLat: coords[0], label: h.name, kind: 'start' as const },
       { lngLat: coords[1], label: 'Кофейня «Зерно» · 2 мин' },

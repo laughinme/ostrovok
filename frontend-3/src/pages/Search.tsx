@@ -1,4 +1,4 @@
-import { AnimatePresence, LayoutGroup, motion } from 'motion/react';
+import { LayoutGroup, motion } from 'motion/react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { Footer, Header } from '../components/chrome';
@@ -82,14 +82,12 @@ export default function SearchPage() {
           <div className={`lime-in${app ? ' app' : ''}`}>
             <div className="hero">
               <div className="hero-l">
-                <AnimatePresence initial={false}>
-                  {!app && (
-                    <motion.div key="copy" className="hero-copy" exit={{ opacity: 0, y: -16, transition: { duration: 0.25 } }}>
+                {!app && (
+                    <div className={`hero-copy${phase === 'thinking' ? ' fading' : ''}`}>
                       <h1>Каким будет ваш номер — <em>видно до&nbsp;поездки</em></h1>
                       <p className="lede">Опишите отдых своими словами. Мы посчитаем вид из окна, шум и дорогу до моря для каждого этажа отелей Сочи — и покажем, откуда это знаем.</p>
-                    </motion.div>
+                    </div>
                   )}
-                </AnimatePresence>
                 <WishBox query={query} onQuery={setQuery} chips={chips} onChips={setChips} known={known} researching={researching} compact={app} thinking={phase === 'thinking' || phase === 'loading'}
                   label={phase === 'thinking' || phase === 'loading' ? 'Подбираю' : app ? 'Уточнить' : 'Подобрать'} onSubmit={(ph) => start(ph)} onAdd={addWish} />
                 {app && (
@@ -102,9 +100,7 @@ export default function SearchPage() {
                   </div>
                 )}
               </div>
-              <AnimatePresence initial={false}>
-                {!app && <HeroWindow key="win" />}
-              </AnimatePresence>
+              {!app && <HeroWindow fading={phase === 'thinking'} />}
             </div>
           </div>
         </motion.section>
@@ -144,11 +140,11 @@ export default function SearchPage() {
   );
 }
 
-function HeroWindow() {
+function HeroWindow({ fading }: { fading: boolean }) {
   const [floor, setFloor] = useState(3);
   const [sea, setSea] = useState(0);
   return (
-    <motion.figure className="hero-window" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.96, transition: { duration: 0.25 } }}>
+    <motion.figure className="hero-window" initial={{ opacity: 0, y: 12 }} animate={fading ? { opacity: 0, scale: 0.94, y: -10 } : { opacity: 1, scale: 1, y: 0 }} transition={{ duration: fading ? 0.7 : 0.5, ease: [0.22, 1, 0.36, 1] }}>
       <div className="stage"><Panorama facade="SW" floor={floor} onReading={(r) => setSea(r.seaShare)} /></div>
       <div className="ctrl">
         <label htmlFor="hero-floor">Этаж <b className="num">{floor}</b></label>

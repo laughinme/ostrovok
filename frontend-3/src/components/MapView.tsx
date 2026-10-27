@@ -9,7 +9,7 @@ export interface MapPin { id: string; lngLat: [number, number]; label: string; t
 export interface MapLine { coords: [number, number][]; color?: string; dashed?: boolean }
 export interface MapPoi { lngLat: [number, number]; label: string; kind?: 'poi' | 'start' | 'end' }
 
-const STYLE = 'https://tiles.openfreemap.org/styles/positron';
+const STYLE = 'https://tiles.openfreemap.org/styles/liberty';
 
 export function MapView({ pins = [], line, pois = [], hover, onHover, onPick, className = '', fit = true, interactive = true }: {
   pins?: MapPin[]; line?: MapLine; pois?: MapPoi[]; hover?: string | null; onHover?: (id: string | null) => void; onPick?: (id: string) => void; className?: string; fit?: boolean; interactive?: boolean;
