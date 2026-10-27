@@ -78,3 +78,19 @@ def test_verified_snapshot_is_usable_offline(tmp_path, monkeypatch):
         )
     )
     assert pbf.snapshot() == source
+
+
+def test_neighbouring_snapshots_deduplicate_native_refs(monkeypatch):
+    monkeypatch.setattr(pbf, "snapshot", lambda url: url)
+    monkeypatch.setattr(pbf, "regional_cache", lambda source: source)
+    monkeypatch.setattr(
+        pbf,
+        "records",
+        lambda source, _layer, **_kw: [
+            {"osm_id": "way/1", "source": source},
+            {"osm_id": source, "source": source},
+        ],
+    )
+    records = pbf.regional_records("lines", where="highway IS NOT NULL")
+    assert len(records) == 3
+    assert records[0] == {"osm_id": "way/1", "source": pbf.SOURCE}
