@@ -12,6 +12,40 @@
 
 ---
 
+### 28.10 02:49 МСК · codex-view · B2.5 · API готов, финальные проверки в работе
+- Сделано: `7fa98b8`, `d814ea7`, `ffeb0de`, `7949a2f`, `580bef5`: ядро горизонта, море, МК,
+  подготовка сцен через TerrainModel, DSM-коррекция, видимые вершины и горный силуэт.
+- **Публичный стык B2.10:** все координаты геометрий в локальных метрах одной `LocalProjection`.
+  `scene.Building(ref, footprint: Polygon, base_elevation_m, height_m, height_source)`;
+  height_source строго `osm_height | osm_levels | default` (так у регионального пайплайна).
+  `ViewSceneBuilder(terrain: TerrainModel, projection: LocalProjection, *, step_m=30, max_km=40)`
+  из `app.infra.geo.view_scene`: `.buildings_with_bases(buildings) -> tuple[Building,...]` оценивает
+  основание по DSM (32 пробы, буфер 35 м, 20-й перцентиль). Высоту глаза отеля считать **от той же базы**.
+  `.prepare(origin_xy, normal_deg, buildings, sea: BaseGeometry) -> Scene` делает 141 луч ±70°,
+  выборку рельефа до 40 км, маску моря и точные интервалы крыш до 2 км; собственное здание сохранять.
+  Подготовить отдельно четверть/середину/три четверти каждого Wall, затем держать Scene в кэше.
+  `horizon.evaluate_horizon(scene, eye_m) -> Horizon` (1D массивы),
+  `horizon.batch_horizon(scene, eyes_m, *, roofs_m=None, terrain_bias_m=None)` (runs,rays):
+  angle_deg, kind, building_deg, terrain_deg, sea_low_deg, sea_high_deg, sea_visible; `.sea_fraction`.
+  `scene.Obstacle`: BUILDING=0, TERRAIN=1, SEA=2, SKY=3, UNKNOWN=4; неизвестный рельеф не свободное небо.
+  `sea.minimum_floor(scenes, base_elevation_m, floors, *, min_fraction=.01) -> int|None` — первый
+  доступный этаж с долей моря хотя бы в одном окне. Доля — по азимутам, не площадь изображения.
+  `montecarlo.monte_carlo(scenes, eye_m, *, runs=16, min_fraction=.01, seed=0, target="sea")`
+  → `VisibilityProbability(probability, fractions, window_indices)`; target также `mountains`.
+  Сцены должны иметь одинаковый порядок buildings; шум высот ±1,5 м / ±1 этаж / ±2 этажа,
+  DEM ±2 м как общий вертикальный сдвиг, окно — случайный выбор среди подготовленных точек.
+  `peaks.Peak(ref, name|None, xy, elevation_m)` и `visible_peaks(scene, eye_m, peaks)`
+  → tuple `VisiblePeak(ref,name,distance_m,azimuth_deg,elevation_deg)`; препятствия только перед вершиной.
+  `peaks.mountain_visibility(scene, eyes_m, batch_profiles, *, terrain_bias_m=None)` → bool (runs,rays):
+  силуэт рельефа выше 500 м. Среднее по rays — доля горного силуэта.
+- Проверка: все 18 этаж/фасад сцен B1.0 совпадают по доле моря до округления отчёта (<0,005 п.п.),
+  P95 номинального расчёта ~2,8 мс. Полный make check прошёл: 197 passed, 3 skipped, 7 arch-контрактов.
+  Синтетический отель 4 фасада × 10 этажей × 3 окна: подготовка 0,50 с, все номинальные окна 0,29 с,
+  МК16 для всех этажей/фасадов 1,58 с; с подготовкой 0,79/2,08 с. Скрипт замера ещё в финальном коммите.
+- Грабли: DSM — эвристика, не DTM; сдвиг окна требует своей Scene. МК по трём точкам — дискретная
+  модель положения окна, не непрерывный сдвиг с повторным использованием неверных пересечений.
+- Дальше: завершить коммит проверок, проверить готовый DEM B1.3 при публикации, закрыть B2.5.
+
 ### 28.10 02:44 МСК · codex-ground · B2.8, линия B2.7 → B2.9 → B2.8 завершена
 - Сделано: scipy Router поверх направленного CSR, KDTree, три профиля, независимые маршруты туда
   и обратно (включая разные пути), ступени/переходы/подъём, высотный профиль, выбор ближайшего
