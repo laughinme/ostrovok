@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
-import { Providers } from './providers';
-import '@/styles/tokens.css';
-import '@/styles/base.css';
-import '@/styles/app.css';
+import { Providers } from '@/app/providers';
+import '@/app/styles/tokens.css';
+import '@/app/styles/base.css';
+import '@/app/styles/app.css';
 
 export const metadata: Metadata = {
   title: 'О!кно — каким будет ваш номер',

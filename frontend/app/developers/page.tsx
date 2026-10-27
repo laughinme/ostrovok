@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import DevelopersPage from '@/pages/Developers';
+import DevelopersPage from '@/pages/developers';
 import Loading from '../loading';
 
 export default function Page() {

@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import CreditsPage from '@/pages/Credits';
+import CreditsPage from '@/pages/credits';
 import Loading from '../loading';
 
 export default function Page() {

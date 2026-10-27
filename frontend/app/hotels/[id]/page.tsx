@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import HotelPage from '@/pages/Hotel';
+import HotelPage from '@/pages/hotel';
 import Loading from '../../loading';
 
 export default function Page() {

@@ -1,5 +1,5 @@
 import { Suspense, type ReactNode } from 'react';
-import SearchPage from '@/pages/Search';
+import SearchPage from '@/pages/search';
 import Loading from '../loading';
 
 // Keep the search workflow mounted during the landing → results transition.

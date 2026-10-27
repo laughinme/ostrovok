@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import PartnerPage from '@/pages/Partner';
+import PartnerPage from '@/pages/partner';
 import Loading from '../loading';
 
 export default function Page() {

@@ -130,7 +130,7 @@ if (process.argv.includes('--candidates')) {
     meta[key] = { src: `/demo/photos/${key}.jpg`, title: c.title, author: c.author, license: c.license, licenseUrl: c.licenseUrl, page: c.page };
     await sleep(1200);
   }
-  await mkdir(join(ROOT, 'src', 'data'), { recursive: true });
-  await writeFile(join(ROOT, 'src', 'data', 'photos.json'), JSON.stringify(meta, null, 2));
+  await mkdir(join(ROOT, 'src', 'shared', 'lib', 'photos'), { recursive: true });
+  await writeFile(join(ROOT, 'src', 'shared', 'lib', 'photos', 'photos.json'), JSON.stringify(meta, null, 2));
   console.log('saved', Object.keys(meta).length);
 }
