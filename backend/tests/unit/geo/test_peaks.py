@@ -26,3 +26,9 @@ def test_mountain_silhouette_and_monte_carlo() -> None:
     assert np.all(mountain_visibility(ridge, np.array([15.0]), profiles))
     assert monte_carlo([ridge], 15, target="mountains").probability == 1
     assert monte_carlo([analytic_scene()], 15, target="mountains").probability == 0
+
+
+def test_nearby_roof_can_hide_a_named_peak() -> None:
+    scene = analytic_scene(building=True)
+    peaks = [Peak("node/1", "Низкая", (-1000, 0), 100), Peak("node/2", "Высокая", (-1000, 0), 500)]
+    assert [p.name for p in visible_peaks(scene, 15, peaks)] == ["Высокая"]
