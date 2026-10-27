@@ -4,9 +4,13 @@ Data files are optional: an adapter whose file is missing is simply not wired, a
 executors fall back (and say so in the trace).
 """
 
+import gzip
 import logging
 from dataclasses import dataclass
 from pathlib import Path
+
+import shapely.prepared
+import shapely.wkb
 
 from app.db.database import Database
 from app.infra.geo.climate import ClimateCatalog
@@ -37,6 +41,10 @@ def build_environment(db: Database, clock: Clock, data_dir: Path) -> Environment
         env.terrain = NpyTerrain(region)
     if (region / "climate.json").exists():
         env.climate = ClimateCatalog.from_file(region / "climate.json")
+    if (region / "sea.wkb.gz").exists():
+        env.sea = shapely.prepared.prep(
+            shapely.wkb.loads(gzip.decompress((region / "sea.wkb.gz").read_bytes()))
+        )
     return env
 
 

@@ -50,11 +50,13 @@ class StatementTemplate:
 def _format(template: str, value: Any) -> str:
     fields = value if isinstance(value, Mapping) else {"value": value}
     names = {name for _, name, _, _ in string.Formatter().parse(template) if name}
-    safe = {name: _pretty(fields.get(name, "?")) for name in names}
+    safe = {name: _pretty(fields.get(name)) for name in names}
     return template.format(**safe)
 
 
 def _pretty(value: Any) -> str:
+    if value is None:
+        return "—"
     if isinstance(value, float):
         return f"{value:.0f}" if abs(value) >= 10 else f"{value:.1f}".replace(".", ",")
     return str(value)

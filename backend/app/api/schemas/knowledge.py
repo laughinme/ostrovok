@@ -117,7 +117,9 @@ class FactSourceOut(ApiModel):
     def from_domain(cls, o: Observation) -> Self:
         return cls(
             kind=o.source,
-            label=source_label(o.source, observed_at=o.observed_at, is_demo=o.is_demo),
+            label=source_label(
+                o.source, observed_at=o.observed_at, is_demo=o.is_demo, ref=o.source_ref
+            ),
             observed_at=o.observed_at,
             confidence=round(o.confidence, 3),
             ref=o.source_ref,
