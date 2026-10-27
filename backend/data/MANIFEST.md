@@ -1,6 +1,6 @@
 # Данные региона О!кно
 
-Отчёт: 2026-10-27T23:31:56+00:00. Все геометрии EPSG:4326.
+Отчёт: 2026-10-27T23:48:40+00:00. Все геометрии EPSG:4326.
 CSV: UTF-8, gzip, WKB hex. Синтетические свойства помечены «демо».
 
 Получение: `make data` или `cd backend && uv run --group pipeline python -m pipeline all`.
@@ -12,7 +12,7 @@ CSV: UTF-8, gzip, WKB hex. Синтетические свойства поме�
 | [Copernicus DEM](https://registry.opendata.aws/copernicus-dem/) | Copernicus Digital Elevation Model, © DLR e.V. 2010–2014, © Airbus Defence and Space GmbH 2014–2018; provided under the Copernicus DEM licence |
 | [Open-Meteo](https://open-meteo.com/en/licence) | CC BY 4.0; weather data by Open-Meteo and its model providers |
 
-Дата получения сырых ответов (UTC): 2026-10-27T23:23:29.618355+00:00 — 2026-10-27T23:30:38.056441+00:00
+Дата получения сырых ответов (UTC): 2026-10-27T23:23:29.618355+00:00 — 2026-10-27T23:48:39.315029+00:00
 
 ## Объекты
 
@@ -22,8 +22,12 @@ CSV: UTF-8, gzip, WKB hex. Синтетические свойства поме�
 
 | Файл | Байт |
 |---|---:|
+| demo/users.yaml | 1,083 |
+| region/dem.json | 995 |
+| region/dem_int16.npy | 11,178,800 |
 | region/hotel_selection.json | 420 |
-| region/hotels.csv.gz | 49,920 |
-| **Всего** | **50,340** |
+| region/hotels.csv.gz | 49,903 |
+| registry/characteristics.yaml | 13,167 |
+| **Всего** | **11,244,368** |
 
 Бюджет: <60 МБ вместе, <50 МБ каждый файл.
