@@ -6,6 +6,7 @@ import json
 import re
 import time
 from dataclasses import dataclass
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -13,9 +14,9 @@ import httpx
 import numpy as np
 import rasterio
 from pyproj import Transformer
-from shapely import LineString, Point, Polygon, box, make_valid
+from shapely import LineString, Point, Polygon, box, make_valid, transform
 from shapely.geometry import mapping, shape
-from shapely.ops import polygonize, transform, unary_union
+from shapely.ops import polygonize, unary_union
 
 CACHE = Path(__file__).resolve().parents[2] / ".cache" / "spike"
 OVERPASS = "https://maps.mail.ru/osm/tools/overpass/api/interpreter"
@@ -25,7 +26,7 @@ HOTELS = {
     "morskaya_zvezda": 53549358,
     "marriott_polyana": 227214566,
 }
-COAST_BOUNDS = (38.6, 42.9, 41.0, 44.3)
+COAST_BOUNDS = (39.0, 43.0, 40.9, 44.2)
 
 
 def cached_download(name: str, url: str, query: str | None = None) -> Path:
@@ -33,11 +34,12 @@ def cached_download(name: str, url: str, query: str | None = None) -> Path:
     path = CACHE / name
     if path.exists():
         return path
-    for attempt in range(4):
+    for attempt in range(6):
+        endpoint = url
         try:
             with httpx.Client(headers={"User-Agent": USER_AGENT}, timeout=240) as client:
                 if query is not None:
-                    response = client.post(url, data={"data": query})
+                    response = client.post(endpoint, data={"data": query})
                     response.raise_for_status()
                     payload = response.json()
                     if "remark" in payload:
@@ -50,17 +52,29 @@ def cached_download(name: str, url: str, query: str | None = None) -> Path:
                             for chunk in response.iter_bytes():
                                 target.write(chunk)
             path.with_suffix(".part").replace(path)
+            path.with_suffix(".source.json").write_text(
+                json.dumps(
+                    {
+                        "url": endpoint,
+                        "query": query,
+                        "fetched_at": datetime.now(UTC).isoformat(),
+                    },
+                    ensure_ascii=False,
+                    indent=2,
+                )
+            )
             print(f"Скачано {name}: {path.stat().st_size / 1e6:.2f} MB", flush=True)
             return path
-        except (httpx.HTTPError, ValueError):
-            if attempt == 3:
+        except (httpx.HTTPError, ValueError) as error:
+            if attempt == 5:
                 raise
-            time.sleep(2 * (attempt + 1))
+            print(f"Повтор загрузки {name}: {type(error).__name__} ({endpoint})", flush=True)
+            time.sleep(5 * (attempt + 1))
     raise RuntimeError("Unreachable download state")
 
 
 def osm_query(name: str, body: str) -> dict[str, Any]:
-    path = cached_download(name, OVERPASS, f"[out:json][timeout:180];{body};out body geom;")
+    path = cached_download(name, OVERPASS, f"[out:json][timeout:180];{body};out meta geom;")
     return json.loads(path.read_text())
 
 
@@ -77,6 +91,10 @@ def local_projection(lon: float, lat: float) -> tuple[Transformer, Transformer]:
         Transformer.from_crs(4326, crs, always_xy=True),
         Transformer.from_crs(crs, 4326, always_xy=True),
     )
+
+
+def project_geometry(projection: Transformer, geometry: Any) -> Any:
+    return transform(geometry, lambda xy: np.column_stack(projection.transform(xy[:, 0], xy[:, 1])))
 
 
 def way_line(geometry: list[dict[str, float]]) -> LineString:
@@ -102,16 +120,16 @@ def osm_polygon(element: dict[str, Any]) -> Any:
 def sea_polygon(projection: Transformer) -> Any:
     west, south, east, north = COAST_BOUNDS
     data = osm_query("coastline.json", f'way["natural"="coastline"]({south},{west},{north},{east})')
-    bounds = transform(projection.transform, box(*COAST_BOUNDS))
+    bounds = project_geometry(projection, box(*COAST_BOUNDS))
     lines = [
-        transform(projection.transform, way_line(e["geometry"])).intersection(bounds)
+        project_geometry(projection, way_line(e["geometry"])).intersection(bounds)
         for e in data["elements"]
     ]
     faces = list(polygonize(unary_union([bounds.boundary, *lines])))
     # OSM coastlines run with land on the left and water on the right.
     water_probes: list[Any] = []
     for element in data["elements"]:
-        coords = np.array(transform(projection.transform, way_line(element["geometry"])).coords)
+        coords = np.array(project_geometry(projection, way_line(element["geometry"])).coords)
         vectors = np.diff(coords, axis=0)
         lengths = np.linalg.norm(vectors, axis=1)
         valid = lengths > 1
@@ -152,9 +170,14 @@ def building_height(tags: dict[str, str]) -> tuple[float, str]:
 
 
 def load_buildings(lat: float, lon: float, key: str, projection: Transformer) -> list[Building]:
+    delta_lat = 2000 / 111_000
+    delta_lon = 2000 / (111_000 * np.cos(np.radians(lat)))
+    south, west = np.floor(np.array([lat - delta_lat, lon - delta_lon]) * 1000) / 1000
+    north, east = np.ceil(np.array([lat + delta_lat, lon + delta_lon]) * 1000) / 1000
+    bounds = f"{south},{west},{north},{east}"
     data = osm_query(
         f"{key}_buildings.json",
-        f'(way["building"](around:2000,{lat},{lon});rel["building"](around:2000,{lat},{lon});)',
+        f'(way["building"]({bounds});rel["building"]({bounds});)',
     )
     member_ids = {
         m["ref"]
@@ -165,9 +188,11 @@ def load_buildings(lat: float, lon: float, key: str, projection: Transformer) ->
     }
     buildings = []
     for element in data["elements"]:
+        if "building" not in element.get("tags", {}):
+            continue
         if element["type"] == "way" and element["id"] in member_ids:
             continue
-        polygon = transform(projection.transform, osm_polygon(element))
+        polygon = project_geometry(projection, osm_polygon(element))
         if polygon.is_empty or polygon.area < 1 or polygon.distance(Point(0, 0)) > 2000:
             continue
         height, source = building_height(element["tags"])
@@ -180,7 +205,7 @@ def load_buildings(lat: float, lon: float, key: str, projection: Transformer) ->
 def load_railways(lat: float, lon: float, key: str, projection: Transformer) -> Any:
     data = osm_query(f"{key}_railways.json", f'way["railway"="rail"](around:2000,{lat},{lon})')
     return unary_union(
-        [transform(projection.transform, way_line(e["geometry"])) for e in data["elements"]]
+        [project_geometry(projection, way_line(e["geometry"])) for e in data["elements"]]
     )
 
 
