@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
-import { Link, NavLink, useLocation } from 'react-router';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router';
+import { setVariantsEnabled, useVariantsEnabled } from '../lib/variants';
 import { useStore } from '../state/store';
 
 export function Logo() {
@@ -31,6 +32,8 @@ export function Header({ tone = 'white', children }: { tone?: 'white' | 'lime' |
 }
 
 export function Footer() {
+  const variantsOn = useVariantsEnabled();
+  const navigate = useNavigate();
   return (
     <footer className="foot">
       <div className="foot-in">
@@ -43,7 +46,10 @@ export function Footer() {
         <div className="foot-col"><h4>Островку</h4><Link to="/console">Консоль знаний</Link><Link to="/developers">API и MCP</Link></div>
         <div className="foot-col"><h4>Данные</h4><span>© OpenStreetMap contributors, ODbL</span><span>Copernicus DEM GLO-30</span><span>Open-Meteo, CC BY 4.0</span><Link to="/credits">Авторы фотографий</Link></div>
       </div>
-      <div className="foot-b">Отели, цены, рейтинги, номера и история поездок — демо-данные. Фото — Wikimedia Commons, иллюстрации, не конкретный отель.</div>
+      <div className="foot-b">
+        Отели, цены, рейтинги, номера и история поездок — демо-данные. Фото — Wikimedia Commons, иллюстрации, не конкретный отель.
+        <button type="button" className="foot-variants" onClick={() => { setVariantsEnabled(!variantsOn); if (!variantsOn) navigate('/'); }}>{variantsOn ? 'Выключить другие лендинги' : 'Включить другие лендинги'}</button>
+      </div>
     </footer>
   );
 }

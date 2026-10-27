@@ -10,6 +10,7 @@ import { WishBox } from '../components/WishBox';
 import { CHARACTERISTICS, DEFAULT_INTENT, EXAMPLES, MOODS, parseIntent } from '../data/characteristics';
 import { HOTELS } from '../data/hotels';
 import { rub } from '../lib/format';
+import { setVariantsEnabled, useVariantsEnabled } from '../lib/variants';
 import { rank } from '../lib/score';
 import { useStore } from '../state/store';
 
@@ -33,7 +34,7 @@ export default function SearchPage() {
   const [researching, setResearching] = useState<Set<string>>(new Set());
   const [agent, setAgent] = useState<{ key: string; done: boolean; open: boolean } | null>(null);
   const [wideMap, setWideMap] = useState(false);
-  const [variant, setVariant] = useVariant();
+  const [variant, setVariant, variantsOn] = useVariant();
   const timers = useRef<number[]>([]);
   const later = (fn: () => void, ms: number) => timers.current.push(window.setTimeout(fn, reduced() ? 0 : ms));
   useEffect(() => () => timers.current.forEach(clearTimeout), []);
@@ -139,7 +140,7 @@ export default function SearchPage() {
 
         {!app && variant === 'lime' && <MoodStrip onMood={onMood} />}
         {!app && <Landing onMood={onMood} showMoods={variant !== 'lime'} />}
-        {!app && <VariantSwitch value={variant} onChange={setVariant} />}
+        {!app && variantsOn && <VariantSwitch value={variant} onChange={setVariant} />}
 
         {app && (
           <div className={`work${wideMap ? ' map-wide' : ''}`}>
@@ -225,21 +226,24 @@ function MoodStrip({ onMood }: { onMood(m: (typeof MOODS)[number]): void }) {
 
 type Variant = 'photo' | 'split' | 'lime';
 const VARIANTS: [Variant, string, string][] = [['photo', 'A', 'Фото и поле по центру'], ['split', 'B', 'Номер с доказательством'], ['lime', 'C', 'Салатовый Островок']];
-function useVariant(): [Variant, (v: Variant) => void] {
+function useVariant(): [Variant, (v: Variant) => void, boolean] {
   const [sp, setSp] = useSearchParams();
+  const enabled = useVariantsEnabled();
   const fromUrl = sp.get('v') as Variant | null;
   const stored = (() => { try { return localStorage.getItem('okno-variant') as Variant | null; } catch { return null; } })();
-  const v: Variant = fromUrl && VARIANTS.some(([k]) => k === fromUrl) ? fromUrl : stored && VARIANTS.some(([k]) => k === stored) ? stored : 'photo';
+  // без включённого режима всегда салатовый C
+  const v: Variant = !enabled ? 'lime' : fromUrl && VARIANTS.some(([k]) => k === fromUrl) ? fromUrl : stored && VARIANTS.some(([k]) => k === stored) ? stored : 'lime';
   // вариант из ссылки запоминаем, чтобы выдача после перехода на /search была в том же стиле
-  useEffect(() => { if (fromUrl && fromUrl !== stored) { try { localStorage.setItem('okno-variant', v); } catch { /* приватный режим */ } } }, [fromUrl, stored, v]);
-  return [v, (n) => { try { localStorage.setItem('okno-variant', n); } catch { /* приватный режим */ } setSp((s) => { s.set('v', n); return s; }, { replace: true }); }];
+  useEffect(() => { if (enabled && fromUrl && fromUrl !== stored) { try { localStorage.setItem('okno-variant', v); } catch { /* приватный режим */ } } }, [enabled, fromUrl, stored, v]);
+  return [v, (n) => { try { localStorage.setItem('okno-variant', n); } catch { /* приватный режим */ } setSp((s) => { s.set('v', n); return s; }, { replace: true }); }, enabled];
 }
 
 function VariantSwitch({ value, onChange }: { value: Variant; onChange(v: Variant): void }) {
   return (
     <div className="vswitch" role="group" aria-label="Вариант главной">
-      <span>Вариант главной</span>
-      {VARIANTS.map(([k, l, t]) => <button key={k} className={value === k ? 'on' : ''} aria-pressed={value === k} title={t} onClick={() => onChange(k)}><b>{l}</b>{t}</button>)}
+      <span>Лендинг</span>
+      {VARIANTS.map(([k, l, t]) => <button key={k} className={value === k ? 'on' : ''} aria-pressed={value === k} title={t} onClick={() => onChange(k)}><b>{l}</b></button>)}
+      <button className="vswitch-x" aria-label="Скрыть варианты лендинга" title="Скрыть варианты лендинга" onClick={() => { onChange('lime'); setVariantsEnabled(false); }}>×</button>
     </div>
   );
 }

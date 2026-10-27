@@ -884,11 +884,14 @@ pre { font-family: var(--font-code); font-size: 13px; line-height: 1.55; backgro
 .v-lime .sheet { margin-top: 0; border-radius: 0; padding-top: 40px; }
 
 /* переключатель вариантов */
-.vswitch { position: fixed; right: 18px; bottom: 18px; z-index: 25; white-space: nowrap; display: flex; align-items: center; gap: 4px; background: var(--ink); color: #fff; border-radius: var(--r-pill); padding: 5px 5px 5px 16px; font-size: 13px; box-shadow: 0 16px 40px -12px rgba(6, 14, 46, .6); }
+.vswitch { position: fixed; right: 14px; bottom: 14px; opacity: .92; z-index: 25; white-space: nowrap; display: flex; align-items: center; gap: 4px; background: var(--ink); color: #fff; border-radius: var(--r-pill); padding: 5px 5px 5px 16px; font-size: 13px; box-shadow: 0 16px 40px -12px rgba(6, 14, 46, .6); }
 .vswitch > span { color: rgba(255, 255, 255, .6); margin-right: 6px; }
 .vswitch button { display: inline-flex; gap: 6px; align-items: center; padding: 7px 12px; border-radius: var(--r-pill); color: rgba(255, 255, 255, .85); }
 .vswitch button b { width: 20px; height: 20px; border-radius: 50%; background: rgba(255, 255, 255, .15); display: grid; place-items: center; font-size: 11px; }
 .vswitch button.on { background: var(--lime); color: var(--ink); }
+.vswitch .vswitch-x { padding: 7px 10px; font-size: 16px; line-height: 1; color: rgba(255, 255, 255, .6); }
+.foot-variants { margin-left: 16px; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; font-size: 13px; }
+.foot-variants:hover { color: var(--ink); }
 .vswitch button.on b { background: var(--ink); color: var(--lime); }
 
 @media (max-width: 1100px) {
