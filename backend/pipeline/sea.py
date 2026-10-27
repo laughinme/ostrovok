@@ -2,7 +2,7 @@
 
 import gzip
 
-from shapely import Point, box
+from shapely import Point, box, union_all
 from shapely.ops import polygonize, unary_union
 
 from pipeline.geography import REGION_BOUNDS, line, metric, polygons, wgs84
@@ -25,7 +25,7 @@ def run() -> None:
             length = (dx * dx + dy * dy) ** 0.5
             if length > 1:
                 probes.append(Point((x + xx) / 2 + dy / length * 2, (y + yy) / 2 - dx / length * 2))
-    faces = list(polygonize(unary_union([bounds.boundary, *lines])))
+    faces = list(polygonize(union_all([bounds.boundary, *lines], grid_size=0.001)))
     sea = polygons(wgs84(unary_union([f for f in faces if any(f.contains(p) for p in probes)])))
     if len(faces) < 2 or sea.is_empty or not sea.contains(Point(39.6, 43.45)):
         raise ValueError("Coastlines did not produce a valid Black Sea mask")
