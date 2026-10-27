@@ -11,7 +11,9 @@ def curvature_drop(distances_m: FloatArray) -> FloatArray:
     return CURVATURE * distances_m**2
 
 
-def elevation_angle(heights_m: FloatArray, distances_m: FloatArray, eye_m: float) -> FloatArray:
+def elevation_angle(
+    heights_m: FloatArray, distances_m: FloatArray, eye_m: float | FloatArray
+) -> FloatArray:
     """Apparent terrain/roof angle in degrees; all elevations absolute, distances positive."""
     return np.degrees(np.arctan2(heights_m - eye_m - curvature_drop(distances_m), distances_m))
 
