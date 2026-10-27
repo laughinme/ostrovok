@@ -15,6 +15,9 @@ npm run start      # production server после сборки, порт 5175
 
 Сборка находится в `.next/`; для запуска нужен сервер Next.js. Vercel использует preset `nextjs`;
 старый SPA rewrite на `index.html` удалён.
+`vercel.json` явно задаёт `outputDirectory: ".next"`, переопределяя старое значение `dist`
+в настройках проекта Vercel после перехода с Vite. Иначе `vercel build` успешно собирает Next.js,
+но падает при упаковке результата для деплоя.
 
 ## Маршруты
 
