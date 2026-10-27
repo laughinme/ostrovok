@@ -17,7 +17,7 @@ async def test_seed_is_idempotent_and_derives_facades(db: Database, tmp_path: Pa
     first = await run_seed(db, data_dir, seed_loaders())
     second = await run_seed(db, data_dir, seed_loaders())
 
-    assert first == ["hotels", "demo_users"]
+    assert first == ["hotels", "demo_users"]  # the tiny region has no registry file
     assert second == []
     async with db.raw_session() as session:
         mayak = await session.get(Hotel, hotel_id("way/1"))

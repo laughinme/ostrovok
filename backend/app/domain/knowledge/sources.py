@@ -1,4 +1,5 @@
 from collections.abc import Mapping
+from datetime import datetime
 from enum import StrEnum
 
 
@@ -52,3 +53,15 @@ RELIABILITY: Mapping[Authority, Mapping[SourceKind, float]] = {
 }
 
 DEMO_SOURCES = frozenset({SourceKind.DEMO_CARD})
+
+
+def source_label(source: SourceKind, *, observed_at: datetime, is_demo: bool) -> str:
+    """«расчёт», «ответ отеля, 12.10», «демо-отельер» (08 §9 `Fact.sourceLabel`)."""
+    if source is SourceKind.HOTELIER:
+        return "демо-отельер" if is_demo else f"ответ отеля, {observed_at:%d.%m}"
+    return {
+        SourceKind.COMPUTED: "расчёт",
+        SourceKind.OPEN_DATA: "открытые данные OSM",
+        SourceKind.GUEST: "отзывы гостей после поездки",
+        SourceKind.DEMO_CARD: "демо-карточка",
+    }[source]

@@ -1,0 +1,289 @@
+# Starter registry (09 §5.1). A characteristic is data: a key, how to say it, where it lives,
+# and a recipe from the closed set of methods. New ones arrive from the Curator at runtime.
+#
+# statement: for probability values — `yes` / `no` phrases; the scope is appended as text.
+#            for records and numbers — a template over the value's fields.
+characteristics:
+  - key: sea_view
+    title: Море из окна
+    synonyms: [вид на море, море из окна, окна на море, морской вид, sea view]
+    level: facade_floor
+    value_type: probability
+    recipe: {kind: view, target: sea, min_share: 0.05}
+    ttl_days: 365
+    authority: physics
+    statement: {yes: Море видно из окон, no: Моря из окон не видно}
+    question: Какие категории номеров выходят на сторону {facade} и с какого этажа там видно море?
+
+  - key: sunset_over_sea
+    title: Закат над морем
+    synonyms: [закат, закаты, закат над морем, солнце садится в море, вечернее солнце над морем]
+    level: facade_floor_month
+    value_type: probability
+    recipe: {kind: sun_event, event: sunset, over: sea}
+    ttl_days: 365
+    authority: physics
+    statement: {yes: Закат над морем виден из окон, no: Заката над морем из окон не видно}
+
+  - key: sunrise
+    title: Рассвет из окна
+    synonyms: [рассвет, восход, утреннее солнце, рассвет из окна]
+    level: facade_floor_month
+    value_type: probability
+    recipe: {kind: sun_event, event: sunrise, over: any}
+    ttl_days: 365
+    authority: physics
+    statement: {yes: Рассвет виден из окон, no: Рассвета из окон не видно}
+
+  - key: mountain_view
+    title: Горы из окна
+    synonyms: [вид на горы, горы из окна, горный вид, вершины]
+    level: facade_floor
+    value_type: probability
+    recipe: {kind: view, target: mountains, min_share: 0.05}
+    ttl_days: 365
+    authority: physics
+    statement: {yes: Горы видны из окон, no: Гор из окон не видно}
+
+  - key: night_noise
+    title: Тишина ночью
+    synonyms: [тихий номер, тишина, тихо ночью, без шума, высыпаться, не шумно]
+    level: facade
+    value_type: probability
+    recipe: {kind: noise, period: night, quiet_below_db: 45}
+    ttl_days: 180
+    authority: physics
+    statement: {yes: Ночью тихо, no: Ночью шумно}
+    caveats: [Модель шума по карте, а не замер]
+
+  - key: day_noise
+    title: Тишина днём
+    synonyms: [тихо днём, спокойно днём, без шума днём]
+    level: facade
+    value_type: probability
+    recipe: {kind: noise, period: day, quiet_below_db: 55}
+    ttl_days: 180
+    authority: physics
+    statement: {yes: Днём тихо, no: Днём шумно}
+    caveats: [Модель шума по карте, а не замер]
+
+  - key: beach_walk
+    title: До пляжа пешком
+    synonyms: [близко к морю, рядом с пляжем, до моря пешком, первая линия, до пляжа]
+    level: hotel
+    value_type: record
+    recipe: {kind: walk_to, target: beach, profile: walk}
+    ttl_days: 180
+    authority: physics
+    statement: "До пляжа {minutes} мин пешком, обратно {back_minutes} мин · подъём {climb_m} м"
+
+  - key: stroller_to_sea
+    title: До моря с коляской без ступеней
+    synonyms: [с коляской, коляска, без ступенек до моря, с маленьким ребёнком к морю]
+    level: hotel
+    value_type: probability
+    recipe: {kind: walk_to, target: beach, profile: stroller, max_minutes: 20, no_steps: true}
+    ttl_days: 180
+    authority: physics
+    statement: {yes: До моря можно дойти с коляской без ступеней, no: С коляской до моря без ступеней не дойти}
+
+  - key: steep_streets
+    title: Крутые улицы вокруг
+    synonyms: [без подъёмов, ровно вокруг, не в горку, крутые подъёмы, холмы]
+    level: hotel
+    value_type: probability
+    recipe: {kind: area_stat, metric: steep_share, radius_m: 300, threshold: 0.25}
+    ttl_days: 180
+    authority: physics
+    statement: {yes: Вокруг крутые улицы, no: Вокруг в основном ровно}
+
+  - key: aircraft_noise
+    title: Самолёты
+    synonyms: [самолёты, аэропорт рядом, шум самолётов]
+    level: hotel
+    value_type: probability
+    recipe: {kind: noise, period: day, sources: [aircraft], quiet_below_db: 50}
+    ttl_days: 180
+    authority: physics
+    statement: {yes: Самолётов почти не слышно, no: Слышно взлетающие самолёты}
+
+  - key: construction_nearby
+    title: Стройка рядом
+    synonyms: [стройка, строительство рядом, без стройки]
+    level: hotel
+    value_type: probability
+    recipe: {kind: poi_nearby, poi: {tags: {landuse: [construction], building: [construction]}}, within_m: 300}
+    ttl_days: 90
+    authority: freshest
+    statement: {yes: Рядом идёт стройка, no: Стройки рядом нет}
+
+  - key: pharmacy_24_7
+    title: Круглосуточная аптека рядом
+    synonyms: [аптека, круглосуточная аптека, аптека ночью]
+    level: hotel
+    value_type: probability
+    recipe: {kind: poi_nearby, poi: {tags: {amenity: [pharmacy], healthcare: [pharmacy]}}, within_minutes: 15, open: "24_7"}
+    ttl_days: 90
+    authority: freshest
+    statement: {yes: Круглосуточная аптека в 15 минутах пешком, no: Круглосуточной аптеки в 15 минутах нет}
+
+  - key: food_late
+    title: Поесть поздно вечером
+    synonyms: [поесть ночью, ресторан допоздна, кафе ночью, ужин поздно]
+    level: hotel
+    value_type: probability
+    recipe: {kind: poi_nearby, poi: {tags: {amenity: [restaurant, cafe, fast_food]}}, within_minutes: 10, open: night}
+    ttl_days: 90
+    authority: freshest
+    statement: {yes: Рядом есть где поесть поздно вечером, no: Поздно вечером рядом поесть негде}
+
+  - key: playground_walk
+    title: Детская площадка рядом
+    synonyms: [детская площадка, площадка для детей, с детьми]
+    level: hotel
+    value_type: probability
+    recipe: {kind: poi_nearby, poi: {tags: {leisure: [playground]}}, within_minutes: 10}
+    ttl_days: 90
+    authority: freshest
+    statement: {yes: Детская площадка в 10 минутах пешком, no: Детской площадки в 10 минутах нет}
+
+  - key: kids_hospital
+    title: Детская больница рядом
+    synonyms: [детская больница, педиатр, детский врач]
+    level: hotel
+    value_type: probability
+    recipe: {kind: poi_nearby, poi: {tags: {amenity: [hospital, clinic], healthcare: [hospital, clinic]}, name_contains: [детск]}, within_m: 3000}
+    ttl_days: 90
+    authority: freshest
+    statement: {yes: Детская больница или клиника в 3 км, no: Детской больницы в 3 км нет}
+
+  - key: parking
+    title: Парковка рядом
+    synonyms: [парковка, на машине, где оставить машину]
+    level: hotel
+    value_type: probability
+    recipe: {kind: poi_nearby, poi: {tags: {amenity: [parking]}}, within_m: 300}
+    ttl_days: 90
+    authority: hotelier
+    statement: {yes: Парковка в 300 м, no: Парковки рядом нет}
+
+  - key: ev_charging
+    title: Зарядка для электромобиля
+    synonyms: [зарядка, электромобиль, электрозаправка, tesla]
+    level: hotel
+    value_type: probability
+    recipe: {kind: poi_nearby, poi: {tags: {amenity: [charging_station]}}, within_m: 1500}
+    ttl_days: 90
+    authority: freshest
+    statement: {yes: Зарядка для электромобиля в 1,5 км, no: Зарядки для электромобиля рядом нет}
+
+  - key: climate
+    title: Погода и море в даты
+    synonyms: [тепло, погода, вода тёплая, искупаться, солнечно]
+    level: month
+    value_type: record
+    recipe: {kind: climate}
+    ttl_days: 365
+    authority: physics
+    statement: "Воздух до {air_max}°, вода {water}° · солнце {sun_hours} ч в день"
+
+  - key: pets_policy
+    title: С животными
+    synonyms: [с собакой, с животными, с кошкой, pet friendly, с питомцем]
+    level: hotel
+    value_type: record
+    recipe:
+      kind: ask_hotelier
+      question: Можно ли у вас с животными? Какие, до какого веса и есть ли доплата?
+      answer_kind: free_text
+    ttl_days: 90
+    authority: hotelier
+    statement: "{summary}"
+
+  - key: soundproofing
+    title: Шумоизоляция окон
+    synonyms: [шумоизоляция, звукоизоляция, хорошие окна, стеклопакеты]
+    level: facade
+    value_type: probability
+    recipe:
+      kind: ask_hotelier
+      question: Какие окна в номерах на шумную сторону — есть ли шумоизоляция?
+      answer_kind: yes_no
+    ttl_days: 180
+    authority: hotelier
+    statement: {yes: Окна с шумоизоляцией, no: Окна без шумоизоляции}
+
+  - key: blackout
+    title: Плотные шторы
+    synonyms: [блэкаут, плотные шторы, затемнение, темно спать]
+    level: hotel
+    value_type: probability
+    recipe:
+      kind: ask_hotelier
+      question: Есть ли в номерах плотные шторы или блэкаут?
+      answer_kind: yes_no
+    ttl_days: 180
+    authority: hotelier
+    statement: {yes: В номерах плотные шторы, no: Плотных штор нет}
+
+  - key: ac
+    title: Кондиционер
+    synonyms: [кондиционер, кондей, прохладно в жару]
+    level: hotel
+    value_type: probability
+    recipe:
+      kind: ask_hotelier
+      question: Есть ли кондиционер во всех номерах?
+      answer_kind: yes_no
+    ttl_days: 180
+    authority: hotelier
+    statement: {yes: Кондиционер в номерах, no: Кондиционера нет}
+
+  - key: elevator
+    title: Лифт
+    synonyms: [лифт, подъёмник, с чемоданами]
+    level: hotel
+    value_type: probability
+    recipe:
+      kind: ask_hotelier
+      question: Есть ли в здании лифт до всех этажей?
+      answer_kind: yes_no
+    ttl_days: 180
+    authority: hotelier
+    statement: {yes: Есть лифт до всех этажей, no: Лифта нет}
+
+  - key: step_free
+    title: Без ступеней до номера
+    synonyms: [без ступенек, доступная среда, инвалидная коляска, пандус]
+    level: hotel
+    value_type: probability
+    recipe:
+      kind: ask_hotelier
+      question: Можно ли попасть от входа до номеров без ступеней (пандус, лифт)?
+      answer_kind: yes_no
+    ttl_days: 180
+    authority: hotelier
+    statement: {yes: До номера без ступеней, no: До номера есть ступени}
+
+  - key: facade_rooms
+    title: Какие номера на какой стороне
+    synonyms: [номер на сторону моря, окна во двор, какая сторона]
+    level: room_type
+    value_type: record
+    recipe:
+      kind: ask_hotelier
+      question: Какие категории номеров выходят на какие стороны здания и на каких этажах?
+      answer_kind: facade_mapping
+    ttl_days: 180
+    authority: hotelier
+    statement: "{summary}"
+
+  - key: remote_work
+    title: Можно поработать
+    synonyms: [поработать, удалёнка, рабочее место, тихо работать]
+    level: hotel
+    value_type: probability
+    recipe: {kind: derived, op: all, keys: [day_noise]}
+    ttl_days: 180
+    authority: physics
+    statement: {yes: Тихо днём — можно спокойно поработать, no: Днём шумно для работы}

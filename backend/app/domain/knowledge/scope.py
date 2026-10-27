@@ -219,3 +219,37 @@ def _merge_facades[V](items: list[tuple[Scope, V]]) -> list[tuple[Scope, V]]:
         )
         for (floor_from, floor_to, months, value), facades in merged.items()
     ]
+
+
+def scope_to_json(scope: Scope) -> dict[str, object]:
+    """Contract shape (08 §9 `Scope`): omitted fields mean "all"."""
+    data: dict[str, object] = {}
+    if scope.facades:
+        data["facades"] = [f.value for f in _ORDER if f in scope.facades]
+    if scope.floor_from is not None:
+        data["floorFrom"] = scope.floor_from
+    if scope.floor_to is not None:
+        data["floorTo"] = scope.floor_to
+    if scope.months:
+        data["months"] = sorted(scope.months)
+    if scope.room_types:
+        data["roomTypeIds"] = sorted(scope.room_types)
+    return data
+
+
+def scope_from_json(data: Mapping[str, object]) -> Scope:
+    def items(name: str) -> list[object] | None:
+        value = data.get(name)
+        return list(value) if isinstance(value, list | tuple) and value else None
+
+    facades = items("facades")
+    months = items("months")
+    rooms = items("roomTypeIds")
+    floor_from, floor_to = data.get("floorFrom"), data.get("floorTo")
+    return Scope(
+        facades=frozenset(Facade(str(f)) for f in facades) if facades else None,
+        floor_from=int(str(floor_from)) if floor_from is not None else None,
+        floor_to=int(str(floor_to)) if floor_to is not None else None,
+        months=frozenset(int(str(m)) for m in months) if months else None,
+        room_types=frozenset(str(r) for r in rooms) if rooms else None,
+    )

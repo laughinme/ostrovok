@@ -5,6 +5,7 @@ from app.service.catalog.seed import (
     OsmFeaturesLoader,
     RoomTypesLoader,
 )
+from app.service.knowledge.registry import RegistryLoader
 from app.service.seed import SeedLoader
 
 
@@ -19,4 +20,5 @@ def seed_loaders() -> list[SeedLoader]:
         OsmFeaturesLoader(),
         RoomTypesLoader(),
         DemoUsersLoader(),
+        RegistryLoader(),
     ]
