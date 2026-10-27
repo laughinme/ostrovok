@@ -1,0 +1,255 @@
+data_status: демо; оценочные диапазоны R6, не реальные характеристики отелей
+reference: R6 demo reference, 27.10.2026
+types:
+  hotel_2_star:
+    categories:
+    - name: Эконом
+      area_m2: [15, 20]
+      beds: Одна двуспальная либо две односпальные
+      capacity: [1, 2]
+    - name: Стандарт
+      area_m2: [17, 24]
+      beds: Одна двуспальная либо две односпальные
+      capacity: [1, 2]
+    - name: Комфорт
+      area_m2: [22, 30]
+      beds: Двуспальная кровать, возможна дополнительная
+      capacity: [2, 3]
+    - name: Семейный
+      area_m2: [28, 42]
+      beds: Двуспальная кровать и диван либо отдельные кровати
+      capacity: [3, 4]
+    amenities:
+      wifi_pct: [85, 98]
+      pool_pct: [15, 35]
+      parking_pct: [35, 65]
+      breakfast_pct: [85, 100]
+      air_conditioning_pct: [65, 90]
+      spa_pct: [0, 8]
+      kids_club_pct: [0, 8]
+      hotel_beach_pct: [0, 8]
+      transfer_pct: [10, 35]
+    policies:
+      soundproof_windows_pct: [10, 30]
+      blackout_curtains_pct: [20, 45]
+      elevator_pct: [20, 45]
+      step_free_entrance_pct: [25, 50]
+    pets_pct: [25, 40]
+  hotel_3_star:
+    categories:
+    - name: Компактный стандарт
+      area_m2: [19, 23]
+      beds: Двуспальная либо две односпальные
+      capacity: [1, 2]
+    - name: Стандарт
+      area_m2: [20, 27]
+      beds: Двуспальная либо две односпальные
+      capacity: [2, 2]
+    - name: Улучшенный
+      area_m2: [25, 34]
+      beds: Двуспальная и дополнительное место по запросу
+      capacity: [2, 3]
+    - name: Семейный
+      area_m2: [30, 43]
+      beds: Двуспальная и диван-кровать
+      capacity: [3, 4]
+    - name: Джуниор сюит
+      area_m2: [30, 45]
+      beds: Большая двуспальная и диван
+      capacity: [2, 4]
+    amenities:
+      wifi_pct: [94, 100]
+      pool_pct: [25, 55]
+      parking_pct: [40, 70]
+      breakfast_pct: [90, 100]
+      air_conditioning_pct: [80, 97]
+      spa_pct: [5, 25]
+      kids_club_pct: [5, 20]
+      hotel_beach_pct: [3, 18]
+      transfer_pct: [20, 50]
+    policies:
+      soundproof_windows_pct: [20, 45]
+      blackout_curtains_pct: [35, 65]
+      elevator_pct: [40, 75]
+      step_free_entrance_pct: [40, 65]
+    pets_pct: [25, 40]
+  hotel_4_star:
+    categories:
+    - name: Стандарт
+      area_m2: [22, 30]
+      beds: Двуспальная либо две односпальные
+      capacity: [2, 2]
+    - name: Супериор
+      area_m2: [27, 36]
+      beds: Большая двуспальная либо раздельные кровати
+      capacity: [2, 3]
+    - name: Делюкс
+      area_m2: [32, 45]
+      beds: Большая двуспальная и дополнительное место
+      capacity: [2, 3]
+    - name: Семейный
+      area_m2: [38, 52]
+      beds: Двуспальная, диван или отдельная спальная зона
+      capacity: [3, 5]
+    - name: Джуниор сюит
+      area_m2: [38, 58]
+      beds: Большая двуспальная и диван
+      capacity: [2, 4]
+    amenities:
+      wifi_pct: [98, 100]
+      pool_pct: [50, 80]
+      parking_pct: [60, 85]
+      breakfast_pct: [100, 100]
+      air_conditioning_pct: [100, 100]
+      spa_pct: [35, 70]
+      kids_club_pct: [25, 55]
+      hotel_beach_pct: [10, 35]
+      transfer_pct: [100, 100]
+    policies:
+      soundproof_windows_pct: [45, 75]
+      blackout_curtains_pct: [65, 90]
+      elevator_pct: [70, 97]
+      step_free_entrance_pct: [60, 90]
+    pets_pct: [20, 40]
+  hotel_5_star:
+    categories:
+    - name: Супериор
+      area_m2: [28, 40]
+      beds: Большая двуспальная либо две односпальные
+      capacity: [2, 2]
+    - name: Делюкс
+      area_m2: [35, 48]
+      beds: Большая двуспальная, возможно дополнительное место
+      capacity: [2, 3]
+    - name: Джуниор сюит
+      area_m2: [42, 62]
+      beds: Большая двуспальная и диван
+      capacity: [2, 4]
+    - name: Люкс
+      area_m2: [55, 95]
+      beds: Отдельная спальня с двуспальной кроватью и диван
+      capacity: [2, 4]
+    - name: Сюит
+      area_m2: [75, 130]
+      beds: Одна или несколько спален, дополнительный диван
+      capacity: [2, 6]
+    amenities:
+      wifi_pct: [100, 100]
+      pool_pct: [75, 98]
+      parking_pct: [100, 100]
+      breakfast_pct: [100, 100]
+      air_conditioning_pct: [100, 100]
+      spa_pct: [100, 100]
+      kids_club_pct: [45, 75]
+      hotel_beach_pct: [30, 65]
+      transfer_pct: [100, 100]
+    policies:
+      soundproof_windows_pct: [65, 92]
+      blackout_curtains_pct: [85, 100]
+      elevator_pct: [85, 100]
+      step_free_entrance_pct: [75, 97]
+    pets_pct: [20, 35]
+  guesthouse:
+    categories:
+    - name: Бюджетный номер
+      area_m2: [13, 18]
+      beds: Одна двуспальная либо две односпальные
+      capacity: [1, 2]
+    - name: Стандарт
+      area_m2: [16, 23]
+      beds: Двуспальная либо две односпальные
+      capacity: [2, 2]
+    - name: Комфорт
+      area_m2: [20, 30]
+      beds: Двуспальная и раскладное кресло либо диван
+      capacity: [2, 3]
+    - name: Семейный
+      area_m2: [26, 42]
+      beds: Двуспальная, диван или дополнительные кровати
+      capacity: [3, 5]
+    amenities:
+      wifi_pct: [80, 97]
+      pool_pct: [18, 45]
+      parking_pct: [45, 75]
+      breakfast_pct: [25, 60]
+      air_conditioning_pct: [70, 95]
+      spa_pct: [0, 8]
+      kids_club_pct: [0, 5]
+      hotel_beach_pct: [0, 5]
+      transfer_pct: [15, 45]
+    policies:
+      soundproof_windows_pct: [5, 25]
+      blackout_curtains_pct: [15, 45]
+      elevator_pct: [0, 12]
+      step_free_entrance_pct: [10, 35]
+    pets_pct: [25, 45]
+  apartments:
+    categories:
+    - name: Студия
+      area_m2: [20, 32]
+      beds: Двуспальная кровать либо диван-кровать
+      capacity: [1, 2]
+    - name: Апартаменты с отдельной спальней
+      area_m2: [30, 48]
+      beds: Двуспальная в спальне и диван в гостиной
+      capacity: [2, 4]
+    - name: Семейные апартаменты
+      area_m2: [45, 70]
+      beds: Двуспальная, диван и дополнительные спальные места
+      capacity: [3, 5]
+    - name: Апартаменты с двумя спальнями
+      area_m2: [65, 105]
+      beds: Две спальни, дополнительные места в гостиной
+      capacity: [4, 6]
+    amenities:
+      wifi_pct: [90, 100]
+      pool_pct: [5, 35]
+      parking_pct: [30, 65]
+      breakfast_pct: [5, 30]
+      air_conditioning_pct: [80, 98]
+      spa_pct: [0, 20]
+      kids_club_pct: [0, 12]
+      hotel_beach_pct: [0, 8]
+      transfer_pct: [10, 40]
+    policies:
+      soundproof_windows_pct: [15, 50]
+      blackout_curtains_pct: [35, 70]
+      elevator_pct: [45, 85]
+      step_free_entrance_pct: [30, 70]
+    pets_pct: [25, 50]
+prices:
+  center:
+    hotel_2_star: [1800, 3800]
+    hotel_3_star: [2400, 5600]
+    hotel_4_star: [3500, 9500]
+    hotel_5_star: [8000, 24000]
+    guesthouse: [1400, 3500]
+    apartments: [2000, 4700]
+  khosta:
+    hotel_2_star: [1500, 3300]
+    hotel_3_star: [2100, 4700]
+    hotel_4_star: [3000, 8000]
+    hotel_5_star: [7500, 20000]
+    guesthouse: [1200, 3200]
+    apartments: [1900, 4500]
+  adler:
+    hotel_2_star: [1500, 3600]
+    hotel_3_star: [2000, 5000]
+    hotel_4_star: [3300, 8500]
+    hotel_5_star: [8000, 22000]
+    guesthouse: [1100, 3000]
+    apartments: [1800, 4300]
+  sirius:
+    hotel_2_star: [1900, 4200]
+    hotel_3_star: [2600, 6200]
+    hotel_4_star: [4500, 11000]
+    hotel_5_star: [11000, 28000]
+    guesthouse: [1600, 4200]
+    apartments: [2300, 5200]
+  krasnaya_polyana:
+    hotel_2_star: [1500, 3400]
+    hotel_3_star: [2200, 5400]
+    hotel_4_star: [3000, 9500]
+    hotel_5_star: [4500, 19000]
+    guesthouse: [1400, 3800]
+    apartments: [1900, 4800]
