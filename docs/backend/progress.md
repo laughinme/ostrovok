@@ -12,6 +12,29 @@
 
 ---
 
+### 28.10 02:53 МСК · codex-terrain · B1.4
+- Сделано: `pipeline.climate` и `data/region/climate.json` по D-38, 4 точки × 12 месяцев × 6 метрик.
+  Open-Meteo Archive ERA5 за 3653 дня 2016–2025; Marine SST best_match за 2023–2025. Коммит `44b283a`.
+  Ноябрь: вода центр +17,08, Адлер +16,98, Сириус +16,96 °C, Поляна null. Атрибуция CC BY 4.0 в JSON/MANIFEST.
+- **Публичный API:** `pipeline.climate.monthly_normals(weather: dict, marine: dict|None) -> dict[str,dict]`
+  принимает daily/hourly секции API, возвращает ключи "1"…"12" с `air_max_c`, `air_min_c`, `water_c`
+  (°C), `sun_hours`, `daylight_h` (ч/день), `rain_days` (дней с rain_sum ≥1 мм за месяц).
+  Усреднение сначала внутри календарного года/месяца, затем равные веса лет. `water_normals(marine)`
+  возвращает `(месячные °C, число полных лет для каждого месяца)`; месяцы с пропусками исключены целиком.
+  `ClimateCatalog.from_file(Path("data/region/climate.json"))`, `.nearest(LonLat)` и `.estimate(location, check_in, check_out)`
+  работают без изменения адаптера; checkout исключён, единицы сохраняются.
+- Как проверить: `uv run --group pipeline python -m pipeline climate`; сырые запросы в SHA256-кэше,
+  URL и координаты фактических ячеек сохранены в JSON. Полный `make check` в отдельной БД/Redis:
+  209 passed, 1 skipped (пока нет графа), ruff/format, mypy strict и import-linter зелёные.
+  Unit-тесты проверяют високосные годы, секунды→часы, порог дождя, пропуски и реальный адаптер.
+- Грабли: ERA5-Ocean принимает SST за 2016–2025, но возвращает только null. Marine best_match имеет
+  SST с конца ноября 2022 и пропуски в январе/феврале 2025. Поэтому для воды используем только полные
+  месяцы 2023–2025: 2 года для января/февраля и 3 для остальных; не называем их десятилетней нормой.
+  `weather_years=10`, `water_years_by_month` и `water_period` явные; `years=2` у моря — консервативный
+  минимум для существующего ClimateCatalog, чтобы его уверенность не приписала воде 10 лет.
+- Дальше: B2.10 может читать готовый климат; отдельное повышение точности воды требует более длинного ряда.
+  codex-terrain делает B1.6 по реальным 200 osm_id и R6.
+
 ### 28.10 02:51 МСК · codex-terrain · B1.3
 - Сделано: `pipeline.dem` → `dem_int16.npy` (1852×3018, 11 178 800 байт) и `dem.json`,
   EPSG:4326, шаг 2″ (~45×62 м), среднее исходных пикселей с округлением до метра. Коммит `f9adea6`.
