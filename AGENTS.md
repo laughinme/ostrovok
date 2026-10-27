@@ -5,6 +5,6 @@
 ## Дизайн-работа
 
 - Любую визуальную задачу (экран, лендинг, анимация, критика, правки `DESIGN.md`) начинай со скилла `design-studio`
-  (`$design-studio`). Не стоит — `bash design-lab/install.sh` (см. `design-lab/README.md`).
+  (`$design-studio`). Не стоит — спроси у владельца архив `design-studio` (в репозитории его нет) и запусти `bash design-studio/install.sh`.
 - Команды Impeccable: `$impeccable critique`, `polish`, `audit`, `animate`, `harden`.
 - Без просмотра результата глазами «готово» не говорим: скриншоты 1440 и 390, для скролла — скрипт из скилла.
