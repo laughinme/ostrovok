@@ -102,3 +102,53 @@ pythonpath = ["."]
 addopts = "-ra --strict-markers"
 markers = ["integration: needs PostGIS and Redis from docker-compose.test.yml"]
 filterwarnings = ["error::DeprecationWarning:app.*"]
+
+# Architecture contracts (09 §10.3), checked by `lint-imports` in `make check`.
+[tool.importlinter]
+root_package = "app"
+include_external_packages = true
+
+[[tool.importlinter.contracts]]
+name = "Layers: api → service → domain"
+type = "layers"
+layers = ["app.api", "app.service", "app.domain"]
+
+[[tool.importlinter.contracts]]
+name = "Domain is pure: no frameworks, ORM, schemas or adapters"
+type = "forbidden"
+source_modules = ["app.domain"]
+forbidden_modules = [
+    "fastapi", "starlette", "sqlalchemy", "geoalchemy2", "pydantic", "redis", "httpx", "pydantic_ai",
+    "app.db", "app.infra", "app.service", "app.api",
+]
+
+[[tool.importlinter.contracts]]
+name = "Services do not know HTTP"
+type = "forbidden"
+source_modules = ["app.service"]
+forbidden_modules = ["fastapi", "starlette", "app.api"]
+
+[[tool.importlinter.contracts]]
+name = "Persistence does not call services, adapters or the API"
+type = "forbidden"
+source_modules = ["app.db"]
+forbidden_modules = ["app.service", "app.infra", "app.api", "fastapi"]
+
+[[tool.importlinter.contracts]]
+name = "Adapters do not call the API"
+type = "forbidden"
+source_modules = ["app.infra"]
+forbidden_modules = ["app.api", "fastapi"]
+
+[[tool.importlinter.contracts]]
+name = "Core is shared and depends on nothing in the app"
+type = "forbidden"
+source_modules = ["app.core"]
+forbidden_modules = ["app.domain", "app.service", "app.db", "app.infra", "app.api"]
+
+[[tool.importlinter.contracts]]
+name = "Geo kernels do not depend on search or agents"
+type = "forbidden"
+source_modules = ["app.domain.geo"]
+forbidden_modules = ["app.domain.search", "app.domain.agents", "app.domain.partner", "app.domain.booking"]
+allow_indirect_imports = true
