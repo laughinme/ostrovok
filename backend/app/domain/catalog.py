@@ -1,3 +1,5 @@
+from collections.abc import Mapping
+from dataclasses import dataclass
 from uuid import NAMESPACE_URL, UUID, uuid5
 
 import numpy as np
@@ -48,3 +50,38 @@ def building_facades(footprint: BaseGeometry) -> tuple[Facade, ...]:
     walls = extract_facades(local)
     sides = {wall.facade for wall in walls if wall.length_m >= _MIN_FACADE_M}
     return tuple(f for f in Facade if f in sides) or tuple({w.facade for w in walls})
+
+
+@dataclass(frozen=True, slots=True)
+class HotelGeo:
+    """Everything the research tools need about one hotel; geometry in WGS84."""
+
+    id: UUID
+    osm_id: str
+    name: str
+    district: str
+    location: LonLat
+    footprint: BaseGeometry
+    floors: int
+    height_m: float
+    height_source: str
+    facades: tuple[Facade, ...]
+    ground_m: float = 0.0
+
+
+@dataclass(frozen=True, slots=True)
+class MapFeature:
+    osm_id: str
+    kind: str
+    name: str | None
+    tags: Mapping[str, str]
+    geometry: BaseGeometry
+
+
+@dataclass(frozen=True, slots=True)
+class BuildingShape:
+    osm_id: str | None
+    geometry: BaseGeometry
+    height_m: float
+    levels: int | None
+    height_source: str

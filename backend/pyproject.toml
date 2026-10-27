@@ -74,6 +74,7 @@ ignore = [
 "app/api/**" = ["PLR0917"]
 # Domain math is full of thresholds and coefficients that are named where they matter.
 "app/domain/**" = ["PLR2004"]
+"app/service/recipes/methods/**" = ["PLR2004"]
 # Offline scripts print progress and talk to known public hosts.
 "pipeline/**" = ["T201", "S310", "PLR2004"]
 
