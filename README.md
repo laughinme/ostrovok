@@ -10,6 +10,7 @@
 | --- | --- | --- |
 | [`frontend`](frontend/README.md) | React, TanStack Start, FSD; текущая рабочая версия с локальными правками | http://localhost:5173 |
 | [`frontend-2`](frontend-2/README.md) | React, Vite, React Router; версия из ветки `feat/frontend-2` | http://127.0.0.1:5174 |
+| [`frontend-3`](frontend-3/README.md) | React, Vite, React Router, Motion, MapLibre; «О!кно» по `DESIGN.md` и прототипу `design/prototype/` | http://127.0.0.1:5175 |
 
 Для обеих версий нужны Node.js 22.12+ и npm. Запуск первой версии:
 
