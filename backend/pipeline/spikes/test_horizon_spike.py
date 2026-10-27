@@ -3,6 +3,7 @@
 
 # ruff: noqa: S101
 
+import horizon_data
 import numpy as np
 from horizon_data import building_height, positive_number
 from horizon_geometry import (
@@ -88,3 +89,22 @@ def test_height_precedence_units_and_unknown_tags():
     assert building_height({"height": "unknown"}) == (9, "default")
     assert positive_number("12,5") == 12.5
     assert positive_number("-5") is None
+
+
+def test_coastline_direction_selects_only_water_side(monkeypatch):
+    coastline = {
+        "elements": [
+            {
+                "geometry": [
+                    {"lon": 39.8, "lat": 42.8},
+                    {"lon": 39.8, "lat": 43.5},
+                    {"lon": 39.8, "lat": 44.4},
+                ]
+            }
+        ]
+    }
+    monkeypatch.setattr(horizon_data, "osm_query", lambda *_: coastline)
+    projection, _ = horizon_data.local_projection(39.8, 43.6)
+    water = horizon_data.sea_polygon(projection)
+    assert water.contains(Point(projection.transform(40.0, 43.6)))
+    assert not water.contains(Point(projection.transform(39.6, 43.6)))
