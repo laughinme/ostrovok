@@ -6,6 +6,7 @@ import hashlib
 import io
 import json
 import time
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -45,13 +46,18 @@ def download(url: str, *, query: str | None = None) -> Path:
                             for chunk in response.iter_bytes():
                                 target.write(chunk)
             path.with_suffix(".part").replace(path)
-            path.with_suffix(".request.json").write_text(json.dumps({"url": url, "query": query}))
+            path.with_suffix(".request.json").write_text(
+                json.dumps(
+                    {"url": url, "query": query, "fetched_at": datetime.now(UTC).isoformat()}
+                )
+            )
             print(f"Cached {key[:10]}: {path.stat().st_size:,} bytes", flush=True)
             time.sleep(1)
             return path
-        except (httpx.HTTPError, ValueError):
+        except (httpx.HTTPError, ValueError) as error:
             if attempt == 3:
                 raise
+            print(f"Retry {attempt + 1}/4: {type(error).__name__}", flush=True)
             time.sleep(3 * (attempt + 1))
     raise RuntimeError("Download retries exhausted")
 
