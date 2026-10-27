@@ -1,9 +1,10 @@
+from dataclasses import replace
 from math import exp
 from typing import ClassVar
 
 from app.domain.geo.noise import facade_noise
 from app.domain.geo.noise_sources import NoiseFeature, noise_sources
-from app.domain.knowledge.characteristic import MethodKind
+from app.domain.knowledge.characteristic import Level, MethodKind
 from app.domain.knowledge.observation import OSM_ATTRIBUTION, Evidence, EvidenceKind
 from app.domain.knowledge.scope import Scope
 from app.domain.knowledge.statements import FACADE_SHORT
@@ -104,4 +105,8 @@ class NoiseExecutor:
         await call.tracer.tool(
             "noise.facades", summary="; ".join(lines), args={"period": recipe.period}
         )
+        if call.characteristic.level is Level.HOTEL:
+            # A hotel-level answer must hold for every room: the loudest side decides.
+            loudest = min(findings, key=lambda f: f.confidence if f.value else 1 - f.confidence)
+            return [replace(loudest, scope=Scope.everywhere())]
         return findings

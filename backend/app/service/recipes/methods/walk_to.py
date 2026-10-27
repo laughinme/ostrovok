@@ -16,6 +16,7 @@ from app.service.recipes.models import WalkToRecipe
 
 _TARGET_KINDS = {"beach": ["beach"], "station": ["station"]}
 _SEARCH_RADIUS_M = 3000
+_SEA_TOUCH_DEG = 0.003  # ~250 m: a beach belongs to the sea if it touches it within this
 
 
 class WalkToExecutor:
@@ -31,6 +32,11 @@ class WalkToExecutor:
                 hotel.location, _SEARCH_RADIUS_M, kinds=_TARGET_KINDS.get(recipe.target, [])
             )
             label = {"beach": "пляж", "station": "станция", "center": "центр"}[recipe.target]
+            if recipe.target == "beach" and env.sea is not None:
+                # River and lake beaches in the mountains are not what «до пляжа» means here.
+                targets = [
+                    t for t in targets if env.sea.intersects(t.geometry.buffer(_SEA_TOUCH_DEG))
+                ]
         else:
             targets = await env.reader.tagged(
                 recipe.target.tags, near=hotel.location, radius_m=_SEARCH_RADIUS_M
@@ -40,7 +46,7 @@ class WalkToExecutor:
             "osm.find", summary=f"{len(targets)} вариантов «{label}» в 3 км", args={"target": label}
         )
         profile = WalkProfile(recipe.profile)
-        walk = nearest_walk(env.router, hotel.location, targets, profile)
+        walk = nearest_walk(env.router, hotel.location, targets, profile, terrain=env.terrain)
         if walk is None:
             raise NoDataError(f"{label}: пешком не дойти или нет данных")
         await call.tracer.tool(
@@ -72,7 +78,7 @@ class WalkToExecutor:
             )
             value = record
         caveats = (
-            ("Без пешеходного графа: оценка по прямой ×1,35, рельеф не учтён",)
+            ("Без пешеходного графа: оценка по прямой ×1,35 с уклоном по рельефу",)
             if walk.estimated
             else ()
         )
@@ -100,8 +106,8 @@ def _record(walk: Walk) -> dict[str, object]:
     return {
         "minutes": round(walk.minutes, 1),
         "back_minutes": round(walk.back_minutes, 1),
-        "climb_m": round(route.there.climb_m) if route else None,
-        "back_climb_m": round(route.back.climb_m) if route else None,
+        "climb_m": round(walk.climb_m) if walk.climb_m is not None else None,
+        "back_climb_m": round(walk.back_climb_m) if walk.back_climb_m is not None else None,
         "steps": route.there.steps if route else None,
         "crossings": route.there.crossings if route else None,
         "length_m": round(route.there.length_m) if route else None,
@@ -114,7 +120,8 @@ def _record(walk: Walk) -> dict[str, object]:
 def _route_summary(walk: Walk, label: str) -> str:
     name = f"«{walk.feature.name}»" if walk.feature.name else label
     if walk.route is None:
-        return f"{name}: ~{walk.minutes:.0f} мин по прямой (без графа)"
+        climb = f", обратно в гору {walk.back_climb_m:.0f} м" if walk.back_climb_m else ""
+        return f"{name}: ~{walk.minutes:.0f} мин по прямой с учётом рельефа{climb} (без графа)"
     there, back = walk.route.there, walk.route.back
     return (
         f"{name}: {there.minutes:.0f} мин туда, {back.minutes:.0f} обратно, "

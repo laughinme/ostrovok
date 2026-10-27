@@ -74,6 +74,8 @@ class Environment:
     router: Router | None = None
     terrain: TerrainModel | None = None
     climate: Any = None
+    sea: Any = None
+    """Prepared sea polygon (WGS84) when `sea.wkb.gz` is present."""
     extras: dict[str, Any] = field(default_factory=dict)
 
 

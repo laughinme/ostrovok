@@ -55,8 +55,10 @@ RELIABILITY: Mapping[Authority, Mapping[SourceKind, float]] = {
 DEMO_SOURCES = frozenset({SourceKind.DEMO_CARD})
 
 
-def source_label(source: SourceKind, *, observed_at: datetime, is_demo: bool) -> str:
+def source_label(source: SourceKind, *, observed_at: datetime, is_demo: bool, ref: str = "") -> str:
     """«расчёт», «ответ отеля, 12.10», «демо-отельер» (08 §9 `Fact.sourceLabel`)."""
+    if ref.startswith("open-meteo"):
+        return "климат Open-Meteo"
     if source is SourceKind.HOTELIER:
         return "демо-отельер" if is_demo else f"ответ отеля, {observed_at:%d.%m}"
     return {

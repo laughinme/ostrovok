@@ -175,7 +175,9 @@ def _fact(
         statement=characteristic.statement.render(draft.value),
         scope_text=scope_text(draft.scope),
         source=main.source,
-        source_label=source_label(main.source, observed_at=main.observed_at, is_demo=is_demo),
+        source_label=source_label(
+            main.source, observed_at=main.observed_at, is_demo=is_demo, ref=main.source_ref
+        ),
         method=main.method,
         observed_at=main.observed_at,
         valid_until=main.valid_until,
@@ -223,7 +225,9 @@ def _claim(o: Observation) -> dict[str, object]:
     return {
         "observationId": str(o.id),
         "source": o.source.value,
-        "label": source_label(o.source, observed_at=o.observed_at, is_demo=o.is_demo),
+        "label": source_label(
+            o.source, observed_at=o.observed_at, is_demo=o.is_demo, ref=o.source_ref
+        ),
         "value": o.value,
         "scopeText": scope_text(o.scope),
         "confidence": round(o.confidence, 3),

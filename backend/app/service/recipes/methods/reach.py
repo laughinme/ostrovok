@@ -4,11 +4,13 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 from math import asin, cos, radians, sin, sqrt
 
+import numpy as np
 from shapely.geometry.base import BaseGeometry
 
 from app.domain.catalog import MapFeature
 from app.domain.geo.types import LonLat, Route, WalkProfile
-from app.service.ports import Router
+from app.domain.geo.walking import tobler_speed_kmh
+from app.service.ports import Router, TerrainModel
 
 WALK_M_PER_MIN = 80.0
 DETOUR = 1.35  # streets are longer than the straight line
@@ -39,10 +41,8 @@ class Walk:
     back_minutes: float
     route: Route | None
     estimated: bool
-
-    @property
-    def climb_m(self) -> float:
-        return self.route.there.climb_m if self.route else 0.0
+    climb_m: float | None = None
+    back_climb_m: float | None = None
 
 
 def straight_minutes(origin: LonLat, target: LonLat) -> float:
@@ -54,6 +54,8 @@ def nearest_walk(
     origin: LonLat,
     features: Sequence[MapFeature],
     profile: WalkProfile = WalkProfile.WALK,
+    *,
+    terrain: TerrainModel | None = None,
 ) -> Walk | None:
     if not features:
         return None
@@ -62,10 +64,32 @@ def nearest_walk(
         found = router.nearest_of(origin, targets, profile)
         if found is not None:
             index, route = found
-            return Walk(features[index], route.there.minutes, route.back.minutes, route, False)
+            return Walk(
+                features[index],
+                route.there.minutes,
+                route.back.minutes,
+                route,
+                False,
+                route.there.climb_m,
+                route.back.climb_m,
+            )
     index = min(range(len(targets)), key=lambda i: haversine_m(origin, targets[i]))
-    minutes = straight_minutes(origin, targets[index])
-    return Walk(features[index], minutes, minutes, None, True)
+    return _estimate(features[index], origin, targets[index], terrain)
+
+
+def _estimate(
+    feature: MapFeature, origin: LonLat, target: LonLat, terrain: TerrainModel | None
+) -> Walk:
+    """Straight line ×1.35 with Tobler's speed on the average slope from the DEM, if we have it."""
+    length = haversine_m(origin, target) * DETOUR
+    if terrain is None or length == 0:
+        minutes = length / WALK_M_PER_MIN
+        return Walk(feature, minutes, minutes, None, True)
+    start, end = terrain.elevation(np.array([[origin.lon, origin.lat], [target.lon, target.lat]]))
+    rise = float(end - start)
+    there = length / (tobler_speed_kmh(rise / length) * 1000 / 60)
+    back = length / (tobler_speed_kmh(-rise / length) * 1000 / 60)
+    return Walk(feature, there, back, None, True, max(0.0, rise), max(0.0, -rise))
 
 
 def within_minutes(
