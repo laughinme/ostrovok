@@ -102,7 +102,7 @@ def select_hotels() -> list[dict[str, Any]]:
         }
         selected.extend(candidates)
         print(f"Hotels {district}: {len(candidates)}/{quota}", flush=True)
-    if len(selected) < 180:
+    if len(selected) < min(180, sum(quota for _, quota in DISTRICTS.values())):
         raise ValueError(f"Insufficient building-linked hotels: {report}")
     selected.sort(key=lambda row: row["osm_id"])
     write_csv("hotels.csv.gz", HOTEL_FIELDS, selected)
