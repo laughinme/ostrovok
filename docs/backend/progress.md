@@ -12,6 +12,29 @@
 
 ---
 
+### 28.10 02:38 МСК · codex-ground · B2.8 · стык графа, задача ещё в работе
+- Сделано: `walking.py` (попал в параллельный коммит `cb80e28` при гонке общего git index),
+  `walk_graph.py`, тесты (`231dd45`). Для последующих коммитов использую `git commit --only <свои пути>`.
+- **Стык codex-pipeline / B1.5:** `walk_graph.npz` читается без pickle. Обязательные массивы:
+  `nodes` float `(n,3)` = lon°, lat°, elevation_m; `edges` int `(m,2)` = направленные индексы узлов;
+  `length_m` float `(m,)` >0; `steps` int `(m,)` = число ступеней (0 если нет);
+  `crossings` int `(m,)` = число переходов на ребре; `uncertain` bool `(m,)`;
+  `osm_refs` Unicode `(m,)` = `way/123`, НЕ object dtype. Обратная дуга обязательна отдельно,
+  если путь доступен в обе стороны. Нужен несокращённый граф с промежуточными OSM-узлами,
+  чтобы линия маршрута и высотный профиль соответствовали реальной дороге.
+- Публичный API: `WalkGraph.from_file(Path) -> WalkGraph`; `graph.edge(i) -> WalkEdge`;
+  `ProfileGraph.build(graph, profile)` выбирает самую быструю из параллельных дуг перед CSR.
+  `tobler_speed_kmh(slope)` (уклон rise/length со знаком),
+  `edge_minutes(length_m, rise_m, profile, *, steps=0) -> float` (inf = запрещено),
+  `route_leg(edges: Sequence[WalkEdge], profile) -> RouteLeg|None`,
+  `elevation_profile(edges, initial_elevation_m) -> tuple[(distance_m,elevation_m), ...]`.
+- Как проверить: полный make check в изолированном снимке и отдельной тестовой БД: 165 passed,
+  mypy strict, ruff/format и import-linter зелёные.
+- Грабли: время на ступенях ограничено 2 км/ч; коляска 4 км/ч, кресло 3 км/ч; штраф свыше |8%|
+  = `1 + k*(|s|-0.08)` (k=10 для коляски, 20 для кресла). Это параметры модели, не подтверждение
+  доступности. Любые ступени запрещены обоим профилям. Подъём вычисляется из DEM-высот узлов.
+- Дальше: ScipyRouter, туда/обратно, достижимость, замеры; реальный NPZ пока отсутствует.
+
 ### 28.10 02:37 МСК · codex-view · B2.5a, проверка на Copernicus
 - Сделано: адаптер проверен на реальном тайле N43E039 из локального кэша B1.0, без новых загрузок.
   Во временной папке создан int16 DEM по согласованному формату, после проверки удалён.
