@@ -95,6 +95,9 @@
           ribbons[k].setAttribute('stroke', map[k].color);
           labels[k].dot.setAttribute('fill', map[k].color);
           labels[k].t.textContent = `${NAME[k]} · ${map[k].text}`;
+          const w = labels[k].t.getComputedTextLength() + 44;
+          labels[k].r.setAttribute('x', -w / 2); labels[k].r.setAttribute('width', w);
+          labels[k].dot.setAttribute('cx', -w / 2 + 16); labels[k].t.setAttribute('x', -w / 2 + 26);
         }
       },
       pick(k, color) {

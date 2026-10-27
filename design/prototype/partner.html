@@ -32,7 +32,7 @@
 .conflict .p{border-radius:var(--r-md);overflow:hidden;height:170px}
 .conflict .acts{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
 .mapper{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:20px;border:1px solid var(--line);border-radius:var(--r-lg);padding:16px}
-.mapper svg{width:100%;display:block;border-radius:var(--r-md);background:var(--map-land)}
+.mapper svg{width:100%;display:block;border-radius:var(--r-md);background:var(--map-land);align-self:center}
 .mapper .side{cursor:pointer;transition:stroke var(--d-quick),stroke-width var(--d-quick)}
 .mapper .side:hover{stroke:var(--primary)}
 .mapper .side.on{stroke:var(--primary);stroke-width:14}
@@ -155,22 +155,7 @@
     <section class="sec" id="facades">
       <div class="sec-h"><h2>Номера и стороны</h2><p>Нажмите на сторону здания и отметьте, какие номера туда выходят</p></div>
       <div class="mapper">
-        <svg viewBox="0 0 520 380" aria-label="Схема здания сверху">
-          <path d="M-10 300 L 330 390" stroke="var(--ink)" stroke-width="2" stroke-dasharray="9 6" opacity=".55"/>
-          <text x="40" y="330" font-size="12" fill="var(--muted)" transform="rotate(15 40 330)">железная дорога · 60 м</text>
-          <path d="M420 390 L 530 220" stroke="#C3CDE6" stroke-width="12"/>
-          <text x="430" y="330" font-size="12" fill="var(--muted)" transform="rotate(-57 430 330)">ул. Морская</text>
-          <text x="80" y="90" font-size="13" fill="var(--primary)" font-weight="600">море и закат ↙</text>
-          <text x="380" y="60" font-size="13" fill="var(--muted)">горы ↗</text>
-          <g transform="translate(260 180) rotate(38)">
-            <rect x="-110" y="-70" width="220" height="140" fill="#fff" stroke="var(--line)"/>
-            <text x="0" y="6" text-anchor="middle" font-size="16" font-weight="700" fill="var(--ink)">Маяк</text>
-            <line class="side" data-s="SW" x1="-110" y1="70" x2="110" y2="70" stroke="var(--line)" stroke-width="10"/>
-            <line class="side" data-s="NE" x1="-110" y1="-70" x2="110" y2="-70" stroke="var(--line)" stroke-width="10"/>
-            <line class="side" data-s="SE" x1="110" y1="-70" x2="110" y2="70" stroke="var(--line)" stroke-width="10"/>
-            <line class="side" data-s="NW" x1="-110" y1="-70" x2="-110" y2="70" stroke="var(--line)" stroke-width="10"/>
-          </g>
-        </svg>
+        <svg id="mapsvg" role="img" aria-label="Схема здания: нажмите на сторону"></svg>
         <div class="mp">
           <h3 id="mp-t">Юго-западная сторона</h3>
           <div class="cons" id="mp-c"></div>
@@ -220,6 +205,7 @@
 </div>
 <div class="toast" id="toast"></div>
 <script src="pano.js"></script>
+<script src="building.js"></script>
 <script>
 const toast = (t) => { const n = document.getElementById('toast'); n.textContent = t; n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2600); };
 window.mountPano(document.querySelector('.conflict .p'));
@@ -240,16 +226,22 @@ const SIDES = {
   NW:['Северо-западная сторона',['соседний дом в 30 м','город, кусочек моря с 7-го этажа']],
 };
 let cur = 'SW';
-const sides = document.querySelectorAll('.mapper .side');
+const bldm = window.drawBuilding(document.getElementById('mapsvg'), {name:'Маяк'});
+const MAPV = {SW:'Делюкс · 2–8 эт.', NE:'не размечено', SE:'не размечено', NW:'не размечено'};
+const paint = () => { const m = {}; for (const k in MAPV) m[k] = {color: MAPV[k] === 'не размечено' ? '#C3CDE6' : '#1E8F4E', text: MAPV[k]}; bldm.set(m); };
+paint();
+const sides = document.querySelectorAll('#mapsvg .side, #mapsvg .side-label');
+sides.forEach(n => n.style.cursor = 'pointer');
 function pick(s){
-  cur = s; sides.forEach(l => l.classList.toggle('on', l.dataset.s === s));
+  cur = s; bldm.pick(s, getComputedStyle(document.documentElement).getPropertyValue('--primary').trim());
   document.getElementById('mp-t').textContent = SIDES[s][0];
   document.getElementById('mp-c').innerHTML = SIDES[s][1].map(t => `<span>· ${t}</span>`).join('');
 }
 sides.forEach(l => l.addEventListener('click', () => pick(l.dataset.s)));
 pick('SW');
 document.getElementById('save').addEventListener('click', () => {
-  document.querySelector(`.mapper .side[data-s="${cur}"]`).classList.add('set');
+  const r = [...document.querySelectorAll('#mp-r input:checked')].map(i => i.value).join(', ') || 'без номеров';
+  MAPV[cur] = `${r.split(' ')[0]} · ${document.getElementById('f1').value}–${document.getElementById('f2').value} эт.`; paint(); pick(cur);
   if (cur === 'SW') { const q = document.getElementById('q1'); q.classList.add('done'); }
   toast(`${SIDES[cur][0]} сохранена. Пересчитали подбор для 3 категорий номеров.`);
 });
