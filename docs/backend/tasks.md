@@ -143,7 +143,7 @@ SQLAlchemy, Pydantic, `db`, `infra`), независимость контекс�
 Готово, когда: `make data` запускается и пишет MANIFEST.
 
 ### B1.2 · Выгрузка OSM
-Статус: в работе · codex-pipeline · 28.10 02:20 МСК
+Статус: в работе · codex-osm · 28.10 02:47 МСК
 Зависит от: B1.1
 Что: Overpass (зеркало `maps.mail.ru` со своим User-Agent) по границам Большого Сочи: отели; здания в 2 км
 вокруг отелей с `height` и `building:levels`; дороги и ж/д; POI с `opening_hours` и `cuisine`; пляжи;
