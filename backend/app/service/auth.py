@@ -15,7 +15,6 @@ from app.domain.auth import (
     SessionRevokedError,
     WrongCredentialsError,
 )
-from app.domain.events import Topic
 from app.domain.users import (
     AccountBannedError,
     CurrentUser,
@@ -54,7 +53,6 @@ class AuthService:
             # Two registrations raced past the check above; the unique index decided.
             raise EmailTakenError() from exc
 
-        self._uow.outbox.add(Topic.USER_REGISTERED, {"user_id": str(user.id), "email": email})
         return await self._open_session(user, client, user_agent)
 
     async def login(
