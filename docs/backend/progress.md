@@ -12,6 +12,32 @@
 
 ---
 
+### 28.10 02:31 МСК · codex-ground · B2.7
+- Сделано: энергетическая сумма, затухание 20 log10(d), экран −10, задняя сторона фасада −5…−15;
+  дороги, ж/д, поздние бары/клубы, стройки; неизвестные мощности и часы остаются пробелами данных.
+  Коммиты `25b1157`, `7668ca4`.
+- Публичный API (`app/domain/geo/noise.py`):
+  `NoiseSource(osm_ref, kind, geometry, day_db, night_db, activity_share=1)` — геометрия в локальных
+  метрах, условная мощность на 1 м, None = источник неактивен в этот период; activity_share — доля
+  времени 0…1. `facade_noise(receiver: Point, facade_azimuth: float, sources, period: "day"|"night",
+  *, buildings=(), road_completeness=0.5, source_completeness=1, top_n=5) -> NoiseEstimate`.
+  Азимут в градусах от севера по часовой стрелке; результат: index_db, category (тихо/умеренно/шумно),
+  confidence, margin_db до ближайшего порога, sources с OSM id, расстоянием и потерями.
+  Пустые/неактивные источники → index_db/category=None, confidence=0. Считать два периода отдельно.
+  `energy_sum(levels_db) -> float|None`, `orientation_loss(facade_azimuth, source_bearing) -> float`.
+- Публичный API (`noise_sources.py`): `NoiseFeature(osm_ref, geometry, tags, late_open=None)`;
+  `noise_sources(features, *, aircraft_power_db=None, rail_activity_share=1) -> NoiseSources`
+  с sources, unmodelled_refs, completeness. Передавать completeness в facade_noise и отдельно
+  оценивать полноту дорог. late_open подаётся из проверки часов (B2.9).
+- Как проверить: `make check` на временном снимке HEAD + только файлы этой линии: ruff/format,
+  mypy strict, 7 import-контрактов, 119 тестов включая PostGIS. В общем дереве в это время менялись
+  pipeline/catalog.py и sun.py; чужие промежуточные правки не исправлялись и не коммитились.
+- Грабли: это модельный индекс, не LAeq. Некалиброванные пороги 30/45 — для условной мощности на 1 м;
+  confidence ограничена 0.75 и уменьшается при пробелах. R5 не даёт мощность авиации: OSM ВПП/аэропорт
+  без явно заданного параметра попадает в unmodelled_refs. Ж/д по умолчанию — индекс при проходе поезда,
+  для среднего требуется известная доля времени; актуальную частоту из исторических данных не выводим.
+- Дальше: B2.9 (часы и климат), затем B2.8; реальные данные ещё не появились.
+
 ### 28.10 02:29 МСК · codex-view · B2.4
 - Сделано: равнопромежуточная проекция без pyproj; фасады по внешнему контуру, склейка соседних почти
   коллинеарных рёбер, внешние нормали независимо от порядка вершин, окна на четвертях и середине.
