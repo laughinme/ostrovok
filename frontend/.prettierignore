@@ -1,6 +1,0 @@
-node_modules
-.output
-dist
-.tanstack
-.nitro
-package-lock.json

@@ -4,32 +4,21 @@
 
 ## Frontend
 
-Из проекта `chupapis` перенесены две независимые демонстрационные версии:
-
-| Каталог | Реализация | Локальный адрес |
-| --- | --- | --- |
-| [`frontend`](frontend/README.md) | React, TanStack Start, FSD; текущая рабочая версия с локальными правками | http://localhost:5173 |
-| [`frontend-2`](frontend-2/README.md) | React, Vite, React Router; версия из ветки `feat/frontend-2` | http://127.0.0.1:5174 |
-| [`frontend-3`](frontend-3/README.md) | React, Vite, React Router, Motion, MapLibre; «О!кно» по `DESIGN.md` и прототипу `design/prototype/` | http://127.0.0.1:5175 |
-
-Для обеих версий нужны Node.js 22.12+ и npm. Запуск первой версии:
+Основной фронтенд — [`frontend`](frontend/README.md): «О!кно», React, Vite, React Router, Motion, MapLibre, по `DESIGN.md`
+и прототипу `design/prototype/`. Работает на демо-данных, backend и ключи API не нужны. Нужны Node.js 22.12+ и npm.
 
 ```sh
 cd frontend
 npm ci
-npm run dev
+npm run dev    # http://127.0.0.1:5175
+npm run build  # dist/
 ```
 
-В другом терминале из корня репозитория можно запустить вторую:
+Пуш в `main` с изменениями в `frontend/` автоматически деплоится на Vercel (https://ostrovok-okno.vercel.app/)
+через `.github/workflows/deploy-frontend.yml`. Секреты: `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`.
 
-```sh
-cd frontend-2
-npm ci
-npm run dev
-```
-
-Проверка каждой версии: `npm run check` из соответствующего каталога.
-Для браузерных тестов второй версии предварительно выполнить `npx playwright install chromium`.
-Каталог отелей и ответы агентов демонстрационные; backend и ключи API не нужны.
+Другие версии лежат в [`archive/`](archive/): `frontend-luch` (React, TanStack Start, FSD; запуск на порту 5173)
+и `frontend-2` (React, Vite, React Router; порт 5174). Запускаются так же: `cd archive/<папка>`, `npm ci`, `npm run dev`;
+проверка: `npm run check`, для браузерных тестов `frontend-2` сначала `npx playwright install chromium`.
 
 Исследование, дизайн-система и прототип находятся в `docs/research/`, `DESIGN.md` и `design/prototype/`.
