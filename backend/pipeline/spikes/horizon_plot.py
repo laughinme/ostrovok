@@ -28,7 +28,7 @@ def plot_panorama(
     fig, axes = plt.subplots(len(results), 1, figsize=(14, 9), sharex=True, squeeze=False)
     for axis, record, result in zip(axes[:, 0], facet["floors"], results, strict=True):
         bottom = min(-8, float(np.min(result.angle)) - 1)
-        top = max(10, min(70, float(np.max(result.angle)) + 3))
+        top = max(10, min(90, float(np.max(result.angle)) + 3))
         axis.set_facecolor(COLORS[SKY])
         axis.fill_between(azimuths, bottom, result.terrain, color=COLORS[TERRAIN], step="mid")
         axis.fill_between(
