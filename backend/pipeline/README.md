@@ -17,3 +17,9 @@ OSM: пять явно заданных областей отбора (это д
 `sea.wkb.gz` содержит ASCII WKB hex MultiPolygon; море справа от направленной линии OSM.
 
 Тесты без сети: `cd backend && uv run --group pipeline pytest tests/pipeline -q`.
+
+DEM: `python -m pipeline dem` берёт Copernicus GLO-30 по охвату всех отелей +40,2 км.
+Кэш B1.0 в `.cache/spike/` переиспользуется; недостающие тайлы загружаются с публичного S3.
+Четыре тайла N43E039/N43E040/N44E039/N44E040 усредняются до 2″ и округляются в int16.
+`dem.json` содержит pixel-corner Affine `[a,b,c,d,e,f]`, nodata и URL источников.
+DEM — поверхность с деревьями/крышами (DSM), не модель голого рельефа; неизвестное не равно морю.
