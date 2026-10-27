@@ -127,7 +127,7 @@ SQLAlchemy, Pydantic, `db`, `infra`), независимость контекс�
 Готово, когда: панорамы правдоподобны (сверили глазами с публичными панорамами); выводы и грабли — в progress.md.
 
 ### B1.1 · Каркас пайплайна
-Статус: todo
+Статус: в работе · codex-pipeline · 28.10 02:19 МСК
 Зависит от: B0.1
 Что: `backend/pipeline/` с группой зависимостей `pipeline` (osmnx, geopandas, rasterio, pyogrio, httpx);
 кэш сырых выгрузок в `backend/.cache/` (в `.gitignore`); `make data`; генерация `backend/data/MANIFEST.md`
