@@ -52,13 +52,13 @@ def elevation_angle(height: FloatArray, distance: FloatArray, eye: float) -> Flo
 
 
 def facade_windows(polygon: Any, sea_bearing: float) -> list[tuple[str, FloatArray, float]]:
-    """Choose long real edges with outward normals nearest to sea/opposite bearings."""
+    """Choose real edges with outward normals nearest to sea/opposite bearings."""
     if polygon.geom_type != "Polygon":
         polygon = max(polygon.geoms, key=lambda part: part.area)
     coords = np.asarray(orient(polygon, sign=1).exterior.coords)
     edges = np.diff(coords, axis=0)
     lengths = np.linalg.norm(edges, axis=1)
-    valid = lengths >= max(3, float(lengths.max()) * 0.15)
+    valid = lengths >= 3
     edges, lengths = edges[valid], lengths[valid]
     mids = (coords[:-1][valid] + coords[1:][valid]) / 2
     normals = np.column_stack((edges[:, 1], -edges[:, 0])) / lengths[:, None]

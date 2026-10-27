@@ -14,7 +14,7 @@ import httpx
 import numpy as np
 import rasterio
 from pyproj import Transformer
-from shapely import LineString, Point, Polygon, box, make_valid, transform
+from shapely import LineString, Point, Polygon, box, make_valid, transform, union_all
 from shapely.geometry import mapping, shape
 from shapely.ops import polygonize, unary_union
 
@@ -125,7 +125,7 @@ def sea_polygon(projection: Transformer) -> Any:
         project_geometry(projection, way_line(e["geometry"])).intersection(bounds)
         for e in data["elements"]
     ]
-    faces = list(polygonize(unary_union([bounds.boundary, *lines])))
+    faces = list(polygonize(union_all([bounds.boundary, *lines], grid_size=0.01)))
     # OSM coastlines run with land on the left and water on the right.
     water_probes: list[Any] = []
     for element in data["elements"]:
@@ -137,6 +137,9 @@ def sea_polygon(projection: Transformer) -> Any:
         mids = (coords[:-1][valid] + coords[1:][valid]) / 2
         water_probes.extend(Point(p) for p in (mids + right * 2)[::20])
     sea = unary_union([face for face in faces if any(face.contains(p) for p in water_probes)])
+    ocean_anchor = Point(projection.transform(39.6, 43.45))
+    if sea.contains(Point(0, 0)) or not sea.contains(ocean_anchor):
+        raise ValueError("Sea mask failed known land/ocean control points")
     if sea.is_empty or len(faces) < 2:
         raise ValueError("Coastline did not divide the region into land and sea")
     return sea
