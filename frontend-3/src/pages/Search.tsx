@@ -165,6 +165,13 @@ export default function SearchPage() {
             <aside className="map-col">
               <MapView className="results-map" hover={hover} onHover={setHover} onPick={(id) => nav(`/hotels/${id}`)}
                 pins={phase === 'loading' ? [] : ranked.map((m, i) => ({ id: m.hotel.id, lngLat: m.hotel.lngLat, label: `${m.score}%`, sub: rub(m.hotel.priceFrom), top: i === 0 }))} />
+              {(() => { const m = ranked.find((x) => x.hotel.id === hover) ?? ranked[0]; return phase !== 'loading' && m && (
+                <Link className="map-card" to={`/hotels/${m.hotel.id}`}>
+                  <Photo k={m.hotel.photos[0]} alt="" credit={false} />
+                  <span><b>{m.hotel.name}</b><small>{m.hotel.district} · {m.score}% совпадение</small><small className="num">{rub(m.hotel.priceFrom)} за ночь</small></span>
+                  <Icon name="arrow" size={16} />
+                </Link>
+              ); })()}
               <button type="button" className="map-toggle" onClick={() => setWideMap((w) => !w)}><Icon name="expand" size={15} />{wideMap ? 'Карта меньше' : 'Карта крупнее'}</button>
             </aside>
           </div>

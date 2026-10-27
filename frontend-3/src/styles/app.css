@@ -907,3 +907,9 @@ pre { font-family: var(--font-code); font-size: 13px; line-height: 1.55; backgro
   .vswitch > span { display: none; }
   .vswitch button { white-space: nowrap; }
 }
+
+.map-card { position: absolute; left: 12px; right: 12px; bottom: 34px; z-index: 2; display: flex; gap: 12px; align-items: center; background: #fff; border-radius: var(--r-md); padding: 8px 14px 8px 8px; color: var(--ink); box-shadow: 0 12px 30px -12px rgba(6, 14, 46, .4); }
+.map-card .ph { width: 64px; height: 52px; border-radius: 10px; flex: none; }
+.map-card span { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.map-card small { font-size: 12.5px; color: var(--muted); }
+.map-card .ic { color: var(--primary); }
