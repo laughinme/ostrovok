@@ -262,5 +262,245 @@
     "license": "CC BY-SA 3.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
     "page": "https://commons.wikimedia.org/wiki/File:RIAN_archive_499451_On_a_beach_in_Sochi.jpg"
+  },
+  "lux-bright-room": {
+    "src": "/demo/lux/bright-room.jpg",
+    "title": "bright-room.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-cabin": {
+    "src": "/demo/lux/cabin.jpg",
+    "title": "cabin.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-coast": {
+    "src": "/demo/lux/coast.jpg",
+    "title": "coast.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-day-pool": {
+    "src": "/demo/lux/day-pool.jpg",
+    "title": "day-pool.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-day-resort": {
+    "src": "/demo/lux/day-resort.jpg",
+    "title": "day-resort.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h1": {
+    "src": "/demo/lux/h1.jpg",
+    "title": "h1.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h1a": {
+    "src": "/demo/lux/h1a.jpg",
+    "title": "h1a.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h1b": {
+    "src": "/demo/lux/h1b.jpg",
+    "title": "h1b.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h2": {
+    "src": "/demo/lux/h2.jpg",
+    "title": "h2.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h2a": {
+    "src": "/demo/lux/h2a.jpg",
+    "title": "h2a.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h2b": {
+    "src": "/demo/lux/h2b.jpg",
+    "title": "h2b.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h3": {
+    "src": "/demo/lux/h3.jpg",
+    "title": "h3.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h3a": {
+    "src": "/demo/lux/h3a.jpg",
+    "title": "h3a.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h3b": {
+    "src": "/demo/lux/h3b.jpg",
+    "title": "h3b.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h4": {
+    "src": "/demo/lux/h4.jpg",
+    "title": "h4.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h4a": {
+    "src": "/demo/lux/h4a.jpg",
+    "title": "h4a.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h4b": {
+    "src": "/demo/lux/h4b.jpg",
+    "title": "h4b.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h5": {
+    "src": "/demo/lux/h5.jpg",
+    "title": "h5.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h5a": {
+    "src": "/demo/lux/h5a.jpg",
+    "title": "h5a.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h5b": {
+    "src": "/demo/lux/h5b.jpg",
+    "title": "h5b.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h6": {
+    "src": "/demo/lux/h6.jpg",
+    "title": "h6.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h6a": {
+    "src": "/demo/lux/h6a.jpg",
+    "title": "h6a.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h6b": {
+    "src": "/demo/lux/h6b.jpg",
+    "title": "h6b.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-hero": {
+    "src": "/demo/lux/hero.jpg",
+    "title": "hero.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-interior": {
+    "src": "/demo/lux/interior.jpg",
+    "title": "interior.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-mountains": {
+    "src": "/demo/lux/mountains.jpg",
+    "title": "mountains.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-room": {
+    "src": "/demo/lux/room.jpg",
+    "title": "room.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-sea": {
+    "src": "/demo/lux/sea.jpg",
+    "title": "sea.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-suite": {
+    "src": "/demo/lux/suite.jpg",
+    "title": "suite.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-terrace": {
+    "src": "/demo/lux/terrace.jpg",
+    "title": "terrace.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
   }
 }

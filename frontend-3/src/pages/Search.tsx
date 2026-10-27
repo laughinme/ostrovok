@@ -1,13 +1,13 @@
 import { LayoutGroup, motion } from 'motion/react';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router';
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router';
 import { Footer, Header } from '../components/chrome';
 import { HotelCard } from '../components/HotelCard';
 import { MapView } from '../components/MapView';
-import { Demo, Icon } from '../components/ui';
-import { Panorama, Photo } from '../components/visuals';
+import { Demo, Icon, Mark, SrcTag } from '../components/ui';
+import { Photo } from '../components/visuals';
 import { WishBox } from '../components/WishBox';
-import { CHARACTERISTICS, DEFAULT_INTENT, MOODS, parseIntent } from '../data/characteristics';
+import { CHARACTERISTICS, DEFAULT_INTENT, EXAMPLES, MOODS, parseIntent } from '../data/characteristics';
 import { HOTELS } from '../data/hotels';
 import { rub } from '../lib/format';
 import { rank } from '../lib/score';
@@ -33,6 +33,7 @@ export default function SearchPage() {
   const [researching, setResearching] = useState<Set<string>>(new Set());
   const [agent, setAgent] = useState<{ key: string; done: boolean; open: boolean } | null>(null);
   const [wideMap, setWideMap] = useState(false);
+  const [variant, setVariant] = useVariant();
   const timers = useRef<number[]>([]);
   const later = (fn: () => void, ms: number) => timers.current.push(window.setTimeout(fn, reduced() ? 0 : ms));
   useEffect(() => () => timers.current.forEach(clearTimeout), []);
@@ -48,7 +49,9 @@ export default function SearchPage() {
   const app = phase !== 'landing' && phase !== 'thinking';
 
   function start(placeholder: string, preset?: typeof chips, text?: string) {
-    const q = text ?? (query.trim() || placeholder);
+    // плейсхолдер печатается по буквам — берём пример целиком
+    const full = EXAMPLES.find((e) => placeholder && e.startsWith(placeholder)) ?? EXAMPLES[0];
+    const q = text ?? (query.trim() || full);
     setQuery(q);
     setChips(preset ?? (chips.length ? chips : parseIntent(q)));
     if (app) { setPhase('loading'); setStep(2); later(() => setPhase('results'), 650); return; }
@@ -74,44 +77,75 @@ export default function SearchPage() {
   }
   const script = agent ? AGENT_SCRIPTS[CHARACTERISTICS[agent.key].checkable === 'ask_hotelier' ? 'ask' : 'compute'] : null;
 
+  const thinking = phase === 'thinking' || phase === 'loading';
+  const wish = (
+    <WishBox query={query} onQuery={setQuery} chips={chips} onChips={setChips} known={known} researching={researching} compact={app} thinking={thinking}
+      label={thinking ? 'Подбираю' : app ? 'Уточнить' : 'Подобрать'} onSubmit={(ph) => start(ph)} onAdd={addWish} />
+  );
+  const status = app && (
+    <div className="status" aria-live="polite">
+      {phase === 'loading'
+        ? STEPS.map((s, i) => <span key={s} className={`st ${i < step ? 'done' : i === step ? 'run' : ''}`}><i />{s}</span>)
+        : <span className="hint">Закат зависит от дат: <b>10–15 ноября</b> солнце садится в море около 16:58 <button type="button" className="opt">Другие даты</button></span>}
+    </div>
+  );
+  const fading = phase === 'thinking';
+  const onExample = (t: string) => start('', undefined, t);
+  const onMood = (m: (typeof MOODS)[number]) => start('', m.chips.map((c) => ({ ...c })), m.title);
+
   return (
     <LayoutGroup>
-      <div className={`search-page ${app ? 'is-app' : 'is-landing'}`}>
-        <motion.section layout transition={{ type: 'spring', stiffness: 200, damping: 30 }} className="lime">
-          <Header tone="lime" />
-          <div className={`lime-in${app ? ' app' : ''}`}>
-            <div className="hero">
-              <div className="hero-l">
-                {!app && (
-                    <div className={`hero-copy${phase === 'thinking' ? ' fading' : ''}`}>
-                      <h1>Каким будет ваш номер — <em>видно до&nbsp;поездки</em></h1>
-                      <p className="lede">Опишите отдых своими словами. Мы посчитаем вид из окна, шум и дорогу до моря для каждого этажа отелей Сочи — и покажем, откуда это знаем.</p>
-                    </div>
-                  )}
-                <WishBox query={query} onQuery={setQuery} chips={chips} onChips={setChips} known={known} researching={researching} compact={app} thinking={phase === 'thinking' || phase === 'loading'}
-                  label={phase === 'thinking' || phase === 'loading' ? 'Подбираю' : app ? 'Уточнить' : 'Подобрать'} onSubmit={(ph) => start(ph)} onAdd={addWish} />
-                {app && (
-                  <div className="status" aria-live="polite">
-                    {phase === 'loading' ? (
-                      STEPS.map((s, i) => <span key={s} className={`st ${i < step ? 'done' : i === step ? 'run' : ''}`}><i />{s}</span>)
-                    ) : (
-                      <span className="hint">Закат зависит от дат: <b>10–15 ноября</b> солнце садится в море около 16:58 <button type="button" className="opt">Другие даты</button></span>
-                    )}
-                  </div>
-                )}
+      <div className={`search-page v-${variant} ${app ? 'is-app' : 'is-landing'}`}>
+        <motion.section layout transition={{ type: 'spring', stiffness: 200, damping: 30 }} className={`band band-${variant}${app ? ' app' : ''}${fading ? ' fading' : ''}`}>
+          {variant === 'photo' && <div className="band-bg" aria-hidden="true"><Photo k="lux-hero" alt="" credit={false} /></div>}
+          <Header tone={variant === 'photo' ? 'clear' : variant === 'lime' ? 'lime' : 'white'} />
+          <div className={`band-in${app ? ' app' : ''}`}>
+            {app ? <>{wish}{status}</> : variant === 'photo' ? (
+              <div className="hero-c">
+                <div className="hero-copy">
+                  <span className="kicker"><Icon name="spark" size={15} />Большой Сочи · 214 отелей посчитано по этажам</span>
+                  <h1>Опишите отдых — покажем, каким будет ваш номер</h1>
+                  <p className="lede">Вид из окна, тишина ночью и дорога до моря — для каждого этажа. С источником у каждого факта.</p>
+                </div>
+                {wish}
+                <Examples onPick={onExample} />
               </div>
-              {!app && <HeroWindow fading={phase === 'thinking'} />}
-            </div>
+            ) : variant === 'split' ? (
+              <div className="hero-s">
+                <div className="hero-l">
+                  <div className="hero-copy">
+                    <span className="kicker dark"><Icon name="spark" size={15} />Не просто отель. Номер, который вы ждёте</span>
+                    <h1>Каким будет ваш номер — <em>видно до&nbsp;поездки</em></h1>
+                    <p className="lede">Расскажите, о чём мечтаете. Мы проверим вид, шум и дорогу до моря по рельефу и картам — и честно скажем, где не уверены.</p>
+                  </div>
+                  {wish}
+                  <Examples onPick={onExample} light />
+                </div>
+                <ProofCard />
+              </div>
+            ) : (
+              <div className="hero-c">
+                <div className="hero-copy">
+                  <h1>Оооочень точный подбор номера</h1>
+                  <p className="lede">Скажите, какой отдых хотите. Мы найдём отели Сочи, где это правда — до этажа и стороны здания.</p>
+                </div>
+                {wish}
+                <Examples onPick={onExample} light />
+              </div>
+            )}
           </div>
+          {!app && variant === 'photo' && <div className="band-proof"><span><b className="num">16:58</b> закат из номера 512 «Маяка» 11 ноября</span><span><b className="num">38 дБ</b> ночью в номерах во двор</span><span><b className="num">6 мин</b> до пляжа, 64 ступени</span><span className="muted-w">посчитано по рельефу и зданиям · <Demo /></span></div>}
         </motion.section>
 
-        {!app && <Landing onMood={(m) => start('', m.chips.map((c) => ({ ...c })), m.title)} />}
+        {!app && variant === 'lime' && <MoodStrip onMood={onMood} />}
+        {!app && <Landing onMood={onMood} showMoods={variant !== 'lime'} />}
+        {!app && <VariantSwitch value={variant} onChange={setVariant} />}
 
         {app && (
           <div className={`work${wideMap ? ' map-wide' : ''}`}>
             <section className="list" aria-live="polite">
               <div className="list-head">
-                <h2>Подходят</h2>
+                <h2>{query ? `«${query.length > 60 ? query.slice(0, 58) + '…' : query}»` : 'Подходят'}</h2>
                 <span className="cnt num">{phase === 'loading' ? 'ищем среди 214 отелей…' : `${ranked.length} из 214 отелей Большого Сочи`}</span>
                 <span className="sort">по совпадению</span>
               </div>
@@ -140,26 +174,73 @@ export default function SearchPage() {
   );
 }
 
-function HeroWindow({ fading }: { fading: boolean }) {
-  const [floor, setFloor] = useState(3);
-  const [sea, setSea] = useState(0);
+const EX_PROMPTS = ['Тихий номер с закатом над морем', 'Поработать неделю у моря', 'С собакой и рядом лес', 'С ребёнком, без подъёмов к пляжу'];
+function Examples({ onPick, light }: { onPick(t: string): void; light?: boolean }) {
   return (
-    <motion.figure className="hero-window" initial={{ opacity: 0, y: 12 }} animate={fading ? { opacity: 0, scale: 0.94, y: -10 } : { opacity: 1, scale: 1, y: 0 }} transition={{ duration: fading ? 0.7 : 0.5, ease: [0.22, 1, 0.36, 1] }}>
-      <div className="stage"><Panorama facade="SW" floor={floor} onReading={(r) => setSea(r.seaShare)} /></div>
-      <div className="ctrl">
-        <label htmlFor="hero-floor">Этаж <b className="num">{floor}</b></label>
-        <input id="hero-floor" type="range" min={2} max={8} value={floor} onChange={(e) => setFloor(+e.target.value)} />
-        <span>море <b className="num">{sea}%</b></span>
-      </div>
-      <figcaption>Подвигайте этаж — так мы считаем вид из каждого номера · <Demo /></figcaption>
+    <div className={`examples${light ? ' light' : ''}`}>
+      <span>Например:</span>
+      {EX_PROMPTS.map((t) => <button key={t} type="button" onClick={() => onPick(t)}>«{t}»</button>)}
+    </div>
+  );
+}
+
+function ProofCard() {
+  return (
+    <motion.figure className="proof-photo" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}>
+      <Photo k="lux-h1a" alt="Номер с видом на закат над морем" credit={false} />
+      <span className="pp-tag"><Icon name="pin" size={14} />Маяк · номер 512 · ЮЗ, 5 этаж</span>
+      <motion.div className="pp-card" initial={{ opacity: 0, y: 20, rotate: -2 }} animate={{ opacity: 1, y: 0, rotate: -2 }} transition={{ delay: 0.35, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}>
+        <div className="pp-h"><span>Почему этот номер ваш</span><b className="num">92%</b></div>
+        <ul>
+          <li><Mark v="yes" />Закат над морем в 16:58 <SrcTag kind="computed">расчёт</SrcTag></li>
+          <li><Mark v="yes" />Ночью ≈ 38 дБ во двор <SrcTag kind="computed">расчёт</SrcTag></li>
+          <li><Mark v="partial" />Ж/д в 60 м — берём 5 этаж <SrcTag kind="hotelier">отель</SrcTag></li>
+        </ul>
+        <Link to="/hotels/mayak">Посмотреть доказательства →</Link>
+      </motion.div>
+      <figcaption>Фото для настроения · <Demo /></figcaption>
     </motion.figure>
   );
 }
 
-function Landing({ onMood }: { onMood(m: (typeof MOODS)[number]): void }) {
+function MoodStrip({ onMood }: { onMood(m: (typeof MOODS)[number]): void }) {
+  return (
+    <div className="mood-strip">
+      {MOODS.map((m) => (
+        <button key={m.id} type="button" className="mood" onClick={() => onMood(m)}>
+          <Photo k={m.photo} alt="" credit={false} />
+          <span className="mood-t"><b>{m.title}</b><span className="num">{m.proof}</span><span className="cta">Подобрать <Icon name="arrow" size={15} /></span></span>
+        </button>
+      ))}
+    </div>
+  );
+}
+
+type Variant = 'photo' | 'split' | 'lime';
+const VARIANTS: [Variant, string, string][] = [['photo', 'A', 'Фото и поле по центру'], ['split', 'B', 'Номер с доказательством'], ['lime', 'C', 'Салатовый Островок']];
+function useVariant(): [Variant, (v: Variant) => void] {
+  const [sp, setSp] = useSearchParams();
+  const fromUrl = sp.get('v') as Variant | null;
+  const stored = (() => { try { return localStorage.getItem('okno-variant') as Variant | null; } catch { return null; } })();
+  const v: Variant = fromUrl && VARIANTS.some(([k]) => k === fromUrl) ? fromUrl : stored && VARIANTS.some(([k]) => k === stored) ? stored : 'photo';
+  // вариант из ссылки запоминаем, чтобы выдача после перехода на /search была в том же стиле
+  useEffect(() => { if (fromUrl && fromUrl !== stored) { try { localStorage.setItem('okno-variant', v); } catch { /* приватный режим */ } } }, [fromUrl, stored, v]);
+  return [v, (n) => { try { localStorage.setItem('okno-variant', n); } catch { /* приватный режим */ } setSp((s) => { s.set('v', n); return s; }, { replace: true }); }];
+}
+
+function VariantSwitch({ value, onChange }: { value: Variant; onChange(v: Variant): void }) {
+  return (
+    <div className="vswitch" role="group" aria-label="Вариант главной">
+      <span>Вариант главной</span>
+      {VARIANTS.map(([k, l, t]) => <button key={k} className={value === k ? 'on' : ''} aria-pressed={value === k} title={t} onClick={() => onChange(k)}><b>{l}</b>{t}</button>)}
+    </div>
+  );
+}
+
+function Landing({ onMood, showMoods }: { onMood(m: (typeof MOODS)[number]): void; showMoods: boolean }) {
   return (
     <div className="sheet">
-      <section className="sec-l">
+      {showMoods && <section className="sec-l">
         <div className="sec-lh"><h2>Начните с настроения</h2><p>Подборки собраны из наших расчётов, а не из рекламы</p></div>
         <div className="moods">
           {MOODS.map((m) => (
@@ -169,7 +250,7 @@ function Landing({ onMood }: { onMood(m: (typeof MOODS)[number]): void }) {
             </button>
           ))}
         </div>
-      </section>
+      </section>}
 
       <section className="sec-l">
         <div className="sec-lh"><h2>Откуда мы это знаем</h2><p>Не из рекламы отеля и не из догадок нейросети. У каждого факта есть источник, дата и уверенность.</p></div>

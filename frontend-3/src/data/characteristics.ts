@@ -22,10 +22,10 @@ export const DEFAULT_INTENT: IntentChip[] = [
 ];
 
 export const MOODS = [
-  { id: 'sea', title: 'Проснуться с морем', proof: '23 отеля, где море видно из кровати', photo: 'mood-sea', chips: [{ key: 'sea', importance: 'must' }, { key: 'beach', importance: 'important' }] },
-  { id: 'calm', title: 'Тишина и горы', proof: '17 отелей без дорог под окнами', photo: 'mood-mountains', chips: [{ key: 'quiet', importance: 'must' }, { key: 'mountains', importance: 'must' }] },
-  { id: 'kids', title: 'С ребёнком без подъёмов', proof: '31 отель, до пляжа не больше 10 м вверх', photo: 'mood-kids', chips: [{ key: 'beach', importance: 'must' }, { key: 'kids', importance: 'important' }, { key: 'quiet', importance: 'nice' }] },
-  { id: 'sunset', title: 'Закаты в ноябре', proof: '14 отелей, солнце садится в море', photo: 'mood-sunset', chips: [{ key: 'sunset', importance: 'must' }, { key: 'quiet', importance: 'nice' }] },
+  { id: 'sea', title: 'Проснуться с морем', proof: '23 отеля, где море видно из кровати', photo: 'lux-h1a', chips: [{ key: 'sea', importance: 'must' }, { key: 'beach', importance: 'important' }] },
+  { id: 'calm', title: 'Тишина и горы', proof: '17 отелей без дорог под окнами', photo: 'lux-h2', chips: [{ key: 'quiet', importance: 'must' }, { key: 'mountains', importance: 'must' }] },
+  { id: 'kids', title: 'С ребёнком без подъёмов', proof: '31 отель, до пляжа не больше 10 м вверх', photo: 'lux-h3', chips: [{ key: 'beach', importance: 'must' }, { key: 'kids', importance: 'important' }, { key: 'quiet', importance: 'nice' }] },
+  { id: 'sunset', title: 'Закаты в ноябре', proof: '14 отелей, солнце садится в море', photo: 'lux-hero', chips: [{ key: 'sunset', importance: 'must' }, { key: 'quiet', importance: 'nice' }] },
 ] as const satisfies readonly { id: string; title: string; proof: string; photo: string; chips: IntentChip[] }[];
 
 export const QUICK_TAGS = [
