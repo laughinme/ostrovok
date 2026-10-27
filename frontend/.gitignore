@@ -24,3 +24,9 @@ dist-ssr
 *.sw?
 scripts/.candidates/
 .vercel
+
+.next/
+next-env.d.ts
+*.tsbuildinfo
+playwright-report/
+test-results/
