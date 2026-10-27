@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.db.repositories.agents import AgentRepository
 from app.db.repositories.jobs import JobRepository
 from app.db.repositories.knowledge import KnowledgeRepository
 from app.db.repositories.sessions import SessionRepository
@@ -17,6 +18,7 @@ class UnitOfWork:
         self.users = UserRepository(session)
         self.sessions = SessionRepository(session)
         self.jobs = JobRepository(session)
+        self.agents = AgentRepository(session)
         self.knowledge = KnowledgeRepository(session)
 
     async def flush(self) -> None:
