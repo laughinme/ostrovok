@@ -5,6 +5,7 @@ from dataclasses import dataclass
 
 from shapely.geometry.base import BaseGeometry
 
+from app.domain.geo.hours import parse_hours
 from app.domain.geo.noise import NoiseSource
 
 ROAD_POWERS_DB = {
@@ -59,10 +60,14 @@ def _powers(
 
 def _nightlife(feature: NoiseFeature) -> tuple[str, float | None, float | None] | None:
     tags = feature.tags
-    if tags.get("amenity") not in {"bar", "pub", "nightclub"} or feature.late_open is False:
+    if tags.get("amenity") not in {"bar", "pub", "nightclub"}:
+        return None
+    known_late = feature.late_open
+    if known_late is None:
+        known_late = parse_hours(tags.get("opening_hours")).at_night
+    if known_late is False:
         return None
     power = 70.0 if tags.get("amenity") == "nightclub" else 60.0
-    known_late = feature.late_open or tags.get("opening_hours") == "24/7"
     return "nightlife", None, power if known_late else None
 
 
