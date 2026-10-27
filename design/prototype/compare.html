@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Сравнение · О!кно</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="base.css">
+<style>
+.wrap{margin:0 auto;padding:16px 48px 96px;max-width:1280px}
+.back{font-size:14px;color:var(--muted)}
+h1{font-size:var(--fs-heading);font-weight:700;letter-spacing:-.02em;line-height:1.1;margin-top:8px}
+.crit{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;align-items:center}
+.crit .lbl{margin-right:4px}
+.cr{padding:7px 14px;border-radius:var(--r-pill);border:1px solid var(--line);font-size:14px;background:#fff;transition:background var(--d-quick)}
+.cr.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.rec{margin-top:24px;background:var(--scene-bg);color:#fff;border-radius:var(--r-xl);padding:28px 32px}
+.rec .k{font-size:var(--fs-label);color:var(--verified);font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.rec h2{font-size:28px;font-weight:700;letter-spacing:-.02em;line-height:1.15;margin-top:6px}
+.rec .alts{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:16px;font-size:15px;color:var(--on-scene-muted)}
+.rec .alts b{color:#fff;font-weight:600}
+.cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:24px}
+.col{border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;background:#fff;display:flex;flex-direction:column}
+.col.best{border:2px solid var(--primary)}
+.col .media{height:170px;position:relative}
+.col .media .pano-label{display:none}
+.col .media span{position:absolute;left:12px;bottom:10px;font-size:12px;color:#fff;font-weight:500;background:rgba(10,28,102,.55);border-radius:var(--r-pill);padding:3px 10px}
+.col-h{display:flex;gap:12px;align-items:flex-start;padding:16px 18px 6px}
+.col-h h3{font-size:22px;font-weight:700;letter-spacing:-.015em;line-height:1.2}
+.col-h .area{font-size:var(--fs-label);color:var(--muted)}
+.col-h .ringbox{margin-left:auto;text-align:center}
+.ring-svg{width:58px;height:58px;display:block}
+.ring-svg .bg{stroke:var(--raised)}
+.ring-svg .fg{stroke:var(--primary);transition:stroke-dashoffset 500ms var(--ease-out)}
+.ring-svg text{font-size:16px;font-weight:700;fill:var(--ink)}
+.rows{padding:6px 10px}
+.row{display:grid;grid-template-columns:22px minmax(0,1fr);gap:6px 8px;padding:10px 8px;border-radius:var(--r-md);transition:background var(--d-quick)}
+.row .c{font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:500;grid-column:2;display:flex;gap:8px;align-items:center}
+.row .t{grid-column:2;font-size:14px}
+.row .mk{grid-row:1 / span 2;padding-top:2px}
+.row.win{background:var(--verified)}
+.row.win .c::after{content:'лучше всех';margin-left:auto;white-space:nowrap;font-size:11px;letter-spacing:.04em;color:var(--on-verified);font-weight:600}
+.trade{margin:4px 18px 0;padding-top:10px;border-top:1px dashed var(--line);font-size:var(--fs-label);color:var(--muted)}
+.foot{margin-top:auto;display:flex;align-items:center;gap:10px;padding:14px 18px 18px}
+.foot b{font-size:var(--fs-section);font-weight:700}
+.foot .btn{margin-left:auto}
+@media (max-width:1000px){.cols{grid-template-columns:1fr}.rec .alts{grid-template-columns:1fr}}
+@media (max-width:720px){.wrap{padding:8px 16px 64px}.rec{padding:22px 20px}.rec h2{font-size:22px}}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="index.html">О<b>!</b>кно</a>
+  <a class="back" href="index.html#app">← 6 подходящих</a>
+  <div class="roles"><a class="on" href="index.html">Гость</a><a href="partner.html">Отельер</a><a href="console.html">Островок</a></div>
+</header>
+<div class="wrap">
+  <h1>Что выбрать из трёх</h1>
+  <div class="crit" id="crit"><span class="lbl">Учитываем</span></div>
+  <section class="rec" aria-live="polite">
+    <div class="k">Рекомендация по вашим желаниям</div>
+    <h2 id="rec-h"></h2>
+    <div class="alts" id="rec-a"></div>
+  </section>
+  <div class="cols" id="cols"></div>
+</div>
+<script src="pano.js"></script>
+<script>
+const CRIT = [
+  {k:'sunset',l:'Закат над морем',on:true},{k:'quiet',l:'Тишина ночью',on:true},{k:'beach',l:'Без подъёма к морю',on:true},
+  {k:'dog',l:'С собакой',on:false},{k:'work',l:'Поработать',on:false},{k:'mountains',l:'Горы',on:false},
+];
+const SRC = {calc:['calc','посчитано'],hotel:['hotel','ответ отеля'],open:['open','OSM'],conf:['guest','противоречие']};
+const H = [
+  {id:'mayak',name:'Маяк',area:'Центр',price:'8 400',floor:6,facade:'SW',cap:'Делюкс · ЮЗ, 6 этаж',trade:'С морской стороны ж/д — берите этаж от 4-го.',
+   d:{sunset:[.82,'с 4-го этажа ЮЗ-фасада','calc'],quiet:[.9,'тихо в номерах во двор','calc'],beach:[.8,'6 мин, спуск 20 м по лестнице','calc'],dog:[.92,'до 40 кг, 1 500 ₽/сутки','hotel'],work:[.8,'стол у окна в Делюксах','hotel'],mountains:[.15,'горы закрыты домами','calc']}},
+  {id:'kiparis',name:'Кипарис',area:'Центр',price:'6 100',floor:3,facade:'NE',cap:'Комфорт · во двор',trade:'Тихо и близко к морю, но заката из окон нет.',
+   d:{sunset:[.25,'море закрыто домом напротив','calc'],quiet:[.95,'все номера во двор, дорога в 180 м','calc'],beach:[.85,'5 мин по ровной улице','calc'],dog:[.85,'можно, без доплаты','hotel'],work:[.9,'коворкинг на 1 этаже','hotel'],mountains:[.3,'горы почти не видны','calc']}},
+  {id:'lazur',name:'Лазурь',area:'Адлер',price:'9 800',floor:5,facade:'SW',cap:'Полулюкс · на море',trade:'Всё совпадает, но взлёты из аэропорта с 6 утра.',
+   d:{sunset:[.9,'с любого этажа','calc'],quiet:[.55,'взлёты с 6:00, окна на море','calc'],beach:[.9,'2 мин, без подъёма','calc'],dog:[.5,'по согласованию','conf'],work:[.6,'стол только в полулюксе','hotel'],mountains:[.7,'горы с северной стороны','calc']}},
+];
+const verdict = (p) => p >= .7 ? 'y' : p >= .4 ? 'p' : 'n';
+const MARK = {y:'✓',p:'⚠',n:'✗'};
+const ring = (s) => { const r = 24, c = 2 * Math.PI * r; return `<svg class="ring-svg" viewBox="0 0 58 58"><circle class="bg" cx="29" cy="29" r="${r}" fill="none" stroke-width="5"/><circle class="fg" cx="29" cy="29" r="${r}" fill="none" stroke-width="5" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c * (1 - s / 100)}" transform="rotate(-90 29 29)"/><text x="29" y="35" text-anchor="middle" class="num">${s}</text></svg>`; };
+const crit = document.getElementById('crit');
+crit.insertAdjacentHTML('beforeend', CRIT.map((c, i) => `<button class="cr${c.on ? ' on' : ''}" data-i="${i}">${c.l}</button>`).join(''));
+crit.addEventListener('click', (e) => { const b = e.target.closest('.cr'); if (!b) return; const c = CRIT[+b.dataset.i]; c.on = !c.on; b.classList.toggle('on', c.on); render(); });
+function render(){
+  const on = CRIT.filter(c => c.on);
+  const sc = H.map(h => ({h, s: on.length ? Math.round(100 * on.reduce((a, c) => a + h.d[c.k][0], 0) / on.length) : 0})).sort((a, b) => b.s - a.s);
+  const best = sc[0];
+  const winner = {}; on.forEach(c => winner[c.k] = H.reduce((a, h) => h.d[c.k][0] > a.d[c.k][0] ? h : a).id);
+  document.getElementById('rec-h').textContent = `«${best.h.name}» — ${best.s}% под ваши желания`;
+  document.getElementById('rec-a').innerHTML = sc.slice(1).map(({h}) => {
+    const wins = on.filter(c => winner[c.k] === h.id).map(c => c.l.toLowerCase());
+    return `<div>Выберите <b>«${h.name}»</b>, если ${wins.length ? `важнее ${wins.join(' и ')}` : 'важнее цена'}: ${h.trade.charAt(0).toLowerCase() + h.trade.slice(1)}</div>`;
+  }).join('');
+  document.getElementById('cols').innerHTML = H.map(h => {
+    const s = sc.find(x => x.h === h).s;
+    return `<article class="col${h === best.h ? ' best' : ''}">
+      <div class="media" data-floor="${h.floor}" data-facade="${h.facade}"><svg class="pano" aria-hidden="true"></svg><span>${h.cap}</span></div>
+      <div class="col-h"><div><div class="area">${h.area}</div><h3>${h.name} <span class="demo">демо</span></h3></div><div class="ringbox">${ring(s)}</div></div>
+      <div class="rows">${on.map(c => { const [p, t, src] = h.d[c.k], v = verdict(p); return `<div class="row${winner[c.k] === h.id ? ' win' : ''}"><i class="mk ${v}">${MARK[v]}</i><span class="c">${c.l}<span class="src-k ${SRC[src][0]}" style="text-transform:none;letter-spacing:0">${SRC[src][1]}</span></span><span class="t">${t}</span></div>`; }).join('')}</div>
+      <div class="trade">${h.trade}</div>
+      <div class="foot"><b class="num">${h.price} ₽</b><span class="muted" style="font-size:13px">за ночь</span><a class="btn ${h === best.h ? 'btn-primary' : 'btn-ghost'} btn-sm" href="hotel.html?id=${h.id}">Открыть</a></div>
+    </article>`;
+  }).join('');
+  document.querySelectorAll('.col .media').forEach(n => window.mountPano(n));
+}
+render();
+</script>
+</body>
+</html>

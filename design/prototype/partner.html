@@ -54,6 +54,31 @@
 .dm .num{text-align:right;font-weight:600}
 .dm .tag{justify-self:start}
 @media (max-width:720px){.kpis{grid-template-columns:1fr 1fr}.conflict,.mapper{grid-template-columns:1fr}.dm{grid-template-columns:1fr 60px}.dm .bar,.dm .tag{grid-column:1 / -1}}
+
+.qgrid{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:20px;align-items:start}
+.chat{position:sticky;top:20px;background:var(--scene);color:#fff;border-radius:var(--r-lg);display:flex;flex-direction:column;height:520px;overflow:hidden;margin-top:42px}
+.chat-h{display:flex;gap:12px;align-items:center;padding:16px 18px;border-bottom:1px solid var(--scene-line)}
+.chat-h .av{width:36px;height:36px;border-radius:50%;background:var(--verified);color:var(--scene);display:grid;place-items:center;font-weight:800;font-size:13px;flex:none}
+.chat-h b{display:block;font-size:15px}
+.chat-h span{font-size:var(--fs-label);color:var(--on-scene-muted)}
+.msgs{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+.m{max-width:88%;border-radius:var(--r-md);padding:10px 14px;font-size:14px;animation:pop var(--d-move) var(--ease-out) both}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}}
+.m.bot{background:var(--scene-raised);align-self:flex-start}
+.m.me{background:#fff;color:var(--ink);align-self:flex-end}
+.m.parsed{background:transparent;border:1px dashed var(--scene-line);align-self:flex-start;font-size:var(--fs-label);color:var(--on-scene-muted)}
+.m.parsed b{color:var(--verified);font-weight:600}
+.say{display:flex;gap:8px;padding:12px;border-top:1px solid var(--scene-line)}
+.say input{flex:1;border:0;border-radius:var(--r-md);padding:10px 12px;min-width:0}
+.req{border:1px solid var(--line);border-radius:var(--r-lg);padding:18px 20px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 20px;align-items:center}
+.who-g{display:flex;gap:12px;align-items:center}
+.who-g b{display:block}
+.who-g span{font-size:var(--fs-label);color:var(--muted)}
+.av2{width:40px;height:40px;border-radius:50%;background:var(--raised);display:grid;place-items:center;font-weight:700;font-size:13px;color:var(--primary);flex:none}
+.req-chips{display:flex;gap:6px;flex-wrap:wrap;grid-column:1}
+.req-why{grid-column:1;font-size:14px;color:var(--muted)}
+.req-act{grid-column:2;grid-row:1 / span 3;display:flex;flex-direction:column;gap:8px;align-items:stretch}
+@media (max-width:1000px){.qgrid{grid-template-columns:1fr}.chat{position:static;margin-top:0}.req{grid-template-columns:1fr}.req-act{grid-column:1;grid-row:auto;flex-direction:row}}
 </style>
 </head>
 <body>
@@ -81,7 +106,8 @@
       <div class="kpi"><b>+18%</b><span>переходов после ответов <span class="demo">демо</span></span></div>
     </div>
 
-    <section class="sec" id="questions">
+    <section class="sec qgrid" id="questions">
+      <div>
       <div class="sec-h"><h2>Вопросы</h2><p>Отсортированы по пользе: что чаще ищут гости и в чём мы меньше уверены</p></div>
       <div class="q" id="q1">
         <div class="q-top"><h3>Какие номера выходят на юго-западную сторону?</h3><span class="tag ink">самый важный</span></div>
@@ -101,6 +127,14 @@
         <div class="ans"><input placeholder="Например: да, до 40 кг, 1 500 ₽ в сутки" aria-label="Ответ"><button class="btn btn-primary btn-sm" data-free>Ответить</button></div>
         <div class="res"></div>
       </div>
+      </div>
+      <aside class="chat">
+        <div class="chat-h"><span class="av">О!</span><div><b>Агент О!кно</b><span>ответьте своими словами — разложу по полям</span></div></div>
+        <div class="msgs" id="msgs">
+          <div class="m bot">Здравствуйте! Гости часто ищут тишину. Какие окна стоят на юго-западной стороне, где железная дорога?</div>
+        </div>
+        <form class="say" id="say"><input id="say-in" placeholder="Например: двойные стеклопакеты, в Делюксах шумоизоляция" aria-label="Ответ агенту"><button class="btn btn-primary btn-sm">Отправить</button></form>
+      </aside>
     </section>
 
     <section class="sec" id="conflict">
@@ -153,11 +187,12 @@
 
     <section class="sec" id="requests">
       <div class="sec-h"><h2>Запросы гостей</h2></div>
-      <table class="table">
-        <thead><tr><th>Гость</th><th>Даты</th><th>Номер и запрос</th><th class="r">Действие</th></tr></thead>
-        <tbody><tr><td>Анна Демо</td><td class="num">10–15 ноября</td><td>Делюкс с видом на море<br><span class="tag ok">ЮЗ-сторона</span> <span class="tag ok">этаж ≥ 4</span> <span class="tag">подальше от лифта</span></td>
-          <td class="r" id="req-act"><button class="btn btn-primary btn-sm" id="confirm">Подтвердить: № 512, 5 этаж</button><br><button class="btn-ghost btn-sm" style="margin-top:6px">Предложить другой</button></td></tr></tbody>
-      </table>
+      <article class="req">
+        <div class="who-g"><span class="av2">АД</span><div><b>Анна Демо</b><span class="num">10–15 ноября · 2 взрослых · Делюкс с видом на море</span></div></div>
+        <div class="req-chips"><span class="tag ok">ЮЗ-сторона</span><span class="tag ok">этаж ≥ 4</span><span class="tag">подальше от лифта</span></div>
+        <div class="req-why">Гость выбрал вас за закат над морем. Мы советуем номер 512: ЮЗ, 5 этаж, далеко от лифта.</div>
+        <div class="req-act" id="req-act"><button class="btn btn-primary btn-sm" id="confirm">Подтвердить № 512</button><button class="btn-ghost btn-sm">Предложить другой</button></div>
+      </article>
     </section>
 
     <section class="sec" id="demand">
@@ -172,15 +207,14 @@
 
     <section class="sec" id="facts">
       <div class="sec-h"><h2>Что мы знаем</h2><p>Подтвердите или поправьте — гости видят источник</p></div>
-      <table class="table">
-        <thead><tr><th>Характеристика</th><th>Значение</th><th>Источник</th><th>Уверенность</th><th class="r"></th></tr></thead>
-        <tbody>
-          <tr><td>Закат над морем</td><td>ЮЗ, этаж ≥ 4, октябрь–март</td><td>расчёт + ваш ответ</td><td><span class="conf"><span class="dots"><i class="f"></i><i class="f"></i><i class="f"></i><i></i></span>скорее да</span></td><td class="r"><button class="btn-ghost btn-sm">Верно</button></td></tr>
-          <tr><td>Ночью тихо</td><td>СВ-сторона, ~38 дБ</td><td>расчёт</td><td><span class="conf"><span class="dots"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i></span>точно</span></td><td class="r"><button class="btn-ghost btn-sm">Верно</button></td></tr>
-          <tr><td>До пляжа</td><td>6 мин вниз, 64 ступени</td><td>расчёт</td><td><span class="conf"><span class="dots"><i class="f"></i><i class="f"></i><i class="f"></i><i></i></span>скорее да</span></td><td class="r"><button class="btn-ghost btn-sm">Поправить</button></td></tr>
-          <tr><td>Парковка</td><td>есть, 8 мест</td><td>карточка отеля</td><td><span class="conf"><span class="dots"><i class="f"></i><i class="f"></i><i></i><i></i></span>не уверены</span></td><td class="r"><button class="btn-ghost btn-sm">Верно</button></td></tr>
-        </tbody>
-      </table>
+      <div class="tiles">
+        <div class="tile"><span class="t-top"><i class="mk y">✓</i>Вид<span class="src-k calc" style="margin-left:auto;text-transform:none;letter-spacing:0">расчёт + ваш ответ</span></span><b>Закат над морем</b><span class="scope">ЮЗ, этаж ≥ 4, октябрь–март</span><span class="t-acts"><span class="conf"><span class="dots"><i class="f"></i><i class="f"></i><i class="f"></i><i></i></span>скорее да</span><button class="btn-ghost btn-sm ok-b" style="margin-left:auto">Верно</button></span></div>
+        <div class="tile"><span class="t-top"><i class="mk y">✓</i>Шум<span class="src-k calc" style="margin-left:auto;text-transform:none;letter-spacing:0">расчёт</span></span><b>Ночью тихо во двор</b><span class="scope">СВ-сторона, ≈ 38 дБ</span><span class="t-acts"><span class="conf"><span class="dots"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i></span>точно</span><button class="btn-ghost btn-sm ok-b" style="margin-left:auto">Верно</button></span></div>
+        <div class="tile"><span class="t-top"><i class="mk p">⚠</i>Море<span class="src-k calc" style="margin-left:auto;text-transform:none;letter-spacing:0">расчёт</span></span><b>До пляжа 6 минут</b><span class="scope">вниз, 64 ступени, тоннель</span><span class="t-acts"><span class="conf"><span class="dots"><i class="f"></i><i class="f"></i><i class="f"></i><i></i></span>скорее да</span><button class="btn-ghost btn-sm" style="margin-left:auto">Поправить</button></span></div>
+        <div class="tile"><span class="t-top"><i class="mk u">?</i>Отель<span class="src-k" style="margin-left:auto;text-transform:none;letter-spacing:0">карточка</span></span><b>Парковка, 8 мест</b><span class="scope">данные двухлетней давности</span><span class="t-acts"><span class="conf"><span class="dots"><i class="f"></i><i class="f"></i><i></i><i></i></span>не уверены</span><button class="btn-ghost btn-sm ok-b" style="margin-left:auto">Верно</button></span></div>
+        <div class="tile"><span class="t-top"><i class="mk y">✓</i>Правила<span class="src-k hotel" style="margin-left:auto;text-transform:none;letter-spacing:0">ваш ответ</span></span><b>Можно с собакой до 40 кг</b><span class="scope">1 500 ₽ в сутки</span><span class="t-acts"><span class="conf"><span class="dots"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i></span>точно</span><button class="btn-ghost btn-sm ok-b" style="margin-left:auto">Верно</button></span></div>
+        <div class="tile"><span class="t-top"><i class="mk y">✓</i>Рядом<span class="src-k open" style="margin-left:auto;text-transform:none;letter-spacing:0">OSM</span></span><b>Аптека 24/7 в 300 м</b><span class="scope">ул. Морская, 12</span><span class="t-acts"><span class="conf"><span class="dots"><i class="f"></i><i class="f"></i><i class="f"></i><i></i></span>скорее да</span><button class="btn-ghost btn-sm ok-b" style="margin-left:auto">Верно</button></span></div>
+      </div>
     </section>
   </main>
 </div>
@@ -221,6 +255,16 @@ document.getElementById('save').addEventListener('click', () => {
 });
 document.getElementById('confirm').addEventListener('click', () => {
   document.getElementById('req-act').innerHTML = '<span class="tag ok">Подтверждено · № 512</span>'; toast('Гость получил подтверждение');
+});
+document.querySelectorAll('.ok-b').forEach(b => b.addEventListener('click', () => { b.textContent = 'Подтверждено ✓'; b.disabled = true; }));
+const msgs = document.getElementById('msgs');
+const addM = (cls, html) => { const m = document.createElement('div'); m.className = 'm ' + cls; m.innerHTML = html; msgs.appendChild(m); msgs.scrollTop = msgs.scrollHeight; };
+document.getElementById('say').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const inp = document.getElementById('say-in'), v = inp.value.trim() || 'двойные стеклопакеты, в Делюксах дополнительная шумоизоляция';
+  addM('me', v); inp.value = '';
+  setTimeout(() => addM('parsed', 'Разобрал: <b>окна ЮЗ = двойной стеклопакет</b> · <b>Делюкс: шумоизоляция = да</b>'), 700);
+  setTimeout(() => { addM('bot', 'Спасибо! Уверенность «ночью тихо» для Делюксов выросла. Ещё вопрос: можно ли с собакой 30 кг?'); document.getElementById('q2').classList.add('done'); document.querySelector('#q2 .res').textContent = 'Ответ из чата: двойные стеклопакеты, в Делюксах шумоизоляция.'; }, 1500);
 });
 </script>
 </body>

@@ -77,6 +77,23 @@ tr.new td{animation:flash 1.6s var(--ease-out)}
 .charts .card-line p{font-size:var(--fs-label);color:var(--muted)}
 .charts svg{width:100%;display:block;margin-top:10px}
 @media (max-width:720px){.runs,.changes,.charts{grid-template-columns:1fr}.qk{grid-template-columns:1fr 1fr}.cf{grid-template-columns:1fr}.composer .in{flex-wrap:wrap}.chain{flex-direction:column}.arrow{transform:rotate(90deg);align-self:flex-start}}
+
+.regs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.rc{background:var(--raised);border-radius:var(--r-lg);padding:16px 18px;display:flex;flex-direction:column;gap:6px}
+.rc.new{animation:flash 1.6s var(--ease-out)}
+.rc-h{display:flex;align-items:center;gap:8px}
+.rc-h b{font-size:var(--fs-title);font-weight:700;line-height:1.3;flex:1}
+.rc .scope{font-size:var(--fs-label);color:var(--muted)}
+.rc .cov{margin-top:6px}
+.rc .cov .bar{flex:1;width:auto;height:8px;border-radius:4px;background:#fff}
+.rc-f{display:flex;justify-content:space-between;gap:10px;font-size:var(--fs-label);color:var(--muted);margin-top:2px}
+.rc-f b{color:var(--ink)}
+.drys{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.dt{background:var(--raised);border-radius:var(--r-md);padding:12px;font-size:var(--fs-label);color:var(--muted);display:flex;flex-direction:column;gap:6px}
+.dt-h{display:flex;gap:6px;align-items:baseline;color:var(--ink)}
+.dt-h b{font-size:14px;flex:1}
+@media (max-width:1100px){.regs{grid-template-columns:repeat(2,minmax(0,1fr))}.drys{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:720px){.regs,.drys{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -101,18 +118,35 @@ tr.new td{animation:flash 1.6s var(--ease-out)}
 
     <section class="sec" id="registry">
       <div class="sec-h"><h2>Характеристики</h2><p>Каждая — рецепт из инструментов и источник данных</p></div>
-      <table class="table" id="reg">
-        <thead><tr><th>Характеристика</th><th>Как узнаём</th><th>Покрытие</th><th>Средняя уверенность</th><th>Перепроверка</th></tr></thead>
-        <tbody>
-          <tr><td><b>Закат над морем</b><br><span class="muted" style="font-size:13px">по фасаду, этажу и месяцу</span></td><td><span class="src-k calc">расчёт</span></td><td><span class="cov"><span class="bar"><span style="width:100%"></span></span><span class="num">214/214</span></span></td><td class="num">0,78</td><td>раз в 180 дней или при изменении карты</td></tr>
-          <tr><td><b>Шум ночью</b><br><span class="muted" style="font-size:13px">по сторонам здания</span></td><td><span class="src-k calc">расчёт</span></td><td><span class="cov"><span class="bar"><span style="width:100%"></span></span><span class="num">214/214</span></span></td><td class="num">0,84</td><td>при изменении карты</td></tr>
-          <tr><td><b>Дорога до пляжа</b><br><span class="muted" style="font-size:13px">время, подъём, ступени</span></td><td><span class="src-k calc">расчёт</span></td><td><span class="cov"><span class="bar"><span style="width:97%"></span></span><span class="num">208/214</span></span></td><td class="num">0,81</td><td>при изменении карты</td></tr>
-          <tr><td><b>Погода и вода в даты</b></td><td><span class="src-k open">открытые данные</span></td><td><span class="cov"><span class="bar"><span style="width:100%"></span></span><span class="num">214/214</span></span></td><td class="num">0,90</td><td>раз в год</td></tr>
-          <tr><td><b>Что работает ночью</b></td><td><span class="src-k open">открытые данные</span></td><td><span class="cov"><span class="bar"><span style="width:88%"></span></span><span class="num">189/214</span></span></td><td class="num">0,66</td><td>раз в 90 дней</td></tr>
-          <tr><td><b>Номера по сторонам здания</b></td><td><span class="src-k hotel">отель</span></td><td><span class="cov"><span class="bar"><span style="width:31%"></span></span><span class="num">67/214</span></span></td><td class="num">0,95</td><td>раз в год</td></tr>
-          <tr><td><b>С собакой</b></td><td><span class="src-k hotel">отель</span></td><td><span class="cov"><span class="bar"><span style="width:19%"></span></span><span class="num">41/214</span></span></td><td class="num">0,93</td><td>раз в 90 дней</td></tr>
-        </tbody>
-      </table>
+      <div class="regs" id="reg">
+        <div class="rc"><div class="rc-h"><b>Закат над морем</b><span class="src-k calc">расчёт</span></div><span class="scope">по фасаду, этажу и месяцу</span>
+          <div class="cov"><span class="bar"><span style="width:100%"></span></span><span class="num">214/214</span></div>
+          <div class="rc-f"><span>уверенность <b class="num">0,78</b></span><span>раз в 180 дней или при изменении карты</span></div></div>
+        <div class="rc"><div class="rc-h"><b>Шум ночью</b><span class="src-k calc">расчёт</span></div><span class="scope">по сторонам здания</span>
+          <div class="cov"><span class="bar"><span style="width:100%"></span></span><span class="num">214/214</span></div>
+          <div class="rc-f"><span>уверенность <b class="num">0,84</b></span><span>при изменении карты</span></div></div>
+        <div class="rc"><div class="rc-h"><b>Дорога до пляжа</b><span class="src-k calc">расчёт</span></div><span class="scope">время, подъём, ступени</span>
+          <div class="cov"><span class="bar"><span style="width:97%"></span></span><span class="num">208/214</span></div>
+          <div class="rc-f"><span>уверенность <b class="num">0,81</b></span><span>при изменении карты</span></div></div>
+        <div class="rc"><div class="rc-h"><b>Погода и вода в даты</b><span class="src-k open">открытые данные</span></div><span class="scope">норма за 10 лет</span>
+          <div class="cov"><span class="bar"><span style="width:100%"></span></span><span class="num">214/214</span></div>
+          <div class="rc-f"><span>уверенность <b class="num">0,90</b></span><span>раз в год</span></div></div>
+        <div class="rc"><div class="rc-h"><b>Что работает ночью</b><span class="src-k open">открытые данные</span></div><span class="scope">аптеки, кафе, магазины</span>
+          <div class="cov"><span class="bar"><span style="width:88%"></span></span><span class="num">189/214</span></div>
+          <div class="rc-f"><span>уверенность <b class="num">0,66</b></span><span>раз в 90 дней</span></div></div>
+        <div class="rc"><div class="rc-h"><b>Номера по сторонам здания</b><span class="src-k hotel">отель</span></div><span class="scope">разметка фасадов</span>
+          <div class="cov"><span class="bar"><span style="width:31%"></span></span><span class="num">67/214</span></div>
+          <div class="rc-f"><span>уверенность <b class="num">0,95</b></span><span>раз в год</span></div></div>
+        <div class="rc"><div class="rc-h"><b>С собакой</b><span class="src-k hotel">отель</span></div><span class="scope">правила и доплата</span>
+          <div class="cov"><span class="bar"><span style="width:19%"></span></span><span class="num">41/214</span></div>
+          <div class="rc-f"><span>уверенность <b class="num">0,93</b></span><span>раз в 90 дней</span></div></div>
+        <div class="rc"><div class="rc-h"><b>Вид на горы</b><span class="src-k calc">расчёт</span></div><span class="scope">по фасаду и этажу, с названиями вершин</span>
+          <div class="cov"><span class="bar"><span style="width:100%"></span></span><span class="num">214/214</span></div>
+          <div class="rc-f"><span>уверенность <b class="num">0,80</b></span><span>при изменении карты</span></div></div>
+        <div class="rc"><div class="rc-h"><b>Детские площадки рядом</b><span class="src-k open">открытые данные</span></div><span class="scope">в 5 минутах пешком</span>
+          <div class="cov"><span class="bar"><span style="width:92%"></span></span><span class="num">197/214</span></div>
+          <div class="rc-f"><span>уверенность <b class="num">0,72</b></span><span>раз в 90 дней</span></div></div>
+      </div>
     </section>
 
     <section class="sec" id="new">
@@ -129,14 +163,7 @@ tr.new td{animation:flash 1.6s var(--ease-out)}
           </div>
           <div class="dry">
             <div class="lbl" style="margin-bottom:6px">Пробный прогон</div>
-            <table class="table"><thead><tr><th>Отель</th><th>Результат</th><th>Путь</th><th>Уверенность</th></tr></thead>
-              <tbody>
-                <tr><td>Маяк</td><td><i class="mk n">✗</i>нет</td><td>без ступеней только в обход — 11 мин, уклон 11%</td><td class="num">0,82</td></tr>
-                <tr><td>Кипарис</td><td><i class="mk y">✓</i>да</td><td>5 мин по ровной улице</td><td class="num">0,88</td></tr>
-                <tr><td>Лазурь</td><td><i class="mk y">✓</i>да</td><td>2 мин, набережная</td><td class="num">0,93</td></tr>
-                <tr><td>Прибой</td><td><i class="mk n">✗</i>нет</td><td>только лестница, 140 ступеней</td><td class="num">0,9</td></tr>
-                <tr><td>Сосновый склон</td><td><i class="mk n">✗</i>нет</td><td>25 мин, подъём 90 м</td><td class="num">0,86</td></tr>
-              </tbody></table>
+            <div class="drys"><div class="dt"><div class="dt-h"><i class="mk n">✗</i><b>Маяк</b><span class="num">0,82</span></div><span>без ступеней только в обход — 11 мин, уклон 11%</span></div><div class="dt"><div class="dt-h"><i class="mk y">✓</i><b>Кипарис</b><span class="num">0,88</span></div><span>5 мин по ровной улице</span></div><div class="dt"><div class="dt-h"><i class="mk y">✓</i><b>Лазурь</b><span class="num">0,93</span></div><span>2 мин, набережная</span></div><div class="dt"><div class="dt-h"><i class="mk n">✗</i><b>Прибой</b><span class="num">0,90</span></div><span>только лестница, 140 ступеней</span></div><div class="dt"><div class="dt-h"><i class="mk n">✗</i><b>Сосновый склон</b><span class="num">0,86</span></div><span>25 мин, подъём 90 м</span></div></div>
           </div>
           <div class="acts"><button class="btn btn-primary" id="publish">Опубликовать для 214 отелей</button><span class="muted" style="font-size:14px">Займёт около минуты. Гости смогут искать по ней сразу.</span></div>
         </div>
@@ -214,9 +241,9 @@ document.getElementById('compile').addEventListener('click', () => {
 document.getElementById('publish').addEventListener('click', (e) => {
   e.target.disabled = true; e.target.textContent = 'Считаем для 214 отелей…';
   setTimeout(() => {
-    const tr = document.createElement('tr'); tr.className = 'new';
-    tr.innerHTML = `<td><b>${document.getElementById('nc').value}</b><br><span class="muted" style="font-size:13px">новая · сегодня</span></td><td><span class="src-k calc">расчёт</span></td><td><span class="cov"><span class="bar"><span style="width:96%"></span></span><span class="num">206/214</span></span></td><td class="num">0,85</td><td>при изменении карты</td>`;
-    document.querySelector('#reg tbody').prepend(tr);
+    const tr = document.createElement('div'); tr.className = 'rc new';
+    tr.innerHTML = `<div class="rc-h"><b>${document.getElementById('nc').value}</b><span class="src-k calc">расчёт</span></div><span class="scope">новая · сегодня</span><div class="cov"><span class="bar"><span style="width:96%"></span></span><span class="num">206/214</span></div><div class="rc-f"><span>уверенность <b class="num">0,85</b></span><span>при изменении карты</span></div>`;
+    document.getElementById('reg').prepend(tr);
     e.target.textContent = 'Опубликовано ✓'; toast('Характеристика доступна в поиске');
     document.getElementById('registry').scrollIntoView({behavior:'smooth'});
   }, 1600);

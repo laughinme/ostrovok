@@ -69,6 +69,7 @@
       el('circle', { cx: x(F.sun), cy: HZ - 5, r: 9, fill: v('--pano-sun') }, svg);
       const t = el('text', { x: x(F.sun) - 18, y: HZ - 18, 'text-anchor': 'end', class: 'pano-label pano-sun-label', fill: v('--pano-label') }, svg);
       t.textContent = 'закат 11 ноября · 16:58';
+      F._sunLabel = t;
     }
     // рельеф
     if (F.left.length) el('path', { d: profile(F.left) + ` L${x(F.left[F.left.length - 1][0])},${HZ + 1} L${x(F.left[0][0])},${HZ + 1} Z`, fill: v('--pano-land') }, svg);
@@ -86,6 +87,7 @@
       for (const n of [r, w]) n.style.transition = 'y 420ms cubic-bezier(0.22,1,0.36,1), height 420ms cubic-bezier(0.22,1,0.36,1)';
       return [r, w];
     });
+    if (F._sunLabel) { svg.appendChild(F._sunLabel); F._sunLabel = null; }
     // шкала сторон света
     for (let d = 0; d <= SPAN; d += 5) {
       const az = (F.from + d + 360) % 360, major = az % 45 === 0;
