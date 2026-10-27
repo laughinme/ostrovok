@@ -1,0 +1,7262 @@
+isDemo: true
+seed: 20261028
+description: Скрытая правда симулятора — демо, не подтверждённые свойства отелей
+hotels:
+  node/10058556917:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: true
+    ac: false
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/10058556917:room:1
+      facade: SE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/10058556917:room:1
+      facade: SW
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/10058556917:room:2
+      facade: SW
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/10058556917:room:2
+      facade: NW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/10058556917:room:3
+      facade: NW
+      floor_from: 3
+      floor_to: 5
+    - room_type_id: node/10058556917:room:4
+      facade: NE
+      floor_from: 1
+      floor_to: 5
+    - room_type_id: node/10058556917:room:5
+      facade: SE
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: node/10058556917:room:5
+      facade: SW
+      floor_from: 1
+      floor_to: 2
+    claims: {}
+    persona: расплывчатый
+  node/10058760244:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/10058760244:room:1
+      facade: SE
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/10058760244:room:2
+      facade: SW
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/10058760244:room:3
+      facade: NW
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/10058760244:room:4
+      facade: NE
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/10058760244:room:4
+      facade: SE
+      floor_from: 2
+      floor_to: 2
+    claims: {}
+    persona: многословный
+  node/10058780093:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      max_kg: 15
+      fee_rub: 1100
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: true
+    facade_rooms:
+    - room_type_id: node/10058780093:room:1
+      facade: NW
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/10058780093:room:2
+      facade: NE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/10058780093:room:3
+      facade: SE
+      floor_from: 1
+      floor_to: 1
+    claims:
+      sea_view_all_rooms: true
+    persona: многословный
+  node/10118233110:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      - cat
+      max_kg: 15
+      fee_rub: 1200
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/10118233110:room:1
+      facade: W
+      floor_from: 3
+      floor_to: 5
+    - room_type_id: node/10118233110:room:2
+      facade: NW
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/10118233110:room:2
+      facade: N
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/10118233110:room:3
+      facade: N
+      floor_from: 1
+      floor_to: 4
+    claims: {}
+    persona: краткий
+  node/10213051617:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      max_kg: 15
+      fee_rub: 800
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: node/10213051617:room:1
+      facade: SW
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: node/10213051617:room:1
+      facade: NW
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: node/10213051617:room:2
+      facade: NW
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/10213051617:room:3
+      facade: NE
+      floor_from: 2
+      floor_to: 4
+    - room_type_id: node/10213051617:room:3
+      facade: SE
+      floor_from: 1
+      floor_to: 2
+    claims: {}
+    persona: расплывчатый
+  node/10574256210:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/10574256210:room:1
+      facade: SW
+      floor_from: 2
+      floor_to: 9
+    - room_type_id: node/10574256210:room:1
+      facade: NW
+      floor_from: 1
+      floor_to: 8
+    - room_type_id: node/10574256210:room:2
+      facade: NW
+      floor_from: 2
+      floor_to: 7
+    - room_type_id: node/10574256210:room:3
+      facade: NE
+      floor_from: 2
+      floor_to: 5
+    - room_type_id: node/10574256210:room:3
+      facade: SE
+      floor_from: 1
+      floor_to: 4
+    claims: {}
+    persona: расплывчатый
+  node/10734977305:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/10734977305:room:1
+      facade: SW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/10734977305:room:1
+      facade: NW
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: node/10734977305:room:2
+      facade: NW
+      floor_from: 1
+      floor_to: 2
+    claims:
+      sea_view_all_rooms: true
+    persona: многословный
+  node/10759606594:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/10759606594:room:1
+      facade: E
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/10759606594:room:2
+      facade: S
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/10759606594:room:3
+      facade: W
+      floor_from: 1
+      floor_to: 4
+    - room_type_id: node/10759606594:room:4
+      facade: N
+      floor_from: 2
+      floor_to: 4
+    - room_type_id: node/10759606594:room:4
+      facade: E
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/10759606594:room:5
+      facade: E
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/10759606594:room:5
+      facade: S
+      floor_from: 2
+      floor_to: 2
+    claims: {}
+    persona: расплывчатый
+  node/10759606596:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/10759606596:room:1
+      facade: NW
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/10759606596:room:2
+      facade: NE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/10759606596:room:2
+      facade: SE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/10759606596:room:3
+      facade: SE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/10759606596:room:3
+      facade: SW
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/10759606596:room:4
+      facade: SW
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/10759606596:room:4
+      facade: NW
+      floor_from: 1
+      floor_to: 1
+    claims: {}
+    persona: расплывчатый
+  node/10759613912:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/10759613912:room:1
+      facade: NW
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/10759613912:room:2
+      facade: NE
+      floor_from: 1
+      floor_to: 1
+    claims: {}
+    persona: расплывчатый
+  node/10759613919:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/10759613919:room:1
+      facade: SW
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/10759613919:room:2
+      facade: W
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/10759613919:room:2
+      facade: N
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/10759613919:room:3
+      facade: N
+      floor_from: 1
+      floor_to: 1
+    claims: {}
+    persona: многословный
+  node/10759614063:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      - cat
+      max_kg: 10
+      fee_rub: 1200
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/10759614063:room:1
+      facade: E
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/10759614063:room:2
+      facade: S
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/10759614063:room:2
+      facade: W
+      floor_from: 2
+      floor_to: 3
+    claims: {}
+    persona: краткий
+  node/10810801627:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/10810801627:room:1
+      facade: W
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/10810801627:room:2
+      facade: N
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/10810801627:room:2
+      facade: E
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/10810801627:room:3
+      facade: E
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/10810801627:room:4
+      facade: S
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/10810801627:room:4
+      facade: W
+      floor_from: 1
+      floor_to: 2
+    claims: {}
+    persona: многословный
+  node/10853513205:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: false
+    ac: false
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/10853513205:room:1
+      facade: NW
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/10853513205:room:2
+      facade: NE
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/10853513205:room:3
+      facade: SE
+      floor_from: 1
+      floor_to: 2
+    claims: {}
+    persona: многословный
+  node/10858734694:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/10858734694:room:1
+      facade: S
+      floor_from: 3
+      floor_to: 6
+    - room_type_id: node/10858734694:room:1
+      facade: W
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/10858734694:room:2
+      facade: W
+      floor_from: 3
+      floor_to: 7
+    - room_type_id: node/10858734694:room:3
+      facade: N
+      floor_from: 3
+      floor_to: 5
+    - room_type_id: node/10858734694:room:3
+      facade: E
+      floor_from: 1
+      floor_to: 6
+    - room_type_id: node/10858734694:room:4
+      facade: E
+      floor_from: 2
+      floor_to: 4
+    - room_type_id: node/10858734694:room:4
+      facade: S
+      floor_from: 1
+      floor_to: 7
+    claims: {}
+    persona: краткий
+  node/10967527654:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/10967527654:room:1
+      facade: NW
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/10967527654:room:1
+      facade: NE
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/10967527654:room:2
+      facade: NE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/10967527654:room:3
+      facade: E
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/10967527654:room:3
+      facade: SE
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/10967527654:room:4
+      facade: SE
+      floor_from: 3
+      floor_to: 3
+    claims: {}
+    persona: многословный
+  node/10974113805:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      max_kg: 15
+      fee_rub: 300
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/10974113805:room:1
+      facade: W
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/10974113805:room:2
+      facade: N
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/10974113805:room:2
+      facade: E
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/10974113805:room:3
+      facade: E
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/10974113805:room:4
+      facade: S
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/10974113805:room:4
+      facade: W
+      floor_from: 2
+      floor_to: 3
+    claims: {}
+    persona: многословный
+  node/11016631786:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      - cat
+      max_kg: 15
+      fee_rub: 1500
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11016631786:room:1
+      facade: W
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11016631786:room:1
+      facade: NW
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: node/11016631786:room:2
+      facade: NW
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: node/11016631786:room:2
+      facade: N
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/11016631786:room:3
+      facade: N
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: node/11016631786:room:3
+      facade: E
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11016631786:room:4
+      facade: E
+      floor_from: 3
+      floor_to: 3
+    claims: {}
+    persona: многословный
+  node/11016631787:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      - cat
+      max_kg: 10
+      fee_rub: 800
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11016631787:room:1
+      facade: S
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/11016631787:room:2
+      facade: W
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/11016631787:room:2
+      facade: N
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/11016631787:room:3
+      facade: N
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/11016631787:room:3
+      facade: E
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11016631787:room:4
+      facade: E
+      floor_from: 2
+      floor_to: 3
+    claims:
+      sea_view_all_rooms: true
+    persona: расплывчатый
+  node/11016638369:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11016638369:room:1
+      facade: NW
+      floor_from: 3
+      floor_to: 21
+    - room_type_id: node/11016638369:room:2
+      facade: NE
+      floor_from: 2
+      floor_to: 21
+    - room_type_id: node/11016638369:room:2
+      facade: SE
+      floor_from: 1
+      floor_to: 11
+    - room_type_id: node/11016638369:room:3
+      facade: SE
+      floor_from: 2
+      floor_to: 4
+    - room_type_id: node/11016638369:room:4
+      facade: W
+      floor_from: 2
+      floor_to: 17
+    - room_type_id: node/11016638369:room:4
+      facade: NW
+      floor_from: 1
+      floor_to: 8
+    claims: {}
+    persona: многословный
+  node/11016638373:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11016638373:room:1
+      facade: SW
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: node/11016638373:room:2
+      facade: NW
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/11016638373:room:3
+      facade: NE
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: node/11016638373:room:3
+      facade: SE
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: node/11016638373:room:4
+      facade: SE
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/11016638373:room:5
+      facade: SW
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: node/11016638373:room:5
+      facade: NW
+      floor_from: 1
+      floor_to: 1
+    claims:
+      sea_view_all_rooms: true
+    persona: многословный
+  node/11016638375:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: node/11016638375:room:1
+      facade: NW
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11016638375:room:2
+      facade: NE
+      floor_from: 1
+      floor_to: 4
+    - room_type_id: node/11016638375:room:3
+      facade: SE
+      floor_from: 1
+      floor_to: 22
+    - room_type_id: node/11016638375:room:3
+      facade: S
+      floor_from: 3
+      floor_to: 19
+    claims:
+      sea_view_all_rooms: true
+    persona: краткий
+  node/11029913505:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11029913505:room:1
+      facade: SE
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11029913505:room:2
+      facade: SW
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11029913505:room:2
+      facade: NW
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/11029913505:room:3
+      facade: NW
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11029913505:room:3
+      facade: NE
+      floor_from: 2
+      floor_to: 3
+    claims: {}
+    persona: расплывчатый
+  node/11067209459:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11067209459:room:1
+      facade: SW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11067209459:room:1
+      facade: NW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11067209459:room:2
+      facade: NW
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11067209459:room:3
+      facade: NE
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11067209459:room:4
+      facade: SE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11067209459:room:5
+      facade: SW
+      floor_from: 2
+      floor_to: 2
+    claims: {}
+    persona: многословный
+  node/11119611105:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11119611105:room:1
+      facade: NW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11119611105:room:2
+      facade: NE
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/11119611105:room:2
+      facade: SE
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/11119611105:room:3
+      facade: SE
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11119611105:room:3
+      facade: S
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11119611105:room:4
+      facade: S
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/11119611105:room:4
+      facade: SW
+      floor_from: 3
+      floor_to: 3
+    claims: {}
+    persona: расплывчатый
+  node/11138786325:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      max_kg: 5
+      fee_rub: 300
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11138786325:room:1
+      facade: SW
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/11138786325:room:1
+      facade: NW
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/11138786325:room:2
+      facade: NW
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11138786325:room:2
+      facade: NE
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11138786325:room:3
+      facade: NE
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/11138786325:room:3
+      facade: SE
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/11138786325:room:4
+      facade: SE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11138786325:room:4
+      facade: SW
+      floor_from: 3
+      floor_to: 3
+    claims: {}
+    persona: краткий
+  node/11138786328:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11138786328:room:1
+      facade: NE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11138786328:room:1
+      facade: SE
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/11138786328:room:2
+      facade: SE
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/11138786328:room:2
+      facade: SW
+      floor_from: 1
+      floor_to: 2
+    claims:
+      sea_view_all_rooms: true
+    persona: расплывчатый
+  node/11138786368:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      max_kg: 5
+      fee_rub: 800
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: node/11138786368:room:1
+      facade: E
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11138786368:room:1
+      facade: S
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/11138786368:room:2
+      facade: S
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11138786368:room:3
+      facade: W
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/11138786368:room:3
+      facade: N
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/11138786368:room:4
+      facade: N
+      floor_from: 3
+      floor_to: 3
+    claims: {}
+    persona: многословный
+  node/11138786395:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11138786395:room:1
+      facade: NE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11138786395:room:2
+      facade: N
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11138786395:room:2
+      facade: NE
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/11138786395:room:3
+      facade: NE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11138786395:room:4
+      facade: N
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/11138786395:room:4
+      facade: NE
+      floor_from: 3
+      floor_to: 4
+    claims: {}
+    persona: краткий
+  node/11138786397:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11138786397:room:1
+      facade: SE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11138786397:room:1
+      facade: SW
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11138786397:room:2
+      facade: SW
+      floor_from: 2
+      floor_to: 3
+    claims:
+      sea_view_all_rooms: true
+    persona: многословный
+  node/11138786401:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: true
+    facade_rooms:
+    - room_type_id: node/11138786401:room:1
+      facade: S
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11138786401:room:1
+      facade: W
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11138786401:room:2
+      facade: W
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11138786401:room:3
+      facade: N
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11138786401:room:3
+      facade: E
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11138786401:room:4
+      facade: E
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11138786401:room:4
+      facade: S
+      floor_from: 1
+      floor_to: 1
+    claims: {}
+    persona: многословный
+  node/11138788609:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11138788609:room:1
+      facade: SW
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/11138788609:room:2
+      facade: NW
+      floor_from: 3
+      floor_to: 3
+    claims: {}
+    persona: многословный
+  node/11190910581:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      - cat
+      max_kg: 10
+      fee_rub: 1000
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11190910581:room:1
+      facade: SW
+      floor_from: 1
+      floor_to: 6
+    - room_type_id: node/11190910581:room:1
+      facade: NW
+      floor_from: 2
+      floor_to: 5
+    - room_type_id: node/11190910581:room:2
+      facade: NW
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/11190910581:room:2
+      facade: N
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11190910581:room:3
+      facade: N
+      floor_from: 1
+      floor_to: 5
+    - room_type_id: node/11190910581:room:3
+      facade: E
+      floor_from: 3
+      floor_to: 7
+    - room_type_id: node/11190910581:room:4
+      facade: E
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: node/11190910581:room:4
+      facade: SE
+      floor_from: 2
+      floor_to: 6
+    claims: {}
+    persona: расплывчатый
+  node/11238118158:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: false
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11238118158:room:1
+      facade: N
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/11238118158:room:1
+      facade: E
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11238118158:room:2
+      facade: E
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11238118158:room:3
+      facade: S
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11238118158:room:3
+      facade: W
+      floor_from: 3
+      floor_to: 3
+    claims: {}
+    persona: многословный
+  node/11304222978:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      max_kg: 5
+      fee_rub: 300
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11304222978:room:1
+      facade: NE
+      floor_from: 1
+      floor_to: 4
+    - room_type_id: node/11304222978:room:1
+      facade: SE
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11304222978:room:2
+      facade: SE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11304222978:room:2
+      facade: SW
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: node/11304222978:room:3
+      facade: SW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11304222978:room:3
+      facade: NW
+      floor_from: 1
+      floor_to: 4
+    - room_type_id: node/11304222978:room:4
+      facade: NW
+      floor_from: 2
+      floor_to: 3
+    claims: {}
+    persona: краткий
+  node/11304222979:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      max_kg: 15
+      fee_rub: 900
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11304222979:room:1
+      facade: SE
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/11304222979:room:2
+      facade: SW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11304222979:room:3
+      facade: NW
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/11304222979:room:4
+      facade: NE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11304222979:room:5
+      facade: SE
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/11304222979:room:5
+      facade: SW
+      floor_from: 3
+      floor_to: 3
+    claims:
+      sea_view_all_rooms: true
+    persona: многословный
+  node/11304222981:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11304222981:room:1
+      facade: N
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11304222981:room:1
+      facade: E
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/11304222981:room:2
+      facade: E
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/11304222981:room:3
+      facade: S
+      floor_from: 2
+      floor_to: 5
+    - room_type_id: node/11304222981:room:3
+      facade: W
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/11304222981:room:4
+      facade: W
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/11304222981:room:5
+      facade: N
+      floor_from: 1
+      floor_to: 4
+    claims: {}
+    persona: расплывчатый
+  node/11304222982:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11304222982:room:1
+      facade: S
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/11304222982:room:2
+      facade: W
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11304222982:room:2
+      facade: N
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/11304222982:room:3
+      facade: N
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11304222982:room:4
+      facade: E
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11304222982:room:5
+      facade: S
+      floor_from: 2
+      floor_to: 3
+    claims: {}
+    persona: расплывчатый
+  node/11304222983:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11304222983:room:1
+      facade: SW
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11304222983:room:2
+      facade: NW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11304222983:room:2
+      facade: NE
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/11304222983:room:3
+      facade: NE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11304222983:room:4
+      facade: SE
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11304222983:room:4
+      facade: SW
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/11304222983:room:5
+      facade: SW
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/11304222983:room:5
+      facade: NW
+      floor_from: 1
+      floor_to: 3
+    claims: {}
+    persona: расплывчатый
+  node/11304222984:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: node/11304222984:room:1
+      facade: NE
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/11304222984:room:2
+      facade: SE
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/11304222984:room:3
+      facade: SW
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/11304222984:room:3
+      facade: NW
+      floor_from: 2
+      floor_to: 5
+    - room_type_id: node/11304222984:room:4
+      facade: NW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11304222984:room:5
+      facade: NE
+      floor_from: 1
+      floor_to: 1
+    claims: {}
+    persona: расплывчатый
+  node/11304222985:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      - cat
+      max_kg: 5
+      fee_rub: 900
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11304222985:room:1
+      facade: NE
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: node/11304222985:room:1
+      facade: SE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11304222985:room:2
+      facade: SE
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11304222985:room:3
+      facade: SW
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11304222985:room:4
+      facade: NW
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: node/11304222985:room:5
+      facade: NE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11304222985:room:5
+      facade: SE
+      floor_from: 2
+      floor_to: 3
+    claims: {}
+    persona: расплывчатый
+  node/11304222987:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: node/11304222987:room:1
+      facade: SE
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11304222987:room:1
+      facade: SW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11304222987:room:2
+      facade: SW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11304222987:room:3
+      facade: NW
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/11304222987:room:3
+      facade: NE
+      floor_from: 1
+      floor_to: 3
+    claims: {}
+    persona: краткий
+  node/11331531334:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11331531334:room:1
+      facade: S
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11331531334:room:2
+      facade: W
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/11331531334:room:3
+      facade: N
+      floor_from: 2
+      floor_to: 4
+    - room_type_id: node/11331531334:room:3
+      facade: E
+      floor_from: 2
+      floor_to: 4
+    - room_type_id: node/11331531334:room:4
+      facade: E
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11331531334:room:5
+      facade: S
+      floor_from: 2
+      floor_to: 2
+    claims:
+      sea_view_all_rooms: true
+    persona: многословный
+  node/11482391574:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11482391574:room:1
+      facade: NE
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/11482391574:room:2
+      facade: SE
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11482391574:room:2
+      facade: SW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11482391574:room:3
+      facade: SW
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/11482391574:room:3
+      facade: NW
+      floor_from: 3
+      floor_to: 3
+    claims: {}
+    persona: краткий
+  node/11497670982:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      - cat
+      max_kg: 10
+      fee_rub: 700
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: node/11497670982:room:1
+      facade: SW
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/11497670982:room:2
+      facade: NW
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11497670982:room:2
+      facade: NE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11497670982:room:3
+      facade: NE
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11497670982:room:3
+      facade: SE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11497670982:room:4
+      facade: SE
+      floor_from: 1
+      floor_to: 3
+    claims: {}
+    persona: многословный
+  node/11521416444:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11521416444:room:1
+      facade: SE
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/11521416444:room:2
+      facade: SW
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11521416444:room:2
+      facade: NW
+      floor_from: 1
+      floor_to: 4
+    claims: {}
+    persona: многословный
+  node/11637552371:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: node/11637552371:room:1
+      facade: NW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11637552371:room:1
+      facade: NE
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/11637552371:room:2
+      facade: NE
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11637552371:room:2
+      facade: SE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11637552371:room:3
+      facade: SE
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/11637552371:room:4
+      facade: SW
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/11637552371:room:5
+      facade: NW
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/11637552371:room:5
+      facade: NE
+      floor_from: 2
+      floor_to: 3
+    claims: {}
+    persona: многословный
+  node/11637558670:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      - cat
+      max_kg: 15
+      fee_rub: 1500
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11637558670:room:1
+      facade: SW
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/11637558670:room:1
+      facade: NW
+      floor_from: 1
+      floor_to: 7
+    - room_type_id: node/11637558670:room:2
+      facade: NW
+      floor_from: 3
+      floor_to: 7
+    - room_type_id: node/11637558670:room:3
+      facade: NE
+      floor_from: 1
+      floor_to: 7
+    - room_type_id: node/11637558670:room:4
+      facade: SE
+      floor_from: 3
+      floor_to: 6
+    claims: {}
+    persona: расплывчатый
+  node/11843545829:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      max_kg: 5
+      fee_rub: 500
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: false
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11843545829:room:1
+      facade: N
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11843545829:room:1
+      facade: E
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11843545829:room:2
+      facade: E
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11843545829:room:2
+      facade: S
+      floor_from: 2
+      floor_to: 2
+    claims: {}
+    persona: расплывчатый
+  node/11843545833:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11843545833:room:1
+      facade: N
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11843545833:room:2
+      facade: E
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11843545833:room:2
+      facade: S
+      floor_from: 1
+      floor_to: 1
+    claims:
+      sea_view_all_rooms: true
+    persona: расплывчатый
+  node/11843545856:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11843545856:room:1
+      facade: NE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11843545856:room:2
+      facade: SE
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11843545856:room:3
+      facade: SW
+      floor_from: 1
+      floor_to: 3
+    claims: {}
+    persona: краткий
+  node/11843545860:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11843545860:room:1
+      facade: W
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11843545860:room:2
+      facade: N
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11843545860:room:3
+      facade: E
+      floor_from: 2
+      floor_to: 2
+    claims:
+      sea_view_all_rooms: true
+    persona: расплывчатый
+  node/11843545861:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11843545861:room:1
+      facade: SE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11843545861:room:1
+      facade: SW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11843545861:room:2
+      facade: SW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11843545861:room:2
+      facade: NW
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/11843545861:room:3
+      facade: NW
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11843545861:room:4
+      facade: NE
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/11843545861:room:4
+      facade: SE
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11843545861:room:5
+      facade: SE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11843545861:room:5
+      facade: SW
+      floor_from: 1
+      floor_to: 1
+    claims:
+      sea_view_all_rooms: true
+    persona: краткий
+  node/11843553789:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      - cat
+      max_kg: 15
+      fee_rub: 1400
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: node/11843553789:room:1
+      facade: NW
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/11843553789:room:2
+      facade: NE
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/11843553789:room:2
+      facade: SE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11843553789:room:3
+      facade: SE
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11843553789:room:4
+      facade: SW
+      floor_from: 2
+      floor_to: 4
+    claims: {}
+    persona: расплывчатый
+  node/11843553790:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: true
+    facade_rooms:
+    - room_type_id: node/11843553790:room:1
+      facade: W
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11843553790:room:1
+      facade: N
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11843553790:room:2
+      facade: N
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11843553790:room:3
+      facade: E
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11843553790:room:3
+      facade: S
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11843553790:room:4
+      facade: S
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11843553790:room:4
+      facade: W
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11843553790:room:5
+      facade: W
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11843553790:room:5
+      facade: N
+      floor_from: 1
+      floor_to: 1
+    claims: {}
+    persona: краткий
+  node/11843553791:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11843553791:room:1
+      facade: SE
+      floor_from: 2
+      floor_to: 4
+    - room_type_id: node/11843553791:room:1
+      facade: SW
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11843553791:room:2
+      facade: SW
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: node/11843553791:room:3
+      facade: NW
+      floor_from: 1
+      floor_to: 2
+    claims: {}
+    persona: многословный
+  node/11843553792:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11843553792:room:1
+      facade: W
+      floor_from: 2
+      floor_to: 15
+    - room_type_id: node/11843553792:room:2
+      facade: NW
+      floor_from: 3
+      floor_to: 8
+    - room_type_id: node/11843553792:room:2
+      facade: N
+      floor_from: 3
+      floor_to: 12
+    - room_type_id: node/11843553792:room:3
+      facade: N
+      floor_from: 3
+      floor_to: 9
+    - room_type_id: node/11843553792:room:4
+      facade: NE
+      floor_from: 1
+      floor_to: 12
+    - room_type_id: node/11843553792:room:4
+      facade: SE
+      floor_from: 3
+      floor_to: 17
+    claims: {}
+    persona: расплывчатый
+  node/11843553793:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: node/11843553793:room:1
+      facade: NW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11843553793:room:1
+      facade: N
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11843553793:room:2
+      facade: N
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/11843553793:room:2
+      facade: E
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/11843553793:room:3
+      facade: E
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11843553793:room:4
+      facade: S
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11843553793:room:4
+      facade: W
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11843553793:room:5
+      facade: W
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11843553793:room:5
+      facade: NW
+      floor_from: 1
+      floor_to: 3
+    claims: {}
+    persona: расплывчатый
+  node/11843553834:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11843553834:room:1
+      facade: SW
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/11843553834:room:1
+      facade: NW
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/11843553834:room:2
+      facade: NW
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11843553834:room:3
+      facade: NE
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11843553834:room:3
+      facade: SE
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/11843553834:room:4
+      facade: SE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11843553834:room:5
+      facade: SW
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/11843553834:room:5
+      facade: NW
+      floor_from: 2
+      floor_to: 2
+    claims: {}
+    persona: краткий
+  node/11843553838:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: node/11843553838:room:1
+      facade: NW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11843553838:room:1
+      facade: NE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11843553838:room:2
+      facade: NE
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11843553838:room:3
+      facade: SE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11843553838:room:3
+      facade: SW
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/11843553838:room:4
+      facade: SW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11843553838:room:5
+      facade: NW
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/11843553838:room:5
+      facade: NE
+      floor_from: 3
+      floor_to: 3
+    claims:
+      sea_view_all_rooms: true
+    persona: многословный
+  node/11843553839:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: node/11843553839:room:1
+      facade: NW
+      floor_from: 2
+      floor_to: 4
+    - room_type_id: node/11843553839:room:2
+      facade: NE
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/11843553839:room:2
+      facade: SE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11843553839:room:3
+      facade: SE
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11843553839:room:4
+      facade: SW
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: node/11843553839:room:5
+      facade: NW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11843553839:room:5
+      facade: NE
+      floor_from: 2
+      floor_to: 2
+    claims: {}
+    persona: расплывчатый
+  node/11843553851:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      - cat
+      max_kg: 5
+      fee_rub: 1300
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11843553851:room:1
+      facade: NE
+      floor_from: 1
+      floor_to: 4
+    - room_type_id: node/11843553851:room:2
+      facade: SE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11843553851:room:3
+      facade: SW
+      floor_from: 2
+      floor_to: 4
+    - room_type_id: node/11843553851:room:4
+      facade: NW
+      floor_from: 1
+      floor_to: 2
+    claims: {}
+    persona: краткий
+  node/11866202895:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      max_kg: 10
+      fee_rub: 400
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: node/11866202895:room:1
+      facade: NE
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/11866202895:room:1
+      facade: SE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11866202895:room:2
+      facade: SE
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/11866202895:room:3
+      facade: SW
+      floor_from: 3
+      floor_to: 3
+    claims: {}
+    persona: краткий
+  node/11874180256:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11874180256:room:1
+      facade: N
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: node/11874180256:room:1
+      facade: E
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11874180256:room:2
+      facade: E
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/11874180256:room:3
+      facade: S
+      floor_from: 1
+      floor_to: 3
+    claims: {}
+    persona: краткий
+  node/11878294031:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11878294031:room:1
+      facade: NE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11878294031:room:2
+      facade: SE
+      floor_from: 3
+      floor_to: 4
+    claims:
+      sea_view_all_rooms: true
+    persona: расплывчатый
+  node/11878294032:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11878294032:room:1
+      facade: NW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11878294032:room:2
+      facade: SE
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11878294032:room:2
+      facade: SW
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/11878294032:room:3
+      facade: SW
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/11878294032:room:3
+      facade: NW
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/11878294032:room:4
+      facade: NW
+      floor_from: 3
+      floor_to: 3
+    claims: {}
+    persona: расплывчатый
+  node/11878294039:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11878294039:room:1
+      facade: SE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11878294039:room:2
+      facade: SW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11878294039:room:3
+      facade: NW
+      floor_from: 2
+      floor_to: 3
+    claims:
+      sea_view_all_rooms: true
+    persona: краткий
+  node/11958139262:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11958139262:room:1
+      facade: NE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11958139262:room:1
+      facade: SE
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/11958139262:room:2
+      facade: SE
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/11958139262:room:2
+      facade: SW
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/11958139262:room:3
+      facade: SW
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11958139262:room:3
+      facade: NW
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11958139262:room:4
+      facade: NW
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11958139262:room:4
+      facade: NE
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/11958139262:room:5
+      facade: NE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11958139262:room:5
+      facade: SE
+      floor_from: 1
+      floor_to: 1
+    claims: {}
+    persona: расплывчатый
+  node/11958163713:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: node/11958163713:room:1
+      facade: SW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11958163713:room:2
+      facade: NW
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/11958163713:room:3
+      facade: NE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11958163713:room:3
+      facade: SE
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/11958163713:room:4
+      facade: SE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11958163713:room:4
+      facade: SW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11958163713:room:5
+      facade: SW
+      floor_from: 1
+      floor_to: 3
+    claims:
+      sea_view_all_rooms: true
+    persona: краткий
+  node/11958163737:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      max_kg: 10
+      fee_rub: 1400
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11958163737:room:1
+      facade: SE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11958163737:room:2
+      facade: NW
+      floor_from: 1
+      floor_to: 2
+    claims: {}
+    persona: краткий
+  node/11958163769:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11958163769:room:1
+      facade: E
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/11958163769:room:1
+      facade: S
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/11958163769:room:2
+      facade: S
+      floor_from: 3
+      floor_to: 3
+    claims: {}
+    persona: краткий
+  node/11958163786:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11958163786:room:1
+      facade: N
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11958163786:room:2
+      facade: E
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/11958163786:room:3
+      facade: S
+      floor_from: 1
+      floor_to: 1
+    claims: {}
+    persona: расплывчатый
+  node/11958163800:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: false
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/11958163800:room:1
+      facade: W
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11958163800:room:2
+      facade: N
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/11958163800:room:2
+      facade: E
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/11958163800:room:3
+      facade: E
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/11958163800:room:3
+      facade: S
+      floor_from: 2
+      floor_to: 2
+    claims: {}
+    persona: краткий
+  node/12032893438:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/12032893438:room:1
+      facade: NE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/12032893438:room:1
+      facade: SE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/12032893438:room:2
+      facade: SE
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/12032893438:room:2
+      facade: SW
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/12032893438:room:3
+      facade: SW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/12032893438:room:4
+      facade: NW
+      floor_from: 1
+      floor_to: 3
+    claims:
+      sea_view_all_rooms: true
+    persona: краткий
+  node/12043534507:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/12043534507:room:1
+      facade: SW
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/12043534507:room:2
+      facade: NW
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: node/12043534507:room:3
+      facade: NE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/12043534507:room:4
+      facade: SE
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: node/12043534507:room:5
+      facade: SW
+      floor_from: 1
+      floor_to: 3
+    claims: {}
+    persona: многословный
+  node/12084593369:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      - cat
+      max_kg: 5
+      fee_rub: 800
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/12084593369:room:1
+      facade: E
+      floor_from: 2
+      floor_to: 4
+    - room_type_id: node/12084593369:room:1
+      facade: S
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/12084593369:room:2
+      facade: S
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: node/12084593369:room:2
+      facade: W
+      floor_from: 1
+      floor_to: 4
+    - room_type_id: node/12084593369:room:3
+      facade: W
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/12084593369:room:3
+      facade: N
+      floor_from: 2
+      floor_to: 3
+    claims: {}
+    persona: расплывчатый
+  node/12183637632:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/12183637632:room:1
+      facade: N
+      floor_from: 2
+      floor_to: 7
+    - room_type_id: node/12183637632:room:2
+      facade: E
+      floor_from: 3
+      floor_to: 5
+    - room_type_id: node/12183637632:room:3
+      facade: S
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/12183637632:room:4
+      facade: W
+      floor_from: 1
+      floor_to: 6
+    claims: {}
+    persona: краткий
+  node/12184779499:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/12184779499:room:1
+      facade: S
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/12184779499:room:2
+      facade: W
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/12184779499:room:3
+      facade: N
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/12184779499:room:4
+      facade: E
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/12184779499:room:4
+      facade: S
+      floor_from: 1
+      floor_to: 1
+    claims: {}
+    persona: многословный
+  node/12416060217:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/12416060217:room:1
+      facade: E
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/12416060217:room:1
+      facade: S
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/12416060217:room:2
+      facade: S
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/12416060217:room:3
+      facade: N
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/12416060217:room:4
+      facade: E
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/12416060217:room:4
+      facade: S
+      floor_from: 3
+      floor_to: 4
+    claims:
+      sea_view_all_rooms: true
+    persona: расплывчатый
+  node/12416060226:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: false
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/12416060226:room:1
+      facade: E
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/12416060226:room:1
+      facade: S
+      floor_from: 2
+      floor_to: 13
+    - room_type_id: node/12416060226:room:2
+      facade: S
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/12416060226:room:2
+      facade: W
+      floor_from: 3
+      floor_to: 13
+    claims: {}
+    persona: расплывчатый
+  node/12416060227:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      max_kg: 10
+      fee_rub: 1400
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/12416060227:room:1
+      facade: N
+      floor_from: 2
+      floor_to: 18
+    - room_type_id: node/12416060227:room:2
+      facade: E
+      floor_from: 2
+      floor_to: 17
+    - room_type_id: node/12416060227:room:3
+      facade: S
+      floor_from: 2
+      floor_to: 13
+    - room_type_id: node/12416060227:room:3
+      facade: W
+      floor_from: 2
+      floor_to: 11
+    claims: {}
+    persona: расплывчатый
+  node/12541096667:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/12541096667:room:1
+      facade: SW
+      floor_from: 3
+      floor_to: 9
+    - room_type_id: node/12541096667:room:2
+      facade: NW
+      floor_from: 2
+      floor_to: 4
+    claims: {}
+    persona: многословный
+  node/12560021804:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      - cat
+      max_kg: 10
+      fee_rub: 1100
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: node/12560021804:room:1
+      facade: S
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/12560021804:room:1
+      facade: W
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/12560021804:room:2
+      facade: W
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/12560021804:room:2
+      facade: N
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/12560021804:room:3
+      facade: N
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/12560021804:room:4
+      facade: E
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/12560021804:room:5
+      facade: S
+      floor_from: 2
+      floor_to: 3
+    claims: {}
+    persona: краткий
+  node/12732332501:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      - cat
+      max_kg: 5
+      fee_rub: 900
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: false
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/12732332501:room:1
+      facade: W
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/12732332501:room:2
+      facade: N
+      floor_from: 3
+      floor_to: 3
+    claims: {}
+    persona: расплывчатый
+  node/12747840301:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/12747840301:room:1
+      facade: W
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/12747840301:room:1
+      facade: N
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/12747840301:room:2
+      facade: N
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/12747840301:room:3
+      facade: E
+      floor_from: 1
+      floor_to: 3
+    claims:
+      sea_view_all_rooms: true
+    persona: краткий
+  node/12747932801:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/12747932801:room:1
+      facade: W
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/12747932801:room:1
+      facade: N
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/12747932801:room:2
+      facade: N
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/12747932801:room:3
+      facade: E
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/12747932801:room:4
+      facade: S
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/12747932801:room:4
+      facade: W
+      floor_from: 2
+      floor_to: 2
+    claims:
+      sea_view_all_rooms: true
+    persona: многословный
+  node/12749552601:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      max_kg: 30
+      fee_rub: 1200
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/12749552601:room:1
+      facade: SE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/12749552601:room:2
+      facade: SW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/12749552601:room:2
+      facade: NW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/12749552601:room:3
+      facade: NW
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/12749552601:room:4
+      facade: NE
+      floor_from: 3
+      floor_to: 5
+    - room_type_id: node/12749552601:room:5
+      facade: SE
+      floor_from: 3
+      floor_to: 4
+    claims: {}
+    persona: расплывчатый
+  node/12800893166:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/12800893166:room:1
+      facade: E
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/12800893166:room:1
+      facade: S
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/12800893166:room:2
+      facade: S
+      floor_from: 2
+      floor_to: 2
+    claims: {}
+    persona: многословный
+  node/12836338654:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      - cat
+      max_kg: 15
+      fee_rub: 400
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/12836338654:room:1
+      facade: N
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/12836338654:room:2
+      facade: E
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/12836338654:room:2
+      facade: S
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/12836338654:room:3
+      facade: S
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/12836338654:room:3
+      facade: W
+      floor_from: 3
+      floor_to: 3
+    claims: {}
+    persona: расплывчатый
+  node/12956582499:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/12956582499:room:1
+      facade: W
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/12956582499:room:1
+      facade: N
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/12956582499:room:2
+      facade: N
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/12956582499:room:3
+      facade: E
+      floor_from: 2
+      floor_to: 3
+    claims: {}
+    persona: многословный
+  node/12958832506:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: node/12958832506:room:1
+      facade: SW
+      floor_from: 1
+      floor_to: 4
+    - room_type_id: node/12958832506:room:2
+      facade: NW
+      floor_from: 2
+      floor_to: 6
+    - room_type_id: node/12958832506:room:2
+      facade: NE
+      floor_from: 2
+      floor_to: 6
+    - room_type_id: node/12958832506:room:3
+      facade: NE
+      floor_from: 1
+      floor_to: 5
+    - room_type_id: node/12958832506:room:3
+      facade: SE
+      floor_from: 1
+      floor_to: 8
+    claims:
+      sea_view_all_rooms: true
+    persona: краткий
+  node/13098414695:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      - cat
+      max_kg: 15
+      fee_rub: 400
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/13098414695:room:1
+      facade: W
+      floor_from: 1
+      floor_to: 5
+    - room_type_id: node/13098414695:room:1
+      facade: N
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/13098414695:room:2
+      facade: N
+      floor_from: 2
+      floor_to: 5
+    - room_type_id: node/13098414695:room:3
+      facade: E
+      floor_from: 1
+      floor_to: 4
+    - room_type_id: node/13098414695:room:3
+      facade: S
+      floor_from: 1
+      floor_to: 4
+    - room_type_id: node/13098414695:room:4
+      facade: S
+      floor_from: 3
+      floor_to: 5
+    - room_type_id: node/13098414695:room:5
+      facade: W
+      floor_from: 3
+      floor_to: 3
+    claims: {}
+    persona: расплывчатый
+  node/13100429523:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/13100429523:room:1
+      facade: W
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/13100429523:room:2
+      facade: N
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/13100429523:room:3
+      facade: E
+      floor_from: 3
+      floor_to: 3
+    claims: {}
+    persona: расплывчатый
+  node/13108695501:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      max_kg: 10
+      fee_rub: 700
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/13108695501:room:1
+      facade: NE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/13108695501:room:2
+      facade: SE
+      floor_from: 1
+      floor_to: 1
+    claims: {}
+    persona: расплывчатый
+  node/13114325896:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      - cat
+      max_kg: 15
+      fee_rub: 1100
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: true
+    ac: false
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/13114325896:room:1
+      facade: W
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/13114325896:room:2
+      facade: N
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/13114325896:room:2
+      facade: E
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/13114325896:room:3
+      facade: E
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/13114325896:room:4
+      facade: S
+      floor_from: 2
+      floor_to: 2
+    claims:
+      sea_view_all_rooms: true
+    persona: расплывчатый
+  node/13115134069:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/13115134069:room:1
+      facade: N
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/13115134069:room:2
+      facade: E
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/13115134069:room:3
+      facade: S
+      floor_from: 3
+      floor_to: 3
+    claims: {}
+    persona: краткий
+  node/1323204199:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/1323204199:room:1
+      facade: SW
+      floor_from: 2
+      floor_to: 5
+    - room_type_id: node/1323204199:room:2
+      facade: NW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/1323204199:room:2
+      facade: SE
+      floor_from: 2
+      floor_to: 3
+    claims:
+      sea_view_all_rooms: true
+    persona: краткий
+  node/13301736401:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/13301736401:room:1
+      facade: N
+      floor_from: 1
+      floor_to: 4
+    - room_type_id: node/13301736401:room:1
+      facade: E
+      floor_from: 2
+      floor_to: 4
+    - room_type_id: node/13301736401:room:2
+      facade: E
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/13301736401:room:3
+      facade: S
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/13301736401:room:4
+      facade: SW
+      floor_from: 2
+      floor_to: 5
+    - room_type_id: node/13301736401:room:5
+      facade: NW
+      floor_from: 3
+      floor_to: 5
+    claims: {}
+    persona: многословный
+  node/13301736402:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/13301736402:room:1
+      facade: NE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/13301736402:room:1
+      facade: SE
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/13301736402:room:2
+      facade: SE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/13301736402:room:3
+      facade: SW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/13301736402:room:3
+      facade: NW
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/13301736402:room:4
+      facade: NW
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/13301736402:room:5
+      facade: NE
+      floor_from: 3
+      floor_to: 3
+    claims: {}
+    persona: краткий
+  node/13301736501:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      - cat
+      max_kg: 10
+      fee_rub: 1000
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: node/13301736501:room:1
+      facade: N
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/13301736501:room:2
+      facade: E
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/13301736501:room:3
+      facade: S
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/13301736501:room:3
+      facade: W
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/13301736501:room:4
+      facade: W
+      floor_from: 3
+      floor_to: 4
+    claims: {}
+    persona: многословный
+  node/13408523534:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/13408523534:room:1
+      facade: SE
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/13408523534:room:2
+      facade: SW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/13408523534:room:2
+      facade: NW
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/13408523534:room:3
+      facade: NW
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/13408523534:room:4
+      facade: NE
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/13408523534:room:4
+      facade: SE
+      floor_from: 2
+      floor_to: 3
+    claims: {}
+    persona: краткий
+  node/13438392946:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: false
+    elevator: false
+    step_free: true
+    facade_rooms:
+    - room_type_id: node/13438392946:room:1
+      facade: NE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/13438392946:room:1
+      facade: SE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/13438392946:room:2
+      facade: SE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/13438392946:room:3
+      facade: SW
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/13438392946:room:3
+      facade: NW
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/13438392946:room:4
+      facade: NW
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/13438392946:room:5
+      facade: NE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/13438392946:room:5
+      facade: SE
+      floor_from: 1
+      floor_to: 1
+    claims:
+      sea_view_all_rooms: true
+    persona: краткий
+  node/1362320485:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: false
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: node/1362320485:room:1
+      facade: SE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/1362320485:room:2
+      facade: SW
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/1362320485:room:3
+      facade: NW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/1362320485:room:4
+      facade: NE
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/1362320485:room:4
+      facade: SE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/1362320485:room:5
+      facade: SE
+      floor_from: 2
+      floor_to: 4
+    - room_type_id: node/1362320485:room:5
+      facade: SW
+      floor_from: 2
+      floor_to: 4
+    claims:
+      sea_view_all_rooms: true
+    persona: краткий
+  node/1370976583:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      - cat
+      max_kg: 15
+      fee_rub: 900
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: node/1370976583:room:1
+      facade: W
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/1370976583:room:2
+      facade: N
+      floor_from: 1
+      floor_to: 14
+    claims:
+      sea_view_all_rooms: true
+    persona: расплывчатый
+  node/13825065360:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/13825065360:room:1
+      facade: SW
+      floor_from: 2
+      floor_to: 4
+    - room_type_id: node/13825065360:room:2
+      facade: NW
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: node/13825065360:room:2
+      facade: NE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/13825065360:room:3
+      facade: NE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/13825065360:room:3
+      facade: SE
+      floor_from: 3
+      floor_to: 4
+    claims: {}
+    persona: многословный
+  node/13825076875:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/13825076875:room:1
+      facade: SE
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: node/13825076875:room:2
+      facade: SW
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/13825076875:room:3
+      facade: NW
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/13825076875:room:3
+      facade: NE
+      floor_from: 2
+      floor_to: 4
+    - room_type_id: node/13825076875:room:4
+      facade: NE
+      floor_from: 2
+      floor_to: 5
+    claims:
+      sea_view_all_rooms: true
+    persona: краткий
+  node/13825400642:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/13825400642:room:1
+      facade: NW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/13825400642:room:1
+      facade: NE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/13825400642:room:2
+      facade: NE
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/13825400642:room:3
+      facade: SE
+      floor_from: 2
+      floor_to: 2
+    claims: {}
+    persona: многословный
+  node/13962415401:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      max_kg: 15
+      fee_rub: 1400
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/13962415401:room:1
+      facade: W
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/13962415401:room:2
+      facade: N
+      floor_from: 2
+      floor_to: 3
+    claims: {}
+    persona: краткий
+  node/13968540001:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      - cat
+      max_kg: 15
+      fee_rub: 400
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/13968540001:room:1
+      facade: NW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/13968540001:room:2
+      facade: NE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/13968540001:room:3
+      facade: SE
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/13968540001:room:3
+      facade: SW
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: node/13968540001:room:4
+      facade: SW
+      floor_from: 2
+      floor_to: 4
+    claims: {}
+    persona: краткий
+  node/14002340401:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      max_kg: 5
+      fee_rub: 500
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: false
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/14002340401:room:1
+      facade: NW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/14002340401:room:2
+      facade: NE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/14002340401:room:3
+      facade: SE
+      floor_from: 1
+      floor_to: 3
+    claims: {}
+    persona: многословный
+  node/1449074195:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      max_kg: 10
+      fee_rub: 500
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/1449074195:room:1
+      facade: S
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/1449074195:room:2
+      facade: SW
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/1449074195:room:3
+      facade: NW
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/1449074195:room:3
+      facade: N
+      floor_from: 1
+      floor_to: 1
+    claims: {}
+    persona: многословный
+  node/1521215547:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: node/1521215547:room:1
+      facade: SW
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/1521215547:room:1
+      facade: W
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/1521215547:room:2
+      facade: W
+      floor_from: 3
+      floor_to: 4
+    claims: {}
+    persona: многословный
+  node/1589583311:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/1589583311:room:1
+      facade: S
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/1589583311:room:2
+      facade: W
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/1589583311:room:3
+      facade: N
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/1589583311:room:3
+      facade: E
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/1589583311:room:4
+      facade: E
+      floor_from: 3
+      floor_to: 3
+    claims: {}
+    persona: расплывчатый
+  node/1589583324:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/1589583324:room:1
+      facade: E
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/1589583324:room:2
+      facade: S
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/1589583324:room:3
+      facade: W
+      floor_from: 3
+      floor_to: 3
+    claims: {}
+    persona: расплывчатый
+  node/1589583328:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      - cat
+      max_kg: 30
+      fee_rub: 600
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/1589583328:room:1
+      facade: S
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/1589583328:room:2
+      facade: W
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/1589583328:room:3
+      facade: N
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/1589583328:room:4
+      facade: E
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/1589583328:room:5
+      facade: S
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/1589583328:room:5
+      facade: W
+      floor_from: 3
+      floor_to: 3
+    claims: {}
+    persona: расплывчатый
+  node/1589590335:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/1589590335:room:1
+      facade: S
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/1589590335:room:2
+      facade: W
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/1589590335:room:2
+      facade: N
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: node/1589590335:room:3
+      facade: N
+      floor_from: 1
+      floor_to: 4
+    - room_type_id: node/1589590335:room:3
+      facade: E
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/1589590335:room:4
+      facade: E
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/1589590335:room:4
+      facade: S
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/1589590335:room:5
+      facade: S
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/1589590335:room:5
+      facade: W
+      floor_from: 3
+      floor_to: 4
+    claims: {}
+    persona: краткий
+  node/1859715975:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/1859715975:room:1
+      facade: E
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/1859715975:room:2
+      facade: S
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/1859715975:room:3
+      facade: W
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/1859715975:room:3
+      facade: N
+      floor_from: 3
+      floor_to: 3
+    claims:
+      sea_view_all_rooms: true
+    persona: краткий
+  node/1859716038:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/1859716038:room:1
+      facade: E
+      floor_from: 3
+      floor_to: 5
+    - room_type_id: node/1859716038:room:2
+      facade: S
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: node/1859716038:room:3
+      facade: W
+      floor_from: 2
+      floor_to: 5
+    - room_type_id: node/1859716038:room:3
+      facade: N
+      floor_from: 2
+      floor_to: 4
+    - room_type_id: node/1859716038:room:4
+      facade: N
+      floor_from: 2
+      floor_to: 4
+    - room_type_id: node/1859716038:room:4
+      facade: E
+      floor_from: 3
+      floor_to: 4
+    claims: {}
+    persona: расплывчатый
+  node/2178886260:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/2178886260:room:1
+      facade: NW
+      floor_from: 2
+      floor_to: 7
+    - room_type_id: node/2178886260:room:1
+      facade: N
+      floor_from: 2
+      floor_to: 4
+    - room_type_id: node/2178886260:room:2
+      facade: N
+      floor_from: 1
+      floor_to: 7
+    - room_type_id: node/2178886260:room:2
+      facade: E
+      floor_from: 1
+      floor_to: 1
+    claims: {}
+    persona: краткий
+  node/2181712522:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      - cat
+      max_kg: 5
+      fee_rub: 700
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: true
+    facade_rooms:
+    - room_type_id: node/2181712522:room:1
+      facade: NW
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/2181712522:room:2
+      facade: NE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/2181712522:room:3
+      facade: SE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/2181712522:room:4
+      facade: SW
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/2181712522:room:4
+      facade: NW
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/2181712522:room:5
+      facade: NW
+      floor_from: 1
+      floor_to: 1
+    claims: {}
+    persona: расплывчатый
+  node/2196524288:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      - cat
+      max_kg: 15
+      fee_rub: 1000
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/2196524288:room:1
+      facade: E
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/2196524288:room:2
+      facade: S
+      floor_from: 3
+      floor_to: 3
+    claims: {}
+    persona: многословный
+  node/2514339345:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      - cat
+      max_kg: 15
+      fee_rub: 300
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: false
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/2514339345:room:1
+      facade: SW
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/2514339345:room:1
+      facade: NW
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/2514339345:room:2
+      facade: NW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/2514339345:room:2
+      facade: NE
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/2514339345:room:3
+      facade: NE
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/2514339345:room:4
+      facade: SE
+      floor_from: 1
+      floor_to: 2
+    claims: {}
+    persona: краткий
+  node/2514339346:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/2514339346:room:1
+      facade: SW
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/2514339346:room:1
+      facade: NW
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/2514339346:room:2
+      facade: NW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/2514339346:room:2
+      facade: NE
+      floor_from: 1
+      floor_to: 3
+    claims: {}
+    persona: расплывчатый
+  node/2514340498:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/2514340498:room:1
+      facade: NE
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/2514340498:room:2
+      facade: SW
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/2514340498:room:2
+      facade: NW
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/2514340498:room:3
+      facade: NW
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/2514340498:room:3
+      facade: NE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/2514340498:room:4
+      facade: NE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/2514340498:room:4
+      facade: SW
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/2514340498:room:5
+      facade: SW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/2514340498:room:5
+      facade: NW
+      floor_from: 2
+      floor_to: 2
+    claims: {}
+    persona: краткий
+  node/2870121087:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/2870121087:room:1
+      facade: W
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: node/2870121087:room:1
+      facade: N
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/2870121087:room:2
+      facade: N
+      floor_from: 2
+      floor_to: 4
+    - room_type_id: node/2870121087:room:2
+      facade: S
+      floor_from: 2
+      floor_to: 3
+    claims: {}
+    persona: краткий
+  node/3143192173:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: false
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/3143192173:room:1
+      facade: W
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/3143192173:room:2
+      facade: N
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/3143192173:room:3
+      facade: E
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/3143192173:room:4
+      facade: S
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/3143192173:room:4
+      facade: W
+      floor_from: 2
+      floor_to: 2
+    claims: {}
+    persona: расплывчатый
+  node/3730652025:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: node/3730652025:room:1
+      facade: E
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/3730652025:room:2
+      facade: S
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/3730652025:room:2
+      facade: W
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/3730652025:room:3
+      facade: W
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/3730652025:room:3
+      facade: N
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/3730652025:room:4
+      facade: N
+      floor_from: 2
+      floor_to: 3
+    claims: {}
+    persona: многословный
+  node/3839779706:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      - cat
+      max_kg: 5
+      fee_rub: 600
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/3839779706:room:1
+      facade: E
+      floor_from: 3
+      floor_to: 5
+    - room_type_id: node/3839779706:room:2
+      facade: S
+      floor_from: 3
+      floor_to: 5
+    - room_type_id: node/3839779706:room:2
+      facade: W
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/3839779706:room:3
+      facade: W
+      floor_from: 1
+      floor_to: 2
+    claims: {}
+    persona: расплывчатый
+  node/4138105189:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      max_kg: 10
+      fee_rub: 700
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/4138105189:room:1
+      facade: NE
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/4138105189:room:2
+      facade: SE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/4138105189:room:2
+      facade: SW
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/4138105189:room:3
+      facade: SW
+      floor_from: 3
+      floor_to: 5
+    - room_type_id: node/4138105189:room:4
+      facade: NW
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/4138105189:room:4
+      facade: NE
+      floor_from: 3
+      floor_to: 4
+    claims: {}
+    persona: расплывчатый
+  node/4161702427:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      - cat
+      max_kg: 5
+      fee_rub: 800
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/4161702427:room:1
+      facade: SE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/4161702427:room:2
+      facade: SW
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/4161702427:room:2
+      facade: NW
+      floor_from: 1
+      floor_to: 1
+    claims: {}
+    persona: многословный
+  node/4209373299:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      - cat
+      max_kg: 5
+      fee_rub: 1100
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/4209373299:room:1
+      facade: NE
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/4209373299:room:2
+      facade: SE
+      floor_from: 2
+      floor_to: 2
+    claims: {}
+    persona: расплывчатый
+  node/4281963807:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      max_kg: 5
+      fee_rub: 1500
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/4281963807:room:1
+      facade: E
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/4281963807:room:2
+      facade: S
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/4281963807:room:3
+      facade: W
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/4281963807:room:4
+      facade: N
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/4281963807:room:5
+      facade: E
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/4281963807:room:5
+      facade: S
+      floor_from: 3
+      floor_to: 3
+    claims: {}
+    persona: краткий
+  node/4323769893:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      - cat
+      max_kg: 15
+      fee_rub: 700
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/4323769893:room:1
+      facade: NE
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/4323769893:room:1
+      facade: SE
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/4323769893:room:2
+      facade: SE
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/4323769893:room:3
+      facade: SW
+      floor_from: 3
+      floor_to: 3
+    claims: {}
+    persona: расплывчатый
+  node/4325712906:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: false
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/4325712906:room:1
+      facade: SE
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/4325712906:room:1
+      facade: SW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/4325712906:room:2
+      facade: SW
+      floor_from: 2
+      floor_to: 2
+    claims:
+      sea_view_all_rooms: true
+    persona: многословный
+  node/4331507393:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/4331507393:room:1
+      facade: NE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/4331507393:room:1
+      facade: SE
+      floor_from: 2
+      floor_to: 4
+    - room_type_id: node/4331507393:room:2
+      facade: SE
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: node/4331507393:room:3
+      facade: SW
+      floor_from: 1
+      floor_to: 4
+    - room_type_id: node/4331507393:room:3
+      facade: NW
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/4331507393:room:4
+      facade: NW
+      floor_from: 3
+      floor_to: 4
+    claims: {}
+    persona: многословный
+  node/4369173790:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/4369173790:room:1
+      facade: S
+      floor_from: 1
+      floor_to: 4
+    - room_type_id: node/4369173790:room:2
+      facade: SW
+      floor_from: 3
+      floor_to: 7
+    - room_type_id: node/4369173790:room:2
+      facade: W
+      floor_from: 1
+      floor_to: 10
+    - room_type_id: node/4369173790:room:3
+      facade: W
+      floor_from: 1
+      floor_to: 19
+    - room_type_id: node/4369173790:room:3
+      facade: NW
+      floor_from: 2
+      floor_to: 5
+    - room_type_id: node/4369173790:room:4
+      facade: NW
+      floor_from: 1
+      floor_to: 18
+    claims: {}
+    persona: расплывчатый
+  node/4369348389:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: true
+    facade_rooms:
+    - room_type_id: node/4369348389:room:1
+      facade: SE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/4369348389:room:1
+      facade: S
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/4369348389:room:2
+      facade: S
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/4369348389:room:2
+      facade: W
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/4369348389:room:3
+      facade: W
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/4369348389:room:3
+      facade: NW
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/4369348389:room:4
+      facade: NW
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/4369348389:room:4
+      facade: N
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/4369348389:room:5
+      facade: N
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/4369348389:room:5
+      facade: E
+      floor_from: 1
+      floor_to: 1
+    claims: {}
+    persona: расплывчатый
+  node/4370076889:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/4370076889:room:1
+      facade: NW
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/4370076889:room:2
+      facade: NE
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/4370076889:room:3
+      facade: SE
+      floor_from: 1
+      floor_to: 3
+    claims: {}
+    persona: многословный
+  node/4370807729:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: false
+    ac: false
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/4370807729:room:1
+      facade: NE
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: node/4370807729:room:1
+      facade: SE
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/4370807729:room:2
+      facade: SE
+      floor_from: 1
+      floor_to: 2
+    claims: {}
+    persona: многословный
+  node/4393265790:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      max_kg: 10
+      fee_rub: 1400
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: node/4393265790:room:1
+      facade: W
+      floor_from: 2
+      floor_to: 6
+    - room_type_id: node/4393265790:room:2
+      facade: N
+      floor_from: 1
+      floor_to: 7
+    - room_type_id: node/4393265790:room:3
+      facade: E
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/4393265790:room:3
+      facade: S
+      floor_from: 3
+      floor_to: 5
+    - room_type_id: node/4393265790:room:4
+      facade: S
+      floor_from: 3
+      floor_to: 8
+    - room_type_id: node/4393265790:room:5
+      facade: W
+      floor_from: 2
+      floor_to: 8
+    - room_type_id: node/4393265790:room:5
+      facade: N
+      floor_from: 2
+      floor_to: 7
+    claims:
+      sea_view_all_rooms: true
+    persona: расплывчатый
+  node/4398105389:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/4398105389:room:1
+      facade: N
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/4398105389:room:2
+      facade: E
+      floor_from: 1
+      floor_to: 1
+    claims: {}
+    persona: краткий
+  node/4422134889:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/4422134889:room:1
+      facade: N
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/4422134889:room:2
+      facade: E
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/4422134889:room:2
+      facade: S
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: node/4422134889:room:3
+      facade: S
+      floor_from: 1
+      floor_to: 4
+    claims: {}
+    persona: расплывчатый
+  node/4426452241:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      max_kg: 5
+      fee_rub: 3000
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: node/4426452241:room:1
+      facade: S
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/4426452241:room:2
+      facade: W
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/4426452241:room:3
+      facade: NW
+      floor_from: 1
+      floor_to: 1
+    claims: {}
+    persona: краткий
+  node/4426452242:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      - cat
+      max_kg: 15
+      fee_rub: 1000
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/4426452242:room:1
+      facade: SW
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/4426452242:room:2
+      facade: NW
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/4426452242:room:2
+      facade: NE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/4426452242:room:3
+      facade: NE
+      floor_from: 2
+      floor_to: 2
+    claims:
+      sea_view_all_rooms: true
+    persona: многословный
+  node/4426452243:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: false
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/4426452243:room:1
+      facade: NE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/4426452243:room:2
+      facade: SE
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/4426452243:room:2
+      facade: SW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/4426452243:room:3
+      facade: SW
+      floor_from: 3
+      floor_to: 3
+    claims: {}
+    persona: расплывчатый
+  node/4426452244:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/4426452244:room:1
+      facade: NW
+      floor_from: 2
+      floor_to: 4
+    - room_type_id: node/4426452244:room:2
+      facade: NE
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/4426452244:room:3
+      facade: SE
+      floor_from: 2
+      floor_to: 2
+    claims: {}
+    persona: расплывчатый
+  node/4426452245:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: node/4426452245:room:1
+      facade: NW
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/4426452245:room:1
+      facade: N
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/4426452245:room:2
+      facade: N
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/4426452245:room:2
+      facade: NE
+      floor_from: 2
+      floor_to: 3
+    claims: {}
+    persona: многословный
+  node/4467961989:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: node/4467961989:room:1
+      facade: NW
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/4467961989:room:1
+      facade: NE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/4467961989:room:2
+      facade: NE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/4467961989:room:3
+      facade: SE
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/4467961989:room:4
+      facade: SW
+      floor_from: 1
+      floor_to: 3
+    claims: {}
+    persona: расплывчатый
+  node/4601243304:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: false
+    ac: false
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/4601243304:room:1
+      facade: S
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/4601243304:room:1
+      facade: SW
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/4601243304:room:2
+      facade: SW
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/4601243304:room:3
+      facade: N
+      floor_from: 2
+      floor_to: 3
+    claims: {}
+    persona: расплывчатый
+  node/4601243306:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/4601243306:room:1
+      facade: NW
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/4601243306:room:1
+      facade: NE
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/4601243306:room:2
+      facade: NE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/4601243306:room:3
+      facade: S
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/4601243306:room:3
+      facade: SW
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/4601243306:room:4
+      facade: SW
+      floor_from: 1
+      floor_to: 1
+    claims: {}
+    persona: расплывчатый
+  node/4601243307:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: false
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/4601243307:room:1
+      facade: N
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/4601243307:room:2
+      facade: E
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/4601243307:room:2
+      facade: SE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/4601243307:room:3
+      facade: SE
+      floor_from: 1
+      floor_to: 3
+    claims: {}
+    persona: расплывчатый
+  node/4601243308:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/4601243308:room:1
+      facade: S
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/4601243308:room:1
+      facade: W
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/4601243308:room:2
+      facade: W
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/4601243308:room:2
+      facade: N
+      floor_from: 2
+      floor_to: 3
+    claims: {}
+    persona: краткий
+  node/4695560722:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/4695560722:room:1
+      facade: SW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/4695560722:room:1
+      facade: NW
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/4695560722:room:2
+      facade: NW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/4695560722:room:2
+      facade: NE
+      floor_from: 2
+      floor_to: 2
+    claims: {}
+    persona: многословный
+  node/4695569234:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/4695569234:room:1
+      facade: NW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/4695569234:room:2
+      facade: NE
+      floor_from: 1
+      floor_to: 3
+    claims:
+      sea_view_all_rooms: true
+    persona: многословный
+  node/4726642890:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      - cat
+      max_kg: 10
+      fee_rub: 1300
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: true
+    ac: false
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/4726642890:room:1
+      facade: NE
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/4726642890:room:2
+      facade: SE
+      floor_from: 3
+      floor_to: 8
+    - room_type_id: node/4726642890:room:2
+      facade: SW
+      floor_from: 2
+      floor_to: 3
+    claims: {}
+    persona: расплывчатый
+  node/4980407222:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      - cat
+      max_kg: 5
+      fee_rub: 1100
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/4980407222:room:1
+      facade: S
+      floor_from: 2
+      floor_to: 4
+    - room_type_id: node/4980407222:room:2
+      facade: W
+      floor_from: 1
+      floor_to: 4
+    - room_type_id: node/4980407222:room:3
+      facade: N
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: node/4980407222:room:4
+      facade: E
+      floor_from: 1
+      floor_to: 1
+    claims:
+      sea_view_all_rooms: true
+    persona: многословный
+  node/4985022111:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/4985022111:room:1
+      facade: NW
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/4985022111:room:1
+      facade: NE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/4985022111:room:2
+      facade: NE
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/4985022111:room:2
+      facade: SE
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/4985022111:room:3
+      facade: SE
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/4985022111:room:3
+      facade: S
+      floor_from: 2
+      floor_to: 2
+    claims: {}
+    persona: расплывчатый
+  node/4986725623:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: true
+    ac: false
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/4986725623:room:1
+      facade: NE
+      floor_from: 2
+      floor_to: 14
+    - room_type_id: node/4986725623:room:2
+      facade: E
+      floor_from: 1
+      floor_to: 11
+    claims:
+      sea_view_all_rooms: true
+    persona: расплывчатый
+  node/5014222522:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/5014222522:room:1
+      facade: SW
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/5014222522:room:2
+      facade: NW
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/5014222522:room:3
+      facade: NE
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/5014222522:room:4
+      facade: SE
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/5014222522:room:4
+      facade: SW
+      floor_from: 3
+      floor_to: 3
+    claims: {}
+    persona: расплывчатый
+  node/5329922057:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/5329922057:room:1
+      facade: SW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/5329922057:room:1
+      facade: N
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/5329922057:room:2
+      facade: N
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/5329922057:room:2
+      facade: E
+      floor_from: 1
+      floor_to: 1
+    claims: {}
+    persona: краткий
+  node/6181072994:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      max_kg: 10
+      fee_rub: 1500
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: false
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/6181072994:room:1
+      facade: SE
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/6181072994:room:2
+      facade: SW
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/6181072994:room:3
+      facade: NW
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/6181072994:room:3
+      facade: NE
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/6181072994:room:4
+      facade: NE
+      floor_from: 2
+      floor_to: 2
+    claims:
+      sea_view_all_rooms: true
+    persona: многословный
+  node/6590015485:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/6590015485:room:1
+      facade: W
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/6590015485:room:1
+      facade: N
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/6590015485:room:2
+      facade: N
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/6590015485:room:2
+      facade: E
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/6590015485:room:3
+      facade: E
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/6590015485:room:3
+      facade: S
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: node/6590015485:room:4
+      facade: S
+      floor_from: 3
+      floor_to: 3
+    claims:
+      sea_view_all_rooms: true
+    persona: краткий
+  node/7151225626:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/7151225626:room:1
+      facade: NE
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/7151225626:room:1
+      facade: SE
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: node/7151225626:room:2
+      facade: SE
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/7151225626:room:3
+      facade: SW
+      floor_from: 1
+      floor_to: 2
+    claims: {}
+    persona: краткий
+  node/7659392485:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      max_kg: 10
+      fee_rub: 500
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: node/7659392485:room:1
+      facade: E
+      floor_from: 2
+      floor_to: 4
+    - room_type_id: node/7659392485:room:1
+      facade: S
+      floor_from: 3
+      floor_to: 5
+    - room_type_id: node/7659392485:room:2
+      facade: S
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/7659392485:room:3
+      facade: W
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/7659392485:room:3
+      facade: N
+      floor_from: 2
+      floor_to: 5
+    claims: {}
+    persona: многословный
+  node/7948116896:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/7948116896:room:1
+      facade: N
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/7948116896:room:2
+      facade: E
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/7948116896:room:3
+      facade: S
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/7948116896:room:3
+      facade: W
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/7948116896:room:4
+      facade: W
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/7948116896:room:4
+      facade: N
+      floor_from: 1
+      floor_to: 4
+    - room_type_id: node/7948116896:room:5
+      facade: N
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/7948116896:room:5
+      facade: E
+      floor_from: 1
+      floor_to: 2
+    claims: {}
+    persona: расплывчатый
+  node/8253762590:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      - cat
+      max_kg: 5
+      fee_rub: 1000
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/8253762590:room:1
+      facade: NE
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/8253762590:room:1
+      facade: SE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/8253762590:room:2
+      facade: SE
+      floor_from: 1
+      floor_to: 1
+    claims: {}
+    persona: расплывчатый
+  node/8504620920:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      max_kg: 15
+      fee_rub: 800
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/8504620920:room:1
+      facade: N
+      floor_from: 1
+      floor_to: 4
+    - room_type_id: node/8504620920:room:2
+      facade: E
+      floor_from: 3
+      floor_to: 5
+    - room_type_id: node/8504620920:room:3
+      facade: S
+      floor_from: 3
+      floor_to: 3
+    claims: {}
+    persona: многословный
+  node/8541891228:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: node/8541891228:room:1
+      facade: S
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: node/8541891228:room:2
+      facade: W
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: node/8541891228:room:3
+      facade: N
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/8541891228:room:3
+      facade: E
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: node/8541891228:room:4
+      facade: E
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: node/8541891228:room:5
+      facade: S
+      floor_from: 3
+      floor_to: 3
+    claims: {}
+    persona: краткий
+  node/9079226417:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      max_kg: 15
+      fee_rub: 1400
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: node/9079226417:room:1
+      facade: E
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: node/9079226417:room:2
+      facade: SE
+      floor_from: 1
+      floor_to: 1
+    claims: {}
+    persona: расплывчатый
+  way/1001106450:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      max_kg: 10
+      fee_rub: 700
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: way/1001106450:room:1
+      facade: E
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: way/1001106450:room:2
+      facade: S
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: way/1001106450:room:2
+      facade: W
+      floor_from: 2
+      floor_to: 2
+    claims: {}
+    persona: многословный
+  way/113049896:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: way/113049896:room:1
+      facade: NE
+      floor_from: 2
+      floor_to: 4
+    - room_type_id: way/113049896:room:2
+      facade: SE
+      floor_from: 3
+      floor_to: 6
+    claims: {}
+    persona: многословный
+  way/113049930:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      - cat
+      max_kg: 5
+      fee_rub: 1200
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: way/113049930:room:1
+      facade: NE
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: way/113049930:room:2
+      facade: SE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: way/113049930:room:3
+      facade: SW
+      floor_from: 3
+      floor_to: 3
+    claims: {}
+    persona: расплывчатый
+  way/113123465:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      max_kg: 5
+      fee_rub: 1100
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: way/113123465:room:1
+      facade: NE
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: way/113123465:room:1
+      facade: SE
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: way/113123465:room:2
+      facade: SE
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: way/113123465:room:3
+      facade: SW
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: way/113123465:room:4
+      facade: NW
+      floor_from: 3
+      floor_to: 3
+    claims: {}
+    persona: краткий
+  way/113123470:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: false
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: way/113123470:room:1
+      facade: NW
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: way/113123470:room:2
+      facade: NE
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: way/113123470:room:3
+      facade: SE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: way/113123470:room:3
+      facade: SW
+      floor_from: 2
+      floor_to: 3
+    claims: {}
+    persona: краткий
+  way/113147777:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: way/113147777:room:1
+      facade: E
+      floor_from: 3
+      floor_to: 5
+    - room_type_id: way/113147777:room:2
+      facade: SE
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: way/113147777:room:3
+      facade: S
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: way/113147777:room:3
+      facade: SW
+      floor_from: 3
+      floor_to: 5
+    - room_type_id: way/113147777:room:4
+      facade: SW
+      floor_from: 1
+      floor_to: 4
+    claims: {}
+    persona: расплывчатый
+  way/113147792:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: false
+    ac: false
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: way/113147792:room:1
+      facade: NE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: way/113147792:room:2
+      facade: SE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: way/113147792:room:3
+      facade: SW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: way/113147792:room:4
+      facade: W
+      floor_from: 3
+      floor_to: 3
+    claims: {}
+    persona: многословный
+  way/113147798:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      max_kg: 15
+      fee_rub: 1100
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: way/113147798:room:1
+      facade: SE
+      floor_from: 2
+      floor_to: 4
+    - room_type_id: way/113147798:room:1
+      facade: SW
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: way/113147798:room:2
+      facade: SW
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: way/113147798:room:3
+      facade: NW
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: way/113147798:room:3
+      facade: NE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: way/113147798:room:4
+      facade: NE
+      floor_from: 2
+      floor_to: 2
+    claims: {}
+    persona: расплывчатый
+  way/113147804:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: way/113147804:room:1
+      facade: NW
+      floor_from: 1
+      floor_to: 7
+    - room_type_id: way/113147804:room:1
+      facade: N
+      floor_from: 2
+      floor_to: 4
+    - room_type_id: way/113147804:room:2
+      facade: N
+      floor_from: 2
+      floor_to: 7
+    - room_type_id: way/113147804:room:2
+      facade: NE
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: way/113147804:room:3
+      facade: NE
+      floor_from: 1
+      floor_to: 7
+    claims: {}
+    persona: краткий
+  way/1316217472:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: way/1316217472:room:1
+      facade: SE
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: way/1316217472:room:2
+      facade: SW
+      floor_from: 2
+      floor_to: 2
+    claims: {}
+    persona: краткий
+  way/176568487:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: way/176568487:room:1
+      facade: NE
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: way/176568487:room:2
+      facade: SE
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: way/176568487:room:2
+      facade: SW
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: way/176568487:room:3
+      facade: SW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: way/176568487:room:3
+      facade: NW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: way/176568487:room:4
+      facade: NW
+      floor_from: 2
+      floor_to: 2
+    claims: {}
+    persona: многословный
+  way/194163834:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: way/194163834:room:1
+      facade: W
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: way/194163834:room:2
+      facade: N
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: way/194163834:room:2
+      facade: E
+      floor_from: 3
+      floor_to: 3
+    claims: {}
+    persona: многословный
+  way/194163839:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      max_kg: 10
+      fee_rub: 700
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: way/194163839:room:1
+      facade: N
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: way/194163839:room:2
+      facade: E
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: way/194163839:room:3
+      facade: S
+      floor_from: 2
+      floor_to: 2
+    claims: {}
+    persona: краткий
+  way/194163841:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: way/194163841:room:1
+      facade: E
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: way/194163841:room:2
+      facade: S
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: way/194163841:room:3
+      facade: W
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: way/194163841:room:4
+      facade: N
+      floor_from: 2
+      floor_to: 3
+    claims: {}
+    persona: многословный
+  way/194163843:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: way/194163843:room:1
+      facade: S
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: way/194163843:room:2
+      facade: W
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: way/194163843:room:3
+      facade: N
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: way/194163843:room:4
+      facade: E
+      floor_from: 2
+      floor_to: 3
+    claims: {}
+    persona: многословный
+  way/194163849:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: way/194163849:room:1
+      facade: E
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: way/194163849:room:1
+      facade: S
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: way/194163849:room:2
+      facade: S
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: way/194163849:room:2
+      facade: W
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: way/194163849:room:3
+      facade: W
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: way/194163849:room:4
+      facade: N
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: way/194163849:room:4
+      facade: E
+      floor_from: 1
+      floor_to: 2
+    claims: {}
+    persona: краткий
+  way/194163851:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: way/194163851:room:1
+      facade: W
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: way/194163851:room:2
+      facade: N
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: way/194163851:room:2
+      facade: E
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: way/194163851:room:3
+      facade: E
+      floor_from: 2
+      floor_to: 2
+    claims: {}
+    persona: краткий
+  way/221585297:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: way/221585297:room:1
+      facade: SE
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: way/221585297:room:2
+      facade: SW
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: way/221585297:room:2
+      facade: NW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: way/221585297:room:3
+      facade: NW
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: way/221585297:room:4
+      facade: NE
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: way/221585297:room:4
+      facade: SE
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: way/221585297:room:5
+      facade: SE
+      floor_from: 3
+      floor_to: 3
+    claims: {}
+    persona: краткий
+  way/221585350:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      max_kg: 10
+      fee_rub: 400
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: false
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: way/221585350:room:1
+      facade: S
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: way/221585350:room:1
+      facade: W
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: way/221585350:room:2
+      facade: W
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: way/221585350:room:2
+      facade: N
+      floor_from: 1
+      floor_to: 1
+    claims: {}
+    persona: расплывчатый
+  way/221585406:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      max_kg: 5
+      fee_rub: 600
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: false
+    facade_rooms:
+    - room_type_id: way/221585406:room:1
+      facade: NE
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: way/221585406:room:1
+      facade: SE
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: way/221585406:room:2
+      facade: SE
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: way/221585406:room:2
+      facade: SW
+      floor_from: 1
+      floor_to: 3
+    - room_type_id: way/221585406:room:3
+      facade: SW
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: way/221585406:room:3
+      facade: NW
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: way/221585406:room:4
+      facade: NW
+      floor_from: 3
+      floor_to: 4
+    claims: {}
+    persona: многословный
+  way/221585440:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: way/221585440:room:1
+      facade: S
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: way/221585440:room:2
+      facade: W
+      floor_from: 1
+      floor_to: 4
+    - room_type_id: way/221585440:room:3
+      facade: N
+      floor_from: 3
+      floor_to: 5
+    - room_type_id: way/221585440:room:3
+      facade: E
+      floor_from: 3
+      floor_to: 5
+    - room_type_id: way/221585440:room:4
+      facade: E
+      floor_from: 3
+      floor_to: 4
+    claims: {}
+    persona: краткий
+  way/221585445:
+    isDemo: true
+    pets_policy:
+      allowed: true
+      kinds:
+      - dog
+      max_kg: 5
+      fee_rub: 1100
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: way/221585445:room:1
+      facade: N
+      floor_from: 2
+      floor_to: 3
+    - room_type_id: way/221585445:room:2
+      facade: E
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: way/221585445:room:3
+      facade: S
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: way/221585445:room:4
+      facade: W
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: way/221585445:room:5
+      facade: N
+      floor_from: 3
+      floor_to: 4
+    claims: {}
+    persona: многословный
+  way/221585763:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: way/221585763:room:1
+      facade: W
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: way/221585763:room:1
+      facade: N
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: way/221585763:room:2
+      facade: N
+      floor_from: 3
+      floor_to: 4
+    - room_type_id: way/221585763:room:2
+      facade: E
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: way/221585763:room:3
+      facade: E
+      floor_from: 1
+      floor_to: 4
+    claims: {}
+    persona: краткий
+  way/227214566:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: way/227214566:room:1
+      facade: E
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: way/227214566:room:1
+      facade: S
+      floor_from: 2
+      floor_to: 5
+    - room_type_id: way/227214566:room:2
+      facade: S
+      floor_from: 3
+      floor_to: 8
+    claims: {}
+    persona: краткий
+  way/53215178:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: true
+    facade_rooms:
+    - room_type_id: way/53215178:room:1
+      facade: NW
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: way/53215178:room:2
+      facade: N
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: way/53215178:room:2
+      facade: E
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: way/53215178:room:3
+      facade: E
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: way/53215178:room:4
+      facade: SE
+      floor_from: 1
+      floor_to: 1
+    claims: {}
+    persona: многословный
+  way/53447916:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: way/53447916:room:1
+      facade: SW
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: way/53447916:room:2
+      facade: NW
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: way/53447916:room:2
+      facade: NE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: way/53447916:room:3
+      facade: NE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: way/53447916:room:3
+      facade: SE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: way/53447916:room:4
+      facade: SE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: way/53447916:room:5
+      facade: SW
+      floor_from: 1
+      floor_to: 1
+    claims:
+      sea_view_all_rooms: true
+    persona: многословный
+  way/53498769:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: way/53498769:room:1
+      facade: NE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: way/53498769:room:2
+      facade: SE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: way/53498769:room:2
+      facade: SW
+      floor_from: 1
+      floor_to: 1
+    claims:
+      sea_view_all_rooms: true
+    persona: краткий
+  way/53498776:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: false
+    step_free: false
+    facade_rooms:
+    - room_type_id: way/53498776:room:1
+      facade: NW
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: way/53498776:room:1
+      facade: NE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: way/53498776:room:2
+      facade: NE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: way/53498776:room:2
+      facade: SE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: way/53498776:room:3
+      facade: SE
+      floor_from: 1
+      floor_to: 1
+    claims: {}
+    persona: расплывчатый
+  way/53534006:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: true
+    ac: true
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: way/53534006:room:1
+      facade: NE
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: way/53534006:room:2
+      facade: E
+      floor_from: 3
+      floor_to: 3
+    - room_type_id: way/53534006:room:3
+      facade: SE
+      floor_from: 1
+      floor_to: 1
+    - room_type_id: way/53534006:room:3
+      facade: S
+      floor_from: 1
+      floor_to: 2
+    - room_type_id: way/53534006:room:4
+      facade: S
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: way/53534006:room:5
+      facade: SW
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: way/53534006:room:5
+      facade: W
+      floor_from: 3
+      floor_to: 3
+    claims:
+      sea_view_all_rooms: true
+    persona: многословный
+  way/53537049:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: true
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: way/53537049:room:1
+      facade: S
+      floor_from: 2
+      floor_to: 5
+    - room_type_id: way/53537049:room:2
+      facade: W
+      floor_from: 2
+      floor_to: 4
+    - room_type_id: way/53537049:room:3
+      facade: N
+      floor_from: 3
+      floor_to: 4
+    claims: {}
+    persona: расплывчатый
+  way/53549358:
+    isDemo: true
+    pets_policy:
+      allowed: false
+      kinds: []
+      max_kg: null
+      fee_rub: 0
+      fee_basis: за сутки · демо
+    soundproofing: false
+    blackout: false
+    ac: true
+    elevator: true
+    step_free: true
+    facade_rooms:
+    - room_type_id: way/53549358:room:1
+      facade: NW
+      floor_from: 3
+      floor_to: 10
+    - room_type_id: way/53549358:room:1
+      facade: NE
+      floor_from: 3
+      floor_to: 11
+    - room_type_id: way/53549358:room:2
+      facade: NE
+      floor_from: 2
+      floor_to: 8
+    - room_type_id: way/53549358:room:3
+      facade: SE
+      floor_from: 2
+      floor_to: 9
+    - room_type_id: way/53549358:room:3
+      facade: SW
+      floor_from: 2
+      floor_to: 2
+    - room_type_id: way/53549358:room:4
+      facade: SW
+      floor_from: 1
+      floor_to: 9
+    - room_type_id: way/53549358:room:4
+      facade: NW
+      floor_from: 3
+      floor_to: 11
+    claims: {}
+    persona: многословный
