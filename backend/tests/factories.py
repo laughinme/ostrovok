@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from datetime import UTC, datetime, timedelta
 from itertools import count
 from typing import Any
 
@@ -81,3 +82,16 @@ async def login(client: AsyncClient, email: str, password: str = DEFAULT_PASSWOR
 async def promote(db: Database, email: str, role: Role = Role.OPERATOR) -> None:
     async with db.unit_of_work() as uow:
         await uow.session.execute(update(User).where(User.email == email).values(role=role))
+
+
+class FakeClock:
+    """Time that moves only when a test says so."""
+
+    def __init__(self, now: datetime | None = None) -> None:
+        self._now = now or datetime(2026, 11, 12, 12, 0, tzinfo=UTC)
+
+    def now(self) -> datetime:
+        return self._now
+
+    def advance(self, delta: timedelta) -> None:
+        self._now += delta

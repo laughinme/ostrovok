@@ -1,1 +1,11 @@
-"""Ports to the outside world (LLM, routing, terrain, events, clock). Filled in by B0.5."""
+from datetime import UTC, datetime
+from typing import Protocol
+
+
+class Clock(Protocol):
+    def now(self) -> datetime: ...
+
+
+class SystemClock:
+    def now(self) -> datetime:
+        return datetime.now(UTC)
