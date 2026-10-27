@@ -133,7 +133,7 @@ def run() -> None:
             'nwr["building"]',
             'nwr["highway"]',
             'nwr["railway"]',
-            'nwr[~"^(amenity|shop|tourism|leisure|healthcare)$"~"."]',
+            *[f'nwr["{key}"]' for key in ("amenity", "shop", "tourism", "leisure", "healthcare")],
             'nwr["landuse"="construction"]',
         ]
         data = overpass("(" + "".join(s + bbox + ";" for s in selectors) + ")", seconds=30)

@@ -1,0 +1,27 @@
+{
+  "center": {
+    "selected": 70,
+    "quota": 70,
+    "osm_elements": 45547
+  },
+  "khosta": {
+    "selected": 25,
+    "quota": 25,
+    "osm_elements": 11020
+  },
+  "adler": {
+    "selected": 45,
+    "quota": 45,
+    "osm_elements": 24364
+  },
+  "sirius": {
+    "selected": 30,
+    "quota": 30,
+    "osm_elements": 11640
+  },
+  "krasnaya_polyana": {
+    "selected": 30,
+    "quota": 30,
+    "osm_elements": 158
+  }
+}
