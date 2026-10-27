@@ -102,3 +102,20 @@ def test_zero_budget_and_invalid_budget() -> None:
     assert result[0].minutes == 0
     with pytest.raises(ValueError, match="budget"):
         router.reachable(origin, [], -1, WalkProfile.WALK)
+
+
+def test_return_can_use_a_different_path() -> None:
+    router = ScipyRouter(
+        make_graph(
+            [(39.7, 43.6, 10), (39.7, 43.601, 0), (39.701, 43.6, 20)],
+            [(0, 1), (1, 2), (2, 0)],
+            [100, 150, 150],
+            crossings=[0, 1, 0],
+        )
+    )
+    route = router.route(LonLat(39.7, 43.6), LonLat(39.7, 43.601), WalkProfile.WALK)
+    assert route.there.length_m == 100
+    assert route.back.length_m == 300
+    assert route.back.climb_m == 20
+    assert route.back.descent_m == 10
+    assert route.back.crossings == 1
