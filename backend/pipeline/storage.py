@@ -102,6 +102,7 @@ def write_csv(name: str, fields: list[str], rows: list[dict[str, Any]]) -> None:
 
 
 def read_csv(name: str) -> list[dict[str, str]]:
+    csv.field_size_limit(50_000_000)
     with gzip.open(REGION / name, "rt", encoding="utf-8", newline="") as stream:
         return list(csv.DictReader(stream))
 
