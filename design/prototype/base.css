@@ -1,0 +1,149 @@
+/* Общие компоненты прототипа «О!кно» */
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased}
+body{font-family:var(--font);font-size:var(--fs-body);line-height:1.5;color:var(--ink);background:var(--surface)}
+button,input,select,textarea{font:inherit;color:inherit}
+button{background:none;border:0;cursor:pointer}
+a{color:var(--primary);text-decoration:none}
+.num{font-variant-numeric:tabular-nums}
+:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.muted{color:var(--muted)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* шапка */
+.top{display:flex;align-items:center;gap:40px;padding:20px 48px;height:76px}
+.logo{font-weight:800;font-size:22px;letter-spacing:-.02em;color:var(--ink)}
+.logo b{color:var(--primary)}
+.top nav{display:flex;gap:28px;font-size:14px;color:var(--muted)}
+.top nav a{color:var(--muted)}
+.top nav a.on{color:var(--ink);font-weight:600}
+.roles{margin-left:auto;display:flex;border:1px solid var(--line);border-radius:var(--r-pill);padding:3px;font-size:var(--fs-label)}
+.roles a{padding:6px 14px;border-radius:var(--r-pill);color:var(--muted);transition:background var(--d-quick)}
+.roles a:hover{color:var(--ink)}
+.roles a.on{background:var(--ink);color:#fff}
+
+/* кнопки */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:600;padding:12px 22px;border-radius:var(--r-md);white-space:nowrap;transition:transform var(--d-instant),background var(--d-quick)}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--primary);color:var(--on-primary)}
+.btn-primary:hover{background:#1742C9}
+.btn-ghost{border:1px solid var(--line);background:#fff;font-weight:500;padding:9px 14px;border-radius:var(--r-pill);font-size:14px}
+.btn-ghost:hover{border-color:var(--primary);color:var(--primary)}
+.btn-sm{padding:7px 12px;font-size:var(--fs-label);border-radius:var(--r-sm)}
+.icon-btn{width:40px;height:40px;display:grid;place-items:center;border-radius:var(--r-pill);color:var(--muted)}
+.icon-btn:hover{background:var(--raised)}
+.icon-btn svg{width:20px;height:20px}
+
+/* метки */
+.demo{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:var(--r-pill);padding:1px 7px;margin-left:6px;vertical-align:2px;font-weight:500;white-space:nowrap}
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:var(--fs-label);padding:4px 10px;border-radius:var(--r-pill);background:var(--raised);white-space:nowrap}
+.tag.ok{background:var(--verified);color:var(--on-verified)}
+.tag.warn{background:#FFF3D6;color:#6B4E00}
+.tag.bad{background:#FDE3E0;color:#8A231A}
+.tag.ink{background:var(--ink);color:#fff}
+
+/* значки вердикта */
+.mk{font-style:normal;font-weight:700;width:16px;flex:none;display:inline-block}
+.mk.y{color:var(--yes)} .mk.p{color:var(--partial)} .mk.n{color:var(--critical)} .mk.u{color:var(--muted)}
+
+/* уверенность */
+.conf{font-size:var(--fs-label);display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+.dots{display:inline-flex;gap:3px}
+.dots i{width:7px;height:7px;border-radius:50%;background:var(--line)}
+.dots i.f{background:var(--ink)}
+
+/* карточки и секции */
+.card{background:var(--raised);border-radius:var(--r-lg);padding:20px}
+.card-line{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);padding:20px}
+.sec{margin-top:40px}
+.sec-h{display:flex;align-items:baseline;gap:14px;margin-bottom:14px}
+.sec-h h2{font-size:var(--fs-section);font-weight:700;letter-spacing:-.01em}
+.sec-h p{font-size:14px;color:var(--muted)}
+.sec-h .right{margin-left:auto}
+.lbl{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
+
+/* сегменты */
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:var(--r-pill);overflow:hidden;font-size:var(--fs-label);background:#fff}
+.seg button{padding:5px 12px;color:var(--muted)}
+.seg button.on{background:var(--primary);color:#fff}
+
+/* строка факта */
+.facts{border-top:1px solid var(--line)}
+.fact{display:grid;grid-template-columns:22px minmax(0,1fr) 150px 92px;gap:14px;align-items:baseline;padding:13px 0;border-bottom:1px solid var(--line);cursor:pointer;transition:background var(--d-quick)}
+.fact:hover{background:var(--raised)}
+.fact .st{font-weight:500}
+.fact .sc{display:block;font-size:var(--fs-label);color:var(--muted);font-weight:400}
+.fact .why{font-size:var(--fs-label);color:var(--primary);text-align:right}
+.fact.sel{background:var(--verified);box-shadow:-12px 0 0 var(--verified),12px 0 0 var(--verified)}
+.fact.flash{animation:flash 1.2s var(--ease-out)}
+@keyframes flash{0%{background:var(--verified)}100%{background:transparent}}
+
+/* таблицы */
+.table{width:100%;border-collapse:collapse;font-size:14px}
+.table th{text-align:left;font-weight:500;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--line)}
+.table td{padding:12px;border-bottom:1px solid var(--line);vertical-align:top}
+.table tr:hover td{background:var(--raised)}
+.table .r{text-align:right}
+
+/* боковая навигация кабинетов */
+.shell{display:grid;grid-template-columns:240px minmax(0,1fr);min-height:calc(100vh - 76px)}
+.side-nav{border-right:1px solid var(--line);padding:24px 16px;position:sticky;top:0;height:calc(100vh - 76px);display:flex;flex-direction:column;gap:2px}
+.side-nav .who{padding:0 12px 18px;border-bottom:1px solid var(--line);margin-bottom:12px}
+.side-nav .who b{display:block;font-size:15px}
+.side-nav .who span{font-size:var(--fs-label);color:var(--muted)}
+.side-nav a{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--r-sm);color:var(--ink);font-size:14px}
+.side-nav a:hover{background:var(--raised)}
+.side-nav a.on{background:var(--raised);font-weight:600}
+.side-nav a .cnt{margin-left:auto;background:var(--primary);color:#fff;font-size:12px;border-radius:var(--r-pill);padding:0 7px;font-weight:600}
+.side-nav .foot{margin-top:auto;font-size:12px;color:var(--muted);padding:0 12px}
+.page{padding:32px 48px 80px;max-width:1180px}
+.page-h h1{font-size:var(--fs-heading);font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.page-h p{color:var(--muted);margin-top:6px;font-size:var(--fs-lede)}
+
+/* панорама */
+svg.pano{display:block;width:100%;height:100%}
+.pano-label{font-size:12px;letter-spacing:.02em}
+.pano-sun-label{font-size:13px}
+
+/* выезжающая панель */
+.drawer{position:fixed;top:0;right:0;bottom:0;width:440px;background:var(--raised);box-shadow:-1px 0 0 var(--line);transform:translateX(100%);transition:transform var(--d-move) var(--ease-out);z-index:20;overflow:auto;padding:28px 28px 40px}
+.drawer.open{transform:none}
+.drawer .close{position:absolute;right:16px;top:16px}
+.scrim{position:fixed;inset:0;background:rgba(11,21,51,.18);opacity:0;pointer-events:none;transition:opacity var(--d-move);z-index:19}
+.scrim.open{opacity:1;pointer-events:auto}
+
+/* тост */
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;background:var(--ink);color:#fff;border-radius:var(--r-pill);padding:10px 18px;font-size:14px;transition:all var(--d-move) var(--ease-out);z-index:30}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (prefers-reduced-motion:reduce){
+  *,::before,::after{transition:none !important;animation:none !important}
+}
+@media (max-width:720px){
+  .top{padding:14px 16px;gap:14px;height:auto}
+  .top nav{display:none}
+  .shell{grid-template-columns:1fr}
+  .side-nav{position:static;height:auto;flex-direction:row;overflow:auto;border-right:0;border-bottom:1px solid var(--line);padding:8px}
+  .side-nav .who,.side-nav .foot{display:none}
+  .side-nav a{white-space:nowrap}
+  .page{padding:20px 16px 60px}
+  .page-h h1{font-size:28px}
+  .fact{grid-template-columns:20px minmax(0,1fr) auto}
+  .fact .why{grid-column:2;text-align:left}
+  .drawer{width:100%}
+}
+
+/* метка «демо» на синих сценах */
+.hero .demo,.scene .demo{color:#fff;border-color:var(--on-scene-muted)}
+
+/* устойчивость сетки и мобильные правки */
+.logo{white-space:nowrap}
+.shell > main{min-width:0}
+@media (max-width:720px){
+  .logo .muted,.top .back{display:none}
+  .sec-h{flex-wrap:wrap;gap:4px 12px}
+  .sec-h p{flex-basis:100%}
+  .sec-h .right{margin-left:0}
+  .table{display:block;overflow-x:auto;white-space:nowrap}
+  .table td{white-space:normal;min-width:120px}
+}

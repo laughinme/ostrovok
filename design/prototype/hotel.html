@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Маяк · О!кно</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="base.css">
+<style>
+.back{font-size:14px;color:var(--muted)}
+.back:hover{color:var(--primary)}
+.trip{font-size:14px;color:var(--muted)}
+.layout > *{min-width:0}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:40px;padding:8px 48px 96px;max-width:1440px}
+.head{display:flex;gap:24px;align-items:flex-end}
+.head h1{font-size:var(--fs-heading);font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.head .area{color:var(--muted);margin-top:4px}
+.match{margin-left:auto;text-align:right}
+.match .pct{font-size:var(--fs-heading);font-weight:700;color:var(--primary);letter-spacing:-.02em;line-height:1}
+.match small{display:block;font-size:var(--fs-label);color:var(--muted)}
+.verdicts{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:14px;font-size:14px}
+.verdicts span{display:inline-flex;gap:6px}
+.like{display:flex;align-items:center;gap:8px;margin-top:16px;font-size:14px;color:var(--muted);flex-wrap:wrap}
+
+.window{margin-top:28px;border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden}
+.w-head{display:flex;align-items:center;gap:16px;padding:14px 18px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.w-head h2{font-size:var(--fs-title);font-weight:700}
+.w-head .read{margin-left:auto}
+.read{font-size:var(--fs-label);color:var(--muted)}
+.read b{color:var(--ink);font-weight:600}
+.window .stage{height:320px}
+.w-foot{display:flex;align-items:center;gap:22px;padding:14px 18px;border-top:1px solid var(--line);font-size:14px;flex-wrap:wrap}
+.floor{display:flex;align-items:center;gap:12px;flex:1;min-width:260px}
+.floor input{flex:1;accent-color:var(--primary)}
+.w-note{padding:12px 18px;background:var(--raised);font-size:14px;display:flex;gap:10px;align-items:baseline}
+.attrib{font-size:12px;color:var(--muted);padding:8px 18px 12px}
+
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.panel{border:1px solid var(--line);border-radius:var(--r-lg);padding:18px}
+.panel h3{font-size:var(--fs-title);font-weight:700;display:flex;align-items:center;gap:12px}
+.panel h3 .seg{margin-left:auto}
+.panel .sub{font-size:14px;color:var(--muted);margin-top:4px}
+.panel svg{display:block;width:100%;margin-top:12px}
+.legend{list-style:none;display:grid;gap:6px;margin-top:10px;font-size:14px}
+.legend li{display:flex;gap:10px;align-items:baseline}
+.legend li b{margin-left:auto;font-weight:600}
+.sw{width:10px;height:10px;border-radius:3px;flex:none;transform:translateY(1px)}
+
+.days{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.day{background:var(--raised);border-radius:var(--r-md);padding:12px}
+.day .d{font-size:var(--fs-label);color:var(--muted)}
+.day .t{font-size:var(--fs-section);font-weight:700;margin-top:4px}
+.day .row{display:flex;justify-content:space-between;font-size:var(--fs-label);margin-top:4px}
+.day .row span:first-child{color:var(--muted)}
+
+.rooms .rec td{background:var(--verified)}
+.rooms td b{font-weight:600}
+.unknown{display:grid;gap:8px}
+.unknown div{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--raised);border-radius:var(--r-md)}
+.unknown div span{flex:1}
+
+aside .sticky{position:sticky;top:20px;display:grid;gap:12px}
+.book h3{font-size:var(--fs-title);font-weight:700}
+.book .field{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
+.book .field span:first-child{color:var(--muted)}
+.book .req{margin-top:12px}
+.book .req .lbl{margin-bottom:8px}
+.book .req .chips{display:flex;flex-wrap:wrap;gap:6px}
+.book .total{display:flex;align-items:baseline;margin-top:16px}
+.book .total b{font-size:var(--fs-metric);font-weight:700;margin-left:auto;letter-spacing:-.02em}
+.book .btn-primary{width:100%;margin-top:14px;padding:14px}
+.book .fine{font-size:12px;color:var(--muted);margin-top:8px;text-align:center}
+.risk{display:flex;gap:12px;align-items:flex-start}
+.risk .gauge{font-size:var(--fs-metric);font-weight:700;color:var(--yes);line-height:1}
+.risk p{font-size:14px}
+
+.why .stmt{font-size:var(--fs-section);font-weight:700;letter-spacing:-.01em;line-height:1.25;margin-top:8px}
+.why .bar{height:8px;border-radius:4px;background:var(--line);margin-top:18px;overflow:hidden}
+.why .bar span{display:block;height:100%;background:var(--primary)}
+.why .meter-t{font-size:14px;margin-top:8px}
+.why dl{display:grid;gap:16px;margin-top:22px}
+.why dd{font-size:14px;margin-top:4px}
+.why ul{list-style:none;display:grid;gap:6px}
+.why li{display:flex;gap:8px;font-size:14px}
+.why li span{margin-left:auto;color:var(--muted);font-size:var(--fs-label)}
+.why .acts{display:flex;gap:8px;margin-top:24px;flex-wrap:wrap}
+.why .evidence{margin-top:16px;border-radius:var(--r-md);overflow:hidden;height:150px}
+
+@media (max-width:720px){
+  .layout{grid-template-columns:1fr;padding:8px 16px 64px;gap:24px}
+  .head{flex-wrap:wrap}
+  .match{margin-left:0;text-align:left}
+  .window .stage{height:210px}
+  .two{grid-template-columns:1fr}
+  .days{grid-template-columns:repeat(3,1fr)}
+  .rooms{display:block;overflow:auto}
+  .trip{display:none}
+  .w-head .read{margin-left:0;flex-basis:100%}
+  .like{gap:6px}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="index.html">О<b>!</b>кно</a>
+  <a class="back" href="index.html#app">← 6 подходящих</a>
+  <span class="trip num">Тихо · закат над морем · без подъёма · 10–15 ноября · 2 взрослых</span>
+  <div class="roles"><a class="on" href="index.html">Гость</a><a href="partner.html">Отельер</a><a href="console.html">Островок</a></div>
+</header>
+
+<div class="layout">
+<main>
+  <div class="head">
+    <div>
+      <div class="muted" style="font-size:14px">Сочи · Центр · Приморская сторона</div>
+      <h1 id="hname">Маяк <span class="demo">демо</span></h1>
+    </div>
+    <div class="match"><div class="pct num">85%</div><small>совпадение с вашим запросом</small></div>
+  </div>
+  <div class="verdicts">
+    <span><i class="mk y">✓</i>закат над морем с 4-го этажа</span>
+    <span><i class="mk y">✓</i>тихо в номерах во двор</span>
+    <span><i class="mk n">✗</i>с морской стороны ж/д в 60 м</span>
+    <span><i class="mk y">✓</i>6 минут до пляжа, спуск</span>
+  </div>
+  <div class="like">Как этот, но <button class="btn-ghost">тише</button><button class="btn-ghost">ближе к морю</button><button class="btn-ghost">дешевле</button></div>
+
+  <!-- Ваше окно -->
+  <section class="window" id="win" data-facade="SW">
+    <div class="w-head">
+      <h2>Ваше окно</h2>
+      <div class="seg" role="group" aria-label="Фасад"><button data-facade="NE">СВ</button><button data-facade="SE">ЮВ</button><button data-facade="SW" class="on">ЮЗ</button><button data-facade="NW">СЗ</button></div>
+      <span class="read num">10–15 ноября · закат <b>16:52–16:58</b></span>
+    </div>
+    <div class="stage"><svg class="pano" role="img" aria-label="Панорама из окна выбранного фасада"></svg></div>
+    <div class="w-foot">
+      <label class="floor">Этаж <b class="num" data-out="floor">6</b><input type="range" min="2" max="8" value="6" aria-label="Этаж"></label>
+      <span class="read">море в окне <b class="num" data-out="sea">—</b></span>
+      <span class="read">закат <b data-out="sun">—</b></span>
+    </div>
+    <div class="w-note" id="wnote"><i class="mk y">✓</i><span>На ЮЗ выходят номера <b>Делюкс с видом на море</b>, этажи 2–8. Ответ отеля от 12 октября.</span></div>
+    <div class="attrib">© OpenStreetMap contributors · Copernicus DEM GLO-30 · геометрия в прототипе условная</div>
+  </section>
+
+  <!-- Ночь и утро -->
+  <section class="sec two">
+    <div class="panel" id="night">
+      <h3>Ваша ночь <div class="seg"><button data-t="day">День</button><button data-t="night" class="on">Ночь</button></div></h3>
+      <p class="sub">Шум по сторонам здания</p>
+      <svg viewBox="0 0 400 250" aria-label="Схема шума по фасадам">
+        <rect width="400" height="250" rx="14" fill="var(--map-land)"/>
+        <path d="M0 238 L 210 250" stroke="none"/>
+        <path d="M-10 200 L 260 260" stroke="var(--ink)" stroke-width="2" stroke-dasharray="9 6" opacity=".6"/>
+        <text x="40" y="232" font-size="12" fill="var(--muted)" transform="rotate(12 40 232)">ж/д · 60 м</text>
+        <path d="M300 262 L 412 96" stroke="#C3CDE6" stroke-width="10"/>
+        <text x="318" y="214" font-size="12" fill="var(--muted)" transform="rotate(-56 318 214)">ул. Морская · 140 м</text>
+        <g transform="translate(190 112) rotate(38)">
+          <rect x="-62" y="-40" width="124" height="80" fill="#fff" stroke="var(--line)"/>
+          <line class="side" data-side="SW" x1="-62" y1="40" x2="62" y2="40" stroke-width="9"/>
+          <line class="side" data-side="NE" x1="-62" y1="-40" x2="62" y2="-40" stroke-width="9"/>
+          <line class="side" data-side="SE" x1="62" y1="-40" x2="62" y2="40" stroke-width="9"/>
+          <line class="side" data-side="NW" x1="-62" y1="-40" x2="-62" y2="40" stroke-width="9"/>
+          <text x="0" y="5" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)">Маяк</text>
+        </g>
+        <text x="262" y="34" text-anchor="middle" font-size="12" fill="var(--muted)">двор</text>
+      </svg>
+      <ul class="legend" id="noise-legend"></ul>
+    </div>
+    <div class="panel">
+      <h3>Ваше утро</h3>
+      <p class="sub">До пляжа «Маяк» · 450 м</p>
+      <svg viewBox="0 0 400 210" aria-label="Профиль высот маршрута до пляжа">
+        <defs><linearGradient id="elev" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--primary)" stop-opacity=".22"/><stop offset="1" stop-color="var(--primary)" stop-opacity="0"/></linearGradient></defs>
+        <line x1="30" y1="170" x2="390" y2="170" stroke="var(--line)"/>
+        <line x1="30" y1="30" x2="30" y2="170" stroke="var(--line)"/>
+        <text x="24" y="34" font-size="12" fill="var(--muted)" text-anchor="end">32 м</text>
+        <text x="24" y="172" font-size="12" fill="var(--muted)" text-anchor="end">0</text>
+        <path d="M30 38 C 80 40, 110 50, 150 62 L 210 120 C 240 140, 270 150, 300 158 L 390 164 L 390 170 L 30 170 Z" fill="url(#elev)"/>
+        <path d="M30 38 C 80 40, 110 50, 150 62 L 210 120 C 240 140, 270 150, 300 158 L 390 164" fill="none" stroke="var(--primary)" stroke-width="2.5"/>
+        <rect x="150" y="56" width="60" height="70" fill="var(--verified)" opacity=".45"/>
+        <text x="180" y="50" font-size="12" text-anchor="middle" fill="var(--ink)" font-weight="600">лестница · 64 ступени</text>
+        <line x1="300" y1="150" x2="300" y2="176" stroke="var(--ink)" stroke-dasharray="3 3"/>
+        <text x="300" y="194" font-size="12" text-anchor="middle" fill="var(--ink)">тоннель под ж/д</text>
+        <text x="30" y="194" font-size="12" fill="var(--muted)">отель</text>
+        <text x="390" y="194" font-size="12" fill="var(--muted)" text-anchor="end">пляж</text>
+      </svg>
+      <ul class="legend">
+        <li><span>Туда, вниз</span><b class="num">6 мин</b></li>
+        <li><span>Обратно, вверх 30 м</span><b class="num">9 мин</b></li>
+        <li><span>Без ступеней (через ул. Морскую)</span><b class="num">11 мин</b></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Даты -->
+  <section class="sec">
+    <div class="sec-h"><h2>Ваши даты</h2><p>Норма за 10 лет по Open-Meteo, не прогноз</p></div>
+    <div class="days num" id="days"></div>
+  </section>
+
+  <!-- Номера -->
+  <section class="sec">
+    <div class="sec-h"><h2>Какой номер брать</h2><p>Стороны и этажи — по ответу отеля, вид — по расчёту</p></div>
+    <table class="table rooms">
+      <thead><tr><th>Категория</th><th>Сторона, этажи</th><th>Для вас</th><th class="r">Цена <span class="demo">демо</span></th></tr></thead>
+      <tbody>
+        <tr><td><b>Стандарт</b></td><td>СВ, во двор · 2–8</td><td><i class="mk y">✓</i>тихо &nbsp;<i class="mk n">✗</i>моря нет</td><td class="r num">6 200 ₽</td></tr>
+        <tr class="rec"><td><b>Делюкс с видом на море</b><br><span style="font-size:13px">рекомендуем · просим этаж ≥ 4</span></td><td>ЮЗ · 2–8</td><td><i class="mk y">✓</i>закат &nbsp;<i class="mk p">⚠</i>ж/д, но окна ПВХ</td><td class="r num">8 400 ₽</td></tr>
+        <tr><td><b>Полулюкс угловой</b></td><td>ЮЗ + СЗ · 6–8</td><td><i class="mk y">✓</i>закат &nbsp;<i class="mk p">⚠</i>ж/д</td><td class="r num">11 900 ₽</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Остальные факты -->
+  <section class="sec">
+    <div class="sec-h"><h2>Что ещё мы знаем</h2><p>Нажмите на факт, чтобы увидеть доказательство</p></div>
+    <div class="facts" id="facts"></div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-h"><h2>Чего мы не знаем</h2><p>Можем спросить отель — ответ обычно за день</p></div>
+    <div class="unknown">
+      <div><i class="mk u">?</i><span>Шумоизоляция окон на ЮЗ-стороне</span><button class="btn-ghost btn-sm ask">Спросить отель</button></div>
+      <div><i class="mk u">?</i><span>Есть ли кондиционер в Стандарте</span><button class="btn-ghost btn-sm ask">Спросить отель</button></div>
+    </div>
+  </section>
+</main>
+
+<aside>
+  <div class="sticky">
+    <div class="card book">
+      <h3>Делюкс с видом на море</h3>
+      <div class="field"><span>Даты</span><span class="num">10–15 ноября · 5 ночей</span></div>
+      <div class="field"><span>Гости</span><span>2 взрослых</span></div>
+      <div class="req">
+        <div class="lbl">Попросим у отеля</div>
+        <div class="chips"><span class="tag ok">ЮЗ-сторона</span><span class="tag ok">этаж ≥ 4</span><span class="tag">подальше от лифта</span></div>
+      </div>
+      <div class="total"><span class="muted">Итого <span class="demo">демо</span></span><b class="num">42 000 ₽</b></div>
+      <a class="btn btn-primary" href="book.html">Забронировать</a>
+      <div class="fine">Отель подтвердит сторону и этаж до заезда</div>
+    </div>
+    <div class="card risk">
+      <div class="gauge num">12%</div>
+      <p><b>Риск разочарования низкий.</b> Главное для вас подтверждено расчётом и отелем. Единственное «но» — ж/д с морской стороны, поэтому просим этаж повыше.</p>
+    </div>
+  </div>
+</aside>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer why" id="why" aria-hidden="true" aria-label="Почему мы так думаем">
+  <button class="icon-btn close" id="why-close" aria-label="Закрыть"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <div class="lbl">Почему мы так думаем</div>
+  <div class="stmt" id="w-stmt"></div>
+  <div class="bar"><span id="w-bar"></span></div>
+  <p class="meter-t" id="w-meter"></p>
+  <div class="evidence" id="w-ev"><svg class="pano" aria-hidden="true"></svg></div>
+  <dl>
+    <div><dt class="lbl">Метод</dt><dd id="w-method"></dd></div>
+    <div><dt class="lbl">Источники</dt><dd><ul id="w-src"></ul></dd></div>
+    <div><dt class="lbl">Что может пойти не так</dt><dd id="w-risk"></dd></div>
+    <div><dt class="lbl">История</dt><dd id="w-hist"></dd></div>
+  </dl>
+  <div class="acts"><button class="btn-ghost">Показать на карте</button><button class="btn-ghost">Сообщить об ошибке</button></div>
+</aside>
+<div class="toast" id="toast"></div>
+
+<script src="pano.js"></script>
+<script>
+const FACTS = [
+  {k:'sunset',v:'y',st:'Закат над морем',sc:'ЮЗ-фасад, этаж 4 и выше · октябрь–март',c:3,cl:'скорее да',p:82,
+   stmt:'Море и закат видно из окон ЮЗ-фасада начиная с 4-го этажа',meter:'82 из 100 симуляций с учётом погрешности высот соседних домов показывают море и солнце над ним.',
+   method:'Линия горизонта по рельефу и зданиям для каждого фасада и этажа; положение солнца на ваши даты по астрономическому расчёту.',
+   src:[['Рельеф Copernicus DEM 30 м','2024'],['Здания и этажность OSM','сен 2026'],['Ответ отеля о номерах','12 окт']],
+   risk:'Деревья не учитываем. Высота дома напротив оценена: в OSM её нет.',hist:'2 сентября: «не уверены» → 12 октября: «скорее да» после ответа отеля.',pano:true},
+  {k:'quiet',v:'y',st:'Ночью тихо во двор',sc:'номера СВ-стороны · ближайшая дорога 140 м',c:4,cl:'точно',p:94,
+   stmt:'В номерах на СВ-сторону ночью тихо',meter:'Оценка шума ночью — около 38 дБ: как в спальне жилого квартала.',
+   method:'Индекс шума по расстоянию до дорог, ж/д и заведений, с поправкой на экранирование зданием.',
+   src:[['Дороги и ж/д OSM','сен 2026'],['Часы работы заведений OSM','сен 2026']],risk:'Стройки и разовые события не учитываем.',hist:'Факт не менялся с 2 сентября.'},
+  {k:'rail',v:'n',st:'Железная дорога под окнами',sc:'ЮЗ-фасад · 60 м · поезда и ночью',c:4,cl:'точно',p:97,
+   stmt:'С ЮЗ-стороны в 60 м проходит железная дорога',meter:'Расстояние измерено по карте; ночные поезда есть в расписании.',
+   method:'Расстояние от фасада до ж/д по OSM.',src:[['Железная дорога OSM','сен 2026']],risk:'Шумоизоляцию окон не знаем — спросили отель.',hist:'Факт не менялся.'},
+  {k:'beach',v:'y',st:'До пляжа 6 минут',sc:'спуск 30 м · 64 ступени · тоннель под ж/д',c:3,cl:'скорее да',p:80,
+   stmt:'До пляжа 6 минут пешком вниз, обратно 9',meter:'Время по пешеходному графу с поправкой на уклон (функция Тоблера).',
+   method:'Кратчайший пешеходный путь по OSM, высоты по DEM.',src:[['Пешеходные пути OSM','сен 2026'],['Рельеф Copernicus DEM','2024']],risk:'Если тоннель закрыт, путь в обход — 11 минут.',hist:'Факт не менялся.'},
+  {k:'night',v:'y',st:'Аптека 24/7 в 300 м',sc:'ул. Морская, 12',c:3,cl:'скорее да',p:85,
+   stmt:'Круглосуточная аптека в 300 м',meter:'Часы работы указаны в OSM, проверены 3 месяца назад.',method:'Поиск объектов OSM по типу и часам работы.',src:[['OSM: amenity=pharmacy','сен 2026']],risk:'Часы работы могли измениться.',hist:'Факт не менялся.'},
+  {k:'pets',v:'y',st:'Можно с собакой до 40 кг',sc:'1 500 ₽/сутки',c:4,cl:'точно',p:95,
+   stmt:'Можно с собакой до 40 кг за 1 500 ₽ в сутки',meter:'Ответ отеля на вопрос гостя.',method:'Вопрос отелю через кабинет, ответ разобран в поля.',src:[['Ответ отеля','сегодня']],risk:'Правила может поменять отель — перепроверим через 90 дней.',hist:'Новый факт: появился сегодня после живого исследования.'},
+];
+const facts = document.getElementById('facts');
+facts.innerHTML = FACTS.map((f,i) => `<div class="fact" data-i="${i}" tabindex="0"><i class="mk ${f.v}">${{y:'✓',n:'✗',p:'⚠'}[f.v]}</i><span class="st">${f.st}<span class="sc">${f.sc}</span></span><span class="conf"><span class="dots">${[1,2,3,4].map(n => `<i class="${n <= f.c ? 'f' : ''}"></i>`).join('')}</span>${f.cl}</span><span class="why">почему →</span></div>`).join('');
+
+const why = document.getElementById('why'), scrim = document.getElementById('scrim');
+function openWhy(i){
+  const f = FACTS[i];
+  document.querySelectorAll('.fact').forEach(n => n.classList.toggle('sel', +n.dataset.i === i));
+  document.getElementById('w-stmt').textContent = f.stmt;
+  document.getElementById('w-bar').style.width = f.p + '%';
+  document.getElementById('w-meter').textContent = f.meter;
+  document.getElementById('w-method').textContent = f.method;
+  document.getElementById('w-src').innerHTML = f.src.map(([a,b]) => `<li>${a}<span>${b}</span></li>`).join('');
+  document.getElementById('w-risk').textContent = f.risk;
+  document.getElementById('w-hist').textContent = f.hist;
+  const ev = document.getElementById('w-ev');
+  ev.style.display = f.pano ? 'block' : 'none';
+  why.classList.add('open'); scrim.classList.add('open'); why.setAttribute('aria-hidden','false');
+  if (f.pano) { ev.dataset.floor = 4; window.mountPano(ev); }
+}
+function closeWhy(){ why.classList.remove('open'); scrim.classList.remove('open'); why.setAttribute('aria-hidden','true'); document.querySelectorAll('.fact.sel').forEach(n => n.classList.remove('sel')); }
+facts.addEventListener('click', (e) => { const n = e.target.closest('.fact'); if (n) openWhy(+n.dataset.i); });
+facts.addEventListener('keydown', (e) => { if (e.key === 'Enter') { const n = e.target.closest('.fact'); if (n) openWhy(+n.dataset.i); } });
+scrim.addEventListener('click', closeWhy);
+document.getElementById('why-close').addEventListener('click', closeWhy);
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeWhy(); });
+
+// окно
+const win = document.getElementById('win');
+const NOTES = {
+  SW:['y','На ЮЗ выходят номера <b>Делюкс с видом на море</b>, этажи 2–8. Ответ отеля от 12 октября.'],
+  NE:['y','На СВ выходят номера <b>Стандарт</b>: вид на горы, моря нет. Самая тихая сторона.'],
+  SE:['p','На ЮВ номеров нет: здесь лестница и лифты.'],
+  NW:['p','На СЗ выходит угловой <b>Полулюкс</b> (этажи 6–8): город и кусочек моря.'],
+};
+win.addEventListener('pano', (e) => {
+  const [m, t] = NOTES[e.detail.facade];
+  document.getElementById('wnote').innerHTML = `<i class="mk ${m}">${m === 'y' ? '✓' : '⚠'}</i><span>${t}</span>`;
+});
+window.mountPano(win);
+
+// шум
+const NOISE = {
+  night:{SW:['#D2463B','~55 дБ','ж/д, ночные поезда'],SE:['#B7860B','~45 дБ','ул. Морская'],NE:['#1E8F4E','~38 дБ','двор'],NW:['#B7860B','~43 дБ','соседний дом']},
+  day:{SW:['#D2463B','~63 дБ','ж/д и пляж'],SE:['#D2463B','~58 дБ','ул. Морская'],NE:['#1E8F4E','~44 дБ','двор'],NW:['#B7860B','~50 дБ','соседний дом']},
+};
+const SIDES = {SW:'ЮЗ',SE:'ЮВ',NE:'СВ',NW:'СЗ'};
+function noise(t){
+  document.querySelectorAll('#night .side').forEach(l => l.setAttribute('stroke', NOISE[t][l.dataset.side][0]));
+  document.getElementById('noise-legend').innerHTML = Object.entries(NOISE[t]).map(([s,[c,db,src]]) => `<li><span class="sw" style="background:${c}"></span><span>${SIDES[s]} · ${src}</span><b class="num">${db}</b></li>`).join('');
+  document.querySelectorAll('#night [data-t]').forEach(b => b.classList.toggle('on', b.dataset.t === t));
+}
+document.querySelectorAll('#night [data-t]').forEach(b => b.addEventListener('click', () => noise(b.dataset.t)));
+noise('night');
+
+// даты
+const DAYS = [['пн 10','17°','16:58','18°','10%'],['вт 11','16°','16:57','18°','25%'],['ср 12','15°','16:56','17°','40%'],['чт 13','16°','16:55','17°','20%'],['пт 14','17°','16:54','17°','10%'],['сб 15','16°','16:53','17°','15%']];
+document.getElementById('days').innerHTML = DAYS.map(([d,t,s,w,r]) => `<div class="day"><div class="d">${d} ноября</div><div class="t">${t}</div><div class="row"><span>закат</span><span>${s}</span></div><div class="row"><span>вода</span><span>${w}</span></div><div class="row"><span>дождь</span><span>${r}</span></div></div>`).join('');
+
+// спросить отель
+const toast = document.getElementById('toast');
+document.querySelectorAll('.ask').forEach(b => b.addEventListener('click', () => {
+  b.textContent = 'Спросили ✓'; b.disabled = true;
+  toast.textContent = 'Вопрос ушёл в кабинет отеля. Сообщим, когда ответят.'; toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2600);
+}));
+const NAMES = {mayak:'Маяк',priboy:'Прибой',kiparis:'Кипарис',lazur:'Лазурь',sosny:'Сосновый склон',galka:'Галечный берег'};
+const id = new URLSearchParams(location.search).get('id');
+if (NAMES[id]) { document.getElementById('hname').firstChild.textContent = NAMES[id] + ' '; document.title = NAMES[id] + ' · О!кно'; }
+</script>
+</body>
+</html>

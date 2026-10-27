@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Кабинет отеля · О!кно</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="base.css">
+<style>
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:24px}
+.kpi{background:var(--raised);border-radius:var(--r-lg);padding:16px 18px}
+.kpi b{display:block;font-size:var(--fs-metric);font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.kpi span{font-size:var(--fs-label);color:var(--muted)}
+.q{border:1px solid var(--line);border-radius:var(--r-lg);padding:18px 20px;margin-bottom:12px;transition:opacity var(--d-move),transform var(--d-move) var(--ease-out)}
+.q.done{opacity:.6}
+.q-top{display:flex;gap:12px;align-items:baseline}
+.q h3{font-size:var(--fs-title);font-weight:700;flex:1}
+.q .why-q{font-size:14px;color:var(--muted);margin-top:4px}
+.q .why-q b{color:var(--ink)}
+.q .ans{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;align-items:center}
+.q .ans input{flex:1;min-width:220px;border:1px solid var(--line);border-radius:var(--r-md);padding:10px 14px}
+.q .res{margin-top:12px;font-size:14px;background:var(--verified);color:var(--on-verified);padding:10px 14px;border-radius:var(--r-md);display:none}
+.q.done .res{display:block}
+.q.done .ans{display:none}
+.conflict{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:20px;background:var(--raised);border-radius:var(--r-lg);padding:20px}
+.conflict .vs{display:grid;gap:10px;margin-top:12px}
+.conflict .vs div{background:#fff;border-radius:var(--r-md);padding:12px 14px;font-size:14px}
+.conflict .vs .lbl{margin-bottom:4px}
+.conflict .p{border-radius:var(--r-md);overflow:hidden;height:170px}
+.conflict .acts{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.mapper{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:20px;border:1px solid var(--line);border-radius:var(--r-lg);padding:16px}
+.mapper svg{width:100%;display:block;border-radius:var(--r-md);background:var(--map-land)}
+.mapper .side{cursor:pointer;transition:stroke var(--d-quick),stroke-width var(--d-quick)}
+.mapper .side:hover{stroke:var(--primary)}
+.mapper .side.on{stroke:var(--primary);stroke-width:14}
+.mapper .side.set{stroke:var(--yes)}
+.mapper .side.set.on{stroke:var(--primary)}
+.mp h3{font-size:var(--fs-title);font-weight:700}
+.mp .cons{font-size:14px;background:var(--raised);border-radius:var(--r-md);padding:12px 14px;margin-top:10px;display:grid;gap:4px}
+.mp .rooms{display:grid;gap:8px;margin-top:14px}
+.mp .rooms label{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:var(--r-md);padding:10px 12px;font-size:14px;cursor:pointer}
+.mp .rooms label:has(input:checked){border-color:var(--primary);background:var(--raised)}
+.mp .rooms input{accent-color:var(--primary)}
+.mp .floors{display:flex;gap:10px;align-items:center;margin-top:12px;font-size:14px}
+.mp .floors select{border:1px solid var(--line);border-radius:var(--r-sm);padding:6px 10px;background:#fff}
+.mp .btn{margin-top:14px;width:100%}
+.demand{display:grid;gap:10px}
+.dm{display:grid;grid-template-columns:200px minmax(0,1fr) 52px 250px;gap:14px;align-items:center;font-size:14px}
+.dm .bar{height:10px;border-radius:5px;background:var(--raised);overflow:hidden}
+.dm .bar span{display:block;height:100%;background:var(--primary);border-radius:5px}
+.dm .num{text-align:right;font-weight:600}
+.dm .tag{justify-self:start}
+@media (max-width:720px){.kpis{grid-template-columns:1fr 1fr}.conflict,.mapper{grid-template-columns:1fr}.dm{grid-template-columns:1fr 60px}.dm .bar,.dm .tag{grid-column:1 / -1}}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="index.html">О<b>!</b>кно <span class="muted" style="font-weight:500;font-size:15px">для отелей</span></a>
+  <div class="roles"><a href="index.html">Гость</a><a class="on" href="partner.html">Отельер</a><a href="console.html">Островок</a></div>
+</header>
+<div class="shell">
+  <nav class="side-nav">
+    <div class="who"><b>Маяк</b><span>Сочи, Центр · <span class="demo">демо</span></span></div>
+    <a class="on" href="#questions">Вопросы <span class="cnt">3</span></a>
+    <a href="#conflict">Расхождения <span class="cnt">1</span></a>
+    <a href="#facades">Номера и стороны</a>
+    <a href="#requests">Запросы гостей <span class="cnt">1</span></a>
+    <a href="#demand">Что ищут гости</a>
+    <a href="#facts">Что мы знаем</a>
+    <div class="foot">Ответы появляются у гостей сразу. Расчёты пересматриваем при изменениях карты.</div>
+  </nav>
+  <main class="page">
+    <div class="page-h"><h1>Что Островок знает о «Маяке»</h1><p>Мы посчитали вид, шум и дорогу до моря. Помогите с тем, что посчитать нельзя.</p></div>
+    <div class="kpis num">
+      <div class="kpi"><b>34</b><span>факта об отеле</span></div>
+      <div class="kpi"><b>3</b><span>вопроса ждут ответа</span></div>
+      <div class="kpi"><b>1 240</b><span>раз вас показали за неделю</span></div>
+      <div class="kpi"><b>+18%</b><span>переходов после ответов <span class="demo">демо</span></span></div>
+    </div>
+
+    <section class="sec" id="questions">
+      <div class="sec-h"><h2>Вопросы</h2><p>Отсортированы по пользе: что чаще ищут гости и в чём мы меньше уверены</p></div>
+      <div class="q" id="q1">
+        <div class="q-top"><h3>Какие номера выходят на юго-западную сторону?</h3><span class="tag ink">самый важный</span></div>
+        <p class="why-q"><b>34 гостя за неделю</b> искали закат над морем. С ЮЗ-стороны его видно с 4-го этажа, но мы не знаем, какие там номера.</p>
+        <div class="ans"><a class="btn btn-primary btn-sm" href="#facades">Отметить на схеме</a><span class="muted" style="font-size:14px">или скажите голосом</span><button class="icon-btn" aria-label="Ответить голосом"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button></div>
+        <div class="res">Готово: Делюкс с видом на море — ЮЗ, этажи 2–8. Отель находится по запросу «закат над морем».</div>
+      </div>
+      <div class="q" id="q2">
+        <div class="q-top"><h3>Какие окна на ЮЗ-стороне?</h3></div>
+        <p class="why-q"><b>21 гость</b> искал тишину. С ЮЗ-стороны в 60 м железная дорога — хорошие окна сильно меняют дело.</p>
+        <div class="ans"><button class="btn-ghost" data-a="Обычные стеклопакеты">Обычные</button><button class="btn-ghost" data-a="Двойные стеклопакеты ПВХ">Двойной стеклопакет</button><button class="btn-ghost" data-a="Шумозащитные окна">Шумозащитные</button></div>
+        <div class="res"></div>
+      </div>
+      <div class="q" id="q3">
+        <div class="q-top"><h3>Можно ли с собакой 30 кг?</h3><span class="tag">спросил гость сейчас</span></div>
+        <p class="why-q">Гость выбирает между вами и ещё 5 отелями. Ответ увидят все, кто ищет отдых с собакой.</p>
+        <div class="ans"><input placeholder="Например: да, до 40 кг, 1 500 ₽ в сутки" aria-label="Ответ"><button class="btn btn-primary btn-sm" data-free>Ответить</button></div>
+        <div class="res"></div>
+      </div>
+    </section>
+
+    <section class="sec" id="conflict">
+      <div class="sec-h"><h2>Расхождения</h2><p>Где ваше описание и наш расчёт говорят разное</p></div>
+      <div class="conflict">
+        <div>
+          <h3 style="font-size:var(--fs-title);font-weight:700">«Вид на море из всех номеров»</h3>
+          <div class="vs">
+            <div><div class="lbl">В вашем описании</div>Вид на море из всех номеров</div>
+            <div><div class="lbl">Наш расчёт · уверенность 0,9</div>Море видно только с ЮЗ-стороны и только с 4-го этажа. С СВ-стороны — горы.</div>
+          </div>
+          <div class="acts"><button class="btn btn-primary btn-sm" id="agree">Согласен, исправить описание</button><button class="btn-ghost">Не согласен — объяснить</button></div>
+        </div>
+        <div class="p" data-floor="2"><svg class="pano" aria-label="Вид с ЮЗ-стороны со 2-го этажа: море закрыто домами"></svg></div>
+      </div>
+    </section>
+
+    <section class="sec" id="facades">
+      <div class="sec-h"><h2>Номера и стороны</h2><p>Нажмите на сторону здания и отметьте, какие номера туда выходят</p></div>
+      <div class="mapper">
+        <svg viewBox="0 0 520 380" aria-label="Схема здания сверху">
+          <path d="M-10 300 L 330 390" stroke="var(--ink)" stroke-width="2" stroke-dasharray="9 6" opacity=".55"/>
+          <text x="40" y="330" font-size="12" fill="var(--muted)" transform="rotate(15 40 330)">железная дорога · 60 м</text>
+          <path d="M420 390 L 530 220" stroke="#C3CDE6" stroke-width="12"/>
+          <text x="430" y="330" font-size="12" fill="var(--muted)" transform="rotate(-57 430 330)">ул. Морская</text>
+          <text x="80" y="90" font-size="13" fill="var(--primary)" font-weight="600">море и закат ↙</text>
+          <text x="380" y="60" font-size="13" fill="var(--muted)">горы ↗</text>
+          <g transform="translate(260 180) rotate(38)">
+            <rect x="-110" y="-70" width="220" height="140" fill="#fff" stroke="var(--line)"/>
+            <text x="0" y="6" text-anchor="middle" font-size="16" font-weight="700" fill="var(--ink)">Маяк</text>
+            <line class="side" data-s="SW" x1="-110" y1="70" x2="110" y2="70" stroke="var(--line)" stroke-width="10"/>
+            <line class="side" data-s="NE" x1="-110" y1="-70" x2="110" y2="-70" stroke="var(--line)" stroke-width="10"/>
+            <line class="side" data-s="SE" x1="110" y1="-70" x2="110" y2="70" stroke="var(--line)" stroke-width="10"/>
+            <line class="side" data-s="NW" x1="-110" y1="-70" x2="-110" y2="70" stroke="var(--line)" stroke-width="10"/>
+          </g>
+        </svg>
+        <div class="mp">
+          <h3 id="mp-t">Юго-западная сторона</h3>
+          <div class="cons" id="mp-c"></div>
+          <div class="rooms" id="mp-r">
+            <label><input type="checkbox" value="Стандарт">Стандарт</label>
+            <label><input type="checkbox" value="Делюкс с видом на море" checked>Делюкс с видом на море</label>
+            <label><input type="checkbox" value="Полулюкс угловой">Полулюкс угловой</label>
+          </div>
+          <div class="floors">Этажи с <select id="f1"><option>2</option><option>3</option><option>4</option></select> по <select id="f2"><option>6</option><option>7</option><option selected>8</option></select></div>
+          <button class="btn btn-primary" id="save">Сохранить сторону</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="requests">
+      <div class="sec-h"><h2>Запросы гостей</h2></div>
+      <table class="table">
+        <thead><tr><th>Гость</th><th>Даты</th><th>Номер и запрос</th><th class="r">Действие</th></tr></thead>
+        <tbody><tr><td>Анна Демо</td><td class="num">10–15 ноября</td><td>Делюкс с видом на море<br><span class="tag ok">ЮЗ-сторона</span> <span class="tag ok">этаж ≥ 4</span> <span class="tag">подальше от лифта</span></td>
+          <td class="r" id="req-act"><button class="btn btn-primary btn-sm" id="confirm">Подтвердить: № 512, 5 этаж</button><br><button class="btn-ghost btn-sm" style="margin-top:6px">Предложить другой</button></td></tr></tbody>
+      </table>
+    </section>
+
+    <section class="sec" id="demand">
+      <div class="sec-h"><h2>Что ищут гости в Центре</h2><p>За последние 7 дней <span class="demo">демо</span></p></div>
+      <div class="demand num">
+        <div class="dm"><span>Тишина ночью</span><div class="bar"><span style="width:100%"></span></div><span class="num">412</span><span class="tag ok">у вас: СВ-сторона, подтверждено</span></div>
+        <div class="dm"><span>Закат над морем</span><div class="bar"><span style="width:86%"></span></div><span class="num">356</span><span class="tag warn">у вас есть, нужны номера</span></div>
+        <div class="dm"><span>До пляжа без подъёма</span><div class="bar"><span style="width:70%"></span></div><span class="num">290</span><span class="tag bad">у вас: 64 ступени</span></div>
+        <div class="dm"><span>С собакой</span><div class="bar"><span style="width:16%"></span></div><span class="num">64</span><span class="tag warn">не знаем — ответьте</span></div>
+      </div>
+    </section>
+
+    <section class="sec" id="facts">
+      <div class="sec-h"><h2>Что мы знаем</h2><p>Подтвердите или поправьте — гости видят источник</p></div>
+      <table class="table">
+        <thead><tr><th>Характеристика</th><th>Значение</th><th>Источник</th><th>Уверенность</th><th class="r"></th></tr></thead>
+        <tbody>
+          <tr><td>Закат над морем</td><td>ЮЗ, этаж ≥ 4, октябрь–март</td><td>расчёт + ваш ответ</td><td><span class="conf"><span class="dots"><i class="f"></i><i class="f"></i><i class="f"></i><i></i></span>скорее да</span></td><td class="r"><button class="btn-ghost btn-sm">Верно</button></td></tr>
+          <tr><td>Ночью тихо</td><td>СВ-сторона, ~38 дБ</td><td>расчёт</td><td><span class="conf"><span class="dots"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i></span>точно</span></td><td class="r"><button class="btn-ghost btn-sm">Верно</button></td></tr>
+          <tr><td>До пляжа</td><td>6 мин вниз, 64 ступени</td><td>расчёт</td><td><span class="conf"><span class="dots"><i class="f"></i><i class="f"></i><i class="f"></i><i></i></span>скорее да</span></td><td class="r"><button class="btn-ghost btn-sm">Поправить</button></td></tr>
+          <tr><td>Парковка</td><td>есть, 8 мест</td><td>карточка отеля</td><td><span class="conf"><span class="dots"><i class="f"></i><i class="f"></i><i></i><i></i></span>не уверены</span></td><td class="r"><button class="btn-ghost btn-sm">Верно</button></td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</div>
+<div class="toast" id="toast"></div>
+<script src="pano.js"></script>
+<script>
+const toast = (t) => { const n = document.getElementById('toast'); n.textContent = t; n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2600); };
+window.mountPano(document.querySelector('.conflict .p'));
+// вопросы
+document.querySelectorAll('#q2 [data-a]').forEach(b => b.addEventListener('click', () => {
+  const q = document.getElementById('q2'); q.querySelector('.res').textContent = `Готово: «${b.dataset.a}». Уверенность в тишине ЮЗ-стороны обновлена.`; q.classList.add('done'); toast('Ответ сохранён — гости увидят его сразу');
+}));
+document.querySelector('#q3 [data-free]').addEventListener('click', () => {
+  const q = document.getElementById('q3'); const v = q.querySelector('input').value || 'да, до 40 кг, 1 500 ₽ в сутки';
+  q.querySelector('.res').textContent = `Разобрали ответ: животные — можно; вес — до 40 кг; доплата — 1 500 ₽/сутки. Гость уже видит ответ.`; q.classList.add('done'); toast('Ответ разобран в поля');
+});
+document.getElementById('agree').addEventListener('click', (e) => { e.target.closest('.conflict').style.opacity = .55; e.target.textContent = 'Описание исправлено ✓'; });
+// фасады
+const SIDES = {
+  SW:['Юго-западная сторона',['море с 4-го этажа, закат октябрь–март','ж/д в 60 м — ночью ~55 дБ']],
+  NE:['Северо-восточная сторона',['горы, моря нет','двор — ночью ~38 дБ, самая тихая']],
+  SE:['Юго-восточная сторона',['ул. Морская в 140 м','море частично с 6-го этажа']],
+  NW:['Северо-западная сторона',['соседний дом в 30 м','город, кусочек моря с 7-го этажа']],
+};
+let cur = 'SW';
+const sides = document.querySelectorAll('.mapper .side');
+function pick(s){
+  cur = s; sides.forEach(l => l.classList.toggle('on', l.dataset.s === s));
+  document.getElementById('mp-t').textContent = SIDES[s][0];
+  document.getElementById('mp-c').innerHTML = SIDES[s][1].map(t => `<span>· ${t}</span>`).join('');
+}
+sides.forEach(l => l.addEventListener('click', () => pick(l.dataset.s)));
+pick('SW');
+document.getElementById('save').addEventListener('click', () => {
+  document.querySelector(`.mapper .side[data-s="${cur}"]`).classList.add('set');
+  if (cur === 'SW') { const q = document.getElementById('q1'); q.classList.add('done'); }
+  toast(`${SIDES[cur][0]} сохранена. Пересчитали подбор для 3 категорий номеров.`);
+});
+document.getElementById('confirm').addEventListener('click', () => {
+  document.getElementById('req-act').innerHTML = '<span class="tag ok">Подтверждено · № 512</span>'; toast('Гость получил подтверждение');
+});
+</script>
+</body>
+</html>

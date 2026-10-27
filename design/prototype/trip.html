@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Поездка · О!кно</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="base.css">
+<style>
+.wrap{margin:0 auto;padding:16px 48px 96px;max-width:1180px}
+.hero{background:var(--scene-bg);color:#fff;border-radius:var(--r-xl);padding:40px 44px;display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:40px;align-items:center}
+.hero h1{font-size:var(--fs-heading);font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.hero p{color:var(--on-scene-muted);margin-top:8px;font-size:var(--fs-lede)}
+.hero .pano-box{height:190px;border-radius:var(--r-lg);overflow:hidden}
+.status{list-style:none;display:grid;gap:0;margin-top:24px}
+.status li{display:grid;grid-template-columns:22px 1fr auto;gap:12px;padding:8px 0;align-items:baseline;color:var(--on-scene-muted)}
+.status li .dot{width:12px;height:12px;border-radius:50%;border:2px solid var(--on-scene-muted);transform:translateY(1px)}
+.status li.done{color:#fff}
+.status li.done .dot{background:var(--verified);border-color:var(--verified)}
+.status li.live .dot{border-color:var(--verified);border-right-color:transparent;animation:spin .9s linear infinite}
+@keyframes spin{to{transform:translateY(1px) rotate(360deg)}}
+.status small{font-size:var(--fs-label);color:var(--on-scene-muted)}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grid3 .card h3{font-size:var(--fs-title);font-weight:700}
+.grid3 .card .big{font-size:var(--fs-metric);font-weight:700;letter-spacing:-.02em;margin-top:8px}
+.grid3 .card p{font-size:14px;color:var(--muted);margin-top:4px}
+.fb{border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden}
+.fb-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;padding:14px 18px;border-bottom:1px solid var(--line);align-items:center}
+.fb-row:last-child{border-bottom:0}
+.fb-row .sc{font-size:var(--fs-label);color:var(--muted)}
+.fb-row .seg button{padding:6px 14px}
+.fb-head{display:flex;align-items:center;gap:12px}
+.switch{font-size:14px;color:var(--muted);display:flex;gap:8px;align-items:center}
+.after{display:none}
+body.post .after{display:block}
+body.post .before{display:none}
+.thanks{margin-top:12px;font-size:14px;color:var(--muted)}
+@media (max-width:720px){.wrap{padding:8px 16px 64px}.hero{grid-template-columns:1fr;padding:28px 20px}.grid3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="index.html">О<b>!</b>кно</a>
+  <nav><a href="index.html">Подбор</a><a class="on" href="trip.html">Мои поездки</a><a href="me.html">Профиль вкуса</a></nav>
+  <div class="roles"><a class="on" href="index.html">Гость</a><a href="partner.html">Отельер</a><a href="console.html">Островок</a></div>
+</header>
+<div class="wrap">
+  <section class="hero">
+    <div>
+      <h1>Маяк, 10–15 ноября</h1>
+      <p>Делюкс с видом на море · 2 взрослых <span class="demo">демо</span></p>
+      <ol class="status" id="status">
+        <li class="done"><span class="dot"></span><span>Бронь оплачена</span><small>сегодня, 14:02</small></li>
+        <li class="done"><span class="dot"></span><span>Запрос ушёл в отель: ЮЗ-сторона, этаж ≥ 4, подальше от лифта</span><small>14:02</small></li>
+        <li class="live" id="st-confirm"><span class="dot"></span><span>Ждём подтверждения отеля</span><small>обычно до 2 часов</small></li>
+      </ol>
+    </div>
+    <div class="pano-box" data-floor="5"><svg class="pano" aria-hidden="true"></svg></div>
+  </section>
+
+  <div class="switch" style="margin-top:28px">Показать как <div class="seg"><button class="on" data-m="pre">до поездки</button><button data-m="post">после поездки</button></div></div>
+
+  <section class="sec before">
+    <div class="sec-h"><h2>Что вас ждёт</h2><p>Обновим, если что-то изменится</p></div>
+    <div class="grid3">
+      <div class="card"><h3>Закат из окна</h3><div class="big num">16:58 → 16:53</div><p>С 10 по 15 ноября солнце садится в море прямо напротив ЮЗ-фасада.</p></div>
+      <div class="card"><h3>Погода и вода</h3><div class="big num">16° / 17°</div><p>Обычно 1–2 дождливых дня. Возьмите ветровку.</p></div>
+      <div class="card"><h3>Дорога к морю</h3><div class="big num">6 мин</div><p>Вниз по лестнице, 64 ступени, тоннель под ж/д. Обратно — 9 минут.</p></div>
+    </div>
+  </section>
+
+  <section class="sec after">
+    <div class="sec-h"><h2>Всё было так, как мы обещали?</h2><p>Ваш ответ уточнит факты для следующих гостей</p></div>
+    <div class="fb" id="fb">
+      <div class="fb-row"><div>Закат над морем из окна<div class="sc">обещали: ЮЗ-сторона, этаж ≥ 4</div></div><div class="seg"><button>Да</button><button>Частично</button><button>Нет</button></div></div>
+      <div class="fb-row"><div>Ночью тихо<div class="sc">обещали: ~55 дБ на ЮЗ, слышны ночные поезда</div></div><div class="seg"><button>Да</button><button>Частично</button><button>Нет</button></div></div>
+      <div class="fb-row"><div>До пляжа 6 минут<div class="sc">обещали: спуск, 64 ступени, тоннель</div></div><div class="seg"><button>Да</button><button>Частично</button><button>Нет</button></div></div>
+    </div>
+    <p class="thanks" id="thanks"></p>
+  </section>
+</div>
+<script src="pano.js"></script>
+<script>
+window.mountPano(document.querySelector('.pano-box'));
+setTimeout(() => {
+  const li = document.getElementById('st-confirm');
+  li.className = 'done';
+  li.innerHTML = '<span class="dot"></span><span>Отель подтвердил: ЮЗ-сторона, 5 этаж, номер 512</span><small>только что</small>';
+}, 2500);
+document.querySelectorAll('[data-m]').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('[data-m]').forEach(n => n.classList.toggle('on', n === b));
+  document.body.classList.toggle('post', b.dataset.m === 'post');
+}));
+document.getElementById('fb').addEventListener('click', (e) => {
+  const b = e.target.closest('button'); if (!b) return;
+  b.parentElement.querySelectorAll('button').forEach(n => n.classList.toggle('on', n === b));
+  const n = document.querySelectorAll('#fb .on').length;
+  document.getElementById('thanks').textContent = n === 3 ? 'Спасибо! Уверенность в трёх фактах «Маяка» обновлена.' : '';
+});
+</script>
+</body>
+</html>

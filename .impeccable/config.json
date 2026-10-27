@@ -1,0 +1,62 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "design-system-font",
+        "value": "geologica",
+        "files": [
+          "design/directions/index.html"
+        ],
+        "createdAt": "2026-10-26T20:10:33.489Z",
+        "reason": "Claude: архивный эскиз гейта 1, шрифты отвергнутых направлений A/B, не продуктовый код"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "jetbrains mono",
+        "files": [
+          "design/directions/index.html"
+        ],
+        "createdAt": "2026-10-26T20:10:33.505Z",
+        "reason": "Claude: архивный эскиз гейта 1, шрифты отвергнутых направлений A/B, не продуктовый код"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "literata",
+        "files": [
+          "design/directions/index.html"
+        ],
+        "createdAt": "2026-10-26T20:10:33.522Z",
+        "reason": "Claude: архивный эскиз гейта 1, шрифты отвергнутых направлений A/B, не продуктовый код"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "golos text",
+        "files": [
+          "design/directions/index.html"
+        ],
+        "createdAt": "2026-10-26T20:10:33.537Z",
+        "reason": "Claude: архивный эскиз гейта 1, шрифты отвергнутых направлений A/B, не продуктовый код"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "design/prototype/console.html"
+        ],
+        "createdAt": "2026-10-26T20:26:34.612Z",
+        "reason": "Claude: схема-карта (SVG) намеренно заполняет карточку до краёв, как изображение карты; текстовых блоков у края нет"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "design/prototype/partner.html"
+        ],
+        "createdAt": "2026-10-26T20:26:34.627Z",
+        "reason": "Claude: схема-карта (SVG) намеренно заполняет карточку до краёв, как изображение карты; текстовых блоков у края нет"
+      }
+    ]
+  }
+}

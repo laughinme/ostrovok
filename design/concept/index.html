@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>О!кно · интерактивная концепция</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400..800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0B1533;--surface:#FFFFFF;--raised:#F4F7FF;--muted:#5B6580;--line:#E1E6F2;
+  --primary:#1B4DE4;--scene:#0A1C66;--scene-raised:#2450DA;--verified:#C9F59A;--on-verified:#2C4A10;
+  --yes:#1E8F4E;--partial:#B7860B;--critical:#D2463B;
+  --r-sm:10px;--r-md:14px;--r-lg:22px;--r-xl:32px;
+  --ease-out:cubic-bezier(0.22,1,0.36,1);--ease-io:cubic-bezier(0.65,0,0.35,1);
+  --pano-sky-top:#1A3FC4;--pano-sky-low:#8FB0FF;--pano-sea-top:#1534A8;--pano-sea-low:#0B1F6E;
+  --pano-sun:#C9F59A;--pano-land:#0B1B55;--pano-land-far:#29429E;--pano-build:#0A1648;--pano-build-edge:#2A3F99;
+  --pano-tick:#C8D4FF;--pano-label:#FFFFFF;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased}
+body{font-family:Onest,system-ui,sans-serif;font-size:15px;line-height:1.5;color:var(--ink);background:var(--surface)}
+button,input{font:inherit;color:inherit}
+button{background:none;border:0;cursor:pointer}
+.num{font-variant-numeric:tabular-nums}
+:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+
+.top{display:flex;align-items:center;gap:40px;padding:20px 48px;height:76px}
+.logo{font-weight:800;font-size:22px;letter-spacing:-.02em;text-decoration:none;color:var(--ink);cursor:pointer}
+.logo b{color:var(--primary)}
+.top nav{display:flex;gap:28px;font-size:14px;color:var(--muted)}
+.trip{display:none;gap:8px;font-size:14px;color:var(--muted)}
+.roles{margin-left:auto;display:flex;border:1px solid var(--line);border-radius:999px;padding:3px;font-size:13px}
+.roles span{padding:6px 14px;border-radius:999px;color:var(--muted)}
+.roles .on{background:var(--ink);color:#fff}
+
+/* ---------- сцена: герой лендинга / полоса холста ---------- */
+.scene{margin:0 24px;border-radius:var(--r-xl);background:radial-gradient(120% 90% at 20% 0%,#2F62FF 0%,#1438C2 45%,#0A1C66 100%);color:#fff;position:relative;overflow:hidden;padding:64px 56px 290px;view-transition-name:scene}
+.scene h1{font-weight:800;font-size:66px;line-height:1;letter-spacing:-.035em;max-width:860px}
+.scene h1 em{font-style:normal;color:var(--verified)}
+.lede{font-size:18px;color:#D5DEFF;max-width:600px;margin-top:20px}
+.wish{margin-top:34px;max-width:940px;background:#fff;color:var(--ink);border-radius:var(--r-lg);padding:14px 14px 14px 24px;view-transition-name:wish;position:relative;z-index:2}
+.wish-field{display:flex;align-items:center;gap:10px}
+.wish input{flex:1;border:0;outline:0;font-size:19px;font-weight:500;background:transparent;min-width:0}
+.icon-btn{width:40px;height:40px;display:grid;place-items:center;border-radius:999px;color:var(--muted)}
+.icon-btn:hover{background:var(--raised)}
+.icon-btn svg{width:20px;height:20px}
+.primary{background:var(--primary);color:#fff;font-weight:600;padding:12px 22px;border-radius:var(--r-md);white-space:nowrap;transition:transform 100ms}
+.primary:active{transform:scale(.97)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.chip{display:inline-flex;align-items:center;gap:8px;padding:6px 8px 6px 12px;border-radius:999px;font-size:13.5px;background:var(--raised);border:1px solid transparent;transition:background 180ms,opacity 180ms}
+.chip.ok{background:var(--verified)}
+.chip.ok .how{color:var(--on-verified)}
+.chip.ask{background:var(--raised);border:1px dashed #9AA8D6}
+.chip.trip{background:#fff;border:1px solid var(--line)}
+.chip .how{font-size:12px;color:var(--muted)}
+.chip .imp{width:16px;height:16px;display:grid;place-items:center;border-radius:50%;cursor:pointer}
+.chip .imp i{width:7px;height:7px;border-radius:50%;background:var(--ink);display:block}
+.chip .imp.important i{background:transparent;border:1.5px solid var(--ink)}
+.chip .imp.nice i{background:transparent;border:1.5px dashed var(--ink)}
+.chip .x{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;color:var(--muted);font-size:14px;line-height:1}
+.chip .x:hover{background:rgba(11,21,51,.08)}
+.chip.add{background:transparent;border:1px dashed var(--line);color:var(--primary);padding-right:12px;cursor:pointer}
+.chip.add:hover{border-color:var(--primary)}
+.chip.researching{background:var(--raised)}
+.chip.researching .how::after{content:'';display:inline-block;width:8px;height:8px;margin-left:6px;border-radius:50%;border:1.5px solid var(--primary);border-right-color:transparent;animation:spin .8s linear infinite;vertical-align:-1px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hint{display:none}
+
+.moods{margin-top:18px;max-width:940px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;position:relative;z-index:2}
+.mood{text-align:left;padding:16px 18px;border-radius:18px;background:var(--scene-raised);border:1px solid #3A63E6;color:#fff;transition:background 180ms,transform 180ms var(--ease-out)}
+.mood:hover{background:#2C5BEA;transform:translateY(-2px)}
+.mood h4{font-weight:600;font-size:16px}
+.mood p{font-size:13px;color:#E3E9FF;margin-top:4px}
+.hero-pano{position:absolute;left:0;right:0;bottom:0;height:250px}
+.hero-pano svg{display:block;width:100%;height:100%}
+.hero-pano figcaption{position:absolute;right:28px;bottom:30px;font-size:12.5px;color:#C9D4FF}
+.pano-label{font-size:12px;letter-spacing:.02em}
+.pano-sun-label{font-size:13px}
+.demo{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:1px 7px;margin-left:6px;vertical-align:2px;font-weight:500}
+.scene .demo{color:#FFFFFF;border-color:#8FA6F2}
+
+/* ---------- рабочее пространство ---------- */
+.work{display:none}
+body.app .landing-only{display:none}
+body.app .scene{padding:20px 24px 20px;margin:0 24px;border-radius:var(--r-lg)}
+body.app .scene h1,body.app .lede,body.app .moods,body.app .hero-pano{display:none}
+body.app .wish{margin-top:0;max-width:none}
+body.app .hint{display:flex;align-items:center;gap:10px;margin-top:12px;font-size:14px;color:#D5DEFF;padding-left:4px}
+body.app .hint b{color:#fff;font-weight:600}
+body.app .hint .opt{background:var(--scene-raised);border:1px solid #3A63E6;border-radius:999px;padding:4px 12px;color:#fff;font-size:13px}
+body.app .work{display:grid;grid-template-columns:600px minmax(0,1fr);gap:24px;padding:20px 24px 24px;height:calc(100vh - 76px - 172px);min-height:560px}
+body.app nav{display:none}
+body.app .trip{display:flex}
+
+.list{overflow:auto;padding-right:6px;scrollbar-width:thin}
+.list-head{display:flex;align-items:baseline;gap:12px;padding:4px 0 12px}
+.list-head h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
+.list-head span{font-size:13.5px;color:var(--muted)}
+.list-head .sort{margin-left:auto;font-size:13px;color:var(--muted)}
+
+.research{border-radius:var(--r-lg);background:var(--raised);padding:16px 18px;margin-bottom:12px}
+.research h3{font-size:15px;font-weight:600;display:flex;align-items:center;gap:10px}
+.research h3 .spin{width:14px;height:14px;border-radius:50%;border:2px solid var(--primary);border-right-color:transparent;animation:spin .8s linear infinite}
+.research.done h3 .spin{animation:none;border-color:var(--yes);background:var(--yes)}
+.research ol{list-style:none;margin-top:10px;display:grid;gap:6px}
+.research li{display:grid;grid-template-columns:110px 1fr;gap:10px;font-size:13.5px;opacity:0;transform:translateY(4px);transition:opacity 320ms var(--ease-out),transform 320ms var(--ease-out)}
+.research li.in{opacity:1;transform:none}
+.research li .tool{font-size:12px;color:var(--muted);background:#fff;border-radius:999px;padding:1px 9px;justify-self:start;height:fit-content}
+
+.card{display:grid;grid-template-columns:150px minmax(0,1fr) auto;gap:16px;padding:14px;border-radius:var(--r-lg);border:1px solid var(--line);background:#fff;margin-bottom:10px;cursor:pointer;transition:border-color 180ms,background 180ms}
+.card:hover,.card.hl{border-color:var(--primary)}
+.thumb{height:118px;border-radius:14px;overflow:hidden;position:relative}
+.thumb svg{display:block;width:100%;height:100%}
+.thumb .pano-label{display:none}
+.thumb span{position:absolute;left:8px;top:6px;font-size:12px;color:#fff;font-weight:500}
+.card h3{font-size:17px;font-weight:700;letter-spacing:-.01em;line-height:1.2}
+.card .area{font-size:13px;color:var(--muted)}
+.vlist{list-style:none;margin-top:8px;display:grid;gap:3px}
+.vlist li{font-size:13.5px;display:flex;gap:8px;border-radius:6px;transition:background 1.2s}
+.vlist li i{font-style:normal;font-weight:700;width:14px;flex:none}
+.vlist li.y i{color:var(--yes)} .vlist li.p i{color:var(--partial)} .vlist li.n i{color:var(--critical)} .vlist li.u i{color:var(--muted)}
+.vlist li.u{color:var(--muted)}
+.vlist li.flash{background:var(--verified)}
+.trade{font-size:13px;color:var(--muted);margin-top:6px}
+.side{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;text-align:right;min-width:116px}
+.pct{font-size:30px;font-weight:700;color:var(--primary);letter-spacing:-.02em;line-height:1}
+.pct-l{font-size:12px;color:var(--muted)}
+.price{font-weight:600;font-size:15px}
+.price small{display:block;font-weight:400;font-size:12px;color:var(--muted)}
+.cmp{font-size:12.5px;color:var(--primary);border:1px solid var(--line);border-radius:999px;padding:3px 10px}
+
+.map{border-radius:var(--r-lg);overflow:hidden;position:relative;background:#EAF0FF}
+.map svg{display:block;width:100%;height:100%}
+.map .layers{position:absolute;left:16px;top:16px;display:flex;gap:6px}
+.map .layers span{background:#fff;border-radius:999px;padding:6px 12px;font-size:13px;border:1px solid var(--line)}
+.map .layers span.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.map .attr{position:absolute;right:12px;bottom:8px;font-size:12px;color:var(--muted)}
+.marker{cursor:pointer}
+.marker rect{fill:#fff;stroke:var(--ink);stroke-width:1;transition:fill 180ms}
+.marker text{font-size:14px;font-weight:700;fill:var(--ink)}
+.marker.top rect{fill:var(--primary);stroke:var(--primary)}
+.marker.top text{fill:#fff}
+.marker.hl rect{fill:var(--verified);stroke:var(--ink)}
+.marker.hl text{fill:var(--ink)}
+
+.tray{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:#fff;border-radius:999px;padding:8px 8px 8px 20px;display:none;align-items:center;gap:14px;font-size:14px}
+body.app .tray.show{display:flex}
+.tray .primary{padding:8px 16px;border-radius:999px}
+
+::view-transition-group(*){animation-duration:600ms;animation-timing-function:cubic-bezier(0.76,0,0.24,1)}
+@media (prefers-reduced-motion:reduce){
+  ::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none !important}
+  *{transition:none !important}
+  .research li{opacity:1;transform:none}
+}
+@media (max-width:720px){
+  .top{padding:16px;gap:16px;height:auto}
+  .top nav,.trip{display:none !important}
+  .scene{margin:0;border-radius:0;padding:28px 16px 230px}
+  .scene h1{font-size:40px}
+  .lede{font-size:16px}
+  .wish{padding:14px}
+  .wish-field{flex-wrap:wrap}
+  .wish input{flex-basis:100%;font-size:17px}
+  .wish-field .primary{margin-left:auto}
+  .moods{grid-template-columns:1fr 1fr}
+  .hero-pano figcaption{display:none}
+  body.app .scene{margin:0;border-radius:0;padding:14px 12px}
+  body.app .hint{flex-wrap:wrap}
+  body.app .work{grid-template-columns:1fr;height:auto;padding:16px 12px}
+  .map{display:none}
+  .card{grid-template-columns:96px minmax(0,1fr)}
+  .thumb{height:96px}
+  .side{grid-column:1 / -1;flex-direction:row;align-items:center}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="logo" id="home">О<b>!</b>кно</a>
+  <nav><span>Как мы знаем</span><span>Отельерам</span><span>Разработчикам</span></nav>
+  <div class="trip"><span>Сочи</span>·<span class="num">10–15 ноября</span>·<span>2 взрослых</span></div>
+  <div class="roles"><span class="on">Гость</span><span>Отельер</span><span>Островок</span></div>
+</header>
+
+<section class="scene">
+  <h1>Каким будет ваш номер — <em>видно до&nbsp;поездки</em></h1>
+  <p class="lede">Мы считаем вид из окна, шум и дорогу до моря для каждого фасада и этажа отелей Сочи. И показываем, откуда это знаем.</p>
+  <form class="wish" id="wish">
+    <div class="wish-field">
+      <input id="q" value="Тихо, закат над морем, до пляжа без подъёма, в ноябре, вдвоём" aria-label="Опишите поездку своими словами">
+      <button type="button" class="icon-btn" aria-label="Сказать голосом"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
+      <button type="button" class="icon-btn" aria-label="Найти по фото вида"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="6" width="18" height="14" rx="2"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2h5L16 6"/></svg></button>
+      <button class="primary" id="go">Подобрать</button>
+    </div>
+    <div class="chips" id="chips"></div>
+  </form>
+  <div class="hint" id="hint">Закат зависит от дат: <b>10–15 ноября</b> солнце садится в море около 16:58. <span class="opt">Другие даты</span></div>
+  <div class="moods">
+    <button class="mood" data-mood="sea"><h4>Проснуться с морем</h4><p class="num">23 отеля, где море видно из кровати</p></button>
+    <button class="mood" data-mood="calm"><h4>Тишина и горы</h4><p class="num">17 отелей без дорог под окнами</p></button>
+    <button class="mood" data-mood="kids"><h4>С ребёнком без подъёмов</h4><p class="num">31 отель, до пляжа не больше 10 м вверх</p></button>
+    <button class="mood" data-mood="sunset"><h4>Закаты в ноябре</h4><p class="num">14 отелей, солнце садится в море</p></button>
+  </div>
+  <figure class="hero-pano" data-floor="6">
+    <svg class="pano" role="img" aria-label="Вид из окна ЮЗ-фасада, 6 этаж"></svg>
+    <figcaption>Вид из номера 6-го этажа · ЮЗ-фасад · расчёт по рельефу и зданиям <span class="demo">демо</span></figcaption>
+  </figure>
+</section>
+
+<div class="work">
+  <section class="list" id="list" aria-live="polite">
+    <div class="list-head"><h2>Подходят</h2><span class="num" id="count"></span><span class="sort">по совпадению</span></div>
+    <div id="research-slot"></div>
+    <div id="cards"></div>
+  </section>
+  <section class="map" aria-label="Карта">
+    <svg id="map" viewBox="0 0 800 720" preserveAspectRatio="xMidYMid slice"></svg>
+    <div class="layers"><span class="on">Отели</span><span>Шум ночью</span><span>Обзор фасадов</span><span>Путь к морю</span></div>
+    <div class="attr">© OpenStreetMap contributors · схема условная · <span class="demo">демо</span></div>
+  </section>
+</div>
+<div class="tray" id="tray"><span id="tray-t">2 отеля в сравнении</span><button class="primary">Сравнить</button></div>
+
+<script src="../directions/pano.js"></script>
+<script>
+const CH = {
+  sunset:{label:'закат над морем',how:'посчитаем',kind:'ok'},
+  quiet:{label:'тишина ночью',how:'посчитаем',kind:'ok'},
+  beach:{label:'до пляжа без подъёма',how:'посчитаем',kind:'ok'},
+  mountains:{label:'горы в окне',how:'посчитаем',kind:'ok'},
+  kids:{label:'детская площадка рядом',how:'посчитаем',kind:'ok'},
+  dog:{label:'с собакой 30 кг',how:'спросим отели',kind:'ask'},
+  khinkali:{label:'хинкальная в 10 минутах',how:'научимся считать',kind:'ask'},
+};
+// p: вероятность, что желание выполняется; l: строка объяснения (данные демо)
+const HOTELS = [
+  {id:'mayak',name:'Маяк',area:'Центр',x:400,y:385,floor:6,price:'8 400',room:'Делюкс, ЮЗ ≥ 4 эт.',
+   trade:'с морской стороны ж/д в 60 м — просим номер не ниже 4-го этажа',
+   d:{sunset:[.82,'закат над морем с 4-го этажа ЮЗ-фасада'],quiet:[.9,'тихо в номерах во двор'],beach:[.8,'6 мин, спуск 20 м, переход под ж/д'],mountains:[.15,'горы закрыты соседними домами'],kids:[.7,'площадка в 4 мин'],dog:[.92,'можно до 40 кг · 1 500 ₽/сутки'],khinkali:[.95,'«Сулико» в 7 мин пешком']}},
+  {id:'priboy',name:'Прибой',area:'Хоста',x:560,y:515,floor:8,price:'7 200',room:'Стандарт с балконом',
+   trade:'до моря 3 минуты, но обратно 140 ступеней вверх',
+   d:{sunset:[.88,'закат над морем с 3-го этажа'],quiet:[.75,'ночью тихо, днём стройка в 200 м'],beach:[.3,'обратно 140 ступеней вверх'],mountains:[.6,'горы с СВ-фасада'],kids:[.4,'площадки рядом нет'],dog:[.1,'нельзя с животными'],khinkali:[.4,'ближайшая в 18 мин']}},
+  {id:'kiparis',name:'Кипарис',area:'Центр',x:330,y:300,floor:3,price:'6 100',room:'Комфорт во двор',
+   trade:'тихо и близко к морю, но заката из окон не видно',
+   d:{sunset:[.25,'вид на море закрыт домом напротив'],quiet:[.95,'все номера во двор, дорога в 180 м'],beach:[.85,'5 мин по ровной улице'],mountains:[.3,'горы почти не видны'],kids:[.8,'парк в 3 мин'],dog:[.85,'можно, без доплаты'],khinkali:[.9,'в 5 мин пешком']}},
+  {id:'lazur',name:'Лазурь',area:'Адлер',x:690,y:610,floor:5,price:'9 800',room:'Полулюкс на море',
+   trade:'всё совпадает, но взлёты из аэропорта слышны с 6 утра',
+   d:{sunset:[.9,'закат над морем с любого этажа'],quiet:[.55,'взлёты с 6:00, окна на море'],beach:[.9,'2 мин, без подъёма'],mountains:[.7,'горы с северной стороны'],kids:[.85,'площадка на территории'],dog:[.5,'по согласованию'],khinkali:[.6,'в 12 мин']}},
+  {id:'sosny',name:'Сосновый склон',area:'Мацеста',x:520,y:330,floor:4,price:'5 600',room:'Стандарт, вид на горы',
+   trade:'тишина и горы, но к морю 25 минут вниз и в гору',
+   d:{sunset:[.45,'море видно вдали, закат частично'],quiet:[.98,'лес вокруг, дорог нет'],beach:[.1,'25 мин, подъём 90 м'],mountains:[.95,'горы во все окна'],kids:[.5,'площадка на территории'],dog:[.95,'можно, есть выгул'],khinkali:[.2,'нет рядом']}},
+  {id:'galka',name:'Галечный берег',area:'Лазаревское',x:170,y:185,floor:7,price:'6 900',room:'Стандарт на море',
+   trade:'закат и пляж отличные, но под окнами бар до 2 ночи',
+   d:{sunset:[.85,'закат над морем с 2-го этажа'],quiet:[.2,'бар до 2:00 под окнами'],beach:[.95,'1 мин, без подъёма'],mountains:[.4,'холмы с востока'],kids:[.6,'площадка у пляжа'],dog:[.3,'только мелкие'],khinkali:[.7,'в 9 мин']}},
+];
+const W = {must:3,important:2,nice:1};
+let chips = [
+  {k:'sunset',imp:'must'},{k:'quiet',imp:'must'},{k:'beach',imp:'important'},
+];
+const known = new Set(['sunset','quiet','beach','mountains','kids']);
+const MOODS = {
+  sea:[{k:'sunset',imp:'important'},{k:'beach',imp:'must'}],
+  calm:[{k:'quiet',imp:'must'},{k:'mountains',imp:'must'}],
+  kids:[{k:'beach',imp:'must'},{k:'kids',imp:'important'},{k:'quiet',imp:'nice'}],
+  sunset:[{k:'sunset',imp:'must'},{k:'quiet',imp:'nice'}],
+};
+const verdict = (p) => p == null ? 'u' : p >= .7 ? 'y' : p >= .4 ? 'p' : 'n';
+const MARK = {y:'✓',p:'⚠',n:'✗',u:'?'};
+
+function score(h){
+  let s = 0, w = 0, pen = 1;
+  for (const c of chips){
+    const p = known.has(c.k) ? h.d[c.k][0] : null;
+    const wt = W[c.imp];
+    w += wt; s += wt * (p == null ? .5 : p);
+    if (c.imp === 'must' && p != null && p < .4) pen *= .62;
+  }
+  return w ? Math.round(100 * s / w * pen) : 50;
+}
+
+/* ---------- чипы ---------- */
+function renderChips(){
+  const box = document.getElementById('chips');
+  const suggest = ['mountains','dog','khinkali','kids'].filter(k => !chips.some(c => c.k === k)).slice(0,2);
+  box.innerHTML = chips.map((c,i) => {
+    const m = CH[c.k], res = !known.has(c.k);
+    const cls = res ? 'chip researching' : (m.kind === 'ask' ? 'chip ask' : 'chip ok');
+    const how = res ? 'исследуем' : (m.kind === 'ask' ? 'ответили отели' : m.how);
+    const impT = {must:'обязательно',important:'важно',nice:'приятно'}[c.imp];
+    return `<span class="${cls}"><button type="button" class="imp ${c.imp}" data-i="${i}" title="Важность: ${impT}. Нажмите, чтобы изменить" aria-label="Важность: ${impT}"><i></i></button>${m.label} <span class="how">${how}</span><button type="button" class="x" data-x="${i}" aria-label="Убрать">×</button></span>`;
+  }).join('')
+  + `<span class="chip trip">10–15 ноября · 2 взрослых</span>`
+  + suggest.map(k => `<button type="button" class="chip add" data-add="${k}">+ ${CH[k].label}</button>`).join('');
+}
+document.getElementById('chips').addEventListener('click', (e) => {
+  const t = e.target.closest('button'); if (!t) return;
+  if (t.dataset.i != null){ const c = chips[+t.dataset.i]; c.imp = {must:'important',important:'nice',nice:'must'}[c.imp]; }
+  else if (t.dataset.x != null){ chips.splice(+t.dataset.x, 1); }
+  else if (t.dataset.add){ const k = t.dataset.add; chips.push({k, imp:'important'}); if (!known.has(k)) research(k); }
+  update();
+});
+
+/* ---------- выдача с FLIP-перестановкой ---------- */
+let prevPct = {};
+function renderCards(flash){
+  const cards = document.getElementById('cards');
+  const before = {};
+  cards.querySelectorAll('.card').forEach(n => before[n.dataset.id] = n.getBoundingClientRect().top);
+  const ranked = HOTELS.map(h => ({h, s:score(h)})).sort((a,b) => b.s - a.s);
+  document.getElementById('count').textContent = `${ranked.length} из 214 отелей Сочи`;
+  cards.innerHTML = ranked.map(({h,s},i) => `
+    <article class="card" data-id="${h.id}" tabindex="0">
+      <div class="thumb" data-floor="${h.floor}"><svg class="pano" aria-hidden="true"></svg><span>${h.floor} этаж · вид</span></div>
+      <div>
+        <h3>${h.name} <span class="demo">демо</span></h3>
+        <div class="area">${h.area} · ${h.room}</div>
+        <ul class="vlist">${chips.map(c => {
+          const p = known.has(c.k) ? h.d[c.k][0] : null, v = verdict(p);
+          const line = p == null ? `${CH[c.k].label}: исследуем…` : h.d[c.k][1];
+          return `<li class="${v}${flash && flash === c.k ? ' flash' : ''}"><i>${MARK[v]}</i>${line}</li>`;
+        }).join('')}</ul>
+        <div class="trade">${h.trade}</div>
+      </div>
+      <div class="side">
+        <div><div class="pct num" data-from="${prevPct[h.id] ?? s}" data-to="${s}">${prevPct[h.id] ?? s}%</div><div class="pct-l">совпадение</div></div>
+        <div class="price num">${h.price} ₽<small>за ночь</small></div>
+        <button class="cmp" type="button" data-cmp="${h.id}">${i < 0 ? '' : '+ сравнить'}</button>
+      </div>
+    </article>`).join('');
+  cards.querySelectorAll('.thumb').forEach(n => window.mountPano(n));
+  // FLIP
+  cards.querySelectorAll('.card').forEach(n => {
+    const b = before[n.dataset.id]; if (b == null) return;
+    const d = b - n.getBoundingClientRect().top; if (!d) return;
+    n.animate([{transform:`translateY(${d}px)`},{transform:'none'}], {duration:420, easing:'cubic-bezier(0.22,1,0.36,1)'});
+  });
+  // счётчики процентов
+  cards.querySelectorAll('.pct').forEach(n => {
+    const a = +n.dataset.from, b = +n.dataset.to; if (a === b) return;
+    const t0 = performance.now();
+    const step = (t) => { const k = Math.min(1, (t - t0) / 420); n.textContent = Math.round(a + (b - a) * (1 - Math.pow(1 - k, 3))) + '%'; if (k < 1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  });
+  ranked.forEach(({h,s}) => prevPct[h.id] = s);
+  if (flash) setTimeout(() => cards.querySelectorAll('.flash').forEach(n => n.classList.remove('flash')), 1200);
+  renderMap(ranked);
+}
+
+/* ---------- карта (схема) ---------- */
+function renderMap(ranked){
+  const svg = document.getElementById('map');
+  const top = ranked[0].h.id;
+  const coast = 'M-20 120 C 80 150, 150 210, 210 260 S 330 380, 420 450 S 560 560, 640 620 S 760 700, 840 740';
+  let s = `
+    <defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#DCE5FF" stroke-width="1"/></pattern></defs>
+    <rect width="800" height="720" fill="#F7F9FF"/>
+    <rect width="800" height="720" fill="url(#grid)"/>
+    ${[0,1,2,3,4].map(i => `<path d="M${220+i*60} -20 C ${300+i*60} 120, ${420+i*50} 200, ${560+i*40} 260 S ${760} ${380+i*40}, 840 ${420+i*50}" fill="none" stroke="#D4DEFB" stroke-width="1"/>`).join('')}
+    <path d="${coast} L 840 740 L -20 740 Z" fill="#CFDCFF"/>
+    <path d="${coast}" fill="none" stroke="#9DB5F5" stroke-width="2"/>
+    <path d="M-20 108 C 80 138, 150 196, 214 246 S 334 366, 426 436 S 566 546, 646 606 S 766 686, 846 726" fill="none" stroke="#0B1533" stroke-width="2" stroke-dasharray="10 6" opacity=".55"/>
+    <text x="250" y="265" font-size="12" fill="#5B6580" transform="rotate(38 250 265)">железная дорога</text>
+    <text x="120" y="560" font-size="15" fill="#1B3FB8" font-weight="600" letter-spacing="3">ЧЁРНОЕ МОРЕ</text>
+    <path d="M 120 40 C 260 120, 340 200, 470 250 S 640 330, 790 380" fill="none" stroke="#FFFFFF" stroke-width="6"/>
+    <path d="M 120 40 C 260 120, 340 200, 470 250 S 640 330, 790 380" fill="none" stroke="#C3CDE6" stroke-width="1.5"/>
+    <text x="560" y="300" font-size="12" fill="#5B6580" transform="rotate(22 560 300)">Курортный проспект</text>`;
+  ranked.forEach(({h,s:sc}) => {
+    const w = 62;
+    s += `<g class="marker${h.id === top ? ' top' : ''}" data-id="${h.id}" transform="translate(${h.x - w/2},${h.y - 70})">
+      <rect width="${w}" height="30" rx="15"/><text x="${w/2}" y="20" text-anchor="middle" class="num">${sc}%</text></g>`;
+  });
+  svg.innerHTML = s;
+}
+// связь карточки и метки
+function hl(id, on){
+  document.querySelectorAll(`[data-id="${id}"]`).forEach(n => n.classList.toggle('hl', on));
+}
+document.addEventListener('mouseover', (e) => { const n = e.target.closest('[data-id]'); if (n) hl(n.dataset.id, true); });
+document.addEventListener('mouseout', (e) => { const n = e.target.closest('[data-id]'); if (n) hl(n.dataset.id, false); });
+
+/* ---------- живое исследование ---------- */
+function research(k){
+  const slot = document.getElementById('research-slot');
+  const steps = k === 'dog' ? [
+    ['рассуждение','По карте это не посчитать: правила для животных знает только отель'],
+    ['ask_hotelier','Спрашиваю 6 отелей: «Можно ли с собакой 30 кг? Есть ли доплата?»'],
+    ['ответ отеля','«Маяк»: можно до 40 кг, 1 500 ₽/сутки'],
+    ['ответ отеля','«Сосновый склон», «Кипарис»: можно; «Прибой»: нельзя'],
+    ['готово','Факт сохранён с источником «отель» и датой. Выдача обновлена'],
+  ] : [
+    ['рассуждение','Это можно посчитать по карте: кафе грузинской кухни + пеший маршрут'],
+    ['рецепт','osm_query(cuisine=georgian) → route_to(пешком) ≤ 10 мин'],
+    ['пробный прогон','Проверяю на 6 отелях: 4 подходят'],
+    ['публикация','Новая характеристика «хинкальная рядом» доступна в поиске'],
+  ];
+  slot.innerHTML = `<div class="research" id="rs"><h3><span class="spin"></span>Исследую: ${CH[k].label}</h3><ol>${steps.map(([t,s]) => `<li><span class="tool">${t}</span><span>${s}</span></li>`).join('')}</ol></div>`;
+  const lis = slot.querySelectorAll('li');
+  lis.forEach((li, i) => setTimeout(() => li.classList.add('in'), 500 + i * 700));
+  setTimeout(() => {
+    known.add(k);
+    document.getElementById('rs').classList.add('done');
+    update(k);
+  }, 500 + lis.length * 700);
+}
+
+/* ---------- переход лендинг → рабочее пространство ---------- */
+function go(){
+  const swap = () => { document.body.classList.add('app'); update(); };
+  if (document.startViewTransition && !matchMedia('(prefers-reduced-motion: reduce)').matches) document.startViewTransition(swap);
+  else swap();
+}
+function home(){
+  const swap = () => { document.body.classList.remove('app'); document.getElementById('research-slot').innerHTML = ''; };
+  if (document.startViewTransition) document.startViewTransition(swap); else swap();
+}
+document.getElementById('wish').addEventListener('submit', (e) => { e.preventDefault(); go(); });
+document.querySelectorAll('.mood').forEach(b => b.addEventListener('click', () => {
+  chips = MOODS[b.dataset.mood].map(c => ({...c}));
+  document.getElementById('q').value = b.querySelector('h4').textContent;
+  renderChips(); go();
+}));
+document.getElementById('home').addEventListener('click', home);
+const cmp = new Set();
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-cmp]'); if (!b) return;
+  e.stopPropagation();
+  cmp.has(b.dataset.cmp) ? cmp.delete(b.dataset.cmp) : cmp.add(b.dataset.cmp);
+  b.textContent = cmp.has(b.dataset.cmp) ? '✓ в сравнении' : '+ сравнить';
+  document.getElementById('tray').classList.toggle('show', cmp.size > 0);
+  document.getElementById('tray-t').textContent = `${cmp.size} в сравнении`;
+});
+document.getElementById('cards').addEventListener('click', (e) => {
+  const c = e.target.closest('.card'); if (c && !e.target.closest('[data-cmp]')) location.href = '../directions/index.html?d=c';
+});
+
+function update(flash){ renderChips(); if (document.body.classList.contains('app')) renderCards(flash); }
+renderChips();
+window.mountPano(document.querySelector('.hero-pano'));
+if (location.hash === '#app') { document.body.classList.add('app'); update(); }
+</script>
+</body>
+</html>

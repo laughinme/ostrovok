@@ -1,0 +1,26 @@
+/* Токены из DESIGN.md. Меняем сначала DESIGN.md, потом этот файл. */
+:root{
+  --ink:#0B1533;--surface:#FFFFFF;--raised:#F4F7FF;--muted:#5B6580;--line:#E1E6F2;
+  --primary:#1B4DE4;--on-primary:#FFFFFF;
+  --scene:#0A1C66;--scene-raised:#2450DA;--scene-top:#2F62FF;--scene-mid:#1438C2;--scene-line:#3A63E6;--on-scene-muted:#D5DEFF;
+  --verified:#C9F59A;--on-verified:#2C4A10;
+  --yes:#1E8F4E;--partial:#B7860B;--critical:#D2463B;
+  --map-land:#F7F9FF;--map-sea:#CFDCFF;
+
+  --font:Onest,system-ui,sans-serif;--font-code:ui-monospace,Menlo,monospace;
+  --fs-display:4.125rem;--fs-heading:2.125rem;--fs-metric:1.875rem;--fs-section:1.375rem;
+  --fs-lede:1.125rem;--fs-title:1.125rem;--fs-body:.9375rem;--fs-label:.8125rem;
+
+  --r-sm:10px;--r-md:14px;--r-lg:22px;--r-xl:32px;--r-pill:999px;
+  --s-xs:4px;--s-sm:8px;--s-md:16px;--s-lg:24px;--s-xl:48px;--s-section:96px;
+
+  --d-instant:100ms;--d-quick:180ms;--d-move:320ms;--d-scene:700ms;
+  --ease-out:cubic-bezier(0.22,1,0.36,1);--ease-io:cubic-bezier(0.65,0,0.35,1);--ease-cine:cubic-bezier(0.76,0,0.24,1);
+
+  --scene-bg:radial-gradient(120% 90% at 20% 0%,var(--scene-top) 0%,var(--scene-mid) 45%,var(--scene) 100%);
+
+  /* панорама «Ваше окно» */
+  --pano-sky-top:#1A3FC4;--pano-sky-low:#8FB0FF;--pano-sea-top:#1534A8;--pano-sea-low:#0B1F6E;
+  --pano-sun:var(--verified);--pano-land:#0B1B55;--pano-land-far:#29429E;--pano-build:#0A1648;--pano-build-edge:#2A3F99;
+  --pano-tick:#C8D4FF;--pano-label:#FFFFFF;
+}

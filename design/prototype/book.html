@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Бронь · О!кно</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="base.css">
+<style>
+.back{font-size:14px;color:var(--muted)}
+.wrap{margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:48px;padding:16px 48px 96px;max-width:1240px}
+h1{font-size:var(--fs-heading);font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.lead{color:var(--muted);font-size:var(--fs-lede);margin-top:6px}
+.block{margin-top:32px}
+.block h2{font-size:var(--fs-title);font-weight:700;margin-bottom:12px}
+.req-box{border:1px solid var(--line);border-radius:var(--r-lg);padding:18px}
+.req-chips{display:flex;flex-wrap:wrap;gap:8px}
+.rc{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:var(--r-pill);background:var(--raised);font-size:14px;border:1px solid transparent;transition:background var(--d-quick)}
+.rc.on{background:var(--verified);color:var(--on-verified)}
+.rc .box{width:16px;height:16px;border-radius:5px;border:1.5px solid currentColor;display:grid;place-items:center;font-size:11px;font-weight:700}
+.rc.on .box::after{content:'✓'}
+.preview{margin-top:16px;padding:14px 16px;background:var(--raised);border-radius:var(--r-md);font-size:14px}
+.preview .lbl{margin-bottom:6px}
+.why-req{font-size:var(--fs-label);color:var(--muted);margin-top:10px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.f label{display:block;font-size:var(--fs-label);color:var(--muted);margin-bottom:6px}
+.f input{width:100%;border:1px solid var(--line);border-radius:var(--r-md);padding:12px 14px;background:#fff}
+.f input:focus{outline:2px solid var(--primary);outline-offset:-1px;border-color:transparent}
+.pay{display:grid;gap:8px}
+.pay label{display:flex;gap:12px;align-items:center;border:1px solid var(--line);border-radius:var(--r-md);padding:14px 16px;cursor:pointer}
+.pay label:has(input:checked){border-color:var(--primary);background:var(--raised)}
+.pay input{accent-color:var(--primary)}
+.pay span small{display:block;color:var(--muted);font-size:var(--fs-label)}
+.sum{position:sticky;top:20px}
+.sum .thumb{height:150px;border-radius:var(--r-md);overflow:hidden}
+.sum h3{font-size:var(--fs-title);font-weight:700;margin-top:14px}
+.sum .row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+.sum .row span:first-child{color:var(--muted)}
+.sum .total{display:flex;align-items:baseline;margin-top:14px}
+.sum .total b{margin-left:auto;font-size:var(--fs-metric);font-weight:700;letter-spacing:-.02em}
+.sum .btn{width:100%;margin-top:14px;padding:14px}
+.promise{margin-top:12px;font-size:var(--fs-label);color:var(--muted);display:flex;gap:8px}
+@media (max-width:720px){.wrap{grid-template-columns:1fr;padding:8px 16px 64px;gap:24px}.fields{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="index.html">О<b>!</b>кно</a>
+  <a class="back" href="hotel.html">← Маяк</a>
+  <div class="roles"><a class="on" href="index.html">Гость</a><a href="partner.html">Отельер</a><a href="console.html">Островок</a></div>
+</header>
+<div class="wrap">
+  <main>
+    <h1>Бронь в один шаг</h1>
+    <p class="lead">Мы уже знаем, какой номер вам нужен. Отель получит запрос вместе с бронью.</p>
+
+    <section class="block">
+      <h2>Запрос отелю</h2>
+      <div class="req-box">
+        <div class="req-chips" id="req">
+          <button class="rc on" data-t="юго-западная сторона (вид на море и закат)"><span class="box"></span>ЮЗ-сторона</button>
+          <button class="rc on" data-t="этаж не ниже 4-го (выше ж/д)"><span class="box"></span>этаж ≥ 4</button>
+          <button class="rc on" data-t="подальше от лифта"><span class="box"></span>подальше от лифта</button>
+          <button class="rc" data-t="ранний заезд"><span class="box"></span>ранний заезд</button>
+          <button class="rc" data-t="место для собаки 30 кг"><span class="box"></span>с собакой</button>
+        </div>
+        <div class="preview"><div class="lbl">Отель увидит</div><span id="preview"></span></div>
+        <div class="why-req">«Этаж ≥ 4» добавили сами: ниже море закрывают дома напротив, а шум ж/д сильнее.</div>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>Гость</h2>
+      <div class="fields">
+        <div class="f"><label for="n">Имя и фамилия</label><input id="n" value="Анна Демо"></div>
+        <div class="f"><label for="p">Телефон</label><input id="p" value="+7 900 000-00-00"></div>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>Оплата <span class="demo">имитация</span></h2>
+      <div class="pay">
+        <label><input type="radio" name="pay" checked><span>Картой сейчас<small>Бесплатная отмена до 8 ноября</small></span></label>
+        <label><input type="radio" name="pay"><span>При заезде<small>Отель держит номер до 18:00</small></span></label>
+      </div>
+    </section>
+  </main>
+  <aside>
+    <div class="card sum">
+      <div class="thumb" data-floor="5"><svg class="pano" aria-hidden="true"></svg></div>
+      <h3>Маяк · Делюкс с видом на море <span class="demo">демо</span></h3>
+      <div class="row"><span>Даты</span><span class="num">10–15 ноября · 5 ночей</span></div>
+      <div class="row"><span>Гости</span><span>2 взрослых</span></div>
+      <div class="row"><span>8 400 ₽ × 5 ночей</span><span class="num">42 000 ₽</span></div>
+      <div class="total"><span class="muted">Итого</span><b class="num">42 000 ₽</b></div>
+      <a class="btn btn-primary" href="trip.html">Забронировать</a>
+      <div class="promise"><i class="mk y">✓</i><span>Если отель не подтвердит сторону и этаж — предложим замену или вернём деньги.</span></div>
+    </div>
+  </aside>
+</div>
+<script src="pano.js"></script>
+<script>
+window.mountPano(document.querySelector('.thumb'));
+const req = document.getElementById('req');
+function upd(){
+  const t = [...req.querySelectorAll('.rc.on')].map(b => b.dataset.t);
+  document.getElementById('preview').textContent = t.length ? 'Гость просит: ' + t.join(', ') + '.' : 'Без особых пожеланий.';
+}
+req.addEventListener('click', (e) => { const b = e.target.closest('.rc'); if (b) { b.classList.toggle('on'); upd(); } });
+upd();
+</script>
+</body>
+</html>

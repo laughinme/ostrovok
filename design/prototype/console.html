@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Консоль знаний · О!кно</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="base.css">
+<style>
+.page{max-width:1240px}
+.src-k{font-size:var(--fs-label);padding:2px 9px;border-radius:var(--r-pill);background:var(--raised);white-space:nowrap}
+.src-k.calc{background:#E5ECFF;color:#1438C2}
+.src-k.open{background:#E8F6EE;color:#17663A}
+.src-k.hotel{background:#FFF3D6;color:#6B4E00}
+.cov{display:flex;align-items:center;gap:8px}
+.cov .bar{width:80px;height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.cov .bar span{display:block;height:100%;background:var(--primary)}
+tr.new td{animation:flash 1.6s var(--ease-out)}
+/* новая характеристика */
+.composer{border:1px solid var(--line);border-radius:var(--r-lg);padding:18px}
+.composer .in{display:flex;gap:10px}
+.composer input{flex:1;border:1px solid var(--line);border-radius:var(--r-md);padding:12px 14px;font-size:16px}
+.recipe{display:none;margin-top:18px}
+.recipe.show{display:block}
+.chain{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;margin-top:10px}
+.step{background:var(--raised);border-radius:var(--r-md);padding:12px 14px;min-width:180px;opacity:0;transform:translateY(6px);transition:opacity var(--d-move) var(--ease-out),transform var(--d-move) var(--ease-out)}
+.step.in{opacity:1;transform:none}
+.step code{font-family:var(--font-code);font-size:13px;color:var(--primary);font-weight:600}
+.step p{font-size:var(--fs-label);color:var(--muted);margin-top:2px}
+.arrow{align-self:center;padding:0 8px;color:var(--muted)}
+.dry{margin-top:16px}
+.composer .acts{display:flex;gap:10px;margin-top:14px;align-items:center}
+/* агенты */
+.runs{display:grid;grid-template-columns:320px minmax(0,1fr);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;min-height:380px}
+.run-list{border-right:1px solid var(--line);background:var(--raised)}
+.run{display:block;width:100%;text-align:left;padding:14px 16px;border-bottom:1px solid var(--line)}
+.run.on{background:#fff}
+.run b{display:block;font-size:14px}
+.run span{font-size:var(--fs-label);color:var(--muted)}
+.run .st{float:right;font-size:12px}
+.trace{padding:6px 0}
+.tr{display:grid;grid-template-columns:96px minmax(0,1fr) 56px;gap:12px;padding:10px 18px;border-bottom:1px solid var(--line);font-size:14px;align-items:baseline}
+.tr .ty{font-size:12px;padding:2px 9px;border-radius:var(--r-pill);justify-self:start}
+.tr .ty.reason{background:#E5ECFF;color:#1438C2}
+.tr .ty.tool{background:#FFF3D6;color:#6B4E00}
+.tr .ty.result{background:var(--verified);color:var(--on-verified)}
+.tr .t{font-size:12px;color:var(--muted);text-align:right}
+.tr small{display:block;color:var(--muted);font-size:var(--fs-label);font-family:var(--font-code)}
+/* конфликты */
+.cf{display:grid;grid-template-columns:1fr 1fr 1.1fr;gap:12px;border:1px solid var(--line);border-radius:var(--r-lg);padding:16px;margin-bottom:12px;font-size:14px}
+.cf .lbl{margin-bottom:4px}
+.cf .rule{background:var(--raised);border-radius:var(--r-md);padding:10px 12px}
+/* изменения */
+.changes{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:20px}
+.feed{list-style:none;display:grid;gap:0;border-left:2px solid var(--line);margin-left:6px}
+.feed li{position:relative;padding:0 0 18px 20px;font-size:14px}
+.feed li::before{content:'';position:absolute;left:-7px;top:5px;width:12px;height:12px;border-radius:50%;background:#fff;border:2px solid var(--line)}
+.feed li.hot::before{border-color:var(--primary);background:var(--primary)}
+.feed li b{display:block}
+.feed li span{color:var(--muted);font-size:var(--fs-label)}
+.feed li.new{animation:flash 1.6s var(--ease-out)}
+.city{border-radius:var(--r-lg);overflow:hidden;background:var(--map-land);border:1px solid var(--line)}
+.city svg{display:block;width:100%}
+#newb{transform-origin:center bottom;transform-box:fill-box;transform:scaleY(0);transition:transform 900ms var(--ease-out)}
+#newb.up{transform:scaleY(1)}
+#cone{transition:opacity var(--d-scene)}
+/* качество */
+.qk{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.qk div{background:var(--raised);border-radius:var(--r-lg);padding:16px}
+.qk b{display:block;font-size:var(--fs-metric);font-weight:700;letter-spacing:-.02em}
+.qk span{font-size:var(--fs-label);color:var(--muted)}
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.charts .card-line h3{font-size:var(--fs-title);font-weight:700}
+.charts .card-line p{font-size:var(--fs-label);color:var(--muted)}
+.charts svg{width:100%;display:block;margin-top:10px}
+@media (max-width:720px){.runs,.changes,.charts{grid-template-columns:1fr}.qk{grid-template-columns:1fr 1fr}.cf{grid-template-columns:1fr}.composer .in{flex-wrap:wrap}.chain{flex-direction:column}.arrow{transform:rotate(90deg);align-self:flex-start}}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="index.html">О<b>!</b>кно <span class="muted" style="font-weight:500;font-size:15px">консоль знаний</span></a>
+  <div class="roles"><a href="index.html">Гость</a><a href="partner.html">Отельер</a><a class="on" href="console.html">Островок</a></div>
+</header>
+<div class="shell">
+  <nav class="side-nav">
+    <div class="who"><b>Большой Сочи</b><span>214 отелей · 38 характеристик</span></div>
+    <a class="on" href="#registry">Характеристики</a>
+    <a href="#new">Новая характеристика</a>
+    <a href="#agents">Работа агентов</a>
+    <a href="#conflicts">Конфликты <span class="cnt">2</span></a>
+    <a href="#changes">Изменения мира</a>
+    <a href="#quality">Качество</a>
+    <a href="developers.html">API и MCP</a>
+    <div class="foot">Данные: OSM (ODbL), Copernicus DEM, Open-Meteo. Карточки и цены — демо.</div>
+  </nav>
+  <main class="page">
+    <div class="page-h"><h1>Знания об отелях Сочи</h1><p>Что умеем узнавать, откуда, насколько уверены и когда перепроверим</p></div>
+
+    <section class="sec" id="registry">
+      <div class="sec-h"><h2>Характеристики</h2><p>Каждая — рецепт из инструментов и источник данных</p></div>
+      <table class="table" id="reg">
+        <thead><tr><th>Характеристика</th><th>Как узнаём</th><th>Покрытие</th><th>Средняя уверенность</th><th>Перепроверка</th></tr></thead>
+        <tbody>
+          <tr><td><b>Закат над морем</b><br><span class="muted" style="font-size:13px">по фасаду, этажу и месяцу</span></td><td><span class="src-k calc">расчёт</span></td><td><span class="cov"><span class="bar"><span style="width:100%"></span></span><span class="num">214/214</span></span></td><td class="num">0,78</td><td>раз в 180 дней или при изменении карты</td></tr>
+          <tr><td><b>Шум ночью</b><br><span class="muted" style="font-size:13px">по сторонам здания</span></td><td><span class="src-k calc">расчёт</span></td><td><span class="cov"><span class="bar"><span style="width:100%"></span></span><span class="num">214/214</span></span></td><td class="num">0,84</td><td>при изменении карты</td></tr>
+          <tr><td><b>Дорога до пляжа</b><br><span class="muted" style="font-size:13px">время, подъём, ступени</span></td><td><span class="src-k calc">расчёт</span></td><td><span class="cov"><span class="bar"><span style="width:97%"></span></span><span class="num">208/214</span></span></td><td class="num">0,81</td><td>при изменении карты</td></tr>
+          <tr><td><b>Погода и вода в даты</b></td><td><span class="src-k open">открытые данные</span></td><td><span class="cov"><span class="bar"><span style="width:100%"></span></span><span class="num">214/214</span></span></td><td class="num">0,90</td><td>раз в год</td></tr>
+          <tr><td><b>Что работает ночью</b></td><td><span class="src-k open">открытые данные</span></td><td><span class="cov"><span class="bar"><span style="width:88%"></span></span><span class="num">189/214</span></span></td><td class="num">0,66</td><td>раз в 90 дней</td></tr>
+          <tr><td><b>Номера по сторонам здания</b></td><td><span class="src-k hotel">отель</span></td><td><span class="cov"><span class="bar"><span style="width:31%"></span></span><span class="num">67/214</span></span></td><td class="num">0,95</td><td>раз в год</td></tr>
+          <tr><td><b>С собакой</b></td><td><span class="src-k hotel">отель</span></td><td><span class="cov"><span class="bar"><span style="width:19%"></span></span><span class="num">41/214</span></span></td><td class="num">0,93</td><td>раз в 90 дней</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="sec" id="new">
+      <div class="sec-h"><h2>Новая характеристика</h2><p>Опишите словами — агент соберёт рецепт из инструментов и проверит на 5 отелях</p></div>
+      <div class="composer">
+        <div class="in"><input id="nc" value="Можно дойти с коляской до моря без ступеней" aria-label="Описание характеристики"><button class="btn btn-primary" id="compile">Собрать рецепт</button></div>
+        <div class="recipe" id="recipe">
+          <div class="lbl">Рецепт</div>
+          <div class="chain">
+            <div class="step"><code>osm_query</code><p>пешеходные пути без ступеней</p></div><span class="arrow">→</span>
+            <div class="step"><code>route_to</code><p>до ближайшего пляжа, профиль «коляска»</p></div><span class="arrow">→</span>
+            <div class="step"><code>slope_max</code><p>уклон не круче 8%</p></div><span class="arrow">→</span>
+            <div class="step"><code>threshold</code><p>не дольше 15 минут → да / нет</p></div>
+          </div>
+          <div class="dry">
+            <div class="lbl" style="margin-bottom:6px">Пробный прогон</div>
+            <table class="table"><thead><tr><th>Отель</th><th>Результат</th><th>Путь</th><th>Уверенность</th></tr></thead>
+              <tbody>
+                <tr><td>Маяк</td><td><i class="mk n">✗</i>нет</td><td>без ступеней только в обход — 11 мин, уклон 11%</td><td class="num">0,82</td></tr>
+                <tr><td>Кипарис</td><td><i class="mk y">✓</i>да</td><td>5 мин по ровной улице</td><td class="num">0,88</td></tr>
+                <tr><td>Лазурь</td><td><i class="mk y">✓</i>да</td><td>2 мин, набережная</td><td class="num">0,93</td></tr>
+                <tr><td>Прибой</td><td><i class="mk n">✗</i>нет</td><td>только лестница, 140 ступеней</td><td class="num">0,9</td></tr>
+                <tr><td>Сосновый склон</td><td><i class="mk n">✗</i>нет</td><td>25 мин, подъём 90 м</td><td class="num">0,86</td></tr>
+              </tbody></table>
+          </div>
+          <div class="acts"><button class="btn btn-primary" id="publish">Опубликовать для 214 отелей</button><span class="muted" style="font-size:14px">Займёт около минуты. Гости смогут искать по ней сразу.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="agents">
+      <div class="sec-h"><h2>Работа агентов</h2><p>Каждый шаг: что агент решил, какой инструмент вызвал и что получил</p></div>
+      <div class="runs">
+        <div class="run-list" id="runs"></div>
+        <div class="trace" id="trace"></div>
+      </div>
+    </section>
+
+    <section class="sec" id="conflicts">
+      <div class="sec-h"><h2>Конфликты</h2><p>Когда источники расходятся, решаем по правилу и сообщаем отелю</p></div>
+      <div class="cf"><div><div class="lbl">Отель «Маяк»</div>«Вид на море из всех номеров»</div><div><div class="lbl">Расчёт</div>Только ЮЗ-фасад, этаж ≥ 4 · уверенность 0,9</div><div class="rule"><div class="lbl">Решение</div>Физика сильнее описания: показываем расчёт, отелю ушёл вопрос. <span class="tag warn">ждём отель</span></div></div>
+      <div class="cf"><div><div class="lbl">Гость после поездки</div>«Ночью было шумно» (Прибой)</div><div><div class="lbl">Расчёт</div>Ночью тихо · 0,75</div><div class="rule"><div class="lbl">Решение</div>Снизили уверенность до 0,6, запустили проверку: в OSM появилась стройка в 200 м. <span class="tag ok">исправлено</span></div></div>
+    </section>
+
+    <section class="sec" id="changes">
+      <div class="sec-h"><h2>Изменения мира</h2><p>Карта меняется — факты пересчитываются сами</p><button class="btn btn-primary btn-sm right" id="build">Демо: построить дом у «Маяка»</button></div>
+      <div class="changes">
+        <ul class="feed" id="feed">
+          <li><b>В OSM появилась стройка рядом с «Прибоем»</b><span>3 дня назад · пересчитали шум для 2 отелей</span></li>
+          <li><b>Отель «Кипарис» ответил про животных</b><span>5 дней назад · новый факт</span></li>
+          <li><b>Плановая перепроверка климата</b><span>неделю назад · 214 отелей, изменений нет</span></li>
+        </ul>
+        <div class="city">
+          <svg viewBox="0 0 420 300" aria-label="Схема квартала у отеля «Маяк»">
+            <path d="M0 300 L 0 230 C 120 250, 260 270, 420 210 L 420 300 Z" fill="var(--map-sea)"/>
+            <path d="M0 218 C 120 238, 260 258, 420 198" fill="none" stroke="var(--ink)" stroke-width="2" stroke-dasharray="8 6" opacity=".5"/>
+            <path id="cone" d="M210 120 L 90 260 L 300 270 Z" fill="var(--verified)" opacity=".55"/>
+            <rect x="180" y="80" width="64" height="44" fill="var(--primary)" rx="3"/>
+            <text x="212" y="107" text-anchor="middle" font-size="12" fill="#fff" font-weight="700">Маяк</text>
+            <rect x="60" y="60" width="50" height="40" fill="#D4DEFB"/><rect x="300" y="60" width="60" height="50" fill="#D4DEFB"/><rect x="280" y="140" width="44" height="36" fill="#D4DEFB"/>
+            <rect id="newb" x="168" y="150" width="78" height="40" fill="var(--critical)" rx="3"/>
+            <text x="20" y="290" font-size="12" fill="var(--muted)">море</text>
+            <text x="300" y="196" font-size="12" fill="var(--muted)">ж/д</text>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="quality">
+      <div class="sec-h"><h2>Качество</h2><p>Эталон: 48 отелей, размечено вручную по фото и выездам <span class="demo">демо-цифры</span></p></div>
+      <div class="qk num">
+        <div><b>0,87</b><span>точность «вид на море» на эталоне</span></div>
+        <div><b>0,06</b><span>ошибка калибровки уверенности (ECE)</span></div>
+        <div><b>92%</b><span>фактов покрыто без вопросов отелю</span></div>
+        <div><b>14%</b><span>фактов потребовали вопроса</span></div>
+        <div><b>0,81</b><span>nDCG@5 поиска на 20 запросах</span></div>
+      </div>
+      <div class="charts">
+        <div class="card-line">
+          <h3>Точность по характеристикам</h3><p>Доля совпадений с эталоном</p>
+          <svg viewBox="0 0 460 200" id="acc"></svg>
+        </div>
+        <div class="card-line">
+          <h3>Калибровка уверенности</h3><p>Когда мы говорим «0,8», мы правы примерно в 80% случаев</p>
+          <svg viewBox="0 0 460 220" id="cal"></svg>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const toast = (t) => { const n = document.getElementById('toast'); n.textContent = t; n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2800); };
+// новая характеристика
+document.getElementById('compile').addEventListener('click', () => {
+  const r = document.getElementById('recipe'); r.classList.add('show');
+  r.querySelectorAll('.step').forEach((s, i) => setTimeout(() => s.classList.add('in'), 250 + i * 380));
+});
+document.getElementById('publish').addEventListener('click', (e) => {
+  e.target.disabled = true; e.target.textContent = 'Считаем для 214 отелей…';
+  setTimeout(() => {
+    const tr = document.createElement('tr'); tr.className = 'new';
+    tr.innerHTML = `<td><b>${document.getElementById('nc').value}</b><br><span class="muted" style="font-size:13px">новая · сегодня</span></td><td><span class="src-k calc">расчёт</span></td><td><span class="cov"><span class="bar"><span style="width:96%"></span></span><span class="num">206/214</span></span></td><td class="num">0,85</td><td>при изменении карты</td>`;
+    document.querySelector('#reg tbody').prepend(tr);
+    e.target.textContent = 'Опубликовано ✓'; toast('Характеристика доступна в поиске');
+    document.getElementById('registry').scrollIntoView({behavior:'smooth'});
+  }, 1600);
+});
+// агенты
+const RUNS = [
+  {n:'Исследователь · Маяк',g:'вид на море по фасадам',st:'готово · 4,2 с',steps:[
+    ['reason','Нужен вид на море по фасадам и этажам. Высоты соседних домов в OSM нет у 2 из 5 — оценю с разбросом.','0:00'],
+    ['tool','osm_buildings(радиус 300 м)','0:01','→ 41 здание, этажность у 26'],
+    ['tool','horizon(фасады ×4, этажи 2–8, DEM 30 м)','0:02','→ 28 профилей горизонта'],
+    ['tool','monte_carlo(высоты ±1 этаж, 100 прогонов)','0:03','→ ЮЗ ≥4 эт.: море в 82/100'],
+    ['reason','Расчёт уверенный для ЮЗ, но неизвестно, какие номера там. Ставлю вопрос отелю.','0:04'],
+    ['result','Факт сохранён: «море с ЮЗ, этаж ≥ 4», 0,82. Вопрос отелю — приоритет 1.','0:04'],
+  ]},
+  {n:'Связной · 6 отелей',g:'«с собакой 30 кг»',st:'готово · 38 с',steps:[
+    ['reason','Правила для животных по карте не посчитать — только отель.','0:00'],
+    ['tool','ask_hotelier(6 отелей, «Можно ли с собакой 30 кг? Доплата?»)','0:01','→ 6 вопросов в кабинетах'],
+    ['tool','parse_answer(«Маяк»: «да, до 40 кг, 1500 в сутки»)','0:21','→ pets=yes, max_kg=40, fee=1500'],
+    ['tool','parse_answer(«Прибой»: «нет»)','0:30','→ pets=no'],
+    ['result','4 ответа из 6 за 38 с. Выдача гостя обновлена.','0:38'],
+  ]},
+  {n:'Куратор · новая характеристика',g:'«хинкальная в 10 минутах»',st:'готово · 52 с',steps:[
+    ['reason','Это вычислимо: кафе с грузинской кухней + пеший маршрут.','0:00'],
+    ['tool','compile_recipe(osm_query → route_to → threshold)','0:02','→ рецепт из 3 шагов'],
+    ['tool','dry_run(5 отелей)','0:05','→ 4 да, 1 нет; проверено глазами'],
+    ['result','Опубликовано для 214 отелей.','0:52'],
+  ]},
+  {n:'Сверщик · Маяк',g:'описание против расчёта',st:'ждёт отель',steps:[
+    ['reason','Описание отеля: «море из всех номеров». Расчёт: только ЮЗ ≥ 4. Расхождение > порога.','0:00'],
+    ['tool','rule(physics_over_marketing)','0:00','→ показываем расчёт гостям'],
+    ['result','Конфликт открыт, отелю ушло уведомление.','0:01'],
+  ]},
+];
+const runs = document.getElementById('runs'), trace = document.getElementById('trace');
+function showRun(i){
+  runs.querySelectorAll('.run').forEach((r, j) => r.classList.toggle('on', i === j));
+  trace.innerHTML = RUNS[i].steps.map(([ty, t, tm, out]) => `<div class="tr"><span class="ty ${ty}">${{reason:'рассуждение',tool:'инструмент',result:'итог'}[ty]}</span><span>${t}${out ? `<small>${out}</small>` : ''}</span><span class="t num">${tm}</span></div>`).join('');
+}
+runs.innerHTML = RUNS.map((r, i) => `<button class="run" data-i="${i}"><span class="st">${r.st}</span><b>${r.n}</b><span>${r.g}</span></button>`).join('');
+runs.addEventListener('click', (e) => { const b = e.target.closest('.run'); if (b) showRun(+b.dataset.i); });
+showRun(0);
+// построили дом
+document.getElementById('build').addEventListener('click', (e) => {
+  e.target.disabled = true;
+  document.getElementById('newb').classList.add('up');
+  const feed = document.getElementById('feed');
+  const add = (h, s, d) => setTimeout(() => { const li = document.createElement('li'); li.className = 'hot new'; li.innerHTML = `<b>${h}</b><span>${s}</span>`; feed.prepend(li); }, d);
+  add('В OSM появилось здание: 7 этажей, 40 м от «Маяка»', 'только что', 600);
+  add('Пересчитали вид для 3 отелей', 'Исследователь · 3,1 с', 1500);
+  setTimeout(() => document.getElementById('cone').style.opacity = .12, 1700);
+  add('«Маяк»: море со 2–5 этажей ЮЗ-фасада пропало', 'уверенность «закат над морем, этаж ≥ 4» → «этаж ≥ 6»', 2300);
+  add('Уведомили отель и 1 гостя с будущей бронью', 'гостю предложили этаж 6–8 без доплаты', 3000);
+});
+// графики
+const acc = [['Шум ночью',.91],['Вид на море',.87],['Дорога до пляжа',.85],['Закат над морем',.83],['Что работает ночью',.74]];
+document.getElementById('acc').innerHTML = acc.map(([n, v], i) => {
+  const y = 12 + i * 37, w = v * 260;
+  return `<text x="0" y="${y + 15}" font-size="13" fill="var(--ink)">${n}</text><rect x="150" y="${y}" width="260" height="22" rx="6" fill="var(--raised)"/><rect x="150" y="${y}" width="${w}" height="22" rx="6" fill="var(--primary)"/><text x="${150 + w + 8}" y="${y + 16}" font-size="13" fill="var(--ink)" font-weight="600">${String(v).replace('.', ',')}</text>`;
+}).join('');
+const cal = [[.15,.12],[.35,.31],[.55,.58],[.72,.69],[.85,.86],[.95,.91]];
+const X = (v) => 50 + v * 380, Y = (v) => 190 - v * 170;
+document.getElementById('cal').innerHTML = `
+  <line x1="${X(0)}" y1="${Y(0)}" x2="${X(1)}" y2="${Y(0)}" stroke="var(--line)"/><line x1="${X(0)}" y1="${Y(0)}" x2="${X(0)}" y2="${Y(1)}" stroke="var(--line)"/>
+  <line x1="${X(0)}" y1="${Y(0)}" x2="${X(1)}" y2="${Y(1)}" stroke="var(--muted)" stroke-dasharray="4 4"/>
+  <text x="${X(.62)}" y="${Y(.78)}" font-size="12" fill="var(--muted)" transform="rotate(-24 ${X(.62)} ${Y(.78)})">идеальная калибровка</text>
+  <polyline points="${cal.map(([a, b]) => `${X(a)},${Y(b)}`).join(' ')}" fill="none" stroke="var(--primary)" stroke-width="2"/>
+  ${cal.map(([a, b]) => `<circle cx="${X(a)}" cy="${Y(b)}" r="5" fill="var(--primary)"/>`).join('')}
+  <text x="${X(0)}" y="212" font-size="12" fill="var(--muted)">0</text><text x="${X(1)}" y="212" font-size="12" fill="var(--muted)" text-anchor="end">заявленная уверенность 1,0</text>
+  <text x="${X(0) - 8}" y="${Y(1) + 4}" font-size="12" fill="var(--muted)" text-anchor="end">1,0</text><text x="${X(0) + 8}" y="${Y(1) + 4}" font-size="12" fill="var(--muted)">доля верных</text>`;
+// подсветка навигации
+const links = document.querySelectorAll('.side-nav a[href^="#"]');
+const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) links.forEach((l) => l.classList.toggle('on', l.getAttribute('href') === '#' + e.target.id)); }), {rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('main section[id]').forEach((s) => io.observe(s));
+</script>
+</body>
+</html>

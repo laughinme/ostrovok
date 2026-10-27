@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>API и MCP · О!кно</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="base.css">
+<style>
+.wrap{margin:0 auto;padding:16px 48px 96px;max-width:1240px}
+.hero{background:var(--scene-bg);color:#fff;border-radius:var(--r-xl);padding:48px 48px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:40px}
+.hero h1{font-size:var(--fs-heading);font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.hero p{color:var(--on-scene-muted);font-size:var(--fs-lede);margin-top:10px}
+.hero ul{list-style:none;margin-top:20px;display:grid;gap:8px}
+.hero li{display:flex;gap:10px}
+.hero li::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--verified);margin-top:8px;flex:none}
+.chat{background:var(--scene);border:1px solid var(--scene-line);border-radius:var(--r-lg);padding:16px;display:grid;gap:10px;align-content:start;min-height:360px}
+.chat .who{font-size:12px;color:var(--on-scene-muted);letter-spacing:.06em;text-transform:uppercase}
+.msg{border-radius:var(--r-md);padding:12px 14px;font-size:14px;opacity:0;transform:translateY(6px);transition:opacity var(--d-move) var(--ease-out),transform var(--d-move) var(--ease-out)}
+.msg.in{opacity:1;transform:none}
+.msg.user{background:var(--scene-raised);justify-self:end;max-width:80%}
+.msg.tool{background:transparent;border:1px dashed var(--scene-line);font-family:var(--font-code);font-size:13px;color:var(--on-scene-muted)}
+.msg.tool b{color:var(--verified);font-weight:600}
+.msg.bot{background:#fff;color:var(--ink)}
+.msg.bot .src{display:block;font-size:var(--fs-label);color:var(--muted);margin-top:6px}
+.replay{justify-self:start;color:var(--verified);font-size:var(--fs-label);margin-top:4px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+pre{white-space:pre-wrap;word-break:break-word;font-family:var(--font-code);font-size:13px;line-height:1.55;background:var(--raised);border-radius:var(--r-lg);padding:18px 20px;overflow:auto;color:var(--ink)}
+pre .k{color:#1438C2}
+pre .s{color:#17663A}
+pre .c{color:var(--muted)}
+.ep{display:grid;gap:8px}
+.ep div{display:grid;grid-template-columns:60px minmax(0,1fr);gap:12px;align-items:baseline;padding:12px 14px;border:1px solid var(--line);border-radius:var(--r-md);font-size:14px}
+.ep code{font-family:var(--font-code);font-size:13px;font-weight:600}
+.ep span.m{font-family:var(--font-code);font-size:12px;font-weight:600;color:var(--primary)}
+.ep p{grid-column:2;color:var(--muted);font-size:var(--fs-label)}
+@media (max-width:720px){.wrap{padding:8px 16px 64px}.hero,.cols{grid-template-columns:1fr}.hero{padding:28px 20px}}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="index.html">О<b>!</b>кно <span class="muted" style="font-weight:500;font-size:15px">для разработчиков</span></a>
+  <div class="roles"><a href="index.html">Гость</a><a href="partner.html">Отельер</a><a href="console.html">Островок</a></div>
+</header>
+<div class="wrap">
+  <section class="hero">
+    <div>
+      <h1>Знания об отелях как строительный блок</h1>
+      <p>Тот же слой фактов, что видят гости, — для поиска, ранжирования, голосового бота и любых AI-агентов.</p>
+      <ul>
+        <li>Факты на уровне фасада, этажа и дат — с источником и уверенностью</li>
+        <li>Поиск по желанию своими словами с объяснением «да / нет / частично»</li>
+        <li>MCP-сервер: подключается к Claude, ChatGPT и локальным моделям</li>
+        <li>Работает без LLM-ключа: факты считаются заранее</li>
+      </ul>
+    </div>
+    <div class="chat" id="chat" aria-live="polite">
+      <div class="who">Внешний AI-ассистент, подключён MCP «О!кно»</div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-h"><h2>Пример ответа</h2><p>Каждый факт несёт доказательство — его можно показать пользователю как есть</p></div>
+    <div class="cols">
+<pre><span class="c"># факты отеля по одной характеристике</span>
+GET /v1/hotels/mayak/facts?characteristic=sunset_over_sea
+
+<span class="c"># поиск по желанию</span>
+POST /v1/search
+{
+  <span class="k">"text"</span>: <span class="s">"тихо, закат над морем, без подъёма"</span>,
+  <span class="k">"trip"</span>: { <span class="k">"from"</span>: <span class="s">"2026-11-10"</span>, <span class="k">"to"</span>: <span class="s">"2026-11-15"</span> }
+}</pre>
+<pre>{
+  <span class="k">"statement"</span>: <span class="s">"Море видно из окон ЮЗ-фасада с 4-го этажа"</span>,
+  <span class="k">"scope"</span>: { <span class="k">"facades"</span>: [<span class="s">"SW"</span>], <span class="k">"floorFrom"</span>: 4, <span class="k">"months"</span>: [10,11,12,1,2,3] },
+  <span class="k">"confidence"</span>: 0.82,
+  <span class="k">"source"</span>: <span class="s">"computed"</span>,
+  <span class="k">"method"</span>: <span class="s">"horizon + sun_at, Monte Carlo n=100"</span>,
+  <span class="k">"observedAt"</span>: <span class="s">"2026-10-12"</span>,
+  <span class="k">"evidence"</span>: [{ <span class="k">"kind"</span>: <span class="s">"horizon_panorama"</span>, <span class="k">"attribution"</span>: <span class="s">"© OSM, Copernicus DEM"</span> }],
+  <span class="k">"caveats"</span>: [<span class="s">"деревья не учитываются"</span>]
+}</pre>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-h"><h2>Методы</h2></div>
+    <div class="cols">
+      <div class="ep">
+        <div><span class="m">POST</span><code>/v1/search</code><p>Желание текстом → отели с вердиктами по каждому пункту</p></div>
+        <div><span class="m">GET</span><code>/v1/hotels/{id}/facts</code><p>Все факты отеля с доказательствами</p></div>
+        <div><span class="m">POST</span><code>/v1/characteristics</code><p>Новая характеристика по описанию: рецепт и пробный прогон</p></div>
+        <div><span class="m">GET</span><code>/v1/changes</code><p>Лента изменений: что пересчитано и почему</p></div>
+      </div>
+<pre><span class="c"># подключение MCP к агенту</span>
+{
+  <span class="k">"mcpServers"</span>: {
+    <span class="k">"okno"</span>: { <span class="k">"url"</span>: <span class="s">"http://localhost:8080/mcp"</span> }
+  }
+}
+
+<span class="c"># инструменты</span>
+search_rooms · get_facts · explain_fact
+compare_hotels · ask_hotelier</pre>
+    </div>
+  </section>
+</div>
+<script>
+const chat = document.getElementById('chat');
+const MSGS = [
+  ['user','Найди в Сочи номер с закатом над морем на 10–15 ноября, чтобы ночью было тихо'],
+  ['tool','→ <b>okno.search_rooms</b>(text: «закат над морем, тихо ночью», 10–15.11)'],
+  ['tool','← 6 отелей · лучший «Маяк» 85% · 3 факта с доказательствами'],
+  ['bot','Подойдёт «Маяк», Делюкс на ЮЗ-стороне не ниже 4-го этажа: закат над морем в 16:53–16:58. Учтите: с этой стороны в 60 м ж/д, поэтому высокий этаж важен. Если тишина важнее заката — «Кипарис», но заката из окон там нет.<span class="src">Источник: О!кно · расчёт по рельефу и зданиям OSM · ответ отеля от 12.10 · уверенность 0,82</span>'],
+];
+function play(){
+  chat.querySelectorAll('.msg,.replay').forEach(n => n.remove());
+  MSGS.forEach(([c, t], i) => setTimeout(() => {
+    const m = document.createElement('div'); m.className = 'msg ' + c; m.innerHTML = t; chat.appendChild(m);
+    requestAnimationFrame(() => m.classList.add('in'));
+    if (i === MSGS.length - 1) { const r = document.createElement('button'); r.className = 'replay'; r.textContent = '↻ повторить'; r.onclick = play; chat.appendChild(r); }
+  }, 400 + i * 900));
+}
+play();
+</script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Профиль вкуса · О!кно</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="base.css">
+<style>
+.wrap{margin:0 auto;padding:16px 48px 96px;max-width:1080px}
+.taste{display:grid;gap:12px;margin-top:28px}
+.t{display:grid;grid-template-columns:minmax(0,1fr) 300px auto;gap:24px;align-items:center;background:var(--raised);border-radius:var(--r-lg);padding:18px 20px;transition:opacity var(--d-quick)}
+.t.off{opacity:.45}
+.t h2{font-size:var(--fs-title);font-weight:700}
+.t p{font-size:14px;color:var(--muted);margin-top:2px}
+.scale{display:flex;align-items:center;gap:10px;font-size:var(--fs-label);color:var(--muted)}
+.scale input{flex:1;accent-color:var(--primary)}
+.tog{width:44px;height:26px;border-radius:13px;background:var(--line);position:relative;transition:background var(--d-quick)}
+.tog::after{content:'';position:absolute;left:3px;top:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform var(--d-quick) var(--ease-out)}
+.tog.on{background:var(--primary)}
+.tog.on::after{transform:translateX(18px)}
+.note{display:flex;gap:12px;align-items:center;margin-top:20px;font-size:14px;color:var(--muted)}
+.hist{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.h{border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden}
+.h .p{height:96px}
+.h div.b{padding:12px 14px}
+.h b{display:block}
+.h span{font-size:var(--fs-label);color:var(--muted)}
+@media (max-width:720px){.wrap{padding:8px 16px 64px}.t{grid-template-columns:1fr}.hist{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="index.html">О<b>!</b>кно</a>
+  <nav><a href="index.html">Подбор</a><a href="trip.html">Мои поездки</a><a class="on" href="me.html">Профиль вкуса</a></nav>
+  <div class="roles"><a class="on" href="index.html">Гость</a><a href="partner.html">Отельер</a><a href="console.html">Островок</a></div>
+</header>
+<div class="wrap">
+  <div class="page-h"><h1>Что мы поняли о вас</h1><p>По 4 прошлым поездкам и тому, что вы сохраняли. Поправьте, если мы ошиблись <span class="demo">демо-история</span></p></div>
+  <div class="taste" id="taste">
+    <div class="t"><div><h2>Тишина важнее вида</h2><p>3 из 4 броней — номера во двор, даже когда был вид на море</p></div><label class="scale">вид<input type="range" min="0" max="100" value="72" aria-label="Вид или тишина">тишина</label><button class="tog on" aria-label="Учитывать"></button></div>
+    <div class="t"><div><h2>Не любите подъёмы</h2><p>Дважды убирали отели «на холме» из сравнения</p></div><label class="scale">неважно<input type="range" min="0" max="100" value="80" aria-label="Важность подъёмов">важно</label><button class="tog on" aria-label="Учитывать"></button></div>
+    <div class="t"><div><h2>Едете осенью</h2><p>Октябрь и ноябрь в трёх поездках из четырёх — поэтому показываем закаты и воду по сезону</p></div><label class="scale">редко<input type="range" min="0" max="100" value="65" aria-label="Осенние поездки">часто</label><button class="tog on" aria-label="Учитывать"></button></div>
+    <div class="t"><div><h2>Бюджет до 9 000 ₽ за ночь</h2><p>Средняя цена ваших броней — 7 800 ₽</p></div><label class="scale">ниже<input type="range" min="0" max="100" value="55" aria-label="Бюджет">выше</label><button class="tog" aria-label="Учитывать"></button></div>
+  </div>
+  <div class="note"><button class="btn-ghost">Сбросить профиль</button><span>Профиль меняет только порядок отелей и подсказки. Факты об отелях от него не зависят.</span></div>
+
+  <section class="sec">
+    <div class="sec-h"><h2>Прошлые поездки</h2><p>Отметки «всё было так» уточняют факты для всех</p></div>
+    <div class="hist">
+      <div class="h"><div class="p" data-floor="4"><svg class="pano" aria-hidden="true"></svg></div><div class="b"><b>Кипарис, Сочи</b><span>октябрь 2025 · ✓ всё так</span></div></div>
+      <div class="h"><div class="p" data-floor="7" data-facade="NE"><svg class="pano" aria-hidden="true"></svg></div><div class="b"><b>Сосновый склон</b><span>ноябрь 2024 · ✓ всё так</span></div></div>
+      <div class="h"><div class="p" data-floor="3"><svg class="pano" aria-hidden="true"></svg></div><div class="b"><b>Прибой, Хоста</b><span>сентябрь 2024 · ⚠ шумнее, чем ждали</span></div></div>
+      <div class="h"><div class="p" data-floor="8" data-facade="SE"><svg class="pano" aria-hidden="true"></svg></div><div class="b"><b>Лазурь, Адлер</b><span>октябрь 2023 · ✓ всё так</span></div></div>
+    </div>
+  </section>
+</div>
+<script src="pano.js"></script>
+<script>
+document.querySelectorAll('.p').forEach(n => window.mountPano(n));
+document.getElementById('taste').addEventListener('click', (e) => {
+  const b = e.target.closest('.tog'); if (!b) return;
+  b.classList.toggle('on'); b.closest('.t').classList.toggle('off', !b.classList.contains('on'));
+});
+document.querySelectorAll('.tog:not(.on)').forEach(b => b.closest('.t').classList.add('off'));
+</script>
+</body>
+</html>
