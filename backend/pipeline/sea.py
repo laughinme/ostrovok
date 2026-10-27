@@ -11,7 +11,9 @@ from pipeline.storage import REGION, overpass
 
 def run() -> None:
     west, south, east, north = REGION_BOUNDS
-    elements = overpass(f'way["natural"="coastline"]({south},{west},{north},{east})')["elements"]
+    elements = overpass(f'way["natural"="coastline"]({south},{west},{north},{east})', seconds=30)[
+        "elements"
+    ]
     bounds = metric(box(*REGION_BOUNDS))
     lines, probes = [], []
     for element in elements:

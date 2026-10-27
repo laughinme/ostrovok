@@ -22,7 +22,7 @@ def test_coastline_keeps_water_right_and_land_out(tmp_path, monkeypatch):
     monkeypatch.setattr(
         sea,
         "overpass",
-        lambda _: {
+        lambda _, **_kwargs: {
             "elements": [
                 {
                     "geometry": [

@@ -136,7 +136,7 @@ def run() -> None:
             'nwr[~"^(amenity|shop|tourism|leisure|healthcare)$"~"."]',
             'nwr["landuse"="construction"]',
         ]
-        data = overpass("(" + "".join(s + bbox + ";" for s in selectors) + ")")
+        data = overpass("(" + "".join(s + bbox + ";" for s in selectors) + ")", seconds=30)
         elements.update((identifier(e), e) for e in data["elements"])
         print(f"OSM cell {index}/{len(cells)}: {len(elements):,} unique objects", flush=True)
     west, south, east, north = REGION_BOUNDS

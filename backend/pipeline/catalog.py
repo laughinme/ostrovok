@@ -25,17 +25,28 @@ HOTEL_FIELDS = [
 ]
 
 
+def fetch_candidates(district: str, bounds: tuple[float, ...]) -> list[dict[str, Any]]:
+    west, south, east, north = bounds
+    bbox = f"({south},{west},{north},{east})"
+    body = (
+        '(nwr["tourism"~"^(hotel|guest_house|apartment)$"]["name"]' + bbox + ";"
+        'way["building"]' + bbox + ';rel["building"]' + bbox + ";)"
+    )
+    if district == "krasnaya_polyana":
+        # Wide mountain area: named hotel ways already carry building footprints.
+        body = 'nw["tourism"~"^(hotel|guest_house|apartment)$"]["name"]' + bbox
+    return (
+        overpass(body, seconds=30)["elements"]
+        if district == "krasnaya_polyana"
+        else overpass(body)["elements"]
+    )
+
+
 def select_hotels() -> list[dict[str, Any]]:
     selected, used = [], set()
     report = {}
     for district, (bounds, quota) in DISTRICTS.items():
-        west, south, east, north = bounds
-        bbox = f"({south},{west},{north},{east})"
-        body = (
-            '(nwr["tourism"~"^(hotel|guest_house|apartment)$"]["name"]' + bbox + ";"
-            'way["building"]' + bbox + ';rel["building"]' + bbox + ";)"
-        )
-        elements = overpass(body)["elements"]
+        elements = fetch_candidates(district, bounds)
         member_ids = {
             m["ref"]
             for e in elements

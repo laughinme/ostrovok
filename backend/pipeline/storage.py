@@ -40,7 +40,11 @@ def download(url: str, *, query: str | None = None) -> Path:
                 headers={"User-Agent": USER_AGENT}, timeout=240, follow_redirects=True
             ) as client:
                 if query is not None:
-                    response = client.post(endpoint, data={"data": query})
+                    response = (
+                        client.get(endpoint, params={"data": query})
+                        if attempt == 1
+                        else client.post(endpoint, data={"data": query})
+                    )
                     response.raise_for_status()
                     payload = response.json()
                     if payload.get("remark"):
@@ -64,13 +68,13 @@ def download(url: str, *, query: str | None = None) -> Path:
         except (httpx.HTTPError, ValueError) as error:
             if attempt == 3:
                 raise
-            print(f"Retry {attempt + 1}/4: {type(error).__name__}", flush=True)
+            print(f"Retry {attempt + 1}/4 at {endpoint}: {error}", flush=True)
             time.sleep(3 * (attempt + 1))
     raise RuntimeError("Download retries exhausted")
 
 
-def overpass(body: str) -> dict[str, Any]:
-    query = f"[out:json][timeout:180];{body};out meta geom;"
+def overpass(body: str, *, seconds: int = 180) -> dict[str, Any]:
+    query = f"[out:json][timeout:{seconds}];{body};out meta geom;"
     return json.loads(download(OVERPASS, query=query).read_text())
 
 
