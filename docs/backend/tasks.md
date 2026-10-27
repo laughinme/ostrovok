@@ -50,7 +50,7 @@ GeoAlchemy2 для колонок и autogenerate, тестовая БД в `doc
 Готово, когда: интеграционный тест создаёт таблицу с геометрией и делает `ST_DWithin`; миграции идут вверх и вниз.
 
 ### B0.3 · Compose из семи сервисов и шлюз
-Статус: todo
+Статус: в работе · claude-core · 28.10 04:20 МСК
 Зависит от: B0.1, B0.2
 Что: `docker-compose.yml` в корне: db, redis, init (миграции → ключи JWT в volume → сид-заглушка), backend,
 worker, frontend, gateway (nginx-unprivileged, 8080). `platform: linux/amd64`, `env_file: .env`,
@@ -81,7 +81,8 @@ healthcheck, `depends_on`, наружу только `8080:8080`. Корнево
 Готово, когда: типы в main, тесты `Scope` зелёные, в progress.md короткое описание стыка для других сессий.
 
 ### B0.6 · Контракты import-linter
-Статус: todo
+Статус: done · claude-core · 28.10 04:20 МСК
+Итог: 7 контрактов в `backend/pyproject.toml` (слои, чистый домен, сервисы без HTTP, `db`/`infra`/`core` без лишних зависимостей, гео без поиска и агентов); `make arch` и `make check`; запрещённый импорт в домене ломает проверку (проверили и убрали).
 Зависит от: B0.1 (уточнить после B0.5)
 Что: контракты слоёв (`api → service → domain`, адаптеры `db` и `infra`), запреты для `domain` (FastAPI,
 SQLAlchemy, Pydantic, `db`, `infra`), независимость контекстов по 09 §10.3; проверка в `make check`.
