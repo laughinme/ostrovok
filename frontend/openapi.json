@@ -1,0 +1,2098 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "О!кно API",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Liveness: the process is up (never touches dependencies)",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object",
+                  "title": "Response Health Health Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/health": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Liveness: the process is up (never touches dependencies)",
+        "operationId": "health_api_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object",
+                  "title": "Response Health Api Health Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ready": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Readiness: Postgres and Redis answer",
+        "operationId": "ready_api_ready_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "503": {
+            "description": "A dependency is down"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Create an account and sign in",
+        "operationId": "register_api_v1_auth_register_post",
+        "parameters": [
+          {
+            "name": "X-Client",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "enum": [
+                "web",
+                "mobile"
+              ],
+              "type": "string",
+              "default": "web",
+              "title": "X-Client"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenPair"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Email is already registered"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Sign in with email and password",
+        "operationId": "login_api_v1_auth_login_post",
+        "parameters": [
+          {
+            "name": "X-Client",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "enum": [
+                "web",
+                "mobile"
+              ],
+              "type": "string",
+              "default": "web",
+              "title": "X-Client"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenPair"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Wrong email or password"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/personas": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Demo personas for the role switcher",
+        "operationId": "personas_api_v1_auth_personas_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PersonaOut"
+                  },
+                  "type": "array",
+                  "title": "Response Personas Api V1 Auth Personas Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/demo": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Sign in as a demo persona: guest, hotelier or operator (no password)",
+        "operationId": "demo_login_api_v1_auth_demo_post",
+        "parameters": [
+          {
+            "name": "X-Client",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "enum": [
+                "web",
+                "mobile"
+              ],
+              "type": "string",
+              "default": "web",
+              "title": "X-Client"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DemoLoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenPair"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unknown persona"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/refresh": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Rotate the refresh token and get a new access token",
+        "operationId": "refresh_api_v1_auth_refresh_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "X-CSRF-Token",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Browsers only: the csrf_token cookie",
+              "title": "X-Csrf-Token"
+            },
+            "description": "Browsers only: the csrf_token cookie"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenPair"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "End the current session (idempotent)",
+        "operationId": "logout_api_v1_auth_logout_post",
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/auth/logout-all": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "End every session of the current user and invalidate issued access tokens",
+        "operationId": "logout_all_api_v1_auth_logout_all_post",
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/me": {
+      "get": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "Who is signed in",
+        "operationId": "get_me_api_v1_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountOut"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/hotels": {
+      "get": {
+        "tags": [
+          "Hotels"
+        ],
+        "summary": "Hotels of the region with a summary of what we know",
+        "operationId": "list_hotels_api_v1_hotels_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/HotelOut"
+                  },
+                  "type": "array",
+                  "title": "Response List Hotels Api V1 Hotels Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/hotels/{hotel_id}": {
+      "get": {
+        "tags": [
+          "Hotels"
+        ],
+        "summary": "Hotel card (demo), rooms, facts summary and what we do not know yet",
+        "operationId": "get_hotel_api_v1_hotels__hotel_id__get",
+        "parameters": [
+          {
+            "name": "hotel_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Hotel Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HotelOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unknown hotel"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/hotels/{hotel_id}/facts": {
+      "get": {
+        "tags": [
+          "Hotels"
+        ],
+        "summary": "Every fact about a hotel, with evidence",
+        "operationId": "hotel_facts_api_v1_hotels__hotel_id__facts_get",
+        "parameters": [
+          {
+            "name": "hotel_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Hotel Id"
+            }
+          },
+          {
+            "name": "characteristic",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Registry key: sea_view",
+              "title": "Characteristic"
+            },
+            "description": "Registry key: sea_view"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FactOut"
+                  },
+                  "title": "Response Hotel Facts Api V1 Hotels  Hotel Id  Facts Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/facts/{fact_id}": {
+      "get": {
+        "tags": [
+          "Hotels"
+        ],
+        "summary": "«Почему мы так думаем»: method, sources, evidence and history",
+        "operationId": "fact_detail_api_v1_facts__fact_id__get",
+        "parameters": [
+          {
+            "name": "fact_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Fact Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FactDetailOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unknown fact"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/characteristics": {
+      "get": {
+        "tags": [
+          "Knowledge"
+        ],
+        "summary": "What the system can check and how",
+        "operationId": "list_characteristics_api_v1_characteristics_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/CharacteristicOut"
+                  },
+                  "type": "array",
+                  "title": "Response List Characteristics Api V1 Characteristics Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/runs/{run_id}": {
+      "get": {
+        "tags": [
+          "Agents"
+        ],
+        "summary": "An agent run with its steps",
+        "operationId": "get_run_api_v1_runs__run_id__get",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Run Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentRunOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unknown run"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/runs/{run_id}/events": {
+      "get": {
+        "tags": [
+          "Agents"
+        ],
+        "summary": "Server-sent events: run.step for every step, then run.finished",
+        "operationId": "run_events_api_v1_runs__run_id__events_get",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Run Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/events": {
+      "get": {
+        "tags": [
+          "Agents"
+        ],
+        "summary": "Server-sent events: fact.changed for the hotels on screen",
+        "operationId": "hotel_events_api_v1_events_get",
+        "parameters": [
+          {
+            "name": "hotels",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Hotel ids; empty = all",
+              "title": "Hotels"
+            },
+            "description": "Hotel ids; empty = all"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AccountOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "username": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Username"
+          },
+          "role": {
+            "$ref": "#/components/schemas/Role"
+          },
+          "persona": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Persona"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "email",
+          "username",
+          "role",
+          "persona"
+        ],
+        "title": "AccountOut"
+      },
+      "AgentKind": {
+        "type": "string",
+        "enum": [
+          "researcher",
+          "curator",
+          "liaison",
+          "reconciler",
+          "watcher",
+          "intent",
+          "matcher",
+          "simulator"
+        ],
+        "title": "AgentKind"
+      },
+      "AgentRunOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "agent": {
+            "$ref": "#/components/schemas/AgentKind"
+          },
+          "goal": {
+            "type": "string",
+            "title": "Goal"
+          },
+          "planner": {
+            "$ref": "#/components/schemas/Planner"
+          },
+          "status": {
+            "$ref": "#/components/schemas/RunStatus"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Createdat"
+          },
+          "startedAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Startedat"
+          },
+          "finishedAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finishedat"
+          },
+          "steps": {
+            "items": {
+              "$ref": "#/components/schemas/AgentStepOut"
+            },
+            "type": "array",
+            "title": "Steps"
+          },
+          "usage": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/UsageOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "subject": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subject"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "agent",
+          "goal",
+          "planner",
+          "status",
+          "createdAt",
+          "steps"
+        ],
+        "title": "AgentRunOut"
+      },
+      "AgentStepOut": {
+        "properties": {
+          "seq": {
+            "type": "integer",
+            "title": "Seq"
+          },
+          "at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "At"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "reason",
+              "tool",
+              "result",
+              "decision",
+              "error"
+            ],
+            "title": "Kind"
+          },
+          "tool": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tool"
+          },
+          "summary": {
+            "type": "string",
+            "title": "Summary"
+          },
+          "args": {
+            "title": "Args"
+          },
+          "output": {
+            "title": "Output"
+          },
+          "durationMs": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Durationms"
+          }
+        },
+        "type": "object",
+        "required": [
+          "seq",
+          "at",
+          "kind",
+          "summary"
+        ],
+        "title": "AgentStepOut"
+      },
+      "CharacteristicOut": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "how": {
+            "type": "string",
+            "title": "How"
+          },
+          "checkable": {
+            "$ref": "#/components/schemas/Checkable"
+          },
+          "level": {
+            "type": "string",
+            "title": "Level"
+          },
+          "method": {
+            "type": "string",
+            "title": "Method"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "published",
+              "provisional",
+              "draft"
+            ],
+            "title": "Status"
+          },
+          "synonyms": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Synonyms"
+          },
+          "ttlDays": {
+            "type": "integer",
+            "title": "Ttldays"
+          },
+          "coverage": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Coverage"
+          },
+          "avgConfidence": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avgconfidence"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "title",
+          "how",
+          "checkable",
+          "level",
+          "method",
+          "status",
+          "synonyms",
+          "ttlDays"
+        ],
+        "title": "CharacteristicOut"
+      },
+      "Checkable": {
+        "type": "string",
+        "enum": [
+          "compute",
+          "ask_hotelier",
+          "cannot"
+        ],
+        "title": "Checkable"
+      },
+      "DemoLoginRequest": {
+        "properties": {
+          "persona": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Persona",
+            "examples": [
+              "guest_anna"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "persona"
+        ],
+        "title": "DemoLoginRequest"
+      },
+      "EvidenceOut": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "horizon_panorama",
+              "noise_facades",
+              "route_profile",
+              "climate_chart",
+              "hotelier_answer",
+              "osm_objects",
+              "map_layer",
+              "text"
+            ],
+            "title": "Kind"
+          },
+          "summary": {
+            "type": "string",
+            "title": "Summary"
+          },
+          "params": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Params"
+          },
+          "osmRefs": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Osmrefs"
+          },
+          "attribution": {
+            "type": "string",
+            "title": "Attribution"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "summary",
+          "attribution"
+        ],
+        "title": "EvidenceOut"
+      },
+      "Facade": {
+        "type": "string",
+        "enum": [
+          "N",
+          "NE",
+          "E",
+          "SE",
+          "S",
+          "SW",
+          "W",
+          "NW"
+        ],
+        "title": "Facade",
+        "description": "Compass direction of a wall's outward normal, 8 points (09 §5.3)."
+      },
+      "FactDetailOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "hotelId": {
+            "type": "string",
+            "title": "Hotelid"
+          },
+          "characteristic": {
+            "type": "string",
+            "title": "Characteristic"
+          },
+          "statement": {
+            "type": "string",
+            "title": "Statement"
+          },
+          "scopeText": {
+            "type": "string",
+            "title": "Scopetext"
+          },
+          "value": {
+            "title": "Value"
+          },
+          "scope": {
+            "$ref": "#/components/schemas/ScopeOut"
+          },
+          "confidence": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Confidence"
+          },
+          "confidenceLabel": {
+            "type": "string",
+            "enum": [
+              "точно",
+              "скорее да",
+              "не уверены",
+              "скорее нет"
+            ],
+            "title": "Confidencelabel"
+          },
+          "source": {
+            "$ref": "#/components/schemas/SourceKind"
+          },
+          "sourceLabel": {
+            "type": "string",
+            "title": "Sourcelabel"
+          },
+          "method": {
+            "type": "string",
+            "title": "Method"
+          },
+          "observedAt": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Observedat"
+          },
+          "validUntil": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Validuntil"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "stale",
+              "conflict"
+            ],
+            "title": "Status"
+          },
+          "evidence": {
+            "items": {
+              "$ref": "#/components/schemas/EvidenceOut"
+            },
+            "type": "array",
+            "title": "Evidence"
+          },
+          "caveats": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Caveats"
+          },
+          "conflictId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Conflictid"
+          },
+          "isDemo": {
+            "type": "boolean",
+            "title": "Isdemo"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/FactSourceOut"
+            },
+            "type": "array",
+            "title": "Sources"
+          },
+          "history": {
+            "items": {
+              "$ref": "#/components/schemas/FactHistoryOut"
+            },
+            "type": "array",
+            "title": "History"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "hotelId",
+          "characteristic",
+          "statement",
+          "scopeText",
+          "value",
+          "scope",
+          "confidence",
+          "confidenceLabel",
+          "source",
+          "sourceLabel",
+          "method",
+          "observedAt",
+          "status",
+          "evidence",
+          "caveats",
+          "isDemo",
+          "sources",
+          "history"
+        ],
+        "title": "FactDetailOut"
+      },
+      "FactHistoryOut": {
+        "properties": {
+          "at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "At"
+          },
+          "statement": {
+            "type": "string",
+            "title": "Statement"
+          },
+          "confidence": {
+            "type": "number",
+            "title": "Confidence"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          }
+        },
+        "type": "object",
+        "required": [
+          "at",
+          "statement",
+          "confidence",
+          "reason"
+        ],
+        "title": "FactHistoryOut"
+      },
+      "FactOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "hotelId": {
+            "type": "string",
+            "title": "Hotelid"
+          },
+          "characteristic": {
+            "type": "string",
+            "title": "Characteristic"
+          },
+          "statement": {
+            "type": "string",
+            "title": "Statement"
+          },
+          "scopeText": {
+            "type": "string",
+            "title": "Scopetext"
+          },
+          "value": {
+            "title": "Value"
+          },
+          "scope": {
+            "$ref": "#/components/schemas/ScopeOut"
+          },
+          "confidence": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Confidence"
+          },
+          "confidenceLabel": {
+            "type": "string",
+            "enum": [
+              "точно",
+              "скорее да",
+              "не уверены",
+              "скорее нет"
+            ],
+            "title": "Confidencelabel"
+          },
+          "source": {
+            "$ref": "#/components/schemas/SourceKind"
+          },
+          "sourceLabel": {
+            "type": "string",
+            "title": "Sourcelabel"
+          },
+          "method": {
+            "type": "string",
+            "title": "Method"
+          },
+          "observedAt": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Observedat"
+          },
+          "validUntil": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Validuntil"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "stale",
+              "conflict"
+            ],
+            "title": "Status"
+          },
+          "evidence": {
+            "items": {
+              "$ref": "#/components/schemas/EvidenceOut"
+            },
+            "type": "array",
+            "title": "Evidence"
+          },
+          "caveats": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Caveats"
+          },
+          "conflictId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Conflictid"
+          },
+          "isDemo": {
+            "type": "boolean",
+            "title": "Isdemo"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "hotelId",
+          "characteristic",
+          "statement",
+          "scopeText",
+          "value",
+          "scope",
+          "confidence",
+          "confidenceLabel",
+          "source",
+          "sourceLabel",
+          "method",
+          "observedAt",
+          "status",
+          "evidence",
+          "caveats",
+          "isDemo"
+        ],
+        "title": "FactOut"
+      },
+      "FactSourceOut": {
+        "properties": {
+          "kind": {
+            "$ref": "#/components/schemas/SourceKind"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "observedAt": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Observedat"
+          },
+          "confidence": {
+            "type": "number",
+            "title": "Confidence"
+          },
+          "ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ref"
+          },
+          "statement": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Statement"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "label",
+          "observedAt",
+          "confidence"
+        ],
+        "title": "FactSourceOut"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HotelDemoOut": {
+        "properties": {
+          "rating": {
+            "type": "number",
+            "title": "Rating"
+          },
+          "ratingLabel": {
+            "type": "string",
+            "title": "Ratinglabel"
+          },
+          "tagline": {
+            "type": "string",
+            "title": "Tagline"
+          },
+          "amenities": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Amenities"
+          }
+        },
+        "type": "object",
+        "required": [
+          "rating",
+          "ratingLabel",
+          "tagline",
+          "amenities"
+        ],
+        "title": "HotelDemoOut"
+      },
+      "HotelOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "osmId": {
+            "type": "string",
+            "title": "Osmid"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "stars": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stars"
+          },
+          "area": {
+            "type": "string",
+            "title": "Area"
+          },
+          "address": {
+            "type": "string",
+            "title": "Address"
+          },
+          "location": {
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Location",
+            "description": "lon, lat"
+          },
+          "floors": {
+            "type": "integer",
+            "title": "Floors"
+          },
+          "facades": {
+            "items": {
+              "$ref": "#/components/schemas/Facade"
+            },
+            "type": "array",
+            "title": "Facades"
+          },
+          "demo": {
+            "$ref": "#/components/schemas/HotelDemoOut"
+          },
+          "priceFromDemo": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pricefromdemo"
+          },
+          "rooms": {
+            "items": {
+              "$ref": "#/components/schemas/RoomTypeOut"
+            },
+            "type": "array",
+            "title": "Rooms"
+          },
+          "facts": {
+            "items": {
+              "$ref": "#/components/schemas/FactOut"
+            },
+            "type": "array",
+            "title": "Facts"
+          },
+          "unknowns": {
+            "items": {
+              "$ref": "#/components/schemas/UnknownOut"
+            },
+            "type": "array",
+            "title": "Unknowns"
+          },
+          "nearby": {
+            "items": {
+              "$ref": "#/components/schemas/NearbyOut"
+            },
+            "type": "array",
+            "title": "Nearby"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "osmId",
+          "name",
+          "area",
+          "address",
+          "location",
+          "floors",
+          "facades",
+          "demo",
+          "rooms",
+          "facts",
+          "unknowns",
+          "nearby"
+        ],
+        "title": "HotelOut"
+      },
+      "LoginRequest": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "title": "Email",
+            "description": "User e-mail"
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 128,
+            "title": "Password",
+            "description": "User password"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ],
+        "title": "LoginRequest",
+        "description": "Credentials used for login."
+      },
+      "NearbyOut": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "title": "Kind"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "distanceText": {
+            "type": "string",
+            "title": "Distancetext"
+          },
+          "osmRef": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Osmref"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "name",
+          "distanceText"
+        ],
+        "title": "NearbyOut"
+      },
+      "PersonaOut": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "role": {
+            "$ref": "#/components/schemas/Role"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "hotels": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Hotels",
+            "description": "OSM ids of managed hotels"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "role",
+          "name",
+          "title"
+        ],
+        "title": "PersonaOut"
+      },
+      "Planner": {
+        "type": "string",
+        "enum": [
+          "llm",
+          "rules"
+        ],
+        "title": "Planner"
+      },
+      "RatePlanOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "meal": {
+            "type": "string",
+            "title": "Meal"
+          },
+          "cancel": {
+            "type": "string",
+            "title": "Cancel"
+          },
+          "pay": {
+            "type": "string",
+            "title": "Pay"
+          },
+          "priceDemo": {
+            "type": "integer",
+            "title": "Pricedemo"
+          },
+          "tag": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tag"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "meal",
+          "cancel",
+          "pay",
+          "priceDemo"
+        ],
+        "title": "RatePlanOut"
+      },
+      "RegisterRequest": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "title": "Email",
+            "description": "User e-mail",
+            "examples": [
+              "user@example.com"
+            ]
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 8,
+            "title": "Password",
+            "description": "User password"
+          },
+          "username": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Username",
+            "description": "Display name"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ],
+        "title": "RegisterRequest",
+        "description": "Data required for registration."
+      },
+      "Role": {
+        "type": "string",
+        "enum": [
+          "guest",
+          "hotelier",
+          "operator"
+        ],
+        "title": "Role"
+      },
+      "RoomTypeOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "area": {
+            "type": "number",
+            "title": "Area"
+          },
+          "bed": {
+            "type": "string",
+            "title": "Bed"
+          },
+          "capacity": {
+            "type": "integer",
+            "title": "Capacity"
+          },
+          "facades": {
+            "items": {
+              "$ref": "#/components/schemas/Facade"
+            },
+            "type": "array",
+            "title": "Facades"
+          },
+          "floors": {
+            "anyOf": [
+              {
+                "prefixItems": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "type": "array",
+                "maxItems": 2,
+                "minItems": 2
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Floors"
+          },
+          "confirmedByHotel": {
+            "type": "boolean",
+            "title": "Confirmedbyhotel"
+          },
+          "rates": {
+            "items": {
+              "$ref": "#/components/schemas/RatePlanOut"
+            },
+            "type": "array",
+            "title": "Rates"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "area",
+          "bed",
+          "capacity",
+          "facades",
+          "confirmedByHotel",
+          "rates"
+        ],
+        "title": "RoomTypeOut"
+      },
+      "RunStatus": {
+        "type": "string",
+        "enum": [
+          "queued",
+          "running",
+          "done",
+          "failed"
+        ],
+        "title": "RunStatus"
+      },
+      "ScopeOut": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "SourceKind": {
+        "type": "string",
+        "enum": [
+          "computed",
+          "open_data",
+          "hotelier",
+          "guest",
+          "demo_card"
+        ],
+        "title": "SourceKind"
+      },
+      "TokenPair": {
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "title": "Access Token"
+          },
+          "refresh_token": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Refresh Token"
+          },
+          "token_type": {
+            "type": "string",
+            "const": "bearer",
+            "title": "Token Type",
+            "default": "bearer"
+          },
+          "expires_in": {
+            "type": "integer",
+            "title": "Expires In",
+            "description": "Access token lifetime in seconds"
+          }
+        },
+        "type": "object",
+        "required": [
+          "access_token",
+          "expires_in"
+        ],
+        "title": "TokenPair",
+        "description": "`refresh_token` is null for web clients: they get it as an httpOnly cookie\ntogether with a readable `csrf_token` cookie to echo in `X-CSRF-Token`."
+      },
+      "UnknownOut": {
+        "properties": {
+          "characteristic": {
+            "type": "string",
+            "title": "Characteristic"
+          },
+          "question": {
+            "type": "string",
+            "title": "Question"
+          },
+          "why": {
+            "type": "string",
+            "title": "Why"
+          }
+        },
+        "type": "object",
+        "required": [
+          "characteristic",
+          "question",
+          "why"
+        ],
+        "title": "UnknownOut"
+      },
+      "UsageOut": {
+        "properties": {
+          "requests": {
+            "type": "integer",
+            "title": "Requests",
+            "default": 0
+          },
+          "inputTokens": {
+            "type": "integer",
+            "title": "Inputtokens",
+            "default": 0
+          },
+          "outputTokens": {
+            "type": "integer",
+            "title": "Outputtokens",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "title": "UsageOut"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    },
+    "securitySchemes": {
+      "HTTPBearer": {
+        "type": "http",
+        "description": "Access token from /auth/login or /auth/refresh",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 .PHONY: help install env keys run worker migrate migration openapi lint fmt typecheck arch test-unit \
-	test-deps test test-down check up down dev logs data collect eval eval-llm frontend-dev frontend-check
+	test-deps test test-down check up up-native down dev logs data collect eval eval-llm frontend-dev frontend-check
 
 BACKEND := backend
 UV := cd $(BACKEND) && uv run
@@ -44,7 +44,7 @@ migration: ## New migration from model changes: make migration m="add facts"
 	$(UV) alembic revision --autogenerate -m "$(m)"
 
 openapi: ## Export the OpenAPI schema for the frontend into frontend/openapi.json
-	$(UV) python -m app.cli openapi > frontend/openapi.json.tmp
+	$(UV) python -m app.cli openapi > $(CURDIR)/frontend/openapi.json.tmp
 	mv frontend/openapi.json.tmp frontend/openapi.json
 
 # --- data and knowledge ------------------------------------------------------------
@@ -104,6 +104,9 @@ up: env ## Build and start the whole stack: http://localhost:8080
 
 down: ## Stop the stack (data volumes are kept)
 	docker compose down --remove-orphans
+
+up-native: env ## The whole stack with native images (Apple Silicon): http://localhost:8080
+	$(DEV_COMPOSE) up -d --build
 
 dev: env ## PostGIS and Redis on localhost (5432, 6379) for `make run` and `make worker`
 	$(DEV_COMPOSE) up -d --wait db redis

@@ -15,7 +15,12 @@ from app.domain.auth import ClientKind
 from app.domain.users import CurrentUser, Permission
 from app.infra.rate_limit import RateLimiter
 from app.service.accounts import AccountService
+from app.service.agents.runs import RunQueries, RunStream
 from app.service.auth import AuthService, resolve_current_user
+from app.service.catalog.hotels import HotelQueries
+from app.service.knowledge.facts import FactQueries
+from app.service.knowledge.registry import Registry
+from app.service.ports import EventBus
 
 # Everything long-lived is created once in the app factory and read from app.state here,
 # so tests can build an app with their own settings and fakes.
@@ -117,3 +122,40 @@ def _account_service(uow: UowDep) -> AccountService:
 
 
 AccountServiceDep = Annotated[AccountService, Depends(_account_service)]
+
+
+def _hotel_queries(uow: UowDep) -> HotelQueries:
+    return HotelQueries(uow)
+
+
+def _fact_queries(uow: UowDep) -> FactQueries:
+    return FactQueries(uow)
+
+
+def _registry(uow: UowDep) -> Registry:
+    return Registry(uow)
+
+
+HotelQueriesDep = Annotated[HotelQueries, Depends(_hotel_queries)]
+FactQueriesDep = Annotated[FactQueries, Depends(_fact_queries)]
+RegistryDep = Annotated[Registry, Depends(_registry)]
+
+
+def _events(request: Request) -> EventBus:
+    events: EventBus = request.app.state.events
+    return events
+
+
+EventsDep = Annotated[EventBus, Depends(_events)]
+
+
+def _run_queries(db: DatabaseDep) -> RunQueries:
+    return RunQueries(db)
+
+
+def _run_stream(db: DatabaseDep, events: EventsDep) -> RunStream:
+    return RunStream(db, events)
+
+
+RunQueriesDep = Annotated[RunQueries, Depends(_run_queries)]
+RunStreamDep = Annotated[RunStream, Depends(_run_stream)]

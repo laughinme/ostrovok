@@ -8,11 +8,17 @@ from contextlib import suppress
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from pathlib import Path
+from uuid import UUID
 
+from redis.asyncio import Redis
+
+from app.bootstrap import build_agents
 from app.core.config import Settings, get_settings
 from app.core.logging import configure_logging
 from app.db.database import Database
-from app.domain.jobs import JobKind, NewJob
+from app.domain.jobs import ClaimedJob, JobKind, NewJob
+from app.infra.events import RedisEventBus
+from app.service.agents.collect import CollectService
 from app.service.jobs import Handler, JobQueue, JobRunner
 from app.service.ports import Clock, SystemClock
 
@@ -93,14 +99,26 @@ class Worker:
             self._next_tick[periodic.kind] = now + periodic.every
 
 
-def build_handlers() -> dict[JobKind, Handler]:
-    """Kind → handler. Agents register theirs here as they land (B2.11 and later)."""
-    return {}
+def build_handlers(collect: CollectService) -> dict[JobKind, Handler]:
+    """Kind → handler; each handler only unpacks the payload and calls one agent."""
+
+    async def research_collect(job: ClaimedJob) -> None:
+        keys = job.payload.get("keys")
+        await collect.study(
+            UUID(job.payload["hotel_id"]),
+            characteristics_keys=keys,
+            run_id=job.run_id,
+        )
+
+    return {JobKind.RESEARCH_COLLECT: research_collect}
 
 
 async def run_worker(settings: Settings) -> None:
     db = Database(settings)
     clock = SystemClock()
+    redis = Redis.from_url(settings.redis_url, decode_responses=True)
+    agents = build_agents(db, RedisEventBus(redis), clock, settings.data_dir)
+    collect = CollectService(db, agents.researcher, agents.runner, clock)
     stop = asyncio.Event()
     loop = asyncio.get_running_loop()
     for sig in (signal.SIGINT, signal.SIGTERM):
@@ -108,7 +126,7 @@ async def run_worker(settings: Settings) -> None:
 
     runner = JobRunner(
         db,
-        build_handlers(),
+        build_handlers(collect),
         clock,
         worker_id=f"{socket.gethostname()}:{os.getpid()}",
         lease=timedelta(seconds=settings.jobs_lease_sec),
@@ -125,6 +143,7 @@ async def run_worker(settings: Settings) -> None:
     removed = await cleanup_sessions(db, clock)
     logger.info("removed %s stale sessions", removed)
     await worker.run(stop)
+    await redis.aclose()
     await db.dispose()
     logger.info("worker stopped")
 

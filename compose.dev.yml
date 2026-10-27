@@ -1,12 +1,26 @@
-# Local development: `make dev` publishes PostGIS and Redis for `make run` / `make worker`.
-# Native arm64 images on Apple Silicon (D-34); the jury stack stays linux/amd64.
+# Local development on Apple Silicon: native images instead of linux/amd64 emulation (D-34).
+# `make dev` starts PostGIS and Redis on localhost for `make run` / `make worker`;
+# `make up-native` runs the whole stack natively to check it end to end.
+x-native: &native
+  platform: !reset null
+
 services:
   db:
+    <<: *native
     image: imresamu/postgis:17-3.5
-    platform: !reset null
     ports:
       - "5432:5432"
   redis:
-    platform: !reset null
+    <<: *native
     ports:
       - "6379:6379"
+  init:
+    <<: *native
+  backend:
+    <<: *native
+  worker:
+    <<: *native
+  frontend:
+    <<: *native
+  gateway:
+    <<: *native
