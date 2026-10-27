@@ -1,0 +1,231 @@
+# Словарь «как гость называет место → фильтр тегов OpenStreetMap» для Большого Сочи.
+# Полная версия: 150 видов мест из предыдущего ответа.
+#
+# Формат каждого элемента:
+#   osm: список альтернативных наборов тегов (между элементами списка — ИЛИ);
+#        внутри одного набора теги объединены через И;
+#        значению [a, b] соответствует a ИЛИ b;
+#        "*" означает наличие ключа с любым значением.
+#   name_regex: если не null, ОБЯЗАТЕЛЬНОЕ дополнительное условие к osm.
+#               Проверять name, name:ru, name:en, official_name, short_name,
+#               alt_name без учёта регистра, с нормализацией ё→е.
+#   coverage_note: high/medium/low и пояснение — экспертная качественная оценка
+#                  ожидаемой полноты в России, НЕ измеренная статистика OSM.
+#   uncertain: true — только приблизительное соответствие, требуется проверка.
+#              Низкая полнота покрытия сама по себе не делает маппинг неверным.
+#
+# Для cuisine, sport, healthcare:speciality, outdoor_seating, beauty,
+# theatre:genre и rental значения могут быть разделены «;»; при сопоставлении
+# следует разделять такие значения и обрезать пробелы.
+# opening_hours имеет отдельный синтаксис (согласно OSM Wiki): строгое
+# opening_hours: "24/7" НЕ охватывает все эквивалентные круглосуточные графики.
+#
+# Границы Большого Сочи и радиус поиска задаются вне данного словаря.
+# Для расстояний до больших объектов следует использовать доступный вход;
+# доступ, часы работы и сезонность проверяются отдельно. name_regex НЕ
+# доказывает соответствие услуги без подтверждения первичных данных.
+#
+# Первичные справочники по тегам OSM Wiki (из предыдущего ответа):
+# https://wiki.openstreetmap.org/wiki/Key:amenity
+# https://wiki.openstreetmap.org/wiki/Key:cuisine
+# https://wiki.openstreetmap.org/wiki/Key:diet
+# https://wiki.openstreetmap.org/wiki/Key:outdoor_seating
+# https://wiki.openstreetmap.org/wiki/Key:karaoke
+# https://wiki.openstreetmap.org/wiki/Key:shop
+# https://wiki.openstreetmap.org/wiki/Template:RU:Map_Features:shop
+# https://wiki.openstreetmap.org/wiki/Tag:rental=ski
+# https://wiki.openstreetmap.org/wiki/Tag:amenity=ski_rental
+# https://wiki.openstreetmap.org/wiki/Key:healthcare
+# https://wiki.openstreetmap.org/wiki/Key:healthcare:speciality
+# https://wiki.openstreetmap.org/wiki/Tag:healthcare=sample_collection
+# https://wiki.openstreetmap.org/wiki/Key:leisure
+# https://wiki.openstreetmap.org/wiki/Key:tourism
+# https://wiki.openstreetmap.org/wiki/Tag:tourism=aquarium
+# https://wiki.openstreetmap.org/wiki/Tag:amenity=theatre
+# https://wiki.openstreetmap.org/wiki/Tag:railway=station
+# https://wiki.openstreetmap.org/wiki/Key:aerialway
+# https://wiki.openstreetmap.org/wiki/Tag:amenity=parking
+# https://wiki.openstreetmap.org/wiki/Tag:amenity=charging_station
+# https://wiki.openstreetmap.org/wiki/Tag:natural=beach
+# https://wiki.openstreetmap.org/wiki/Tag:surface=pebblestone
+# https://wiki.openstreetmap.org/wiki/Tag:garden:type=botanical
+# https://wiki.openstreetmap.org/wiki/Tag:route=hiking
+# https://wiki.openstreetmap.org/wiki/Key:sport
+# https://wiki.openstreetmap.org/wiki/Tag:leisure=swimming_pool
+# https://wiki.openstreetmap.org/wiki/Spa
+# https://wiki.openstreetmap.org/wiki/Tag:amenity=public_bath
+# https://wiki.openstreetmap.org/wiki/Tag:amenity=concert_hall
+# https://wiki.openstreetmap.org/wiki/Tag:amenity=luggage_locker
+# https://wiki.openstreetmap.org/wiki/Tag:amenity=left_luggage
+# https://wiki.openstreetmap.org/wiki/Tag:information=office
+#
+# Группа 1 — Еда и напитки (30 видов).
+
+"хинкальная": {osm: [{amenity: [restaurant, cafe, fast_food]}], name_regex: "хинкал|khinkal", coverage_note: "low: специализация может быть указана только в названии; сочетание базового типа и имени даёт кандидата.", uncertain: true}
+"грузинская кухня": {osm: [{amenity: [restaurant, cafe, fast_food], cuisine: georgian}], name_regex: null, coverage_note: "medium: заведение может быть нанесено без cuisine; название само по себе кухню не доказывает.", uncertain: false}
+"шаурма": {osm: [{amenity: [restaurant, cafe, fast_food], cuisine: shawarma}], name_regex: null, coverage_note: "medium: точный cuisine заполнен не везде; kebab шире шаурмы и здесь не включён.", uncertain: false}
+"кофейня": {osm: [{amenity: cafe, cuisine: coffee_shop}], name_regex: null, coverage_note: "medium: кофейня может иметь только cafe; shop=coffee означает магазин кофе и сюда не включён.", uncertain: false}
+"пекарня": {osm: [{shop: bakery}], name_regex: null, coverage_note: "high: самостоятельный понятный тип; небольшие пекарни внутри магазинов могут отсутствовать.", uncertain: false}
+"столовая": {osm: [{amenity: canteen}, {amenity: fast_food, fast_food: cafeteria}], name_regex: null, coverage_note: "medium: используются разные схемы; столовые с одним cafe или restaurant будут пропущены. Проверять доступ.", uncertain: false}
+"ресторан": {osm: [{amenity: restaurant}], name_regex: null, coverage_note: "high: основной тип общепита; актуальность отдельных заведений может отставать.", uncertain: false}
+"ресторан у моря": {osm: [{amenity: restaurant}], name_regex: null, coverage_note: "low: это только кандидаты; обязательно проверять расстояние до морского берега и доступ. Вид на море не подтверждается.", uncertain: true}
+"кафе": {osm: [{amenity: cafe}], name_regex: null, coverage_note: "high: основной тип общепита; формат и меню требуют дополнительных признаков.", uncertain: false}
+"пиццерия": {osm: [{amenity: [restaurant, cafe, fast_food], cuisine: pizza}], name_regex: null, coverage_note: "medium: cuisine заполнен не везде; italian без pizza не подтверждает пиццерию.", uncertain: false}
+"суши и роллы": {osm: [{amenity: [restaurant, cafe, fast_food], cuisine: sushi}], name_regex: null, coverage_note: "medium: точки доставки и небольшие суши-бары могут не иметь cuisine.", uncertain: false}
+"бургерная": {osm: [{amenity: [restaurant, cafe, fast_food], cuisine: burger}], name_regex: null, coverage_note: "medium: специализация может отсутствовать у объекта fast_food.", uncertain: false}
+"шашлычная": {osm: [{amenity: [restaurant, cafe, fast_food]}], name_regex: "шашлы|shashl", coverage_note: "low: название даёт кандидата; barbecue шире шашлычной и не считается достаточным признаком.", uncertain: true}
+"рыбный ресторан": {osm: [{amenity: restaurant, cuisine: [fish, seafood]}], name_regex: null, coverage_note: "medium: рыбная специализация заполнена не всегда; fish не гарантирует именно морепродукты.", uncertain: false}
+"кафе с вегетарианским меню": {osm: [{amenity: [restaurant, cafe, fast_food], "diet:vegetarian": ["yes", only]}, {amenity: [restaurant, cafe, fast_food], "diet:vegan": ["yes", only]}], name_regex: null, coverage_note: "low: диетические признаки факультативны; yes означает выбор подходящих блюд, only — специализацию всего меню.", uncertain: false}
+"кафе с веганским меню": {osm: [{amenity: [restaurant, cafe, fast_food], "diet:vegan": ["yes", only]}], name_regex: null, coverage_note: "low: diet:vegan может отсутствовать даже при подходящем меню; yes не означает полностью веганское заведение.", uncertain: false}
+"кафе с халяльной едой": {osm: [{amenity: [restaurant, cafe, fast_food], "diet:halal": ["yes", only]}], name_regex: null, coverage_note: "low: диетическая разметка неполна; тег сам по себе не подтверждает сертификацию.", uncertain: false}
+"кафе с безглютеновым меню": {osm: [{amenity: [restaurant, cafe, fast_food], "diet:gluten_free": ["yes", only]}], name_regex: null, coverage_note: "low: специальный признак заполняется не всегда; условия приготовления требуют отдельного уточнения.", uncertain: false}
+"кафе с верандой или террасой": {osm: [{amenity: [cafe, restaurant], outdoor_seating: [veranda, terrace]}], name_regex: null, coverage_note: "low: тип наружной посадки уточнён не везде; outdoor_seating=yes недостаточно для такого строгого фильтра. Сезон работы отдельно.", uncertain: false}
+"круглосуточное кафе": {osm: [{amenity: cafe, opening_hours: "24/7"}], name_regex: null, coverage_note: "low: часы могут отсутствовать или устареть; другие эквивалентные расписания требуют отдельного парсера.", uncertain: false}
+"чайная": {osm: [{amenity: cafe, cuisine: tea}], name_regex: null, coverage_note: "low: чайная специализация может не указываться; shop=tea обозначает магазин чая.", uncertain: false}
+"кондитерская": {osm: [{shop: pastry}], name_regex: null, coverage_note: "medium: сладкая выпечка может быть отмечена разными торговыми типами; здесь строгий фильтр для shop=pastry.", uncertain: false}
+"мороженое": {osm: [{amenity: ice_cream}, {shop: ice_cream}, {amenity: cafe, cuisine: ice_cream}], name_regex: null, coverage_note: "medium: используются разные схемы; сезонные киоски и лотки могут отсутствовать.", uncertain: false}
+"бар": {osm: [{amenity: bar}], name_regex: null, coverage_note: "high: основной тип заведения; часть похожих мест отмечена как pub или restaurant.", uncertain: false}
+"паб": {osm: [{amenity: pub}], name_regex: null, coverage_note: "medium: граница между пабом, баром и рестораном зависит от принятой классификации.", uncertain: false}
+"ночной клуб": {osm: [{amenity: nightclub}], name_regex: null, coverage_note: "medium: тип однозначен, но закрытия и смена формата могут не отражаться своевременно.", uncertain: false}
+"караоке": {osm: [{amenity: karaoke_box}, {amenity: [bar, pub, cafe, restaurant, nightclub], karaoke: "yes"}], name_regex: null, coverage_note: "low: дополнительная услуга может быть известна только из названия или описания и отсутствовать в тегах.", uncertain: false}
+"фудкорт": {osm: [{amenity: food_court}], name_regex: null, coverage_note: "medium: иногда нанесены отдельные заведения без общего объекта фудкорта.", uncertain: false}
+"русская кухня": {osm: [{amenity: [restaurant, cafe, fast_food], cuisine: russian}], name_regex: null, coverage_note: "medium: cuisine может отсутствовать; обычное кафе не следует автоматически считать русской кухней.", uncertain: false}
+"узбекская кухня": {osm: [{amenity: [restaurant, cafe, fast_food], cuisine: uzbek}], name_regex: null, coverage_note: "medium: национальная кухня может быть не уточнена; название с пловом не служит строгим доказательством.", uncertain: false}
+
+# Группа 2 — Магазины и снаряжение (27 видов).
+"продуктовый магазин": {osm: [{shop: [convenience, supermarket]}], name_regex: null, coverage_note: "high: основные продуктовые форматы имеют устойчивые теги; маленькие точки могут отсутствовать.", uncertain: false}
+"супермаркет": {osm: [{shop: supermarket}], name_regex: null, coverage_note: "high: крупный самостоятельный магазин легко выделить; актуальность конкретного объекта нужно учитывать.", uncertain: false}
+"круглосуточный продуктовый": {osm: [{shop: [convenience, supermarket], opening_hours: "24/7"}], name_regex: null, coverage_note: "low: дополнительный режим работы заполнен не везде; эквивалентные расписания требуют парсера.", uncertain: false}
+"рынок": {osm: [{amenity: marketplace}], name_regex: null, coverage_note: "high: крупные рынки имеют самостоятельный тип; продуктовый ассортимент и торговые дни не гарантируются.", uncertain: false}
+"торговый центр": {osm: [{shop: mall}], name_regex: null, coverage_note: "high: крупные комплексы хорошо различимы; состав арендаторов может быть неполным.", uncertain: false}
+"винный магазин": {osm: [{shop: wine}], name_regex: null, coverage_note: "medium: винотека может быть размечена общим alcohol; такой объект строгий фильтр пропустит.", uncertain: false}
+"алкомаркет": {osm: [{shop: [alcohol, wine]}], name_regex: null, coverage_note: "high: специализированная торговля имеет прямые теги; ассортимент и часы продажи отдельно.", uncertain: false}
+"овощи и фрукты": {osm: [{shop: greengrocer}], name_regex: null, coverage_note: "medium: небольшие лавки и сезонные палатки могут отсутствовать.", uncertain: false}
+"рыбный магазин": {osm: [{shop: seafood}], name_regex: null, coverage_note: "medium: специализированные точки могут иметь общий продуктовый тег; основной документированный вариант здесь seafood.", uncertain: false}
+"мясная лавка": {osm: [{shop: butcher}], name_regex: null, coverage_note: "medium: отдельные магазины распознаются точнее мясных отделов внутри супермаркета.", uncertain: false}
+"молочный магазин": {osm: [{shop: dairy}], name_regex: null, coverage_note: "medium: специализация может не выделяться; отделы внутри других магазинов могут не иметь отдельного объекта.", uncertain: false}
+"магазин чая": {osm: [{shop: tea}], name_regex: null, coverage_note: "medium: отдельная специализация может быть потеряна; посадка и дегустации не следуют из тега.", uncertain: false}
+"магазин кофе": {osm: [{shop: coffee}], name_regex: null, coverage_note: "medium: специализированная точка может иметь общий торговый тип; shop=coffee не гарантирует готовые напитки.", uncertain: false}
+"сувенирный магазин": {osm: [{shop: gift}], name_regex: null, coverage_note: "medium: сувенирные точки внутри достопримечательностей и сезонные лавки могут отсутствовать.", uncertain: false}
+"спортивный магазин": {osm: [{shop: sports}], name_regex: null, coverage_note: "medium: небольшие магазины и отделы внутри ТЦ могут не выделяться; ассортимент отдельно.", uncertain: false}
+"туристическое снаряжение": {osm: [{shop: outdoor}], name_regex: null, coverage_note: "medium: специализация имеет отдельный тег; небольшие магазины могут быть отмечены как sports.", uncertain: false}
+"магазин одежды": {osm: [{shop: clothes}], name_regex: null, coverage_note: "high: базовая категория магазинов; небольшие отделы и смена арендаторов могут быть не учтены.", uncertain: false}
+"обувной магазин": {osm: [{shop: shoes}], name_regex: null, coverage_note: "medium: самостоятельные точки различимы; обувные отделы универсальных магазинов этим фильтром не находятся.", uncertain: false}
+"магазин игрушек": {osm: [{shop: toys}], name_regex: null, coverage_note: "medium: отделы в торговых центрах и магазинах детских товаров могут не выделяться.", uncertain: false}
+"косметика и гигиена": {osm: [{shop: [cosmetics, chemist]}], name_regex: null, coverage_note: "medium: смешанные магазины могут иметь другую основную категорию; chemist здесь не означает аптеку.", uncertain: false}
+"салон связи или магазин телефонов": {osm: [{shop: [mobile_phone, telecommunication]}], name_regex: null, coverage_note: "medium: используются разные торговые типы; услуги мобильного оператора и продажа SIM-карт не гарантируются.", uncertain: false}
+"магазин электроники": {osm: [{shop: [electronics, computer]}], name_regex: null, coverage_note: "medium: небольшие магазины и отделы могут отсутствовать; наличие конкретных зарядок и переходников отдельно.", uncertain: false}
+"книжный магазин": {osm: [{shop: books}], name_regex: null, coverage_note: "medium: небольшие точки могут отсутствовать; язык и ассортимент книг отдельно.", uncertain: false}
+"цветочный магазин": {osm: [{shop: florist}], name_regex: null, coverage_note: "medium: маленькие павильоны могут отсутствовать; круглосуточность не следует из тега.", uncertain: false}
+"табачный магазин": {osm: [{shop: tobacco}], name_regex: null, coverage_note: "medium: отдельные магазины имеют прямой тег; продажа табака в продуктовых сюда не входит.", uncertain: false}
+"прокат лыж": {osm: [{amenity: ski_rental}, {shop: [ski, sports, rental], rental: ski}, {shop: ski, rental: "yes"}], name_regex: null, coverage_note: "low: сосуществуют несколько схем; сезонные пункты и аренда при отеле могут не иметь отдельной точки.", uncertain: false}
+"пункт выдачи заказов": {osm: [{shop: outpost}], name_regex: null, coverage_note: "medium: профильный тег есть, но точки быстро меняются; постаматы относятся к другой категории.", uncertain: false}
+
+# Группа 3 — Здоровье (10 видов).
+"аптека": {osm: [{amenity: pharmacy}, {healthcare: pharmacy}], name_regex: null, coverage_note: "high: базовая категория с прямыми тегами; часы работы и наличие лекарств отдельно.", uncertain: false}
+"круглосуточная аптека": {osm: [{amenity: pharmacy, opening_hours: "24/7"}, {healthcare: pharmacy, opening_hours: "24/7"}], name_regex: null, coverage_note: "low: режим работы заполнен не везде; иной синтаксис круглосуточного расписания требует парсера.", uncertain: false}
+"больница": {osm: [{amenity: hospital}, {healthcare: hospital}], name_regex: null, coverage_note: "high: крупное учреждение с устойчивым назначением; экстренный приём и нужное отделение не гарантируются.", uncertain: false}
+"детская больница": {osm: [{amenity: hospital}, {healthcare: hospital}], name_regex: "детск.*больниц|больниц.*детск|children.?s?.?hospital|paediatric.*hospital|pediatric.*hospital", coverage_note: "low: обязательное название даёт кандидата; paediatrics может обозначать лишь отделение обычной больницы.", uncertain: true}
+"поликлиника или медицинский центр": {osm: [{amenity: clinic}, {healthcare: clinic}], name_regex: null, coverage_note: "medium: амбулаторные учреждения размечаются неоднородно; государственные и частные клиники не разделены.", uncertain: false}
+"педиатр": {osm: [{amenity: [doctors, clinic], "healthcare:speciality": paediatrics}, {healthcare: [doctor, clinic], "healthcare:speciality": paediatrics}], name_regex: null, coverage_note: "low: специализация заполнена реже базового типа; приём туристов и запись отдельно.", uncertain: false}
+"травмпункт": {osm: [{amenity: [hospital, clinic, doctors]}, {healthcare: [hospital, clinic, doctor]}], name_regex: "травм(?:а|о)?пункт|травматологическ.*пункт|пункт.*травматолог", coverage_note: "low: обязательное название даёт только кандидата; trauma не подтверждает травмпункт или круглосуточный приём.", uncertain: true}
+"стоматология": {osm: [{amenity: dentist}, {healthcare: dentist}], name_regex: null, coverage_note: "medium: устойчивые специальные теги; отдельные кабинеты и экстренный приём могут быть не отражены.", uncertain: false}
+"пункт сдачи анализов": {osm: [{healthcare: sample_collection}, {healthcare: laboratory, sample_collection: "yes"}], name_regex: null, coverage_note: "low: пункты и приём образцов размечены не всегда; лаборатория без sample_collection не считается местом сдачи.", uncertain: false}
+"оптика": {osm: [{shop: optician}], name_regex: null, coverage_note: "medium: небольшие оптики могут отсутствовать; ремонт очков и медицинский приём не гарантируются.", uncertain: false}
+
+# Группа 4 — Дети и семейный досуг (9 видов).
+"детская площадка": {osm: [{leisure: playground}], name_regex: null, coverage_note: "high: хорошо различимый базовый объект; возраст, исправность оборудования и доступ отдельно.", uncertain: false}
+"крытая детская игровая": {osm: [{leisure: indoor_play}, {leisure: playground, indoor: "yes"}], name_regex: null, coverage_note: "low: помещения внутри ТЦ и отелей могут не иметь отдельной разметки; присмотр не гарантируется.", uncertain: false}
+"аквапарк": {osm: [{leisure: water_park}], name_regex: null, coverage_note: "high: крупный заметный объект с прямым тегом; сезонность и открытые зоны отдельно.", uncertain: false}
+"парк аттракционов": {osm: [{tourism: theme_park}], name_regex: null, coverage_note: "high: самостоятельные парки выделяются; отдельные аттракционы в обычном парке не охвачены.", uncertain: false}
+"зоопарк": {osm: [{tourism: zoo}], name_regex: null, coverage_note: "high: специальный тип для крупных объектов; мини-зоопарки могут отсутствовать.", uncertain: false}
+"дельфинарий": {osm: [{tourism: [aquarium, zoo, attraction]}], name_regex: "дельфинар|dolphinarium|dolphin.?show", coverage_note: "low: обязательное название уточняет широкий класс; даже совпадение имени требует проверки.", uncertain: true}
+"океанариум": {osm: [{tourism: aquarium}], name_regex: null, coverage_note: "medium: небольшие экспозиции могут отсутствовать; тег включает также другие публичные аквариумы.", uncertain: false}
+"цирк": {osm: [{amenity: theatre, "theatre:genre": circus}], name_regex: null, coverage_note: "low: консервативная документированная схема; объекты с иным основным типом будут пропущены.", uncertain: false}
+"верёвочный парк": {osm: [{leisure: high_ropes_course}], name_regex: null, coverage_note: "low: отдельный тег есть; трассы внутри крупных парков могут быть не выделены.", uncertain: false}
+
+# Группа 5 — Животные (4 вида).
+"ветеринарная клиника": {osm: [{amenity: veterinary}], name_regex: null, coverage_note: "medium: маленькие кабинеты могут отсутствовать; круглосуточность и экстренная помощь отдельно.", uncertain: false}
+"площадка для собак": {osm: [{leisure: dog_park}], name_regex: null, coverage_note: "medium: специальные площадки заметнее стихийных мест выгула; обычный парк сюда не входит.", uncertain: false}
+"зоомагазин": {osm: [{shop: pet}], name_regex: null, coverage_note: "medium: небольшие магазины и отделы могут отсутствовать; наличие нужного корма отдельно.", uncertain: false}
+"груминг": {osm: [{shop: pet_grooming}], name_regex: null, coverage_note: "low: небольшие кабинеты и услуги при ветклиниках могут не иметь отдельного объекта.", uncertain: false}
+
+# Группа 6 — Транспорт (23 вида).
+"ж/д вокзал или станция": {osm: [{railway: [station, halt]}], name_regex: null, coverage_note: "high: основная инфраструктура хорошо различима; тип линии, пассажирское обслуживание и входы проверяются отдельно.", uncertain: false}
+"автобусная остановка": {osm: [{highway: bus_stop}, {public_transport: platform, bus: "yes"}], name_regex: null, coverage_note: "high: обе распространённые схемы учтены; направления движения и дубликаты нужно различать.", uncertain: false}
+"автовокзал": {osm: [{amenity: bus_station}, {public_transport: station, bus: "yes"}], name_regex: null, coverage_note: "high: крупные автобусные узлы имеют прямую разметку; отдельное здание вокзала не гарантируется.", uncertain: false}
+"аэропорт": {osm: [{aeroway: aerodrome}], name_regex: null, coverage_note: "high: крупные аэропорты легко выделить; для маршрута нужен пассажирский терминал.", uncertain: false}
+"стоянка такси": {osm: [{amenity: taxi}], name_regex: null, coverage_note: "medium: размечаются обозначенные стоянки; неофициальные места ожидания и точки подачи приложения не охвачены.", uncertain: false}
+"станция канатной дороги": {osm: [{aerialway: station}], name_regex: null, coverage_note: "medium: станции могут не выделяться отдельно; необходимо связать объект с пассажирской линией.", uncertain: true}
+"канатная дорога": {osm: [{aerialway: [cable_car, gondola, chair_lift, mixed_lift]}], name_regex: null, coverage_note: "high: крупные курортные линии хорошо различимы; расстояние до линии не равно пути до посадки.", uncertain: false}
+"горнолыжный подъёмник": {osm: [{aerialway: [cable_car, gondola, chair_lift, mixed_lift, drag_lift, t-bar, j-bar, platter, rope_tow, magic_carpet]}], name_regex: null, coverage_note: "medium: небольшие учебные подъёмники могут отсутствовать; фильтр требует проверки связи с лыжными трассами.", uncertain: true}
+"парковка": {osm: [{amenity: parking}], name_regex: null, coverage_note: "high: крупные площадки имеют устойчивый тег; право въезда, стоимость и свободные места отдельно.", uncertain: false}
+"бесплатная парковка": {osm: [{amenity: parking, fee: "no"}], name_regex: null, coverage_note: "low: платность заполнена не везде; fee=no не означает общедоступность или отсутствие ограничения времени.", uncertain: false}
+"крытая парковка": {osm: [{amenity: parking, covered: "yes"}, {amenity: parking, parking: underground}], name_regex: null, coverage_note: "low: крыша и подземность уточнены не всегда; multi-storey само по себе не гарантирует крышу над местом.", uncertain: false}
+"зарядка для электромобиля": {osm: [{amenity: charging_station, motorcar: ["yes", designated]}], name_regex: null, coverage_note: "low: строгий фильтр требует явного motorcar и пропускает станции без него; разъём, доступ и мощность отдельно.", uncertain: false}
+"автозаправка": {osm: [{amenity: fuel}], name_regex: null, coverage_note: "high: основной тип АЗС; конкретное топливо и режим работы требуют уточнения.", uncertain: false}
+"прокат велосипедов": {osm: [{amenity: bicycle_rental}], name_regex: null, coverage_note: "medium: включает станции велошеринга и прокаты; сезонные точки могут отсутствовать.", uncertain: false}
+"велопарковка": {osm: [{amenity: bicycle_parking}], name_regex: null, coverage_note: "medium: мелкая инфраструктура наносится неравномерно; охрана и крыша не гарантируются.", uncertain: false}
+"прокат автомобилей": {osm: [{amenity: car_rental}], name_regex: null, coverage_note: "medium: офисы имеют прямой тег; операторы с доставкой автомобиля могут не иметь точки.", uncertain: false}
+"автосервис": {osm: [{shop: car_repair}], name_regex: null, coverage_note: "medium: небольшие мастерские могут отсутствовать; конкретные марки, работы и срочный приём отдельно.", uncertain: false}
+"автомойка": {osm: [{amenity: car_wash}], name_regex: null, coverage_note: "medium: небольшие и встроенные мойки могут отсутствовать; самообслуживание отдельно.", uncertain: false}
+"пирс": {osm: [{man_made: pier}], name_regex: null, coverage_note: "medium: конструкция может быть нанесена без назначения; прогулочный доступ и посадка на катер не гарантируются.", uncertain: false}
+"паромный терминал": {osm: [{amenity: ferry_terminal}], name_regex: null, coverage_note: "medium: небольшие остановочные пункты могут отсутствовать; экскурсионный причал не равнозначен паромному.", uncertain: false}
+"прокат лодок": {osm: [{amenity: boat_rental}], name_regex: null, coverage_note: "low: сезонные пункты могут отсутствовать; тип судна и наличие инструктора отдельно.", uncertain: false}
+"велодорожка": {osm: [{highway: cycleway}, {highway: path, bicycle: designated}], name_regex: null, coverage_note: "medium: отдельные дорожки и совмещённые пути учтены; велополосы на проезжей части требуют других фильтров.", uncertain: false}
+"яхтенная марина": {osm: [{leisure: marina}], name_regex: null, coverage_note: "medium: крупные гавани заметнее малых стоянок; аренда яхт и прогулочные рейсы не гарантируются.", uncertain: false}
+
+# Группа 7 — Берег и природа (13 видов).
+"пляж": {osm: [{natural: beach}], name_regex: null, coverage_note: "high: заметные пляжные участки хорошо различимы; морской берег, доступ и пригодность для купания проверяются отдельно.", uncertain: false}
+"оборудованный пляж": {osm: [{leisure: beach_resort}], name_regex: null, coverage_note: "medium: граница управляемой пляжной территории выделена не всегда; тег не подтверждает конкретный набор оборудования.", uncertain: true}
+"песчаный пляж": {osm: [{natural: beach, surface: sand}], name_regex: null, coverage_note: "low: материал покрытия уточнён не всегда; смешанные участки и сезонные изменения возможны.", uncertain: false}
+"галечный пляж": {osm: [{natural: beach, surface: pebblestone}], name_regex: null, coverage_note: "low: строгий материал покрытия часто не указан; участки с общей разметкой gravel будут пропущены.", uncertain: false}
+"набережная": {osm: [{highway: [pedestrian, footway, path]}], name_regex: "набережн|променад|promenade|esplanade", coverage_note: "low: обязательное название даёт кандидатов; нужна близость к воде. man_made=quay не означает прогулочную набережную.", uncertain: true}
+"парк": {osm: [{leisure: park}], name_regex: null, coverage_note: "high: крупные городские парки имеют устойчивый тип; лес или газон автоматически парком не считаются.", uncertain: false}
+"ботанический сад": {osm: [{leisure: garden, "garden:type": botanical}], name_regex: null, coverage_note: "medium: дополнительный тип сада указан не везде; дендрарии могут использовать иную разметку.", uncertain: false}
+"заповедная природная территория": {osm: [{leisure: nature_reserve}], name_regex: null, coverage_note: "medium: одна из схем охраняемых территорий; точный российский правовой статус и разрешение на вход не следуют из тега.", uncertain: false}
+"смотровая площадка": {osm: [{tourism: viewpoint}], name_regex: null, coverage_note: "medium: известные точки обзора заметнее неофициальных; видимость моря или заката не гарантируется.", uncertain: false}
+"водопад": {osm: [{waterway: waterfall}], name_regex: null, coverage_note: "medium: небольшие и сезонные водопады могут отсутствовать; полноводность и путь отдельно.", uncertain: false}
+"пещера": {osm: [{natural: cave_entrance}], name_regex: null, coverage_note: "medium: обозначается вход; экскурсионное оборудование и возможность самостоятельного посещения не гарантируются.", uncertain: false}
+"горная вершина": {osm: [{natural: peak}], name_regex: null, coverage_note: "high: известные вершины хорошо различимы; наличие доступного пешего маршрута не гарантируется.", uncertain: false}
+"пешеходный туристический маршрут": {osm: [{type: route, route: [hiking, foot]}], name_regex: null, coverage_note: "medium: учитываются маршрутные отношения; отдельные тропы без relation будут пропущены.", uncertain: false}
+
+# Группа 8 — Бассейны, спорт и оздоровление (14 видов).
+"бассейн": {osm: [{leisure: swimming_pool}, {leisure: sports_centre, sport: swimming}], name_regex: null, coverage_note: "medium: возможны чаша и комплекс одного бассейна; нужны объединение дублей и проверка доступа.", uncertain: false}
+"крытый бассейн": {osm: [{leisure: swimming_pool, indoor: "yes"}], name_regex: null, coverage_note: "low: внутренние чаши и indoor нанесены не всегда; включение посещения в проживание не следует из тега.", uncertain: false}
+"спортзал": {osm: [{leisure: fitness_centre}], name_regex: null, coverage_note: "medium: отдельные фитнес-клубы выделены лучше небольших залов при отелях.", uncertain: false}
+"уличные тренажёры": {osm: [{leisure: fitness_station}], name_regex: null, coverage_note: "medium: отдельные тренажёры и дворовые площадки могут быть пропущены.", uncertain: false}
+"спа": {osm: [{shop: beauty, beauty: spa}], name_regex: null, coverage_note: "low: точный фильтр для салона спа-процедур; гостиничные комплексы с бассейнами могут быть размечены иначе.", uncertain: false}
+"баня или сауна": {osm: [{leisure: sauna}, {amenity: public_bath, sauna: "yes"}], name_regex: null, coverage_note: "medium: отдельные заведения размечены лучше парных внутри отеля; public_bath без sauna=yes недостаточно.", uncertain: false}
+"хаммам": {osm: [{amenity: public_bath, "bath:type": hammam}], name_regex: null, coverage_note: "low: тип купальни может не уточняться; хаммам внутри спа часто не отдельный объект.", uncertain: false}
+"теннисный корт": {osm: [{leisure: pitch, sport: tennis}], name_regex: null, coverage_note: "medium: вид спорта уточнён не везде; комплекс без отдельно нанесённых кортов будет пропущен.", uncertain: false}
+"футбольное поле": {osm: [{leisure: pitch, sport: soccer}], name_regex: null, coverage_note: "medium: школьные и дворовые поля нанесены неравномерно; доступ и размер отдельно.", uncertain: false}
+"баскетбольная площадка": {osm: [{leisure: pitch, sport: basketball}], name_regex: null, coverage_note: "medium: многофункциональная площадка может иметь только sport=multi и не попасть в строгий фильтр.", uncertain: false}
+"волейбольная площадка": {osm: [{leisure: pitch, sport: [volleyball, beachvolleyball]}], name_regex: null, coverage_note: "medium: включает обычный и пляжный волейбол; вид спорта может быть не указан, наличие сетки и сезонность отдельно.", uncertain: false}
+"скейтпарк": {osm: [{leisure: pitch, sport: skateboard}], name_regex: null, coverage_note: "medium: специальная площадка распознаётся по виду спорта; небольшие элементы могут не выделяться.", uncertain: false}
+"каток": {osm: [{leisure: ice_rink}], name_regex: null, coverage_note: "medium: временные катки могут отсутствовать; массовое катание и наличие льда в нужный день отдельно.", uncertain: false}
+"горнолыжная трасса": {osm: [{"piste:type": downhill}], name_regex: null, coverage_note: "medium: курортные трассы могут быть нанесены линиями или площадями; открытие и снег не подтверждаются.", uncertain: false}
+
+# Группа 9 — Культура и отдых (7 видов).
+"музей": {osm: [{tourism: museum}], name_regex: null, coverage_note: "high: крупные музеи имеют устойчивый тип; небольшие частные экспозиции могут отсутствовать.", uncertain: false}
+"театр": {osm: [{amenity: theatre}], name_regex: null, coverage_note: "high: самостоятельные культурные учреждения хорошо различимы; репертуар и работа площадки отдельно.", uncertain: false}
+"кинотеатр": {osm: [{amenity: cinema}], name_regex: null, coverage_note: "medium: тип однозначен; кинотеатры внутри комплексов и закрытия могут отражаться с задержкой.", uncertain: false}
+"концертный зал": {osm: [{amenity: concert_hall}, {amenity: theatre, "theatre:type": concert_hall}], name_regex: null, coverage_note: "low: используются разные схемы; площадки с одним music_venue или theatre строгий фильтр пропускает.", uncertain: false}
+"боулинг": {osm: [{leisure: bowling_alley}], name_regex: null, coverage_note: "medium: помещения внутри развлекательных центров могут не иметь отдельной точки.", uncertain: false}
+"место для пикника": {osm: [{tourism: picnic_site}], name_regex: null, coverage_note: "medium: специально выделенные места заметнее стихийных; мангал и разрешение разводить огонь не гарантируются.", uncertain: false}
+"стадион": {osm: [{leisure: stadium}], name_regex: null, coverage_note: "high: крупная спортивная инфраструктура хорошо различима; свободный вход для тренировок не гарантируется.", uncertain: false}
+
+# Группа 10 — Услуги и бытовая инфраструктура (13 видов).
+"банкомат": {osm: [{amenity: atm}, {amenity: bank, atm: "yes"}], name_regex: null, coverage_note: "medium: часть устройств указана только свойством банка; доступ зависит от помещения и отдельных часов банкомата.", uncertain: false}
+"банк": {osm: [{amenity: bank}], name_regex: null, coverage_note: "high: отделения имеют устойчивый тип; перечень операций и актуальный режим отдельно.", uncertain: false}
+"обмен валют": {osm: [{amenity: bureau_de_change}], name_regex: null, coverage_note: "low: обмен внутри банка может не иметь отдельного объекта; валюты, наличность и курс неизвестны.", uncertain: false}
+"почтовое отделение": {osm: [{amenity: post_office}], name_regex: null, coverage_note: "high: основной тип учреждения; обслуживание конкретного отправления и часы отдельно.", uncertain: false}
+"прачечная": {osm: [{shop: laundry}], name_regex: null, coverage_note: "medium: отдельные точки видны лучше услуг при отелях; самообслуживание и сроки не гарантируются.", uncertain: false}
+"химчистка": {osm: [{shop: dry_cleaning}, {shop: laundry, dry_cleaning: "yes"}], name_regex: null, coverage_note: "medium: включает пункты приёма; услуга при других заведениях может не выделяться, сроки обработки отдельно.", uncertain: false}
+"парикмахерская": {osm: [{shop: hairdresser}], name_regex: null, coverage_note: "medium: базовая категория услуг; маленькие кабинеты и смена арендаторов могут быть не учтены.", uncertain: false}
+"салон красоты": {osm: [{shop: beauty}], name_regex: null, coverage_note: "medium: небольшие кабинеты и услуги внутри других заведений могут отсутствовать; конкретные процедуры отдельно.", uncertain: false}
+"массаж": {osm: [{shop: massage}], name_regex: null, coverage_note: "low: небольшие кабинеты и услуги внутри отеля могут не иметь отдельного объекта.", uncertain: false}
+"общественный туалет": {osm: [{amenity: toilets}], name_regex: null, coverage_note: "medium: сезонные и внутренние туалеты могут отсутствовать; доступ, стоимость и часы отдельно.", uncertain: false}
+"питьевой фонтанчик или точка питьевой воды": {osm: [{amenity: drinking_water}], name_regex: null, coverage_note: "medium: мелкие точки воды нанесены неравномерно; фильтр включает питьевые краны и колонки.", uncertain: false}
+"камера хранения": {osm: [{amenity: luggage_locker}, {amenity: left_luggage}], name_regex: null, coverage_note: "low: охватывает ячейки и приём багажа сотрудником; внутренние объекты вокзалов и отелей нанесены неполно.", uncertain: false}
+"туристический инфоцентр": {osm: [{tourism: information, information: [office, visitor_centre]}], name_regex: null, coverage_note: "medium: сезонные офисы могут отсутствовать; фильтр выбирает офисы для посетителей, а не информационные щиты.", uncertain: false}

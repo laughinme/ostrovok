@@ -10,7 +10,7 @@ Mobbin MCP. Читать вместе с [`PRODUCT.md`](../../PRODUCT.md) (ау�
   проводить заново: сразу исследование референсов → направления → гейт 1.
 - Пользователь не дизайнер. Решаем сами, его зовём только на три гейта: **направление**,
   **интерактивная концепция**, **ревью**.
-- Прототип собираем на моковых данных по контракту из [§9](#9-контракт-данных-для-моков), чтобы потом
+- Прототип собираем на моковых данных по контракту из [§9](#9-контракт-данных), чтобы потом
   подключить настоящий бэкенд без переделки экранов.
 - Результаты дизайн-сессии: `DESIGN.md` (корень), `design/references/`, `design/decisions.md`,
   `design/storyboard.md` (для лендинга), прототип во фронтенде.
@@ -337,16 +337,29 @@ B в помощнике запроса.
 Тайминги и правила — по `design-studio` (feedback 100–200 мс, переходы 250–400 мс, stagger ≤ 30 мс).
 Для каждого момента нужна версия с `prefers-reduced-motion`.
 
-## 9. Контракт данных для моков
+## 9. Контракт данных
 
-Черновик. Бэкенд будет отдавать то же самое; поля можно уточнять, но через этот файл.
+**v2, согласовано 28.10** вместе с архитектурой бэкенда ([09](09-backend-architecture.md)); пути API — в
+09 §9. Пока у бэкенда нет OpenAPI, главный документ контракта — этот раздел; потом источник правды —
+`/api/openapi.json`, а раздел обновляем вслед (D-32 в `docs/backend/decisions.md`). Поля меняем только
+через этот файл. Фронт сейчас работает на типах v1 (`frontend/src/entities/hotel/model/types.ts`) и
+переходит на v2 при подключении API (задачи F1–F8 в `docs/backend/tasks.md`).
+
+Что поменялось относительно v1: фасады — 8 румбов; у фактов есть `scopeText`, `sourceLabel`, `status` и
+`isDemo`; история и источники вынесены в `FactDetail`; `Recommendation` вместо `bestRoom`; добавлены
+`Hotel`, `RoomType`, `Characteristic`, `SearchResult`, `Comparison`; `AgentStep` и `AgentRun` расширены;
+новые типы для отельера, мира, гостя и качества; события SSE.
 
 ```ts
+// ── Общие ───────────────────────────────────────────────────────────────
 type Verdict = 'yes' | 'partial' | 'no' | 'unknown'
 type SourceKind = 'computed' | 'open_data' | 'hotelier' | 'guest' | 'demo_card'
-type Facade = 'N' | 'NE' | 'E' | 'SE' | 'S' | 'SW' | 'W' | 'NW'
+type Facade = 'N' | 'NE' | 'E' | 'SE' | 'S' | 'SW' | 'W' | 'NW'   // нормаль стены, 8 румбов
+type Importance = 'must' | 'important' | 'nice'
+type Checkable = 'compute' | 'ask_hotelier' | 'cannot'
+type ConfidenceLabel = 'точно' | 'скорее да' | 'не уверены' | 'скорее нет'
 
-interface Scope {               // где факт верен
+interface Scope {               // где факт верен; пустое поле — «все»
   facades?: Facade[]
   floorFrom?: number
   floorTo?: number
@@ -354,74 +367,274 @@ interface Scope {               // где факт верен
   roomTypeIds?: string[]
 }
 
+// ── Знания ──────────────────────────────────────────────────────────────
 interface Evidence {
-  kind: 'horizon_panorama' | 'noise_facades' | 'route_profile' | 'map_layer'
-      | 'climate_chart' | 'hotelier_answer' | 'osm_objects' | 'text'
-  data: unknown                 // своя схема на каждый kind
-  attribution: string
+  kind: 'horizon_panorama' | 'noise_facades' | 'route_profile' | 'climate_chart'
+      | 'hotelier_answer' | 'osm_objects' | 'map_layer' | 'text'
+  summary: string               // «море видно в 82 из 100 симуляций»
+  params?: Record<string, unknown>  // чем перестроить картинку: { facade, floor, date, target }
+  osmRefs?: string[]            // 'way/123456' — для «проверить самому»
+  attribution: string           // «© OpenStreetMap contributors, Copernicus DEM»
 }
 
 interface Fact {
   id: string
   hotelId: string
-  characteristic: string        // ключ из реестра: 'sea_view', 'sunset_over_sea', 'night_noise', ...
+  characteristic: string        // ключ реестра: 'sea_view', 'sunset_over_sea', 'night_noise', …
   statement: string             // «Море видно из окон ЮЗ-фасада с 4-го этажа»
-  value: unknown
+  scopeText: string             // «ЮЗ-фасад, этаж 4 и выше · октябрь–март»
+  value: unknown                // по схеме характеристики
   scope: Scope
-  confidence: number            // 0..1
-  confidenceLabel: 'точно' | 'скорее да' | 'не уверены' | 'скорее нет'
-  source: SourceKind
-  method: string
+  confidence: number            // 0..1: вероятность, что утверждение верно в своей области
+  confidenceLabel: ConfidenceLabel
+  source: SourceKind            // главный источник
+  sourceLabel: string           // «расчёт», «ответ отеля, 12.10», «демо-отельер»
+  method: string                // «горизонт по рельефу и зданиям, Монте-Карло 50»
   observedAt: string            // ISO
   validUntil?: string
+  status: 'ok' | 'stale' | 'conflict'
   evidence: Evidence[]
-  caveats: string[]
+  caveats: string[]             // «деревья не учитываем»
   conflictId?: string
-  history?: { at: string; value: unknown; source: SourceKind; note: string }[]
+  isDemo: boolean               // синтетика: демо-карточка или демо-отельер
 }
 
+interface FactDetail extends Fact {   // панель «Почему мы так думаем»
+  sources: { kind: SourceKind; label: string; observedAt: string; confidence: number; ref?: string }[]
+  history: { at: string; statement: string; confidence: number; reason: string }[]
+}
+
+interface Characteristic {      // реестр: что умеем проверять
+  key: string
+  title: string                 // «закат над морем»
+  how: string                   // «посчитаем», «спросим у отеля», «проверить не можем»
+  checkable: Checkable
+  level: 'hotel' | 'facade' | 'facade_floor' | 'facade_floor_month' | 'month' | 'room_type'
+  method: string                // 'view' | 'sun_event' | 'noise' | 'walk_to' | 'poi_nearby' | …
+  status: 'published' | 'provisional' | 'draft'
+  coverage?: number             // доля отелей с фактом, 0..1
+  avgConfidence?: number
+  ttlDays: number
+}
+
+// ── Отель ───────────────────────────────────────────────────────────────
+interface RatePlan { id: string; meal: string; cancel: string; pay: string; priceDemo: number; tag?: string }
+
+interface RoomType {            // категория номера — демо-карточка
+  id: string
+  name: string
+  area: number
+  bed: string
+  capacity: number
+  facades: Facade[]             // пусто, пока отель не разметил стороны
+  floors?: [number, number]
+  confirmedByHotel: boolean     // стороны размечены самим отелем
+  rates: RatePlan[]
+}
+
+interface Hotel {
+  id: string
+  name: string                  // из OSM
+  stars?: number
+  area: string                  // «Центр», «Хоста», «Адлер», «Сириус», «Красная Поляна»
+  address: string
+  location: [number, number]    // lon, lat
+  floors: number
+  facades: Facade[]             // реальные стороны здания
+  demo: { rating: number; ratingLabel: string; tagline: string; amenities: string[] }
+  priceFromDemo: number
+  rooms: RoomType[]
+  facts: Fact[]                 // сводка: главный факт по каждой характеристике
+  unknowns: { characteristic: string; question: string; why: string }[]
+  nearby: { kind: string; name: string; distanceText: string; osmRef?: string }[]
+}
+
+// ── Поиск ───────────────────────────────────────────────────────────────
 interface IntentChip {
   id: string
   characteristic?: string       // нет ключа → желание неизвестно, нужно исследование
   label: string                 // «закат над морем»
-  importance: 'must' | 'important' | 'nice'
-  checkable: 'compute' | 'ask_hotelier' | 'cannot'
-  params?: Record<string, unknown>
+  importance: Importance
+  checkable: Checkable
+  params?: Record<string, unknown>   // { maxWalkMinutes: 10 }, { dogWeightKg: 30 }
   fromProfile?: boolean         // подмешано профилем вкуса
 }
+
+interface Trip { from?: string; to?: string; adults?: number; children?: number; budgetPerNight?: number }
 
 interface Intent {
   text?: string
   chips: IntentChip[]
-  trip: { from?: string; to?: string; adults?: number; children?: number; budgetPerNight?: number }
-  hints: string[]               // подсказки помощника
+  trip: Trip
+  hints: string[]               // подсказки помощника, не больше двух
+  planner: 'llm' | 'rules'      // кто разбирал запрос
+}
+
+interface ChipResult {
+  chipId: string
+  verdict: Verdict
+  probability: number | null    // null — факта нет
+  factId?: string
+  line: string                  // «✓ закат над морем с ЮЗ-фасада, этаж ≥ 4 (12 ноября около 16:52)»
+}
+
+interface Recommendation {      // какой номер брать и о чём попросить отель
+  roomTypeId?: string
+  roomName?: string
+  scope: Scope
+  scopeText: string
+  request: string               // «ЮЗ-сторона · этаж ≥ 4 · подальше от лифта»
+  confirmedByHotel: boolean     // false → «отель не подтвердил, какие номера на этой стороне»
+  priceDemo?: number
 }
 
 interface HotelMatch {
   hotelId: string
   name: string
-  area: string                  // «Центр», «Адлер», «Сириус», «Красная Поляна»
+  area: string
   location: [number, number]    // lon, lat
   score: number                 // 0..1
   disappointmentRisk: number    // 0..1
-  perChip: { chipId: string; verdict: Verdict; factId?: string; line: string }[]
-  tradeoff?: string
-  bestRoom?: { roomTypeId: string; name: string; request: string; priceDemo?: number }
-  thumbnail: { kind: 'horizon' | 'facades' | 'map'; data: unknown }
+  perChip: ChipResult[]
+  tradeoff?: string             // самый весомый компромисс одной строкой
+  recommendation?: Recommendation
+  thumbnail: { kind: 'horizon' | 'facades' | 'map'; params: Record<string, unknown> }
+  priceFromDemo?: number
 }
 
-interface AgentStep { at: string; tool: string; summary: string; status: 'running' | 'done' | 'failed' }
-interface AgentRun { id: string; goal: string; status: 'running' | 'done' | 'failed'; steps: AgentStep[] }
+interface SearchResult {
+  searchId: string
+  intent: Intent
+  matches: HotelMatch[]
+  relaxations: { chipId: string; label: string; wouldMatch: number }[]   // «уберите „до 4 000 ₽“ — будет 7»
+  research: { chipId: string; hotelIds: string[]; runId?: string }[]     // что можно узнать вживую
+}
 
+interface Comparison {
+  items: { hotelId: string; roomTypeId?: string; name: string }[]
+  rows: { chipId: string; label: string; cells: ChipResult[] }[]
+  summary: string               // «A лучше по закату, B — по тишине»
+}
+
+// ── Агенты ──────────────────────────────────────────────────────────────
+type AgentKind = 'researcher' | 'curator' | 'liaison' | 'reconciler' | 'watcher'
+               | 'intent' | 'matcher' | 'simulator'
+
+interface AgentStep {
+  seq: number
+  at: string
+  kind: 'reason' | 'tool' | 'result' | 'decision' | 'error'
+  tool?: string                 // 'geo.horizon', 'hotelier.ask', …
+  summary: string               // одна строка для ленты
+  args?: unknown
+  output?: unknown
+  durationMs?: number
+}
+
+interface AgentRun {
+  id: string
+  agent: AgentKind
+  goal: string
+  planner: 'llm' | 'rules'
+  status: 'queued' | 'running' | 'done' | 'failed'
+  startedAt?: string
+  finishedAt?: string
+  steps: AgentStep[]
+  usage?: { requests: number; inputTokens: number; outputTokens: number }
+}
+
+// ── Отельер, мир, гость, качество ───────────────────────────────────────
 interface HotelierQuestion {
   id: string
   hotelId: string
+  characteristic: string
   text: string                  // «Какие категории номеров выходят на юго-западную сторону?»
   why: string                   // «34 гостя за неделю искали тишину»
   value: number                 // спрос × неопределённость × влияние
-  answerKind: 'facade_mapping' | 'choice' | 'free_text'
+  answerKind: 'facade_mapping' | 'choice' | 'number' | 'free_text'
+  options?: string[]
   status: 'open' | 'answered'
 }
+
+interface Conflict {
+  id: string
+  hotelId: string
+  characteristic: string
+  claims: { source: SourceKind; label: string; statement: string; confidence: number }[]
+  rule: 'physics' | 'hotelier' | 'freshest' | 'guests'
+  resolution: string            // «физика сильнее описания: показываем расчёт»
+  status: 'open' | 'resolved' | 'waiting_hotel'
+  questionId?: string
+}
+
+interface WorldChange {
+  id: string
+  kind: 'building_added' | 'building_removed' | 'construction' | 'poi_opened' | 'osm_diff'
+  title: string                 // «Появилось здание: 9 этажей, 40 м от „Маяка“»
+  at: string
+  affectedHotels: string[]
+  runId?: string
+}
+
+interface Notification {
+  id: string
+  audience: 'guest' | 'hotel' | 'operator'
+  kind: string
+  title: string
+  body: string
+  at: string
+  read: boolean
+  link?: string
+}
+
+interface Booking {
+  id: string
+  hotelId: string
+  roomTypeId: string
+  ratePlanId: string
+  checkIn: string
+  checkOut: string
+  guests: { adults: number; children: number }
+  request: string               // автозапрос к отелю, гость может поправить
+  status: 'requested' | 'confirmed' | 'alternative_offered' | 'declined' | 'completed'
+  hotelReply?: string
+  priceDemo: number
+}
+
+interface TasteProfile {
+  enabled: boolean
+  summary: string[]             // «тишина важнее вида», «не любите подъёмы»
+  weights: { characteristic: string; weight: number; because: string }[]   // because: «3 из 4 броней — во двор»
+}
+
+interface DayPlan {
+  hotelId: string
+  date: string
+  slots: {
+    time: string
+    title: string
+    place?: string
+    osmRef?: string
+    route?: { minutes: number; backMinutes: number; climbM: number; steps: number }
+  }[]
+  sunset: { time: string; fromWindow: boolean; spot?: string }
+}
+
+interface QualityReport {
+  generatedAt: string
+  perCharacteristic: { key: string; n: number; accuracy: number; ece: number; coverage: number }[]
+  hotelierShare: number         // доля фактов, для которых понадобился отель
+  parseAccuracy: { rules: number; llm?: number }
+  ndcg10: number
+}
+
+// ── События SSE ─────────────────────────────────────────────────────────
+type ServerEvent =
+  | { type: 'run.step'; runId: string; step: AgentStep }
+  | { type: 'run.finished'; runId: string; status: 'done' | 'failed' }
+  | { type: 'fact.changed'; hotelId: string; characteristic: string; factId: string }
+  | { type: 'search.updated'; searchId: string }
+  | { type: 'notification'; notification: Notification }
 ```
 
 ## 10. Референсы: что искать

@@ -1,0 +1,254 @@
+- question_key: facade_rooms
+  answer_text: "На юго-западную сторону выходят категории «Стандарт с балконом» и «Делюкс». Такие номера расположены с 4-го по 8-й этаж включительно."
+  expected:
+    facade: SW
+    room_types: ["Стандарт с балконом", "Делюкс"]
+    floor_from: 4
+    floor_to: 8
+  clarity: high
+
+- question_key: facade_rooms
+  answer_text: "Да, у нас довольно много номеров в сторону моря, преимущественно на верхних этажах. Но точные категории и этажи зависят от корпуса, надо смотреть отдельно."
+  expected:
+    facade: SW
+    room_types: []
+    floor_from: null
+    floor_to: null
+  clarity: low
+
+- question_key: facade_rooms
+  answer_text: "На юго-запад смотрят «Комфорт» и «Люкс», начиная с третьего этажа и до девятого включительно."
+  expected:
+    facade: SW
+    room_types: ["Комфорт", "Люкс"]
+    floor_from: 3
+    floor_to: 9
+  clarity: high
+
+- question_key: facade_rooms
+  answer_text: "Да абсолютно все категории у нас выходят на юго-запад! И Стандарт, и Комфорт, и Люкс, причём на каждом этаже с первого по десятый. Вообще любой номер берите, не ошибётесь!"
+  expected:
+    facade: SW
+    room_types: ["Стандарт", "Комфорт", "Люкс"]
+    floor_from: 1
+    floor_to: 10
+  clarity: medium
+
+- question_key: facade_rooms
+  answer_text: "так смотрите юго запад это у нас получается комфорт и делюкс ну с пятого этажа начинается и по восьмой включительно да именно эти две категории"
+  expected:
+    facade: SW
+    room_types: ["Комфорт", "Делюкс"]
+    floor_from: 5
+    floor_to: 8
+  clarity: high
+
+- question_key: pets_policy
+  answer_text: "Да, с собакой весом 30 кг заселиться можно. Принимаем собак до 35 кг, доплата 1500 рублей за ночь. При заселении потребуется ветеринарный паспорт."
+  expected:
+    allowed: true
+    species: ["dog"]
+    max_weight_kg: 35
+    fee_rub_per_night: 1500
+    conditions: "Необходим ветеринарный паспорт"
+  clarity: high
+
+- question_key: pets_policy
+  answer_text: "С собаками в принципе заселяем, но всё индивидуально. Насчёт такого веса нужно согласовать с руководством. Доплата обычно бывает, сумму скажем после подтверждения."
+  expected:
+    allowed: null
+    species: ["dog"]
+    max_weight_kg: null
+    fee_rub_per_night: null
+    conditions: "Заселение с собакой требует предварительного согласования с руководством"
+  clarity: low
+
+- question_key: pets_policy
+  answer_text: "К сожалению, собак принимаем только до двадцати пяти килограммов, поэтому с собакой весом тридцать килограммов нельзя. Для разрешённых питомцев доплата семьсот рублей за ночь."
+  expected:
+    allowed: false
+    species: ["dog"]
+    max_weight_kg: 25
+    fee_rub_per_night: 700
+    conditions: "Собаки весом более 25 кг не допускаются; доплата действует для разрешённых питомцев"
+  clarity: high
+
+- question_key: pets_policy
+  answer_text: "Конечно, мы вообще всех собак принимаем, хоть огромного алабая под сто килограммов привозите! Никаких ограничений по весу, и всё совершенно бесплатно!"
+  expected:
+    allowed: true
+    species: ["dog"]
+    max_weight_kg: null
+    fee_rub_per_night: 0
+    conditions: "Заявлено отсутствие ограничений по весу"
+  clarity: medium
+
+- question_key: pets_policy
+  answer_text: "да с собакой тридцать кило можно без проблем максимальный вес у нас тридцать пять килограммов доплата пятьсот рублей в сутки только заранее предупредите пожалуйста что будете с собакой"
+  expected:
+    allowed: true
+    species: ["dog"]
+    max_weight_kg: 35
+    fee_rub_per_night: 500
+    conditions: "Необходимо заранее предупредить о заселении с собакой"
+  clarity: high
+
+- question_key: soundproofing
+  answer_text: "Со стороны железной дороги у нас северо-восточный фасад. В номерах «Стандарт» и «Комфорт» установлены двухкамерные стеклопакеты с дополнительными шумозащитными уплотнителями. Специальная шумоизоляция окон есть."
+  expected:
+    facade: NE
+    soundproof: true
+    window_type: "Двухкамерные стеклопакеты с дополнительными шумозащитными уплотнителями"
+    room_types: ["Стандарт", "Комфорт"]
+  clarity: high
+
+- question_key: soundproofing
+  answer_text: "Окна вроде пластиковые, современные. Обычно при закрытых окнах поезд особо не мешает, но гости по-разному воспринимают шум. Точный тип стеклопакета сейчас не подскажу."
+  expected:
+    facade: null
+    soundproof: null
+    window_type: "Пластиковые окна, точный тип не подтверждён"
+    room_types: []
+  clarity: low
+
+- question_key: soundproofing
+  answer_text: "На северо-восточной стороне в категории «Стандарт» стоят обычные окна с двумя стёклами. Специальной шумоизоляции у них нет."
+  expected:
+    facade: NE
+    soundproof: false
+    window_type: "Обычные окна с двумя стёклами"
+    room_types: ["Стандарт"]
+  clarity: high
+
+- question_key: soundproofing
+  answer_text: "У нас абсолютно звуконепроницаемые окна во всём отеле! Поезда вообще никогда не слышно, даже на северо-восточной стороне прямо напротив путей. И в Стандартах, и в Комфортах, и в Люксах полная тишина!"
+  expected:
+    facade: NE
+    soundproof: true
+    window_type: null
+    room_types: ["Стандарт", "Комфорт", "Люкс"]
+  clarity: medium
+
+- question_key: soundproofing
+  answer_text: "так железка у нас с северо восточной стороны там стоят двойные стеклопакеты в стандартах и делюксах но прямо специальной шумоизоляции нет обычные окна в общем"
+  expected:
+    facade: NE
+    soundproof: false
+    window_type: "Двойные стеклопакеты без специальной шумоизоляции"
+    room_types: ["Стандарт", "Делюкс"]
+  clarity: high
+
+- question_key: blackout
+  answer_text: "Да, плотные шторы блэкаут установлены в категориях «Комфорт» и «Люкс». В номерах «Стандарт» только обычные шторы, полного затемнения они не обеспечивают."
+  expected:
+    blackout: true
+    room_types: ["Комфорт", "Люкс"]
+  clarity: high
+
+- question_key: blackout
+  answer_text: "Шторы у нас хорошие, достаточно плотные, кажется, в большинстве номеров. Но насколько они полностью блокируют свет, не могу точно сказать."
+  expected:
+    blackout: null
+    room_types: []
+  clarity: low
+
+- question_key: blackout
+  answer_text: "В двенадцати номерах категории «Панорама» установлены настоящие шторы блэкаут. Они есть на третьем и четвёртом этажах. В остальных категориях обычные шторы."
+  expected:
+    blackout: true
+    room_types: ["Панорама"]
+  clarity: high
+
+- question_key: blackout
+  answer_text: "У нас абсолютно во всех номерах, даже самых бюджетных, стопроцентное затемнение! Все шторы блэкаут, вообще ни один лучик света не проходит, хоть днём спите!"
+  expected:
+    blackout: true
+    room_types: all
+  clarity: medium
+
+- question_key: blackout
+  answer_text: "нет смотрите в стандартах плотных штор нет там обычные а вот в делюксах да там именно блэкаут стоят полностью затемняют комнату"
+  expected:
+    blackout: true
+    room_types: ["Делюкс"]
+  clarity: high
+
+- question_key: step_free
+  answer_text: "Да, в здании есть лифт, он обслуживает все жилые этажи. Но перед главным входом три ступеньки, пандуса нет. Поэтому вход без преодоления ступеней не предусмотрен."
+  expected:
+    elevator: true
+    step_free_entrance: false
+    notes: "Лифт обслуживает все жилые этажи; у главного входа 3 ступеньки, пандуса нет"
+  clarity: high
+
+- question_key: step_free
+  answer_text: "Лифт у нас вроде есть, хотя не помню, в каком корпусе. На входе, кажется, небольшой порожек или пара ступеней. Лучше уточнить у администратора."
+  expected:
+    elevator: null
+    step_free_entrance: null
+    notes: "Наличие лифта в конкретном корпусе и количество препятствий на входе требуют уточнения"
+  clarity: low
+
+- question_key: step_free
+  answer_text: "В отеле работают два лифта. Перед главным входом две ступени, но рядом оборудован пандус, поэтому можно попасть внутрь без подъёма по ступенькам."
+  expected:
+    elevator: true
+    step_free_entrance: true
+    notes: "Работают 2 лифта; у входа 2 ступени и альтернативный вход по пандусу"
+  clarity: high
+
+- question_key: step_free
+  answer_text: "У нас вообще идеальная доступность! Ни одной ступеньки нигде, прямо с улицы можно заехать на коляске. И целых три лифта, которые работают круглосуточно!"
+  expected:
+    elevator: true
+    step_free_entrance: true
+    notes: "Заявлено полное отсутствие ступеней на входе и наличие 3 круглосуточно работающих лифтов"
+  clarity: medium
+
+- question_key: step_free
+  answer_text: "да лифт есть конечно только до него от входа три ступеньки надо подняться пандуса к сожалению нет поэтому с коляской без помощи будет сложно"
+  expected:
+    elevator: true
+    step_free_entrance: false
+    notes: "До лифта необходимо преодолеть 3 ступеньки, пандуса нет; самостоятельный доступ на коляске затруднён"
+  clarity: high
+
+- question_key: remote_work
+  answer_text: "В номерах категорий «Комфорт» и «Бизнес» есть отдельные рабочие столы. Wi-Fi доступен в номерах, по нашим замерам скорость около 80 Мбит/с. В «Стандартах» отдельных рабочих столов нет."
+  expected:
+    desk: true
+    wifi_mbps: 80
+    room_types: ["Комфорт", "Бизнес"]
+  clarity: high
+
+- question_key: remote_work
+  answer_text: "Да, интернет у нас хороший, гости часто работают. Со столами по-разному, в каких-то номерах есть, в каких-то только небольшой столик. Скорость обычно нормальная."
+  expected:
+    desk: null
+    wifi_mbps: null
+    room_types: []
+  clarity: low
+
+- question_key: remote_work
+  answer_text: "В категории «Бизнес» в каждом номере установлен письменный стол. Скорость Wi-Fi по замерам составляет сто двадцать мегабит в секунду."
+  expected:
+    desk: true
+    wifi_mbps: 120
+    room_types: ["Бизнес"]
+  clarity: high
+
+- question_key: remote_work
+  answer_text: "У нас вообще лучший интернет на всём побережье! Стабильные 200 мегабит без единого обрыва, даже при полной загрузке отеля. Во всех категориях — Стандарт, Комфорт и Люкс — огромные рабочие столы, можно хоть офис открывать!"
+  expected:
+    desk: true
+    wifi_mbps: 200
+    room_types: ["Стандарт", "Комфорт", "Люкс"]
+  clarity: medium
+
+- question_key: remote_work
+  answer_text: "так в стандартах рабочего стола нет а вот в комфортах есть нормальный письменный стол вай фай там по нашим замерам шестьдесят мегабит в секунду обычно показывает"
+  expected:
+    desk: true
+    wifi_mbps: 60
+    room_types: ["Комфорт"]
+  clarity: high

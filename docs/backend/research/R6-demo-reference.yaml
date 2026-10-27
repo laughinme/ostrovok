@@ -1,0 +1,689 @@
+room_types:
+  description: "Синтетические категории номеров для демо-отелей Большого Сочи"
+  data_status: "демо; не статистическая выборка реальных отелей"
+  area_definition: "Полная площадь номера, включая санузел; без балкона"
+  capacity_definition: "Максимальная вместимость с допустимыми дополнительными местами"
+  share_definition: "Примерная доля категории в номерном фонде объекта"
+  generation_rule: "Выбрать доли внутри интервалов и нормализовать сумму до 100%"
+  numeric_note: "Все значения с пометкой оценка являются сценарными диапазонами"
+
+  sources:
+    classification:
+      url: "https://www.garant.ru/products/ipo/prime/doc/411140735/"
+      date: "2024-12-27"
+      revision_note: "Проверена редакция с изменениями от 2025-11-27"
+      relevance: "Минимальные площади, официальные категории номеров и требования к гостиницам"
+    room_categories:
+      url: "https://sudact.ru/law/postanovlenie-pravitelstva-rf-ot-27122024-n-1951/polozhenie-o-klassifikatsii-sredstv-razmeshcheniia_2/prilozhenie-n-5_2/"
+      relevance: "Официальные категории: стандарт, студия, джуниор сюит, люкс, апартамент, сюит"
+
+  legal_minimums:
+    note: "Нормативы ниже относятся к жилой площади без санузла, балкона и лоджии"
+    hotel_2_star:
+      single_m2: 9 # источник: https://www.garant.ru/products/ipo/prime/doc/411140735/
+      double_m2: 12 # источник: https://www.garant.ru/products/ipo/prime/doc/411140735/
+    hotel_3_star:
+      single_m2: 12 # источник: https://www.garant.ru/products/ipo/prime/doc/411140735/
+      double_m2: 15 # источник: https://www.garant.ru/products/ipo/prime/doc/411140735/
+    hotel_4_star:
+      single_m2: 12 # источник: https://www.garant.ru/products/ipo/prime/doc/411140735/
+      double_m2: 15 # источник: https://www.garant.ru/products/ipo/prime/doc/411140735/
+    hotel_5_star:
+      single_m2: 14 # источник: https://www.garant.ru/products/ipo/prime/doc/411140735/
+      double_m2: 16 # источник: https://www.garant.ru/products/ipo/prime/doc/411140735/
+    official_higher_categories:
+      studio_min_m2: 25 # источник: https://sudact.ru/law/postanovlenie-pravitelstva-rf-ot-27122024-n-1951/polozhenie-o-klassifikatsii-sredstv-razmeshcheniia_2/prilozhenie-n-5_2/
+      junior_suite_min_m2: 25 # источник: https://sudact.ru/law/postanovlenie-pravitelstva-rf-ot-27122024-n-1951/polozhenie-o-klassifikatsii-sredstv-razmeshcheniia_2/prilozhenie-n-5_2/
+      luxe_min_m2: 35 # источник: https://sudact.ru/law/postanovlenie-pravitelstva-rf-ot-27122024-n-1951/polozhenie-o-klassifikatsii-sredstv-razmeshcheniia_2/prilozhenie-n-5_2/
+      hotel_apartment_min_m2: 40 # источник: https://sudact.ru/law/postanovlenie-pravitelstva-rf-ot-27122024-n-1951/polozhenie-o-klassifikatsii-sredstv-razmeshcheniia_2/prilozhenie-n-5_2/
+      suite_min_m2: 75 # источник: https://sudact.ru/law/postanovlenie-pravitelstva-rf-ot-27122024-n-1951/polozhenie-o-klassifikatsii-sredstv-razmeshcheniia_2/prilozhenie-n-5_2/
+
+  hotels:
+    hotel_2_star:
+      categories:
+        - name: "Эконом"
+          area_m2: [15, 20] # оценка
+          beds: "Одна двуспальная либо две односпальные"
+          capacity: [1, 2] # оценка
+          share_pct: [15, 25] # оценка
+        - name: "Стандарт"
+          area_m2: [17, 24] # оценка
+          beds: "Одна двуспальная либо две односпальные"
+          capacity: [1, 2] # оценка
+          share_pct: [50, 60] # оценка
+        - name: "Комфорт"
+          area_m2: [22, 30] # оценка
+          beds: "Двуспальная кровать, возможна дополнительная"
+          capacity: [2, 3] # оценка
+          share_pct: [10, 20] # оценка
+        - name: "Семейный"
+          area_m2: [28, 42] # оценка
+          beds: "Двуспальная кровать и диван либо отдельные кровати"
+          capacity: [3, 4] # оценка
+          share_pct: [5, 15] # оценка
+
+    hotel_3_star:
+      categories:
+        - name: "Компактный стандарт"
+          area_m2: [19, 23] # оценка
+          beds: "Двуспальная либо две односпальные"
+          capacity: [1, 2] # оценка
+          share_pct: [5, 15] # оценка
+        - name: "Стандарт"
+          area_m2: [20, 27] # оценка
+          beds: "Двуспальная либо две односпальные"
+          capacity: [2, 2] # оценка
+          share_pct: [40, 50] # оценка
+        - name: "Улучшенный"
+          area_m2: [25, 34] # оценка
+          beds: "Двуспальная и дополнительное место по запросу"
+          capacity: [2, 3] # оценка
+          share_pct: [20, 30] # оценка
+        - name: "Семейный"
+          area_m2: [30, 43] # оценка
+          beds: "Двуспальная и диван-кровать"
+          capacity: [3, 4] # оценка
+          share_pct: [10, 20] # оценка
+        - name: "Джуниор сюит"
+          area_m2: [30, 45] # оценка
+          beds: "Большая двуспальная и диван"
+          capacity: [2, 4] # оценка
+          share_pct: [0, 10] # оценка
+
+    hotel_4_star:
+      categories:
+        - name: "Стандарт"
+          area_m2: [22, 30] # оценка
+          beds: "Двуспальная либо две односпальные"
+          capacity: [2, 2] # оценка
+          share_pct: [30, 45] # оценка
+        - name: "Супериор"
+          area_m2: [27, 36] # оценка
+          beds: "Большая двуспальная либо раздельные кровати"
+          capacity: [2, 3] # оценка
+          share_pct: [20, 35] # оценка
+        - name: "Делюкс"
+          area_m2: [32, 45] # оценка
+          beds: "Большая двуспальная и дополнительное место"
+          capacity: [2, 3] # оценка
+          share_pct: [10, 25] # оценка
+        - name: "Семейный"
+          area_m2: [38, 52] # оценка
+          beds: "Двуспальная, диван или отдельная спальная зона"
+          capacity: [3, 5] # оценка
+          share_pct: [5, 15] # оценка
+        - name: "Джуниор сюит"
+          area_m2: [38, 58] # оценка
+          beds: "Большая двуспальная и диван"
+          capacity: [2, 4] # оценка
+          share_pct: [2, 12] # оценка
+
+    hotel_5_star:
+      categories:
+        - name: "Супериор"
+          area_m2: [28, 40] # оценка
+          beds: "Большая двуспальная либо две односпальные"
+          capacity: [2, 2] # оценка
+          share_pct: [25, 40] # оценка
+        - name: "Делюкс"
+          area_m2: [35, 48] # оценка
+          beds: "Большая двуспальная, возможно дополнительное место"
+          capacity: [2, 3] # оценка
+          share_pct: [25, 40] # оценка
+        - name: "Джуниор сюит"
+          area_m2: [42, 62] # оценка
+          beds: "Большая двуспальная и диван"
+          capacity: [2, 4] # оценка
+          share_pct: [10, 25] # оценка
+        - name: "Люкс"
+          area_m2: [55, 95] # оценка
+          beds: "Отдельная спальня с двуспальной кроватью и диван"
+          capacity: [2, 4] # оценка
+          share_pct: [5, 15] # оценка
+        - name: "Сюит"
+          area_m2: [75, 130] # оценка
+          beds: "Одна или несколько спален, дополнительный диван"
+          capacity: [2, 6] # оценка
+          share_pct: [2, 12] # оценка
+
+  guesthouse:
+    note: "Гостевые дома могут использовать собственные маркетинговые названия"
+    categories:
+      - name: "Бюджетный номер"
+        area_m2: [13, 18] # оценка
+        beds: "Одна двуспальная либо две односпальные"
+        capacity: [1, 2] # оценка
+        share_pct: [20, 35] # оценка
+      - name: "Стандарт"
+        area_m2: [16, 23] # оценка
+        beds: "Двуспальная либо две односпальные"
+        capacity: [2, 2] # оценка
+        share_pct: [40, 55] # оценка
+      - name: "Комфорт"
+        area_m2: [20, 30] # оценка
+        beds: "Двуспальная и раскладное кресло либо диван"
+        capacity: [2, 3] # оценка
+        share_pct: [10, 25] # оценка
+      - name: "Семейный"
+        area_m2: [26, 42] # оценка
+        beds: "Двуспальная, диван или дополнительные кровати"
+        capacity: [3, 5] # оценка
+        share_pct: [0, 15] # оценка
+
+  apartments:
+    note: "Здесь апартаменты — отдельные объекты аренды; не юридическая категория гостиничного номера"
+    categories:
+      - name: "Студия"
+        area_m2: [20, 32] # оценка
+        beds: "Двуспальная кровать либо диван-кровать"
+        capacity: [1, 2] # оценка
+        share_pct: [35, 50] # оценка
+      - name: "Апартаменты с отдельной спальней"
+        area_m2: [30, 48] # оценка
+        beds: "Двуспальная в спальне и диван в гостиной"
+        capacity: [2, 4] # оценка
+        share_pct: [25, 40] # оценка
+      - name: "Семейные апартаменты"
+        area_m2: [45, 70] # оценка
+        beds: "Двуспальная, диван и дополнительные спальные места"
+        capacity: [3, 5] # оценка
+        share_pct: [15, 25] # оценка
+      - name: "Апартаменты с двумя спальнями"
+        area_m2: [65, 105] # оценка
+        beds: "Две спальни, дополнительные места в гостиной"
+        capacity: [4, 6] # оценка
+        share_pct: [0, 10] # оценка
+
+prices:
+  currency: "RUB"
+  unit: "Рублей за ночь за номер или целый объект"
+  occupancy: "Базовый вариант для двух взрослых"
+  base_tariff: "Гибкий тариф без завтрака"
+  data_status: "Синтетические интервалы; не прогноз и не реальные предложения"
+  sampling_note: "Это рабочие интервалы типичных демо-карточек, а не минимумы и максимумы рынка"
+  months:
+    november: "Низкий сезон на побережье, межсезонье в горах"
+    january: "Обычные январские даты после новогодних каникул; в горах высокий лыжный сезон"
+    july: "Летний высокий сезон на побережье, летний горный туризм"
+  geography_note: "Сириус учитывается отдельно от Адлера; Красная Поляна включает поселок и горные курортные локации"
+
+  sources:
+    ator_summer_2025:
+      url: "https://www.atorus.ru/article/skolko-stoit-otdokhnut-vdvoem-nedelyu-v-sochi-v-2025-godu-60442"
+      relevance: "Летние цены отелей разной звездности за номер на двоих с завтраком"
+    rbst_2025:
+      url: "https://kuban.rbc.ru/krasnodar/03/01/2026/69525de69a79479de5e93fd7"
+      relevance: "Ориентиры стоимости трехзвездочных гостиниц на первой и второй береговых линиях"
+    hotel_sochi_2026_2027:
+      url: "https://riviera-tour.ru/hotels/sochi/"
+      checked: "2026-10-27"
+      relevance: "Цены по месяцам и звездности; агрегированные предложения"
+    hotel_polyana_2026_2027:
+      url: "https://riviera-tour.ru/hotels/krasnaya-polyana/"
+      checked: "2026-10-27"
+      relevance: "Сезонный контраст ноября и января в Красной Поляне"
+    apartments_2025_2026:
+      url: "https://redata.tech/city-analysis/sochi"
+      report_date: "2026-10-05"
+      relevance: "Медианные цены однокомнатных квартир по внутригородским районам Сочи"
+      limitation: "Нет отдельного разреза по Сириусу и горной части Красной Поляны"
+
+  market_benchmarks:
+    sochi_hotel_november_2026_average_nightly:
+      value_rub: 4600
+      source: "https://riviera-tour.ru/hotels/sochi/"
+      note: "Расчет из средней недельной цены в опубликованной подборке"
+    krasnaya_polyana_january_2027_average_nightly:
+      value_rub: 14000
+      source: "https://riviera-tour.ru/hotels/krasnaya-polyana/"
+      note: "Расчет из средней недельной цены в опубликованной подборке"
+    sochi_apartment_july_2026_city_median:
+      value_rub: 5000
+      source: "https://redata.tech/city-analysis/sochi"
+      note: "Однокомнатные квартиры, не гостиничные номера"
+
+  by_district:
+    center:
+      hotel_2_star:
+        november: [1800, 3800] # оценка
+        january: [2200, 4600] # оценка
+        july: [4500, 9500] # оценка
+      hotel_3_star:
+        november: [2400, 5600] # оценка
+        january: [2700, 6200] # оценка
+        july: [6500, 13500] # оценка
+      hotel_4_star:
+        november: [3500, 9500] # оценка
+        january: [4300, 10500] # оценка
+        july: [9500, 21000] # оценка
+      hotel_5_star:
+        november: [8000, 24000] # оценка
+        january: [10000, 26000] # оценка
+        july: [21000, 50000] # оценка
+      guesthouse:
+        november: [1400, 3500] # оценка
+        january: [1600, 3700] # оценка
+        july: [3500, 7500] # оценка
+      apartments:
+        november: [2000, 4700] # оценка
+        january: [2600, 6000] # оценка
+        july: [3500, 8500] # оценка
+
+    khosta:
+      hotel_2_star:
+        november: [1500, 3300] # оценка
+        january: [1800, 4000] # оценка
+        july: [4000, 8500] # оценка
+      hotel_3_star:
+        november: [2100, 4700] # оценка
+        january: [2400, 5500] # оценка
+        july: [6200, 12000] # оценка
+      hotel_4_star:
+        november: [3000, 8000] # оценка
+        january: [3500, 9200] # оценка
+        july: [8500, 18500] # оценка
+      hotel_5_star:
+        november: [7500, 20000] # оценка
+        january: [8500, 22000] # оценка
+        july: [20000, 43000] # оценка
+      guesthouse:
+        november: [1200, 3200] # оценка
+        january: [1400, 3500] # оценка
+        july: [3200, 7500] # оценка
+      apartments:
+        november: [1900, 4500] # оценка
+        january: [2800, 6200] # оценка
+        july: [3500, 8500] # оценка
+
+    adler:
+      hotel_2_star:
+        november: [1500, 3600] # оценка
+        january: [1800, 4300] # оценка
+        july: [4300, 9000] # оценка
+      hotel_3_star:
+        november: [2000, 5000] # оценка
+        january: [2400, 5800] # оценка
+        july: [6200, 12500] # оценка
+      hotel_4_star:
+        november: [3300, 8500] # оценка
+        january: [4000, 9500] # оценка
+        july: [9500, 20500] # оценка
+      hotel_5_star:
+        november: [8000, 22000] # оценка
+        january: [9500, 25000] # оценка
+        july: [22000, 47000] # оценка
+      guesthouse:
+        november: [1100, 3000] # оценка
+        january: [1500, 3300] # оценка
+        july: [3500, 8000] # оценка
+      apartments:
+        november: [1800, 4300] # оценка
+        january: [2400, 5600] # оценка
+        july: [3500, 8500] # оценка
+
+    sirius:
+      hotel_2_star:
+        november: [1900, 4200] # оценка
+        january: [2100, 4800] # оценка
+        july: [5000, 10500] # оценка
+      hotel_3_star:
+        november: [2600, 6200] # оценка
+        january: [3000, 6800] # оценка
+        july: [7800, 15500] # оценка
+      hotel_4_star:
+        november: [4500, 11000] # оценка
+        january: [5000, 12000] # оценка
+        july: [12000, 24000] # оценка
+      hotel_5_star:
+        november: [11000, 28000] # оценка
+        january: [13000, 31000] # оценка
+        july: [25000, 56000] # оценка
+      guesthouse:
+        november: [1600, 4200] # оценка
+        january: [1900, 4600] # оценка
+        july: [4200, 10000] # оценка
+      apartments:
+        november: [2300, 5200] # оценка
+        january: [2900, 6500] # оценка
+        july: [4500, 10000] # оценка
+
+    krasnaya_polyana:
+      hotel_2_star:
+        november: [1500, 3400] # оценка
+        january: [4200, 10000] # оценка
+        july: [2600, 6200] # оценка
+      hotel_3_star:
+        november: [2200, 5400] # оценка
+        january: [6500, 15500] # оценка
+        july: [4000, 9500] # оценка
+      hotel_4_star:
+        november: [3000, 9500] # оценка
+        january: [9500, 26000] # оценка
+        july: [6000, 15000] # оценка
+      hotel_5_star:
+        november: [4500, 19000] # оценка
+        january: [17000, 48000] # оценка
+        july: [10000, 30000] # оценка
+      guesthouse:
+        november: [1400, 3800] # оценка
+        january: [4000, 11000] # оценка
+        july: [2400, 6500] # оценка
+      apartments:
+        november: [1900, 4800] # оценка
+        january: [5000, 15500] # оценка
+        july: [3300, 9200] # оценка
+
+  room_category_multipliers:
+    application: "Умножать базовую цену стандартного номера на коэффициент"
+    economy: [0.75, 0.95] # оценка
+    standard: [1.00, 1.00] # оценка
+    comfort: [1.10, 1.35] # оценка
+    superior: [1.15, 1.45] # оценка
+    deluxe: [1.35, 1.80] # оценка
+    family: [1.40, 2.10] # оценка
+    junior_suite: [1.65, 2.40] # оценка
+    luxe: [2.00, 3.30] # оценка
+    suite: [2.80, 5.00] # оценка
+    note: "Не применять повторно, если цена уже рассчитана для конкретной категории"
+
+  sea_view_markup:
+    application: "Доплата относительно аналогичного номера без вида на море"
+    partial_sea_view_pct: [5, 12] # оценка
+    direct_sea_view_pct: [15, 35] # оценка
+    panoramic_front_sea_view_pct: [30, 60] # оценка
+    sea_view_from_balcony_only_pct: [5, 15] # оценка
+    note: "Наценка не гарантирует фактический вид; для горной Красной Поляны не применять"
+
+  holiday_adjustments:
+    coastal_new_year_early_january_markup_pct: [20, 90] # оценка
+    krasnaya_polyana_new_year_markup_pct: [50, 160] # оценка
+    note: "Дополнительная сезонная наценка к обычной январской цене"
+    source_context: "https://www.kommersant.ru/doc/8317593"
+
+  tariffs:
+    room_only:
+      name: "Без завтрака"
+      base: true
+      cancellation: "Гибкая отмена по условиям конкретного бронирования"
+
+    breakfast_included:
+      name: "С завтраком"
+      description: "Завтрак для двух взрослых включен в итоговую стоимость номера"
+      price_difference_rub_for_two:
+        hotel_2_star: [600, 1200] # оценка
+        hotel_3_star: [1000, 1700] # оценка
+        hotel_4_star: [1500, 3000] # оценка
+        hotel_5_star: [2500, 5000] # оценка
+        guesthouse: [400, 1200] # оценка
+        apartments: [600, 1600] # оценка
+      rule: "Применять только при наличии завтрака у объекта"
+      note: "Доплата за двоих, а не за каждого гостя"
+      price_sources:
+        - "https://8avenue-hotel.ru/"
+        - "https://sochihotel.sochi-magnolia.ru/services/restoran/"
+        - "https://seagalaxy.com/bars/shvedskij-stol"
+
+    nonrefundable:
+      name: "Невозвратный тариф"
+      use_in_demo: true
+      discount_vs_flexible_pct: [10, 20] # оценка; исторический ориентир: https://amp.rbc.ru/rbcnews/business/22/02/2024/65d61bf29a794759b2723865
+      payment: "Обычно предоплата"
+      important_legal_note: >-
+        Название является условным для демо. В России действуют
+        правила предоставления гостиничных услуг, позволяющие гостю
+        отказаться от договора с оплатой фактически понесенных
+        исполнителем расходов. Нельзя утверждать, что весь платеж
+        всегда удерживается безусловно.
+      legal_source: "https://www.consultant.ru/document/cons_doc_LAW_520177/7175d6bce8dad8914dea25d4e5bed8f7c715dd0f/"
+
+    recommended_generation:
+      price_calculation_order:
+        - "Базовая цена по району, звездности и месяцу"
+        - "Коэффициент категории номера"
+        - "Доплата за вид при наличии"
+        - "Поправка на праздничные даты"
+        - "Доплата за завтрак либо скидка тарифа"
+      rounding_rub: 100 # оценка
+      note: "Не складывать несколько надбавок за один и тот же вид"
+
+amenities:
+  interpretation: "Вероятность наличия удобства в синтетическом объекте, в процентах"
+  status: "Оценочные вероятности генератора, не результаты статистического обследования"
+  flags:
+    wifi: "Wi-Fi для гостей"
+    pool: "Собственный либо доступный гостям бассейн"
+    parking: "Парковка при объекте или на прилегающей территории"
+    breakfast: "Возможность заказать завтрак, не обязательно включенный в цену"
+    air_conditioning: "Кондиционер во всех или практически всех сдаваемых номерах"
+    spa: "СПА-услуги в объекте или через партнера на его территории"
+    kids_club: "Организованный детский клуб с занятиями или анимацией"
+    hotel_beach: "Закрепленная или организованная гостиницей пляжная зона"
+    transfer: "Возможность организовать трансфер, включая платный"
+
+  legal_sources:
+    classification:
+      url: "https://www.garant.ru/products/ipo/prime/doc/411140735/"
+    equipment:
+      url: "https://www.consultant.ru/document/cons_doc_LAW_495340/daaa157eac6b0018ceedf347f516c742717b709d/"
+    services:
+      url: "https://www.consultant.ru/document/cons_doc_LAW_495340/6aaa32941cb6255da62526e1d7f095e38807210a/"
+
+  by_type:
+    hotel_2_star:
+      wifi_pct: [85, 98] # оценка
+      pool_pct: [15, 35] # оценка
+      parking_pct: [35, 65] # оценка
+      breakfast_pct: [85, 100] # оценка
+      air_conditioning_pct: [65, 90] # оценка
+      spa_pct: [0, 8] # оценка
+      kids_club_pct: [0, 8] # оценка
+      hotel_beach_pct: [0, 8] # оценка
+      transfer_pct: [10, 35] # оценка
+
+    hotel_3_star:
+      wifi_pct: [94, 100] # оценка
+      pool_pct: [25, 55] # оценка
+      parking_pct: [40, 70] # оценка
+      breakfast_pct: [90, 100] # оценка
+      air_conditioning_pct: [80, 97] # оценка
+      spa_pct: [5, 25] # оценка
+      kids_club_pct: [5, 20] # оценка
+      hotel_beach_pct: [3, 18] # оценка
+      transfer_pct: [20, 50] # оценка
+
+    hotel_4_star:
+      wifi_pct: [98, 100] # оценка
+      pool_pct: [50, 80] # оценка
+      parking_pct: [60, 85] # оценка
+      breakfast_pct: [100, 100] # норматив; https://www.consultant.ru/document/cons_doc_LAW_495340/6aaa32941cb6255da62526e1d7f095e38807210a/
+      air_conditioning_pct: [100, 100] # норматив; https://www.consultant.ru/document/cons_doc_LAW_495340/daaa157eac6b0018ceedf347f516c742717b709d/
+      spa_pct: [35, 70] # оценка
+      kids_club_pct: [25, 55] # оценка
+      hotel_beach_pct: [10, 35] # оценка
+      transfer_pct: [100, 100] # норматив организации доставки гостей; https://www.consultant.ru/document/cons_doc_LAW_495340/6aaa32941cb6255da62526e1d7f095e38807210a/
+
+    hotel_5_star:
+      wifi_pct: [100, 100] # оценка; интернет-услуги обязательны, именно Wi-Fi отдельно не гарантирован
+      pool_pct: [75, 98] # оценка
+      parking_pct: [100, 100] # норматив охраняемой парковки; https://www.consultant.ru/document/cons_doc_LAW_495340/6aaa32941cb6255da62526e1d7f095e38807210a/
+      breakfast_pct: [100, 100] # норматив; https://www.consultant.ru/document/cons_doc_LAW_495340/6aaa32941cb6255da62526e1d7f095e38807210a/
+      air_conditioning_pct: [100, 100] # норматив; https://www.consultant.ru/document/cons_doc_LAW_495340/daaa157eac6b0018ceedf347f516c742717b709d/
+      spa_pct: [100, 100] # норматив доступности СПА-услуг; https://www.consultant.ru/document/cons_doc_LAW_495340/6aaa32941cb6255da62526e1d7f095e38807210a/
+      kids_club_pct: [45, 75] # оценка
+      hotel_beach_pct: [30, 65] # оценка
+      transfer_pct: [100, 100] # норматив организации доставки гостей; https://www.consultant.ru/document/cons_doc_LAW_495340/6aaa32941cb6255da62526e1d7f095e38807210a/
+
+    guesthouse:
+      wifi_pct: [80, 97] # оценка
+      pool_pct: [18, 45] # оценка
+      parking_pct: [45, 75] # оценка
+      breakfast_pct: [25, 60] # оценка
+      air_conditioning_pct: [70, 95] # оценка
+      spa_pct: [0, 8] # оценка
+      kids_club_pct: [0, 5] # оценка
+      hotel_beach_pct: [0, 5] # оценка
+      transfer_pct: [15, 45] # оценка
+
+    apartments:
+      wifi_pct: [90, 100] # оценка
+      pool_pct: [5, 35] # оценка
+      parking_pct: [30, 65] # оценка
+      breakfast_pct: [5, 30] # оценка
+      air_conditioning_pct: [80, 98] # оценка
+      spa_pct: [0, 20] # оценка
+      kids_club_pct: [0, 12] # оценка
+      hotel_beach_pct: [0, 8] # оценка
+      transfer_pct: [10, 40] # оценка
+
+  regional_adjustments:
+    krasnaya_polyana:
+      hotel_beach_pct: [0, 0] # оценка; горная география
+      note: "Вместо пляжа возможны СПА, горный трансфер и бассейн"
+    coastal_districts:
+      applicable_to:
+        - center
+        - khosta
+        - adler
+        - sirius
+      note: "Наличие пляжа при отеле не означает его собственность или круглогодичную работу"
+
+  operating_rules:
+    outdoor_pool:
+      note: "Открытый бассейн может работать только в сезон"
+      winter_availability_requires:
+        - "Подогрев"
+        - "Подтвержденный зимний режим работы"
+    transfer:
+      note: "Доступность трансфера не означает, что он бесплатный"
+    wifi:
+      note: "Наличие Wi-Fi не гарантирует скорость и стабильность"
+    kids_club:
+      note: "Детская площадка и детский клуб являются разными удобствами"
+    legal_note: >-
+      Нормативные значения описывают требования к соответствующей
+      категории классифицированной гостиницы, а не доказанную
+      фактическую распространенность услуги по Сочи.
+
+policies:
+  data_status: "Синтетические настройки и оценочные доли, если не указан источник"
+
+  pets:
+    market_reference:
+      country_pet_friendly_pct: 25 # источник: https://www.interfax.ru/russia/1119403
+      krasnodar_krai: "По данным реестра, опубликованным Интерфаксом, около трети объектов допускают животных"
+      report_date: "2026-09-30"
+      source: "https://www.interfax.ru/russia/1119403"
+      limitation: "Региональная статистика не является отдельной статистикой Большого Сочи"
+
+    sochi_estimated_share_pct: [28, 40] # оценка
+
+    by_type:
+      hotel_2_star_pct: [25, 40] # оценка
+      hotel_3_star_pct: [25, 40] # оценка
+      hotel_4_star_pct: [20, 40] # оценка
+      hotel_5_star_pct: [20, 35] # оценка
+      guesthouse_pct: [25, 45] # оценка
+      apartments_pct: [25, 50] # оценка
+
+    typical_allowed_species:
+      - dog
+      - cat
+
+    weight_limits:
+      common_max_weight_kg: [5, 10] # оценка
+      less_common_max_weight_kg: [10, 15] # оценка
+      rare_large_dog_limit_kg: [20, 35] # оценка
+      large_dog_acceptance_among_pet_friendly_pct: [5, 15] # оценка
+      note: "Собака тяжелее обычного лимита может допускаться только по отдельному согласованию"
+
+    fees:
+      ordinary_daily_rub: [300, 1500] # оценка
+      luxury_daily_rub: [1000, 5000] # оценка
+      refundable_deposit_rub: [2000, 10000] # оценка
+      charging_options:
+        - "За сутки"
+        - "За весь период"
+        - "Фиксированный сбор за уборку"
+        - "Без доплаты по отдельной политике"
+      source_examples:
+        - "https://ekodom-hotels.ru/akciya-pitomcy"
+        - "https://sochihotel.sochi-magnolia.ru/services/razmeshchenie-s-domashnimi-zhivotnymi/"
+        - "https://mondrian-sochi.ru/services/dopolnitelnyj-servis/"
+
+    typical_conditions:
+      prior_approval: "Обычно требуется"
+      veterinary_documents: "Могут потребоваться ветеринарные документы"
+      restricted_rooms: "Возможно размещение только в выделенных категориях номеров"
+      public_areas: "Могут действовать ограничения"
+      unattended_pet: "Может быть запрещено оставлять животное в номере"
+      large_dog: "Не считать разрешенной автоматически даже при pets_allowed=true"
+
+  windows_blackout_elevator_access:
+    definitions:
+      soundproof_windows: >-
+        Окна с заявленными улучшенными шумоизоляционными свойствами.
+        Обычный стеклопакет сам по себе не подтверждает акустические характеристики.
+      blackout_curtains: "Плотные светонепроницаемые шторы, а не обычные занавески"
+      elevator: "Доступный гостям пассажирский лифт"
+      step_free_entrance: "Вход без обязательного преодоления ступенек"
+      access_note: "Вход без ступенек не равнозначен полной доступности для инвалидной коляски"
+
+    prevalence_by_type:
+      hotel_2_star:
+        soundproof_windows_pct: [10, 30] # оценка
+        blackout_curtains_pct: [20, 45] # оценка
+        elevator_pct: [20, 45] # оценка
+        step_free_entrance_pct: [25, 50] # оценка
+
+      hotel_3_star:
+        soundproof_windows_pct: [20, 45] # оценка
+        blackout_curtains_pct: [35, 65] # оценка
+        elevator_pct: [40, 75] # оценка
+        step_free_entrance_pct: [40, 65] # оценка
+
+      hotel_4_star:
+        soundproof_windows_pct: [45, 75] # оценка
+        blackout_curtains_pct: [65, 90] # оценка
+        elevator_pct: [70, 97] # оценка
+        step_free_entrance_pct: [60, 90] # оценка
+
+      hotel_5_star:
+        soundproof_windows_pct: [65, 92] # оценка
+        blackout_curtains_pct: [85, 100] # оценка
+        elevator_pct: [85, 100] # оценка
+        step_free_entrance_pct: [75, 97] # оценка
+
+      guesthouse:
+        soundproof_windows_pct: [5, 25] # оценка
+        blackout_curtains_pct: [15, 45] # оценка
+        elevator_pct: [0, 12] # оценка
+        step_free_entrance_pct: [10, 35] # оценка
+
+      apartments:
+        soundproof_windows_pct: [15, 50] # оценка
+        blackout_curtains_pct: [35, 70] # оценка
+        elevator_pct: [45, 85] # оценка
+        step_free_entrance_pct: [30, 70] # оценка
+
+    elevator_legal_rules:
+      hotel_2_star:
+        required_above_floors: 5 # источник: https://www.consultant.ru/document/cons_doc_LAW_495340/daaa157eac6b0018ceedf347f516c742717b709d/
+      hotel_3_star:
+        required_above_floors: 3 # источник: https://www.consultant.ru/document/cons_doc_LAW_495340/daaa157eac6b0018ceedf347f516c742717b709d/
+      hotel_4_star:
+        required_above_floors: 2 # источник: https://www.consultant.ru/document/cons_doc_LAW_495340/daaa157eac6b0018ceedf347f516c742717b709d/
+      hotel_5_star:
+        required_above_floors: 2 # источник: https://www.consultant.ru/document/cons_doc_LAW_495340/daaa157eac6b0018ceedf347f516c742717b709d/
+      exceptions: "Есть предусмотренные нормативом исключения для небольших объектов и отдельных зданий"
+      note: "Норматив не позволяет определить общую долю гостиниц с лифтом без данных о зданиях"
+
+  generation_safeguards:
+    sources_rule: "Не считать оценки рыночной статистикой"
+    star_classification: "Не назначать звезды обычному гостевому дому или квартире без основания"
+    pets_rule: "pets_allowed=true не означает разрешение на любую массу собаки"
+    soundproofing_rule: "Не выводить звукоизоляцию автоматически из звездности"
+    blackout_rule: "Не выводить blackout автоматически из наличия штор"
+    accessibility_rule: "Не выводить доступность для коляски только из наличия лифта или пандуса"
+    room_rule: "Для классифицированных гостиниц соблюдать нормативные требования к площади и категориям"
+    provenance_rule: "Реальные подтвержденные свойства хранить отдельно от синтетических"
+    demo_label: "ДЕМО — характеристики, цены и условия размещения сгенерированы"
