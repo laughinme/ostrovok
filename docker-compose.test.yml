@@ -1,0 +1,28 @@
+# Throwaway dependencies for backend integration tests: `make test-deps` starts them, `make test` runs pytest.
+# Ports differ from compose.dev.yml so tests can run next to the dev stack. The image has arm64 builds (D-34).
+services:
+  postgis-test:
+    image: imresamu/postgis:17-3.5
+    environment:
+      POSTGRES_USER: okno
+      POSTGRES_PASSWORD: okno
+      POSTGRES_DB: okno_test
+    ports:
+      - "5439:5432"
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U okno -d okno_test"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  redis-test:
+    image: redis:8.2-alpine
+    ports:
+      - "6380:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
