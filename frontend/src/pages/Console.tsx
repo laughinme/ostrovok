@@ -1,6 +1,8 @@
+'use client';
+
 import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router';
+import Link from 'next/link';
 import { Header } from '../components/chrome';
 import { Demo, Mark, Toast, useToast } from '../components/ui';
 import { MapView } from '../components/MapView';
@@ -96,7 +98,7 @@ export default function ConsolePage() {
         <nav className="side-nav" aria-label="Консоль">
           <div className="who"><b>Большой Сочи</b><span>214 отелей · 38 характеристик</span></div>
           {NAV.map(([id, l]) => <a key={id} href={`#${id}`} className={active === id ? 'on' : ''}>{l}{id === 'conflicts' && <span className="cnt">2</span>}</a>)}
-          <Link to="/developers">API и MCP</Link>
+          <Link href="/developers">API и MCP</Link>
           <div className="foot">Данные: OSM (ODbL), Copernicus DEM, Open-Meteo. Карточки и цены — демо.</div>
         </nav>
         <main className="page console">

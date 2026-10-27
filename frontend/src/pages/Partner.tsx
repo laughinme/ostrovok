@@ -1,3 +1,5 @@
+'use client';
+
 import { motion } from 'motion/react';
 import { useState, type FormEvent } from 'react';
 import { Header } from '../components/chrome';

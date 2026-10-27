@@ -1,6 +1,8 @@
+'use client';
+
 import { motion } from 'motion/react';
 import { useState } from 'react';
-import { Link } from 'react-router';
+import Link from 'next/link';
 import { Footer, Header } from '../components/chrome';
 import { Demo, Mark, Ring } from '../components/ui';
 import { Photo } from '../components/visuals';
@@ -60,12 +62,12 @@ export default function ComparePage() {
                   })}
                 </div>
                 <p className="trade">{h.tradeoff}</p>
-                <div className="cmp-foot"><b className="num">{rub(h.priceFrom)}</b><span className="muted">за ночь</span><Link className={`btn btn-sm ${h === best?.h ? 'btn-primary' : 'btn-ghost'}`} to={`/hotels/${h.id}`}>Открыть</Link></div>
+                <div className="cmp-foot"><b className="num">{rub(h.priceFrom)}</b><span className="muted">за ночь</span><Link className={`btn btn-sm ${h === best?.h ? 'btn-primary' : 'btn-ghost'}`} href={`/hotels/${h.id}`}>Открыть</Link></div>
               </motion.article>
             );
           })}
         </div>
-        {hotels.length < 3 && <p className="muted" style={{ marginTop: 16 }}>Добавьте отели кнопкой «Сравнить» в <Link to="/search">подборке</Link>.</p>}
+        {hotels.length < 3 && <p className="muted" style={{ marginTop: 16 }}>Добавьте отели кнопкой «Сравнить» в <Link href="/search">подборке</Link>.</p>}
       </main>
       <Footer />
     </div>

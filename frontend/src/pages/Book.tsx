@@ -1,5 +1,8 @@
+'use client';
+
 import { useState } from 'react';
-import { Link, useNavigate, useParams, useSearchParams } from 'react-router';
+import Link from 'next/link';
+import { useParams, useSearchParams, useRouter } from 'next/navigation';
 import { Header } from '../components/chrome';
 import { Demo, Icon, Mark } from '../components/ui';
 import { Panorama, Photo } from '../components/visuals';
@@ -10,11 +13,11 @@ import { rub } from '../lib/format';
 const EXTRA = ['ранний заезд', 'место для собаки 30 кг', 'кроватка для ребёнка'];
 
 export default function BookPage() {
-  const h = byId(useParams().id);
-  const [sp] = useSearchParams();
-  const nav = useNavigate();
-  const room = h.rooms.find((r) => r.id === sp.get('room')) ?? h.rooms.find((r) => r.recommended) ?? h.rooms[0];
-  const rate = room.rates[+(sp.get('rate') ?? 0)] ?? room.rates[0];
+  const h = byId(useParams<{ id: string }>()?.id);
+  const sp = useSearchParams();
+  const nav = useRouter();
+  const room = h.rooms.find((r) => r.id === sp?.get('room')) ?? h.rooms.find((r) => r.recommended) ?? h.rooms[0];
+  const rate = room.rates[+(sp?.get('rate') ?? 0)] ?? room.rates[0];
   const base = (room.request ?? '').split(' · ').filter(Boolean);
   const [req, setReq] = useState(new Set(base));
   const [pay, setPay] = useState<'now' | 'later'>('now');
@@ -26,7 +29,7 @@ export default function BookPage() {
       <Header />
       <main className="book">
         <div className="book-main">
-          <Link className="pill-btn" to={`/hotels/${h.id}`}><Icon name="back" size={16} />{h.name}</Link>
+          <Link className="pill-btn" href={`/hotels/${h.id}`}><Icon name="back" size={16} />{h.name}</Link>
           <h1 className="page-title">Бронь в один шаг</h1>
           <p className="lead">Мы уже знаем, какой номер вам нужен. Отель получит запрос вместе с бронью.</p>
 
@@ -68,7 +71,7 @@ export default function BookPage() {
             <div className="row"><span>Питание</span><span>{rate.meal}</span></div>
             <div className="row"><span>{rub(rate.price)} × {nights}</span><span className="num">{rub(rate.price * nights)}</span></div>
             <div className="total"><span className="muted">Итого <Demo /></span><b className="num">{rub(rate.price * nights)}</b></div>
-            <button className="btn btn-primary wide-btn" onClick={() => nav(`/trips/${h.id}`)}>Забронировать</button>
+            <button className="btn btn-primary wide-btn" onClick={() => nav.push(`/trips/${h.id}`)}>Забронировать</button>
             <div className="promise"><Mark v="yes" /><span>Если отель не подтвердит сторону и этаж — предложим замену или вернём деньги.</span></div>
           </div>
         </aside>

@@ -1,5 +1,7 @@
+'use client';
+
 import { useState } from 'react';
-import { Link } from 'react-router';
+import Link from 'next/link';
 import { Footer, Header } from '../components/chrome';
 import { Demo } from '../components/ui';
 import { Photo } from '../components/visuals';
@@ -39,7 +41,7 @@ export default function MePage() {
         <h2 className="h-md">Прошлые поездки</h2>
         <div className="past">
           {PAST.map(([id, ph, n, d, s]) => (
-            <Link key={id} to={`/hotels/${id}`} className="card-w past-c"><Photo k={ph} alt={n} credit={false} /><b>{n}</b><span>{d} · {s}</span></Link>
+            <Link key={id} href={`/hotels/${id}`} className="card-w past-c"><Photo k={ph} alt={n} credit={false} /><b>{n}</b><span>{d} · {s}</span></Link>
           ))}
         </div>
       </main>

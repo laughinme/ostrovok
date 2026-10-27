@@ -1,3 +1,5 @@
+'use client';
+
 import { Footer, Header } from '../components/chrome';
 import { allPhotos } from '../lib/photos';
 

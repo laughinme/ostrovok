@@ -1,6 +1,9 @@
+'use client';
+
 import { motion } from 'motion/react';
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router';
+import Link from 'next/link';
+import { useParams, useRouter } from 'next/navigation';
 import { Footer, Header } from '../components/chrome';
 import { MapView } from '../components/MapView';
 import { Drawer, Lightbox, WhyPanel, type GalleryItem } from '../components/overlays';
@@ -23,8 +26,8 @@ const NOISE = {
 const DAYS = [['пн', 10, 17, '16:58', 18, 10], ['вт', 11, 16, '16:57', 18, 25], ['ср', 12, 15, '16:56', 17, 40], ['чт', 13, 16, '16:55', 17, 20], ['пт', 14, 17, '16:54', 17, 10], ['сб', 15, 16, '16:53', 17, 15]] as const;
 
 export default function HotelPage() {
-  const h = byId(useParams().id);
-  const nav = useNavigate();
+  const h = byId(useParams<{ id: string }>()?.id);
+  const nav = useRouter();
   const { chips: storeChips, known, favorites, toggleFavorite, compare, toggleCompare } = useStore();
   const chips = storeChips.length ? storeChips : DEFAULT_INTENT;
   const m = score(h, chips, known);
@@ -59,8 +62,8 @@ export default function HotelPage() {
       <Header />
       <div className="hp">
         <div className="crumbs-row">
-          <Link className="pill-btn" to="/search"><Icon name="back" size={16} />Все варианты в Сочи</Link>
-          <Link className="pill-btn" to="/"><Icon name="spark" size={16} />Новый поиск</Link>
+          <Link className="pill-btn" href="/search"><Icon name="back" size={16} />Все варианты в Сочи</Link>
+          <Link className="pill-btn" href="/"><Icon name="spark" size={16} />Новый поиск</Link>
         </div>
 
         <section className="hp-head card-w">
@@ -195,7 +198,7 @@ export default function HotelPage() {
                   {rt.tag && <span className="rate-tag">{rt.tag}</span>}
                   <b className="num">{rub(rt.price)}</b>
                   <span className="rate-sub">за ночь · налоги включены · <Demo /></span>
-                  <button className="btn btn-primary" onClick={() => nav(`/book/${h.id}?room=${r.id}&rate=${i}`)}>Забронировать</button>
+                  <button className="btn btn-primary" onClick={() => nav.push(`/book/${h.id}?room=${r.id}&rate=${i}`)}>Забронировать</button>
                 </div>
               ))}
             </div>
@@ -231,7 +234,7 @@ export default function HotelPage() {
 
         <div className="hp-actions">
           <button className={`btn-ghost${inCmp ? ' on' : ''}`} onClick={() => toggleCompare(h.id)}>{inCmp ? '✓ В сравнении' : '+ Добавить в сравнение'}</button>
-          <Link className="btn-ghost" to="/compare">Сравнить с другими</Link>
+          <Link className="btn-ghost" href="/compare">Сравнить с другими</Link>
         </div>
       </div>
 

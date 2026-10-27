@@ -1,8 +1,5 @@
 import * as maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
-
-maplibregl.setWorkerUrl(workerUrl);
 import { useEffect, useRef, useState } from 'react';
 
 export interface MapPin { id: string; lngLat: [number, number]; label: string; top?: boolean; sub?: string }

@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { CHARACTERISTICS } from '../data/characteristics';
 import type { HotelMatch, IntentChip } from '../data/types';
 import { rub } from '../lib/format';
@@ -13,7 +14,7 @@ type Slide = { kind: 'photo'; key: string; cap: string } | { kind: 'view'; cap: 
 
 export function HotelCard({ m, chips, known, index, flash, hl, onHover }: { m: HotelMatch; chips: IntentChip[]; known: Set<string>; index: number; flash: string | null; hl: boolean; onHover(id: string | null): void }) {
   const h = m.hotel;
-  const nav = useNavigate();
+  const nav = useRouter();
   const { compare, toggleCompare, favorites, toggleFavorite } = useStore();
   const slides: Slide[] = [
     ...h.photos.slice(0, 3).map((key, i) => ({ kind: 'photo' as const, key, cap: i === 0 ? 'Демо-фото' : 'Демо-фото' })),
@@ -47,7 +48,7 @@ export function HotelCard({ m, chips, known, index, flash, hl, onHover }: { m: H
       <div className="hc-b">
         <div className="hc-top">
           <div className="hc-title">
-            <Link to={`/hotels/${h.id}`} className="hc-name">{h.name}</Link>
+            <Link href={`/hotels/${h.id}`} className="hc-name">{h.name}</Link>
             <div className="hc-sub"><Stars n={h.stars} /> {h.district} · {h.toSea}</div>
           </div>
           <Ring value={m.score} />
@@ -69,7 +70,7 @@ export function HotelCard({ m, chips, known, index, flash, hl, onHover }: { m: H
         </div>
         <div className="hc-foot">
           <button className={`btn-ghost btn-sm${inCmp ? ' on' : ''}`} type="button" aria-pressed={inCmp} onClick={() => toggleCompare(h.id)}>{inCmp ? '✓ В сравнении' : '+ Сравнить'}</button>
-          <button className="btn btn-primary btn-sm" type="button" onClick={() => nav(`/hotels/${h.id}`)}>Показать номера</button>
+          <button className="btn btn-primary btn-sm" type="button" onClick={() => nav.push(`/hotels/${h.id}`)}>Показать номера</button>
         </div>
       </div>
     </motion.article>

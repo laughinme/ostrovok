@@ -1,5 +1,7 @@
+'use client';
+
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useParams } from 'next/navigation';
 import { Footer, Header } from '../components/chrome';
 import { Demo, Icon } from '../components/ui';
 import { Panorama, Photo } from '../components/visuals';
@@ -12,7 +14,7 @@ const PROMISES = [
 ];
 
 export default function TripPage() {
-  const h = byId(useParams().id);
+  const h = byId(useParams<{ id: string }>()?.id);
   const [confirmed, setConfirmed] = useState(false);
   const [post, setPost] = useState(false);
   const [answers, setAnswers] = useState<Record<number, string>>({});

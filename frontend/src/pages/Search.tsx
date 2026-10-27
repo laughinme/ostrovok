@@ -1,6 +1,9 @@
+'use client';
+
 import { LayoutGroup, motion } from 'motion/react';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useLocation, useNavigate, useSearchParams } from 'react-router';
+import Link from 'next/link';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { Footer, Header } from '../components/chrome';
 import { HotelCard } from '../components/HotelCard';
 import { MapView } from '../components/MapView';
@@ -24,8 +27,8 @@ const AGENT_SCRIPTS: Record<string, { run: string; done: string; steps: [string,
 };
 
 export default function SearchPage() {
-  const { pathname } = useLocation();
-  const nav = useNavigate();
+  const pathname = usePathname() ?? '/';
+  const nav = useRouter();
   const { query, setQuery, chips, setChips, known, learn } = useStore();
   const [phase, setPhase] = useState<Phase>(pathname === '/' ? 'landing' : 'results');
   const [step, setStep] = useState(0);
@@ -57,7 +60,7 @@ export default function SearchPage() {
     setChips(preset ?? (chips.length ? chips : parseIntent(q)));
     if (app) { setPhase('loading'); setStep(2); later(() => setPhase('results'), 650); return; }
     setPhase('thinking');
-    later(() => { setPhase('loading'); setStep(0); nav('/search'); window.scrollTo({ top: 0 }); }, 900);
+    later(() => { setPhase('loading'); setStep(0); nav.push('/search'); window.scrollTo({ top: 0 }); }, 900);
     later(() => setStep(1), 1350);
     later(() => setStep(2), 1750);
     later(() => setPhase('results'), 2150);
@@ -164,10 +167,10 @@ export default function SearchPage() {
                 : ranked.map((m, i) => <HotelCard key={m.hotel.id} m={m} chips={chips} known={known} index={i} flash={flash} hl={hover === m.hotel.id} onHover={setHover} />)}
             </section>
             <aside className="map-col">
-              <MapView className="results-map" hover={hover} onHover={setHover} onPick={(id) => nav(`/hotels/${id}`)}
+              <MapView className="results-map" hover={hover} onHover={setHover} onPick={(id) => nav.push(`/hotels/${id}`)}
                 pins={phase === 'loading' ? [] : ranked.map((m, i) => ({ id: m.hotel.id, lngLat: m.hotel.lngLat, label: `${m.score}%`, sub: rub(m.hotel.priceFrom), top: i === 0 }))} />
               {(() => { const m = ranked.find((x) => x.hotel.id === hover) ?? ranked[0]; return phase !== 'loading' && m && (
-                <Link className="map-card" to={`/hotels/${m.hotel.id}`}>
+                <Link className="map-card" href={`/hotels/${m.hotel.id}`}>
                   <Photo k={m.hotel.photos[0]} alt="" credit={false} />
                   <span><b>{m.hotel.name}</b><small>{m.hotel.district} · {m.score}% совпадение</small><small className="num">{rub(m.hotel.priceFrom)} за ночь</small></span>
                   <Icon name="arrow" size={16} />
@@ -204,7 +207,7 @@ function ProofCard() {
           <li><Mark v="yes" />Ночью ≈ 38 дБ во двор <SrcTag kind="computed">расчёт</SrcTag></li>
           <li><Mark v="partial" />Ж/д в 60 м — берём 5 этаж <SrcTag kind="hotelier">отель</SrcTag></li>
         </ul>
-        <Link to="/hotels/mayak">Посмотреть доказательства →</Link>
+        <Link href="/hotels/mayak">Посмотреть доказательства →</Link>
       </motion.div>
       <figcaption>Фото для настроения · <Demo /></figcaption>
     </motion.figure>
@@ -227,15 +230,18 @@ function MoodStrip({ onMood }: { onMood(m: (typeof MOODS)[number]): void }) {
 type Variant = 'photo' | 'split' | 'lime';
 const VARIANTS: [Variant, string, string][] = [['photo', 'A', 'Фото и поле по центру'], ['split', 'B', 'Номер с доказательством'], ['lime', 'C', 'Салатовый Островок']];
 function useVariant(): [Variant, (v: Variant) => void, boolean] {
-  const [sp, setSp] = useSearchParams();
+  const sp = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname() ?? '/';
   const enabled = useVariantsEnabled();
-  const fromUrl = sp.get('v') as Variant | null;
-  const stored = (() => { try { return localStorage.getItem('okno-variant') as Variant | null; } catch { return null; } })();
+  const fromUrl = sp?.get('v') as Variant | null;
+  const [stored, setStored] = useState<Variant | null>(null);
+  useEffect(() => { try { setStored(localStorage.getItem('okno-variant') as Variant | null); } catch { /* приватный режим */ } }, []);
   // без включённого режима всегда салатовый C
   const v: Variant = !enabled ? 'lime' : fromUrl && VARIANTS.some(([k]) => k === fromUrl) ? fromUrl : stored && VARIANTS.some(([k]) => k === stored) ? stored : 'lime';
   // вариант из ссылки запоминаем, чтобы выдача после перехода на /search была в том же стиле
   useEffect(() => { if (enabled && fromUrl && fromUrl !== stored) { try { localStorage.setItem('okno-variant', v); } catch { /* приватный режим */ } } }, [enabled, fromUrl, stored, v]);
-  return [v, (n) => { try { localStorage.setItem('okno-variant', n); } catch { /* приватный режим */ } setSp((s) => { s.set('v', n); return s; }, { replace: true }); }, enabled];
+  return [v, (n) => { try { localStorage.setItem('okno-variant', n); } catch { /* приватный режим */ } const params = new URLSearchParams(sp?.toString()); params.set('v', n); router.replace(`${pathname}?${params}`, { scroll: false }); }, enabled];
 }
 
 function VariantSwitch({ value, onChange }: { value: Variant; onChange(v: Variant): void }) {
@@ -276,7 +282,7 @@ function Landing({ onMood, showMoods }: { onMood(m: (typeof MOODS)[number]): voi
         <div>
           <h2>Нажмите «почему» у любого факта</h2>
           <p>Покажем метод, источники, уверенность и что может пойти не так. Если не знаем — так и скажем и спросим отель.</p>
-          <Link className="btn btn-primary" to="/hotels/mayak">Посмотреть на примере «Маяка»</Link>
+          <Link className="btn btn-primary" href="/hotels/mayak">Посмотреть на примере «Маяка»</Link>
         </div>
         <div className="proof-card">
           <div className="lbl">Почему мы так думаем</div>
@@ -293,8 +299,8 @@ function Landing({ onMood, showMoods }: { onMood(m: (typeof MOODS)[number]): voi
       <section className="sec-l tiles4">
         <div className="tile-a"><b className="num">214</b><span>отелей Большого Сочи<br />посчитано по этажам</span></div>
         <div className="tile-a"><b className="num">38</b><span>характеристик сверх<br />карточки отеля</span></div>
-        <Link className="tile-b" to="/partner"><h3>Отельерам</h3><p>Отвечайте на 3 вопроса в неделю — остальное посчитаем сами. Гости найдут вас за то, чем вы правда хороши.</p><span className="goto">Открыть кабинет <Icon name="arrow" size={16} /></span></Link>
-        <Link className="tile-c" to="/developers"><h3>Разработчикам и AI-агентам</h3><p>Те же факты с доказательствами через API и MCP.</p><code>GET /v1/hotels/mayak/facts</code><span className="goto">Документация <Icon name="arrow" size={16} /></span></Link>
+        <Link className="tile-b" href="/partner"><h3>Отельерам</h3><p>Отвечайте на 3 вопроса в неделю — остальное посчитаем сами. Гости найдут вас за то, чем вы правда хороши.</p><span className="goto">Открыть кабинет <Icon name="arrow" size={16} /></span></Link>
+        <Link className="tile-c" href="/developers"><h3>Разработчикам и AI-агентам</h3><p>Те же факты с доказательствами через API и MCP.</p><code>GET /v1/hotels/mayak/facts</code><span className="goto">Документация <Icon name="arrow" size={16} /></span></Link>
       </section>
       <Footer />
     </div>
