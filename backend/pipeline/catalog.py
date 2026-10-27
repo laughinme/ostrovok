@@ -30,15 +30,23 @@ def select_hotels() -> list[dict[str, Any]]:
     report = {}
     for district, (bounds, quota) in DISTRICTS.items():
         west, south, east, north = bounds
+        bbox = f"({south},{west},{north},{east})"
         body = (
-            'nwr["tourism"~"^(hotel|guest_house|apartment)$"]["name"]'
-            f"({south},{west},{north},{east})->.hotels;"
-            '(.hotels;way["building"](around.hotels:50);'
-            'rel["building"](around.hotels:50);)'
+            '(nwr["tourism"~"^(hotel|guest_house|apartment)$"]["name"]' + bbox + ";"
+            'way["building"]' + bbox + ';rel["building"]' + bbox + ";)"
         )
         elements = overpass(body)["elements"]
+        member_ids = {
+            m["ref"]
+            for e in elements
+            if e["type"] == "relation" and e.get("tags", {}).get("building")
+            for m in e.get("members", [])
+            if m["type"] == "way"
+        }
         buildings = []
         for element in elements:
+            if element["type"] == "way" and element["id"] in member_ids:
+                continue
             if element.get("tags", {}).get("building") not in (None, "no"):
                 shape = geometry(element, area=True)
                 if shape.geom_type in ("Polygon", "MultiPolygon") and not shape.is_empty:
@@ -47,6 +55,8 @@ def select_hotels() -> list[dict[str, Any]]:
         candidates = []
         for element in sorted(elements, key=identifier):
             tags = element.get("tags", {})
+            if element["type"] == "relation":
+                continue
             if tags.get("tourism") not in ("hotel", "guest_house", "apartment") or not tags.get(
                 "name"
             ):
