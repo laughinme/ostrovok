@@ -1,0 +1,27 @@
+{
+  "crs": "EPSG:4326",
+  "transform": [
+    0.0005555555555555556,
+    0.0,
+    39.14611111111111,
+    0.0,
+    -0.0005555555555555556,
+    44.05
+  ],
+  "nodata": -32768,
+  "shape": [
+    1852,
+    3018
+  ],
+  "units": "metres above EGM2008 geoid",
+  "resolution_arcseconds": 2,
+  "buffer_m": 40200,
+  "source": "Copernicus DEM GLO-30 (DSM, includes trees and buildings)",
+  "resampling": "average, rounded to nearest metre",
+  "sources": [
+    "https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_N43_00_E039_00_DEM/Copernicus_DSM_COG_10_N43_00_E039_00_DEM.tif",
+    "https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_N43_00_E040_00_DEM/Copernicus_DSM_COG_10_N43_00_E040_00_DEM.tif",
+    "https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_N44_00_E039_00_DEM/Copernicus_DSM_COG_10_N44_00_E039_00_DEM.tif",
+    "https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_N44_00_E040_00_DEM/Copernicus_DSM_COG_10_N44_00_E040_00_DEM.tif"
+  ]
+}
