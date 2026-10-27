@@ -10,7 +10,7 @@ from shapely.ops import unary_union
 from pipeline import sea
 from pipeline.catalog import select_hotels
 from pipeline.geography import REGION_BOUNDS, geometry, height, identifier, metric, wgs84
-from pipeline.storage import REGION, overpass, read_csv, write_csv
+from pipeline.storage import CACHE, MIRROR, REGION, overpass, read_csv, write_csv
 
 
 def hotel_buffers(radius: float) -> Any:
@@ -22,7 +22,7 @@ def hotel_buffers(radius: float) -> Any:
     )
 
 
-def tiles(area: Any, step: float = 0.08) -> list[tuple[float, float, float, float]]:
+def tiles(area: Any, step: float = 0.04) -> list[tuple[float, float, float, float]]:
     west, south, east, north = wgs84(area).bounds
     result = []
     for x in range(math.floor(west / step), math.ceil(east / step)):
@@ -125,6 +125,11 @@ def export(elements: list[dict[str, Any]]) -> None:
 def run() -> None:
     if not (REGION / "hotels.csv.gz").exists():
         select_hotels()
+    # Resume using the last mirror that actually supplied OSM data in this cache.
+    for metadata in sorted(CACHE.glob("*.request.json"), key=lambda p: p.stat().st_mtime):
+        endpoint = json.loads(metadata.read_text())["url"]
+        if endpoint.endswith("/api/interpreter"):
+            MIRROR["endpoint"] = endpoint
     elements = {}
     cells = tiles(hotel_buffers(2500))
     for index, (west, south, east, north) in enumerate(cells, 1):
@@ -136,7 +141,9 @@ def run() -> None:
             *[f'nwr["{key}"]' for key in ("amenity", "shop", "tourism", "leisure", "healthcare")],
             'nwr["landuse"="construction"]',
         ]
-        data = overpass("(" + "".join(s + bbox + ";" for s in selectors) + ")", seconds=30)
+        data = overpass(
+            "(" + "".join(s + bbox + ";" for s in selectors) + ")", seconds=30, memory=134217728
+        )
         elements.update((identifier(e), e) for e in data["elements"])
         print(f"OSM cell {index}/{len(cells)}: {len(elements):,} unique objects", flush=True)
     west, south, east, north = REGION_BOUNDS

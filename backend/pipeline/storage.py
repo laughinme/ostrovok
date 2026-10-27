@@ -18,6 +18,7 @@ DATA = ROOT / "data"
 REGION = DATA / "region"
 USER_AGENT = "okno-hackathon/0.1 (team chupapis)"
 OVERPASS = "https://maps.mail.ru/osm/tools/overpass/api/interpreter"
+MIRROR = {"endpoint": OVERPASS}
 
 
 def download(url: str, *, query: str | None = None) -> Path:
@@ -28,21 +29,23 @@ def download(url: str, *, query: str | None = None) -> Path:
     if path.exists():
         return path
     for attempt in range(4):
-        endpoint = url
+        endpoint = MIRROR["endpoint"] if query is not None and url == OVERPASS else url
         if query is not None and attempt >= 2:
             endpoint = (
-                "https://overpass-api.de/api/interpreter"
+                "https://overpass.kumi.systems/api/interpreter"
                 if attempt == 2
-                else "https://overpass.kumi.systems/api/interpreter"
+                else "https://overpass.private.coffee/api/interpreter"
             )
         try:
             with httpx.Client(
-                headers={"User-Agent": USER_AGENT}, timeout=240, follow_redirects=True
+                headers={"User-Agent": USER_AGENT},
+                timeout=httpx.Timeout(120, connect=10),
+                follow_redirects=True,
             ) as client:
                 if query is not None:
                     response = (
                         client.get(endpoint, params={"data": query})
-                        if attempt == 1
+                        if attempt == 0
                         else client.post(endpoint, data={"data": query})
                     )
                     response.raise_for_status()
@@ -56,6 +59,8 @@ def download(url: str, *, query: str | None = None) -> Path:
                         with path.with_suffix(".part").open("wb") as target:
                             for chunk in response.iter_bytes():
                                 target.write(chunk)
+            if query is not None and url == OVERPASS:
+                MIRROR["endpoint"] = endpoint
             path.with_suffix(".part").replace(path)
             path.with_suffix(".request.json").write_text(
                 json.dumps(
@@ -68,13 +73,19 @@ def download(url: str, *, query: str | None = None) -> Path:
         except (httpx.HTTPError, ValueError) as error:
             if attempt == 3:
                 raise
-            print(f"Retry {attempt + 1}/4 at {endpoint}: {error}", flush=True)
+            reason = (
+                str(error.response.status_code)
+                if isinstance(error, httpx.HTTPStatusError)
+                else str(error)
+            )
+            print(f"Retry {attempt + 1}/4 at {endpoint}: {reason}", flush=True)
             time.sleep(3 * (attempt + 1))
     raise RuntimeError("Download retries exhausted")
 
 
-def overpass(body: str, *, seconds: int = 180) -> dict[str, Any]:
-    query = f"[out:json][timeout:{seconds}];{body};out meta geom;"
+def overpass(body: str, *, seconds: int = 180, memory: int | None = None) -> dict[str, Any]:
+    allocation = f"[maxsize:{memory}]" if memory else ""
+    query = f"[out:json][timeout:{seconds}]{allocation};{body};out meta geom;"
     return json.loads(download(OVERPASS, query=query).read_text())
 
 

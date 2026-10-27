@@ -13,7 +13,7 @@ OSM: пять явно заданных областей отбора (это д
 ближайшее здание через дорогу не подставляется. Части зданий в отношениях не дублируются.
 Высота: `height` → `building:levels × 3 м` → 9 м; `height_source` сохраняет происхождение.
 Метаданные запроса и фактический endpoint хранятся рядом с кэшем. После двух ошибок Mail.ru
-используются Overpass DE и Kumi (D-37). Снимок OSM указан в `osm_timestamp` каждого отеля.
+используются Kumi и Private Coffee; рабочее зеркало сохраняется на время запуска (D-37). Снимок OSM указан в `osm_timestamp` каждого отеля.
 `sea.wkb.gz` содержит ASCII WKB hex MultiPolygon; море справа от направленной линии OSM.
 
 Тесты без сети: `cd backend && uv run --group pipeline pytest tests/pipeline -q`.
