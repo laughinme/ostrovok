@@ -28,12 +28,19 @@ def download(url: str, *, query: str | None = None) -> Path:
     if path.exists():
         return path
     for attempt in range(4):
+        endpoint = url
+        if query is not None and attempt >= 2:
+            endpoint = (
+                "https://overpass-api.de/api/interpreter"
+                if attempt == 2
+                else "https://overpass.kumi.systems/api/interpreter"
+            )
         try:
             with httpx.Client(
                 headers={"User-Agent": USER_AGENT}, timeout=240, follow_redirects=True
             ) as client:
                 if query is not None:
-                    response = client.post(url, data={"data": query})
+                    response = client.post(endpoint, data={"data": query})
                     response.raise_for_status()
                     payload = response.json()
                     if payload.get("remark"):
@@ -48,7 +55,7 @@ def download(url: str, *, query: str | None = None) -> Path:
             path.with_suffix(".part").replace(path)
             path.with_suffix(".request.json").write_text(
                 json.dumps(
-                    {"url": url, "query": query, "fetched_at": datetime.now(UTC).isoformat()}
+                    {"url": endpoint, "query": query, "fetched_at": datetime.now(UTC).isoformat()}
                 )
             )
             print(f"Cached {key[:10]}: {path.stat().st_size:,} bytes", flush=True)
