@@ -13,10 +13,17 @@ from app.api.deps import (
     UserAgentDep,
     rate_limit,
 )
-from app.api.schemas.auth import LoginRequest, RegisterRequest, TokenPair
+from app.api.schemas.auth import (
+    DemoLoginRequest,
+    LoginRequest,
+    PersonaOut,
+    RegisterRequest,
+    TokenPair,
+)
 from app.core.config import Settings
 from app.core.errors import InvalidTokenError, UnauthorizedError
 from app.domain.auth import ClientKind, IssuedTokens
+from app.service.personas import load_personas
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
@@ -82,6 +89,31 @@ async def login(
     tokens = await svc.login(
         email=payload.email, password=payload.password, client=client, user_agent=user_agent
     )
+    return _token_pair(response, tokens, client, settings)
+
+
+@router.get(path="/personas", summary="Demo personas for the role switcher")
+async def personas(settings: SettingsDep) -> list[PersonaOut]:
+    return [
+        PersonaOut(key=p.key, role=p.role, name=p.name, title=p.title, hotels=list(p.hotels))
+        for p in load_personas(settings.data_dir)
+    ]
+
+
+@router.post(
+    path="/demo",
+    summary="Sign in as a demo persona: guest, hotelier or operator (no password)",
+    responses={404: {"description": "Unknown persona"}},
+)
+async def demo_login(
+    payload: DemoLoginRequest,
+    response: Response,
+    svc: AuthServiceDep,
+    client: ClientDep,
+    user_agent: UserAgentDep,
+    settings: SettingsDep,
+) -> TokenPair:
+    tokens = await svc.demo_login(payload.persona, client=client, user_agent=user_agent)
     return _token_pair(response, tokens, client, settings)
 
 

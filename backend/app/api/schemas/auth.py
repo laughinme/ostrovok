@@ -2,7 +2,8 @@ from typing import Literal
 
 from pydantic import BaseModel, EmailStr, Field
 
-from app.api.schemas.base import RequestModel
+from app.api.schemas.base import RequestModel, ResponseModel
+from app.domain.users import Role
 
 
 class RegisterRequest(RequestModel):
@@ -30,3 +31,15 @@ class TokenPair(BaseModel):
     refresh_token: str | None = None
     token_type: Literal["bearer"] = "bearer"  # noqa: S105 - OAuth2 token type, not a secret
     expires_in: int = Field(..., description="Access token lifetime in seconds")
+
+
+class DemoLoginRequest(RequestModel):
+    persona: str = Field(..., min_length=1, max_length=64, examples=["guest_anna"])
+
+
+class PersonaOut(ResponseModel):
+    key: str
+    role: Role
+    name: str
+    title: str
+    hotels: list[str] = Field(default_factory=list, description="OSM ids of managed hotels")
