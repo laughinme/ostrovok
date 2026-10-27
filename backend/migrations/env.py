@@ -2,6 +2,7 @@ import asyncio
 from logging.config import fileConfig
 
 from alembic import context
+from geoalchemy2 import alembic_helpers
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import create_async_engine
@@ -9,6 +10,7 @@ from sqlalchemy.ext.asyncio import create_async_engine
 from app.core.config import MigrationSettings
 from app.db import models  # noqa: F401 - registers every table on Base.metadata
 from app.db.base import Base
+from app.db.migrations import include_object
 
 config = context.config
 if config.config_file_name is not None and config.attributes.get("configure_logger", True):
@@ -30,13 +32,23 @@ def run_migrations_offline() -> None:
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
         compare_type=True,
+        include_object=include_object,
+        process_revision_directives=alembic_helpers.writer,
+        render_item=alembic_helpers.render_item,
     )
     with context.begin_transaction():
         context.run_migrations()
 
 
 def _run(connection: Connection) -> None:
-    context.configure(connection=connection, target_metadata=target_metadata, compare_type=True)
+    context.configure(
+        connection=connection,
+        target_metadata=target_metadata,
+        compare_type=True,
+        include_object=include_object,
+        process_revision_directives=alembic_helpers.writer,
+        render_item=alembic_helpers.render_item,
+    )
     with context.begin_transaction():
         context.run_migrations()
 

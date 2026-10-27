@@ -1,4 +1,4 @@
-from collections.abc import AsyncIterator, Awaitable, Callable
+from collections.abc import AsyncIterator, Callable
 from contextlib import AbstractAsyncContextManager, asynccontextmanager
 from pathlib import Path
 from typing import Any
@@ -14,12 +14,11 @@ from sqlalchemy import text
 from app.core.config import Settings
 from app.db.database import Database
 from app.main import create_app
-from app.service.outbox import OutboxDispatcher, build_handlers
 from tests.conftest import TEST_DATABASE_URL, build_settings
 from tests.factories import Account, promote, register
 
 BACKEND_DIR = Path(__file__).resolve().parents[2]
-TABLES = ("outbox_events", "auth_sessions", "users")
+TABLES = ("jobs", "auth_sessions", "users")
 
 
 def alembic_config(database_url: str = TEST_DATABASE_URL) -> Config:
@@ -98,13 +97,6 @@ def db(app: FastAPI) -> Database:
     """The app's own Database: assert on rows or run the worker code directly."""
     database: Database = app.state.db
     return database
-
-
-@pytest.fixture
-def run_outbox(db: Database) -> Callable[[], Awaitable[int]]:
-    """Run one worker iteration in the test: `await run_outbox()` delivers pending events."""
-    dispatcher = OutboxDispatcher(db, build_handlers(), batch_size=50, max_attempts=3)
-    return dispatcher.run_once
 
 
 @pytest.fixture

@@ -15,7 +15,7 @@ INTEGRATION_DIR = Path(__file__).parent / "integration"
 
 # Defaults match docker-compose.test.yml; override with env vars to point tests elsewhere.
 TEST_DATABASE_URL = os.environ.get(
-    "TEST_DATABASE_URL", "postgresql+asyncpg://postgres:secret@localhost:5439/okno_test"
+    "TEST_DATABASE_URL", "postgresql+asyncpg://okno:okno@localhost:5439/okno_test"
 )
 TEST_REDIS_URL = os.environ.get("TEST_REDIS_URL", "redis://localhost:6380/0")
 

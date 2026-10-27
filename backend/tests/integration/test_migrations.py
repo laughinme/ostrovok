@@ -5,12 +5,15 @@ from sqlalchemy import Connection
 from sqlalchemy.ext.asyncio import create_async_engine
 
 from app.db.base import Base
+from app.db.migrations import include_object
 from tests.conftest import TEST_DATABASE_URL
 from tests.integration.conftest import alembic_config
 
 
 def _diff(connection: Connection) -> list[object]:
-    context = MigrationContext.configure(connection, opts={"compare_type": True})
+    context = MigrationContext.configure(
+        connection, opts={"compare_type": True, "include_object": include_object}
+    )
     return list(compare_metadata(context, Base.metadata))
 
 
