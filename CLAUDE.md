@@ -55,3 +55,9 @@
   `https://maps.mail.ru/osm/tools/overpass/api/interpreter`.
 - Copernicus DEM GLO-30 без ключа: `https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_N43_00_E039_00_DEM/Copernicus_DSM_COG_10_N43_00_E039_00_DEM.tif`
   (Сочи; Красная Поляна — тайл `N43_00_E040_00`).
+
+## Дизайн-работа
+
+- Любую визуальную задачу (экран, лендинг, анимация, критика, правки `DESIGN.md`) начинай со скилла `design-studio`.
+  Не стоит он — `bash design-lab/install.sh` (см. `design-lab/README.md`).
+- Без просмотра результата глазами «готово» не говорим: скриншоты 1440 и 390, для скролла — скрипт из скилла.
