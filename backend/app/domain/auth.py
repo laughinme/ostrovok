@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from enum import StrEnum
 
-from app.core.errors import ErrorCode, ForbiddenError, UnauthorizedError
+from app.core.errors import ErrorCode, ForbiddenError, NotFoundError, UnauthorizedError
 
 
 class ClientKind(StrEnum):
@@ -42,3 +42,8 @@ class RefreshTokenReusedError(SessionRevokedError):
 class CsrfError(ForbiddenError):
     error_code = ErrorCode.CSRF_FAILED
     default_detail = "CSRF token is missing or invalid"
+
+
+class UnknownPersonaError(NotFoundError):
+    error_code = ErrorCode.UNKNOWN_PERSONA
+    default_detail = "No such demo persona"

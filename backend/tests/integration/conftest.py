@@ -12,13 +12,15 @@ from redis.asyncio import Redis
 from sqlalchemy import text
 
 from app.core.config import Settings
+from app.db import models  # noqa: F401 - registers every table
+from app.db.base import Base
 from app.db.database import Database
 from app.main import create_app
 from tests.conftest import TEST_DATABASE_URL, build_settings
 from tests.factories import Account, promote, register
 
 BACKEND_DIR = Path(__file__).resolve().parents[2]
-TABLES = ("jobs", "auth_sessions", "users")
+TABLES = tuple(table.name for table in Base.metadata.sorted_tables)
 
 
 def alembic_config(database_url: str = TEST_DATABASE_URL) -> Config:

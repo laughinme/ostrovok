@@ -13,6 +13,7 @@ from app.domain.auth import (
     IssuedTokens,
     RefreshTokenReusedError,
     SessionRevokedError,
+    UnknownPersonaError,
     WrongCredentialsError,
 )
 from app.domain.users import (
@@ -72,6 +73,15 @@ class AuthService:
 
         if needs_rehash(user.password_hash):
             user.password_hash = await hash_password(password)
+        return await self._open_session(user, client, user_agent)
+
+    async def demo_login(
+        self, persona: str, *, client: ClientKind, user_agent: str | None
+    ) -> IssuedTokens:
+        """Sign in as a seeded persona (guest, hotelier, operator) for the role switcher."""
+        user = await self._uow.users.get_by_persona(persona)
+        if user is None:
+            raise UnknownPersonaError()
         return await self._open_session(user, client, user_agent)
 
     async def refresh(self, raw_token: str, *, csrf_token: str | None) -> IssuedTokens:

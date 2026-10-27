@@ -1,0 +1,30 @@
+# Demo personas for the role switcher (POST /api/v1/auth/demo). All people here are fictional («демо»).
+# hotels: OSM ids of hotels the hotelier may manage (hotel_staff).
+personas:
+  - key: guest_anna
+    role: guest
+    name: Анна
+    title: Гость · ищет тихий номер с закатом
+  - key: guest_mark
+    role: guest
+    name: Марк
+    title: Гость · с собакой и ребёнком
+  - key: hotelier_salut
+    role: hotelier
+    name: Ирина
+    title: Отельер · Санаторий Салют
+    hotels: [node/1521215547]
+  - key: hotelier_marriott
+    role: hotelier
+    name: Олег
+    title: Отельер · Сочи Марриотт Красная Поляна
+    hotels: [way/227214566]
+  - key: hotelier_imeretinsky
+    role: hotelier
+    name: Светлана
+    title: Отельер · Имеретинский — Прибрежный квартал
+    hotels: [node/2178886260]
+  - key: operator
+    role: operator
+    name: Оператор Островка
+    title: Консоль знаний
