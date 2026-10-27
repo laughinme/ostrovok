@@ -1,0 +1,523 @@
+{
+  "source": "Open-Meteo Archive (ERA5) + Marine (best_match SST)",
+  "period": "2016-2025",
+  "water_period": "2023-2025; only complete calendar months",
+  "years_note": "Station years is the conservative minimum across metrics and months",
+  "licence": "CC BY 4.0, Open-Meteo and its model providers (ECMWF ERA5)",
+  "aggregation": "Equal weight per year; daily extrema, sunshine/daylight hours per day; rain days >=1 mm liquid rain per month; hourly sea surface temperature",
+  "calendar_days": 3653,
+  "stations": [
+    {
+      "id": "center",
+      "lon": 39.7231,
+      "lat": 43.5855,
+      "years": 2,
+      "weather_years": 10,
+      "water_years_by_month": {
+        "1": 2,
+        "2": 2,
+        "3": 3,
+        "4": 3,
+        "5": 3,
+        "6": 3,
+        "7": 3,
+        "8": 3,
+        "9": 3,
+        "10": 3,
+        "11": 3,
+        "12": 3
+      },
+      "months": {
+        "1": {
+          "water_c": 11.26,
+          "air_max_c": 9.44,
+          "air_min_c": 6.05,
+          "sun_hours": 5.79,
+          "daylight_h": 9.37,
+          "rain_days": 14.7
+        },
+        "2": {
+          "water_c": 10.23,
+          "air_max_c": 9.24,
+          "air_min_c": 5.84,
+          "sun_hours": 7.0,
+          "daylight_h": 10.51,
+          "rain_days": 12.1
+        },
+        "3": {
+          "water_c": 10.43,
+          "air_max_c": 11.09,
+          "air_min_c": 7.12,
+          "sun_hours": 8.47,
+          "daylight_h": 11.95,
+          "rain_days": 14.5
+        },
+        "4": {
+          "water_c": 13.13,
+          "air_max_c": 14.86,
+          "air_min_c": 10.22,
+          "sun_hours": 10.6,
+          "daylight_h": 13.44,
+          "rain_days": 9.9
+        },
+        "5": {
+          "water_c": 16.97,
+          "air_max_c": 18.73,
+          "air_min_c": 14.54,
+          "sun_hours": 11.51,
+          "daylight_h": 14.71,
+          "rain_days": 11.0
+        },
+        "6": {
+          "water_c": 22.83,
+          "air_max_c": 23.78,
+          "air_min_c": 19.88,
+          "sun_hours": 13.68,
+          "daylight_h": 15.36,
+          "rain_days": 9.1
+        },
+        "7": {
+          "water_c": 26.36,
+          "air_max_c": 26.19,
+          "air_min_c": 22.43,
+          "sun_hours": 13.85,
+          "daylight_h": 15.04,
+          "rain_days": 9.5
+        },
+        "8": {
+          "water_c": 28.03,
+          "air_max_c": 27.3,
+          "air_min_c": 23.51,
+          "sun_hours": 12.74,
+          "daylight_h": 13.92,
+          "rain_days": 7.2
+        },
+        "9": {
+          "water_c": 25.83,
+          "air_max_c": 23.95,
+          "air_min_c": 20.18,
+          "sun_hours": 10.79,
+          "daylight_h": 12.5,
+          "rain_days": 10.5
+        },
+        "10": {
+          "water_c": 21.14,
+          "air_max_c": 19.47,
+          "air_min_c": 15.7,
+          "sun_hours": 8.86,
+          "daylight_h": 11.01,
+          "rain_days": 10.0
+        },
+        "11": {
+          "water_c": 17.08,
+          "air_max_c": 15.6,
+          "air_min_c": 11.92,
+          "sun_hours": 7.44,
+          "daylight_h": 9.7,
+          "rain_days": 10.1
+        },
+        "12": {
+          "water_c": 13.57,
+          "air_max_c": 11.84,
+          "air_min_c": 8.52,
+          "sun_hours": 5.87,
+          "daylight_h": 9.01,
+          "rain_days": 13.5
+        }
+      },
+      "requests": {
+        "weather": "https://archive-api.open-meteo.com/v1/archive?longitude=39.7231&latitude=43.5855&start_date=2016-01-01&end_date=2025-12-31&timezone=Europe%2FMoscow&models=era5&cell_selection=land&daily=temperature_2m_max%2Ctemperature_2m_min%2Csunshine_duration%2Cdaylight_duration%2Crain_sum",
+        "water": "https://marine-api.open-meteo.com/v1/marine?longitude=39.7231&latitude=43.5855&start_date=2023-01-01&end_date=2025-12-31&timezone=Europe%2FMoscow&models=best_match&cell_selection=sea&hourly=sea_surface_temperature"
+      },
+      "weather_grid": {
+        "latitude": 43.5,
+        "longitude": 39.75,
+        "elevation": 5.0
+      },
+      "water_grid": {
+        "latitude": 43.625,
+        "longitude": 39.708344
+      }
+    },
+    {
+      "id": "adler",
+      "lon": 39.92,
+      "lat": 43.43,
+      "years": 2,
+      "weather_years": 10,
+      "water_years_by_month": {
+        "1": 2,
+        "2": 2,
+        "3": 3,
+        "4": 3,
+        "5": 3,
+        "6": 3,
+        "7": 3,
+        "8": 3,
+        "9": 3,
+        "10": 3,
+        "11": 3,
+        "12": 3
+      },
+      "months": {
+        "1": {
+          "water_c": 11.22,
+          "air_max_c": 10.23,
+          "air_min_c": 5.8,
+          "sun_hours": 5.91,
+          "daylight_h": 9.37,
+          "rain_days": 15.0
+        },
+        "2": {
+          "water_c": 10.34,
+          "air_max_c": 10.44,
+          "air_min_c": 5.87,
+          "sun_hours": 7.06,
+          "daylight_h": 10.51,
+          "rain_days": 13.5
+        },
+        "3": {
+          "water_c": 10.52,
+          "air_max_c": 13.03,
+          "air_min_c": 7.63,
+          "sun_hours": 8.42,
+          "daylight_h": 11.95,
+          "rain_days": 16.1
+        },
+        "4": {
+          "water_c": 13.25,
+          "air_max_c": 17.86,
+          "air_min_c": 11.14,
+          "sun_hours": 10.56,
+          "daylight_h": 13.44,
+          "rain_days": 12.1
+        },
+        "5": {
+          "water_c": 17.02,
+          "air_max_c": 21.37,
+          "air_min_c": 15.26,
+          "sun_hours": 11.32,
+          "daylight_h": 14.71,
+          "rain_days": 15.9
+        },
+        "6": {
+          "water_c": 22.99,
+          "air_max_c": 26.09,
+          "air_min_c": 20.24,
+          "sun_hours": 13.58,
+          "daylight_h": 15.36,
+          "rain_days": 14.1
+        },
+        "7": {
+          "water_c": 26.59,
+          "air_max_c": 28.34,
+          "air_min_c": 22.64,
+          "sun_hours": 13.76,
+          "daylight_h": 15.04,
+          "rain_days": 14.8
+        },
+        "8": {
+          "water_c": 28.16,
+          "air_max_c": 29.48,
+          "air_min_c": 23.55,
+          "sun_hours": 12.72,
+          "daylight_h": 13.92,
+          "rain_days": 11.5
+        },
+        "9": {
+          "water_c": 25.92,
+          "air_max_c": 25.84,
+          "air_min_c": 19.98,
+          "sun_hours": 10.7,
+          "daylight_h": 12.5,
+          "rain_days": 12.1
+        },
+        "10": {
+          "water_c": 21.11,
+          "air_max_c": 21.26,
+          "air_min_c": 15.39,
+          "sun_hours": 8.85,
+          "daylight_h": 11.01,
+          "rain_days": 10.9
+        },
+        "11": {
+          "water_c": 16.98,
+          "air_max_c": 16.94,
+          "air_min_c": 11.47,
+          "sun_hours": 7.49,
+          "daylight_h": 9.7,
+          "rain_days": 10.2
+        },
+        "12": {
+          "water_c": 13.47,
+          "air_max_c": 12.69,
+          "air_min_c": 8.17,
+          "sun_hours": 5.89,
+          "daylight_h": 9.01,
+          "rain_days": 13.8
+        }
+      },
+      "requests": {
+        "weather": "https://archive-api.open-meteo.com/v1/archive?longitude=39.92&latitude=43.43&start_date=2016-01-01&end_date=2025-12-31&timezone=Europe%2FMoscow&models=era5&cell_selection=land&daily=temperature_2m_max%2Ctemperature_2m_min%2Csunshine_duration%2Cdaylight_duration%2Crain_sum",
+        "water": "https://marine-api.open-meteo.com/v1/marine?longitude=39.92&latitude=43.43&start_date=2023-01-01&end_date=2025-12-31&timezone=Europe%2FMoscow&models=best_match&cell_selection=sea&hourly=sea_surface_temperature"
+      },
+      "weather_grid": {
+        "latitude": 43.5,
+        "longitude": 40.0,
+        "elevation": 12.0
+      },
+      "water_grid": {
+        "latitude": 43.458336,
+        "longitude": 39.875015
+      }
+    },
+    {
+      "id": "sirius",
+      "lon": 39.96,
+      "lat": 43.4,
+      "years": 2,
+      "weather_years": 10,
+      "water_years_by_month": {
+        "1": 2,
+        "2": 2,
+        "3": 3,
+        "4": 3,
+        "5": 3,
+        "6": 3,
+        "7": 3,
+        "8": 3,
+        "9": 3,
+        "10": 3,
+        "11": 3,
+        "12": 3
+      },
+      "months": {
+        "1": {
+          "water_c": 11.52,
+          "air_max_c": 10.3,
+          "air_min_c": 5.88,
+          "sun_hours": 5.91,
+          "daylight_h": 9.37,
+          "rain_days": 15.0
+        },
+        "2": {
+          "water_c": 10.57,
+          "air_max_c": 10.51,
+          "air_min_c": 5.93,
+          "sun_hours": 7.06,
+          "daylight_h": 10.51,
+          "rain_days": 13.5
+        },
+        "3": {
+          "water_c": 10.46,
+          "air_max_c": 13.1,
+          "air_min_c": 7.71,
+          "sun_hours": 8.42,
+          "daylight_h": 11.95,
+          "rain_days": 16.1
+        },
+        "4": {
+          "water_c": 12.85,
+          "air_max_c": 17.93,
+          "air_min_c": 11.21,
+          "sun_hours": 10.56,
+          "daylight_h": 13.44,
+          "rain_days": 12.1
+        },
+        "5": {
+          "water_c": 16.84,
+          "air_max_c": 21.44,
+          "air_min_c": 15.33,
+          "sun_hours": 11.32,
+          "daylight_h": 14.71,
+          "rain_days": 15.9
+        },
+        "6": {
+          "water_c": 22.87,
+          "air_max_c": 26.16,
+          "air_min_c": 20.31,
+          "sun_hours": 13.58,
+          "daylight_h": 15.36,
+          "rain_days": 14.1
+        },
+        "7": {
+          "water_c": 26.27,
+          "air_max_c": 28.42,
+          "air_min_c": 22.71,
+          "sun_hours": 13.76,
+          "daylight_h": 15.04,
+          "rain_days": 14.8
+        },
+        "8": {
+          "water_c": 27.78,
+          "air_max_c": 29.55,
+          "air_min_c": 23.61,
+          "sun_hours": 12.72,
+          "daylight_h": 13.92,
+          "rain_days": 11.5
+        },
+        "9": {
+          "water_c": 25.59,
+          "air_max_c": 25.91,
+          "air_min_c": 20.04,
+          "sun_hours": 10.7,
+          "daylight_h": 12.5,
+          "rain_days": 12.1
+        },
+        "10": {
+          "water_c": 20.94,
+          "air_max_c": 21.32,
+          "air_min_c": 15.46,
+          "sun_hours": 8.85,
+          "daylight_h": 11.01,
+          "rain_days": 10.9
+        },
+        "11": {
+          "water_c": 16.96,
+          "air_max_c": 17.01,
+          "air_min_c": 11.54,
+          "sun_hours": 7.49,
+          "daylight_h": 9.7,
+          "rain_days": 10.2
+        },
+        "12": {
+          "water_c": 13.68,
+          "air_max_c": 12.76,
+          "air_min_c": 8.24,
+          "sun_hours": 5.89,
+          "daylight_h": 9.01,
+          "rain_days": 13.8
+        }
+      },
+      "requests": {
+        "weather": "https://archive-api.open-meteo.com/v1/archive?longitude=39.96&latitude=43.4&start_date=2016-01-01&end_date=2025-12-31&timezone=Europe%2FMoscow&models=era5&cell_selection=land&daily=temperature_2m_max%2Ctemperature_2m_min%2Csunshine_duration%2Cdaylight_duration%2Crain_sum",
+        "water": "https://marine-api.open-meteo.com/v1/marine?longitude=39.96&latitude=43.4&start_date=2023-01-01&end_date=2025-12-31&timezone=Europe%2FMoscow&models=best_match&cell_selection=sea&hourly=sea_surface_temperature"
+      },
+      "weather_grid": {
+        "latitude": 43.5,
+        "longitude": 40.0,
+        "elevation": 3.0
+      },
+      "water_grid": {
+        "latitude": 43.375,
+        "longitude": 39.875015
+      }
+    },
+    {
+      "id": "krasnaya_polyana",
+      "lon": 40.202,
+      "lat": 43.68,
+      "years": 10,
+      "weather_years": 10,
+      "water_years_by_month": null,
+      "months": {
+        "1": {
+          "water_c": null,
+          "air_max_c": 6.58,
+          "air_min_c": -0.25,
+          "sun_hours": 6.04,
+          "daylight_h": 9.35,
+          "rain_days": 13.7
+        },
+        "2": {
+          "water_c": null,
+          "air_max_c": 7.56,
+          "air_min_c": 0.5,
+          "sun_hours": 7.06,
+          "daylight_h": 10.5,
+          "rain_days": 12.9
+        },
+        "3": {
+          "water_c": null,
+          "air_max_c": 10.94,
+          "air_min_c": 2.93,
+          "sun_hours": 8.22,
+          "daylight_h": 11.95,
+          "rain_days": 16.2
+        },
+        "4": {
+          "water_c": null,
+          "air_max_c": 16.99,
+          "air_min_c": 6.84,
+          "sun_hours": 10.28,
+          "daylight_h": 13.45,
+          "rain_days": 15.7
+        },
+        "5": {
+          "water_c": null,
+          "air_max_c": 20.43,
+          "air_min_c": 10.97,
+          "sun_hours": 10.67,
+          "daylight_h": 14.74,
+          "rain_days": 21.1
+        },
+        "6": {
+          "water_c": null,
+          "air_max_c": 25.23,
+          "air_min_c": 15.61,
+          "sun_hours": 13.11,
+          "daylight_h": 15.39,
+          "rain_days": 20.2
+        },
+        "7": {
+          "water_c": null,
+          "air_max_c": 27.52,
+          "air_min_c": 17.57,
+          "sun_hours": 13.21,
+          "daylight_h": 15.07,
+          "rain_days": 17.7
+        },
+        "8": {
+          "water_c": null,
+          "air_max_c": 28.71,
+          "air_min_c": 17.9,
+          "sun_hours": 12.51,
+          "daylight_h": 13.94,
+          "rain_days": 15.5
+        },
+        "9": {
+          "water_c": null,
+          "air_max_c": 24.22,
+          "air_min_c": 13.84,
+          "sun_hours": 10.3,
+          "daylight_h": 12.5,
+          "rain_days": 13.8
+        },
+        "10": {
+          "water_c": null,
+          "air_max_c": 19.14,
+          "air_min_c": 8.93,
+          "sun_hours": 8.64,
+          "daylight_h": 11.0,
+          "rain_days": 12.7
+        },
+        "11": {
+          "water_c": null,
+          "air_max_c": 13.82,
+          "air_min_c": 4.73,
+          "sun_hours": 7.48,
+          "daylight_h": 9.68,
+          "rain_days": 11.7
+        },
+        "12": {
+          "water_c": null,
+          "air_max_c": 8.94,
+          "air_min_c": 1.78,
+          "sun_hours": 5.87,
+          "daylight_h": 8.98,
+          "rain_days": 13.0
+        }
+      },
+      "requests": {
+        "weather": "https://archive-api.open-meteo.com/v1/archive?longitude=40.202&latitude=43.68&start_date=2016-01-01&end_date=2025-12-31&timezone=Europe%2FMoscow&models=era5&cell_selection=land&daily=temperature_2m_max%2Ctemperature_2m_min%2Csunshine_duration%2Cdaylight_duration%2Crain_sum",
+        "water": null
+      },
+      "weather_grid": {
+        "latitude": 43.75,
+        "longitude": 40.25,
+        "elevation": 550.0
+      },
+      "water_grid": null
+    }
+  ]
+}
