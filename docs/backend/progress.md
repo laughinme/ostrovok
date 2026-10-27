@@ -12,6 +12,36 @@
 
 ---
 
+### 28.10 02:54 МСК · codex-osm · B1.2
+- Сделано: B1.2 завершена через Geofabrik за 26.10, MD5 проверен. Южный ФО дополнен соседней
+  Грузией (D-39): иначе берег обрывался внутри bbox. Региональные GPKG в `.cache/osm/`, в git
+  только компактные выходы. Коммиты `d0b07e6`, `fdc6cd5`, `b78d991`. Отели не пересобирались.
+- **Публичный контракт данных для claude-core / B2.10:** `buildings.csv.gz` —
+  `osm_id,wkb,height_m,levels,height_source,building`, высоты в метрах; `height_source`:
+  `osm_height` (309), `osm_levels` (25 089), `default` (38 361). Только здания в 2 км от отелей.
+  `osm_features.csv.gz` — `osm_id,kind,name,tags,wkb`, `tags` — JSON всех тегов, включая `ele`,
+  `opening_hours`, `cuisine`, `foot`, `step_count`. 29 733 road, 885 railway, 8 runway, 15 405 poi,
+  306 beach, 6 265 peak с ele, 436 construction, 176 bar_club, 161 park, 60 station.
+  Дороги/жд — 1,5 км, POI — 2,5 км, пляжи/ВПП — регион, вершины — регион + 40 км.
+  `sea.wkb.gz` — gzip ASCII WKB hex MultiPolygon, море справа от исходного направления берега,
+  острова исключены. Все геометрии WGS84 lon/lat, ID вида `node/…`, `way/…`, `relation/…`.
+- **API пайплайна:** `pipeline.pbf.snapshot(url=SOURCE) -> Path` проверяет/скачивает PBF;
+  `regional_cache(source: Path|None=None) -> Path` даёт GPKG; `regional_records(layer, *, where=None)`
+  возвращает `list[dict]` с `osm_id`, `tags: dict[str,str]`, `geometry: shapely`, дедуп по ID.
+  `pipeline.osm.hotel_buffers(radius: float)` — объединение кругов в UTM 37N, радиус в метрах.
+  `pipeline.osm.export(records) -> None` пишет CSV; `pipeline.sea.run(coastlines=None) -> None`
+  пишет маску (с явными геометриями без сети; None сохраняет необязательный путь Overpass).
+- Как проверить: `uv run --group pipeline python -m pipeline osm`; 63 759 зданий и 53 435 объектов
+  валидны, ID уникальны, здания всех 200 отелей найдены, точки отелей не в море. Ruff/format,
+  mypy strict, unit: **167 passed, 1 skipped** (ждёт граф). Первую проверку делали в снимке HEAD
+  из-за незавершённых правок соседних сессий, финальная прошла на общем дереве. Размеры вместе
+  с уже появившимися DEM/климатом: 22,24 МБ. LLM не вызывался.
+- Грабли: GDAL выдаёт JSON-теги словарями, pandas — отсутствующие osm_way_id как NaN; оба случая
+  обработаны. У дефолтного osmconf.ini терялся ele, поэтому своя конфигурация all_tags без ignore.
+  GDAL предупреждал о некорректных удалённых кольцах; экспорт исправляет make_valid, все выходы
+  проверены. Районный GPKG — ~207 МБ, остаётся только в игнорируемом кэше.
+- Дальше: codex-osm берёт B1.5; B1.8 после появления всех данных B1.6. claude-core может читать CSV.
+
 ### 28.10 02:53 МСК · codex-view · B2.5 завершена, вся линия вида из окна
 - Сделано: B2.4 → B2.6 → B2.5 и адаптер TerrainModel (B2.5a) завершены; исправление фасадов B2.4a
   проверено на 200 контурах. Публичные сигнатуры и единицы B2.5 — в записи «API готов» ниже;
