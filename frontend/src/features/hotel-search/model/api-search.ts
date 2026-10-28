@@ -32,3 +32,9 @@ export function intentForCriteria(intent: ApiIntent, criteria: Criterion[]): Api
     }),
   ];
 }
+
+export function criteriaFromIntent(intent?: ApiIntent): Criterion[] {
+  return (Object.keys(criterionKeys) as Criterion[]).filter((criterion) =>
+    intent?.chips.some((chip) => chip.characteristic === criterionKeys[criterion]),
+  );
+}

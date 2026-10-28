@@ -29,6 +29,7 @@ export function ResultsPage({
     error,
     retry,
     search: searchResult,
+    hints,
     chips,
     changeImportance,
     removeChip,
@@ -57,7 +58,15 @@ export function ResultsPage({
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <h1 className="max-w-3xl text-3xl [overflow-wrap:anywhere] sm:text-4xl">«{q}»</h1>
+          <h1 className="max-w-3xl text-3xl [overflow-wrap:anywhere] sm:text-4xl">
+            «{q.length > 240 ? `${q.slice(0, 220)}…` : q}»
+          </h1>
+          {q.length > 240 && (
+            <details className="mt-3 max-w-3xl text-sm [overflow-wrap:anywhere]">
+              <summary className="cursor-pointer text-primary">Полный запрос</summary>
+              <p className="mt-2 text-muted-foreground">{q}</p>
+            </details>
+          )}
         </div>
         <form
           onSubmit={(e) => {
@@ -102,7 +111,7 @@ export function ResultsPage({
           <input
             type="range"
             min={1000}
-            max={50000}
+            max={Math.max(50000, maxPrice ?? 50000)}
             step={500}
             aria-label="Бюджет за ночь"
             value={maxPrice ?? 50000}
@@ -208,11 +217,13 @@ export function ResultsPage({
           Учитывать мой профиль вкуса
         </label>
       )}
-      {searchResult?.intent.hints?.map((hint) => (
-        <p key={hint} className="mt-3 text-sm text-muted-foreground">
-          {hint}
-        </p>
-      ))}
+      {hints.length > 0 && !error && (
+        <div className="mt-6 space-y-2 rounded-2xl border bg-card p-5 text-sm" role="status">
+          {hints.map((hint) => (
+            <p key={hint}>{hint}</p>
+          ))}
+        </div>
+      )}
       {searchResult?.relaxations.map((relaxation) => (
         <button
           key={relaxation.chipId}
@@ -253,9 +264,10 @@ export function ResultsPage({
       )}
       <div className="mt-6 grid gap-6 lg:grid-cols-[1.35fr_1fr]">
         <div className={cn("space-y-4", view === "map" && "hidden lg:block")}>
-          {!pending && !error && ranked.length === 0 && (
+          {!pending && !error && ranked.length === 0 && hints.length === 0 && (
             <p className="rounded-3xl border p-10 text-center text-muted-foreground">
-              Под эти условия вариантов пока нет. Измените бюджет или важность пожеланий.
+              По этим условиям вариантов пока нет. Попробуйте увеличить бюджет, уменьшить число
+              гостей или выбрать другой район Большого Сочи.
             </p>
           )}
           {ranked.slice(0, renderedCount).map((result, index) => (
