@@ -11,6 +11,7 @@ from typing import Any, Literal, Protocol
 import numpy as np
 from pydantic import BaseModel
 
+from app.domain.geo.slopes import SlopeStat
 from app.domain.geo.types import LonLat, Reachable, Route, WalkProfile
 
 
@@ -100,6 +101,10 @@ class TerrainModel(Protocol):
     ) -> tuple[np.ndarray, np.ndarray]:
         """Terrain horizon elevation angle (degrees) and its distance (m) per azimuth."""
         ...
+
+
+class AreaSlopes(Protocol):
+    def within(self, origin: LonLat, radius_m: float) -> SlopeStat | None: ...
 
 
 class Router(Protocol):

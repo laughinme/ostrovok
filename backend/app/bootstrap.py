@@ -13,6 +13,7 @@ import shapely.prepared
 import shapely.wkb
 
 from app.db.database import Database
+from app.infra.geo.area import GraphAreaSlopes
 from app.infra.geo.climate import ClimateCatalog
 from app.infra.geo.router import ScipyRouter
 from app.infra.geo.terrain import NpyTerrain
@@ -20,6 +21,7 @@ from app.service.agents.researcher import Researcher
 from app.service.agents.runtime import AgentRunner
 from app.service.ports import Clock, EventBus
 from app.service.recipes.executor import Environment, GeoReader, MethodExecutor, executors_by_method
+from app.service.recipes.methods.area_stat import AreaStatExecutor
 from app.service.recipes.methods.climate import ClimateExecutor
 from app.service.recipes.methods.derived import DerivedExecutor
 from app.service.recipes.methods.noise import NoiseExecutor
@@ -35,6 +37,7 @@ def build_environment(db: Database, clock: Clock, data_dir: Path) -> Environment
     graph = region / "walk_graph.npz"
     if graph.exists():
         env.router = ScipyRouter.from_file(graph)
+        env.extras["area_slopes"] = GraphAreaSlopes(env.router.graph)
     else:
         logger.warning("walk graph %s missing: routes fall back to straight lines", graph)
     if (region / "dem_int16.npy").exists():
@@ -50,6 +53,7 @@ def build_environment(db: Database, clock: Clock, data_dir: Path) -> Environment
 
 def default_executors() -> list[MethodExecutor]:
     return [
+        AreaStatExecutor(),
         ClimateExecutor(),
         PoiNearbyExecutor(),
         WalkToExecutor(),

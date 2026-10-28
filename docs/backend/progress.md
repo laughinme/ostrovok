@@ -12,6 +12,22 @@
 
 ---
 
+### 28.10 03:02 МСК · codex-ground2 · B2.10-ground
+- Сделано: area_stat/steep_share, графический слой уклонов и запасная оценка DEM; регистрация в bootstrap.
+- **Публичный API:** `service.geo.area.slopes_near(env, origin: LonLat, radius_m: float) -> SlopeStat`;
+  `infra.geo.area.GraphAreaSlopes(graph).within(origin, radius_m) -> SlopeStat|None` за портом
+  `service.ports.AreaSlopes`, подключённым как `env.extras["area_slopes"]`. `SlopeStat` содержит
+  `share` (0…1), `samples: tuple[SlopeSample,...]`, `estimated: bool`; образец — WGS84 coordinates,
+  slope=rise/run (безразмерный, не проценты), osm_ref или None. Обратные дуги одного OSM-сегмента
+  считаются один раз; учитываются пересекающие круг сегменты. Без графа — DEM-сетка 60 м с центральными
+  разностями ±30 м; NaN исключается, пустой результат — NoDataError. Это склоны, не доказанные улицы.
+- `AreaStatExecutor.collect` принимает AreaStatRecipe(metric="steep_share"), value bool по threshold;
+  evidence MAP_LAYER содержит share/radiusM/threshold/estimated/segments и OSM ID, трасса route.edges_within.
+- Как проверить: ruff/format, mypy strict, 7 import-контрактов зелёные; make check в отдельной БД
+  okno_ground2_test / Redis DB12 — 248 passed; после публикации графа unit — 200 passed.
+- Грабли: DSM содержит здания/деревья; DEM-оценка не равна доле крутых улиц, caveat сохранён.
+- Дальше: B2.13-geo (шум/маршруты/климат), затем B5.6. LLM не вызывался.
+
 ### 28.10 03:00 МСК · codex-terrain · B1.6, линия B1.3 → B1.4 → B1.6 завершена
 - Сделано: 200 демо-карточек, 694 категории, 1388 тарифов (`ef0350c`); 200 скрытых профилей,
   981 привязка категорий к фасадам/этажам (`192cda0`); история Анны и CLI (`80b9b3a`).
