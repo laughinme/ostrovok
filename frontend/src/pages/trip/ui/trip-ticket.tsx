@@ -1,9 +1,13 @@
-import type { TripHotel } from "../model/trip";
-import { Check, CircleHelp } from "lucide-react";
-import { Panorama } from "@/shared/ui";
+import type { Hotel } from "@/entities/hotel";
+import {
+  bookingStatus,
+  tripDate,
+  tripGuests,
+  tripNights,
+  type Booking,
+} from "@/features/manage-trips";
+import { Building2, Check, CircleHelp, X } from "lucide-react";
 import "./trip-ticket.css";
-
-const FACADES = { NE: "СВ", SE: "ЮВ", SW: "ЮЗ", NW: "СЗ" };
 
 function TicketPlane({ className = "" }: { className?: string }) {
   return (
@@ -13,10 +17,17 @@ function TicketPlane({ className = "" }: { className?: string }) {
   );
 }
 
-export function TripTicket({ hotel: h, confirmed }: { hotel: TripHotel; confirmed: boolean }) {
-  const StatusIcon = confirmed ? Check : CircleHelp;
-  const room = h.rooms.find((item) => item.recommended);
-  const facade = FACADES[h.bestFacade];
+export function TripTicket({ booking, hotel }: { booking: Booking; hotel: Hotel | undefined }) {
+  const confirmed = booking.status === "confirmed" || booking.status === "completed";
+  const StatusIcon = confirmed ? Check : booking.status === "declined" ? X : CircleHelp;
+  const room = hotel?.backend?.rooms.find((item) => item.id === booking.roomTypeId);
+  const nights = tripNights(booking);
+  const status = bookingStatus[booking.status];
+  const price = new Intl.NumberFormat("ru-RU", {
+    style: "currency",
+    currency: "RUB",
+    maximumFractionDigits: 0,
+  }).format(booking.priceDemo);
 
   return (
     <section className="trip-ticket" aria-labelledby="trip-ticket-heading">
@@ -40,15 +51,16 @@ export function TripTicket({ hotel: h, confirmed }: { hotel: TripHotel; confirme
             </p>
             <span className="ticket-destination">
               <i />
-              Сочи, Россия
+              {hotel?.district ?? "Сочи"}
             </span>
           </div>
           <div className="ticket-hotel">
             <div className="ticket-hotel-photo">
-              <img src={h.photos[0]} alt={h.name} width={312} height={200} />
+              <Building2 size={48} aria-hidden="true" />
+              <span>Фото отсутствует</span>
             </div>
-            <h1 id="trip-ticket-heading">{h.name}</h1>
-            <p>{room?.name ?? h.bestRoom}</p>
+            <h1 id="trip-ticket-heading">{hotel?.name ?? "Ваша поездка"}</h1>
+            <p>{room?.name ?? "Категория номера уточняется"}</p>
           </div>
         </div>
 
@@ -56,19 +68,22 @@ export function TripTicket({ hotel: h, confirmed }: { hotel: TripHotel; confirme
           <div>
             <dt>Заезд</dt>
             <dd>
-              10 ноября<span>2026 · вторник</span>
+              {tripDate(booking.checkIn)}
+              <span>{tripDate(booking.checkIn, { year: "numeric", weekday: "long" })}</span>
             </dd>
           </div>
           <div>
             <dt>Выезд</dt>
             <dd>
-              15 ноября<span>2026 · воскресенье</span>
+              {tripDate(booking.checkOut)}
+              <span>{tripDate(booking.checkOut, { year: "numeric", weekday: "long" })}</span>
             </dd>
           </div>
           <div>
             <dt>Пассажиры</dt>
             <dd>
-              2 взрослых<span>5 ночей в отеле</span>
+              {tripGuests(booking.guests)}
+              <span>Ночей в отеле: {nights}</span>
             </dd>
           </div>
         </dl>
@@ -79,8 +94,8 @@ export function TripTicket({ hotel: h, confirmed }: { hotel: TripHotel; confirme
               <Check size={12} aria-hidden="true" />
             </span>
             <div>
-              <b>Бронь оплачена</b>
-              <span>Сегодня, 14:02</span>
+              <b>Демо-заявка сохранена</b>
+              <span>Без оплаты</span>
             </div>
           </li>
           <li className="is-done">
@@ -89,8 +104,7 @@ export function TripTicket({ hotel: h, confirmed }: { hotel: TripHotel; confirme
             </span>
             <div>
               <b>Пожелания отправлены</b>
-              <span>{room?.request ?? `${facade}-сторона · этаж ≥ 4`}</span>
-              <small>14:02</small>
+              <span>{booking.request || "Без дополнительных пожеланий"}</span>
             </div>
           </li>
           <li className={confirmed ? "is-done" : "is-pending"}>
@@ -98,17 +112,19 @@ export function TripTicket({ hotel: h, confirmed }: { hotel: TripHotel; confirme
               <StatusIcon size={12} aria-hidden="true" />
             </span>
             <div>
-              <b>{confirmed ? "Отель подтвердил" : "Ждём подтверждения"}</b>
+              <b>{status}</b>
               <span>
-                {confirmed ? `${facade}-сторона · 5 этаж · номер 512` : "Обычно до 2 часов"}
+                {booking.hotelReply ??
+                  (booking.status === "requested"
+                    ? "Демо-отель обычно отвечает за 5–30 секунд"
+                    : "Ответ отеля пока не поступил")}
               </span>
-              {confirmed && <small>Только что</small>}
             </div>
           </li>
         </ol>
       </div>
 
-      <aside className="ticket-stub" aria-label="Корешок билета: даты и номер">
+      <aside className="ticket-stub" aria-label="Корешок билета: даты и заявка">
         <div className="ticket-stub-top">
           <span>О!</span>
           <TicketPlane />
@@ -119,35 +135,35 @@ export function TripTicket({ hotel: h, confirmed }: { hotel: TripHotel; confirme
           </b>
         </div>
         <div className="ticket-stub-date">
-          <span>НОЯБРЬ / 2026</span>
-          <b>10—15</b>
-          <small>СОЧИ · 5 НОЧЕЙ</small>
+          <span>ДАТЫ ПОЕЗДКИ</span>
+          <b>
+            {tripDate(booking.checkIn, { month: "short" })} —{" "}
+            {tripDate(booking.checkOut, { month: "short" })}
+          </b>
+          <small>
+            {booking.checkIn.slice(0, 4)}
+            {booking.checkIn.slice(0, 4) !== booking.checkOut.slice(0, 4)
+              ? ` / ${booking.checkOut.slice(0, 4)}`
+              : ""}{" "}
+            · НОЧЕЙ: {nights}
+          </small>
         </div>
-        <div className="ticket-stub-room">
-          <div>
-            <span>Номер</span>
-            <b>{confirmed ? "512" : "—"}</b>
-          </div>
-          <div>
-            <span>Этаж</span>
-            <b>{confirmed ? "05" : "—"}</b>
-          </div>
-          <div>
-            <span>Сторона</span>
-            <b>{confirmed ? facade : "—"}</b>
-          </div>
+        <div className="ticket-stub-price">
+          <span>Стоимость · демо</span>
+          <b>{price}</b>
+          <small>За всю поездку · без оплаты</small>
         </div>
         <div className="ticket-window">
-          <Panorama facade={h.bestFacade} floor={5} labels={false} />
-          <span>Ваше окно · расчёт</span>
+          <TicketPlane />
+          <span>Демо-поездка · Анна</span>
         </div>
         <div className="ticket-stub-bottom">
           <span className={`ticket-stamp${confirmed ? " is-confirmed" : ""}`}>
             <StatusIcon size={13} aria-hidden="true" />
-            {confirmed ? "ОТЕЛЬ ПОДТВЕРДИЛ" : "ПОДТВЕРЖДАЕМ"}
+            {status}
           </span>
           <div className="ticket-barcode" aria-hidden="true" />
-          <span className="ticket-code">10NOV / 15NOV / 2ADT</span>
+          <span className="ticket-code">{booking.id}</span>
         </div>
       </aside>
     </section>
