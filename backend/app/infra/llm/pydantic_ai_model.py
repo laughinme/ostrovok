@@ -132,7 +132,21 @@ class PydanticAiLanguageModel:
         if self._cache is not None and (hit := await self._cache.get(key)):
             cached = output.model_validate(hit["output"])
             await self._log(task, "cached", prompt, output=hit["output"])
-            return LlmResult(cached, Usage(), self._name, cached=True)
+            # What the answer cost when it was computed: nothing is spent now (`cached`).
+            first = hit["usage"]
+            return LlmResult(
+                cached,
+                Usage(
+                    first.get("requests", 0),
+                    first.get("inputTokens", 0),
+                    first.get("outputTokens", 0),
+                    first.get("cachedTokens", 0),
+                    first.get("costUsd", 0.0),
+                ),
+                self._name,
+                cached=True,
+                latency_ms=first.get("latencyMs", 0),
+            )
         if not await self._limit.take():
             await self._log(task, "limit", prompt, error="daily LLM call limit reached")
             raise LlmUnavailableError("daily LLM call limit reached")
@@ -193,6 +207,9 @@ class PydanticAiLanguageModel:
                     "requests": usage.requests,
                     "inputTokens": usage.input_tokens,
                     "outputTokens": usage.output_tokens,
+                    "cachedTokens": usage.cached_tokens,
+                    "costUsd": usage.cost_usd,
+                    "latencyMs": latency,
                 },
             )
         await self._log(

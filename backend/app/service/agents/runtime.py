@@ -94,7 +94,7 @@ class Tracer:
 
     async def llm(self, task: str, result: LlmResult[Any]) -> None:
         """One LLM call as a trace step: model, tokens, time and price."""
-        self.add_usage(result.usage)
+        self.add_usage(result.spent)
         u = result.usage
         summary = (
             f"{result.model}: ответ из кэша"
