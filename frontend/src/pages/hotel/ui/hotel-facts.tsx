@@ -4,6 +4,9 @@ import {
   Baby,
   Building2,
   CookingPot,
+  CloudSun,
+  Footprints,
+  Car,
   FileSearch,
   Laptop,
   MapPin,
@@ -12,7 +15,7 @@ import {
   Sun,
   Utensils,
 } from "lucide-react";
-import { useId } from "react";
+import { useEffect, useId, useRef } from "react";
 import { groupHotelInfo, type HotelInfoGroupKey } from "../model/hotel-info-groups";
 import { factConfidenceStars } from "../model/fact-confidence";
 import type { Fact } from "../model/types";
@@ -23,6 +26,9 @@ const icons = {
   view: Sun,
   quiet: Moon,
   nearby: MapPin,
+  access: Footprints,
+  transport: Car,
+  weather: CloudSun,
   work: Laptop,
   family: Baby,
   food: Utensils,
@@ -36,8 +42,10 @@ function FactItem({
   fact,
   selected,
   onFact,
+  hideScope = false,
 }: {
   fact: Fact;
+  hideScope?: boolean;
   selected: boolean;
   onFact(fact: Fact): void;
 }) {
@@ -53,7 +61,7 @@ function FactItem({
     >
       <span className="hotel-fact-item-copy">
         <b>{fact.statement}</b>
-        <small>{fact.scopeText}</small>
+        {!hideScope && <small>{fact.scopeText}</small>}
         {rating.status && <span className="hotel-fact-status">{rating.status}</span>}
       </span>
       <FactConfidenceStars fact={fact} tooltipId={tooltipId} />
@@ -76,7 +84,22 @@ export function HotelFacts({
   embedded?: boolean;
   amenities?: string[];
 }) {
+  const gridRef = useRef<HTMLDivElement>(null);
   const groups = groupHotelInfo(amenities, facts);
+  useEffect(() => {
+    const grid = gridRef.current;
+    if (!grid) return;
+    const observer = new ResizeObserver((entries) => {
+      for (const { target } of entries) {
+        const tile = target.parentElement;
+        if (tile)
+          tile.style.gridRowEnd = `span ${Math.ceil(target.getBoundingClientRect().height + 20)}`;
+      }
+      grid.dataset["masonry"] = "ready";
+    });
+    grid.querySelectorAll(".hotel-info-group").forEach((group) => observer.observe(group));
+    return () => observer.disconnect();
+  }, [amenities, facts]);
   const allDemo =
     facts.length > 0 && (demo || facts.every((fact) => fact.isDemo || fact.source === "demo_card"));
   const count = facts.length;
@@ -107,35 +130,43 @@ export function HotelFacts({
         </div>
       </header>
       {groups.length ? (
-        <div className="hotel-info-groups">
+        <div ref={gridRef} className="hotel-info-groups">
           {groups.map((group) => {
             const Icon = icons[group.key];
+            const groupFacts = group.items.flatMap((item) =>
+              item.kind === "fact" ? [item.fact] : [],
+            );
+            const commonScope =
+              groupFacts.length > 1 &&
+              groupFacts.every((fact) => fact.scopeText === groupFacts[0]!.scopeText)
+                ? groupFacts[0]!.scopeText
+                : null;
             return (
-              <section
-                key={group.key}
-                className="hotel-info-group"
-                aria-labelledby={`hotel-info-${group.key}`}
-              >
-                <h4 id={`hotel-info-${group.key}`}>
-                  <Icon size={18} aria-hidden="true" />
-                  {group.label}
-                </h4>
-                <ul>
-                  {group.items.map((item) => (
-                    <li key={item.id}>
-                      {item.kind === "fact" ? (
-                        <FactItem
-                          fact={item.fact}
-                          selected={item.fact.id === selectedId}
-                          onFact={onFact}
-                        />
-                      ) : (
-                        <span className="hotel-amenity-item">{item.label}</span>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </section>
+              <div className="hotel-info-tile" key={group.key}>
+                <section className="hotel-info-group" aria-labelledby={`hotel-info-${group.key}`}>
+                  <h4 id={`hotel-info-${group.key}`}>
+                    <Icon size={18} aria-hidden="true" />
+                    {group.label}
+                  </h4>
+                  {commonScope && <p className="hotel-info-group-scope">{commonScope}</p>}
+                  <ul>
+                    {group.items.map((item) => (
+                      <li key={item.id}>
+                        {item.kind === "fact" ? (
+                          <FactItem
+                            fact={item.fact}
+                            selected={item.fact.id === selectedId}
+                            onFact={onFact}
+                            hideScope={!!commonScope}
+                          />
+                        ) : (
+                          <span className="hotel-amenity-item">{item.label}</span>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              </div>
             );
           })}
         </div>

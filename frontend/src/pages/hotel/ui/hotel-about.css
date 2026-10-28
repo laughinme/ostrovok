@@ -1,7 +1,7 @@
 .hotel-detail .hotel-about.hotel-about--with-facts {
   display: block;
   margin: 28px 0 40px;
-  padding: 28px 30px;
+  padding: 24px 28px;
   background: var(--surface);
   border-color: var(--line);
 }
@@ -13,7 +13,7 @@
 }
 .hotel-detail .hotel-about--with-facts .hotel-about-copy > p {
   max-width: 920px;
-  margin-top: 12px;
+  margin-top: 8px;
   color: var(--muted);
   font-size: 13px;
   line-height: 1.75;

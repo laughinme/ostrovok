@@ -16,6 +16,33 @@ const makeFact = (id: string, characteristic: string): Fact => ({
   history: "",
 });
 describe("hotel information groups", () => {
+  it("distributes additional hotel facts by topic instead of one oversized fallback group", () => {
+    const facts = [
+      "aircraft_noise",
+      "construction_nearby",
+      "soundproofing",
+      "blackout",
+      "ac",
+      "facade_rooms",
+      "elevator",
+      "step_free",
+      "stroller_to_sea",
+      "steep_streets",
+      "parking",
+      "ev_charging",
+      "climate",
+      "pharmacy_24_7",
+      "bookstore_nearby",
+      "vegan_cafe_nearby",
+      "shashlik_nearby",
+      "kids_hospital",
+    ].map((key) => makeFact(key, key));
+    const groups = groupHotelInfo([], facts);
+    expect(groups.some((group) => group.key === "other")).toBe(false);
+    expect(groups.flatMap((group) => group.items)).toHaveLength(facts.length);
+    expect(groups.find((group) => group.key === "access")?.items).toHaveLength(4);
+    expect(groups.find((group) => group.key === "transport")?.items).toHaveLength(2);
+  });
   it("keeps every amenity and fact, including unknown and repeated items", () => {
     const facts = [
       makeFact("quiet-ne", "night_noise"),
