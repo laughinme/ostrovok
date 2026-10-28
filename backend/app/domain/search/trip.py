@@ -8,13 +8,13 @@ from zoneinfo import ZoneInfo
 from app.domain.search.text import MONTHS_GENITIVE, MONTHS_PREPOSITIONAL, normalize, to_number
 
 AREAS = {
-    "center": ("центр", "центре", "центральн", "морвокзал", "навагинск"),
-    "khosta": ("хоста", "хосте", "хосты", "кудепст"),
-    "adler": ("адлер", "адлере", "аэропорт"),
-    "sirius": ("сириус", "имеретинск", "олимпийск парк", "олимпийском парке"),
+    "center": ("центр", "центре", "центральн", "морвокзал", "навагинск", "downtown"),
+    "khosta": ("хоста", "хосте", "хосты", "хосту", "кудепст", "khosta"),
+    "adler": ("адлер", "адлере", "аэропорт", "adler"),
+    "sirius": ("сириус", "имеретинск", "олимпийск парк", "олимпийском парке", "sirius"),
     "krasnaya_polyana": (
         "красная поляна", "красной поляне", "поляна", "поляне", "роза хутор", "эсто-садок",
-        "эстосадок", "газпром лаура",
+        "эстосадок", "газпром лаура", "krasnaya polyana", "rosa khutor",
     ),
 }  # fmt: skip
 
@@ -32,7 +32,7 @@ _BUDGET = re.compile(
     r"(\d[\d\s]*(?:[.,]\d+)?)\s*(тыс[а-я]*|к\b|т\.?р|000)?"
 )
 _BUDGET_THOUSANDS = re.compile(r"(\d+(?:[.,]\d+)?)\s*(?:тыс|к)\b")
-_ADULTS = re.compile(r"(\d+|двое|трое|четверо|двух|трех|двоих)\s+взросл")
+_ADULTS = re.compile(r"(\d+|один|одна|два|три|четыре|двое|трое|четверо|двух|трех|двоих)\s+взросл")
 _CHILDREN = re.compile(r"(\d+|двое|трое|двух|одного|один|одна)\s+(?:дет|ребен|малыш)")
 
 
@@ -89,8 +89,8 @@ def _dates(norm: str, today: date) -> TripDraft:
     if m := _RANGE_TWO_MONTHS.search(norm):
         d1, m1, d2, m2, year = m.groups()
         month1, month2 = MONTHS_GENITIVE[m1], MONTHS_GENITIVE[m2]
-        y1 = _year(month1, year, today)
-        y2 = y1 + 1 if month2 < month1 else y1
+        y1 = _year(month1, None, today) if not year else int(year) - int(month2 < month1)
+        y2 = y1 + int(month2 < month1)
         return TripDraft(check_in=date(y1, month1, int(d1)), check_out=date(y2, month2, int(d2)))
     if m := _RANGE_SAME_MONTH.search(norm):
         d1, d2, month_word, year = m.groups()
@@ -212,7 +212,11 @@ def _budget(norm: str) -> int | None:
 
 
 def _area(norm: str) -> str | None:
-    for key, cues in AREAS.items():
-        if any(cue in norm for cue in cues):
-            return key
-    return None
+    found = [
+        (match.start(), key)
+        for key, cues in AREAS.items()
+        for cue in cues
+        for match in re.finditer(r"(?<![а-яa-z])" + re.escape(cue), norm)
+        if not re.search(r"\b(?:не|кроме)\s*$", norm[: match.start()])
+    ]
+    return max(found)[1] if found else None
