@@ -1753,6 +1753,7 @@ export interface components {
       chips?: components["schemas"]["IntentChipModel"][] | null;
       trip?: components["schemas"]["TripModel"] | null;
       useProfile: boolean;
+      hotelIds?: string[] | null;
     };
     SearchResultOut: {
       searchId: string;

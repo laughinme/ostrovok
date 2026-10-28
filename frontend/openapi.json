@@ -7461,6 +7461,23 @@
             "type": "boolean",
             "title": "Useprofile",
             "default": true
+          },
+          "hotelIds": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "type": "array",
+                "maxItems": 20,
+                "minItems": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hotelids"
           }
         },
         "type": "object",
