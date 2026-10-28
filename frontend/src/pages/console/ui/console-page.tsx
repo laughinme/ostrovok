@@ -12,6 +12,8 @@ import {
 import { Runs } from "./runs";
 import { Learn } from "./learn";
 import { Registry } from "./registry";
+import { LlmJournal } from "./llm";
+import { Settings } from "./settings";
 import "./console.css";
 
 const sections = [
@@ -68,6 +70,8 @@ export function ConsolePage() {
             <Learn />
           </div>
           {section === "registry" && <Registry />}
+          {section === "llm" && <LlmJournal />}
+          {section === "settings" && <Settings />}
         </section>
       </div>
     </main>
