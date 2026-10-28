@@ -1,116 +1,227 @@
-import { useEffect, useState } from "react";
-import { Sun, Waves, Footprints, Utensils } from "lucide-react";
-import { trip } from "../model/trip";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { ArrowUpRight, Check, ChevronRight, MessageSquare, ShieldCheck } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { getApiMode } from "@/shared/api";
+import { RequestState, Reveal, TravelAirplane } from "@/shared/ui";
+import { hotelQuery } from "@/entities/hotel";
+import { bookingTripQuery, bookingTripRecord, bookingTripsQuery } from "../model/booking-trips";
+import { demoExpectations } from "../model/demo-expectations";
+import { TripBookingDetails } from "./trip-booking-details";
+import { TripExpectations } from "./trip-expectations";
+import { demoTrips } from "../model/trip";
 import { TripTicket } from "./trip-ticket";
 import "./trip-page.css";
 
-const PROMISES = [
-  ["Закат над морем из окна", "обещали: ЮЗ-сторона, этаж ≥ 4"],
-  ["Ночью тихо", "обещали: ≈55 дБ на ЮЗ, слышны ночные поезда"],
-  ["До пляжа 6 минут", "обещали: спуск, 64 ступени, тоннель"],
-];
-
-export function TripPage() {
-  const h = trip.hotel;
-  const [confirmed, setConfirmed] = useState(false);
+export function TripPage({ initialBookingId }: { initialBookingId?: string } = {}) {
+  const demo = getApiMode() === "demo";
+  const reduce = useReducedMotion();
+  const [filter, setFilter] = useState("Все поездки");
+  const [expanded, setExpanded] = useState<string | null>(initialBookingId ?? null);
   const [post, setPost] = useState(false);
-  const [answers, setAnswers] = useState<Record<number, string>>({});
-  useEffect(() => {
-    const t = setTimeout(() => setConfirmed(true), 2500);
-    return () => clearTimeout(t);
-  }, []);
-
+  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const bookings = useQuery({ ...bookingTripsQuery, enabled: !demo });
+  const selected = useQuery({
+    ...bookingTripQuery(initialBookingId ?? ""),
+    enabled: !demo && !!initialBookingId,
+  });
+  const selectedHotel = useQuery({
+    ...hotelQuery(selected.data?.booking.hotelId ?? ""),
+    enabled: !demo && !!selected.data,
+  });
+  const summaries = bookings.data ?? [];
+  const records = summaries.map(bookingTripRecord);
+  if (selected.data && !records.some((item) => item.id === selected.data.booking.id)) {
+    records.unshift(
+      bookingTripRecord({
+        booking: selected.data.booking,
+        hotelName: selectedHotel.data?.name ?? "Ваша бронь",
+        hotelArea: selectedHotel.data?.district ?? "",
+        createdAt: "",
+      }),
+    );
+  }
+  const trips = (demo ? demoTrips : records).filter(
+    (item) =>
+      filter === "Все поездки" ||
+      (filter === "Предстоящие"
+        ? item.status !== "completed" && item.status !== "declined"
+        : item.status === "completed"),
+  );
   return (
-    <div className="trips-screen">
-      <main className="trip-page">
-        <TripTicket hotel={h} confirmed={confirmed} />
-
-        <div className="seg big-seg">
-          <button
-            type="button"
-            aria-pressed={!post}
-            className={!post ? "on" : ""}
-            onClick={() => setPost(false)}
-          >
-            До поездки
-          </button>
-          <button
-            type="button"
-            aria-pressed={post}
-            className={post ? "on" : ""}
-            onClick={() => setPost(true)}
-          >
-            После поездки
-          </button>
+    <main className="trips-screen">
+      <div className="trip-page">
+        <Reveal className="trips-heading">
+          <div>
+            <span className="trips-eyebrow">Мои поездки</span>
+            <h1>
+              Ваш следующий
+              <br />
+              хороший день.
+            </h1>
+          </div>
+        </Reveal>
+        <div className="trip-list-toolbar">
+          <div className="trip-filter" role="group" aria-label="Поездки">
+            {["Все поездки", "Предстоящие", "Завершённые"].map((label) => (
+              <button
+                type="button"
+                key={label}
+                aria-pressed={filter === label}
+                onClick={() => setFilter(label)}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+          {demo && <span className="trips-demo-label">Примеры поездок · демо</span>}
         </div>
-
-        {!post ? (
-          <section>
-            <h2 className="h-md">Что вас ждёт</h2>
-            <div className="expect">
-              <div className="card-w">
-                <Sun size={22} aria-hidden="true" />
-                <h3>Закат из окна</h3>
-                <b className="num">16:58 → 16:53</b>
-                <p>С 10 по 15 ноября солнце садится в море прямо напротив ЮЗ-фасада.</p>
-              </div>
-              <div className="card-w">
-                <Waves size={22} aria-hidden="true" />
-                <h3>Погода и вода</h3>
-                <b className="num">16° / 17°</b>
-                <p>Обычно 1–2 дождливых дня. Возьмите ветровку.</p>
-              </div>
-              <div className="card-w">
-                <Footprints size={22} aria-hidden="true" />
-                <h3>Дорога к морю</h3>
-                <b className="num">6 мин</b>
-                <p>Вниз по лестнице, 64 ступени, тоннель под ж/д. Обратно — 9 минут.</p>
-              </div>
-              <div className="card-w">
-                <Utensils size={22} aria-hidden="true" />
-                <h3>Рядом вечером</h3>
-                <b>«Сулико»</b>
-                <p>
-                  Хинкальная в 7 минутах, работает до 23:00. Кофейня «Зерно» открывается в 7:00.
-                </p>
-              </div>
-            </div>
-          </section>
-        ) : (
-          <section>
-            <h2 className="h-md">Всё было так, как мы обещали?</h2>
-            <p className="muted">Ваш ответ уточнит факты для следующих гостей</p>
-            <div className="fb card-w">
-              {PROMISES.map(([t, s], i) => (
-                <div className="fb-row" key={t}>
-                  <div>
-                    <b>{t}</b>
-                    <span>{s}</span>
-                  </div>
-                  <div className="seg">
-                    {["Да", "Частично", "Нет"].map((a) => (
-                      <button
-                        type="button"
-                        aria-pressed={answers[i] === a}
-                        key={a}
-                        className={answers[i] === a ? "on" : ""}
-                        onClick={() => setAnswers((x) => ({ ...x, [i]: a }))}
-                      >
-                        {a}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-            {Object.keys(answers).length === 3 && (
-              <p className="thanks" role="status">
-                Спасибо! Уверенность в трёх фактах «{h.name}» обновлена.
-              </p>
-            )}
-          </section>
+        {!demo && (
+          <RequestState
+            pending={bookings.isPending}
+            error={bookings.error}
+            retry={() => void bookings.refetch()}
+          />
         )}
-      </main>
-    </div>
+        {!demo && initialBookingId && (
+          <RequestState
+            pending={selected.isPending}
+            error={selected.error}
+            retry={() => void selected.refetch()}
+          />
+        )}
+        <div className="trip-ticket-list">
+          {trips.map((item, index) => (
+            <Reveal key={item.id} delay={index * 0.06}>
+              <TripTicket
+                trip={item}
+                expanded={expanded === item.id}
+                onToggle={() => {
+                  setExpanded(expanded === item.id ? null : item.id);
+                  setPost(!item.bookingId && item.status === "completed");
+                }}
+              />
+              <AnimatePresence initial={false}>
+                {expanded === item.id && (
+                  <motion.section
+                    id={`trip-details-${item.id}`}
+                    className="trip-expanded"
+                    initial={reduce ? false : { height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: reduce ? 0 : 0.3 }}
+                    aria-label={`Детали поездки: ${item.hotel.name}`}
+                  >
+                    <div className="trip-expanded-inner">
+                      <div className="trip-expanded-heading">
+                        <h3>Всё важное перед отъездом</h3>
+                        {!item.bookingId && (
+                          <div className="trip-detail-tabs">
+                            <button aria-pressed={!post} onClick={() => setPost(false)}>
+                              До поездки
+                            </button>
+                            <button aria-pressed={post} onClick={() => setPost(true)}>
+                              После поездки
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                      {!post ? (
+                        <>
+                          {item.highlights.length > 0 && (
+                            <div className="trip-highlights">
+                              {item.highlights.map((highlight) => (
+                                <div key={highlight.label}>
+                                  <span>{highlight.label}</span>
+                                  <b>{highlight.value}</b>
+                                  <p>{highlight.description}</p>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                          <div className="trip-request">
+                            <ShieldCheck size={19} />
+                            <div>
+                              <b>Пожелания к размещению</b>
+                              <p>{item.hotel.rooms[0]?.request || "Особых пожеланий не указано"}</p>
+                            </div>
+                            {item.hotelId && (
+                              <Link to="/hotel/$id" params={{ id: item.hotelId }}>
+                                Об отеле
+                                <ArrowUpRight size={16} />
+                              </Link>
+                            )}
+                          </div>
+                          {item.bookingId ? (
+                            <TripBookingDetails id={item.bookingId} />
+                          ) : (
+                            <TripExpectations data={demoExpectations(item)} />
+                          )}
+                        </>
+                      ) : (
+                        <div className="trip-feedback">
+                          <p>
+                            <MessageSquare size={18} />
+                            Совпало ли то, что мы обещали, с вашим отдыхом?
+                          </p>
+                          {item.highlights.map((highlight, i) => (
+                            <div key={highlight.label}>
+                              <b>{highlight.label}</b>
+                              <div>
+                                {["Да", "Частично", "Нет"].map((answer) => (
+                                  <button
+                                    key={answer}
+                                    aria-pressed={answers[`${item.id}-${i}`] === answer}
+                                    onClick={() =>
+                                      setAnswers((current) => ({
+                                        ...current,
+                                        [`${item.id}-${i}`]: answer,
+                                      }))
+                                    }
+                                  >
+                                    {answers[`${item.id}-${i}`] === answer && <Check size={12} />}
+                                    {answer}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                          ))}
+                          <small>Ответы в этом примере сохраняются только на экране.</small>
+                        </div>
+                      )}
+                    </div>
+                  </motion.section>
+                )}
+              </AnimatePresence>
+            </Reveal>
+          ))}
+        </div>
+        {trips.length === 0 &&
+          (demo ||
+            (bookings.isSuccess &&
+              (!initialBookingId || (!selected.isPending && !selected.error)))) && (
+            <div className="trips-empty">
+              <TravelAirplane />
+              <h2>Здесь появятся новые маршруты</h2>
+              <p>Пока нет поездок в этой категории.</p>
+            </div>
+          )}
+        <Reveal className="trips-more">
+          <div>
+            <span>А куда дальше?</span>
+            <h2>
+              Хороший отдых
+              <br />
+              начинается с желания.
+            </h2>
+          </div>
+          <Link to="/">
+            Подобрать отель
+            <ChevronRight size={18} />
+          </Link>
+        </Reveal>
+      </div>
+    </main>
   );
 }

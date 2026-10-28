@@ -1,8 +1,9 @@
+import { Link } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { Hotel } from "@/entities/hotel";
 import { demoApi } from "@/entities/session";
-import type { components } from "@/shared/api";
+import { getApiMode, type components } from "@/shared/api";
 import type { RatePlan, RoomType } from "../model/types";
 import { rub } from "../lib/format";
 import { Mark } from "./detail-ui";
@@ -16,7 +17,9 @@ export function BookingRequest({
   room: RoomType;
   rate: RatePlan;
 }) {
+  const queryClient = useQueryClient();
   const [checkIn, setCheckIn] = useState(hotel.searchContext?.trip.from ?? "2026-11-10");
+  const designDemo = getApiMode() === "demo";
   const [checkOut, setCheckOut] = useState(hotel.searchContext?.trip.to ?? "2026-11-15");
   const [adults, setAdults] = useState(
     hotel.searchContext?.trip.adults ?? Math.min(2, room.capacity ?? 2),
@@ -25,6 +28,9 @@ export function BookingRequest({
   const [request, setRequest] = useState(room.request ?? "");
   const nights = Math.max(0, (Date.parse(checkOut) - Date.parse(checkIn)) / 86400000);
   const booking = useMutation({
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["trips", "guest_anna"] });
+    },
     mutationFn: () => {
       if (!rate.id || !hotel.backend) throw new Error("Для этого номера нет тарифа на сервере");
       return demoApi<components["schemas"]["BookingOut"]>("guest_anna", "/bookings", "POST", {
@@ -62,9 +68,15 @@ export function BookingRequest({
         <div role="status" className="verdict-box">
           <Mark v="yes" />
           <span>
-            Заявка {booking.data.id} сохранена. Статус: запрос отправлен демо-отельеру. Оплата не
-            списывается.
+            {designDemo
+              ? `Демо-заявка ${booking.data.id} создана локально. В отель и LLM ничего не отправлено.`
+              : `Заявка ${booking.data.id} сохранена. Статус: запрос отправлен демо-отельеру. Оплата не списывается.`}
           </span>
+          {!designDemo && (
+            <Link to="/trips/$id" params={{ id: booking.data.id }}>
+              Открыть мою бронь →
+            </Link>
+          )}
         </div>
       ) : (
         <form onSubmit={submit}>
@@ -119,7 +131,9 @@ export function BookingRequest({
             />
           </label>
           <p className="sub">
-            Демо-вход: Анна. Заявка сохранится в сервисе, ответ отеля симулируется.
+            {designDemo
+              ? "Тестовый сценарий: заявка и ответ имитируются без отправки на сервер."
+              : "Демо-вход: Анна. Заявка сохранится в сервисе, ответ отеля симулируется."}
           </p>
           {booking.error && <p role="alert">{booking.error.message}</p>}
           <button
