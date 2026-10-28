@@ -45,3 +45,15 @@ async def test_provider_down_falls_back_to_rules(db: Database) -> None:
 
     assert intent.planner == "rules"
     assert intent.chips[0].characteristic == "night_noise"
+
+
+async def test_typing_mode_never_calls_the_llm(db: Database) -> None:
+    await _registry(db)
+    llm = FakeLanguageModel({"intent": LLM_ANSWER})
+    async with db.unit_of_work() as uow:
+        intent = await IntentParser(uow, DATA, llm).parse(
+            "Обязательно тихо ночью", today=date(2026, 10, 28), llm=False
+        )
+
+    assert intent.planner == "rules"
+    assert llm.calls == []

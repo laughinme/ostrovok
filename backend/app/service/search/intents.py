@@ -64,7 +64,8 @@ class IntentParser:
             _guest_phrases(self._data_dir),
         )
 
-    async def parse(self, text: str, *, today: date) -> Intent:
+    async def parse(self, text: str, *, today: date, llm: bool = True) -> Intent:
+        """`llm=False` is the instant rules answer, for chips while the guest is still typing."""
         registry = await Registry(self._uow).all()
         vocabulary = await self.vocabulary(registry)
 
@@ -74,7 +75,7 @@ class IntentParser:
         async def by_rules() -> Intent:
             return parse_intent(text, vocabulary, today=today)
 
-        intent, _ = await with_fallback(self._llm, by_llm, by_rules)
+        intent, _ = await with_fallback(self._llm if llm else None, by_llm, by_rules)
         return intent
 
 
