@@ -31,7 +31,7 @@
       amenity: pharmacy
     within:
       meters: 500
-    open: 24_7
+    open: "24_7"
     min_count: 1
   notes:
     code: pharmacy_24h_500m
