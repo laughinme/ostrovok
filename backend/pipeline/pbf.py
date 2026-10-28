@@ -137,3 +137,8 @@ def regional_records(layer: str, *, where: str | None = None) -> list[dict[str, 
         for record in records(cache, layer, where=where):
             result.setdefault(record["osm_id"], record)
     return list(result.values())
+
+
+def run() -> None:
+    for url in (SOURCE, COAST_SOURCE):
+        print(f"OSM cache ready: {regional_cache(snapshot(url))}", flush=True)

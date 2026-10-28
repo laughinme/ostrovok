@@ -49,8 +49,8 @@ openapi: ## Export the OpenAPI schema for the frontend into frontend/openapi.jso
 
 # --- data and knowledge ------------------------------------------------------------
 
-data: ## Offline pipeline: OSM, DEM, climate, walk graph, demo cards → backend/data/region
-	cd $(BACKEND) && uv run --group pipeline python -m pipeline all
+data: ## Rebuild data: pinned Geofabrik → regional cache → OSM, DEM, climate, demo, walk graph
+	$(UV) --group pipeline python -m pipeline all
 
 collect: ## Agents collect knowledge for every hotel → backend/data/seed (needs `make dev`)
 	$(UV) python -m app.cli collect --all
