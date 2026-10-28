@@ -39,7 +39,7 @@ docker compose up --build
 `init`, вручную ничего делать не нужно.
 
 На Mac с Apple Silicon наши образы собираются под `linux/amd64` (требование организаторов) и работают через
-эмуляцию: всё запускается, но первые запросы медленнее в 5–10 раз. Быстрее с включённой в Docker Desktop опцией
+эмуляцию; первые запросы медленнее в 5–10 раз. Быстрее с включённой в Docker Desktop опцией
 «Use Rosetta for x86_64/amd64 emulation» (Settings → General).
 Если Docker Desktop работает без Rosetta, для Apple Silicon используйте нативные образы:
 `docker compose -f docker-compose.yml -f compose.dev.yml up --build`.
