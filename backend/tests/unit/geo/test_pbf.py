@@ -19,6 +19,8 @@ def test_osm_cache_preserves_ways_relations_and_all_tags(tmp_path, monkeypatch):
 <node id="3" lat="43.6001" lon="39.7001"/>
 <node id="4" lat="43.6" lon="39.7001"/>
 <node id="5" lat="43.6002" lon="39.7001"/>
+<node id="6" lat="43.6003" lon="39.7001"><tag k="barrier" v="gate"/>
+<tag k="access" v="private"/></node>
 <way id="10"><nd ref="1"/><nd ref="2"/><nd ref="3"/><nd ref="4"/><nd ref="1"/>
 <tag k="building" v="hotel"/><tag k="height" v="18"/></way>
 <way id="11"><nd ref="3"/><nd ref="5"/><tag k="highway" v="steps"/>
@@ -37,6 +39,7 @@ def test_osm_cache_preserves_ways_relations_and_all_tags(tmp_path, monkeypatch):
         "source": "survey",
         "name": "Ахун",
     }
+    assert points[1]["tags"] == {"barrier": "gate", "access": "private"}
     lines = pbf.records(cache, "lines")
     assert lines[0]["osm_id"] == "way/11"
     assert lines[0]["tags"]["step_count"] == "17"
