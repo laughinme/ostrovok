@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
+import { useId } from "react";
 export function MatchRing({
   value,
   size = 64,
@@ -10,11 +11,13 @@ export function MatchRing({
 }) {
   const r = (size - stroke) / 2;
   const c = 2 * Math.PI * r;
+  const gradient = useId();
+  const reduce = useReducedMotion();
   return (
     <div className="relative" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="-rotate-90">
         <defs>
-          <linearGradient id={`g${size}`} x1="0" x2="1">
+          <linearGradient id={gradient} x1="0" x2="1">
             <stop offset="0%" stopColor="var(--sun)" />
             <stop offset="100%" stopColor="var(--coral)" />
           </linearGradient>
@@ -31,14 +34,14 @@ export function MatchRing({
           cx={size / 2}
           cy={size / 2}
           r={r}
-          stroke={`url(#g${size})`}
+          stroke={`url(#${gradient})`}
           strokeWidth={stroke}
           strokeLinecap="round"
           fill="none"
           strokeDasharray={c}
-          initial={{ strokeDashoffset: c }}
+          initial={reduce ? false : { strokeDashoffset: c }}
           animate={{ strokeDashoffset: c * (1 - value / 100) }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
+          transition={{ duration: reduce ? 0 : 0.8, ease: "easeOut" }}
         />
       </svg>
       <div className="absolute inset-0 grid place-items-center">
