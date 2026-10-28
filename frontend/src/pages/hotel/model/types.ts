@@ -86,7 +86,7 @@ export interface HotelDetails {
   nearby: [string, string, string][];
   rooms: RoomType[];
   facts: Fact[];
-  unknowns: [string, string][];
+  unknowns: { key: string | null; question: string; why: string }[];
 }
 export interface HotelMatch {
   hotel: HotelDetails;
