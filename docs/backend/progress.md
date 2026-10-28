@@ -12,6 +12,19 @@
 
 ---
 
+### 28.10 ~11:00 МСК · claude-core · сборка линий, проверка с нуля
+- Сделано: слиты линии codex-partner (кабинет, Связной, симулятор), codex-guest (брони, вкус, сравнение, MCP),
+  codex-onboard (новый отель вживую, подборки), codex-quality (eval, `/console/quality`), codex-docs
+  (ARCHITECTURE.md, backend/README.md), codex-view2/ground2 (окно, шум, маршруты, климат, «ваш день»). Мои: Объяснитель,
+  перепроверка, уведомления отелю от Наблюдателя, профиль Ollama, памятка фронтендеру, сценарий видео, `frontend/openapi.json`
+  (61 путь). 460 тестов, ruff, mypy strict, 7 контрактов — зелёные.
+- Как проверить: чистый клон → `cp .env.example .env` → `docker compose -f docker-compose.yml -f compose.dev.yml up --build`,
+  `cd backend && uv run python tests/smoke.py`; MCP — `POST /mcp initialize` через :8080.
+- Грабли: nginx не наследует `proxy_set_header` в location со своими заголовками — MCP видел `Host: backend`
+  (исправлено). Подборка из характеристик «спросим у отеля» до ответов показывает 0 — в подборках только вычислимое.
+- Дальше: O2 (баланс) → `make eval-llm` и модель по умолчанию (B3.3); O3 → ключ жюри (B6.2); холодная сборка amd64 на x86
+  (B6.3); эталон R7 для калибровки; фронт F1–F8 на API (фронтендер); экспорт истории (B0.9, B6.4) — по «да» владельца.
+
 ### 28.10 09:51 МСК · codex-onboard · B3.5 (подборки)
 - Сделано: восемь подборок в `data/registry/moods.yaml`; чистый счётчик через оценщик поиска,
   сервис чтения и GET `/api/v1/moods`. Сравнение/similar не менял: их сделал codex-guest в B5.8.
