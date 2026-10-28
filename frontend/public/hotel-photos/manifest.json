@@ -1,0 +1,3089 @@
+{
+  "version": 1,
+  "assets": {
+    "commons-954ab9d32127": {
+      "src": "/hotel-photos/commons-954ab9d32127.jpg",
+      "kind": "photo",
+      "title": "File:Свиссотель Резорт Сочи Камелия.jpg",
+      "alt": "Свиссотель Резорт Сочи Камелия",
+      "author": "Shmatovadaria",
+      "label": "Фото отеля",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "page": "https://commons.wikimedia.org/wiki/File:%D0%A1%D0%B2%D0%B8%D1%81%D1%81%D0%BE%D1%82%D0%B5%D0%BB%D1%8C_%D0%A0%D0%B5%D0%B7%D0%BE%D1%80%D1%82_%D0%A1%D0%BE%D1%87%D0%B8_%D0%9A%D0%B0%D0%BC%D0%B5%D0%BB%D0%B8%D1%8F.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/b/b3/%D0%A1%D0%B2%D0%B8%D1%81%D1%81%D0%BE%D1%82%D0%B5%D0%BB%D1%8C_%D0%A0%D0%B5%D0%B7%D0%BE%D1%80%D1%82_%D0%A1%D0%BE%D1%87%D0%B8_%D0%9A%D0%B0%D0%BC%D0%B5%D0%BB%D0%B8%D1%8F.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "capturedAt": "2018-11-07",
+      "width": 1280,
+      "height": 719,
+      "sha256": "91b0521b398646ed9c927d81df0ad76eb5add12934fa8efb323ee5dfcf67e2f1",
+      "bytes": 384840,
+      "changes": "Уменьшено до 1280 px; кадрирование в интерфейсе"
+    },
+    "commons-62bd89e4968c": {
+      "src": "/hotel-photos/commons-62bd89e4968c.jpg",
+      "kind": "photo",
+      "title": "File:Свиссотель Резорт Сочи Камелия вид со стороны города.jpg",
+      "alt": "Свиссотель Резорт Сочи Камелия вид со стороны города",
+      "author": "Shmatovadaria",
+      "label": "Фото отеля",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "page": "https://commons.wikimedia.org/wiki/File:%D0%A1%D0%B2%D0%B8%D1%81%D1%81%D0%BE%D1%82%D0%B5%D0%BB%D1%8C_%D0%A0%D0%B5%D0%B7%D0%BE%D1%80%D1%82_%D0%A1%D0%BE%D1%87%D0%B8_%D0%9A%D0%B0%D0%BC%D0%B5%D0%BB%D0%B8%D1%8F_%D0%B2%D0%B8%D0%B4_%D1%81%D0%BE_%D1%81%D1%82%D0%BE%D1%80%D0%BE%D0%BD%D1%8B_%D0%B3%D0%BE%D1%80%D0%BE%D0%B4%D0%B0.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/f/f8/%D0%A1%D0%B2%D0%B8%D1%81%D1%81%D0%BE%D1%82%D0%B5%D0%BB%D1%8C_%D0%A0%D0%B5%D0%B7%D0%BE%D1%80%D1%82_%D0%A1%D0%BE%D1%87%D0%B8_%D0%9A%D0%B0%D0%BC%D0%B5%D0%BB%D0%B8%D1%8F_%D0%B2%D0%B8%D0%B4_%D1%81%D0%BE_%D1%81%D1%82%D0%BE%D1%80%D0%BE%D0%BD%D1%8B_%D0%B3%D0%BE%D1%80%D0%BE%D0%B4%D0%B0.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "capturedAt": "2018-11-07 08:42:32",
+      "width": 1280,
+      "height": 719,
+      "sha256": "166717d5696a02d0d46488fdbf65464b9e00bf37e2204353d648761cc4d52988",
+      "bytes": 415725,
+      "changes": "Уменьшено до 1280 px; кадрирование в интерфейсе"
+    },
+    "commons-1687a840593f": {
+      "src": "/hotel-photos/commons-1687a840593f.jpg",
+      "kind": "photo",
+      "title": "File:Санаторий Салют 01.jpg",
+      "alt": "Санаторий Салют 01",
+      "author": "Frolzart",
+      "label": "Фото отеля",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "page": "https://commons.wikimedia.org/wiki/File:%D0%A1%D0%B0%D0%BD%D0%B0%D1%82%D0%BE%D1%80%D0%B8%D0%B9_%D0%A1%D0%B0%D0%BB%D1%8E%D1%82_01.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/3/3c/%D0%A1%D0%B0%D0%BD%D0%B0%D1%82%D0%BE%D1%80%D0%B8%D0%B9_%D0%A1%D0%B0%D0%BB%D1%8E%D1%82_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "capturedAt": "2016-10-27",
+      "width": 1280,
+      "height": 850,
+      "sha256": "2dbb0d58f62251a4b2153e3a3c3321d8b4c790850a4f5f84d2166ffe917a9f7f",
+      "bytes": 277598,
+      "changes": "Уменьшено до 1280 px; кадрирование в интерфейсе"
+    },
+    "commons-bdb039efa726": {
+      "src": "/hotel-photos/commons-bdb039efa726.jpg",
+      "kind": "photo",
+      "title": "File:Оздоровительный комплекс \"Дагомыс\".jpg",
+      "alt": "Оздоровительный комплекс \"Дагомыс\"",
+      "author": "Mikael655",
+      "label": "Фото отеля",
+      "license": "CC BY 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+      "page": "https://commons.wikimedia.org/wiki/File:%D0%9E%D0%B7%D0%B4%D0%BE%D1%80%D0%BE%D0%B2%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9_%D0%BA%D0%BE%D0%BC%D0%BF%D0%BB%D0%B5%D0%BA%D1%81_%22%D0%94%D0%B0%D0%B3%D0%BE%D0%BC%D1%8B%D1%81%22.jpg",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/8/86/%D0%9E%D0%B7%D0%B4%D0%BE%D1%80%D0%BE%D0%B2%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9_%D0%BA%D0%BE%D0%BC%D0%BF%D0%BB%D0%B5%D0%BA%D1%81_%22%D0%94%D0%B0%D0%B3%D0%BE%D0%BC%D1%8B%D1%81%22.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "capturedAt": "2009-08-14 08:24:43",
+      "width": 1280,
+      "height": 960,
+      "sha256": "6b967c5194d8f791f4cf2e3fd8ee3d2293ec499fd10c7e3e3ac444e246d1ea98",
+      "bytes": 348920,
+      "changes": "Уменьшено до 1280 px; кадрирование в интерфейсе"
+    },
+    "commons-5ea965b1d1ee": {
+      "src": "/hotel-photos/commons-5ea965b1d1ee.jpg",
+      "kind": "photo",
+      "title": "File:Gorki Gorod panorama.JPG",
+      "alt": "Gorki Gorod panorama",
+      "author": "Sergei Kazantsev",
+      "label": "Фото комплекса",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "page": "https://commons.wikimedia.org/wiki/File:Gorki_Gorod_panorama.JPG",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/2/26/Gorki_Gorod_panorama.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "capturedAt": "2014-05-25 14:57:33",
+      "width": 1280,
+      "height": 573,
+      "sha256": "055b29fa17b3e589af7f8a965e40eae692d1b06123ee7d912922ab99a81c71d4",
+      "bytes": 219419,
+      "changes": "Уменьшено до 1280 px; кадрирование в интерфейсе"
+    },
+    "commons-9494ee707c50": {
+      "src": "/hotel-photos/commons-9494ee707c50.png",
+      "kind": "photo",
+      "title": "File:Горки Город уровень +540.png",
+      "alt": "Горки Город уровень +540",
+      "author": "Alexandra9214",
+      "label": "Фото комплекса",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "page": "https://commons.wikimedia.org/wiki/File:%D0%93%D0%BE%D1%80%D0%BA%D0%B8_%D0%93%D0%BE%D1%80%D0%BE%D0%B4_%D1%83%D1%80%D0%BE%D0%B2%D0%B5%D0%BD%D1%8C_%2B540.png",
+      "original": "https://upload.wikimedia.org/wikipedia/commons/2/2b/%D0%93%D0%BE%D1%80%D0%BA%D0%B8_%D0%93%D0%BE%D1%80%D0%BE%D0%B4_%D1%83%D1%80%D0%BE%D0%B2%D0%B5%D0%BD%D1%8C_%2B540.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "capturedAt": "2013-11-08 14:31:17",
+      "width": 1280,
+      "height": 853,
+      "sha256": "82c0494c0a870a1e60a37a4a06a0a41fdc3f9bb1482df454f15c5baa27177405",
+      "bytes": 568820,
+      "changes": "Уменьшено до 1280 px; кадрирование в интерфейсе"
+    },
+    "ai-zakatny-bereg-exterior": {
+      "src": "/hotel-photos/ai-zakatny-bereg-exterior.jpg",
+      "kind": "ai",
+      "title": "Закатный берег",
+      "label": "AI-иллюстрация",
+      "alt": "AI-иллюстрация: фасад",
+      "author": "image_gen",
+      "license": null,
+      "licenseUrl": "",
+      "page": "/hotel-photos/credits.html",
+      "original": "",
+      "capturedAt": "2026-10-28",
+      "width": 1536,
+      "height": 1024,
+      "sha256": "ca131d8b8a5a329814f0f7922c0dae5d62916adc12f3f7d463e392e27585f2b1",
+      "bytes": 620888,
+      "changes": "Без изменений",
+      "note": "Вымышленная сцена. Не фотография этого отеля, номера или вида из окна."
+    },
+    "ai-zakatny-bereg-room": {
+      "src": "/hotel-photos/ai-zakatny-bereg-room.jpg",
+      "kind": "ai",
+      "title": "Закатный берег",
+      "label": "AI-иллюстрация",
+      "alt": "AI-иллюстрация: интерьер номера",
+      "author": "image_gen",
+      "license": null,
+      "licenseUrl": "",
+      "page": "/hotel-photos/credits.html",
+      "original": "",
+      "capturedAt": "2026-10-28",
+      "width": 1536,
+      "height": 1024,
+      "sha256": "c4ac51920c44a4d688af393305aa6badfc263e9ebb3439de95b02f800fa32115",
+      "bytes": 467045,
+      "changes": "Без изменений",
+      "note": "Вымышленная сцена. Не фотография этого отеля, номера или вида из окна."
+    },
+    "ai-zakatny-bereg-balcony": {
+      "src": "/hotel-photos/ai-zakatny-bereg-balcony.jpg",
+      "kind": "ai",
+      "title": "Закатный берег",
+      "label": "AI-иллюстрация",
+      "alt": "AI-иллюстрация: территория",
+      "author": "image_gen",
+      "license": null,
+      "licenseUrl": "",
+      "page": "/hotel-photos/credits.html",
+      "original": "",
+      "capturedAt": "2026-10-28",
+      "width": 1536,
+      "height": 1024,
+      "sha256": "fe08478a41258e3931a55ed154b67a3362a6e2ec55d9bcac8a033e29ed5195dd",
+      "bytes": 577887,
+      "changes": "Без изменений",
+      "note": "Вымышленная сцена. Не фотография этого отеля, номера или вида из окна."
+    },
+    "ai-gornyi-priyut-exterior": {
+      "src": "/hotel-photos/ai-gornyi-priyut-exterior.jpg",
+      "kind": "ai",
+      "title": "Горный приют",
+      "label": "AI-иллюстрация",
+      "alt": "AI-иллюстрация: фасад",
+      "author": "image_gen",
+      "license": null,
+      "licenseUrl": "",
+      "page": "/hotel-photos/credits.html",
+      "original": "",
+      "capturedAt": "2026-10-28",
+      "width": 1536,
+      "height": 1024,
+      "sha256": "4a15b9e9c861bad04b6007a64c7dcd277b733ccb4ba8e4013fbbf2423f289d4f",
+      "bytes": 760272,
+      "changes": "Без изменений",
+      "note": "Вымышленная сцена. Не фотография этого отеля, номера или вида из окна."
+    },
+    "ai-gornyi-priyut-room": {
+      "src": "/hotel-photos/ai-gornyi-priyut-room.jpg",
+      "kind": "ai",
+      "title": "Горный приют",
+      "label": "AI-иллюстрация",
+      "alt": "AI-иллюстрация: интерьер номера",
+      "author": "image_gen",
+      "license": null,
+      "licenseUrl": "",
+      "page": "/hotel-photos/credits.html",
+      "original": "",
+      "capturedAt": "2026-10-28",
+      "width": 1536,
+      "height": 1024,
+      "sha256": "7abe0487792d37d46f77cb7e53405d8434e19416296939e0e41b378928219b78",
+      "bytes": 569883,
+      "changes": "Без изменений",
+      "note": "Вымышленная сцена. Не фотография этого отеля, номера или вида из окна."
+    },
+    "ai-gornyi-priyut-terrace": {
+      "src": "/hotel-photos/ai-gornyi-priyut-terrace.jpg",
+      "kind": "ai",
+      "title": "Горный приют",
+      "label": "AI-иллюстрация",
+      "alt": "AI-иллюстрация: территория",
+      "author": "image_gen",
+      "license": null,
+      "licenseUrl": "",
+      "page": "/hotel-photos/credits.html",
+      "original": "",
+      "capturedAt": "2026-10-28",
+      "width": 1536,
+      "height": 1024,
+      "sha256": "17903eb379125e00981fa04b1962796db8cc3fe26ed47d3f28cc2c9a91c1020a",
+      "bytes": 641294,
+      "changes": "Без изменений",
+      "note": "Вымышленная сцена. Не фотография этого отеля, номера или вида из окна."
+    },
+    "ai-palmovyi-sad-exterior": {
+      "src": "/hotel-photos/ai-palmovyi-sad-exterior.jpg",
+      "kind": "ai",
+      "title": "Пальмовый сад",
+      "label": "AI-иллюстрация",
+      "alt": "AI-иллюстрация: фасад",
+      "author": "image_gen",
+      "license": null,
+      "licenseUrl": "",
+      "page": "/hotel-photos/credits.html",
+      "original": "",
+      "capturedAt": "2026-10-28",
+      "width": 1536,
+      "height": 1024,
+      "sha256": "387db1680c0c8230d212afcde958531e7a30ac88dc3440df4235109f517d1f26",
+      "bytes": 697706,
+      "changes": "Без изменений",
+      "note": "Вымышленная сцена. Не фотография этого отеля, номера или вида из окна."
+    },
+    "ai-palmovyi-sad-room": {
+      "src": "/hotel-photos/ai-palmovyi-sad-room.jpg",
+      "kind": "ai",
+      "title": "Пальмовый сад",
+      "label": "AI-иллюстрация",
+      "alt": "AI-иллюстрация: интерьер номера",
+      "author": "image_gen",
+      "license": null,
+      "licenseUrl": "",
+      "page": "/hotel-photos/credits.html",
+      "original": "",
+      "capturedAt": "2026-10-28",
+      "width": 1536,
+      "height": 1024,
+      "sha256": "66e63e453e201512d2aaa09809cba9be04c468b0719537340aea5d440edca89b",
+      "bytes": 482522,
+      "changes": "Без изменений",
+      "note": "Вымышленная сцена. Не фотография этого отеля, номера или вида из окна."
+    },
+    "ai-palmovyi-sad-garden": {
+      "src": "/hotel-photos/ai-palmovyi-sad-garden.jpg",
+      "kind": "ai",
+      "title": "Пальмовый сад",
+      "label": "AI-иллюстрация",
+      "alt": "AI-иллюстрация: территория",
+      "author": "image_gen",
+      "license": null,
+      "licenseUrl": "",
+      "page": "/hotel-photos/credits.html",
+      "original": "",
+      "capturedAt": "2026-10-28",
+      "width": 1536,
+      "height": 1024,
+      "sha256": "98c5a769cf5d6e16c2a6f4820664f250bae30c7b8655c84396a1d137862049e4",
+      "bytes": 855831,
+      "changes": "Без изменений",
+      "note": "Вымышленная сцена. Не фотография этого отеля, номера или вида из окна."
+    },
+    "ai-atelier-sochi-exterior": {
+      "src": "/hotel-photos/ai-atelier-sochi-exterior.jpg",
+      "kind": "ai",
+      "title": "Ателье 17",
+      "label": "AI-иллюстрация",
+      "alt": "AI-иллюстрация: фасад",
+      "author": "image_gen",
+      "license": null,
+      "licenseUrl": "",
+      "page": "/hotel-photos/credits.html",
+      "original": "",
+      "capturedAt": "2026-10-28",
+      "width": 1536,
+      "height": 1024,
+      "sha256": "5ef47068fc532e01ea97eda7f72ccdafaa1cecfbd2d67476c7c232fa0042beb1",
+      "bytes": 754249,
+      "changes": "Без изменений",
+      "note": "Вымышленная сцена. Не фотография этого отеля, номера или вида из окна."
+    },
+    "ai-atelier-sochi-room": {
+      "src": "/hotel-photos/ai-atelier-sochi-room.jpg",
+      "kind": "ai",
+      "title": "Ателье 17",
+      "label": "AI-иллюстрация",
+      "alt": "AI-иллюстрация: интерьер номера",
+      "author": "image_gen",
+      "license": null,
+      "licenseUrl": "",
+      "page": "/hotel-photos/credits.html",
+      "original": "",
+      "capturedAt": "2026-10-28",
+      "width": 1536,
+      "height": 1024,
+      "sha256": "55d58345154688ad1e6befcd731aa71243376f4476e52adb6140d3fb0215a0f6",
+      "bytes": 485908,
+      "changes": "Без изменений",
+      "note": "Вымышленная сцена. Не фотография этого отеля, номера или вида из окна."
+    },
+    "ai-atelier-sochi-coworking": {
+      "src": "/hotel-photos/ai-atelier-sochi-coworking.jpg",
+      "kind": "ai",
+      "title": "Ателье 17",
+      "label": "AI-иллюстрация",
+      "alt": "AI-иллюстрация: территория",
+      "author": "image_gen",
+      "license": null,
+      "licenseUrl": "",
+      "page": "/hotel-photos/credits.html",
+      "original": "",
+      "capturedAt": "2026-10-28",
+      "width": 1536,
+      "height": 1024,
+      "sha256": "89fff7d646d34270cec1ef4e44eea227baa9504c1d4a60198cb583b08d64b6f4",
+      "bytes": 466539,
+      "changes": "Без изменений",
+      "note": "Вымышленная сцена. Не фотография этого отеля, номера или вида из окна."
+    },
+    "ai-kiparisovaya-alleya-exterior": {
+      "src": "/hotel-photos/ai-kiparisovaya-alleya-exterior.jpg",
+      "kind": "ai",
+      "title": "Кипарисовая аллея",
+      "label": "AI-иллюстрация",
+      "alt": "AI-иллюстрация: фасад",
+      "author": "image_gen",
+      "license": null,
+      "licenseUrl": "",
+      "page": "/hotel-photos/credits.html",
+      "original": "",
+      "capturedAt": "2026-10-28",
+      "width": 1536,
+      "height": 1024,
+      "sha256": "592c0ad51d4430c79bb7d00857bd8098c40c0ec4c14b6f13d9f16b9d6eae6a88",
+      "bytes": 799967,
+      "changes": "Без изменений",
+      "note": "Вымышленная сцена. Не фотография этого отеля, номера или вида из окна."
+    },
+    "ai-kiparisovaya-alleya-room": {
+      "src": "/hotel-photos/ai-kiparisovaya-alleya-room.jpg",
+      "kind": "ai",
+      "title": "Кипарисовая аллея",
+      "label": "AI-иллюстрация",
+      "alt": "AI-иллюстрация: интерьер номера",
+      "author": "image_gen",
+      "license": null,
+      "licenseUrl": "",
+      "page": "/hotel-photos/credits.html",
+      "original": "",
+      "capturedAt": "2026-10-28",
+      "width": 1536,
+      "height": 1024,
+      "sha256": "21bfe836df7de73755bf584a8d87da1f94723af41603df32bfc2ed8eaaa2d0dc",
+      "bytes": 447441,
+      "changes": "Без изменений",
+      "note": "Вымышленная сцена. Не фотография этого отеля, номера или вида из окна."
+    },
+    "ai-kiparisovaya-alleya-park": {
+      "src": "/hotel-photos/ai-kiparisovaya-alleya-park.jpg",
+      "kind": "ai",
+      "title": "Кипарисовая аллея",
+      "label": "AI-иллюстрация",
+      "alt": "AI-иллюстрация: территория",
+      "author": "image_gen",
+      "license": null,
+      "licenseUrl": "",
+      "page": "/hotel-photos/credits.html",
+      "original": "",
+      "capturedAt": "2026-10-28",
+      "width": 1536,
+      "height": 1024,
+      "sha256": "2453bccd4f5f0397bc4e0e8b08f3971aea36269514ceabf04de40661950982ac",
+      "bytes": 871301,
+      "changes": "Без изменений",
+      "note": "Вымышленная сцена. Не фотография этого отеля, номера или вида из окна."
+    },
+    "ai-dom-na-holme-exterior": {
+      "src": "/hotel-photos/ai-dom-na-holme-exterior.jpg",
+      "kind": "ai",
+      "title": "Дом на холме",
+      "label": "AI-иллюстрация",
+      "alt": "AI-иллюстрация: фасад",
+      "author": "image_gen",
+      "license": null,
+      "licenseUrl": "",
+      "page": "/hotel-photos/credits.html",
+      "original": "",
+      "capturedAt": "2026-10-28",
+      "width": 1536,
+      "height": 1024,
+      "sha256": "f32b0601d3a258b668b2fbb2fa4c6d55267bf6081d4df4225ffaf961b3e1f70b",
+      "bytes": 743764,
+      "changes": "Без изменений",
+      "note": "Вымышленная сцена. Не фотография этого отеля, номера или вида из окна."
+    },
+    "ai-dom-na-holme-room": {
+      "src": "/hotel-photos/ai-dom-na-holme-room.jpg",
+      "kind": "ai",
+      "title": "Дом на холме",
+      "label": "AI-иллюстрация",
+      "alt": "AI-иллюстрация: интерьер номера",
+      "author": "image_gen",
+      "license": null,
+      "licenseUrl": "",
+      "page": "/hotel-photos/credits.html",
+      "original": "",
+      "capturedAt": "2026-10-28",
+      "width": 1536,
+      "height": 1024,
+      "sha256": "c4e2ac33f4ee017ec923f5d1cd70941c5241770370f83dfce5c357b7d3830727",
+      "bytes": 490737,
+      "changes": "Без изменений",
+      "note": "Вымышленная сцена. Не фотография этого отеля, номера или вида из окна."
+    },
+    "ai-dom-na-holme-terrace": {
+      "src": "/hotel-photos/ai-dom-na-holme-terrace.jpg",
+      "kind": "ai",
+      "title": "Дом на холме",
+      "label": "AI-иллюстрация",
+      "alt": "AI-иллюстрация: территория",
+      "author": "image_gen",
+      "license": null,
+      "licenseUrl": "",
+      "page": "/hotel-photos/credits.html",
+      "original": "",
+      "capturedAt": "2026-10-28",
+      "width": 1536,
+      "height": 1024,
+      "sha256": "1a92b0322949b4516035bdd3f49791121582385f5b80303da2125578412ee07c",
+      "bytes": 745433,
+      "changes": "Без изменений",
+      "note": "Вымышленная сцена. Не фотография этого отеля, номера или вида из окна."
+    }
+  },
+  "hotels": {
+    "node/10058556917": {
+      "name": "Островок",
+      "gallery": [
+        "ai-palmovyi-sad-exterior",
+        "ai-palmovyi-sad-room",
+        "ai-palmovyi-sad-garden"
+      ],
+      "id": "471e155f-7fe0-5015-bd9e-ed2f13bd7961",
+      "room": "ai-palmovyi-sad-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/10058760244": {
+      "name": "Самшит",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "2a4d2aab-48fc-5b47-ac62-580946e973f7",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/10058780093": {
+      "name": "Белый аист",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "809ccf0d-e0b1-55c1-aecc-22accfeb6038",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/10118233110": {
+      "name": "Swissotel Resort Сочи Камелия",
+      "gallery": [
+        "commons-954ab9d32127",
+        "commons-62bd89e4968c",
+        "ai-zakatny-bereg-room"
+      ],
+      "id": "838b5492-89fc-5d0e-8c50-41e3e2a0c841",
+      "room": "ai-zakatny-bereg-room",
+      "verified": true,
+      "match": "hotel",
+      "matchNote": "Название отеля прямо указано автором обоих снимков."
+    },
+    "node/10213051617": {
+      "name": "Арт Студия",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "56bea62e-b9f3-5a2c-a3ca-9d98564d3819",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/10574256210": {
+      "name": "Монте-Кристо",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "8f454def-e555-5c0c-a6e1-df9c0e84c07a",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/10734977305": {
+      "name": "Севан",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "71c60572-f10c-5f59-8e90-a894c15ffde0",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/10759606594": {
+      "name": "RP Ranovsky Park",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "cc4adb4f-1f0c-51a4-829a-72096b00208a",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/10759606596": {
+      "name": "RP Manhattan",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "1763f287-a724-53b7-b54c-5bb8140b7b38",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/10759613912": {
+      "name": "Vada",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "0f01d015-c273-58bf-8f09-94e21bc4d047",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/10759613919": {
+      "name": "Гости Арарат",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "f8c4156f-8670-58e9-bef8-ee8b9b518bd8",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/10759614063": {
+      "name": "Marina mall",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "c5d68944-bcd4-5f4c-85e5-d8e6d35ae372",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/10810801627": {
+      "name": "Эдем",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "a879a4a8-1fe4-5bed-aa9b-afe14004b379",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/10853513205": {
+      "name": "Гостевой дом на Свердлова",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "5eb554bb-c3f6-5499-87b7-7f55dfb771fd",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/10858734694": {
+      "name": "Моне",
+      "gallery": [
+        "ai-palmovyi-sad-exterior",
+        "ai-palmovyi-sad-room",
+        "ai-palmovyi-sad-garden"
+      ],
+      "id": "01422bd9-3578-5cac-be17-dc96e07f0d0b",
+      "room": "ai-palmovyi-sad-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/10967527654": {
+      "name": "Антика",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "5900b934-3903-538f-afff-dde069506cf8",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/10974113805": {
+      "name": "Оскар",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "47f36095-f61d-52b6-9230-c5c7c86f76fc",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11016631786": {
+      "name": "Эдельвейс",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "55ab44b3-d82e-5cac-8487-047d5f407fe9",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11016631787": {
+      "name": "Аэростар",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "d77abad3-3882-5fd1-bf20-1ad8b445a653",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11016638369": {
+      "name": "Шагал по Красной Площади",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "54bf8f02-d9f2-5bc8-bce3-23bd7029f8e8",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11016638373": {
+      "name": "Grand Gallery",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "9da0e1b0-09d1-5760-9ff4-54a0427b2baf",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11016638375": {
+      "name": "Veryhotel",
+      "gallery": [
+        "ai-zakatny-bereg-exterior",
+        "ai-zakatny-bereg-room",
+        "ai-zakatny-bereg-balcony"
+      ],
+      "id": "fb8c47db-4e85-5a87-86b6-63aaaa83386e",
+      "room": "ai-zakatny-bereg-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11029913505": {
+      "name": "Эмилия",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "12a63bf3-8e9f-5fb6-bb2b-927d7d243908",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11067209459": {
+      "name": "Rp",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "9842e4db-4a98-56a1-ac36-14209317dcb4",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11119611105": {
+      "name": "Ретрит Дом Ливерпуль",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "ae2cbab4-744e-59f5-ab7b-3c8371304f50",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11138786325": {
+      "name": "Черномор",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "5c14dd3c-6f9d-5fa8-940b-75ab9cb786db",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11138786328": {
+      "name": "RP Manhattan",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "f0e5cba6-f5e7-5807-bcf0-9206bcbbd383",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11138786368": {
+      "name": "Банановый рай",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "af07482d-d1e1-5f4e-a317-cf0b2f2e65b2",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11138786395": {
+      "name": "Sochirentapart",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "e29dd949-b986-5c03-beaf-bd893ba93d43",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11138786397": {
+      "name": "Бриз 53",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "639f3252-fd5f-5f12-9371-247239cd7737",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11138786401": {
+      "name": "На Мамайке",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "dd9fa2e0-f133-5cab-9c4d-e4883be95f04",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11138788609": {
+      "name": "Palm resort",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "212a5c5a-8dfd-5bcb-93b9-d2d6efe50283",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11190910581": {
+      "name": "Alpha Sirius",
+      "gallery": [
+        "ai-zakatny-bereg-exterior",
+        "ai-zakatny-bereg-room",
+        "ai-zakatny-bereg-balcony"
+      ],
+      "id": "e1fd6ed1-873e-5135-8ed7-b8249b84bae6",
+      "room": "ai-zakatny-bereg-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11238118158": {
+      "name": "Viva Glamp",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "c01bea65-6469-5ce7-b3cb-7b111b8da2ce",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11304222978": {
+      "name": "Grand Way",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "9c499749-d59f-5f69-bfcd-5d7f03a46a32",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11304222979": {
+      "name": "Grand Way",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "b4768f4a-c45f-5936-a2f2-f1e5ab41c467",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11304222981": {
+      "name": "Grand Way",
+      "gallery": [
+        "ai-zakatny-bereg-exterior",
+        "ai-zakatny-bereg-room",
+        "ai-zakatny-bereg-balcony"
+      ],
+      "id": "068e4be1-1d95-5548-bc41-94231bfc4297",
+      "room": "ai-zakatny-bereg-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11304222982": {
+      "name": "Grand Way",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "3be0b0cb-db53-507b-9c65-8fbd6f773610",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11304222983": {
+      "name": "Grand Way",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "d358ad3d-84c9-5cb6-bab5-e8b759335a9d",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11304222984": {
+      "name": "Grand Way",
+      "gallery": [
+        "ai-zakatny-bereg-exterior",
+        "ai-zakatny-bereg-room",
+        "ai-zakatny-bereg-balcony"
+      ],
+      "id": "6e0e68fc-4f15-5807-8106-c808f73fb32d",
+      "room": "ai-zakatny-bereg-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11304222985": {
+      "name": "Grand Way",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "b00b6b82-613d-5f7a-af1b-6d0885ba215b",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11304222987": {
+      "name": "Grand Way",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "ef4952ff-d12e-5db6-8b4e-77860f920010",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11331531334": {
+      "name": "Cosmos Adler Hotel",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "4af5658a-5e70-5491-a105-59e975fcc40e",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11482391574": {
+      "name": "Морской якорь",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "e692bf6c-dec4-5b71-a1e7-b4aa2165ec2c",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11497670982": {
+      "name": "Арт-отель",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "de562053-ffaa-5b97-9350-6f2d761259bd",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11521416444": {
+      "name": "Русалина",
+      "gallery": [
+        "ai-zakatny-bereg-exterior",
+        "ai-zakatny-bereg-room",
+        "ai-zakatny-bereg-balcony"
+      ],
+      "id": "1e31580e-6718-5780-b07c-0b47c68fa2d0",
+      "room": "ai-zakatny-bereg-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11637552371": {
+      "name": "Родос",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "7abf4616-3270-5fa5-a296-6e892d0cd136",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11637558670": {
+      "name": "Geo apart",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "39aaa3f2-ec17-5dcd-9289-6a1b9799f49a",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11843545829": {
+      "name": "Панорама",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "039e2960-f22e-5b63-ad2d-83af34290514",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11843545833": {
+      "name": "Сириус",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "cc3e097f-924c-503f-8ac8-0ac6b2123466",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11843545856": {
+      "name": "Marco Polo",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "855cb4fe-d776-52ce-8d18-e0298425ec47",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11843545860": {
+      "name": "Флора",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "342cb765-be3e-5fa3-923a-4b6b7950c979",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11843545861": {
+      "name": "Панорама",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "ea27cf96-4295-5f24-82c2-94b3e5ec2fb6",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11843553789": {
+      "name": "Millennials",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "9313bb8b-ee25-5335-a170-16fdb56283a4",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11843553790": {
+      "name": "Виноградный",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "b0ec1646-39b6-54cd-9bae-f8d71e176610",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11843553791": {
+      "name": "Лиссабон",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "14af2ff3-4e7d-56f2-8ea4-d503b83aaffd",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11843553792": {
+      "name": "Парк Горького",
+      "gallery": [
+        "ai-zakatny-bereg-exterior",
+        "ai-zakatny-bereg-room",
+        "ai-zakatny-bereg-balcony"
+      ],
+      "id": "b02c2a68-9339-59d8-b5bc-bdbee6d5264a",
+      "room": "ai-zakatny-bereg-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11843553793": {
+      "name": "Пушкин",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "530c0a39-1775-5a8d-b903-51b804da63d2",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11843553834": {
+      "name": "Ривьера Арт",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "ff227807-1154-5e73-ab5b-c46f5e0a13db",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11843553838": {
+      "name": "Офелия",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "a324d3fc-ede3-56d8-9508-00e84f8c4c40",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11843553839": {
+      "name": "Аркадия+",
+      "gallery": [
+        "ai-palmovyi-sad-exterior",
+        "ai-palmovyi-sad-room",
+        "ai-palmovyi-sad-garden"
+      ],
+      "id": "4b512216-d2c2-5d2c-af52-8ffc3a87da6f",
+      "room": "ai-palmovyi-sad-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11843553851": {
+      "name": "inSochi",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "6e769a69-4b82-5fa8-bdbb-0a23f071f74b",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11866202895": {
+      "name": "Cascade",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "7b4f4934-6bb1-5482-b855-df0daa822483",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11874180256": {
+      "name": "Ареда",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "637081e9-c0c3-5b24-a577-368d1c8b93fc",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11878294031": {
+      "name": "SM Royal",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "7579b0d8-e5ff-505c-bd23-b1fe8c380871",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11878294032": {
+      "name": "Bliss House",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "7327e328-ccdc-5b12-ab77-e6754dc560e7",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11878294039": {
+      "name": "Туя",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "b59f5b84-6cf4-5313-8c19-1c87cb0bc121",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11958139262": {
+      "name": "Гости Эльбрус",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "74ef52be-7f74-564c-9ac3-0a254da8c3e8",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11958163713": {
+      "name": "Mark inn",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "b0d46c47-b15f-586f-b4de-dafffa27bcf3",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11958163737": {
+      "name": "Villa Maria club",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "7b72897a-6881-5243-aea2-7caa8c96eab5",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11958163769": {
+      "name": "Дельфинчик",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "0b2ef979-0419-5869-8146-0018a9a3b97e",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11958163786": {
+      "name": "Альпийская",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "dbb62db7-49bc-5d06-a7c1-cb32fd0e236f",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/11958163800": {
+      "name": "Лалеби",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "0b82ce10-9b9f-54b9-a284-7d15d873b8c5",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/12032893438": {
+      "name": "Portofino",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "942c017d-7a02-59c5-bbbd-7e83602ef6b3",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/12043534507": {
+      "name": "Белладжио",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "da1eff36-969b-5fc9-bfcc-843bf8a2e5d1",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/12084593369": {
+      "name": "Kenguru",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "02f81755-b363-52a9-9851-06d992730549",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/12183637632": {
+      "name": "Atmosfera hotel&SPA",
+      "gallery": [
+        "ai-zakatny-bereg-exterior",
+        "ai-zakatny-bereg-room",
+        "ai-zakatny-bereg-balcony"
+      ],
+      "id": "bc788e37-6589-5c28-b3ff-ac16972899cc",
+      "room": "ai-zakatny-bereg-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/12184779499": {
+      "name": "Каменный",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "d514e0f9-7539-5ca6-80e3-5246f60bdb11",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/12416060217": {
+      "name": "АК Шале Прибрежный",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "bd6a1988-58d2-5e86-bda8-df2e1838cef9",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/12416060226": {
+      "name": "МореСолнцеАпарт",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "80d2a320-8eae-5dda-8da6-1a09a11949e7",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/12416060227": {
+      "name": "МореСолнцеАпарт",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "221a9201-aa1b-59c9-b3bb-9d97e9636047",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/12541096667": {
+      "name": "Альфа",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "dd3e027a-9340-522f-be91-ea5a826c5fe4",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/12560021804": {
+      "name": "Апельсин",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "f3c14289-2c5f-5fc9-babb-2d6b12784566",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/12732332501": {
+      "name": "Акация",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "8c8d1679-676d-5fc2-8626-4685544cefb1",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/12747840301": {
+      "name": "Розовый Фламинго",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "9462aade-d25d-5432-a359-948201114a5b",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/12747932801": {
+      "name": "РоДеРо",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "7ae2e87b-9687-50b1-b524-40ffe1c73f7f",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/12749552601": {
+      "name": "Marina Yacht by Stellar",
+      "gallery": [
+        "ai-zakatny-bereg-exterior",
+        "ai-zakatny-bereg-room",
+        "ai-zakatny-bereg-balcony"
+      ],
+      "id": "eb07a664-2695-5998-b29a-b295c329c350",
+      "room": "ai-zakatny-bereg-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/12800893166": {
+      "name": "Грей",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "94f20a21-e430-5ee8-874e-beff5b13d4c7",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/12836338654": {
+      "name": "Апартаменты Курорта Красная Поляна",
+      "gallery": [
+        "ai-gornyi-priyut-exterior",
+        "ai-gornyi-priyut-room",
+        "ai-gornyi-priyut-terrace"
+      ],
+      "id": "8323c3da-6688-5b68-8356-c2b555da5879",
+      "room": "ai-gornyi-priyut-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/12956582499": {
+      "name": "Тай",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "94cc60c3-4e2c-5f58-8698-0df94f1fea14",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/12958832506": {
+      "name": "Evopart by Benefit Sochi Center",
+      "gallery": [
+        "ai-zakatny-bereg-exterior",
+        "ai-zakatny-bereg-room",
+        "ai-zakatny-bereg-balcony"
+      ],
+      "id": "ac392746-f260-5415-a4b4-6253e5614070",
+      "room": "ai-zakatny-bereg-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/13098414695": {
+      "name": "Mio",
+      "gallery": [
+        "ai-palmovyi-sad-exterior",
+        "ai-palmovyi-sad-room",
+        "ai-palmovyi-sad-garden"
+      ],
+      "id": "48941fb0-e77f-5019-93e8-534c5c3c23df",
+      "room": "ai-palmovyi-sad-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/13100429523": {
+      "name": "Видный",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "8fd6c49b-0ef8-54ca-869c-631e3a76d43e",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/13108695501": {
+      "name": "Горный кедр",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "4b494e17-2fb1-54cb-99d1-4c1ca12a0d1a",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/13114325896": {
+      "name": "Les Amis",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "26a480f4-e9f2-5065-bcb3-ff650dfd0af1",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/13115134069": {
+      "name": "Эридан",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "2cec5727-3a45-5232-943a-f29923a8a77f",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/1323204199": {
+      "name": "МИРИТ",
+      "gallery": [
+        "ai-zakatny-bereg-exterior",
+        "ai-zakatny-bereg-room",
+        "ai-zakatny-bereg-balcony"
+      ],
+      "id": "08b2d334-cc0f-51ff-b8d7-5ddf781e5c67",
+      "room": "ai-zakatny-bereg-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/13301736401": {
+      "name": "Lavicon Dagomys",
+      "gallery": [
+        "ai-zakatny-bereg-exterior",
+        "ai-zakatny-bereg-room",
+        "ai-zakatny-bereg-balcony"
+      ],
+      "id": "b3c42976-fa31-5fed-a924-779ef9e7c000",
+      "room": "ai-zakatny-bereg-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/13301736402": {
+      "name": "Lavicon club residence biarritz",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "748edb6f-a538-53c4-9e2b-ede1901c9591",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/13301736501": {
+      "name": "Lavicon apart Sochi",
+      "gallery": [
+        "ai-zakatny-bereg-exterior",
+        "ai-zakatny-bereg-room",
+        "ai-zakatny-bereg-balcony"
+      ],
+      "id": "ab75f951-9312-596c-a002-f588b2039903",
+      "room": "ai-zakatny-bereg-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/13408523534": {
+      "name": "Мондриан",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "864a37e0-f9e4-56e4-abd9-408b65afd762",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/13438392946": {
+      "name": "Разин",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "bf69d3b3-6f50-561d-88e1-6f7f3d2199c0",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/1362320485": {
+      "name": "Меридиан",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "bccd6774-ea20-5ba7-b0c0-22586d5b8cc1",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/1370976583": {
+      "name": "Коралл",
+      "gallery": [
+        "ai-palmovyi-sad-exterior",
+        "ai-palmovyi-sad-room",
+        "ai-palmovyi-sad-garden"
+      ],
+      "id": "091fb07f-37e0-560a-8c50-86b1a22a5998",
+      "room": "ai-palmovyi-sad-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/13825065360": {
+      "name": "Альфа Сириус Морской квартал",
+      "gallery": [
+        "ai-zakatny-bereg-exterior",
+        "ai-zakatny-bereg-room",
+        "ai-zakatny-bereg-balcony"
+      ],
+      "id": "71f5f140-d3c7-5874-a136-331bd0f09fa5",
+      "room": "ai-zakatny-bereg-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/13825076875": {
+      "name": "Альфа Сириус Заповедный квартал",
+      "gallery": [
+        "ai-zakatny-bereg-exterior",
+        "ai-zakatny-bereg-room",
+        "ai-zakatny-bereg-balcony"
+      ],
+      "id": "a7baf2f4-eb11-5e82-85ce-db73a99a9950",
+      "room": "ai-zakatny-bereg-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/13825400642": {
+      "name": "Гамма сириус",
+      "gallery": [
+        "ai-zakatny-bereg-exterior",
+        "ai-zakatny-bereg-room",
+        "ai-zakatny-bereg-balcony"
+      ],
+      "id": "3b554eb6-1247-5a10-80a0-af09f9f947eb",
+      "room": "ai-zakatny-bereg-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/13962415401": {
+      "name": "Графит",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "2de7b88b-9a0b-5b88-a3ee-17ad3a41f550",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/13968540001": {
+      "name": "«Венеция»",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "11996c9f-71a9-58e9-8ac2-123fe2d58b43",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/14002340401": {
+      "name": "Релакс Кудепста",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "cc2fa0b8-8d25-51d3-acd3-343c17f7928f",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/1449074195": {
+      "name": "Корсар",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "74d41539-0fba-5f23-812c-fba1df270141",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/1521215547": {
+      "name": "Санаторий Салют",
+      "gallery": [
+        "commons-1687a840593f",
+        "ai-kiparisovaya-alleya-room",
+        "ai-kiparisovaya-alleya-park"
+      ],
+      "id": "716427ad-1e37-5cf9-a8e5-31d6746396f1",
+      "room": "ai-kiparisovaya-alleya-room",
+      "verified": true,
+      "match": "hotel",
+      "matchNote": "Серия фотографий санатория Салют в категории Sanatoriums in Sochi."
+    },
+    "node/1589583311": {
+      "name": "Анна",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "e41b1610-2421-588c-a3c7-6aad3ebc626c",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/1589583324": {
+      "name": "Орион",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "6b0e7c0b-e5b1-5123-a9cc-1339a4e53463",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/1589583328": {
+      "name": "Парадиз",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "ff29af5e-d918-565e-8617-3d09a7290c62",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/1589590335": {
+      "name": "Жасмин",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "ee2961eb-d33b-5706-b001-f9ea7889460e",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/1859715975": {
+      "name": "Виктор",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "18e168f5-69cd-5ab1-b9a5-7ee1cd00fac0",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/1859716038": {
+      "name": "Вилла \"Анна\"",
+      "gallery": [
+        "ai-zakatny-bereg-exterior",
+        "ai-zakatny-bereg-room",
+        "ai-zakatny-bereg-balcony"
+      ],
+      "id": "00a96dfa-7752-5296-8691-d53395696831",
+      "room": "ai-zakatny-bereg-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/2178886260": {
+      "name": "Имеретинский - Прибрежный квартал",
+      "gallery": [
+        "ai-zakatny-bereg-exterior",
+        "ai-zakatny-bereg-room",
+        "ai-zakatny-bereg-balcony"
+      ],
+      "id": "ccd99393-5204-566e-b14d-e5a48f202b40",
+      "room": "ai-zakatny-bereg-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/2181712522": {
+      "name": "Мини-отель \"Маяк\"",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "2e7b736b-d9a8-5c8f-a9a0-fb4cc2e2fb71",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/2196524288": {
+      "name": "Ост",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "8a2bc12e-57eb-58f5-8f1b-0fc32a6abc65",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/2514339345": {
+      "name": "Балтийский",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "a971b6f6-3bdc-5f59-bc67-924a073fe8d3",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/2514339346": {
+      "name": "Алая Роза",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "8b74bca1-d277-5574-8e55-a2544fb87129",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/2514340498": {
+      "name": "Анна Вояж",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "633e06fd-879d-5d34-b000-8cba1ad29c11",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/2870121087": {
+      "name": "Визит",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "5a42b781-6199-57c2-aa09-cd3d57c2d6b2",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/3143192173": {
+      "name": "Камо",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "4b91c034-2055-5a75-9a40-409d07a67c11",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/3730652025": {
+      "name": "Грант",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "5eb4f6d5-fc4e-573f-9fa9-ba6215e505c5",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/3839779706": {
+      "name": "Гостевой дом на Мамайке",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "2014beaf-3a9f-57b6-8938-1d8da390d1fe",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/4138105189": {
+      "name": "Море",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "d3dc671a-873e-5121-99d9-afc9c2cfc8f6",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/4161702427": {
+      "name": "VIVA",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "7b49750b-b447-5001-9c32-d2ff73d7d7d5",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/4209373299": {
+      "name": "У Натальи",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "8650b640-8667-50ab-9bcb-43447526b15a",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/4281963807": {
+      "name": "Hotel Veseloye",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "5ba4a836-a8a9-5c37-b1a0-762fdd5d22fa",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/4323769893": {
+      "name": "Торнау",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "b1f4b8c2-0d2e-5a8b-84f7-416f9a4173ef",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/4325712906": {
+      "name": "Надежда",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "9254ffb9-1671-511a-a83e-61b2b2177fb9",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/4331507393": {
+      "name": "Генрих II",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "d585b7bb-c628-5775-a43b-a6762a1a8823",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/4369173790": {
+      "name": "Корпус 3 \"Высотный\"",
+      "gallery": [
+        "ai-kiparisovaya-alleya-exterior",
+        "ai-kiparisovaya-alleya-room",
+        "ai-kiparisovaya-alleya-park"
+      ],
+      "id": "f8e8d5b3-d9e8-5da0-9589-344fb283b0f7",
+      "room": "ai-kiparisovaya-alleya-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/4369348389": {
+      "name": "Сочинский оздоровительный комплекс \"Спутник\"",
+      "gallery": [
+        "ai-kiparisovaya-alleya-exterior",
+        "ai-kiparisovaya-alleya-room",
+        "ai-kiparisovaya-alleya-park"
+      ],
+      "id": "c91b56da-6972-520e-b207-bad6d903ef9e",
+      "room": "ai-kiparisovaya-alleya-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/4370076889": {
+      "name": "Корпус 1",
+      "gallery": [
+        "ai-kiparisovaya-alleya-exterior",
+        "ai-kiparisovaya-alleya-room",
+        "ai-kiparisovaya-alleya-park"
+      ],
+      "id": "f8271416-2b65-54c3-9710-a23481307c02",
+      "room": "ai-kiparisovaya-alleya-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/4370807729": {
+      "name": "ФГБУ \"Санаторий РОП РС \"Электроника\"",
+      "gallery": [
+        "ai-kiparisovaya-alleya-exterior",
+        "ai-kiparisovaya-alleya-room",
+        "ai-kiparisovaya-alleya-park"
+      ],
+      "id": "0446fa28-f42b-5589-92f0-22be5ee2826b",
+      "room": "ai-kiparisovaya-alleya-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/4393265790": {
+      "name": "Отель «Империя»",
+      "gallery": [
+        "ai-zakatny-bereg-exterior",
+        "ai-zakatny-bereg-room",
+        "ai-zakatny-bereg-balcony"
+      ],
+      "id": "a45809c5-dc0c-52cc-a0cf-489e4fe32a86",
+      "room": "ai-zakatny-bereg-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/4398105389": {
+      "name": "Романов",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "37a5ac43-5da0-5bcb-811d-b603b4f0844d",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/4422134889": {
+      "name": "Оливия",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "29d35e92-8bc1-55df-967c-8ab6c0b17765",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/4426452241": {
+      "name": "VIP-корпус «Меркурий»",
+      "gallery": [
+        "ai-kiparisovaya-alleya-exterior",
+        "ai-kiparisovaya-alleya-room",
+        "ai-kiparisovaya-alleya-park"
+      ],
+      "id": "1d2439f4-ee5a-57e6-a991-2bb14b58ad7c",
+      "room": "ai-kiparisovaya-alleya-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/4426452242": {
+      "name": "Вилла \"Бельведер\"",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "6a57b1c1-3554-52bd-828e-bcf99537b53b",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/4426452243": {
+      "name": "Фишт",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "cf47e296-23a0-563a-9de1-c489ecf6e6b2",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/4426452244": {
+      "name": "Золотая орхидея",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "0015c891-de0b-56f1-bbdf-626fbec2736c",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/4426452245": {
+      "name": "Оздоровительный комплекс «ДАГОМЫС»",
+      "gallery": [
+        "commons-bdb039efa726",
+        "ai-kiparisovaya-alleya-room",
+        "ai-kiparisovaya-alleya-park"
+      ],
+      "id": "0ebba728-be80-5ba8-aff1-590e287cb1bf",
+      "room": "ai-kiparisovaya-alleya-room",
+      "verified": true,
+      "match": "hotel",
+      "matchNote": "Автор описывает оздоровительный комплекс Дагомыс."
+    },
+    "node/4467961989": {
+      "name": "Звезда",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "59be1d62-80d4-5182-82b9-ee90f8828613",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/4601243304": {
+      "name": "Горки Город +540 №28",
+      "gallery": [
+        "commons-5ea965b1d1ee",
+        "commons-9494ee707c50",
+        "ai-gornyi-priyut-room"
+      ],
+      "id": "79b8d61c-6f04-5967-99b3-bc5370c2860e",
+      "room": "ai-gornyi-priyut-room",
+      "verified": true,
+      "match": "complex",
+      "matchNote": "Территория комплекса Горки Город +540; конкретный корпус и номер на снимке не установлены."
+    },
+    "node/4601243306": {
+      "name": "Горки Город +540 №23",
+      "gallery": [
+        "commons-5ea965b1d1ee",
+        "commons-9494ee707c50",
+        "ai-gornyi-priyut-room"
+      ],
+      "id": "046b4c0e-e180-5470-a736-9da2d756b7bb",
+      "room": "ai-gornyi-priyut-room",
+      "verified": true,
+      "match": "complex",
+      "matchNote": "Территория комплекса Горки Город +540; конкретный корпус и номер на снимке не установлены."
+    },
+    "node/4601243307": {
+      "name": "Горки Город +540 №24",
+      "gallery": [
+        "commons-5ea965b1d1ee",
+        "commons-9494ee707c50",
+        "ai-gornyi-priyut-room"
+      ],
+      "id": "bf35d5c4-efbf-5f8f-a50c-15c155d01ee1",
+      "room": "ai-gornyi-priyut-room",
+      "verified": true,
+      "match": "complex",
+      "matchNote": "Территория комплекса Горки Город +540; конкретный корпус и номер на снимке не установлены."
+    },
+    "node/4601243308": {
+      "name": "Горки Город +540 №25",
+      "gallery": [
+        "commons-5ea965b1d1ee",
+        "commons-9494ee707c50",
+        "ai-gornyi-priyut-room"
+      ],
+      "id": "511f92c9-e559-5eca-a3a9-617c0b1de666",
+      "room": "ai-gornyi-priyut-room",
+      "verified": true,
+      "match": "complex",
+      "matchNote": "Территория комплекса Горки Город +540; конкретный корпус и номер на снимке не установлены."
+    },
+    "node/4695560722": {
+      "name": "Три пальмы",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "daab4ff8-a802-5c87-8345-0c6ff55761b8",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/4695569234": {
+      "name": "Грант",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "0c44d2c0-3735-5d75-bfcc-d77ae4e7d75e",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/4726642890": {
+      "name": "Студия",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "df066ae7-57e8-52d4-8fc1-a7fbae59e5b3",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/4980407222": {
+      "name": "Villa SALE",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "c9ded004-072f-5f21-ba09-4591f69c9371",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/4985022111": {
+      "name": "У Оксаны",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "0b14a4c0-b3e7-56af-a2a9-847e763061b5",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/4986725623": {
+      "name": "Апартаменты в Маяке",
+      "gallery": [
+        "ai-zakatny-bereg-exterior",
+        "ai-zakatny-bereg-room",
+        "ai-zakatny-bereg-balcony"
+      ],
+      "id": "50cac2e2-482d-5328-934a-6f875bd4f368",
+      "room": "ai-zakatny-bereg-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/5014222522": {
+      "name": "В гостях у Вики",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "756f6eca-f1fa-599a-8bd8-7689488760c0",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/5329922057": {
+      "name": "Горки Город +540 №21",
+      "gallery": [
+        "commons-5ea965b1d1ee",
+        "commons-9494ee707c50",
+        "ai-gornyi-priyut-room"
+      ],
+      "id": "d2cc6680-4127-51e1-84f3-12e4938a0dbb",
+      "room": "ai-gornyi-priyut-room",
+      "verified": true,
+      "match": "complex",
+      "matchNote": "Территория комплекса Горки Город +540; конкретный корпус и номер на снимке не установлены."
+    },
+    "node/6181072994": {
+      "name": "Современник",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "d0f3a5a5-6d22-5194-913d-30e950205aa9",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/6590015485": {
+      "name": "Очарование моря",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "001b2ff8-a0f9-5ae5-a02a-fd50cf068841",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/7151225626": {
+      "name": "Самшит",
+      "gallery": [
+        "ai-dom-na-holme-exterior",
+        "ai-dom-na-holme-room",
+        "ai-dom-na-holme-terrace"
+      ],
+      "id": "60d81dfe-fe9d-5a92-91ed-20c41f166a0d",
+      "room": "ai-dom-na-holme-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/7659392485": {
+      "name": "Золотой лотос",
+      "gallery": [
+        "ai-palmovyi-sad-exterior",
+        "ai-palmovyi-sad-room",
+        "ai-palmovyi-sad-garden"
+      ],
+      "id": "8ba94967-cd69-5ac7-83a2-a8580cd00179",
+      "room": "ai-palmovyi-sad-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/7948116896": {
+      "name": "Искра",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "ae8c550d-b05f-5350-a1e6-eb3394abc3d6",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/8253762590": {
+      "name": "Барские бани",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "22e160ed-7172-53f2-b0dc-52b8fe013189",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/8504620920": {
+      "name": "Хоста Garden",
+      "gallery": [
+        "ai-palmovyi-sad-exterior",
+        "ai-palmovyi-sad-room",
+        "ai-palmovyi-sad-garden"
+      ],
+      "id": "3e8cf06f-cda3-522e-ba04-1b7857469acc",
+      "room": "ai-palmovyi-sad-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/8541891228": {
+      "name": "Весна",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "f3d0748e-e48f-5742-ad29-78e3908309d4",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "node/9079226417": {
+      "name": "Рест Мацеста",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "b1339d84-fd44-5401-8a19-6160b6529de5",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "way/1001106450": {
+      "name": "Country Hills Resort",
+      "gallery": [
+        "ai-gornyi-priyut-exterior",
+        "ai-gornyi-priyut-room",
+        "ai-gornyi-priyut-terrace"
+      ],
+      "id": "66044667-81dc-5475-b318-3eaba4efd9ad",
+      "room": "ai-gornyi-priyut-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "way/113049896": {
+      "name": "Azimut Hotel Freestyle",
+      "gallery": [
+        "ai-gornyi-priyut-exterior",
+        "ai-gornyi-priyut-room",
+        "ai-gornyi-priyut-terrace"
+      ],
+      "id": "36a1b647-e2b6-5b5d-90f5-5cd88ce02d57",
+      "room": "ai-gornyi-priyut-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "way/113049930": {
+      "name": "Valset apartments by AZIMUT Rosa Khutor (корпус 4)",
+      "gallery": [
+        "ai-kiparisovaya-alleya-exterior",
+        "ai-kiparisovaya-alleya-room",
+        "ai-kiparisovaya-alleya-park"
+      ],
+      "id": "0f70c9d9-1f79-58c2-8a10-9c47f4a3fed5",
+      "room": "ai-kiparisovaya-alleya-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "way/113123465": {
+      "name": "Мелодия гор",
+      "gallery": [
+        "ai-gornyi-priyut-exterior",
+        "ai-gornyi-priyut-room",
+        "ai-gornyi-priyut-terrace"
+      ],
+      "id": "5032935c-10ac-5d01-a6d8-2137d8fe39de",
+      "room": "ai-gornyi-priyut-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "way/113123470": {
+      "name": "Gala Plaza Alpic Hotel",
+      "gallery": [
+        "ai-gornyi-priyut-exterior",
+        "ai-gornyi-priyut-room",
+        "ai-gornyi-priyut-terrace"
+      ],
+      "id": "65e7631e-0e0d-5026-89f6-dcb6fc40361d",
+      "room": "ai-gornyi-priyut-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "way/113147777": {
+      "name": "Rosa Ski Inn SPA",
+      "gallery": [
+        "ai-gornyi-priyut-exterior",
+        "ai-gornyi-priyut-room",
+        "ai-gornyi-priyut-terrace"
+      ],
+      "id": "d37b65f4-f568-533c-9ef1-197a1d80e176",
+      "room": "ai-gornyi-priyut-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "way/113147792": {
+      "name": "RS Lodge Chalet",
+      "gallery": [
+        "ai-gornyi-priyut-exterior",
+        "ai-gornyi-priyut-room",
+        "ai-gornyi-priyut-terrace"
+      ],
+      "id": "bd33d167-40d1-5681-89a4-bebfe0f16d37",
+      "room": "ai-gornyi-priyut-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "way/113147798": {
+      "name": "BoogelWoogelBar Hotel",
+      "gallery": [
+        "ai-gornyi-priyut-exterior",
+        "ai-gornyi-priyut-room",
+        "ai-gornyi-priyut-terrace"
+      ],
+      "id": "52a431f5-feda-502b-bee1-720460ab9519",
+      "room": "ai-gornyi-priyut-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "way/113147804": {
+      "name": "Бальнеологический отель \"Rosa Springs\"",
+      "gallery": [
+        "ai-gornyi-priyut-exterior",
+        "ai-gornyi-priyut-room",
+        "ai-gornyi-priyut-terrace"
+      ],
+      "id": "0d0f7f37-74ed-5fbe-9d8f-3ed8ed926d7e",
+      "room": "ai-gornyi-priyut-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "way/1316217472": {
+      "name": "Частье в горах",
+      "gallery": [
+        "ai-gornyi-priyut-exterior",
+        "ai-gornyi-priyut-room",
+        "ai-gornyi-priyut-terrace"
+      ],
+      "id": "82a2605d-6b82-59a5-98a1-c46ef97925c8",
+      "room": "ai-gornyi-priyut-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "way/176568487": {
+      "name": "Грейс Олимпия",
+      "gallery": [
+        "ai-gornyi-priyut-exterior",
+        "ai-gornyi-priyut-room",
+        "ai-gornyi-priyut-terrace"
+      ],
+      "id": "eb13393d-eed3-59e3-ba5b-84268dccf1bb",
+      "room": "ai-gornyi-priyut-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "way/194163834": {
+      "name": "Дом отдыха Администрация Краснодарского края",
+      "gallery": [
+        "ai-gornyi-priyut-exterior",
+        "ai-gornyi-priyut-room",
+        "ai-gornyi-priyut-terrace"
+      ],
+      "id": "c4af767c-61fe-5058-aaea-74742d3b0753",
+      "room": "ai-gornyi-priyut-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "way/194163839": {
+      "name": "Дом отдыха Администрация Краснодарского края",
+      "gallery": [
+        "ai-gornyi-priyut-exterior",
+        "ai-gornyi-priyut-room",
+        "ai-gornyi-priyut-terrace"
+      ],
+      "id": "bb8cf195-2e8a-51e6-b41c-6e7b61acceeb",
+      "room": "ai-gornyi-priyut-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "way/194163841": {
+      "name": "Дом отдыха Администрация Краснодарского края",
+      "gallery": [
+        "ai-gornyi-priyut-exterior",
+        "ai-gornyi-priyut-room",
+        "ai-gornyi-priyut-terrace"
+      ],
+      "id": "f85d37d2-16ef-55f0-820f-9842522f9907",
+      "room": "ai-gornyi-priyut-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "way/194163843": {
+      "name": "Дом отдыха Администрация Краснодарского края",
+      "gallery": [
+        "ai-gornyi-priyut-exterior",
+        "ai-gornyi-priyut-room",
+        "ai-gornyi-priyut-terrace"
+      ],
+      "id": "bebd1f11-57e3-5369-8a4e-0a9d9c87fda1",
+      "room": "ai-gornyi-priyut-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "way/194163849": {
+      "name": "Дом отдыха Администрация Краснодарского края",
+      "gallery": [
+        "ai-gornyi-priyut-exterior",
+        "ai-gornyi-priyut-room",
+        "ai-gornyi-priyut-terrace"
+      ],
+      "id": "6f6ec675-a675-552a-a06d-85b047ea5adb",
+      "room": "ai-gornyi-priyut-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "way/194163851": {
+      "name": "Дом отдыха Администрация Краснодарского края",
+      "gallery": [
+        "ai-gornyi-priyut-exterior",
+        "ai-gornyi-priyut-room",
+        "ai-gornyi-priyut-terrace"
+      ],
+      "id": "d711dd1b-0835-5b48-a8b1-6f721482c4fc",
+      "room": "ai-gornyi-priyut-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "way/221585297": {
+      "name": "Апартаменты \"Чудо\"",
+      "gallery": [
+        "ai-gornyi-priyut-exterior",
+        "ai-gornyi-priyut-room",
+        "ai-gornyi-priyut-terrace"
+      ],
+      "id": "3fbb89a4-8b2a-50f0-9842-c365426c260f",
+      "room": "ai-gornyi-priyut-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "way/221585350": {
+      "name": "Серпантин",
+      "gallery": [
+        "ai-gornyi-priyut-exterior",
+        "ai-gornyi-priyut-room",
+        "ai-gornyi-priyut-terrace"
+      ],
+      "id": "f8ef01d7-11c6-56b6-a67d-887b502ff801",
+      "room": "ai-gornyi-priyut-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "way/221585406": {
+      "name": "Alcont",
+      "gallery": [
+        "ai-gornyi-priyut-exterior",
+        "ai-gornyi-priyut-room",
+        "ai-gornyi-priyut-terrace"
+      ],
+      "id": "7413ae6b-6e29-5a1a-a8bc-9dc87d7c2fc9",
+      "room": "ai-gornyi-priyut-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "way/221585440": {
+      "name": "Горная Резиденция",
+      "gallery": [
+        "ai-gornyi-priyut-exterior",
+        "ai-gornyi-priyut-room",
+        "ai-gornyi-priyut-terrace"
+      ],
+      "id": "d8fa9d80-38d7-5bb1-97c8-07016e38dcf4",
+      "room": "ai-gornyi-priyut-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "way/221585445": {
+      "name": "Wellness СПА-отель Грейс Калипсо",
+      "gallery": [
+        "ai-gornyi-priyut-exterior",
+        "ai-gornyi-priyut-room",
+        "ai-gornyi-priyut-terrace"
+      ],
+      "id": "9889e998-4fe4-537f-ac7e-9f5101b73844",
+      "room": "ai-gornyi-priyut-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "way/221585763": {
+      "name": "Rodwen",
+      "gallery": [
+        "ai-gornyi-priyut-exterior",
+        "ai-gornyi-priyut-room",
+        "ai-gornyi-priyut-terrace"
+      ],
+      "id": "a9e08f4f-19ad-50d7-bc1e-e4e2722d5c8c",
+      "room": "ai-gornyi-priyut-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "way/227214566": {
+      "name": "Сочи Марриотт Красная Поляна",
+      "gallery": [
+        "ai-gornyi-priyut-exterior",
+        "ai-gornyi-priyut-room",
+        "ai-gornyi-priyut-terrace"
+      ],
+      "id": "9b17f684-3320-5e34-8847-570e5a92f73a",
+      "room": "ai-gornyi-priyut-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "way/53215178": {
+      "name": "Зеленая роща",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "bd5a79b4-f7e2-55ea-aef2-e94af20a9683",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "way/53447916": {
+      "name": "Арт-отель",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "f3a61c81-a84c-517f-95e5-5b1f109e6525",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "way/53498769": {
+      "name": "Green Hosta",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "20670478-2cb0-553a-800e-7cac7d47acb4",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "way/53498776": {
+      "name": "Мария",
+      "gallery": [
+        "ai-atelier-sochi-exterior",
+        "ai-atelier-sochi-room",
+        "ai-atelier-sochi-coworking"
+      ],
+      "id": "faaaa211-f8d6-5044-94e7-0c5a7f1a63fc",
+      "room": "ai-atelier-sochi-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "way/53534006": {
+      "name": "Санаторий \"Аврора\"",
+      "gallery": [
+        "ai-kiparisovaya-alleya-exterior",
+        "ai-kiparisovaya-alleya-room",
+        "ai-kiparisovaya-alleya-park"
+      ],
+      "id": "cb285da8-def3-519f-9743-df6b3b125595",
+      "room": "ai-kiparisovaya-alleya-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "way/53537049": {
+      "name": "Санаторий \"Мыс Видный\"",
+      "gallery": [
+        "ai-kiparisovaya-alleya-exterior",
+        "ai-kiparisovaya-alleya-room",
+        "ai-kiparisovaya-alleya-park"
+      ],
+      "id": "27c4de6c-cfe2-5bf8-9c39-0bb66cb29440",
+      "room": "ai-kiparisovaya-alleya-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    },
+    "way/53549358": {
+      "name": "Апартаменты «Морская звезда» Хоста",
+      "gallery": [
+        "ai-palmovyi-sad-exterior",
+        "ai-palmovyi-sad-room",
+        "ai-palmovyi-sad-garden"
+      ],
+      "id": "67272a7a-5743-5c44-aa1d-923887670a6d",
+      "room": "ai-palmovyi-sad-room",
+      "verified": false,
+      "match": "",
+      "matchNote": ""
+    }
+  },
+  "demo": {
+    "zakatny-bereg": [
+      "ai-zakatny-bereg-exterior",
+      "ai-zakatny-bereg-room",
+      "ai-zakatny-bereg-balcony"
+    ],
+    "gornyi-priyut": [
+      "ai-gornyi-priyut-exterior",
+      "ai-gornyi-priyut-room",
+      "ai-gornyi-priyut-terrace"
+    ],
+    "palmovyi-sad": [
+      "ai-palmovyi-sad-exterior",
+      "ai-palmovyi-sad-room",
+      "ai-palmovyi-sad-garden"
+    ],
+    "atelier-sochi": [
+      "ai-atelier-sochi-exterior",
+      "ai-atelier-sochi-room",
+      "ai-atelier-sochi-coworking"
+    ],
+    "kiparisovaya-alleya": [
+      "ai-kiparisovaya-alleya-exterior",
+      "ai-kiparisovaya-alleya-room",
+      "ai-kiparisovaya-alleya-park"
+    ],
+    "dom-na-holme": [
+      "ai-dom-na-holme-exterior",
+      "ai-dom-na-holme-room",
+      "ai-dom-na-holme-terrace"
+    ]
+  }
+}

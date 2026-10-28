@@ -2,6 +2,7 @@ import { tripQuery, tripsQuery } from "@/features/manage-trips";
 import type { components } from "@/shared/api";
 import type { TripRecord } from "./trip";
 import type { TripDetails } from "./expectations";
+import { hotelPhotos } from "@/entities/hotel";
 
 type Booking = components["schemas"]["BookingOut"];
 export interface BookingTripSummary {
@@ -20,7 +21,9 @@ export function bookingTripRecord(item: BookingTripSummary): TripRecord {
     hotelId: booking.hotelId,
     hotel: {
       name: item.hotelName,
-      photos: ["/hotel-placeholder.svg"],
+      photos: hotelPhotos(booking.hotelId).length
+        ? hotelPhotos(booking.hotelId)
+        : ["/hotel-placeholder.svg"],
       bestFacade: null,
       bestRoom: "Ваше размещение",
       rooms: [{ name: "Ваше размещение", recommended: false, request: booking.request }],

@@ -16,7 +16,7 @@ from app.api.schemas.search import (
     WishStarted,
 )
 from app.domain.search.intent import Intent
-from app.domain.search.trip import TripDraft
+from app.domain.search.trip import TripDraft, today_in_sochi
 from app.service.agents.wishes import add_wishes, research_on_request
 
 router = APIRouter(tags=["Search"])
@@ -35,7 +35,9 @@ async def parse_intent(
     clock: ClockDep,
     planner: Annotated[Literal["auto", "rules"], Query()] = "auto",
 ) -> IntentModel:
-    intent = await parser.parse(payload.text, today=clock.now().date(), llm=planner == "auto")
+    intent = await parser.parse(
+        payload.text, today=today_in_sochi(clock.now()), llm=planner == "auto"
+    )
     return IntentModel.from_domain(intent)
 
 
@@ -52,8 +54,10 @@ async def create_search(
     user: OptionalGuestDep,
 ) -> SearchResultOut:
     intent = Intent(text=payload.text, chips=(), trip=TripDraft(), hints=())
-    if payload.text and payload.chips is None:
-        intent = await parser.parse(payload.text, today=clock.now().date())
+    if payload.text:
+        intent = await parser.parse(
+            payload.text, today=today_in_sochi(clock.now()), llm=payload.chips is None
+        )
     if payload.chips is not None:
         intent = replace(intent, chips=tuple(c.to_domain() for c in payload.chips))
     if payload.trip is not None:
@@ -86,7 +90,7 @@ async def add_wish(
     uow: UowDep,
     clock: ClockDep,
 ) -> WishStarted:
-    new = await parser.parse(payload.text, today=clock.now().date())
+    new = await parser.parse(payload.text, today=today_in_sochi(clock.now()))
     run_id, _ = await add_wishes(svc, uow, clock, search_id, new)
     return WishStarted(
         run_id=str(run_id) if run_id else None,

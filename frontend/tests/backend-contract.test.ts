@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   hotelFromApi,
+  photoInfo,
   type ApiFact,
   type ApiHotel,
   type ApiIntent,
@@ -137,7 +138,8 @@ describe("backend hotel contract", () => {
     expect(hotel.id).toBe(fixture.id);
     expect(hotel.lngLat).toEqual([39.9, 43.4]);
     expect(hotel.unknownCriteria).toContain("work");
-    expect(hotel.image).toBe("/hotel-placeholder.svg");
+    expect(photoInfo(hotel.image)).toMatchObject({ kind: "ai", license: null });
+    expect(hotel.gallery).toHaveLength(3);
     expect(createHotelDetails(hotel).rooms).toEqual([]);
     expect(createHotelDetails(hotel).noise.night.NE[1]).toBe("нет данных");
   });

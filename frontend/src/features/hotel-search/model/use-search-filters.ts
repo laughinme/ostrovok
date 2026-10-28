@@ -1,15 +1,9 @@
-import {
-  catalogQuery,
-  criterionKeys,
-  hotelFromApi,
-  type ApiIntent,
-  type Criterion,
-} from "@/entities/hotel";
+import { catalogQuery, hotelFromApi, type ApiIntent, type Criterion } from "@/entities/hotel";
 import { sessionApi, useSession } from "@/entities/session";
 import { api, type components } from "@/shared/api";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { intentForCriteria } from "./api-search";
+import { criteriaFromIntent, intentForCriteria } from "./api-search";
 import { useSearchSession } from "./search-session";
 
 type SearchResult = components["schemas"]["SearchResultOut"];
@@ -45,13 +39,7 @@ export function useSearchFilters(query: string) {
         : null,
     [base, maxPrice],
   );
-  const criteria = useMemo(
-    () =>
-      (Object.keys(criterionKeys) as Criterion[]).filter((criterion) =>
-        base?.chips.some((chip) => chip.characteristic === criterionKeys[criterion]),
-      ),
-    [base],
-  );
+  const criteria = useMemo(() => criteriaFromIntent(base), [base]);
   useEffect(() => {
     useSearchSession
       .getState()
@@ -140,6 +128,7 @@ export function useSearchFilters(query: string) {
     },
     ranked,
     search: current,
+    hints: current?.intent.hints ?? base?.hints ?? [],
     chips: visibleChips,
     useProfile,
     setUseProfile: (value: boolean) => {

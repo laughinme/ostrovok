@@ -10,6 +10,7 @@ import {
   X,
 } from "lucide-react";
 import { TravelAirplane } from "@/shared/ui";
+import { PhotoCredit, photoInfo } from "@/entities/hotel";
 import "./trip-ticket.css";
 
 const FACADES = { NE: "СВ", SE: "ЮВ", SW: "ЮЗ", NW: "СЗ" };
@@ -45,7 +46,13 @@ export function TripTicket({
       aria-labelledby={`ticket-${item.id}`}
     >
       <div className="ticket-photo">
-        <img src={item.hotel.photos[0]} alt={item.hotel.name} width={360} height={420} />
+        <img
+          src={item.hotel.photos[0]}
+          alt={photoInfo(item.hotel.photos[0])?.alt ?? item.hotel.name}
+          width={360}
+          height={420}
+        />
+        <PhotoCredit src={item.hotel.photos[0]} compact className="ticket-photo-credit" />
         <span>
           <MapPin size={13} />
           {item.destination}

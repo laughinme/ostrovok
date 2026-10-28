@@ -264,243 +264,273 @@
     "page": "https://commons.wikimedia.org/wiki/File:RIAN_archive_499451_On_a_beach_in_Sochi.jpg"
   },
   "lux-bright-room": {
-    "src": "/demo/lux/bright-room.jpg",
-    "title": "bright-room.jpg",
-    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
-    "license": "демо",
+    "src": "/hotel-photos/ai-atelier-sochi-room.jpg",
+    "title": "AI-иллюстрация: интерьер номера",
+    "author": "image_gen",
+    "license": null,
     "licenseUrl": "",
-    "page": ""
+    "page": "/hotel-photos/credits.html",
+    "synthetic": true
   },
   "lux-cabin": {
-    "src": "/demo/lux/cabin.jpg",
-    "title": "cabin.jpg",
-    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
-    "license": "демо",
+    "src": "/hotel-photos/ai-gornyi-priyut-exterior.jpg",
+    "title": "AI-иллюстрация: фасад",
+    "author": "image_gen",
+    "license": null,
     "licenseUrl": "",
-    "page": ""
+    "page": "/hotel-photos/credits.html",
+    "synthetic": true
   },
   "lux-coast": {
-    "src": "/demo/lux/coast.jpg",
-    "title": "coast.jpg",
-    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
-    "license": "демо",
+    "src": "/hotel-photos/ai-zakatny-bereg-balcony.jpg",
+    "title": "AI-иллюстрация: территория",
+    "author": "image_gen",
+    "license": null,
     "licenseUrl": "",
-    "page": ""
+    "page": "/hotel-photos/credits.html",
+    "synthetic": true
   },
   "lux-day-pool": {
-    "src": "/demo/lux/day-pool.jpg",
-    "title": "day-pool.jpg",
-    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
-    "license": "демо",
+    "src": "/hotel-photos/ai-palmovyi-sad-exterior.jpg",
+    "title": "AI-иллюстрация: фасад",
+    "author": "image_gen",
+    "license": null,
     "licenseUrl": "",
-    "page": ""
+    "page": "/hotel-photos/credits.html",
+    "synthetic": true
   },
   "lux-day-resort": {
-    "src": "/demo/lux/day-resort.jpg",
-    "title": "day-resort.jpg",
-    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
-    "license": "демо",
+    "src": "/hotel-photos/ai-palmovyi-sad-garden.jpg",
+    "title": "AI-иллюстрация: территория",
+    "author": "image_gen",
+    "license": null,
     "licenseUrl": "",
-    "page": ""
+    "page": "/hotel-photos/credits.html",
+    "synthetic": true
   },
   "lux-h1": {
-    "src": "/demo/lux/h1.jpg",
-    "title": "h1.jpg",
-    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
-    "license": "демо",
+    "src": "/hotel-photos/ai-zakatny-bereg-exterior.jpg",
+    "title": "AI-иллюстрация: фасад",
+    "author": "image_gen",
+    "license": null,
     "licenseUrl": "",
-    "page": ""
+    "page": "/hotel-photos/credits.html",
+    "synthetic": true
   },
   "lux-h1a": {
-    "src": "/demo/lux/h1a.jpg",
-    "title": "h1a.jpg",
-    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
-    "license": "демо",
+    "src": "/hotel-photos/ai-zakatny-bereg-room.jpg",
+    "title": "AI-иллюстрация: интерьер номера",
+    "author": "image_gen",
+    "license": null,
     "licenseUrl": "",
-    "page": ""
+    "page": "/hotel-photos/credits.html",
+    "synthetic": true
   },
   "lux-h1b": {
-    "src": "/demo/lux/h1b.jpg",
-    "title": "h1b.jpg",
-    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
-    "license": "демо",
+    "src": "/hotel-photos/ai-zakatny-bereg-balcony.jpg",
+    "title": "AI-иллюстрация: территория",
+    "author": "image_gen",
+    "license": null,
     "licenseUrl": "",
-    "page": ""
+    "page": "/hotel-photos/credits.html",
+    "synthetic": true
   },
   "lux-h2": {
-    "src": "/demo/lux/h2.jpg",
-    "title": "h2.jpg",
-    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
-    "license": "демо",
+    "src": "/hotel-photos/ai-gornyi-priyut-exterior.jpg",
+    "title": "AI-иллюстрация: фасад",
+    "author": "image_gen",
+    "license": null,
     "licenseUrl": "",
-    "page": ""
+    "page": "/hotel-photos/credits.html",
+    "synthetic": true
   },
   "lux-h2a": {
-    "src": "/demo/lux/h2a.jpg",
-    "title": "h2a.jpg",
-    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
-    "license": "демо",
+    "src": "/hotel-photos/ai-gornyi-priyut-room.jpg",
+    "title": "AI-иллюстрация: интерьер номера",
+    "author": "image_gen",
+    "license": null,
     "licenseUrl": "",
-    "page": ""
+    "page": "/hotel-photos/credits.html",
+    "synthetic": true
   },
   "lux-h2b": {
-    "src": "/demo/lux/h2b.jpg",
-    "title": "h2b.jpg",
-    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
-    "license": "демо",
+    "src": "/hotel-photos/ai-gornyi-priyut-terrace.jpg",
+    "title": "AI-иллюстрация: территория",
+    "author": "image_gen",
+    "license": null,
     "licenseUrl": "",
-    "page": ""
+    "page": "/hotel-photos/credits.html",
+    "synthetic": true
   },
   "lux-h3": {
-    "src": "/demo/lux/h3.jpg",
-    "title": "h3.jpg",
-    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
-    "license": "демо",
+    "src": "/hotel-photos/ai-palmovyi-sad-exterior.jpg",
+    "title": "AI-иллюстрация: фасад",
+    "author": "image_gen",
+    "license": null,
     "licenseUrl": "",
-    "page": ""
+    "page": "/hotel-photos/credits.html",
+    "synthetic": true
   },
   "lux-h3a": {
-    "src": "/demo/lux/h3a.jpg",
-    "title": "h3a.jpg",
-    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
-    "license": "демо",
+    "src": "/hotel-photos/ai-palmovyi-sad-room.jpg",
+    "title": "AI-иллюстрация: интерьер номера",
+    "author": "image_gen",
+    "license": null,
     "licenseUrl": "",
-    "page": ""
+    "page": "/hotel-photos/credits.html",
+    "synthetic": true
   },
   "lux-h3b": {
-    "src": "/demo/lux/h3b.jpg",
-    "title": "h3b.jpg",
-    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
-    "license": "демо",
+    "src": "/hotel-photos/ai-palmovyi-sad-garden.jpg",
+    "title": "AI-иллюстрация: территория",
+    "author": "image_gen",
+    "license": null,
     "licenseUrl": "",
-    "page": ""
+    "page": "/hotel-photos/credits.html",
+    "synthetic": true
   },
   "lux-h4": {
-    "src": "/demo/lux/h4.jpg",
-    "title": "h4.jpg",
-    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
-    "license": "демо",
+    "src": "/hotel-photos/ai-atelier-sochi-exterior.jpg",
+    "title": "AI-иллюстрация: фасад",
+    "author": "image_gen",
+    "license": null,
     "licenseUrl": "",
-    "page": ""
+    "page": "/hotel-photos/credits.html",
+    "synthetic": true
   },
   "lux-h4a": {
-    "src": "/demo/lux/h4a.jpg",
-    "title": "h4a.jpg",
-    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
-    "license": "демо",
+    "src": "/hotel-photos/ai-atelier-sochi-room.jpg",
+    "title": "AI-иллюстрация: интерьер номера",
+    "author": "image_gen",
+    "license": null,
     "licenseUrl": "",
-    "page": ""
+    "page": "/hotel-photos/credits.html",
+    "synthetic": true
   },
   "lux-h4b": {
-    "src": "/demo/lux/h4b.jpg",
-    "title": "h4b.jpg",
-    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
-    "license": "демо",
+    "src": "/hotel-photos/ai-atelier-sochi-coworking.jpg",
+    "title": "AI-иллюстрация: территория",
+    "author": "image_gen",
+    "license": null,
     "licenseUrl": "",
-    "page": ""
+    "page": "/hotel-photos/credits.html",
+    "synthetic": true
   },
   "lux-h5": {
-    "src": "/demo/lux/h5.jpg",
-    "title": "h5.jpg",
-    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
-    "license": "демо",
+    "src": "/hotel-photos/ai-kiparisovaya-alleya-exterior.jpg",
+    "title": "AI-иллюстрация: фасад",
+    "author": "image_gen",
+    "license": null,
     "licenseUrl": "",
-    "page": ""
+    "page": "/hotel-photos/credits.html",
+    "synthetic": true
   },
   "lux-h5a": {
-    "src": "/demo/lux/h5a.jpg",
-    "title": "h5a.jpg",
-    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
-    "license": "демо",
+    "src": "/hotel-photos/ai-kiparisovaya-alleya-room.jpg",
+    "title": "AI-иллюстрация: интерьер номера",
+    "author": "image_gen",
+    "license": null,
     "licenseUrl": "",
-    "page": ""
+    "page": "/hotel-photos/credits.html",
+    "synthetic": true
   },
   "lux-h5b": {
-    "src": "/demo/lux/h5b.jpg",
-    "title": "h5b.jpg",
-    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
-    "license": "демо",
+    "src": "/hotel-photos/ai-kiparisovaya-alleya-park.jpg",
+    "title": "AI-иллюстрация: территория",
+    "author": "image_gen",
+    "license": null,
     "licenseUrl": "",
-    "page": ""
+    "page": "/hotel-photos/credits.html",
+    "synthetic": true
   },
   "lux-h6": {
-    "src": "/demo/lux/h6.jpg",
-    "title": "h6.jpg",
-    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
-    "license": "демо",
+    "src": "/hotel-photos/ai-dom-na-holme-exterior.jpg",
+    "title": "AI-иллюстрация: фасад",
+    "author": "image_gen",
+    "license": null,
     "licenseUrl": "",
-    "page": ""
+    "page": "/hotel-photos/credits.html",
+    "synthetic": true
   },
   "lux-h6a": {
-    "src": "/demo/lux/h6a.jpg",
-    "title": "h6a.jpg",
-    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
-    "license": "демо",
+    "src": "/hotel-photos/ai-dom-na-holme-room.jpg",
+    "title": "AI-иллюстрация: интерьер номера",
+    "author": "image_gen",
+    "license": null,
     "licenseUrl": "",
-    "page": ""
+    "page": "/hotel-photos/credits.html",
+    "synthetic": true
   },
   "lux-h6b": {
-    "src": "/demo/lux/h6b.jpg",
-    "title": "h6b.jpg",
-    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
-    "license": "демо",
+    "src": "/hotel-photos/ai-dom-na-holme-terrace.jpg",
+    "title": "AI-иллюстрация: территория",
+    "author": "image_gen",
+    "license": null,
     "licenseUrl": "",
-    "page": ""
+    "page": "/hotel-photos/credits.html",
+    "synthetic": true
   },
   "lux-hero": {
-    "src": "/demo/lux/hero.jpg",
-    "title": "hero.jpg",
-    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
-    "license": "демо",
+    "src": "/hotel-photos/ai-zakatny-bereg-balcony.jpg",
+    "title": "AI-иллюстрация: территория",
+    "author": "image_gen",
+    "license": null,
     "licenseUrl": "",
-    "page": ""
+    "page": "/hotel-photos/credits.html",
+    "synthetic": true
   },
   "lux-interior": {
-    "src": "/demo/lux/interior.jpg",
-    "title": "interior.jpg",
-    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
-    "license": "демо",
+    "src": "/hotel-photos/ai-atelier-sochi-coworking.jpg",
+    "title": "AI-иллюстрация: территория",
+    "author": "image_gen",
+    "license": null,
     "licenseUrl": "",
-    "page": ""
+    "page": "/hotel-photos/credits.html",
+    "synthetic": true
   },
   "lux-mountains": {
-    "src": "/demo/lux/mountains.jpg",
-    "title": "mountains.jpg",
-    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
-    "license": "демо",
+    "src": "/hotel-photos/ai-gornyi-priyut-terrace.jpg",
+    "title": "AI-иллюстрация: территория",
+    "author": "image_gen",
+    "license": null,
     "licenseUrl": "",
-    "page": ""
+    "page": "/hotel-photos/credits.html",
+    "synthetic": true
   },
   "lux-room": {
-    "src": "/demo/lux/room.jpg",
-    "title": "room.jpg",
-    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
-    "license": "демо",
+    "src": "/hotel-photos/ai-zakatny-bereg-room.jpg",
+    "title": "AI-иллюстрация: интерьер номера",
+    "author": "image_gen",
+    "license": null,
     "licenseUrl": "",
-    "page": ""
+    "page": "/hotel-photos/credits.html",
+    "synthetic": true
   },
   "lux-sea": {
-    "src": "/demo/lux/sea.jpg",
-    "title": "sea.jpg",
-    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
-    "license": "демо",
+    "src": "/hotel-photos/ai-zakatny-bereg-balcony.jpg",
+    "title": "AI-иллюстрация: территория",
+    "author": "image_gen",
+    "license": null,
     "licenseUrl": "",
-    "page": ""
+    "page": "/hotel-photos/credits.html",
+    "synthetic": true
   },
   "lux-suite": {
-    "src": "/demo/lux/suite.jpg",
-    "title": "suite.jpg",
-    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
-    "license": "демо",
+    "src": "/hotel-photos/ai-palmovyi-sad-room.jpg",
+    "title": "AI-иллюстрация: интерьер номера",
+    "author": "image_gen",
+    "license": null,
     "licenseUrl": "",
-    "page": ""
+    "page": "/hotel-photos/credits.html",
+    "synthetic": true
   },
   "lux-terrace": {
-    "src": "/demo/lux/terrace.jpg",
-    "title": "terrace.jpg",
-    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
-    "license": "демо",
+    "src": "/hotel-photos/ai-dom-na-holme-terrace.jpg",
+    "title": "AI-иллюстрация: территория",
+    "author": "image_gen",
+    "license": null,
     "licenseUrl": "",
-    "page": ""
+    "page": "/hotel-photos/credits.html",
+    "synthetic": true
   }
 }

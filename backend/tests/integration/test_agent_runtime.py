@@ -1,9 +1,12 @@
+import pytest
+
 from app.db.database import Database
 from app.domain.agents import AgentKind, Planner, RunStatus, StepKind
 from app.domain.jobs import JobKind
+from app.service.agents.fallback import with_fallback
 from app.service.agents.runtime import AgentRunner, Tracer, launch
-from app.service.ports import RecordingEventBus
-from tests.factories import FakeClock
+from app.service.ports import LanguageModel, LlmUnavailableError, RecordingEventBus
+from tests.factories import FakeClock, FakeLanguageModel
 
 
 async def _launch(db: Database, clock: FakeClock) -> object:
@@ -61,3 +64,30 @@ async def test_failing_agent_marks_the_run_failed(db: Database) -> None:
     assert run is not None
     assert run.status is RunStatus.FAILED
     assert run.steps[-1].kind is StepKind.ERROR
+
+
+@pytest.mark.parametrize("provider_down", [False, True])
+async def test_run_records_the_selected_planner(db: Database, provider_down: bool) -> None:
+    clock, bus = FakeClock(), RecordingEventBus()
+    run_id = await _launch(db, clock)
+
+    async def primary(_llm: LanguageModel) -> str:
+        if provider_down:
+            raise LlmUnavailableError("provider failed")
+        return "LLM plan"
+
+    async def fallback() -> str:
+        return "rules plan"
+
+    tracer = Tracer(db, bus, clock, run_id)  # type: ignore[arg-type]
+    # A later outage must also replace an earlier LLM label with the rules actually used.
+    if provider_down:
+        await tracer.set_planner(Planner.LLM)
+    result, planner = await with_fallback(FakeLanguageModel(), primary, fallback, tracer=tracer)
+
+    async with db.unit_of_work() as uow:
+        run = await uow.agents.run(run_id)  # type: ignore[arg-type]
+    assert run is not None
+    assert run.planner is planner
+    assert planner is (Planner.RULES if provider_down else Planner.LLM)
+    assert result == ("rules plan" if provider_down else "LLM plan")

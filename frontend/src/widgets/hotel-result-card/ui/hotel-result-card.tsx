@@ -46,29 +46,34 @@ export function HotelResultCard({
   const [showAllBeams, setShowAllBeams] = useState(false);
   const reducedMotion = useReducedMotion();
 
+  const hasWishes = r.hotel.searchMatch
+    ? r.hotel.searchMatch.perChip.length > 0
+    : criteria.length > 0;
+  const recommended = index === 0 && hasWishes;
   const nearby = r.hotel.walk.slice(0, 2);
   const hiddenBeams = criteria.length - MAX_BEAMS;
   const shownBeams = showAllBeams ? criteria : criteria.slice(0, MAX_BEAMS);
 
   return (
     <motion.article
+      id={`hotel-${r.hotel.id}`}
       layout
       initial={reducedMotion ? false : { opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: reducedMotion ? 0 : index * 0.04 }}
+      transition={{ delay: reducedMotion || highlighted ? 0 : index * 0.04 }}
       onMouseEnter={() => onHover(r.hotel.id)}
       onMouseLeave={() => onHover(null)}
       aria-label={r.hotel.name}
       className={cn(
         "hotel-result-card @container/hotel-card group relative",
-        index === 0 && "pt-3",
+        recommended && "pt-3",
       )}
     >
-      {index === 0 && <BestOfferRibbon />}
+      {recommended && <BestOfferRibbon />}
       <div
         className={cn(
           "grid overflow-hidden rounded-lg border bg-card transition-shadow @min-[580px]:grid-cols-[38%_minmax(0,1fr)]",
-          index === 0 &&
+          recommended &&
             "rounded-3xl border-x-[3px] border-b-[3px] border-primary bg-primary pt-3 ring-1 ring-primary",
           highlighted && "shadow-soft",
           highlighted && index !== 0 && "border-primary/40",
@@ -86,13 +91,17 @@ export function HotelResultCard({
                   ))}
                 </div>
               </div>
-              <span
-                className="text-[11px] text-muted-foreground"
-                title="Насколько отель совпадает с вашим запросом по выбранным критериям"
-              >
-                <strong className="text-sm font-bold tabular-nums text-primary">{r.score}%</strong>{" "}
-                совпадение
-              </span>
+              {hasWishes && (
+                <span
+                  className="text-[11px] text-muted-foreground"
+                  title="Насколько отель совпадает с вашим запросом по выбранным критериям"
+                >
+                  <strong className="text-sm font-bold tabular-nums text-primary">
+                    {r.score}%
+                  </strong>{" "}
+                  совпадение
+                </span>
+              )}
             </div>
             <Link
               to="/hotel/$id"
@@ -107,6 +116,15 @@ export function HotelResultCard({
               {r.hotel.address}
             </p>
             <p className="mt-1.5 line-clamp-1 text-sm leading-relaxed">{r.hotel.tagline}</p>
+            <Link
+              to="/hotel/$id"
+              params={{ id: r.hotel.id }}
+              search={{ q: query, sid: r.searchId }}
+              hash="similar"
+              className="inline-flex min-h-11 items-center gap-1 text-xs text-primary hover:underline"
+            >
+              Найти похожий, но… <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
+            </Link>
             <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
               {nearby.map((place) => (
                 <span key={place.name} className="flex items-center gap-1.5 text-xs">
@@ -124,7 +142,7 @@ export function HotelResultCard({
             <div className="flex items-center justify-between gap-2">
               <span className="flex items-center gap-1.5 text-[11px] font-semibold text-primary">
                 <Sparkles className="h-3.5 w-3.5" />
-                Под ваш запрос
+                {hasWishes ? "Под ваш запрос" : "Что известно об отеле"}
               </span>
               {hiddenBeams > 0 && (
                 <button

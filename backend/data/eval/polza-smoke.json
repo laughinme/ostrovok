@@ -1,0 +1,110 @@
+{
+  "checkedAt": "2026-10-29T00:42:00+03:00",
+  "provider": "Polza.ai",
+  "baseUrl": "https://polza.ai/api/v1",
+  "model": "openai/gpt-5.6-luna",
+  "http": {
+    "provider": "Polza.ai",
+    "baseUrl": "https://polza.ai/api/v1",
+    "model": "openai/gpt-5.6-luna",
+    "checks": [
+      {
+        "plannerRequested": "rules",
+        "planner": "rules",
+        "ms": 118,
+        "characteristics": [
+          "night_noise",
+          "sea_view"
+        ],
+        "trip": {
+          "from": "2026-11-12",
+          "to": "2026-11-15",
+          "month": null,
+          "adults": 2,
+          "children": null,
+          "budgetPerNight": 9000,
+          "area": "center"
+        }
+      },
+      {
+        "plannerRequested": "auto",
+        "planner": "llm",
+        "ms": 3540,
+        "characteristics": [
+          "night_noise",
+          "day_noise",
+          "sea_view"
+        ],
+        "trip": {
+          "from": "2026-11-12",
+          "to": "2026-11-15",
+          "month": null,
+          "adults": 2,
+          "children": null,
+          "budgetPerNight": 9000,
+          "area": "center"
+        }
+      },
+      {
+        "plannerRequested": "auto",
+        "planner": "llm",
+        "ms": 20,
+        "characteristics": [
+          "night_noise",
+          "day_noise",
+          "sea_view"
+        ],
+        "trip": {
+          "from": "2026-11-12",
+          "to": "2026-11-15",
+          "month": null,
+          "adults": 2,
+          "children": null,
+          "budgetPerNight": 9000,
+          "area": "center"
+        }
+      }
+    ],
+    "cachePreservesResponse": true
+  },
+  "protocol": {
+    "eightSequentialTools": {
+      "calls": 8,
+      "requests": 9,
+      "latencyMs": 16225,
+      "matchesToolResult": true
+    },
+    "nativeStructuredOutput": true
+  },
+  "keyLimit": {
+    "currency": "RUB",
+    "amount": 100,
+    "period": "total",
+    "insufficientLimitHttpStatus": 402,
+    "restoredAfterProbe": true
+  },
+  "network": {
+    "httpProxyEnvironment": false,
+    "directModelsStatus": 200,
+    "initialGeoLookupCountry": "FR",
+    "initialGeoLookupUsedVpn": true,
+    "egressCountry": "RU",
+    "egressCity": "Новосибирск",
+    "russiaWithoutVpnVerified": true,
+    "verification": "polza-ru-smoke.json",
+    "checkedAt": "2026-10-28T21:51:14.438072+00:00"
+  },
+  "billing": {
+    "spentRub": 8.65,
+    "scope": "Initial full eval and short checks before direct RU follow-up; extra cost in polza-ru-smoke.json"
+  },
+  "checks": {
+    "makeCheck": "509 passed; ruff, mypy, seven import contracts passed"
+  },
+  "notes": [
+    "Provider checks are a short sample, not an uptime guarantee.",
+    "USD in the eval report is a model price estimate; RUB here is provider account billing.",
+    "Eight sequential tool calls used a QA request budget of nine; application limits were unchanged.",
+    "Historical checks before the explicit Polza OpenAI model-profile fix; final release checks are in polza-release.json."
+  ]
+}

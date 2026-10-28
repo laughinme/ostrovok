@@ -13,6 +13,7 @@ import {
   Waves,
 } from "lucide-react";
 import PHOTOS from "../model/photos.json";
+import { photoInfo, demoPhotos } from "@/entities/hotel";
 
 const ICONS = {
   arrow: ArrowRight,
@@ -36,15 +37,12 @@ export function Icon({ name, size = 18 }: { name: string; size?: number }) {
 
 export function Photo({ k, alt }: { k: string; alt: string; credit?: boolean }) {
   const photo = (PHOTOS as Record<string, { src: string }>)[k];
+  const src = photo?.src ?? demoPhotos("zakatny-bereg")[0]!;
+  const info = photoInfo(src);
   return (
     <figure className="ph">
-      <img
-        src={photo?.src ?? "/demo/lux/hero.jpg"}
-        alt={alt}
-        loading="lazy"
-        width={1024}
-        height={768}
-      />
+      <img src={src} alt={alt} loading="lazy" width={1024} height={768} />
+      {info?.kind === "ai" && <figcaption className="photo-origin">AI-иллюстрация</figcaption>}
     </figure>
   );
 }

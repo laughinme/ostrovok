@@ -1,0 +1,142 @@
+{
+  "checkedAt": "2026-10-28T22:54:09.576488+00:00",
+  "status": "passed",
+  "provider": "Polza.ai",
+  "baseUrl": "https://polza.ai/api/v1",
+  "model": "openai/gpt-5.6-luna",
+  "thinking": "low",
+  "thinkingStrong": "medium",
+  "backendChecks": {
+    "testsPassed": 515,
+    "lint": true,
+    "strictMypy": true,
+    "architectureContracts": 7,
+    "mockTransportVerifiesActualReasoningEffort": true,
+    "legacyProfileCacheRejected": true
+  },
+  "freshEvaluation": {
+    "successfulTasks": 179,
+    "fallbacks": 0,
+    "intentF1Holdout": 0.9642857142857143,
+    "answerFieldAccuracyHoldout": 0.9552238805970149,
+    "curatorMethodAccuracyHoldout": 0.9333333333333333,
+    "intentMedianMs": 2976,
+    "intentP95Ms": 4535,
+    "usesOldCache": false
+  },
+  "nativeDockerColdStart": {
+    "databaseReadiness": "TCP 127.0.0.1, no temporary Unix-only initdb server",
+    "checkedAt": "2026-10-28T22:44:54.186872+00:00",
+    "platform": "native linux/arm64 on Apple Silicon, matching compose.dev.yml",
+    "imageNameOverridesOnly": false,
+    "localDatabaseOverride": "imresamu/postgis:17-3.5 linux/arm64, D-34",
+    "cleanJuryStartSeconds": 108.89,
+    "freshJuryIntentPlanner": "llm",
+    "freshProviderCallJournaled": true,
+    "freshJuryIntentMs": 3111,
+    "allServicesHealthyWithJuryKey": true,
+    "noKeyRestartSeconds": 20.05,
+    "noKeyPlanner": "rules",
+    "noKeyMadeNoProviderCalls": true,
+    "gatewayRecoveredAfterBackendIpChanged": true,
+    "gatewayWasNotRestarted": true,
+    "apiAndWorkerBothWithoutKey": true,
+    "allServicesHealthyWithoutKey": true,
+    "fullHttpSmokeWithoutKey": true,
+    "temporaryStackRemoved": true
+  },
+  "nativeDockerLlmScenarios": {
+    "model": "openai/gpt-5.6-luna",
+    "intentMs": 2559,
+    "cacheMs": 15,
+    "exactCacheRepeat": true,
+    "curatorPlanner": "llm",
+    "curatorTools": [
+      "osm.vocabulary",
+      "osm.tag_stats",
+      "osm.tag_stats",
+      "llm.curator",
+      "recipe.validate",
+      "osm.tag_stats",
+      "osm.find",
+      "route.reachable",
+      "osm.find",
+      "route.reachable",
+      "osm.find",
+      "route.reachable",
+      "osm.find",
+      "route.reachable",
+      "osm.find",
+      "route.reachable",
+      "recipe.dry_run"
+    ],
+    "answerParser": "llm",
+    "demoHotelierLlm": true,
+    "journalAndUsageReadable": true,
+    "estimatedSessionCostUsd": 0.0024,
+    "elapsedSeconds": 34.09
+  },
+  "finalAmd64Image": {
+    "profileSupportsThinking": true,
+    "checks": [
+      {
+        "thinking": "low",
+        "requests": 2,
+        "latencyMs": 3539,
+        "toolResultMatches": true
+      },
+      {
+        "thinking": "medium",
+        "requests": 2,
+        "latencyMs": 3188,
+        "toolResultMatches": true
+      }
+    ]
+  },
+  "failureScenarios": {
+    "consoleOff": {
+      "httpStatus": 200,
+      "planner": "rules",
+      "ms": 1570
+    },
+    "provider402": {
+      "applicationHttpStatus": 200,
+      "planner": "rules",
+      "ms": 2063,
+      "failedCallJournaled": true
+    },
+    "circuitBreaker": {
+      "applicationHttpStatus": 200,
+      "planner": "rules",
+      "ms": 321
+    },
+    "juryLimitRestoredRub": 100,
+    "consoleModeRestored": "auto"
+  },
+  "makeEvaluationTarget": {
+    "configured": true,
+    "comparison": true,
+    "failFast": true,
+    "networkCalls": 0
+  },
+  "secrets": {
+    "juryKeyLimitRub": 100,
+    "juryKeyLimitPeriod": "total",
+    "juryKeyActive": true,
+    "encryptedForOrganizers": true,
+    "exampleKeyEmpty": true,
+    "plainEnvFilesUntracked": true,
+    "providerAndAdministratorTokensAbsentFromCommittedFiles": true,
+    "runtimeImageUid": 999
+  },
+  "network": {
+    "russiaWithoutVpnPreviouslyVerified": true,
+    "claudeApiRouteAfterChecks": "utun7",
+    "vpnSettingsModified": false
+  },
+  "limitations": [
+    "Complete current Docker run was native ARM64 on Apple Silicon, with approved native PostGIS; final amd64 application image was tested separately with real low/medium tool calls.",
+    "Fully emulated official amd64 PostGIS exited during bulk trace import on this Mac; native x86 jury Compose keeps its official image. Use compose.dev.yml on Apple Silicon without Rosetta.",
+    "Short acceptance runs do not guarantee future provider uptime."
+  ]
+}
