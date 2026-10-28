@@ -1,8 +1,10 @@
 .DEFAULT_GOAL := help
 .PHONY: help install env keys run worker migrate migration openapi lint fmt typecheck arch test-unit \
-	test-deps test test-down check up up-native down dev logs data collect export-seed eval eval-llm frontend-dev frontend-check
+	test-deps test test-down check up up-native down dev logs data collect export-seed jury-secrets eval eval-llm frontend-dev frontend-check
 
 BACKEND := backend
+# Public age key of the hackathon organizers: secrets for the jury are encrypted to it.
+ORGANIZERS_AGE_KEY := age1932fu7f70rwyfhaxflyfszz4gf6avxwc95wc0yjwm6zns9tspycqpgdnc0
 UV := cd $(BACKEND) && uv run
 TEST_COMPOSE := docker compose -p okno-test -f docker-compose.test.yml
 DEV_COMPOSE := docker compose -f docker-compose.yml -f compose.dev.yml
@@ -64,6 +66,11 @@ eval: ## Quality metrics on the gold set (needs `make dev`)
 
 eval-llm: ## Compare LLM models on the R2/R3/R8 sets (spends API credits, cached)
 	$(UV) python -m app.cli eval-llm
+
+jury-secrets: ## Encrypt .env.jury for the organizers into secrets.env.age (needs `age`)
+	@test -f .env.jury || (echo "create .env.jury with the jury LLM key first" && exit 1)
+	age -r $(ORGANIZERS_AGE_KEY) -o secrets.env.age .env.jury
+	@echo "secrets.env.age updated; commit it, never .env.jury"
 
 # --- quality -----------------------------------------------------------------------
 
