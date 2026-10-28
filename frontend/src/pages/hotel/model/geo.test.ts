@@ -19,6 +19,8 @@ describe("hotel geo mappings", () => {
     });
     expect(tripDates({ from: "2027-01-30" }).to).toBe("2027-02-04");
     expect(tripDates().date).toBe("2026-11-15");
+    expect(tripDates().from).toBe(tripDates().date);
+    expect(tripDates({ to: "2027-02-04" }).from).toBe("2027-01-30");
   });
   it("keeps all hotel facades and never fills absent noise with another side", () => {
     const level = { indexDb: 0, category: null, confidence: 0.6, sources: [] };

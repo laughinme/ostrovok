@@ -25,9 +25,13 @@ export const FACADE_ANGLE: Record<GeoFacade, number> = {
   NW: 315,
 };
 export function tripDates(trip?: components["schemas"]["TripModel"]) {
-  const from = trip?.from ?? "2026-11-10";
+  const from =
+    trip?.from ??
+    (trip?.to
+      ? new Date(Date.parse(trip.to) - 5 * 86400000).toISOString().slice(0, 10)
+      : "2026-11-15");
   const to = trip?.to ?? new Date(Date.parse(from) + 5 * 86400000).toISOString().slice(0, 10);
-  return { from, to, date: trip?.from ?? "2026-11-15", fallback: !trip?.from };
+  return { from, to, date: from, fallback: !trip?.from && !trip?.to };
 }
 export function dateLabel(date: string) {
   return new Date(`${date}T12:00:00Z`).toLocaleDateString("ru-RU", {

@@ -6,6 +6,7 @@ import type { components } from "@/shared/api";
 import type { RatePlan, RoomType } from "../model/types";
 import { rub } from "../lib/format";
 import { Mark } from "./detail-ui";
+import { tripDates } from "../model/geo";
 
 export function BookingRequest({
   hotel,
@@ -16,8 +17,9 @@ export function BookingRequest({
   room: RoomType;
   rate: RatePlan;
 }) {
-  const [checkIn, setCheckIn] = useState(hotel.searchContext?.trip.from ?? "2026-11-10");
-  const [checkOut, setCheckOut] = useState(hotel.searchContext?.trip.to ?? "2026-11-15");
+  const dates = tripDates(hotel.searchContext?.trip);
+  const [checkIn, setCheckIn] = useState(dates.from);
+  const [checkOut, setCheckOut] = useState(dates.to);
   const [adults, setAdults] = useState(
     hotel.searchContext?.trip.adults ?? Math.min(2, room.capacity ?? 2),
   );

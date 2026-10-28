@@ -21,17 +21,12 @@ import { BookingRequest } from "./booking-request";
 import { BeachSection } from "./beach-section";
 import { NoiseSection } from "./noise-section";
 import { WindowSection } from "./window-section";
+import { ClimateSection } from "./climate-section";
+import { dateLabel, tripDates } from "../model/geo";
 import "./hotel-detail.css";
-const DAYS = [
-  ["пн", 10, 17, "16:58", 18, 10],
-  ["вт", 11, 16, "16:57", 18, 25],
-  ["ср", 12, 15, "16:56", 17, 40],
-  ["чт", 13, 16, "16:55", 17, 20],
-  ["пт", 14, 17, "16:54", 17, 10],
-  ["сб", 15, 16, "16:53", 17, 15],
-] as const;
 export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | undefined }) {
   const h = useMemo(() => createHotelDetails(hotel), [hotel]);
+  const dates = tripDates(hotel.searchContext?.trip);
   const criteria = useMemo(() => parseQuery(q ?? ""), [q]);
   const chips = criteria.map((key) => ({ key }));
   const match = hotel.searchMatch
@@ -233,39 +228,13 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
 
         <BeachSection hotel={hotel} />
 
-        <section className="dates card-w">
-          <div className="rp-h">
-            <h3>Ваши даты</h3>
-            <span className="sub">Демонстрационная сводка, не прогноз</span>
-          </div>
-          <div className="days num">
-            {DAYS.map(([wd, d, t, s, w, r]) => (
-              <div className="day" key={d}>
-                <span className="d">
-                  {wd}, {d} ноября
-                </span>
-                <b>{t}°</b>
-                <span className="row">
-                  <Icon name="sun" size={14} />
-                  закат {s}
-                </span>
-                <span className="row">
-                  <Icon name="wave" size={14} />
-                  вода {w}°
-                </span>
-                <span className="row">
-                  <Icon name="question" size={14} />
-                  дождь {r}%
-                </span>
-              </div>
-            ))}
-          </div>
-        </section>
+        <ClimateSection hotel={hotel} />
 
         <section className="sec-h2" id="rooms">
           <h2>Доступные номера</h2>
           <p>
-            10–15 ноября · 5 ночей · 2 взрослых · стороны и этажи — по ответу отеля, вид — по
+            {dateLabel(dates.from)} — {dateLabel(dates.to)} · взрослые:{" "}
+            {hotel.searchContext?.trip.adults ?? 2} · стороны и этажи — по ответу отеля, вид — по
             расчёту
           </p>
         </section>
