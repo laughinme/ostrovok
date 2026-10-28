@@ -698,23 +698,6 @@
   background: #d6e5e8;
 }
 
-.hotel-detail .window-visible-objects {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 12px;
-  list-style: none;
-}
-.hotel-detail .window-visible-objects li {
-  padding: 5px 10px;
-  border: 1px solid var(--line);
-  border-radius: var(--r-pill);
-  background: var(--surface);
-  color: var(--ink);
-  font-size: 10px;
-}
-
 .hotel-detail .window-illustration {
   --view-sky-top: #88c9f3;
   --view-sky-low: #e0f1fb;

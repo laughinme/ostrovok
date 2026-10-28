@@ -3,8 +3,6 @@ import {
   ArrowRight,
   Building2,
   Compass,
-  Mountain,
-  Trees,
   BedDouble,
   CalendarDays,
   ChevronDown,
@@ -32,7 +30,7 @@ import type { HotelDetails } from "../model/types";
 import { NoiseCompass } from "./noise-compass";
 import { WindowPanorama } from "./window-panorama";
 import { WindowMethodTooltip } from "./window-method-tooltip";
-import { calculatedWindowView, demoWindowView, windowViewSummary } from "../model/window-view";
+import { calculatedWindowView, demoWindowView } from "../model/window-view";
 import { GeoNotes, GeoStatus } from "./geo-status";
 import "./window-section.css";
 import "./window-controls.css";
@@ -47,7 +45,6 @@ const names: Record<GeoFacade, string> = {
   W: "Запад",
   NW: "Северо-запад",
 };
-const objectIcons = { Море: Waves, Горы: Mountain, Дома: Building2, Деревья: Trees, Закат: Sun };
 const demoFacades: GeoFacade[] = ["NE", "SE", "SW", "NW"];
 
 export function WindowSection({ hotel, detail }: { hotel: Hotel; detail: HotelDetails }) {
@@ -81,10 +78,6 @@ export function WindowSection({ hotel, detail }: { hotel: Hotel; detail: HotelDe
   const known = scene.known;
   const demoFacade = facade === "NE" || facade === "SE" || facade === "NW" ? facade : "SW";
   const reading = readPanorama(demoFacade, floor);
-  const summary = windowViewSummary(
-    scene,
-    demo ? reading.seaShare / 100 : (data?.seaFraction ?? null),
-  );
   const rooms = detail.rooms.filter((room) => facade && room.facades.includes(facade));
   const metrics = [
     {
@@ -307,40 +300,6 @@ export function WindowSection({ hotel, detail }: { hotel: Hotel; detail: HotelDe
               )}
             </div>
             <div className="window-sill" aria-hidden="true" />
-            <div className="window-view-verdict" aria-live="polite" aria-atomic="true">
-              <span className="window-verdict-floor">{floor} этаж</span>
-              <div>
-                <strong>{updating ? "Уточняем вид" : summary.title}</strong>
-                <p>
-                  {updating
-                    ? "На иллюстрации предыдущий вид; ждём новый расчёт."
-                    : summary.description}
-                </p>
-              </div>
-            </div>
-            {known && (
-              <ul
-                className={`window-visible-objects${updating ? " is-updating" : ""}`}
-                aria-hidden={updating}
-                aria-label="Объекты в поле зрения"
-                aria-live="polite"
-              >
-                {scene.objects.map((object) => {
-                  const Icon = objectIcons[object as keyof typeof objectIcons] ?? Eye;
-                  return (
-                    <li key={object}>
-                      <Icon size={13} aria-hidden="true" />
-                      {object}
-                    </li>
-                  );
-                })}
-                {!scene.objects.length && <li>Подтверждённых объектов нет</li>}
-              </ul>
-            )}
-            <p className="window-scene-label">
-              {demo ? "Демо-сцена" : "Схематичный вид"} · тип вида, без точного расположения
-              объектов
-            </p>
             {known && !updating && scene.unknown.length > 0 && (
               <p className="window-scene-label">
                 Не все направления изучены · показаны известные типы вида
