@@ -29,6 +29,7 @@ from app.service.agents.runtime import AgentRunner
 from app.service.agents.watcher import Watcher
 from app.service.agents.wishes import WishResearch
 from app.service.geo.scenes import scene_cache
+from app.service.partner.world_notices import HotelNotices
 from app.service.ports import Clock, EventBus, LanguageModel
 from app.service.recipes.executor import Environment, GeoReader, MethodExecutor, executors_by_method
 from app.service.recipes.methods.area_stat import AreaStatExecutor
@@ -120,7 +121,12 @@ def build_agents(
             ask_hotels=HotelAsker(db, clock, simulator_delay=simulator_delay),
         ),
         watcher=Watcher(
-            db, runner, researcher, events, invalidate=lambda: scene_cache(env).clear()
+            db,
+            runner,
+            researcher,
+            events,
+            notify=HotelNotices(db),
+            invalidate=lambda: scene_cache(env).clear(),
         ),
         env=env,
     )
