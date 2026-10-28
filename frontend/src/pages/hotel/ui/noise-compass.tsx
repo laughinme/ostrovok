@@ -16,10 +16,14 @@ export function NoiseCompass({
   sides,
   selected,
   onSelect,
+  showValues = true,
+  label = "Сторона здания на компасе",
 }: {
   sides: CompassSide[];
   selected: GeoFacade | undefined;
   onSelect(facade: GeoFacade): void;
+  showValues?: boolean;
+  label?: string;
 }) {
   const captionId = useId();
   const [pose, setPose] = useState({ selected, angle: FACADE_ANGLE[selected ?? "N"] });
@@ -62,11 +66,11 @@ export function NoiseCompass({
     if (focus) buttons.current.get(facade)?.focus();
   };
   return (
-    <div className="noise-compass-control">
+    <div className={`noise-compass-control${showValues ? "" : " is-direction-only"}`}>
       <div
         className={`noise-compass${dragAngle === null ? "" : " is-dragging"}${sides.length ? "" : " is-unavailable"}`}
         role="radiogroup"
-        aria-label="Сторона здания на компасе"
+        aria-label={label}
         aria-describedby={captionId}
         onPointerDown={(event) => {
           if (
@@ -183,14 +187,20 @@ export function NoiseCompass({
               style={position}
               aria-checked={selected === facade}
               tabIndex={selected === facade || (!selected && facade === available[0]) ? 0 : -1}
-              aria-label={`${NOISE_FACADE_NAMES[facade]}: ${side.text}`}
+              aria-label={
+                showValues
+                  ? `${NOISE_FACADE_NAMES[facade]}: ${side.text}`
+                  : NOISE_FACADE_NAMES[facade]
+              }
               onClick={() => choose(facade)}
             >
               <b>{FACADE_LABEL[facade]}</b>
-              <span>
-                <i />
-                {side.known ? side.text : "—"}
-              </span>
+              {showValues && (
+                <span>
+                  <i />
+                  {side.known ? side.text : "—"}
+                </span>
+              )}
             </button>
           ) : (
             <span
