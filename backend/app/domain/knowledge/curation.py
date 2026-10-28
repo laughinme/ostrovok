@@ -10,7 +10,7 @@ from dataclasses import dataclass, field
 from enum import StrEnum
 from typing import Any
 
-from app.domain.search.intent import stems
+from app.domain.search.intent import covers, stems
 from app.domain.search.text import normalize, to_number
 
 DEFAULT_WALK_MINUTES = 10
@@ -95,7 +95,7 @@ def propose(description: str, places: Sequence[PlaceTerm]) -> RecipeDraft:
 
 def _best_term(norm: str, places: Sequence[PlaceTerm]) -> PlaceTerm | None:
     present = stems(norm)
-    matching = [t for t in places if (s := stems(normalize(t.name))) and s <= present]
+    matching = [t for t in places if (s := stems(normalize(t.name))) and covers(present, s)]
     return max(matching, key=lambda t: len(stems(normalize(t.name))), default=None)
 
 
