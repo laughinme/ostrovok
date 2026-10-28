@@ -2,16 +2,18 @@
 
 import asyncio
 from collections import OrderedDict
+from collections.abc import Sequence
 from dataclasses import dataclass, field
 from math import cos, radians, sin
 from time import monotonic
 from uuid import UUID, uuid4
 
+import numpy as np
 from shapely import Polygon
 from shapely.geometry.base import BaseGeometry
 from shapely.prepared import PreparedGeometry
 
-from app.domain.catalog import HotelGeo
+from app.domain.catalog import BuildingShape, HotelGeo, MapFeature
 from app.domain.geo.facades import FLOOR_HEIGHT_M, extract_facades
 from app.domain.geo.peaks import Peak
 from app.domain.geo.scene import Building, HeightSource, Scene
@@ -40,16 +42,23 @@ class HotelScene:
         if facade not in self.hotel.facades:
             raise ValueError("Facade does not belong to this hotel")
         if facade not in self.windows:
-            walls = [w for w in extract_facades(self.frame.footprint) if w.facade == facade]
+            polygon = max(
+                getattr(self.frame.footprint, "geoms", [self.frame.footprint]),
+                key=lambda p: p.area,
+            )
+            walls = [w for w in extract_facades(polygon) if w.facade == facade]
             if not walls:
                 raise NoDataError("у здания нет стены выбранного фасада")
             wall = max(walls, key=lambda w: w.length_m)
             dx, dy = sin(radians(wall.azimuth_deg)), cos(radians(wall.azimuth_deg))
             origins = [(x + dx * 0.2, y + dy * 0.2) for x, y in map(wall.point, (0.25, 0.5, 0.75))]
-            self.windows[facade] = tuple(
+            prepared = tuple(
                 self.builder.prepare(xy, wall.azimuth_deg, self.buildings, self.sea)
                 for xy in origins
             )
+            if any(np.any(~np.isfinite(s.terrain_m) & ~s.sea) for s in prepared):
+                raise NoDataError("нет полного покрытия рельефа в поле зрения")
+            self.windows[facade] = prepared
         return self.windows[facade]
 
     def eye(self, floor: int) -> float:
@@ -84,6 +93,26 @@ async def _build(hotel: HotelGeo, env: Environment) -> HotelScene:
     if env.terrain is None:
         raise NoDataError("нет модели рельефа")
     shapes = await env.reader.buildings_near(hotel.location, 2000)
+    buildings = _local_buildings(shapes, frame)
+    if not any(b.ref == hotel.osm_id for b in buildings):
+        parts = getattr(frame.footprint, "geoms", [frame.footprint])
+        buildings.extend(Building(hotel.osm_id, part, 0, hotel.height_m) for part in parts)
+    builder = ViewSceneBuilder(env.terrain, frame.projection)
+    try:
+        based = await asyncio.to_thread(builder.buildings_with_bases, buildings)
+    except ValueError as error:
+        raise NoDataError("нет покрытия рельефа вокруг отеля") from error
+    base = max(
+        (b for b in based if b.ref == hotel.osm_id), key=lambda b: b.footprint.area
+    ).base_elevation_m
+    sea = env.sea.context if isinstance(env.sea, PreparedGeometry) else env.sea
+    local_sea = frame.to_local(sea) if sea is not None else Polygon()
+    features = await env.reader.features_near(hotel.location, 40000, kinds=["peak"])
+    peaks = _local_peaks(features, frame)
+    return HotelScene(hotel, frame, builder, based, local_sea, base, peaks)
+
+
+def _local_buildings(shapes: Sequence[BuildingShape], frame: LocalFrame) -> list[Building]:
     buildings = []
     for shape in shapes:
         geometry = frame.to_local(shape.geometry)
@@ -95,25 +124,12 @@ async def _build(hotel: HotelGeo, env: Environment) -> HotelScene:
                 elif shape.height_source == "osm_levels":
                     source = "osm_levels"
                 buildings.append(
-                    Building(
-                        shape.osm_id or "unknown",
-                        polygon,
-                        0,
-                        shape.height_m,
-                        source,
-                    )
+                    Building(shape.osm_id or "unknown", polygon, 0, shape.height_m, source)
                 )
-    if not any(b.ref == hotel.osm_id for b in buildings):
-        buildings.append(Building(hotel.osm_id, frame.footprint, 0, hotel.height_m))
-    builder = ViewSceneBuilder(env.terrain, frame.projection)
-    try:
-        based = await asyncio.to_thread(builder.buildings_with_bases, buildings)
-    except ValueError as error:
-        raise NoDataError("нет покрытия рельефа вокруг отеля") from error
-    base = next(b.base_elevation_m for b in based if b.ref == hotel.osm_id)
-    sea = env.sea.context if isinstance(env.sea, PreparedGeometry) else env.sea
-    local_sea = frame.to_local(sea) if sea is not None else Polygon()
-    features = await env.reader.features_near(hotel.location, 40000, kinds=["peak"])
+    return buildings
+
+
+def _local_peaks(features: Sequence[MapFeature], frame: LocalFrame) -> tuple[Peak, ...]:
     peaks = []
     for feature in features:
         if not feature.name:
@@ -124,7 +140,7 @@ async def _build(hotel: HotelGeo, env: Environment) -> HotelScene:
             continue
         point = frame.to_local(feature.geometry).centroid
         peaks.append(Peak(feature.osm_id, feature.name, (point.x, point.y), elevation))
-    return HotelScene(hotel, frame, builder, based, local_sea, base, tuple(peaks))
+    return tuple(peaks)
 
 
 def scene_cache(env: Environment) -> SceneCache:
