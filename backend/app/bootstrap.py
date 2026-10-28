@@ -22,6 +22,7 @@ from app.infra.geo.terrain import NpyTerrain
 from app.infra.llm.cache import LlmCache
 from app.infra.llm.guards import DailyLimit, ModeSwitch
 from app.infra.llm.pydantic_ai_model import PydanticAiLanguageModel, openai_compatible
+from app.service.agents.asking import HotelAsker
 from app.service.agents.curator import Curator
 from app.service.agents.researcher import Researcher
 from app.service.agents.runtime import AgentRunner
@@ -97,6 +98,8 @@ def build_agents(
     clock: Clock,
     data_dir: Path,
     llm: LanguageModel | None = None,
+    *,
+    simulator_delay: tuple[float, float] | None = (5.0, 30.0),
 ) -> Agents:
     env = build_environment(db, clock, data_dir)
     executors = dict(executors_by_method(default_executors()))
@@ -107,7 +110,15 @@ def build_agents(
         runner=runner,
         researcher=researcher,
         curator=curator,
-        wishes=WishResearch(db, runner, researcher, curator, events, clock=clock),
+        wishes=WishResearch(
+            db,
+            runner,
+            researcher,
+            curator,
+            events,
+            clock=clock,
+            ask_hotels=HotelAsker(db, clock, simulator_delay=simulator_delay),
+        ),
         watcher=Watcher(
             db, runner, researcher, events, invalidate=lambda: scene_cache(env).clear()
         ),

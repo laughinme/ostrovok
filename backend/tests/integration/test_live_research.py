@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from httpx import AsyncClient
+from sqlalchemy import text
 
 from app.bootstrap import build_agents
 from app.db.database import Database
@@ -74,3 +75,39 @@ async def _claim(db: Database) -> dict[str, object]:
             "chip_ids": job.payload["chip_ids"],
             "hotel_ids": [UUID(h) for h in job.payload["hotel_ids"]],
         }
+
+
+async def test_dog_wish_asks_the_hotels_on_top(
+    client: AsyncClient, db: Database, tmp_path: Path
+) -> None:
+    await run_seed(db, write_region(tmp_path), seed_loaders())
+    async with db.unit_of_work() as uow:
+        await RegistryLoader().load(uow, DATA)
+    search = (await client.post("/api/v1/searches", json={"text": "Тихо ночью"})).json()
+
+    started = await client.post(
+        f"/api/v1/searches/{search['searchId']}/wishes",
+        json={"text": "Можно с собакой 30 кг"},
+    )
+    chip = started.json()["search"]["intent"]["chips"][-1]
+    assert chip["characteristic"] == "pets_policy"
+    assert chip["params"]["dogWeightKg"] == 30
+
+    agents = build_agents(db, RecordingEventBus(), FakeClock(), DATA, simulator_delay=(5, 5))
+    claimed = await _claim(db)
+    await agents.wishes.run(
+        claimed["run_id"], claimed["search_id"], claimed["chip_ids"], claimed["hotel_ids"]
+    )
+
+    async with db.unit_of_work() as uow:
+        rows = (
+            await uow.session.execute(
+                text("SELECT characteristic, why FROM hotelier_questions ORDER BY created_at")
+            )
+        ).all()
+        jobs = await uow.session.scalar(
+            text("SELECT count(*) FROM jobs WHERE kind = 'hotelier.simulate'")
+        )
+    assert {r.characteristic for r in rows} == {"pets_policy"}
+    assert rows[0].why.startswith("Гость ищет прямо сейчас")
+    assert jobs == len(rows)

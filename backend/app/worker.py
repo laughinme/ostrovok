@@ -12,7 +12,7 @@ from uuid import UUID
 
 from redis.asyncio import Redis
 
-from app.bootstrap import build_agents
+from app.bootstrap import Agents, build_agents, build_language_model
 from app.core.config import Settings, get_settings
 from app.core.logging import configure_logging
 from app.db.database import Database
@@ -21,7 +21,9 @@ from app.infra.events import RedisEventBus
 from app.infra.partner_truth import YamlHiddenTruth
 from app.service.agents.collect import CollectService
 from app.service.agents.simulator import HotelierSimulator
+from app.service.agents.wishes import WishResearch
 from app.service.booking.simulator import BookingSimulator
+from app.service.console.publish import ConsoleAgents
 from app.service.jobs import Handler, JobQueue, JobRunner
 from app.service.ports import Clock, SystemClock
 
@@ -55,13 +57,7 @@ class Worker:
     """
 
     def __init__(
-        self,
-        runner: JobRunner,
-        queue: JobQueue,
-        clock: Clock,
-        *,
-        slots: int,
-        poll_sec: float,
+        self, runner: JobRunner, queue: JobQueue, clock: Clock, *, slots: int, poll_sec: float
     ) -> None:
         self._runner = runner
         self._queue = queue
@@ -108,10 +104,18 @@ class Worker:
             self._next_tick[periodic.kind] = now + periodic.every
 
 
+def _run(job: ClaimedJob) -> UUID:
+    if job.run_id is None:
+        raise RuntimeError(f"job {job.kind} has no agent run")
+    return job.run_id
+
+
 def build_handlers(
     collect: CollectService,
     booking: BookingSimulator | None = None,
     hotelier: HotelierSimulator | None = None,
+    wishes: WishResearch | None = None,
+    agents: Agents | None = None,
 ) -> dict[JobKind, Handler]:
     """Kind → handler; each handler only unpacks the payload and calls one agent."""
 
@@ -133,16 +137,48 @@ def build_handlers(
             raise RuntimeError("Booking simulator is not configured")
         await booking.notify_changes(UUID(job.payload["hotel_id"]), job.payload["characteristic"])
 
+    async def research_wish(job: ClaimedJob) -> None:
+        if wishes is None or job.run_id is None:
+            raise RuntimeError("Wish research is not configured")
+        await wishes.run(
+            job.run_id,
+            UUID(job.payload["search_id"]),
+            job.payload["chip_ids"],
+            [UUID(h) for h in job.payload["hotel_ids"]],
+        )
+
     async def hotelier_simulate(job: ClaimedJob) -> None:
         if hotelier is None:
             raise RuntimeError("Hotelier simulator is not configured")
         await hotelier.respond(UUID(job.payload["question_id"]))
 
+    def _agents() -> Agents:
+        if agents is None:
+            raise RuntimeError("Agents are not configured")
+        return agents
+
+    def _console() -> ConsoleAgents:
+        a = _agents()
+        return ConsoleAgents(a.runner.db, a.runner, a.curator, a.researcher)
+
+    async def curator_learn(job: ClaimedJob) -> None:
+        await _console().learn(_run(job), job.payload["description"])
+
+    async def characteristic_publish(job: ClaimedJob) -> None:
+        await _console().publish(_run(job), job.payload["key"])
+
+    async def world_changed(job: ClaimedJob) -> None:
+        await _agents().watcher.react(_run(job), UUID(job.payload["change_id"]))
+
     return {
+        JobKind.CURATOR_LEARN: curator_learn,
+        JobKind.CHARACTERISTIC_PUBLISH: characteristic_publish,
+        JobKind.WORLD_CHANGED: world_changed,
         JobKind.HOTELIER_SIMULATE: hotelier_simulate,
+        JobKind.RESEARCH_WISH: research_wish,
+        JobKind.BOOKING_FACT_CHANGED: booking_fact_changed,
         JobKind.RESEARCH_COLLECT: research_collect,
         JobKind.BOOKING_SIMULATE: booking_simulate,
-        JobKind.BOOKING_FACT_CHANGED: booking_fact_changed,
     }
 
 
@@ -150,7 +186,17 @@ async def run_worker(settings: Settings) -> None:
     db = Database(settings)
     clock = SystemClock()
     redis = Redis.from_url(settings.redis_url, decode_responses=True)
-    agents = build_agents(db, RedisEventBus(redis), clock, settings.data_dir)
+    llm = build_language_model(settings, db, redis)
+    agents = build_agents(
+        db,
+        RedisEventBus(redis),
+        clock,
+        settings.data_dir,
+        llm,
+        simulator_delay=settings.simulator_delay_range
+        if settings.hotelier_simulator == "on"
+        else None,
+    )
     collect = CollectService(db, agents.researcher, agents.runner, clock)
     stop = asyncio.Event()
     loop = asyncio.get_running_loop()
@@ -170,6 +216,8 @@ async def run_worker(settings: Settings) -> None:
             )
             if settings.hotelier_simulator == "on"
             else None,
+            wishes=agents.wishes,
+            agents=agents,
         ),
         clock,
         worker_id=f"{socket.gethostname()}:{os.getpid()}",
