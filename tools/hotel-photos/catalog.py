@@ -12,6 +12,7 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+from uuid import NAMESPACE_URL, uuid5
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -151,6 +152,7 @@ def build():
         generated = sets[fallback(hotel)]
         gallery = real + (generated[1:] if real else generated)[:max(0, 3 - len(real))]
         mappings[hotel["osm_id"]] = dict(name=hotel["name"], gallery=gallery,
+                                        id=str(uuid5(uuid5(NAMESPACE_URL, "https://okno.example/hotels"), hotel["osm_id"])),
                                         room=generated[1],
                                         verified=bool(real), match=selected.get("match", "") if selected else "",
                                         matchNote=selected.get("note", "") if selected else "")

@@ -26,6 +26,7 @@ export interface Hotel {
   address: string;
   image: string;
   gallery: string[];
+  roomImage?: string | undefined;
   price: number;
   rating: number;
   reviewCount: number;
