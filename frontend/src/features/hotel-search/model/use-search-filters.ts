@@ -1,22 +1,27 @@
 import { catalogQuery, hotelFromApi, type ApiIntent, type Criterion } from "@/entities/hotel";
 import { api, type components } from "@/shared/api";
-import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useEffect, useMemo, useState } from "react";
 import { parseQuery } from "./matching";
 import { intentForCriteria } from "./api-search";
+import { useSearchSession } from "./search-session";
 export function useSearchFilters(query: string) {
+  const saved = useSearchSession.getState().filters[query];
   const [refine, setRefine] = useState("");
-  const [criteria, setCriteria] = useState<Criterion[]>(() => parseQuery(query));
-  const [budget, setMaxPrice] = useState<number | null>(null);
-  const [text, setText] = useState(query);
+  const [criteria, setCriteria] = useState<Criterion[]>(() => saved?.criteria ?? parseQuery(query));
+  const [budget, setMaxPrice] = useState<number | null>(() => saved?.budget ?? null);
+  const [text, setText] = useState(() => saved?.text ?? query);
+  useEffect(() => {
+    useSearchSession.getState().remember(query, { text, criteria, budget });
+  }, [query, text, criteria, budget]);
   const intent = useQuery({
     queryKey: ["intent", text],
     queryFn: ({ signal }) => api<ApiIntent>("/intents", { method: "POST", body: { text }, signal }),
-    staleTime: 60000,
     retry: false,
+    retryOnMount: false,
     refetchOnWindowFocus: false,
   });
-  const catalog = useQuery(catalogQuery);
+  const catalog = useQuery({ ...catalogQuery, retryOnMount: false });
   const maxPrice = budget ?? Math.min(20000, intent.data?.trip.budgetPerNight ?? 20000);
   const chips = intentForCriteria(
     intent.data ?? { chips: [], trip: {}, planner: "rules" },
@@ -36,8 +41,9 @@ export function useSearchFilters(query: string) {
         signal,
       }),
     enabled: !!intent.data,
-    staleTime: 60000,
+    placeholderData: keepPreviousData,
     retry: false,
+    retryOnMount: false,
     refetchOnWindowFocus: false,
   });
   const ranked = useMemo(() => {
