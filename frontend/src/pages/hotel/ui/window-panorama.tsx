@@ -18,16 +18,16 @@ export function WindowPanorama({ scene, floor }: { scene: WindowView; floor: num
           <stop offset="1" stopColor="var(--view-sky-low)" />
         </linearGradient>
         <linearGradient id={`${id}-water`} x2="0" y2="1">
-          <stop stopColor="var(--primary)" />
-          <stop offset="1" stopColor="var(--scene)" />
+          <stop stopColor="var(--view-water-top)" />
+          <stop offset="1" stopColor="var(--view-water-low)" />
         </linearGradient>
         <linearGradient id={`${id}-ridge`} x2="0" y2="1">
-          <stop stopColor="var(--scene-raised)" />
-          <stop offset="1" stopColor="var(--scene)" />
+          <stop stopColor="var(--view-ridge-top)" />
+          <stop offset="1" stopColor="var(--view-ridge-low)" />
         </linearGradient>
         <radialGradient id={`${id}-glow`}>
-          <stop stopColor="var(--verified)" stopOpacity=".85" />
-          <stop offset="1" stopColor="var(--verified)" stopOpacity="0" />
+          <stop stopColor="var(--view-sun-glow)" stopOpacity=".85" />
+          <stop offset="1" stopColor="var(--view-sun-glow)" stopOpacity="0" />
         </radialGradient>
         <pattern id={`${id}-unknown`} width="18" height="18" patternUnits="userSpaceOnUse">
           <path
@@ -43,7 +43,7 @@ export function WindowPanorama({ scene, floor }: { scene: WindowView; floor: num
         <path d="M40 92c42-13 59-7 84-9s47-15 77-8c17 4 23 10 43 11-50 8-130 9-204 6Z" />
         <path d="M628 61c38-12 58-10 79-5s48-8 69-1l38 8c-63 7-114 7-186-2Z" />
       </g>
-      <rect y="270" width="960" height="290" fill="var(--verified)" />
+      <rect y="270" width="960" height="290" fill="var(--view-land)" />
       {scene.mountains.map((span, index) => (
         <MountainObject key={index} span={span} fill={`url(#${id}-ridge)`} />
       ))}
@@ -53,13 +53,13 @@ export function WindowPanorama({ scene, floor }: { scene: WindowView; floor: num
       {scene.sun !== null && (
         <g data-window-object="sunset">
           <circle cx={scene.sun * 960} cy="244" r="90" fill={`url(#${id}-glow)`} />
-          <circle cx={scene.sun * 960} cy="244" r="21" fill="var(--verified)" />
+          <circle cx={scene.sun * 960} cy="244" r="21" fill="var(--view-sun)" />
         </g>
       )}
       {scene.buildings.length > 0 && (
         <path
           d={`M0 ${scene.buildings[0]!.base + 18} ${scene.buildings.map((building) => `L${building.from * 960} ${building.base}H${building.to * 960}`).join(" ")}L960 ${scene.buildings.at(-1)!.base + 18}V560H0Z`}
-          fill="var(--lime-deep)"
+          fill="var(--view-foreground)"
         />
       )}
       {scene.buildings.map((building, index) => (

@@ -6,12 +6,12 @@ export function SeaObject({ span, fill }: { span: ViewSpan; fill: string }) {
   return (
     <g data-window-object="sea">
       <rect x={left} y="270" width={width} height="290" fill={fill} />
-      <path d={`M${left} 270h${width}`} stroke="var(--surface)" strokeWidth="2" />
+      <path d={`M${left} 270h${width}`} stroke="var(--view-water-line)" strokeWidth="2" />
       {[296, 325, 370, 430, 500].map((y, index) => (
         <path
           key={y}
           d={`M${left + width * 0.08} ${y}h${width * 0.24}m${width * 0.14} 0h${width * 0.36}`}
-          stroke="var(--on-scene-muted)"
+          stroke="var(--view-water-line)"
           strokeWidth={1 + index * 0.3}
           opacity=".35"
         />
@@ -36,14 +36,14 @@ export function MountainObject({
         d="M0 170 60 133 105 142 180 80 222 96 300 22 342 49 390 0 435 44 495 73 548 31 590 61 660 110 711 89 783 131 836 123 910 157 960 170V300H0Z"
         fill={fill}
       />
-      <path d="m300 22 42 27 48-49-24 61-23-9-29 19-17-22-42 36Z" fill="var(--surface)" />
+      <path d="m300 22 42 27 48-49-24 61-23-9-29 19-17-22-42 36Z" fill="var(--view-snow)" />
       <path
         d="m548 31 42 30 70 49-48-20-29-25-16 7-18-12-38 23Z"
-        fill="var(--surface)"
+        fill="var(--view-snow)"
         opacity=".7"
       />
       <path d="M0 203q120-53 237-23t220-1 219 8 284 16v140H0Z" fill="var(--view-hill-far)" />
-      <path d="M0 247q130-35 248-8t248-3 240 15 224-6v100H0Z" fill="var(--lime-deep)" />
+      <path d="M0 247q130-35 248-8t248-3 240 15 224-6v100H0Z" fill="var(--view-foreground)" />
     </g>
   );
 }
@@ -69,7 +69,7 @@ export function BuildingObject({ building, index }: { building: ViewBuilding; in
         y={roof}
         width={width}
         height={height}
-        fill={index % 2 ? "var(--raised)" : "var(--surface)"}
+        fill={index % 2 ? "var(--view-building-alt)" : "var(--view-building-front)"}
       />
       {Array.from({ length: rows }, (_, row) =>
         Array.from({ length: columns }, (_, column) => (
@@ -80,11 +80,14 @@ export function BuildingObject({ building, index }: { building: ViewBuilding; in
             width={Math.min(8, columnWidth * 0.45)}
             height={Math.max(2, rowHeight * 0.48)}
             rx=".7"
-            fill="var(--scene)"
+            fill="var(--view-building-window)"
           />
         )),
       )}
-      <path d={`M${left - 2} ${roof}h${width + 4}v4h-${width + 4}Z`} fill="var(--scene-raised)" />
+      <path
+        d={`M${left - 2} ${roof}h${width + 4}v4h-${width + 4}Z`}
+        fill="var(--view-building-trim)"
+      />
       <path
         d={`M${left} ${roof - 2}l${side} -6h${width - side}v6Z`}
         fill="var(--view-building-roof)"
@@ -96,10 +99,10 @@ export function BuildingObject({ building, index }: { building: ViewBuilding; in
 export function TreeObject({ x, base, scale }: { x: number; base: number; scale: number }) {
   return (
     <g data-window-object="tree" transform={`translate(${x * 960} ${base}) scale(${scale})`}>
-      <path d="M0 0v-48" stroke="var(--ink)" strokeWidth="5" />
+      <path d="M0 0v-48" stroke="var(--view-tree-trunk)" strokeWidth="5" />
       <ellipse cy="-52" rx="23" ry="34" fill="var(--view-tree-light)" />
       <ellipse cx="-8" cy="-45" rx="15" ry="24" fill="var(--view-tree-dark)" />
-      <path d="M0-20v-52" stroke="var(--on-verified)" strokeWidth="2" />
+      <path d="M0-20v-52" stroke="var(--view-tree-branch)" strokeWidth="2" />
     </g>
   );
 }

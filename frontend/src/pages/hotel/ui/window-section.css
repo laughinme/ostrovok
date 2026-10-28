@@ -206,7 +206,7 @@
 .hotel-detail .window-view-shell {
   position: relative;
   padding: 24px 32px 38px;
-  background: color-mix(in srgb, var(--verified) 18%, var(--surface));
+  background: #eaf2ed;
 }
 .hotel-detail .window-view-caption {
   display: flex;
@@ -716,11 +716,27 @@
 }
 
 .hotel-detail .window-illustration {
-  --view-sky-top: var(--scene-raised);
-  --view-sky-low: color-mix(in srgb, var(--primary) 24%, var(--surface));
-  --view-hill-far: color-mix(in srgb, var(--on-verified) 60%, var(--verified));
-  --view-building-side: color-mix(in srgb, var(--primary) 30%, var(--surface));
-  --view-building-roof: color-mix(in srgb, var(--primary) 50%, var(--surface));
-  --view-tree-light: var(--verified);
-  --view-tree-dark: color-mix(in srgb, var(--on-verified) 40%, var(--verified));
+  --view-sky-top: #88c9f3;
+  --view-sky-low: #e0f1fb;
+  --view-water-top: #82b9c9;
+  --view-water-low: #397e9c;
+  --view-water-line: #e7f3ef;
+  --view-ridge-top: #89a9b9;
+  --view-ridge-low: #c2d2d0;
+  --view-snow: #e8efeb;
+  --view-land: #b5c7b5;
+  --view-foreground: #a5b9a3;
+  --view-hill-far: #90aca4;
+  --view-building-front: #edf0e7;
+  --view-building-alt: #e4e4d7;
+  --view-building-side: #b3c4bf;
+  --view-building-roof: #e1e8de;
+  --view-building-trim: #ccd8cf;
+  --view-building-window: #7f9ca6;
+  --view-tree-light: #7a9d83;
+  --view-tree-dark: #6a9179;
+  --view-tree-trunk: #587567;
+  --view-tree-branch: #668874;
+  --view-sun: #fff1c8;
+  --view-sun-glow: #fff0cc;
 }
