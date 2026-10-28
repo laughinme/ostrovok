@@ -23,6 +23,7 @@ export function scoreHotel(h: Hotel, criteria: Criterion[]): number {
 }
 
 export interface Ranked {
+  searchId?: string;
   hotel: Hotel;
   score: number;
   best: Criterion[];
