@@ -154,7 +154,7 @@ export function apiHotelDetails(hotel: Hotel): HotelDetails {
       view: room.confirmedByHotel
         ? "Сторона подтверждена отелем; вид зависит от этажа"
         : "Размещение и вид не подтверждены отелем",
-      photo: hotel.image,
+      photo: hotel.roomImage ?? hotel.image,
       forYou: [],
       recommended: room.id === recommendation?.roomTypeId,
       request:

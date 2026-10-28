@@ -16,10 +16,15 @@ async def with_fallback[T](
 ) -> tuple[T, Planner]:
     if llm is not None and llm.available:
         try:
-            return await primary(llm), Planner.LLM
+            result = await primary(llm)
+            if tracer is not None:
+                await tracer.set_planner(Planner.LLM)
+            return result, Planner.LLM
         except LlmUnavailableError as exc:
             if tracer is not None:
                 await tracer.decide(f"LLM недоступна ({exc}), работаю по правилам")
     elif tracer is not None:
         await tracer.reason("LLM не подключена — план строят правила")
+    if tracer is not None:
+        await tracer.set_planner(Planner.RULES)
     return await fallback(), Planner.RULES

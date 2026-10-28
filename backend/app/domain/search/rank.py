@@ -8,6 +8,11 @@ from app.domain.knowledge.fact import Fact
 from app.domain.search.intent import Chip, Importance
 from app.domain.search.score import Match, SearchHotel, TripWindow, Verdict, best_match
 
+NO_MATCHES_HINT = (
+    "По этим условиям вариантов пока нет. Попробуйте увеличить бюджет, "
+    "уменьшить число гостей или выбрать другой район Большого Сочи."
+)
+
 GOOD_SCORE = 0.6
 ENOUGH_GOOD = 5
 RESEARCH_TOP = 8
