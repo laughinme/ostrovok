@@ -1,0 +1,180 @@
+.hotel-detail .hotel-similar {
+  margin: 36px 0 48px;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  scroll-margin-top: 145px;
+}
+.hotel-similar h2 {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+.hotel-similar header > p,
+.hotel-similar .similar-hint {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+.similar-modifiers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px 0 14px;
+}
+.similar-modifiers button,
+.similar-more,
+.similar-state button,
+.similar-state a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 9px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primary);
+}
+.similar-modifiers button:hover,
+.similar-more:hover {
+  border-color: var(--primary);
+}
+.similar-modifiers button[aria-pressed="true"] {
+  color: white;
+  background: var(--primary);
+  border-color: var(--primary);
+}
+.hotel-similar :is(button, a, summary):focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 4px;
+}
+.similar-list {
+  list-style: none;
+  margin-top: 16px;
+}
+.similar-list > li {
+  padding: 24px 0;
+  border-top: 1px solid var(--line);
+}
+.similar-list > li:last-child {
+  padding-bottom: 0;
+}
+.similar-result-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+.similar-result-heading a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--primary);
+}
+.similar-result-heading svg {
+  flex-shrink: 0;
+}
+.similar-result-heading p,
+.similar-price small,
+.similar-scope,
+.similar-tradeoff {
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.similar-price {
+  padding-top: 7px;
+  font-size: 18px;
+  font-weight: 700;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.similar-price small {
+  display: block;
+  font-weight: 400;
+}
+.similar-reasons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin: 18px 0;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.similar-reasons h3 {
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.similar-reasons > div,
+.similar-result-heading > div {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.similar-fact + .similar-fact {
+  margin-top: 12px;
+}
+.similar-fact summary,
+.similar-fact small,
+.similar-fact details p,
+.similar-probability {
+  color: var(--muted);
+  font-size: 12px;
+}
+.similar-fact summary {
+  width: fit-content;
+  padding-block: 10px;
+  cursor: pointer;
+}
+.similar-fact details p {
+  margin-bottom: 6px;
+}
+.similar-tradeoff {
+  margin-top: 8px;
+}
+.similar-more {
+  margin-top: 22px;
+}
+.similar-state {
+  padding: 20px 0 0;
+  font-size: 14px;
+  line-height: 1.7;
+}
+.similar-state button,
+.similar-state a {
+  margin-top: 14px;
+}
+@media (max-width: 760px) {
+  .hotel-detail .hotel-similar {
+    padding: 22px 18px;
+    margin-block: 28px;
+  }
+  .hotel-similar h2 {
+    font-size: 21px;
+  }
+  .similar-modifiers {
+    gap: 8px;
+  }
+  .similar-modifiers button {
+    padding-inline: 12px;
+  }
+  .similar-result-heading {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .similar-price {
+    padding-top: 0;
+  }
+  .similar-reasons {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+}

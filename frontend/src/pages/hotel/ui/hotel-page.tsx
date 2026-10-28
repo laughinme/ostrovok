@@ -28,6 +28,7 @@ import "./hotel-detail.css";
 import "./hotel-refresh.css";
 import { HotelAbout, HotelOverview } from "./hotel-overview";
 import { HotelNearby } from "./hotel-nearby";
+import { SimilarHotelsSection } from "./similar-hotels-section";
 import { getApiMode } from "@/shared/api";
 const DAYS = [
   ["пн", 10, 17, "16:58", 18, 10],
@@ -113,6 +114,8 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
           onFact={setWhy}
           demo={designDemo}
         />
+
+        <SimilarHotelsSection hotel={hotel} query={q} />
 
         <section className="sec-h2" id="rooms">
           <h2>Доступные номера</h2>
