@@ -162,11 +162,14 @@ async def test_public_host_is_accepted_when_configured(app_factory: AppFactory) 
 
 
 @pytest.mark.parametrize("origin", [None, "https://claude.ai", "https://chatgpt.com"])
-async def test_remote_connector_origins(app_factory: AppFactory, origin: str | None) -> None:
+async def test_remote_connector_origins(
+    app_factory: AppFactory, origin: str | None, tmp_path: Path
+) -> None:
     headers = {**HEADERS, "Host": "okno-api.fly.dev"}
     if origin:
         headers["Origin"] = origin
-    async with app_factory(mcp_public_hosts="okno-api.fly.dev") as (_, client):
+    async with app_factory(mcp_public_hosts="okno-api.fly.dev") as (app, client):
+        await _world(app.state.db, tmp_path)
         for method, params in (
             (
                 "initialize",
@@ -177,6 +180,7 @@ async def test_remote_connector_origins(app_factory: AppFactory, origin: str | N
                 },
             ),
             ("tools/list", {}),
+            ("tools/call", {"name": "get_hotel_knowledge", "arguments": {"hotel_id": str(MAYAK)}}),
             ("tools/call", {"name": "search_hotels", "arguments": {"text": "тихо"}}),
         ):
             response = await client.post(

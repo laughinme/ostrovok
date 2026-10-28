@@ -94,7 +94,12 @@ def rate_limit(bucket: str) -> Callable[[Request, RedisDep, SettingsDep], Awaita
     async def dependency(request: Request, redis: RedisDep, settings: SettingsDep) -> None:
         if not settings.rate_limit_enabled:
             return
-        limiter = RateLimiter(redis, limit=settings.auth_rate_limit_per_minute, window_sec=60)
+        limit = (
+            settings.llm_rate_limit_per_minute
+            if bucket == "intents"
+            else settings.auth_rate_limit_per_minute
+        )
+        limiter = RateLimiter(redis, limit=limit, window_sec=60)
         client = request.client.host if request.client else "unknown"
         if not await limiter.hit(f"{bucket}:{client}"):
             raise RateLimitedError()

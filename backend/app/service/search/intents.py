@@ -1,20 +1,22 @@
 """The Intent agent (09 §4.2): the LLM planner when available, rules otherwise — same `Intent`."""
 
+from dataclasses import replace
 from datetime import date
 from functools import cache
 from pathlib import Path
-from typing import Literal
+from typing import Literal, Self
 
 import yaml
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 from app.db.uow import UnitOfWork
 from app.domain.knowledge.characteristic import Characteristic, Checkable
 from app.domain.search.intent import Chip, Importance, Intent, Vocabulary, parse_intent
-from app.domain.search.trip import TripDraft
+from app.domain.search.region import REGION_HINT, outside_region
+from app.domain.search.trip import TripDraft, trip_hints
 from app.service.agents.fallback import with_fallback
 from app.service.knowledge.registry import Registry
-from app.service.ports import LanguageModel
+from app.service.ports import LanguageModel, LlmUnavailableError
 
 PROMPTS = Path(__file__).resolve().parents[1] / "agents" / "prompts"
 
@@ -30,7 +32,7 @@ def _guest_phrases(data_dir: Path) -> dict[str, tuple[str, ...]]:
 
 class LlmChip(BaseModel):
     characteristic: str | None = None
-    label: str
+    label: str = Field(min_length=1, max_length=120)
     importance: Literal["must", "important", "nice"] = "important"
     params: dict[str, float | int | bool | str] = Field(default_factory=dict)
 
@@ -38,11 +40,17 @@ class LlmChip(BaseModel):
 class LlmTrip(BaseModel):
     from_: date | None = Field(None, alias="from")
     to: date | None = None
-    month: int | None = None
-    adults: int | None = None
-    children: int | None = None
-    budgetPerNight: int | None = None  # noqa: N815 - the contract's field name
+    month: int | None = Field(None, ge=1, le=12)
+    adults: int | None = Field(None, ge=1, le=10)
+    children: int | None = Field(None, ge=0, le=10)
+    budgetPerNight: int | None = Field(None, ge=0, le=200_000)  # noqa: N815 - the contract's field name
     area: Literal["center", "khosta", "adler", "sirius", "krasnaya_polyana"] | None = None
+
+    @model_validator(mode="after")
+    def _valid_order(self) -> Self:
+        if self.from_ and self.to and self.to <= self.from_:
+            raise ValueError("Выезд должен быть позже заезда")
+        return self
 
 
 class LlmIntent(BaseModel):
@@ -70,13 +78,19 @@ class IntentParser:
         vocabulary = await self.vocabulary(registry)
 
         async def by_llm(llm: LanguageModel) -> Intent:
-            return await _llm_intent(llm, text, registry, today)
+            try:
+                return await _llm_intent(llm, text, registry, today)
+            except (ValueError, OverflowError) as exc:
+                raise LlmUnavailableError("Некорректный разбор поездки") from exc
 
         async def by_rules() -> Intent:
             return parse_intent(text, vocabulary, today=today)
 
         intent, _ = await with_fallback(self._llm if llm else None, by_llm, by_rules)
-        return intent
+        hints = (*intent.hints, *trip_hints(text, intent.trip))
+        if outside_region(text):
+            hints = (REGION_HINT, *hints)
+        return replace(intent, hints=tuple(dict.fromkeys(hints)))
 
 
 async def _llm_intent(

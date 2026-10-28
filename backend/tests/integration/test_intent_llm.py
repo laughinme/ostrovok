@@ -57,3 +57,14 @@ async def test_typing_mode_never_calls_the_llm(db: Database) -> None:
 
     assert intent.planner == "rules"
     assert llm.calls == []
+
+
+async def test_invalid_llm_trip_falls_back_without_http_500(db: Database) -> None:
+    await _registry(db)
+    broken = {**LLM_ANSWER, "trip": {"adults": 100, "children": -1}}
+    async with db.unit_of_work() as uow:
+        intent = await IntentParser(uow, DATA, FakeLanguageModel({"intent": broken})).parse(
+            "тихий номер вдвоём", today=date(2026, 10, 29)
+        )
+    assert intent.planner == "rules"
+    assert intent.trip.adults == 2
