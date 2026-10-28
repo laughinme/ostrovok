@@ -12,7 +12,15 @@ const rules = {
   guests: "Отзывы гостей",
 };
 
-function ConflictRow({ conflict }: { conflict: Conflict }) {
+function ConflictRow({
+  conflict,
+  hotelName,
+  title,
+}: {
+  conflict: Conflict;
+  hotelName: string;
+  title: string;
+}) {
   const [resolution, setResolution] = useState("");
   const resolve = useConsoleAction((text: string) =>
     demoApi<Conflict>(
@@ -25,11 +33,11 @@ function ConflictRow({ conflict }: { conflict: Conflict }) {
   return (
     <li className="console-panel space-y-4 p-5">
       <div className="flex flex-wrap justify-between gap-3">
-        <h3 className="break-all text-base">{conflict.characteristic}</h3>
+        <h3 className="break-all text-base">{title}</h3>
         <span className="console-badge">{statuses[conflict.status]}</span>
       </div>
       <p className="break-all text-xs text-muted-foreground">
-        Отель: {conflict.hotelId} · {dateTime(conflict.createdAt)}
+        Отель: {hotelName} · {dateTime(conflict.createdAt)}
       </p>
       <p className="text-sm">
         Правило: {rules[conflict.rule]} · ячеек: {conflict.cells}
@@ -76,6 +84,8 @@ function ConflictRow({ conflict }: { conflict: Conflict }) {
 
 export function Conflicts() {
   const query = useConsoleQuery<Conflict[]>("/console/conflicts", 10000);
+  const hotels = useConsoleQuery<Schema["HotelOut"][]>("/hotels");
+  const registry = useConsoleQuery<Schema["RegistryLineOut"][]>("/console/registry");
   return (
     <>
       <div className="console-section-heading">
@@ -85,10 +95,20 @@ export function Conflicts() {
         </div>
       </div>
       <LoadState pending={query.isPending} error={query.error} retry={() => void query.refetch()} />
-      {query.data?.length === 0 && <Empty>Конфликтов нет. Источники согласуются.</Empty>}
+      {query.data?.length === 0 && <Empty>Конфликтов пока нет.</Empty>}
       <ul className="space-y-4">
         {query.data?.map((conflict) => (
-          <ConflictRow key={conflict.id} conflict={conflict} />
+          <ConflictRow
+            key={conflict.id}
+            conflict={conflict}
+            hotelName={
+              hotels.data?.find((hotel) => hotel.id === conflict.hotelId)?.name ?? conflict.hotelId
+            }
+            title={
+              registry.data?.find((entry) => entry.key === conflict.characteristic)?.title ??
+              conflict.characteristic
+            }
+          />
         ))}
       </ul>
     </>
