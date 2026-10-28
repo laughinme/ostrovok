@@ -1,1 +1,1 @@
-export { default } from './ui/hotel-page';
+export { HotelPage } from "./ui/hotel-page";
