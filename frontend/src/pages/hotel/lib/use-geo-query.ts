@@ -28,5 +28,5 @@ export function useGeoQuery<T>(hotelId: string, endpoint: string, available = tr
     staleTime: 300000,
     retry: 1,
   });
-  return { ref, ...query };
+  return { ref, visible, ...query };
 }
