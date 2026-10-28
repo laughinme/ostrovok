@@ -12,8 +12,7 @@ from app.api.schemas.search import HotelMatchOut, IntentChipModel, IntentModel, 
 from app.core.config import Settings
 from app.db.database import Database
 from app.domain.search.intent import Intent
-from app.domain.search.rank import NO_MATCHES_HINT
-from app.domain.search.region import outside_region
+from app.domain.search.rank import result_hints
 from app.domain.search.trip import TripDraft, today_in_sochi
 from app.service.catalog.hotels import HotelQueries
 from app.service.knowledge.facts import FactQueries
@@ -52,8 +51,7 @@ class KnowledgeTools:
                 intent = replace(intent, trip=trip.to_domain())
             ranking = await SearchService(uow, self._clock).rank(intent)
         parsed = IntentModel.from_domain(intent)
-        if not ranking.matches and not outside_region(intent.text):
-            parsed.hints.append(NO_MATCHES_HINT)
+        parsed.hints = list(result_hints(intent, ranking))
         return {
             "intent": parsed.model_dump(mode="json"),
             "matches": [
