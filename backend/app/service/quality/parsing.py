@@ -71,8 +71,10 @@ def _trip_counts(
             counts.update(specified=1, specifiedCorrect=int(actual == value))
 
 
-async def answer_metrics(parser: AnswerParser, path: Path) -> dict[str, Any]:
-    result = await evaluate_answers(parser, path)
+async def answer_metrics(
+    parser: AnswerParser, path: Path, *, require_llm: bool = False
+) -> dict[str, Any]:
+    result = await evaluate_answers(parser, path, require_llm=require_llm)
     return {
         **asdict(result),
         "fieldAccuracy": ratio(result.exact_fields, result.total_fields),
@@ -118,13 +120,16 @@ def rules_plan(places: Sequence[PlaceTerm]) -> Callable[[str], Awaitable[RecipeD
 
 
 async def curator_metrics(
-    path: Path, plan: Callable[[str], Awaitable[RecipeDraft]]
+    path: Path, plan: Callable[[str], Awaitable[RecipeDraft | None]]
 ) -> dict[str, Any]:
     cases = await read_yaml(path)
-    methods = correct = total = 0
+    methods = correct = total = evaluated = 0
     details = []
     for case in cases:
         draft = await plan(case["description"])
+        if draft is None:
+            continue
+        evaluated += 1
         method = "cannot_check" if draft.decision is Decision.CANNOT else draft.recipe.get("kind")
         matched = method == case["expected_method"]
         methods += matched
@@ -147,8 +152,10 @@ async def curator_metrics(
             }
         )
     return {
-        "n": len(cases),
-        "methodAccuracy": ratio(methods, len(cases)),
+        "n": evaluated,
+        "requested": len(cases),
+        "rulesResults": len(cases) - evaluated,
+        "methodAccuracy": ratio(methods, evaluated),
         "parameterAccuracy": ratio(correct, total),
         "correctParams": correct,
         "totalParams": total,
