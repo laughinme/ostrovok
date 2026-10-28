@@ -1,0 +1,76 @@
+.hotel-card-body {
+  container-type: inline-size;
+  container-name: hotel-card-body;
+}
+.hotel-card-footer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+}
+.hotel-card-price {
+  min-width: 0;
+  white-space: nowrap;
+}
+.hotel-card-footer-control {
+  height: 44px;
+  gap: 6px;
+  padding-inline: 12px;
+  font-size: 13px;
+}
+.hotel-card-footer-control > svg {
+  width: 15px;
+  height: 15px;
+}
+@container hotel-card-body (max-width: 390px) {
+  .hotel-card-footer {
+    gap: 6px;
+    padding-inline: 14px;
+  }
+  .hotel-card-price > span > span {
+    font-size: 24px;
+  }
+  .hotel-card-footer-control {
+    gap: 5px;
+    padding-inline: 9px;
+    font-size: 11px;
+  }
+  .hotel-card-footer-control > svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+@container hotel-card-body (max-width: 340px) {
+  .hotel-card-footer {
+    gap: 5px;
+    padding-inline: 10px;
+  }
+  .hotel-card-price > span > span {
+    font-size: 20px;
+  }
+  .hotel-card-footer-control {
+    padding-inline: 7px;
+    font-size: 10px;
+  }
+}
+@container hotel-card-body (max-width: 300px) {
+  .hotel-card-footer {
+    gap: 4px;
+    padding-inline: 8px;
+  }
+  .hotel-card-price > p {
+    font-size: 9px;
+  }
+  .hotel-card-price > span > span {
+    font-size: 18px;
+  }
+  .hotel-card-footer-control {
+    gap: 3px;
+    padding-inline: 6px;
+  }
+  .hotel-card-footer-control > svg {
+    width: 12px;
+    height: 12px;
+  }
+}
