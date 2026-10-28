@@ -19,6 +19,7 @@ from pydantic_ai import Agent, Tool, UsageLimits
 from pydantic_ai.exceptions import UnexpectedModelBehavior, UsageLimitExceeded
 from pydantic_ai.models import Model
 from pydantic_ai.models.openai import OpenAIChatModel, OpenAIResponsesModel
+from pydantic_ai.profiles.openai import openai_model_profile
 from pydantic_ai.providers.openai import OpenAIProvider
 from pydantic_ai.settings import ModelSettings
 
@@ -43,6 +44,7 @@ def model_settings(thinking: Thinking) -> ModelSettings:
 pydantic_ai.BANNER_ENABLED = False  # logs are ours: no first-run banner in stdout
 
 OPENAI_API = "api.openai.com"
+CACHE_VERSION = "provider-profiles-v2"
 
 
 def openai_compatible(base_url: str, api_key: str, model: str) -> Model:
@@ -67,7 +69,14 @@ def openai_compatible(base_url: str, api_key: str, model: str) -> Model:
     provider = OpenAIProvider(openai_client=client)
     if host == OPENAI_API:
         return OpenAIResponsesModel(model, provider=provider)
-    return OpenAIChatModel(model, provider=provider)
+    # Polza keeps the vendor prefix in its API IDs. The SDK's OpenAI profile matcher
+    # expects the bare name; otherwise unified `thinking` is silently ignored.
+    profile = (
+        openai_model_profile(model.removeprefix("openai/"))
+        if host == "polza.ai" and model.startswith("openai/")
+        else None
+    )
+    return OpenAIChatModel(model, provider=provider, profile=profile)
 
 
 class PydanticAiLanguageModel:
@@ -142,6 +151,7 @@ class PydanticAiLanguageModel:
         if self._switch is not None and not await self._switch.on():
             raise LlmUnavailableError("LLM выключена в консоли")
         key = cache_key(
+            CACHE_VERSION,
             self._provider_url,
             self._name,
             self._thinking,
