@@ -1,0 +1,231 @@
+.landing-page .band-lime {
+  background: linear-gradient(115deg, var(--lime), var(--verified));
+}
+.landing-page .home-sky {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  color: var(--primary);
+}
+.landing-page .home-sky svg {
+  position: absolute;
+}
+.landing-page .home-sky-route,
+.landing-page .home-sky-symbols {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.landing-page .home-sky-route {
+  opacity: 0.68;
+}
+.landing-page .home-sky-route-reveal {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+.landing-page .home-sky-mobile-route {
+  display: none;
+}
+.landing-page .home-sky-cloud {
+  --sky-opacity: var(--sky-cloud-opacity);
+  height: auto;
+  opacity: var(--sky-opacity);
+  transform-origin: center bottom;
+}
+.landing-page .home-sky-cloud--left-high {
+  left: -22px;
+  top: 20%;
+  width: 116px;
+}
+.landing-page .home-sky-cloud--top {
+  left: 43%;
+  top: 9%;
+  width: 70px;
+}
+.landing-page .home-sky-cloud--right-high {
+  right: 3%;
+  top: 12%;
+  width: 62px;
+}
+.landing-page .home-sky-cloud--right-middle {
+  right: 4%;
+  top: 35%;
+  width: 114px;
+}
+.landing-page .home-sky-cloud--left-low {
+  left: 4%;
+  bottom: 13%;
+  width: 168px;
+}
+.landing-page .home-sky-cloud--left-middle {
+  left: 16%;
+  top: 57%;
+  width: 74px;
+}
+.landing-page .home-sky-cloud--right-low {
+  right: 24%;
+  bottom: 17%;
+  width: 82px;
+}
+.landing-page .home-sky-symbols {
+  opacity: 0.58;
+}
+.landing-page .home-sky-plane {
+  --sky-plane-angle: -3deg;
+  left: 61.74%;
+  top: 8.32%;
+  width: 80px;
+  height: 80px;
+  transform: translate(-50%, -50%) rotate(var(--sky-plane-angle));
+}
+.landing-page .home-sky-globe {
+  --sky-globe-size: clamp(350px, 34vw, 500px);
+  right: calc(var(--sky-globe-size) * -0.42);
+  bottom: calc(var(--sky-globe-size) * -0.42);
+  width: var(--sky-globe-size);
+  height: auto;
+  transform-origin: 60% 60%;
+}
+.landing-page .home-sky-land {
+  fill: var(--lime);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .landing-page .home-sky-cloud {
+    animation: home-sky-cloud-in 720ms var(--ease-out) var(--sky-delay) both;
+  }
+  .landing-page .home-sky-plane {
+    animation: home-sky-plane-appear 100ms linear 120ms both;
+  }
+  .landing-page .home-sky-globe {
+    animation: home-sky-globe-in 1000ms var(--ease-out) 240ms both;
+  }
+  .landing-page .home-sky-route-reveal {
+    animation: home-sky-route-draw 320ms var(--ease-out) 40ms both;
+  }
+  .landing-page .home-sky-waypoint,
+  .landing-page .home-sky-spark {
+    animation: home-sky-detail-in 600ms var(--ease-out) 400ms both;
+  }
+  .landing-page .home-sky-mobile-route {
+    animation: home-sky-detail-in 300ms var(--ease-out) 30ms both;
+  }
+}
+@keyframes home-sky-cloud-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.88);
+  }
+  to {
+    opacity: var(--sky-opacity);
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes home-sky-plane-appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes home-sky-globe-in {
+  from {
+    opacity: 0;
+    transform: translate(70px, 90px) rotate(-12deg) scale(0.86);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0) scale(1);
+  }
+}
+@keyframes home-sky-route-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes home-sky-detail-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: var(--sky-detail-opacity, 1);
+  }
+}
+
+@media (min-width: 721px) and (max-width: 1100px) {
+  .landing-page .home-sky-plane {
+    --sky-plane-angle: -5deg;
+    left: 61.74%;
+    top: 8.32%;
+    width: 64px;
+    height: 64px;
+  }
+  .landing-page .home-sky-cloud--left-middle {
+    left: 5%;
+  }
+}
+@media (max-width: 720px) {
+  .landing-page .home-sky-route {
+    display: none;
+  }
+  .landing-page .home-sky-mobile-route {
+    --sky-detail-opacity: 0.48;
+    display: block;
+    top: 56px;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    opacity: 0.48;
+  }
+  .landing-page .home-sky-plane {
+    --sky-plane-angle: -15deg;
+    left: 74.52%;
+    top: 76.4px;
+    width: 38px;
+    height: 38px;
+  }
+  .landing-page .home-sky-globe {
+    --sky-globe-size: 270px;
+  }
+  .landing-page .home-sky-cloud--left-high {
+    left: -30px;
+    top: 18%;
+    width: 72px;
+    --sky-opacity: 0.13;
+  }
+  .landing-page .home-sky-cloud--top {
+    left: 35%;
+    top: 80px;
+    width: 48px;
+  }
+  .landing-page .home-sky-cloud--right-high {
+    right: -15px;
+    top: 32%;
+    width: 55px;
+    --sky-opacity: 0.2;
+  }
+  .landing-page .home-sky-cloud--right-middle,
+  .landing-page .home-sky-cloud--left-middle {
+    display: none;
+  }
+  .landing-page .home-sky-cloud--left-low {
+    left: -18px;
+    bottom: 85px;
+    width: 104px;
+  }
+  .landing-page .home-sky-cloud--right-low {
+    right: 22px;
+    bottom: 180px;
+    width: 55px;
+  }
+  .landing-page .home-sky-symbols {
+    opacity: 0.32;
+  }
+}
