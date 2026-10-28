@@ -26,6 +26,7 @@ import { dateLabel, tripDates } from "../model/geo";
 import "./hotel-detail.css";
 import "./hotel-refresh.css";
 import { HotelOverview } from "./hotel-overview";
+import { HotelNearby } from "./hotel-nearby";
 import { getApiMode } from "@/shared/api";
 const FACADE_TEXT: Record<Facade, string> = {
   N: "север",
@@ -445,6 +446,7 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
           <h2>Где находится</h2>
           <p>{h.address}</p>
         </section>
+        <HotelNearby places={h.nearby} onRoute={() => scrollTo("morning")} />
         <div className="where card-w">
           <CoastMap items={[{ hotel }]} scrollZoom={false} />
         </div>
