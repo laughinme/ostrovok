@@ -45,6 +45,8 @@ export function ResultsPage({
   const [hover, setHover] = useState<string | null>(null);
   const [view, setView] = useState<"list" | "map">("list");
   const hash = useLocation({ select: (location) => location.hash });
+  const linkedIndex = ranked.findIndex((result) => hash === `hotel-${result.hotel.id}`);
+  const renderedCount = Math.max(visibleCount, linkedIndex + 1);
   useEffect(() => {
     if (!pending && hash.startsWith("hotel-")) {
       document.getElementById(hash)?.scrollIntoView({ block: "center" });
@@ -256,7 +258,7 @@ export function ResultsPage({
               Под эти условия вариантов пока нет. Измените бюджет или важность пожеланий.
             </p>
           )}
-          {ranked.slice(0, visibleCount).map((result, index) => (
+          {ranked.slice(0, renderedCount).map((result, index) => (
             <HotelResultCard
               key={result.hotel.id}
               result={result}
@@ -267,13 +269,13 @@ export function ResultsPage({
               onHover={setHover}
             />
           ))}
-          {ranked.length > visibleCount && (
+          {ranked.length > renderedCount && (
             <button
               type="button"
               className="min-h-11 w-full rounded-2xl border px-5 py-3"
-              onClick={() => setVisibleCount((count) => count + 20)}
+              onClick={() => setVisibleCount(renderedCount + 20)}
             >
-              Показать ещё {Math.min(20, ranked.length - visibleCount)} из {ranked.length}
+              Показать ещё {Math.min(20, ranked.length - renderedCount)} из {ranked.length}
             </button>
           )}
         </div>
