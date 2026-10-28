@@ -1,5 +1,7 @@
 import { useState, type FormEvent } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
+import { tripsQuery } from "@/features/manage-trips";
 import type { Hotel } from "@/entities/hotel";
 import { demoApi } from "@/entities/session";
 import type { components } from "@/shared/api";
@@ -16,6 +18,7 @@ export function BookingRequest({
   room: RoomType;
   rate: RatePlan;
 }) {
+  const queryClient = useQueryClient();
   const [checkIn, setCheckIn] = useState(hotel.searchContext?.trip.from ?? "2026-11-10");
   const [checkOut, setCheckOut] = useState(hotel.searchContext?.trip.to ?? "2026-11-15");
   const [adults, setAdults] = useState(
@@ -25,6 +28,9 @@ export function BookingRequest({
   const [request, setRequest] = useState(room.request ?? "");
   const nights = Math.max(0, (Date.parse(checkOut) - Date.parse(checkIn)) / 86400000);
   const booking = useMutation({
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: tripsQuery.queryKey });
+    },
     mutationFn: () => {
       if (!rate.id || !hotel.backend) throw new Error("Для этого номера нет тарифа на сервере");
       return demoApi<components["schemas"]["BookingOut"]>("guest_anna", "/bookings", "POST", {
@@ -64,6 +70,9 @@ export function BookingRequest({
           <span>
             Заявка {booking.data.id} сохранена. Статус: запрос отправлен демо-отельеру. Оплата не
             списывается.
+            <Link to="/trips/$id" params={{ id: booking.data.id }} className="btn btn-primary">
+              Открыть поездку
+            </Link>
           </span>
         </div>
       ) : (
