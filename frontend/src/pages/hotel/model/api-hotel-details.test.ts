@@ -30,7 +30,8 @@ describe("API hotel detail", () => {
   it("keeps cardinal facades without borrowing diagonal noise", () => {
     const detail = apiHotelDetails(hotelFromApi(hotel));
     expect(detail.bestFacade).toBe("N");
-    expect(Object.keys(detail.noise.night)).toEqual(["N", "E", "S", "W"]);
+    expect(detail.noise.night.N[1]).toBe("нет данных");
+    expect(detail.noise.night.NE[1]).toBe("нет данных");
     expect(Object.values(detail.noise.night).every((value) => value[1] === "нет данных")).toBe(
       true,
     );
