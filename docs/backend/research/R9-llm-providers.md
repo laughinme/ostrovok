@@ -204,3 +204,112 @@ schema-пример использует `response_format={type: json_schema, js
 [выпуск ключа и scopes](https://aistudio.yandex.ru/en/docs/ai-studio/operations/get-api-key).
 **Hard spend cap на отдельный API key не подтверждён.** Cloud Billing budget только уведомляет и не останавливает потребление:
 [официально](https://yandex.cloud/ru/docs/billing/concepts/budget). Для жёсткого ограничения нужен отдельный контролируемый gateway либо другой провайдер.
+
+### 5.2. GigaChat / Сбер
+
+Ответ «только собственный API» уже неточен: есть **частичная OpenAI-совместимость** по base URL **`https://api.giga.chat/v1`**.
+Но это не drop-in для нашего полного контракта: официальный пример функций использует legacy `functions`,
+а native structured output принимает `response_format.schema`, а не OpenAI `response_format.json_schema.schema`.
+В v2 настройки перенесены в `model_options.response_format`.
+Источники: [OpenAI compatibility](https://developers.sber.ru/docs/ru/gigachat/guides/compatible-openai),
+[структурированные данные](https://developers.sber.ru/docs/ru/gigachat/guides/structured-output).
+
+Авторизация осталась OAuth: ключ авторизации обменивается через **`https://ngw.devices.sberbank.ru:9443/api/v2/oauth`**
+на access token на **30 минут**; для обмена `Authorization: Basic <authorization-key>`, `RqUID` и scope аккаунта
+(например `GIGACHAT_API_PERS`, корпоративный — по условиям аккаунта). Inference: `Authorization: Bearer <access_token>`.
+Нельзя положить постоянный authorization-key в `OPENAI_API_KEY` и ожидать автоматического обновления.
+Примечание: в Python-примере страницы совместимости есть Bearer при обмене, а в cURL Basic; для точного OAuth-контракта ориентироваться на справку авторизации.
+
+Функции поддерживаются; для адаптации `tools` и схем есть **`gpt2giga`**:
+OpenAI URL **`http://<proxy>:8090/v1`**, отдельный ключ прокси, GigaChat credentials/scope остаются на стороне прокси.
+Он переводит tool/function schemas и native `response_format`, имеет Docker-развёртывание; полный паритет OpenAI не обещает.
+Это дополнительный сервис для Compose и точка отказа; наш 8-tool loop через него **не проверено**.
+Источники: [Сбер о proxy](https://developers.sber.ru/docs/ru/gigachain/tools/utilities/gpttogiga-proxy-server),
+[матрица проекта](https://ai-forever.github.io/gpt2giga/api-compatibility/), [deployment](https://ai-forever.github.io/gpt2giga/deployment/).
+
+**С 01.09.2026 новых платных клиентов направляют в Cloud.ru**, где уже есть OpenAI endpoint и ключ без 30-минутного OAuth.
+Для действующих физических лиц опубликованы следующие пакеты (вход и выход расходуют токены пакета):
+
+| Модель | Пакет / цена с НДС | Эквивалент ₽/1M при полном расходовании | Источник; просмотр |
+|---|---|---:|---|
+| GigaChat 2 Lite | 20M / 1300 ₽, 1 месяц | 65 | [Сбер](https://developers.sber.ru/docs/ru/gigachat/tariffs/individual-tariffs); 28.10.2026 |
+| GigaChat 2 Pro | 3M / 1500 ₽, 1 месяц | 500 | [Сбер](https://developers.sber.ru/docs/ru/gigachat/tariffs/individual-tariffs); 28.10.2026 |
+| GigaChat 2 Max | 3M / 1950 ₽, 1 месяц | 650 | [Сбер](https://developers.sber.ru/docs/ru/gigachat/tariffs/individual-tariffs); 28.10.2026 |
+
+Freemium физлицам: **365M токенов / 12 месяцев** суммарно по Lite/Pro/Max/Ultra, один поток; цена **0 ₽** в пределах квот.
+Источник цены и квот: [Сбер](https://developers.sber.ru/docs/ru/gigachat/tariffs/individual-tariffs), просмотр **28.10.2026**.
+Режим предназначен для личного некоммерческого использования; применимость к показу хакатона **не проверено**:
+[условия коммерческого использования](https://developers.sber.ru/docs/ru/gigachat/tariffs/commercial-use).
+Для нового подключения сравнивать с Cloud.ru, а не брать старый пакетный прайс за актуальный onboarding.
+
+### 5.3. Cloud.ru Evolution Foundation Models
+
+Base URL **`https://foundation-models.api.cloud.ru/v1`**, `Authorization: Bearer <Key Secret>`.
+Создать проект/service account → API key для сервиса **Foundation Models**, срок действия и при необходимости рабочие интервалы → выбрать точный model ID.
+Источники: [quickstart](https://cloud.ru/docs/foundation-models/ug/topics/quickstart),
+[API](https://cloud.ru/docs/foundation-models/ug/topics/api-ref),
+[OpenAPI](https://cloud.ru/docs/api/specs/foundation-models/ug/_downloads/f2949c1237d79b17b2df8e523e02a89a/openapi__foundation-models.yaml?source-platform=Evolution).
+
+Внутренние модели ниже работают в Cloud.ru; внешние модели каталога идут к другим провайдерам.
+В [каталоге](https://cloud.ru/docs/foundation-models/ug/topics/overview__available__models) у `openai/gpt-oss-120b`,
+`Qwen/Qwen3.6-35B-A3B`, `deepseek-ai/DeepSeek-V4-Pro`, `ai-sage/GigaChat3-10B-A1.8B` заявлены **Function Calling и Structure Output**.
+OpenAPI содержит `tools`, `tool_choice`, `parallel_tool_calls`, `json_schema`, но в enum `response_format.type` только text/json_object:
+есть внутренняя несогласованность документации. Строгий OpenAI json_schema именно выбранной модели **не проверено**; tool-output проверять отдельно.
+
+Дневной обычный тариф, ₽/1M с НДС 22%; **не партнёрская строка** одноимённой модели:
+
+| Внутренняя модель | Вход / выход, ₽/1M | Источник; просмотр |
+|---|---:|---|
+| `openai/gpt-oss-120b` | 15.86 / 61.00 | [действующий PDF, стр. 8, п. 271–272](https://cdn.cloud.ru/docs/legal/tariffs/evolution/current-version/foundation-models.pdf#page=8); 28.10.2026 |
+| `Qwen/Qwen3.6-35B-A3B` | 219.60 / 329.40 | [PDF, стр. 8, п. 269–270](https://cdn.cloud.ru/docs/legal/tariffs/evolution/current-version/foundation-models.pdf#page=8); 28.10.2026 |
+| `deepseek-ai/DeepSeek-V4-Pro` | 183.00 / 732.00 | [PDF, стр. 8, п. 251–252](https://cdn.cloud.ru/docs/legal/tariffs/evolution/current-version/foundation-models.pdf#page=8); 28.10.2026 |
+| `ai-sage/GigaChat3-10B-A1.8B` | 12.20 / 12.20 | [PDF, стр. 8, п. 259–260](https://cdn.cloud.ru/docs/legal/tariffs/evolution/current-version/foundation-models.pdf#page=8); 28.10.2026 |
+| GigaChat 3 Pro (точный ID сверить в кабинете) | 73.0292 / 176.3876 | [PDF, стр. 14, п. 450–451](https://cdn.cloud.ru/docs/legal/tariffs/evolution/current-version/foundation-models.pdf#page=14); 28.10.2026 |
+
+PDF версии **261023** также содержит ночные тарифы; в сравнение они не включены. Цены новых моделей не выводить из старого PDF 2025 года.
+**Per-key hard cap не проверено.** У Cloud Billing есть budget с опцией «Приостановка ресурсов»,
+но её действие на Foundation Models inference/отдельный ключ и задержка остановки **не проверено**:
+[инструкция](https://cloud.ru/docs/billing/ug/topics/guides__budget_add). Не выдавать такой бюджет за подтверждённый лимит API-ключа.
+
+### 5.4. МТС: MWS GPT Model Hub
+
+OpenAI base URL **`https://gpt.mwsapis.ru/projects/<project_name>/openai/v1`**.
+Авторизация — API key сервисного аккаунта с ролью **`gpt.inferencer`**; поле `model` — **ID deployment**, а не обязательно имя модели из прайса.
+Есть Chat Completions и streaming: [официальный API](https://mws.ru/docs/cloud-platform/gpt/general/inference-text.html).
+Модели Qwen3.6 и gpt-oss доступны; DeepSeek в текущей прочитанной таблице не найден.
+Поддержка `tools`/`tool_choice` и OpenAI `response_format=json_schema` через этот endpoint **не проверено**:
+их нет в опубликованной таблице параметров Chat Completions. Наличие reasoning само по себе не доказывает tool calling.
+
+| Модель | Вход / выход, ₽/1M с НДС 22% | Источник; просмотр |
+|---|---:|---|
+| `gpt-oss-120b` | 13.42 / 54.90 | [MWS, GPT Model Hub](https://mws.ru/docs/cloud-platform/about/general/mws-cloud-platform-pricing.html#gpt-model-hub); 28.10.2026 |
+| `qwen3.6-35b-a3b` | 70.76 / 283.04 | [MWS, GPT Model Hub](https://mws.ru/docs/cloud-platform/about/general/mws-cloud-platform-pricing.html#gpt-model-hub); 28.10.2026 |
+
+Отпускная единица — 100 токенов. Hard cap на отдельный ключ **не проверено**. Без проверки функций не выбирать первым вариантом для агента.
+
+### 5.5. Selectel: два разных продукта
+
+| Продукт | OpenAI base URL / auth | Размещение и возможности |
+|---|---|---|
+| **ИИ-роутер** | `https://api.selectel.ru/aig/v1`, Bearer API key | Внешние модели; OpenAI-совместимость заявлена, tool-loop показан в [примере Selectel](https://selectel.ru/blog/openclaw-deploy-ai-agent/); strict json_schema выбранного маршрута **не проверено** |
+| **Token Factory** | `https://api.tf.selcloud.ru/v1`, Bearer API key | Открытые модели в российских ДЦ; tools/json_schema конкретной модели **не проверено**; не переносить лимиты роутера на этот продукт |
+
+Источники endpoint: [роутер](https://docs.selectel.ru/ai-router/quickstart/), [Token Factory](https://docs.selectel.ru/token-factory/quickstart/).
+Актуальные ID Token Factory копируются из карточки модели в кабинете; не угадывать их по маркетинговым названиям.
+
+| Продукт / модель | Вход / кэш / выход, ₽/1M | Статус цены | Источник; просмотр |
+|---|---:|---|---|
+| Token Factory / Qwen-3.8-Flash-Next | 20.85 / 2.09 / 61.30 | Публичная витрина, перепроверить в кабинете | [Selectel](https://selectel.ru/services/cloud/token-factory/); 28.10.2026 |
+| Token Factory / Qwen-3.8-27B | 31.01 / 3.10 / 206.50 | То же | [Selectel](https://selectel.ru/services/cloud/token-factory/); 28.10.2026 |
+| Token Factory / DeepSeek-V4-Flash | 75.42 / 7.54 / 186.29 | То же | [Selectel](https://selectel.ru/services/cloud/token-factory/); 28.10.2026 |
+| ИИ-роутер / Qwen3.7 Flash | 3.86 / 0.77 / 16.74 | Промостраница: цены на 05.08; текущий тариф **не проверено** | [Selectel](https://promo.selectel.ru/ai-router); 28.10.2026 |
+| ИИ-роутер / DeepSeek V4 Pro | 78.41 / 0.65 / 156.81 | То же; не приравнивать к Token Factory | [Selectel](https://promo.selectel.ru/ai-router); 28.10.2026 |
+
+Ставки ИИ-роутера динамические; перед выпуском ключа брать цену из кабинета, а не считать августовскую цену октябрьской.
+Вход в ИИ-роутер требует пополнения **от 200 ₽**, деньги остаются на балансе:
+[quickstart](https://docs.selectel.ru/ai-router/quickstart/), просмотр **28.10.2026**.
+**У ИИ-роутера есть денежный лимит на ключ и общий бюджет:** после достижения месячной суммы запросы прекращаются;
+по умолчанию **0 означает отсутствие ограничения**, не запрет расходов.
+Путь: Продукты → ИИ-роутер → Ключи и лимиты → меню ключа → Изменить лимит.
+Источник: [управление лимитами](https://docs.selectel.ru/ai-router/manage/limits/).
+Лимит lifetime без ежемесячного сброса, точность остановки при конкурентных запросах и аналогичный денежный hard cap Token Factory **не проверено**.
