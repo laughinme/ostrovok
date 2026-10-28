@@ -39,13 +39,30 @@ try {
     await tap(page.getByRole('button', { name: /^Сравнить — / }).nth(0));
     await tap(page.getByRole('button', { name: /^Сравнить — / }).nth(1));
   });
-  await h.goto('/compare');
+  await tap(page.getByRole('link', { name: /^Сравнение/ }).first());
+  await page.waitForURL('**/compare');
+  await page.getByText('Cascade', { exact: true }).first().waitFor({ timeout: 60000 });
   await sleep(2000);
   await scene('04-compare', 'Гость', 'Сравниваем по важному для вас', 'Один запрос — понятный выбор между отелями', async () => {
     await sleep(2500);
     await glide(320, 2000);
     await sleep(2400);
   });
+  }
+  if (include('compare') && part) {
+    await h.goto(`/results?q=${encodeURIComponent(query)}`);
+    await page.getByRole('link', { name: 'Подробнее' }).first().waitFor({ timeout: 120000 });
+    await tap(page.getByRole('button', { name: /^Сравнить — / }).nth(0));
+    await tap(page.getByRole('button', { name: /^Сравнить — / }).nth(1));
+    await tap(page.getByRole('link', { name: /^Сравнение/ }).first());
+    await page.waitForURL('**/compare');
+    await page.getByText('Cascade', { exact: true }).first().waitFor({ timeout: 60000 });
+    await sleep(2000);
+    await scene('04-compare', 'Гость', 'Сравниваем по важному для вас', 'Один запрос — понятный выбор между отелями', async () => {
+      await sleep(2500);
+      await glide(320, 2000);
+      await sleep(2400);
+    });
   }
   if (include('guest') || include('overview')) {
   await h.goto(state.hotelUrl);
