@@ -23,13 +23,13 @@ export function TripFeedback({ trip }: { trip: Trip }) {
   const alreadyAnswered = feedback.error instanceof ApiError && feedback.error.status === 409;
   const eligible = ["confirmed", "completed"].includes(trip.booking.status);
   const disabled = feedback.isPending || feedback.isSuccess || alreadyAnswered || !eligible;
-  const complete =
-    questions.length > 0 && questions.every(({ id }) => typeof answers[id] === "boolean");
+  const complete = questions.some(({ id }) => typeof answers[id] === "boolean");
   return (
     <section>
       <h2 className="h-md">Всё было так, как мы обещали?</h2>
       <p className="muted">
-        Ваш ответ уточнит факты для следующих гостей. Отзыв можно оставить после выезда.
+        Оцените факты, которые удалось проверить. Ваш ответ поможет следующим гостям. Отзыв можно
+        оставить после выезда.
       </p>
       {!eligible && <p className="trip-notice">Для отзыва нужна подтверждённая поездка.</p>}
       {!questions.length ? (
@@ -42,11 +42,12 @@ export function TripFeedback({ trip }: { trip: Trip }) {
           }}
         >
           <div className="fb card-w">
-            {questions.map(({ id, statement, question }) => (
+            {questions.map(({ id, statement, question, scopeText }) => (
               <div className="fb-row" key={id}>
                 <div id={`promise-${id}`}>
                   <b>{question}</b>
                   <span>{statement}</span>
+                  <span>{scopeText}</span>
                 </div>
                 <div
                   className="seg feedback-options"
