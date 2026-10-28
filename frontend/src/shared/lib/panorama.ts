@@ -402,8 +402,8 @@ export function readPanoramaLayout(key: Facade, floor: number) {
     buildings: scene.buildings.map((building) => ({
       from: building.a / SPAN,
       to: building.b / SPAN,
-      elevation: (Math.atan2(building.h - eye, building.d) * 180) / Math.PI,
-      baseElevation: (Math.atan2(-eye, building.d) * 180) / Math.PI,
+      elevation: Number(((Math.atan2(building.h - eye, building.d) * 180) / Math.PI).toFixed(6)),
+      baseElevation: Number(((Math.atan2(-eye, building.d) * 180) / Math.PI).toFixed(6)),
       floors: Math.max(1, Math.round(building.h / 3)),
     })),
   };

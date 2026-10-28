@@ -1,9 +1,19 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { readPanorama, readPanoramaLayout } from "./panorama";
 
 describe("demo window readings", () => {
   it("preserves the previous southwest reading at floor four", () => {
     expect(readPanorama("SW", 4)).toEqual({ seaShare: 37, sunVisible: true, mountains: false });
+  });
+  it("keeps SVG geometry stable across server and browser floating point differences", () => {
+    const server = readPanoramaLayout("SW", 3);
+    const atan2 = Math.atan2;
+    const browserMath = vi.spyOn(Math, "atan2").mockImplementation((y, x) => atan2(y, x) + 1e-14);
+    try {
+      expect(readPanoramaLayout("SW", 3)).toEqual(server);
+    } finally {
+      browserMath.mockRestore();
+    }
   });
   it("preserves the small sea glimpse and hidden sunset on the city side", () => {
     expect(readPanorama("NW", 4)).toMatchObject({ seaShare: 7, sunVisible: false });

@@ -29,7 +29,7 @@ export function DemoMap({ items, active, onHover, onSelect }: CoastMapProps) {
       <svg
         className="h-full w-full"
         viewBox="0 0 640 360"
-        role="img"
+        role="group"
         aria-label="Демонстрационная схема расположения отеля и мест рядом"
       >
         <rect width="640" height="360" fill="var(--map-land, #edf2e7)" />
@@ -44,9 +44,7 @@ export function DemoMap({ items, active, onHover, onSelect }: CoastMapProps) {
           const { x, y } = project(place.location);
           return (
             <g key={`${place.kind}-${place.name}`}>
-              <title>
-                {place.name} · {place.distanceText}
-              </title>
+              <title>{`${place.name} · ${place.distanceText}`}</title>
               <circle cx={x} cy={y} r="5" fill="var(--primary, #1b4de4)" />
               <text x={x} y={y - 12} textAnchor="middle" fontSize="11" fill="var(--ink, #17233d)">
                 {place.name.length > 22 ? `${place.name.slice(0, 20)}…` : place.name}
@@ -54,25 +52,50 @@ export function DemoMap({ items, active, onHover, onSelect }: CoastMapProps) {
             </g>
           );
         })}
+        {items.map(({ hotel, score }) => {
+          const { x, y } = project(hotel.lngLat);
+          const selected = active === hotel.id;
+          return (
+            <g
+              key={hotel.id}
+              transform={`translate(${x} ${y})`}
+              role={onSelect ? "button" : undefined}
+              tabIndex={onSelect ? 0 : undefined}
+              onClick={() => onSelect?.(hotel.id)}
+              onKeyDown={(event) => {
+                if (onSelect && (event.key === "Enter" || event.key === " ")) {
+                  event.preventDefault();
+                  onSelect(hotel.id);
+                }
+              }}
+              onMouseEnter={() => onHover?.(hotel.id)}
+              onMouseLeave={() => onHover?.(null)}
+              aria-label={`Отель «${hotel.name}»`}
+              style={{ cursor: onSelect ? "pointer" : undefined }}
+            >
+              <rect
+                x="-100"
+                y="-22"
+                width="200"
+                height="44"
+                rx="22"
+                fill={selected ? "var(--primary, #1b4de4)" : "white"}
+                stroke="var(--primary, #1b4de4)"
+                strokeWidth="2"
+              />
+              <text
+                textAnchor="middle"
+                dominantBaseline="central"
+                fontSize="13"
+                fontWeight="600"
+                fill={selected ? "white" : "var(--ink, #17233d)"}
+              >
+                {`${hotel.name}${score == null ? "" : ` · ${score}%`}`}
+              </text>
+            </g>
+          );
+        })}
       </svg>
-      {items.map(({ hotel, score }) => {
-        const { x, y } = project(hotel.lngLat);
-        return (
-          <button
-            key={hotel.id}
-            type="button"
-            className={`absolute -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-full border-2 border-white px-3 py-2 text-sm shadow-soft ${active === hotel.id ? "bg-primary text-primary-foreground" : "bg-card text-foreground"}`}
-            style={{ left: `${x / 6.4}%`, top: `${y / 3.6}%` }}
-            onClick={() => onSelect?.(hotel.id)}
-            onMouseEnter={() => onHover?.(hotel.id)}
-            onMouseLeave={() => onHover?.(null)}
-            aria-label={`Открыть отель «${hotel.name}»`}
-          >
-            {hotel.name}
-            {score == null ? "" : ` · ${score}%`}
-          </button>
-        );
-      })}
       <div className="absolute right-3 top-3 flex flex-col gap-1">
         {controls.map(({ label, Icon, action }) => (
           <button
