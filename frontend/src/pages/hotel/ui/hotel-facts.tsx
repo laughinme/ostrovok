@@ -10,7 +10,9 @@ import {
   Sun,
   Waves,
   Building2,
+  ChevronDown,
 } from "lucide-react";
+import { useId, useState } from "react";
 import { factConfidence } from "../model/fact-confidence";
 import type { Fact } from "../model/types";
 import "./hotel-facts.css";
@@ -40,14 +42,20 @@ export function HotelFacts({
   selectedId,
   onFact,
   demo = false,
+  embedded = false,
 }: {
   facts: Fact[];
   selectedId?: string | undefined;
   onFact: (fact: Fact) => void;
   demo?: boolean;
+  embedded?: boolean;
 }) {
+  const [expanded, setExpanded] = useState(false);
+  const listId = useId();
   const allDemo = facts.length > 0 && (demo || facts.every(isDemoFact));
   const count = facts.length;
+  const visibleFacts = embedded && !expanded ? facts.slice(0, 4) : facts;
+  const Heading = embedded ? "h3" : "h2";
   const noun =
     count % 100 >= 11 && count % 100 <= 14
       ? "фактов"
@@ -57,11 +65,15 @@ export function HotelFacts({
           ? "факта"
           : "фактов";
   return (
-    <section className="hotel-facts" id="hotel-facts" aria-labelledby="hotel-facts-title">
+    <section
+      className={`hotel-facts${embedded ? " hotel-facts--embedded" : ""}`}
+      id="hotel-facts"
+      aria-labelledby="hotel-facts-title"
+    >
       <header className="hotel-facts-heading">
         <div>
-          <h2 id="hotel-facts-title">Факты об отеле</h2>
-          <p>Условия с учётом стороны здания и этажа.</p>
+          <Heading id="hotel-facts-title">{embedded ? "Что известно" : "Факты об отеле"}</Heading>
+          {!embedded && <p>Условия с учётом стороны здания и этажа.</p>}
         </div>
         <div className="hotel-facts-heading-meta">
           <span>
@@ -72,12 +84,19 @@ export function HotelFacts({
       </header>
       {count > 0 ? (
         <div className="hotel-facts-panel">
-          <div className="hotel-facts-columns" aria-hidden="true">
-            <span>Что известно</span>
-            <span>Уверенность</span>
-          </div>
-          <ul className="hotel-facts-list">
-            {facts.map((fact) => {
+          {embedded && (
+            <div className="hotel-facts-embedded-columns" aria-hidden="true">
+              <span>Уверенность</span>
+            </div>
+          )}
+          {!embedded && (
+            <div className="hotel-facts-columns" aria-hidden="true">
+              <span>Что известно</span>
+              <span>Уверенность</span>
+            </div>
+          )}
+          <ul className="hotel-facts-list" id={listId}>
+            {visibleFacts.map((fact) => {
               const Icon = icons[fact.characteristic as keyof typeof icons] ?? FileSearch;
               const confidence = factConfidence(fact);
               const percentage = Number.isFinite(fact.confidence)
@@ -120,6 +139,18 @@ export function HotelFacts({
               );
             })}
           </ul>
+          {embedded && count > 4 && (
+            <button
+              type="button"
+              className="hotel-facts-expand"
+              aria-expanded={expanded}
+              aria-controls={listId}
+              onClick={() => setExpanded((value) => !value)}
+            >
+              {expanded ? "Свернуть" : `Все ${count} ${noun}`}
+              <ChevronDown size={16} aria-hidden="true" />
+            </button>
+          )}
         </div>
       ) : (
         <div className="hotel-facts-empty">
