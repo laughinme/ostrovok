@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any, Literal, Self
+from typing import Any, Literal, Self, TypedDict
 
 from pydantic import Field, SerializerFunctionWrapHandler, model_serializer
 
@@ -18,6 +18,16 @@ EvidenceKind = Literal[
 ]  # fmt: skip
 
 
+class ScopeJson(TypedDict, total=False):
+    """ScopeOut on the wire: an absent field means «all» (08 §9)."""
+
+    facades: list[Facade]
+    floorFrom: int
+    floorTo: int
+    months: list[int]
+    roomTypeIds: list[str]
+
+
 class ScopeOut(ApiModel):
     facades: list[Facade] | None = None
     floor_from: int | None = None
@@ -25,7 +35,8 @@ class ScopeOut(ApiModel):
     months: list[int] | None = None
     room_type_ids: list[str] | None = None
 
-    @model_serializer(mode="wrap")
+    # The explicit return type keeps the fields in OpenAPI; a bare dict exported `object`.
+    @model_serializer(mode="wrap", return_type=ScopeJson)
     def _omit_all(self, handler: SerializerFunctionWrapHandler) -> dict[str, Any]:
         """An omitted field means "all" (08 §9), so nulls are not sent."""
         return {k: v for k, v in handler(self).items() if v is not None}

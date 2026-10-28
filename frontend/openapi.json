@@ -7273,9 +7273,44 @@
         "type": "object",
         "title": "ScopeIn"
       },
+      "ScopeJson": {
+        "properties": {
+          "facades": {
+            "items": {
+              "$ref": "#/components/schemas/Facade"
+            },
+            "type": "array",
+            "title": "Facades"
+          },
+          "floorFrom": {
+            "type": "integer",
+            "title": "Floorfrom"
+          },
+          "floorTo": {
+            "type": "integer",
+            "title": "Floorto"
+          },
+          "months": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Months"
+          },
+          "roomTypeIds": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Roomtypeids"
+          }
+        },
+        "type": "object",
+        "title": "ScopeJson",
+        "description": "ScopeOut on the wire: an absent field means «all» (08 §9)."
+      },
       "ScopeOut": {
-        "additionalProperties": true,
-        "type": "object"
+        "$ref": "#/components/schemas/ScopeJson"
       },
       "SearchRequest": {
         "properties": {
