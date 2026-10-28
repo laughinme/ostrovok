@@ -5,7 +5,7 @@ import importlib
 
 from pipeline import manifest
 
-STAGES = ("pbf", "osm", "dem", "climate", "hotels", "graph")
+STAGES = ("pbf", "osm", "dem", "climate", "hotels", "graph", "window_profiles")
 COMMANDS = (*STAGES, "manifest", "all")
 
 

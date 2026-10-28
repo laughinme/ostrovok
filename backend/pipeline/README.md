@@ -1,8 +1,8 @@
 # Данные региона
 
 Запуск из корня: `make data`. Отдельные этапы:
-`cd backend && uv run --group pipeline python -m pipeline <pbf|osm|dem|climate|hotels|graph|manifest|all>`.
-`all` выполняет pbf → osm → dem → climate → hotels → graph → manifest.
+`cd backend && uv run --group pipeline python -m pipeline <pbf|osm|dem|climate|hotels|graph|window_profiles|manifest|all>`.
+`all` выполняет pbf → osm → dem → climate → hotels → graph → window_profiles → manifest.
 `pbf` скачивает закреплённые снимки, проверяет MD5 и обрезает их в региональные GPKG;
 OSM-экспорт и граф читают этот общий кэш. Остальные сырые ответы — в `.cache/pipeline/`
 по SHA-256 запроса, GeoTIFF — в `.cache/spike/`. При удалении кэша исходники получаются повторно;
@@ -69,3 +69,21 @@ NPZ проверяется через `WalkGraph.from_file`, три реальн
 Проверка маршрутов без сети: `uv run --group pipeline python -m pipeline.graph_validation`.
 Карты и высотные профили: `uv run --group pipeline python -m pipeline.graph_plot`.
 Результаты — `.cache/osm/walk-validation.json` и `.cache/osm/walk-validation.png`, в git не попадают.
+
+## Профили окна
+
+После DEM и геослоёв: `uv run python -m pipeline window_profiles` (из `backend/`).
+Этап входит в `all`; без сети, PostGIS и LLM. Создаёт `region/window_profiles.zip`: номинальный
+горизонт среднего окна каждого фасада на каждом этаже всех 200 отелей, видимые вершины,
+минимальный этаж с морем по трём положениям окна. Путь солнца считается API на запрошенную дату.
+
+Внутри ZIP: `manifest.json` (version=1, SHA-256 шести исходных файлов) и `{osm_id}.json`
+(signature контура/этажности/высоты, profiles с ключом `SW/5`). Каждый профиль содержит rays
+`[azimuthDeg,angleDeg,kind,seaLowDeg,seaHighDeg]`, peaks, minimumSeaFloor, eyeM. Углы в градусах,
+eyeM — абсолютные метры; null для бесконечных/неизвестных углов, kind по `Obstacle` (0…4).
+Источник и версия не совпали — API готовит живую сцену. При изменениях соседних зданий вызывайте
+`WindowQueries.invalidate()`: сбрасывает ответы, сцены и использование предрасчёта в этом процессе.
+
+Контрольные точки — `.cache/window_profiles/<hash>/`; прерванный этап продолжает готовые отели.
+Архив заменяется атомарно после завершения. Это номинальные доказательства, не результаты МК;
+исполнители `view` и `sun_event` по-прежнему считают независимые возмущённые горизонты.
