@@ -470,6 +470,26 @@ interface Intent {
   planner: 'llm' | 'rules'      // кто разбирал запрос
 }
 
+interface Mood {               // GET /moods?month=11; без month — текущий месяц
+  id: string
+  title: string
+  description: string
+  count: number                // все чипы P ≥ 0.7 в одном варианте номера; каждый отель один раз
+  countLabel: string           // «23 отеля с видом на горы из окна»
+  month: number                // 1..12, для которого посчитан счётчик
+  chips: IntentChip[]          // POST /searches { chips, trip: { month }, useProfile: false }
+}
+
+interface ReserveHotel {       // GET /console/hotels/reserve, только CONSOLE_WRITE
+  osmId: string                // node/…, way/… или relation/…
+  name: string
+  district: string
+  location: [number, number]    // lon, lat; реальные OSM-здание и окружение уже в данных
+  floors: number
+}
+// POST /console/hotels {osmId} → 202 {runId,hotelId}; дубль → 409.
+// После run.finished перечитать поиск. POST /console/demo/reset возвращает отель в резерв.
+
 interface ChipResult {
   chipId: string
   verdict: Verdict

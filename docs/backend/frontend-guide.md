@@ -37,6 +37,19 @@
 | 4.12 Консоль | `/console/registry`, `POST /console/characteristics {description}` → `runId`, `POST /console/characteristics/{key}/publish`, `/console/runs`, `/console/conflicts`, `/console/changes`, `POST|DELETE /console/world/buildings`, `GET|PUT /console/settings`, `/console/quality`, `POST /console/demo/reset` |
 | 4.13 Для разработчиков | MCP на `/mcp`, OpenAPI на `/api/docs` |
 
+## Подборки и новый отель
+
+`GET /moods?month=11` возвращает восемь `{id,title,description,count,countLabel,month,chips}`.
+Без month используется текущий месяц. Счётчик требует все чипы с вероятностью ≥0,7 у одного
+совместимого варианта номера; неизвестные, просроченные и конфликтные факты не входят. Нулевой счётчик
+честный: например, без ответов о шторах подборка «Тишина и сон» может быть пустой. Для перехода в поиск:
+`POST /searches {chips: mood.chips, trip: {month: mood.month}, useProfile: false}`.
+
+Консоль оператора: `GET /console/hotels/reserve` → `{osmId,name,district,location,floors}[]`.
+`POST /console/hotels {osmId}` → 202 `{runId,hotelId}`; смотреть SSE запуска, после завершения перечитать
+поиск. Неизвестный объект — 404, уже добавленный — 409. Обе ручки требуют CONSOLE_WRITE.
+`POST /console/demo/reset` удаляет добавленный отель; он снова появляется в резерве.
+
 ## Живые события (SSE)
 
 - `GET /runs/{runId}/events` — сначала все уже записанные шаги, потом новые; события `run.step`
