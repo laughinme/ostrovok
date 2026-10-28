@@ -14,7 +14,7 @@ from typing import Any
 from uuid import UUID
 
 from app.domain.knowledge.characteristic import Characteristic
-from app.domain.knowledge.confidence import Vote, decay, pool
+from app.domain.knowledge.confidence import Vote, beta_update, decay, pool
 from app.domain.knowledge.observation import Observation
 from app.domain.knowledge.scope import Cell, Facade, Grid, Scope, compress
 from app.domain.knowledge.sources import RELIABILITY, Authority, SourceKind
@@ -120,7 +120,13 @@ def _reconcile_grid(
             disputed_by[o.id] = o
 
     keys = {
-        cell: (b.value, round(b.confidence * _BUCKET), b.disputed) for cell, b in beliefs.items()
+        cell: (
+            b.value,
+            round(b.confidence * _BUCKET),
+            b.disputed,
+            tuple(sorted(str(o.id) for o in b.contributors if o.method == "guest.feedback")),
+        )
+        for cell, b in beliefs.items()
     }
     facts = []
     for scope, key in compress(keys, grid):
@@ -142,6 +148,19 @@ def _reconcile_grid(
 def _decide(
     authority: Authority, here: Sequence[Observation], now: datetime
 ) -> tuple[_CellBelief, list[Observation]]:
+    guests = [o for o in here if o.source is SourceKind.GUEST and o.method == "guest.feedback"]
+    if guests:
+        others = [o for o in here if o not in guests]
+        base, disputes = _decide(authority, others, now) if others else (_CellBelief(True, 0.5), [])
+        prior = base.confidence if base.value else 1 - base.confidence
+        p = beta_update(
+            prior,
+            yes=sum(o.value is True for o in guests),
+            no=sum(o.value is False for o in guests),
+        )
+        return _CellBelief(
+            p >= 0.5, max(p, 1 - p), [*base.contributors, *guests], base.disputed
+        ), disputes
     probabilities = {o.id: probability_of_yes(o.value, effective_confidence(o, now)) for o in here}
     yes = [o for o in here if probabilities[o.id] >= CONFIDENT_YES]
     no = [o for o in here if probabilities[o.id] <= CONFIDENT_NO]

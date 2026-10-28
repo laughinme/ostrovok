@@ -12,6 +12,42 @@
 
 ---
 
+### 28.10 03:15 МСК · codex-guest · B5.4
+- Сделано: доменные статусы и пересечение областей (`05f4dbd`); бронь со снимком обещаний,
+  отложенный ответ и уведомления об изменившихся обещаниях (`cb5873c`); гостевые REST, поездка,
+  отзыв GUEST и бета-обновление уверенности в забронированных ячейках.
+- **Публичный API для codex-partner / claude-core:**
+  `domain.booking.status.transition(current: BookingStatus, target: BookingStatus) -> BookingStatus`
+  либо `InvalidBookingTransitionError` / `INVALID_BOOKING_TRANSITION` (409).
+  `service.booking.bookings.BookingService(uow, clock).create(user_id, BookingRequest) -> Booking`;
+  `.decide(booking_id: UUID, status: BookingStatus, reply: str) -> Booking` — кабинет сначала
+  проверяет принадлежность отеля сотруднику, затем вызывает decide; сервис берёт блокировку,
+  применяет правило перехода и пишет NotificationRow гостю. `booking_view(BookingRow) -> Booking`.
+  `BookingStatus`: requested, confirmed, alternative_offered, declined, completed; declined терминален,
+  альтернатива требует подтверждения, completed доступен только после confirmed.
+- `BookingRequest(hotel_id, room_type_id, rate_plan_id, check_in, check_out, adults,
+  children=0, request=None, search_id=None)`; цена ₽ за всю поездку, тариф из RoomType,
+  request=None собирается из лучшего варианта поиска, явный текст сохраняется.
+  `Booking.promised`: снимки factId/characteristic/statement/value/confidence/version/scope,
+  bookingScope — выбранная область; даты выезда исключены, месяцы 1…12, этажи включительно.
+  Событие `user_events.booking_requested` хранит область даже при отсутствии обещанных фактов.
+- `TripQueries(uow, env).get(booking_id, user_id) -> Trip`: booking, promised, текущие факты,
+  климатические нормы (не прогноз), астрономические закаты по дням (aware МСК), путь к пляжу.
+  `TripFeedback(uow, clock).record(booking_id, user_id, list[FeedbackAnswer(fact_id, answer)])`
+  — после выезда подтверждённой брони; answer означает «утверждение совпало», для отрицательного
+  обещания направление корректно инвертируется. Дубли отвергаются, чужие брони возвращают 404.
+- REST: POST /bookings; GET /trips/{id}; POST /trips/{id}/feedback; GET /me/notifications.
+  Все требуют Permission.TRIPS. Симулятор: `booking.simulate` через 10 с, повторы безопасны;
+  подтверждает только известную разметку, иначе предлагает альтернативу с уточнением.
+  `booking.fact_changed` ставится KnowledgeStore и проверяет будущие поездки по hotel+characteristic,
+  учитывает исчезновение/перекомпрессию факта, пишет уведомление один раз и публикует user:{id}.
+- Как проверить: собственные интеграционные сценарии на okno_guest_test / Redis 12;
+  ruff, strict mypy, 7 import-контрактов, полный make check: 328 passed на снимке стабильного
+  05f4dbd + свои файлы (общее дерево параллельно изменяют другие сессии).
+- Грабли: отзыв сейчас принимает булевы обещания; для числовой поправки нужен фактический замер,
+  её нельзя вывести из ответа «нет». Климат/маршрут отсутствуют, если соответствующих данных нет.
+- Дальше: B5.5, затем B5.8. LLM API не вызывался.
+
 ### 28.10 03:16 МСК · codex-osm · B1.8, линия B1.2 → B1.5 → B1.8 завершена
 - Сделано: Geofabrik → региональный кэш → здания/объекты/море → DEM/климат/демо → граф
   запускается через `make data` / `python -m pipeline all`. Добавлен отдельный этап `pbf`,
