@@ -91,3 +91,19 @@ async def test_demand_influence_reads_the_stored_top(db: Database, tmp_path: Pat
         influence = await PartnerDemand(uow, clock).influence(MAYAK, "center")
 
     assert influence["night_noise"] == 1.0
+
+
+async def test_questions_do_not_wait_behind_a_stuck_transaction(
+    db: Database, tmp_path: Path
+) -> None:
+    await partner_world(db, tmp_path)
+    clock = FakeClock()
+    async with db.unit_of_work() as holder:
+        assert await holder.knowledge.try_lock_pair(MAYAK, "partner_questions")
+        started = asyncio.get_running_loop().time()
+        async with db.unit_of_work() as uow:
+            questions = await PartnerQuestions(uow, clock).generate(MAYAK)
+        waited = asyncio.get_running_loop().time() - started
+
+    assert questions == []
+    assert waited < 5

@@ -24,14 +24,18 @@ SESSION_SETTINGS = {
 
 
 class Database:
-    def __init__(self, settings: Settings) -> None:
+    def __init__(self, settings: Settings, *, statement_timeout_ms: int | None = None) -> None:
+        session = dict(SESSION_SETTINGS)
+        if statement_timeout_ms:
+            # Request-serving processes: no query may hold a connection longer than this.
+            session["statement_timeout"] = str(statement_timeout_ms)
         self.engine: AsyncEngine = create_async_engine(
             settings.database_url,
             echo=settings.sql_echo,
             pool_size=settings.db_pool_size,
             max_overflow=settings.db_max_overflow,
             pool_pre_ping=True,
-            connect_args={"server_settings": SESSION_SETTINGS},
+            connect_args={"server_settings": session},
         )
         self._sessions = async_sessionmaker(self.engine, expire_on_commit=False, autoflush=False)
 

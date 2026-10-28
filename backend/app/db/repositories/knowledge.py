@@ -1,3 +1,5 @@
+import asyncio
+import time
 from collections.abc import Sequence
 from datetime import datetime
 from uuid import UUID
@@ -94,6 +96,21 @@ class KnowledgeRepository:
             text("SELECT pg_advisory_xact_lock(hashtextextended(:key, 0))"),
             {"key": f"{hotel_id}:{characteristic}"},
         )
+
+    async def try_lock_pair(self, hotel_id: UUID, key: str, *, wait_s: float = 3.0) -> bool:
+        """
+        The same lock without queueing forever: polls `pg_try_advisory_xact_lock` for a few
+        seconds and gives up, so a request never waits behind a stuck transaction.
+        """
+        deadline = time.monotonic() + wait_s
+        while True:
+            locked = await self._session.scalar(
+                text("SELECT pg_try_advisory_xact_lock(hashtextextended(:key, 0))"),
+                {"key": f"{hotel_id}:{key}"},
+            )
+            if locked or time.monotonic() >= deadline:
+                return bool(locked)
+            await asyncio.sleep(0.2)
 
     async def grid(self, hotel_id: UUID) -> Grid | None:
         row = (
