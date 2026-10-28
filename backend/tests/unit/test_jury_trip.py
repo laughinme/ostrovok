@@ -65,7 +65,9 @@ def test_guests(text: str, adults: int | None, children: int | None) -> None:
 def test_small_budget_needs_currency_and_huge_budget_is_not_invented() -> None:
     assert parse_trip("за 500 рублей", today=TODAY).budget_per_night == 500
     assert parse_trip("до 10 минут до моря", today=TODAY).budget_per_night is None
-    assert parse_trip("до 999999999999999999999 тысяч", today=TODAY).budget_per_night is None
+    huge = parse_trip("до 999999999999999999999 тысяч", today=TODAY)
+    assert huge.budget_per_night is None
+    assert any("бюджет" in h for h in trip_hints("до 999999999999999999999 тысяч", huge))
 
 
 def test_relative_dates_follow_sochi_not_utc_midnight() -> None:

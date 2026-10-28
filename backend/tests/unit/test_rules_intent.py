@@ -79,7 +79,16 @@ def test_short_input_has_no_fuzzy_inventions(text: str, vocabulary: Vocabulary) 
         ("без собаки, нужен вид на море", {"sea_view"}),
         ("на выходных без машины", set()),
         ("тишина", {"night_noise"}),
+        ("пёс 8 кг, лифт", {"pets_policy", "elevator"}),
+        ("парковка и хороший интернет", {"parking", "remote_work"}),
     ],
 )
 def test_jury_phrases(text: str, keys: set[str], vocabulary: Vocabulary) -> None:
     assert _keys(text, vocabulary) == keys
+
+
+def test_ambiguous_and_unsupported_wishes_get_specific_hints(vocabulary: Vocabulary) -> None:
+    sea = parse_intent("море", vocabulary, today=TODAY)
+    assert any("Море из окна или пляж" in h for h in sea.hints)
+    pool = parse_intent("бассейн", vocabulary, today=TODAY)
+    assert any("Данных о бассейнах пока нет" in h for h in pool.hints)

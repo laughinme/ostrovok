@@ -151,6 +151,10 @@ def trip_hints(text: str, trip: TripDraft) -> tuple[str, ...]:
                     "Для большой группы уточните размещение у отеля."
                 )
                 break
+    if trip.budget_per_night is None and (
+        _BUDGET_THOUSANDS.search(norm) or re.search(r"руб|₽|бюджет", norm)
+    ):
+        hints.append("Уточните бюджет за ночь: от 1 до 200 000 ₽.")
     if trip.month == 5 and "майски" in norm:
         hints.append("Ищем на май. Уточните даты майских праздников.")
     return tuple(hints)

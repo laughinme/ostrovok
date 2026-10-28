@@ -2,8 +2,10 @@ from pathlib import Path
 
 import pytest
 from httpx import AsyncClient
+from sqlalchemy import update
 
 from app.db.database import Database
+from app.db.models import Hotel
 from tests.integration.conftest import AppFactory
 from tests.integration.test_search_api import _world
 
@@ -78,6 +80,8 @@ async def test_empty_budget_result_explains_how_to_continue(
     tmp_path: Path,
 ) -> None:
     await _world(db, tmp_path)
+    async with db.unit_of_work() as uow:
+        await uow.session.execute(update(Hotel).values(price_from_demo=5000))
     response = await client.post("/api/v1/searches", json={"text": "тихий номер до 1000 рублей"})
     assert response.status_code == 201
     assert response.json()["matches"] == []
