@@ -70,7 +70,7 @@ export function HotelCardFacts({ hotel }: { hotel: Hotel }) {
                 {selected.status === "confirmed"
                   ? "Подтверждено"
                   : selected.status === "computed"
-                    ? "Расчёт по открытым данным"
+                    ? "Рассчет"
                     : "Предположение"}
                 {selected.source && ` · ${selected.source}`}
                 {selected.checkedAt && ` · ${selected.checkedAt}`}
