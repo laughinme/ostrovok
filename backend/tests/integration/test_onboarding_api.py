@@ -67,6 +67,7 @@ async def test_onboarding_research_questions_search_and_reset(
         db = app.state.db
         await _seed(db, data)
         headers = await _headers(client)
+        assert len((await client.get("/api/v1/hotels")).json()) == 2
         reserve = await client.get("/api/v1/console/hotels/reserve", headers=headers)
         assert reserve.status_code == 200
         assert reserve.json()[0]["osmId"] == RESERVE_ID
@@ -76,6 +77,9 @@ async def test_onboarding_research_questions_search_and_reset(
         assert started.status_code == 202, started.text
         body = started.json()
         assert body["hotelId"] == str(hotel_id(RESERVE_ID))
+        listed = (await client.get("/api/v1/hotels")).json()
+        assert len(listed) == 3
+        assert next(h for h in listed if h["id"] == body["hotelId"])["facts"] == []
         async with db.unit_of_work() as uow:
             hotel = await uow.catalog.hotel(UUID(body["hotelId"]))
             assert hotel is not None
@@ -90,7 +94,20 @@ async def test_onboarding_research_questions_search_and_reset(
         await worker.execute(claimed[0])
         trace = (await client.get(f"/api/v1/runs/{body['runId']}")).json()
         assert trace["status"] == "done", trace
-        assert any(s["tool"] == "hotelier.ask" for s in trace["steps"])
+        questions = next(s["output"] for s in trace["steps"] if s["tool"] == "hotelier.ask")
+        assert len(questions) == 3
+        assert all(q["text"] and q["why"] for q in questions)
+        assert {q["characteristic"] for q in questions} <= {
+            "pets_policy",
+            "soundproofing",
+            "blackout",
+            "ac",
+            "elevator",
+            "step_free",
+            "facade_rooms",
+        }
+        refreshed = (await client.get("/api/v1/hotels")).json()
+        assert next(h for h in refreshed if h["id"] == body["hotelId"])["facts"]
         async with db.unit_of_work() as uow:
             assert await uow.knowledge.facts([hotel_id(RESERVE_ID)])
             assert await uow.session.scalar(select(func.count()).select_from(HotelierQuestion))
@@ -106,6 +123,7 @@ async def test_onboarding_research_questions_search_and_reset(
         assert (
             len((await client.get("/api/v1/console/hotels/reserve", headers=headers)).json()) == 1
         )
+        assert len((await client.get("/api/v1/hotels")).json()) == 2
 
 
 async def test_onboarding_rejects_unknown_duplicate_and_guest(
