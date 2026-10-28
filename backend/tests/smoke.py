@@ -28,7 +28,8 @@ def main() -> None:
     started = time.perf_counter()
     with httpx.Client(base_url=BASE, timeout=30) as http:
         assert check("/health", http.get("/health")) == {"status": "ok"}
-        check("frontend /", http.get("/"))
+        if "--api-only" not in sys.argv:
+            check("frontend /", http.get("/"))
         check("OpenAPI", http.get("/api/openapi.json"))
         hotels = check("hotels", http.get("/api/v1/hotels"))
         assert isinstance(hotels, list)
