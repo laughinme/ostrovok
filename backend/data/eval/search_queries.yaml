@@ -1,0 +1,5019 @@
+snapshot_at: '2026-10-28T06:20:52.389039+00:00'
+methodology:
+  label: Оценки команды по фактам расчёта; автоматически по зафиксированной рубрике
+  kind: fact_based_regression
+  independent_gold: false
+  rubric: 'В одной точке фасад×этаж×месяц: 3=все условия, 2=не менее половины, 1=хотя
+    бы одно, 0=нет подтверждения или превышен бюджет. P(да)≥0,65. Неизвестное не подтверждает
+    условие.'
+  pool: До 12 отелей с фактами по OSM ID в районе из R2. nDCG считается только внутри
+    этого фиксированного пула; IDCG=0 исключается, количество исключений выводится.
+  limits: Без фотографий. Это согласованность выдачи с расчётами, не независимая оценка
+    реальности. Не все оснащение и неизвестные пожелания подтверждены; метки не обновляются
+    при eval.
+  reproduce: uv run python -m pipeline.quality_search (явно перезаписывает разметку
+    текущими фактами)
+queries:
+- id: R2-01
+  query: Сочи центр, ночью тихо
+  judgments:
+  - osm_id: node/10118233110
+    grade: 3
+    checks:
+    - key: night_noise
+      satisfied: true
+      fact_id: 0875e5dc-e8f2-4d32-9cc8-3102abfcb181
+  - osm_id: node/10759606594
+    grade: 3
+    checks:
+    - key: night_noise
+      satisfied: true
+      fact_id: d380517f-7c30-49ce-a526-34a2caee75d6
+  - osm_id: node/10759606596
+    grade: 3
+    checks:
+    - key: night_noise
+      satisfied: true
+      fact_id: 8c0d31da-3054-4493-8b08-eeeebce4bdc0
+  - osm_id: node/10967527654
+    grade: 3
+    checks:
+    - key: night_noise
+      satisfied: true
+      fact_id: 61341951-c82f-49d7-85ae-e36a0cb15dc3
+  - osm_id: node/11016638369
+    grade: 3
+    checks:
+    - key: night_noise
+      satisfied: true
+      fact_id: 6fffbe0c-4368-48af-a7f8-1e36ff5636cc
+  - osm_id: node/11016638373
+    grade: 3
+    checks:
+    - key: night_noise
+      satisfied: true
+      fact_id: 908df178-339f-4a91-b032-0fc3e18c0099
+  - osm_id: node/11016638375
+    grade: 3
+    checks:
+    - key: night_noise
+      satisfied: true
+      fact_id: 5161f3be-a653-493a-a67c-5c2720da0988
+  - osm_id: node/11067209459
+    grade: 3
+    checks:
+    - key: night_noise
+      satisfied: true
+      fact_id: 0b2a1ad5-4d44-47ec-a7b3-9659369eecc8
+  - osm_id: node/11138786328
+    grade: 3
+    checks:
+    - key: night_noise
+      satisfied: true
+      fact_id: e0d95c52-8cea-4914-a939-25ccdcf601e5
+  - osm_id: node/11138786395
+    grade: 3
+    checks:
+    - key: night_noise
+      satisfied: true
+      fact_id: a9449eea-3502-415b-9962-151c7f7e6657
+  - osm_id: node/11138786401
+    grade: 3
+    checks:
+    - key: night_noise
+      satisfied: true
+      fact_id: 034894c2-d3ab-4995-b5ac-aa2dc8a95a94
+  - osm_id: node/11304222978
+    grade: 3
+    checks:
+    - key: night_noise
+      satisfied: true
+      fact_id: 8f225e29-27c8-43e6-b5b2-08227ce200d8
+- id: R2-02
+  query: Ищем отель в центре Сочи с 5 по 9 ноября 2026, нас двое. Хочется море прямо
+    из окна, желательно повыше, этажа с шестого, и чтобы закат над морем было видно.
+    Парковка тоже нужна.
+  judgments:
+  - osm_id: node/10118233110
+    grade: 3
+    checks:
+    - key: sea_view
+      satisfied: true
+      fact_id: 1910265a-cf5d-4682-8ce2-c0511d2ca483
+    - key: sunset_over_sea
+      satisfied: true
+      fact_id: 0b91b8ee-f929-4e3f-ade7-fe5c0b028b47
+    - key: parking
+      satisfied: true
+      fact_id: 92534df3-74dd-444a-a958-f1a09bbded1a
+  - osm_id: node/10759606594
+    grade: 1
+    checks:
+    - key: sea_view
+      satisfied: false
+      fact_id: null
+    - key: sunset_over_sea
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: true
+      fact_id: 4dccf373-d598-48f8-91a4-6f9b347c6a94
+  - osm_id: node/10759606596
+    grade: 1
+    checks:
+    - key: sea_view
+      satisfied: false
+      fact_id: null
+    - key: sunset_over_sea
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: true
+      fact_id: 4baa07ac-5670-4750-af69-a1175bba0737
+  - osm_id: node/10967527654
+    grade: 0
+    checks:
+    - key: sea_view
+      satisfied: false
+      fact_id: null
+    - key: sunset_over_sea
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: false
+      fact_id: null
+  - osm_id: node/11016638369
+    grade: 3
+    checks:
+    - key: sea_view
+      satisfied: true
+      fact_id: 43f256b9-7885-4b72-9296-02d9aaffa649
+    - key: sunset_over_sea
+      satisfied: true
+      fact_id: 66170b23-aeba-4f72-a07f-8de3cec07615
+    - key: parking
+      satisfied: true
+      fact_id: 1f464860-c890-4c67-9647-601c78d552cd
+  - osm_id: node/11016638373
+    grade: 1
+    checks:
+    - key: sea_view
+      satisfied: false
+      fact_id: null
+    - key: sunset_over_sea
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: true
+      fact_id: 56fefba1-b777-4711-8f99-220c9de886a1
+  - osm_id: node/11016638375
+    grade: 3
+    checks:
+    - key: sea_view
+      satisfied: true
+      fact_id: b5a4248d-a94b-499e-bff3-8d28ec70d19d
+    - key: sunset_over_sea
+      satisfied: true
+      fact_id: 6bb95817-5ff6-4562-bfd3-72564fca609b
+    - key: parking
+      satisfied: true
+      fact_id: 822e8a1f-009d-4a19-a0a4-928c85b252a3
+  - osm_id: node/11067209459
+    grade: 1
+    checks:
+    - key: sea_view
+      satisfied: false
+      fact_id: null
+    - key: sunset_over_sea
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: true
+      fact_id: c794043a-18a7-4ceb-b5e9-c78e2c608c2e
+  - osm_id: node/11138786328
+    grade: 1
+    checks:
+    - key: sea_view
+      satisfied: false
+      fact_id: null
+    - key: sunset_over_sea
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: true
+      fact_id: cc649be1-886d-44d8-8317-aa5d81795a80
+  - osm_id: node/11138786395
+    grade: 1
+    checks:
+    - key: sea_view
+      satisfied: false
+      fact_id: null
+    - key: sunset_over_sea
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: true
+      fact_id: a79f9d0d-baf6-46a4-894d-f6b2a143d647
+  - osm_id: node/11138786401
+    grade: 1
+    checks:
+    - key: sea_view
+      satisfied: false
+      fact_id: null
+    - key: sunset_over_sea
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: true
+      fact_id: 3dcd680b-9aa7-45aa-b071-29205f4d50ed
+  - osm_id: node/11304222978
+    grade: 2
+    checks:
+    - key: sea_view
+      satisfied: false
+      fact_id: null
+    - key: sunset_over_sea
+      satisfied: true
+      fact_id: 17682f7e-9e7f-448b-8c83-3b9f9327ef57
+    - key: parking
+      satisfied: true
+      fact_id: 81984c8f-dda0-4cc3-b2f8-f6df82e7db84
+- id: R2-03
+  query: Нужен отель в центре Сочи на 2 взрослых и ребенка 4 года. Главное чтоб ночью
+    не орала музыка с улицы. Площадка детская рядом и аптека круглосуточная тоже нужны.
+    До 9000 за ночь.
+  judgments:
+  - osm_id: node/10118233110
+    grade: 2
+    checks:
+    - key: night_noise
+      satisfied: true
+      fact_id: 0875e5dc-e8f2-4d32-9cc8-3102abfcb181
+    - key: playground_walk
+      satisfied: true
+      fact_id: 36e6e235-1974-4705-b9a4-6f2207536a67
+    - key: pharmacy_24_7
+      satisfied: false
+      fact_id: null
+  - osm_id: node/10759606594
+    grade: 2
+    checks:
+    - key: night_noise
+      satisfied: true
+      fact_id: d380517f-7c30-49ce-a526-34a2caee75d6
+    - key: playground_walk
+      satisfied: true
+      fact_id: ab52db5e-2658-426e-af98-2191716fe1f3
+    - key: pharmacy_24_7
+      satisfied: false
+      fact_id: null
+  - osm_id: node/10759606596
+    grade: 3
+    checks:
+    - key: night_noise
+      satisfied: true
+      fact_id: 8c0d31da-3054-4493-8b08-eeeebce4bdc0
+    - key: playground_walk
+      satisfied: true
+      fact_id: 4a3c3b24-daa4-40af-82c7-ede27d79fd47
+    - key: pharmacy_24_7
+      satisfied: true
+      fact_id: b43021c7-954b-430f-a879-464e5e8e53c0
+  - osm_id: node/10967527654
+    grade: 2
+    checks:
+    - key: night_noise
+      satisfied: true
+      fact_id: 61341951-c82f-49d7-85ae-e36a0cb15dc3
+    - key: playground_walk
+      satisfied: true
+      fact_id: a964c3f8-ef4c-445a-aaf4-f15213bc42c0
+    - key: pharmacy_24_7
+      satisfied: false
+      fact_id: null
+  - osm_id: node/11016638369
+    grade: 3
+    checks:
+    - key: night_noise
+      satisfied: true
+      fact_id: 6fffbe0c-4368-48af-a7f8-1e36ff5636cc
+    - key: playground_walk
+      satisfied: true
+      fact_id: 4983f2d8-12c1-48e1-a332-2fe774359b0f
+    - key: pharmacy_24_7
+      satisfied: true
+      fact_id: 9d7de1ac-7fa4-431b-bdcc-122809c77dd5
+  - osm_id: node/11016638373
+    grade: 3
+    checks:
+    - key: night_noise
+      satisfied: true
+      fact_id: 908df178-339f-4a91-b032-0fc3e18c0099
+    - key: playground_walk
+      satisfied: true
+      fact_id: df6630e6-902c-4c27-954b-4bba5a5d7c41
+    - key: pharmacy_24_7
+      satisfied: true
+      fact_id: c7971825-0c79-4a99-8611-a7f2d6b99aff
+  - osm_id: node/11016638375
+    grade: 3
+    checks:
+    - key: night_noise
+      satisfied: true
+      fact_id: 5161f3be-a653-493a-a67c-5c2720da0988
+    - key: playground_walk
+      satisfied: true
+      fact_id: 58f7cb02-96f7-44e3-a19b-facb2b4e2fcd
+    - key: pharmacy_24_7
+      satisfied: true
+      fact_id: b4b76811-e26e-4e52-a885-2b9e6da57839
+  - osm_id: node/11067209459
+    grade: 2
+    checks:
+    - key: night_noise
+      satisfied: true
+      fact_id: 0b2a1ad5-4d44-47ec-a7b3-9659369eecc8
+    - key: playground_walk
+      satisfied: true
+      fact_id: 0ef10b72-f5e9-46a0-aba9-6279d06b283f
+    - key: pharmacy_24_7
+      satisfied: false
+      fact_id: null
+  - osm_id: node/11138786328
+    grade: 3
+    checks:
+    - key: night_noise
+      satisfied: true
+      fact_id: e0d95c52-8cea-4914-a939-25ccdcf601e5
+    - key: playground_walk
+      satisfied: true
+      fact_id: 7053b804-5053-401b-8810-1c862c0b95e3
+    - key: pharmacy_24_7
+      satisfied: true
+      fact_id: aa9846d2-a176-42f2-8eb6-f95b6b279175
+  - osm_id: node/11138786395
+    grade: 3
+    checks:
+    - key: night_noise
+      satisfied: true
+      fact_id: a9449eea-3502-415b-9962-151c7f7e6657
+    - key: playground_walk
+      satisfied: true
+      fact_id: 32410ede-44f5-4709-958a-631899744424
+    - key: pharmacy_24_7
+      satisfied: true
+      fact_id: e7d4b370-9c99-49b7-b70b-4051069633dd
+  - osm_id: node/11138786401
+    grade: 2
+    checks:
+    - key: night_noise
+      satisfied: true
+      fact_id: 034894c2-d3ab-4995-b5ac-aa2dc8a95a94
+    - key: playground_walk
+      satisfied: true
+      fact_id: 020b3765-6e94-4c57-b606-f756eb656b6d
+    - key: pharmacy_24_7
+      satisfied: false
+      fact_id: null
+  - osm_id: node/11304222978
+    grade: 3
+    checks:
+    - key: night_noise
+      satisfied: true
+      fact_id: 8f225e29-27c8-43e6-b5b2-08227ce200d8
+    - key: playground_walk
+      satisfied: true
+      fact_id: bfa7e12c-12f2-4a73-8a82-cdee2e52c99c
+    - key: pharmacy_24_7
+      satisfied: true
+      fact_id: c62d35fc-e3f4-48d9-ad8c-0b4da75cf9d2
+- id: R2-05
+  query: Слушайте, мы с малышом едем в Сочи, вроде с 14 по 18 ноября, если билеты
+    не поменяем. Нас двое взрослых и ребёнку год. Я просто замучилась с коляской в
+    прошлый раз, там везде лестницы какие-то. Поэтому обязательно чтоб до моря можно
+    было нормально докатить коляску, без ступеней и горок. И в сам отель тоже чтобы
+    без ступенек. Лифт нужен, да. И днём чтобы не сверлили ничего, ребёнок спит. А
+    ещё шторы плотные хотелось бы, ну и море из окна было бы вообще супер. Бюджет
+    примерно 7500 за сутки максимум.
+  judgments:
+  - osm_id: node/10118233110
+    grade: 1
+    checks:
+    - key: stroller_to_sea
+      satisfied: true
+      fact_id: 9b53314d-4fd9-4b86-835e-34bee288e3ce
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: steep_streets
+      satisfied: false
+      fact_id: null
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: day_noise
+      satisfied: true
+      fact_id: 3016a85d-645d-4e44-a980-d9b67fbbc634
+    - key: blackout
+      satisfied: false
+      fact_id: null
+    - key: sea_view
+      satisfied: true
+      fact_id: 8e9385b7-2db2-42ed-935d-a9f4c6cc9f86
+  - osm_id: node/10759606594
+    grade: 1
+    checks:
+    - key: stroller_to_sea
+      satisfied: false
+      fact_id: null
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: steep_streets
+      satisfied: false
+      fact_id: null
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: day_noise
+      satisfied: true
+      fact_id: f34a3bf7-1749-4328-a1fa-2a07524b7b2b
+    - key: blackout
+      satisfied: false
+      fact_id: null
+    - key: sea_view
+      satisfied: true
+      fact_id: 71129202-e560-4b49-9bc2-e245efe78f31
+  - osm_id: node/10759606596
+    grade: 1
+    checks:
+    - key: stroller_to_sea
+      satisfied: false
+      fact_id: null
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: steep_streets
+      satisfied: true
+      fact_id: 0c02b451-b5a3-4c7f-909e-1f4b4f6f20fb
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: day_noise
+      satisfied: true
+      fact_id: 9e36acc7-ea02-4176-9fc0-ed9666093043
+    - key: blackout
+      satisfied: false
+      fact_id: null
+    - key: sea_view
+      satisfied: false
+      fact_id: null
+  - osm_id: node/10967527654
+    grade: 1
+    checks:
+    - key: stroller_to_sea
+      satisfied: false
+      fact_id: null
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: steep_streets
+      satisfied: false
+      fact_id: null
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: day_noise
+      satisfied: true
+      fact_id: 3eb0c672-5802-403b-8a6b-fe9eee31486c
+    - key: blackout
+      satisfied: false
+      fact_id: null
+    - key: sea_view
+      satisfied: false
+      fact_id: null
+  - osm_id: node/11016638369
+    grade: 1
+    checks:
+    - key: stroller_to_sea
+      satisfied: false
+      fact_id: null
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: steep_streets
+      satisfied: false
+      fact_id: null
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: day_noise
+      satisfied: true
+      fact_id: c91e1197-9fde-462e-afa6-0298a1d0533a
+    - key: blackout
+      satisfied: false
+      fact_id: null
+    - key: sea_view
+      satisfied: true
+      fact_id: 2e868bd2-b5e4-4d27-ab64-0123535e3e6d
+  - osm_id: node/11016638373
+    grade: 1
+    checks:
+    - key: stroller_to_sea
+      satisfied: false
+      fact_id: null
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: steep_streets
+      satisfied: true
+      fact_id: eb2f5103-fac8-411a-98ab-6df8d4885de2
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: day_noise
+      satisfied: true
+      fact_id: 3dd2aa71-c758-44dc-9dcf-b10a945aebd3
+    - key: blackout
+      satisfied: false
+      fact_id: null
+    - key: sea_view
+      satisfied: false
+      fact_id: null
+  - osm_id: node/11016638375
+    grade: 1
+    checks:
+    - key: stroller_to_sea
+      satisfied: false
+      fact_id: null
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: steep_streets
+      satisfied: false
+      fact_id: null
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: day_noise
+      satisfied: true
+      fact_id: 70a3b921-8476-49c4-b0c0-d885d00fd7d7
+    - key: blackout
+      satisfied: false
+      fact_id: null
+    - key: sea_view
+      satisfied: true
+      fact_id: 6c5b2f95-c203-4d4b-afde-bb7ed2bd502d
+  - osm_id: node/11067209459
+    grade: 1
+    checks:
+    - key: stroller_to_sea
+      satisfied: false
+      fact_id: null
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: steep_streets
+      satisfied: false
+      fact_id: null
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: day_noise
+      satisfied: true
+      fact_id: 28eaddac-5c6b-43b4-866f-78b958d863a4
+    - key: blackout
+      satisfied: false
+      fact_id: null
+    - key: sea_view
+      satisfied: true
+      fact_id: d6b9d3f1-fa15-4d17-be89-28daad6f6908
+  - osm_id: node/11138786328
+    grade: 1
+    checks:
+    - key: stroller_to_sea
+      satisfied: false
+      fact_id: null
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: steep_streets
+      satisfied: true
+      fact_id: d206106c-44de-4ca7-8055-47311c79ace2
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: day_noise
+      satisfied: true
+      fact_id: befb58aa-1d5f-4543-94a3-6932108aa48a
+    - key: blackout
+      satisfied: false
+      fact_id: null
+    - key: sea_view
+      satisfied: false
+      fact_id: null
+  - osm_id: node/11138786395
+    grade: 1
+    checks:
+    - key: stroller_to_sea
+      satisfied: false
+      fact_id: null
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: steep_streets
+      satisfied: true
+      fact_id: d1d7a1c0-99f5-41d9-ad15-d7af0ba8de5d
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: day_noise
+      satisfied: true
+      fact_id: fc3cc902-3484-47b1-92df-293efc2b4c25
+    - key: blackout
+      satisfied: false
+      fact_id: null
+    - key: sea_view
+      satisfied: false
+      fact_id: null
+  - osm_id: node/11138786401
+    grade: 1
+    checks:
+    - key: stroller_to_sea
+      satisfied: false
+      fact_id: null
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: steep_streets
+      satisfied: false
+      fact_id: null
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: day_noise
+      satisfied: true
+      fact_id: c486c0c1-d938-4c3a-8dba-b61d00f2d1b9
+    - key: blackout
+      satisfied: false
+      fact_id: null
+    - key: sea_view
+      satisfied: false
+      fact_id: null
+  - osm_id: node/11304222978
+    grade: 1
+    checks:
+    - key: stroller_to_sea
+      satisfied: false
+      fact_id: null
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: steep_streets
+      satisfied: false
+      fact_id: null
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: day_noise
+      satisfied: true
+      fact_id: 8fda3e59-15d2-47a7-a764-30bdf8c7df0e
+    - key: blackout
+      satisfied: false
+      fact_id: null
+    - key: sea_view
+      satisfied: true
+      fact_id: 400ee050-8250-4236-a24d-2cd379cf8a84
+- id: R2-06
+  query: Хотим в центре Сочи прямо возле пляжа, максимум 3 минуты пешком и без подъема
+    обратно, и чтобы ночью прям полная тишина. Обязательно всё это до 3000 рублей
+    за ночь. Два человека, 20-22 ноября.
+  judgments:
+  - osm_id: node/10118233110
+    grade: 0
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: night_noise
+      satisfied: true
+      fact_id: 0875e5dc-e8f2-4d32-9cc8-3102abfcb181
+  - osm_id: node/10759606594
+    grade: 0
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: night_noise
+      satisfied: true
+      fact_id: d380517f-7c30-49ce-a526-34a2caee75d6
+  - osm_id: node/10759606596
+    grade: 0
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: night_noise
+      satisfied: true
+      fact_id: 8c0d31da-3054-4493-8b08-eeeebce4bdc0
+  - osm_id: node/10967527654
+    grade: 0
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: night_noise
+      satisfied: true
+      fact_id: 61341951-c82f-49d7-85ae-e36a0cb15dc3
+  - osm_id: node/11016638369
+    grade: 0
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: night_noise
+      satisfied: true
+      fact_id: 6fffbe0c-4368-48af-a7f8-1e36ff5636cc
+  - osm_id: node/11016638373
+    grade: 2
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: night_noise
+      satisfied: true
+      fact_id: 908df178-339f-4a91-b032-0fc3e18c0099
+  - osm_id: node/11016638375
+    grade: 0
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: night_noise
+      satisfied: true
+      fact_id: 5161f3be-a653-493a-a67c-5c2720da0988
+  - osm_id: node/11067209459
+    grade: 0
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: night_noise
+      satisfied: true
+      fact_id: 0b2a1ad5-4d44-47ec-a7b3-9659369eecc8
+  - osm_id: node/11138786328
+    grade: 0
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: night_noise
+      satisfied: true
+      fact_id: e0d95c52-8cea-4914-a939-25ccdcf601e5
+  - osm_id: node/11138786395
+    grade: 2
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: night_noise
+      satisfied: true
+      fact_id: a9449eea-3502-415b-9962-151c7f7e6657
+  - osm_id: node/11138786401
+    grade: 2
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: night_noise
+      satisfied: true
+      fact_id: 034894c2-d3ab-4995-b5ac-aa2dc8a95a94
+  - osm_id: node/11304222978
+    grade: 0
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: night_noise
+      satisfied: true
+      fact_id: 8f225e29-27c8-43e6-b5b2-08227ce200d8
+- id: R2-07
+  query: На 29 октября — 2 ноября хотим в Сочи. Мечтаю просыпаться и видеть рассвет
+    из окна номера. И ещё скажите, в эти даты море совсем холодное уже или купаться
+    реально? Еду с девушкой.
+  judgments:
+  - osm_id: node/10058556917
+    grade: 3
+    checks:
+    - key: sunrise
+      satisfied: true
+      fact_id: 751a22fd-8ae7-41fd-8420-d804f1f7b91e
+    - key: climate
+      satisfied: true
+      fact_id: 4aa36a68-f24e-4a29-b511-6ff96adfdea5
+  - osm_id: node/10058760244
+    grade: 2
+    checks:
+    - key: sunrise
+      satisfied: false
+      fact_id: null
+    - key: climate
+      satisfied: true
+      fact_id: 75e67ad9-6650-4396-88eb-eab5927515fe
+  - osm_id: node/10058780093
+    grade: 3
+    checks:
+    - key: sunrise
+      satisfied: true
+      fact_id: eac8b811-1d63-494a-beac-b2a3817b36a0
+    - key: climate
+      satisfied: true
+      fact_id: d1b6c16a-5a88-4629-897d-6b373293352b
+  - osm_id: node/10118233110
+    grade: 3
+    checks:
+    - key: sunrise
+      satisfied: true
+      fact_id: df5f393b-a102-423c-accb-729dfa68e4d2
+    - key: climate
+      satisfied: true
+      fact_id: 7625fd39-b3d7-4c3b-a7ac-38ddf0f0b679
+  - osm_id: node/10213051617
+    grade: 2
+    checks:
+    - key: sunrise
+      satisfied: false
+      fact_id: null
+    - key: climate
+      satisfied: true
+      fact_id: 9a6ee2ad-33e6-48cd-b829-4d07d51194a7
+  - osm_id: node/10574256210
+    grade: 3
+    checks:
+    - key: sunrise
+      satisfied: true
+      fact_id: 685b58b9-68c6-4669-9e63-e040d0a0b145
+    - key: climate
+      satisfied: true
+      fact_id: 82da4f0a-9b2a-4e59-8970-ab15ede192f8
+  - osm_id: node/10734977305
+    grade: 2
+    checks:
+    - key: sunrise
+      satisfied: false
+      fact_id: null
+    - key: climate
+      satisfied: true
+      fact_id: 031fea5c-3394-4df0-ae1b-35b698f8425b
+  - osm_id: node/10759606594
+    grade: 2
+    checks:
+    - key: sunrise
+      satisfied: false
+      fact_id: null
+    - key: climate
+      satisfied: true
+      fact_id: 718dbc22-54d9-4f68-825c-c9dffbcce002
+  - osm_id: node/10759606596
+    grade: 2
+    checks:
+    - key: sunrise
+      satisfied: false
+      fact_id: null
+    - key: climate
+      satisfied: true
+      fact_id: 3ded70b2-8b3b-4b33-bb82-77a941458dce
+  - osm_id: node/10759613912
+    grade: 2
+    checks:
+    - key: sunrise
+      satisfied: false
+      fact_id: null
+    - key: climate
+      satisfied: true
+      fact_id: 681a2f56-f2bf-4c4e-a5f9-7a7662516f64
+  - osm_id: node/10759613919
+    grade: 3
+    checks:
+    - key: sunrise
+      satisfied: true
+      fact_id: 4665ad11-8181-49f4-9c55-c43ad80c0550
+    - key: climate
+      satisfied: true
+      fact_id: c362e738-8bbe-4d2a-9228-1c979a3ead57
+  - osm_id: node/10759614063
+    grade: 3
+    checks:
+    - key: sunrise
+      satisfied: true
+      fact_id: c2a2e7f5-5e59-49f6-a779-6e2fd9ec99a1
+    - key: climate
+      satisfied: true
+      fact_id: fb635c24-d59e-4ab1-875f-19befad78e2d
+- id: R2-09
+  query: Хоста горы из окна
+  judgments:
+  - osm_id: node/11119611105
+    grade: 0
+    checks:
+    - key: mountain_view
+      satisfied: false
+      fact_id: null
+  - osm_id: node/13108695501
+    grade: 0
+    checks:
+    - key: mountain_view
+      satisfied: false
+      fact_id: null
+  - osm_id: node/14002340401
+    grade: 0
+    checks:
+    - key: mountain_view
+      satisfied: false
+      fact_id: null
+  - osm_id: node/4323769893
+    grade: 0
+    checks:
+    - key: mountain_view
+      satisfied: false
+      fact_id: null
+  - osm_id: node/4369173790
+    grade: 3
+    checks:
+    - key: mountain_view
+      satisfied: true
+      fact_id: bd3be5e6-b82a-430b-be94-f4f85aebf032
+  - osm_id: node/4369348389
+    grade: 0
+    checks:
+    - key: mountain_view
+      satisfied: false
+      fact_id: null
+  - osm_id: node/4370076889
+    grade: 3
+    checks:
+    - key: mountain_view
+      satisfied: true
+      fact_id: 956dd995-f005-4dbc-b04f-556e98001df8
+  - osm_id: node/4370807729
+    grade: 0
+    checks:
+    - key: mountain_view
+      satisfied: false
+      fact_id: null
+  - osm_id: node/5014222522
+    grade: 0
+    checks:
+    - key: mountain_view
+      satisfied: false
+      fact_id: null
+  - osm_id: node/6181072994
+    grade: 0
+    checks:
+    - key: mountain_view
+      satisfied: false
+      fact_id: null
+  - osm_id: node/6590015485
+    grade: 0
+    checks:
+    - key: mountain_view
+      satisfied: false
+      fact_id: null
+  - osm_id: node/7151225626
+    grade: 0
+    checks:
+    - key: mountain_view
+      satisfied: false
+      fact_id: null
+- id: R2-10
+  query: Хоста, 3-7 декабря, нам надо чтоб до пляжа не больше 7 мин пешком и обратно
+    не карабкаться в гору. И вообще чтоб вокруг отеля не было этих крутых улиц, мама
+    плохо ходит.
+  judgments:
+  - osm_id: node/11119611105
+    grade: 0
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: steep_streets
+      satisfied: false
+      fact_id: null
+  - osm_id: node/13108695501
+    grade: 0
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: steep_streets
+      satisfied: false
+      fact_id: null
+  - osm_id: node/14002340401
+    grade: 0
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: steep_streets
+      satisfied: false
+      fact_id: null
+  - osm_id: node/4323769893
+    grade: 0
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: steep_streets
+      satisfied: false
+      fact_id: null
+  - osm_id: node/4369173790
+    grade: 0
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: steep_streets
+      satisfied: false
+      fact_id: null
+  - osm_id: node/4369348389
+    grade: 0
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: steep_streets
+      satisfied: false
+      fact_id: null
+  - osm_id: node/4370076889
+    grade: 0
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: steep_streets
+      satisfied: false
+      fact_id: null
+  - osm_id: node/4370807729
+    grade: 0
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: steep_streets
+      satisfied: false
+      fact_id: null
+  - osm_id: node/5014222522
+    grade: 0
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: steep_streets
+      satisfied: false
+      fact_id: null
+  - osm_id: node/6181072994
+    grade: 2
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: steep_streets
+      satisfied: true
+      fact_id: 5a8a84f0-c171-4bf4-af72-78362c2d39dd
+  - osm_id: node/6590015485
+    grade: 0
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: steep_streets
+      satisfied: false
+      fact_id: null
+  - osm_id: node/7151225626
+    grade: 0
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: steep_streets
+      satisfied: false
+      fact_id: null
+- id: R2-12
+  query: В Хосте хочу снять номер с 18 по 24 ноября, буду работать за ноутом. Главное
+    чтоб днем было тихо, нужен нормальный стол и связь для созвонов. Желательно окна
+    с хорошей шумоизоляцией.
+  judgments:
+  - osm_id: node/11119611105
+    grade: 2
+    checks:
+    - key: remote_work
+      satisfied: true
+      fact_id: 766b9efd-148f-4795-bcc7-10e5993502ed
+    - key: day_noise
+      satisfied: true
+      fact_id: 35f4ce2b-9f90-48a3-b04c-cc7f43eaf800
+    - key: soundproofing
+      satisfied: false
+      fact_id: null
+  - osm_id: node/13108695501
+    grade: 2
+    checks:
+    - key: remote_work
+      satisfied: true
+      fact_id: 82c7d037-0cd2-4299-a3e8-36179eab6c05
+    - key: day_noise
+      satisfied: true
+      fact_id: 9128b00e-df78-47a5-bda0-332fbf8a6194
+    - key: soundproofing
+      satisfied: false
+      fact_id: null
+  - osm_id: node/14002340401
+    grade: 2
+    checks:
+    - key: remote_work
+      satisfied: true
+      fact_id: 3d471a7d-5ff2-4ead-b1f6-a72ba41d0552
+    - key: day_noise
+      satisfied: true
+      fact_id: 07e03cbe-7443-4ae0-aba4-219fc16cb501
+    - key: soundproofing
+      satisfied: false
+      fact_id: null
+  - osm_id: node/4323769893
+    grade: 2
+    checks:
+    - key: remote_work
+      satisfied: true
+      fact_id: 167759a5-5d49-493c-9f68-f3ece81a46d0
+    - key: day_noise
+      satisfied: true
+      fact_id: 103ffb7c-483c-43b5-b794-c66dfff841f7
+    - key: soundproofing
+      satisfied: false
+      fact_id: null
+  - osm_id: node/4369173790
+    grade: 2
+    checks:
+    - key: remote_work
+      satisfied: true
+      fact_id: 663226a2-106e-4d6f-b1f2-5cc67cf09279
+    - key: day_noise
+      satisfied: true
+      fact_id: 7b007575-5d9a-4a84-8ff9-e547e53f958c
+    - key: soundproofing
+      satisfied: false
+      fact_id: null
+  - osm_id: node/4369348389
+    grade: 2
+    checks:
+    - key: remote_work
+      satisfied: true
+      fact_id: 2894e3ea-880c-44be-830c-2eb67571b2ac
+    - key: day_noise
+      satisfied: true
+      fact_id: 10cdf1ab-245c-4266-85fd-b1438cc966d9
+    - key: soundproofing
+      satisfied: false
+      fact_id: null
+  - osm_id: node/4370076889
+    grade: 2
+    checks:
+    - key: remote_work
+      satisfied: true
+      fact_id: 77e94e09-817b-410e-8b4a-8a105f9d3815
+    - key: day_noise
+      satisfied: true
+      fact_id: 5edffd90-ea28-4043-82f7-f03404173edf
+    - key: soundproofing
+      satisfied: false
+      fact_id: null
+  - osm_id: node/4370807729
+    grade: 2
+    checks:
+    - key: remote_work
+      satisfied: true
+      fact_id: 6815685c-38fb-409e-845a-52ad2899205c
+    - key: day_noise
+      satisfied: true
+      fact_id: 7b8ce311-c122-471f-b52a-7b3afcd362fe
+    - key: soundproofing
+      satisfied: false
+      fact_id: null
+  - osm_id: node/5014222522
+    grade: 2
+    checks:
+    - key: remote_work
+      satisfied: true
+      fact_id: 72de5e36-e09a-41db-a94d-b8a690bc2c7d
+    - key: day_noise
+      satisfied: true
+      fact_id: c4ff08cf-5e20-47ea-902e-4384dc15abac
+    - key: soundproofing
+      satisfied: false
+      fact_id: null
+  - osm_id: node/6181072994
+    grade: 2
+    checks:
+    - key: remote_work
+      satisfied: true
+      fact_id: d86606fb-c5e1-4bad-a6e6-f1d445f68d43
+    - key: day_noise
+      satisfied: true
+      fact_id: df347151-753c-4cbb-9788-a3d5c0eef45b
+    - key: soundproofing
+      satisfied: false
+      fact_id: null
+  - osm_id: node/6590015485
+    grade: 2
+    checks:
+    - key: remote_work
+      satisfied: true
+      fact_id: 895a84c2-f7d0-4477-80a0-34cceff92c54
+    - key: day_noise
+      satisfied: true
+      fact_id: e2a1a462-41bd-4202-84e0-38d5836de05f
+    - key: soundproofing
+      satisfied: false
+      fact_id: null
+  - osm_id: node/7151225626
+    grade: 2
+    checks:
+    - key: remote_work
+      satisfied: true
+      fact_id: 29b99265-5ec0-4bf3-aa56-06113ba0bb37
+    - key: day_noise
+      satisfied: true
+      fact_id: 2323adad-06c1-4fe8-92f1-29e7b32fb345
+    - key: soundproofing
+      satisfied: false
+      fact_id: null
+- id: R2-13
+  query: Так, по датам пока непонятно, наверное конец ноября. Нам в Хосту, трое взрослых,
+    без детей, с мамой. Она после операции, ей по лестницам тяжело, поэтому никаких
+    ступенек при входе, это обязательно. И лифт обязательно, не хочется её таскать
+    по этажам. Машина будет, парковка желательно своя. Ещё бы аптеку круглосуточную
+    недалеко, вдруг что. Больше 6500 за сутки не хотелось бы, ну если прям идеально
+    то посмотрим.
+  judgments:
+  - osm_id: node/11119611105
+    grade: 0
+    checks:
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: false
+      fact_id: null
+    - key: pharmacy_24_7
+      satisfied: false
+      fact_id: null
+  - osm_id: node/13108695501
+    grade: 0
+    checks:
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: false
+      fact_id: null
+    - key: pharmacy_24_7
+      satisfied: false
+      fact_id: null
+  - osm_id: node/14002340401
+    grade: 0
+    checks:
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: false
+      fact_id: null
+    - key: pharmacy_24_7
+      satisfied: false
+      fact_id: null
+  - osm_id: node/4323769893
+    grade: 0
+    checks:
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: false
+      fact_id: null
+    - key: pharmacy_24_7
+      satisfied: false
+      fact_id: null
+  - osm_id: node/4369173790
+    grade: 1
+    checks:
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: true
+      fact_id: c0227392-f9d4-46eb-a250-3c8839b6e0c4
+    - key: pharmacy_24_7
+      satisfied: false
+      fact_id: null
+  - osm_id: node/4369348389
+    grade: 1
+    checks:
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: true
+      fact_id: 7d08103a-f289-4baf-8cb0-6fe9ae6ea3c7
+    - key: pharmacy_24_7
+      satisfied: false
+      fact_id: null
+  - osm_id: node/4370076889
+    grade: 1
+    checks:
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: true
+      fact_id: 597b126e-6e81-4986-a42d-d1dae1d1087a
+    - key: pharmacy_24_7
+      satisfied: false
+      fact_id: null
+  - osm_id: node/4370807729
+    grade: 1
+    checks:
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: true
+      fact_id: 0281c806-5f69-4eff-9bd9-76745c2e332b
+    - key: pharmacy_24_7
+      satisfied: false
+      fact_id: null
+  - osm_id: node/5014222522
+    grade: 0
+    checks:
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: false
+      fact_id: null
+    - key: pharmacy_24_7
+      satisfied: false
+      fact_id: null
+  - osm_id: node/6181072994
+    grade: 1
+    checks:
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: true
+      fact_id: 5a8b4095-3a49-4b7f-8e16-d94abd4fe5ff
+    - key: pharmacy_24_7
+      satisfied: false
+      fact_id: null
+  - osm_id: node/6590015485
+    grade: 1
+    checks:
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: true
+      fact_id: ea8cf413-6780-47b7-9290-9063e0c37e66
+    - key: pharmacy_24_7
+      satisfied: false
+      fact_id: null
+  - osm_id: node/7151225626
+    grade: 1
+    checks:
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: true
+      fact_id: 20270350-f082-432e-8008-5735157215ab
+    - key: pharmacy_24_7
+      satisfied: false
+      fact_id: null
+- id: R2-14
+  query: Хоста, обязательно чтоб море в 4 минутах максимум пешком, без подъемов, но
+    и днем чтобы вообще не шумно было, никаких толп. Цена строго до 2800 за ночь.
+    Вид на море тоже было бы неплохо.
+  judgments:
+  - osm_id: node/11119611105
+    grade: 1
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: day_noise
+      satisfied: true
+      fact_id: 35f4ce2b-9f90-48a3-b04c-cc7f43eaf800
+    - key: sea_view
+      satisfied: false
+      fact_id: null
+  - osm_id: node/13108695501
+    grade: 2
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: day_noise
+      satisfied: true
+      fact_id: 9128b00e-df78-47a5-bda0-332fbf8a6194
+    - key: sea_view
+      satisfied: true
+      fact_id: 22eafb9f-b4bf-4a47-9012-5600a1475133
+  - osm_id: node/14002340401
+    grade: 0
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: day_noise
+      satisfied: true
+      fact_id: 07e03cbe-7443-4ae0-aba4-219fc16cb501
+    - key: sea_view
+      satisfied: true
+      fact_id: 0a0621dc-233e-4f67-aa28-5a990f91284b
+  - osm_id: node/4323769893
+    grade: 2
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: day_noise
+      satisfied: true
+      fact_id: 103ffb7c-483c-43b5-b794-c66dfff841f7
+    - key: sea_view
+      satisfied: true
+      fact_id: 3811a91c-050c-4288-9f3f-8aa7901130e2
+  - osm_id: node/4369173790
+    grade: 2
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: day_noise
+      satisfied: true
+      fact_id: 025e9bbc-ea02-4a90-bec1-eea99525f6d9
+    - key: sea_view
+      satisfied: true
+      fact_id: 7d5f9437-0d22-4fd2-866a-414270155e5b
+  - osm_id: node/4369348389
+    grade: 0
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: day_noise
+      satisfied: true
+      fact_id: 10cdf1ab-245c-4266-85fd-b1438cc966d9
+    - key: sea_view
+      satisfied: false
+      fact_id: null
+  - osm_id: node/4370076889
+    grade: 0
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: day_noise
+      satisfied: true
+      fact_id: a0510bb8-cd02-4390-af0c-3be87226dd89
+    - key: sea_view
+      satisfied: true
+      fact_id: d34fab69-a267-4bbc-9c1e-0b7ca3aeebd6
+  - osm_id: node/4370807729
+    grade: 0
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: day_noise
+      satisfied: true
+      fact_id: 7b8ce311-c122-471f-b52a-7b3afcd362fe
+    - key: sea_view
+      satisfied: true
+      fact_id: 68d12ee9-1f1d-4dd9-9f1d-0c31e7643907
+  - osm_id: node/5014222522
+    grade: 1
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: day_noise
+      satisfied: true
+      fact_id: c4ff08cf-5e20-47ea-902e-4384dc15abac
+    - key: sea_view
+      satisfied: false
+      fact_id: null
+  - osm_id: node/6181072994
+    grade: 1
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: day_noise
+      satisfied: true
+      fact_id: df347151-753c-4cbb-9788-a3d5c0eef45b
+    - key: sea_view
+      satisfied: false
+      fact_id: null
+  - osm_id: node/6590015485
+    grade: 2
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: day_noise
+      satisfied: true
+      fact_id: e2a1a462-41bd-4202-84e0-38d5836de05f
+    - key: sea_view
+      satisfied: true
+      fact_id: e4ccae8c-940b-4407-9c75-d2af7c8ebc38
+  - osm_id: node/7151225626
+    grade: 2
+    checks:
+    - key: beach_walk
+      satisfied: false
+      fact_id: null
+    - key: day_noise
+      satisfied: true
+      fact_id: 47b92325-ae04-469a-8c29-e2d47b994458
+    - key: sea_view
+      satisfied: true
+      fact_id: 16ac2c1f-fd71-4130-b996-f83226079da6
+- id: R2-15
+  query: В ноябре хотим на пару дней в Хосту, вдвоем. Чтобы из окна были горы, рядом
+    никаких строек, а то в прошлый раз с утра долбили перфоратором. И шторы нужны
+    плотные, я от света сразу просыпаюсь.
+  judgments:
+  - osm_id: node/11119611105
+    grade: 0
+    checks:
+    - key: mountain_view
+      satisfied: false
+      fact_id: null
+    - key: construction_nearby
+      satisfied: false
+      fact_id: null
+    - key: blackout
+      satisfied: false
+      fact_id: null
+  - osm_id: node/13108695501
+    grade: 0
+    checks:
+    - key: mountain_view
+      satisfied: false
+      fact_id: null
+    - key: construction_nearby
+      satisfied: false
+      fact_id: null
+    - key: blackout
+      satisfied: false
+      fact_id: null
+  - osm_id: node/14002340401
+    grade: 0
+    checks:
+    - key: mountain_view
+      satisfied: false
+      fact_id: null
+    - key: construction_nearby
+      satisfied: false
+      fact_id: null
+    - key: blackout
+      satisfied: false
+      fact_id: null
+  - osm_id: node/4323769893
+    grade: 0
+    checks:
+    - key: mountain_view
+      satisfied: false
+      fact_id: null
+    - key: construction_nearby
+      satisfied: false
+      fact_id: null
+    - key: blackout
+      satisfied: false
+      fact_id: null
+  - osm_id: node/4369173790
+    grade: 1
+    checks:
+    - key: mountain_view
+      satisfied: true
+      fact_id: bd3be5e6-b82a-430b-be94-f4f85aebf032
+    - key: construction_nearby
+      satisfied: false
+      fact_id: null
+    - key: blackout
+      satisfied: false
+      fact_id: null
+  - osm_id: node/4369348389
+    grade: 0
+    checks:
+    - key: mountain_view
+      satisfied: false
+      fact_id: null
+    - key: construction_nearby
+      satisfied: false
+      fact_id: null
+    - key: blackout
+      satisfied: false
+      fact_id: null
+  - osm_id: node/4370076889
+    grade: 1
+    checks:
+    - key: mountain_view
+      satisfied: true
+      fact_id: 956dd995-f005-4dbc-b04f-556e98001df8
+    - key: construction_nearby
+      satisfied: false
+      fact_id: null
+    - key: blackout
+      satisfied: false
+      fact_id: null
+  - osm_id: node/4370807729
+    grade: 0
+    checks:
+    - key: mountain_view
+      satisfied: false
+      fact_id: null
+    - key: construction_nearby
+      satisfied: false
+      fact_id: null
+    - key: blackout
+      satisfied: false
+      fact_id: null
+  - osm_id: node/5014222522
+    grade: 0
+    checks:
+    - key: mountain_view
+      satisfied: false
+      fact_id: null
+    - key: construction_nearby
+      satisfied: false
+      fact_id: null
+    - key: blackout
+      satisfied: false
+      fact_id: null
+  - osm_id: node/6181072994
+    grade: 0
+    checks:
+    - key: mountain_view
+      satisfied: false
+      fact_id: null
+    - key: construction_nearby
+      satisfied: false
+      fact_id: null
+    - key: blackout
+      satisfied: false
+      fact_id: null
+  - osm_id: node/6590015485
+    grade: 0
+    checks:
+    - key: mountain_view
+      satisfied: false
+      fact_id: null
+    - key: construction_nearby
+      satisfied: false
+      fact_id: null
+    - key: blackout
+      satisfied: false
+      fact_id: null
+  - osm_id: node/7151225626
+    grade: 0
+    checks:
+    - key: mountain_view
+      satisfied: false
+      fact_id: null
+    - key: construction_nearby
+      satisfied: false
+      fact_id: null
+    - key: blackout
+      satisfied: false
+      fact_id: null
+- id: R2-17
+  query: Адлер без шума самолетов
+  judgments:
+  - osm_id: node/10058556917
+    grade: 3
+    checks:
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: eb6e7406-5a59-4d4c-9856-4a083f6745fb
+  - osm_id: node/10058760244
+    grade: 3
+    checks:
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: 064e2c72-09a5-4b23-bac6-373fab984fa2
+  - osm_id: node/10058780093
+    grade: 3
+    checks:
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: 65d2b0ae-8ee8-4503-a641-8ff33e4a010e
+  - osm_id: node/10574256210
+    grade: 3
+    checks:
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: ecd2a623-6c16-4566-b3c4-7d2806312c42
+  - osm_id: node/10759613919
+    grade: 3
+    checks:
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: 66582980-2b20-4485-9f87-f6e1a0021d18
+  - osm_id: node/10759614063
+    grade: 3
+    checks:
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: 5b238746-af62-45dd-896a-eac76d619da9
+  - osm_id: node/10853513205
+    grade: 3
+    checks:
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: 429b2545-fcfd-43d9-8e6e-1a65bec237d9
+  - osm_id: node/10858734694
+    grade: 3
+    checks:
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: 514bcb81-314f-429e-ab53-4c52d776fa73
+  - osm_id: node/10974113805
+    grade: 3
+    checks:
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: 91d13e4d-166f-43a3-8d5e-1b8c0b05d1c5
+  - osm_id: node/11016631786
+    grade: 3
+    checks:
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: 23e17f4d-d9cf-4913-8833-bce513475fd7
+  - osm_id: node/11016631787
+    grade: 3
+    checks:
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: 003e886d-8fd1-44e5-85f0-25bf42e35408
+  - osm_id: node/11029913505
+    grade: 3
+    checks:
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: c1fe87fb-18fb-4372-b616-91ba05b8e24b
+- id: R2-19
+  query: Адлер с 2 по 6 декабря, двое взрослых и ребёнок 5 лет. Детская площадка чтоб
+    минут 10 пешком максимум, и детская больница рядом на всякий случай. До 7000 руб
+    за номер.
+  judgments:
+  - osm_id: node/10058556917
+    grade: 3
+    checks:
+    - key: playground_walk
+      satisfied: true
+      fact_id: 704b806c-1b31-46a1-a97b-cd2b49dc14ae
+    - key: kids_hospital
+      satisfied: true
+      fact_id: 4b1b90ca-d8af-4700-83d6-4ee9d6d5f747
+  - osm_id: node/10058760244
+    grade: 3
+    checks:
+    - key: playground_walk
+      satisfied: true
+      fact_id: 6104d938-e1cf-4eb3-9c11-25ed3065cb41
+    - key: kids_hospital
+      satisfied: true
+      fact_id: 25dec440-4400-4f10-b3a6-76ae698c9d2d
+  - osm_id: node/10058780093
+    grade: 3
+    checks:
+    - key: playground_walk
+      satisfied: true
+      fact_id: 732031fd-666e-4fcd-a83e-ac1cb9f6f2d4
+    - key: kids_hospital
+      satisfied: true
+      fact_id: 321113cc-ed34-4493-ad74-023a465496b3
+  - osm_id: node/10574256210
+    grade: 3
+    checks:
+    - key: playground_walk
+      satisfied: true
+      fact_id: 9b8ac93b-b360-4363-981f-4bcc39303ca0
+    - key: kids_hospital
+      satisfied: true
+      fact_id: 19dda6e6-63dd-411c-b66c-317e365823ea
+  - osm_id: node/10759613919
+    grade: 3
+    checks:
+    - key: playground_walk
+      satisfied: true
+      fact_id: ae18e79e-2118-44e3-91bd-c2b3af6d1e2b
+    - key: kids_hospital
+      satisfied: true
+      fact_id: 61d04f21-04a7-4c27-8787-627aefc1c205
+  - osm_id: node/10759614063
+    grade: 3
+    checks:
+    - key: playground_walk
+      satisfied: true
+      fact_id: 2156fa26-c5b6-479e-bf61-46d8b93f78ed
+    - key: kids_hospital
+      satisfied: true
+      fact_id: de71e82d-bb13-4385-8c86-e952ef3e2f28
+  - osm_id: node/10853513205
+    grade: 3
+    checks:
+    - key: playground_walk
+      satisfied: true
+      fact_id: de42d30c-8ccd-423b-82c5-bacbaf9418e3
+    - key: kids_hospital
+      satisfied: true
+      fact_id: 8fa30825-8803-4e37-9ab7-9ca31f3785e6
+  - osm_id: node/10858734694
+    grade: 3
+    checks:
+    - key: playground_walk
+      satisfied: true
+      fact_id: 9635b75e-c14f-4edb-84b1-dac736fd39da
+    - key: kids_hospital
+      satisfied: true
+      fact_id: 81126129-ee74-4a1e-9c18-722dc903a1e8
+  - osm_id: node/10974113805
+    grade: 2
+    checks:
+    - key: playground_walk
+      satisfied: true
+      fact_id: fe999711-9b2c-4d25-adc4-0c7984479703
+    - key: kids_hospital
+      satisfied: false
+      fact_id: null
+  - osm_id: node/11016631786
+    grade: 3
+    checks:
+    - key: playground_walk
+      satisfied: true
+      fact_id: c8bc4fcb-2110-4ccd-a3b2-d95e7f464dcd
+    - key: kids_hospital
+      satisfied: true
+      fact_id: 50d494da-c0db-460a-8e8f-ef9a1b60bdb4
+  - osm_id: node/11016631787
+    grade: 3
+    checks:
+    - key: playground_walk
+      satisfied: true
+      fact_id: bbdcb10a-2327-48c7-ae8c-8811ded6d3a2
+    - key: kids_hospital
+      satisfied: true
+      fact_id: 17921c52-b785-4db8-8f77-0198ddee3afa
+  - osm_id: node/11029913505
+    grade: 3
+    checks:
+    - key: playground_walk
+      satisfied: true
+      fact_id: d296737e-aac1-4334-bffd-d04c7f570d78
+    - key: kids_hospital
+      satisfied: true
+      fact_id: 4f588d9b-e54a-4888-a30e-995edaff103b
+- id: R2-20
+  query: На 7-10 ноября в Адлере нужен номер. Самое важное чтобы самолеты не было
+    слышно ночью, там же аэропорт. Окна с хорошей шумкой нужны. Ну и хорошо бы после
+    23:00 было где перекусить поблизости. Нас двое.
+  judgments:
+  - osm_id: node/10058556917
+    grade: 2
+    checks:
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: eb6e7406-5a59-4d4c-9856-4a083f6745fb
+    - key: soundproofing
+      satisfied: false
+      fact_id: null
+    - key: food_late
+      satisfied: true
+      fact_id: 8a8c648d-f331-416a-981b-1013430d8830
+  - osm_id: node/10058760244
+    grade: 2
+    checks:
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: 064e2c72-09a5-4b23-bac6-373fab984fa2
+    - key: soundproofing
+      satisfied: false
+      fact_id: null
+    - key: food_late
+      satisfied: true
+      fact_id: 94f2d6b4-6a24-4b31-b00f-1bfa7e0cb60b
+  - osm_id: node/10058780093
+    grade: 2
+    checks:
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: 65d2b0ae-8ee8-4503-a641-8ff33e4a010e
+    - key: soundproofing
+      satisfied: false
+      fact_id: null
+    - key: food_late
+      satisfied: true
+      fact_id: c811502d-24b0-426a-b44c-d30be227bd69
+  - osm_id: node/10574256210
+    grade: 2
+    checks:
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: ecd2a623-6c16-4566-b3c4-7d2806312c42
+    - key: soundproofing
+      satisfied: false
+      fact_id: null
+    - key: food_late
+      satisfied: true
+      fact_id: 2ad03846-6e1d-4996-ad9c-933107a41ec1
+  - osm_id: node/10759613919
+    grade: 1
+    checks:
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: 66582980-2b20-4485-9f87-f6e1a0021d18
+    - key: soundproofing
+      satisfied: false
+      fact_id: null
+    - key: food_late
+      satisfied: false
+      fact_id: null
+  - osm_id: node/10759614063
+    grade: 2
+    checks:
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: 5b238746-af62-45dd-896a-eac76d619da9
+    - key: soundproofing
+      satisfied: false
+      fact_id: null
+    - key: food_late
+      satisfied: true
+      fact_id: 297640e4-4ac0-4d01-974c-ac43ea912c4f
+  - osm_id: node/10853513205
+    grade: 2
+    checks:
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: 429b2545-fcfd-43d9-8e6e-1a65bec237d9
+    - key: soundproofing
+      satisfied: false
+      fact_id: null
+    - key: food_late
+      satisfied: true
+      fact_id: a185d698-c12e-49a0-bb73-66bb54cd4930
+  - osm_id: node/10858734694
+    grade: 1
+    checks:
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: 514bcb81-314f-429e-ab53-4c52d776fa73
+    - key: soundproofing
+      satisfied: false
+      fact_id: null
+    - key: food_late
+      satisfied: false
+      fact_id: null
+  - osm_id: node/10974113805
+    grade: 1
+    checks:
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: 91d13e4d-166f-43a3-8d5e-1b8c0b05d1c5
+    - key: soundproofing
+      satisfied: false
+      fact_id: null
+    - key: food_late
+      satisfied: false
+      fact_id: null
+  - osm_id: node/11016631786
+    grade: 1
+    checks:
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: 23e17f4d-d9cf-4913-8833-bce513475fd7
+    - key: soundproofing
+      satisfied: false
+      fact_id: null
+    - key: food_late
+      satisfied: false
+      fact_id: null
+  - osm_id: node/11016631787
+    grade: 1
+    checks:
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: 003e886d-8fd1-44e5-85f0-25bf42e35408
+    - key: soundproofing
+      satisfied: false
+      fact_id: null
+    - key: food_late
+      satisfied: false
+      fact_id: null
+  - osm_id: node/11029913505
+    grade: 2
+    checks:
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: c1fe87fb-18fb-4372-b616-91ba05b8e24b
+    - key: soundproofing
+      satisfied: false
+      fact_id: null
+    - key: food_late
+      satisfied: true
+      fact_id: b838f8c8-47dc-4988-bdb3-f81059bbbd30
+- id: R2-21
+  query: Кароче, мы в Адлер хотим, 25-30 ноября, если всё норм. Нас четверо, 2 взрослых
+    и дети 2 и 7 лет. Младший в коляске, так что к морю нужно чтобы можно было доехать
+    без лестниц, реально обязательно, а не как на фотках красиво, а на деле сто ступеней.
+    Сам вход в гостиницу тоже без ступеней. Лифт нужен обязательно, с коляской на
+    третий этаж не полезу. Кондей было бы хорошо, парковка тоже нужна, мы на машине.
+    Бюджет 8200 примерно за ночь, дороже не хочется.
+  judgments:
+  - osm_id: node/10058556917
+    grade: 1
+    checks:
+    - key: stroller_to_sea
+      satisfied: true
+      fact_id: 1282f6ba-ffcc-4032-b7ec-e78e61f0019d
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: ac
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: true
+      fact_id: 78d54c2d-939a-4c6a-af03-8cd3ba044047
+  - osm_id: node/10058760244
+    grade: 1
+    checks:
+    - key: stroller_to_sea
+      satisfied: true
+      fact_id: 3c5dc67c-430d-49a9-b938-875cb3d3174d
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: ac
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: true
+      fact_id: 0d013fb5-f482-4107-9a4c-7d806a0c114c
+  - osm_id: node/10058780093
+    grade: 1
+    checks:
+    - key: stroller_to_sea
+      satisfied: true
+      fact_id: 1279bd93-6bcd-4064-ab57-33104719ac21
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: ac
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: false
+      fact_id: null
+  - osm_id: node/10574256210
+    grade: 1
+    checks:
+    - key: stroller_to_sea
+      satisfied: false
+      fact_id: null
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: ac
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: true
+      fact_id: c4f818f2-2efe-404b-9879-296da2b891c5
+  - osm_id: node/10759613919
+    grade: 1
+    checks:
+    - key: stroller_to_sea
+      satisfied: true
+      fact_id: 47fea7d8-fbd7-4720-8525-38886726eaa4
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: ac
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: true
+      fact_id: 18f69076-ef44-4b9e-98cb-4136c9b2cc92
+  - osm_id: node/10759614063
+    grade: 1
+    checks:
+    - key: stroller_to_sea
+      satisfied: false
+      fact_id: null
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: ac
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: true
+      fact_id: 175933bc-7c6c-4d3b-aabb-7eb08d473d80
+  - osm_id: node/10853513205
+    grade: 0
+    checks:
+    - key: stroller_to_sea
+      satisfied: false
+      fact_id: null
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: ac
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: false
+      fact_id: null
+  - osm_id: node/10858734694
+    grade: 1
+    checks:
+    - key: stroller_to_sea
+      satisfied: true
+      fact_id: f20cac80-fed9-432c-8877-8c463e0b072d
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: ac
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: true
+      fact_id: c6bb2e59-1e97-4d21-8e71-7173f13699b8
+  - osm_id: node/10974113805
+    grade: 0
+    checks:
+    - key: stroller_to_sea
+      satisfied: false
+      fact_id: null
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: ac
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: false
+      fact_id: null
+  - osm_id: node/11016631786
+    grade: 1
+    checks:
+    - key: stroller_to_sea
+      satisfied: false
+      fact_id: null
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: ac
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: true
+      fact_id: f5cf9375-ffcd-408f-bab3-d96bef524d10
+  - osm_id: node/11016631787
+    grade: 1
+    checks:
+    - key: stroller_to_sea
+      satisfied: true
+      fact_id: da213b66-414b-4f5e-b613-e996f8a766e8
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: ac
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: true
+      fact_id: 9e76ef48-8d39-4edc-8f41-cc0d1a9cac3d
+  - osm_id: node/11029913505
+    grade: 1
+    checks:
+    - key: stroller_to_sea
+      satisfied: true
+      fact_id: 368f01c2-0a47-4ec7-a047-1888836901cf
+    - key: step_free
+      satisfied: false
+      fact_id: null
+    - key: elevator
+      satisfied: false
+      fact_id: null
+    - key: ac
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: true
+      fact_id: 86e5332c-4586-4809-a207-992e18a8a52a
+- id: R2-22
+  query: В Адлере 18-21 ноября. Хотим жить в 10 минутах на машине от аэропорта максимум,
+    но обязательно чтобы самолёты вообще не было слышно, особенно ночью. И тишина
+    ночью нужна. До 2500 рублей сутки.
+  judgments:
+  - osm_id: node/10058556917
+    grade: 0
+    checks:
+    - key: null
+      satisfied: false
+      fact_id: null
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: eb6e7406-5a59-4d4c-9856-4a083f6745fb
+    - key: night_noise
+      satisfied: true
+      fact_id: 5e4f3e88-2dd7-4203-992d-62cd2a117e2d
+  - osm_id: node/10058760244
+    grade: 2
+    checks:
+    - key: null
+      satisfied: false
+      fact_id: null
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: 064e2c72-09a5-4b23-bac6-373fab984fa2
+    - key: night_noise
+      satisfied: true
+      fact_id: 961117b2-d317-4aad-a364-98c795a1fd76
+  - osm_id: node/10058780093
+    grade: 0
+    checks:
+    - key: null
+      satisfied: false
+      fact_id: null
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: 65d2b0ae-8ee8-4503-a641-8ff33e4a010e
+    - key: night_noise
+      satisfied: true
+      fact_id: 82df6b38-6ddc-408c-9b37-3931af177eac
+  - osm_id: node/10574256210
+    grade: 0
+    checks:
+    - key: null
+      satisfied: false
+      fact_id: null
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: ecd2a623-6c16-4566-b3c4-7d2806312c42
+    - key: night_noise
+      satisfied: true
+      fact_id: 6a0027ae-ef7f-4d24-b50a-78c805b14993
+  - osm_id: node/10759613919
+    grade: 2
+    checks:
+    - key: null
+      satisfied: false
+      fact_id: null
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: 66582980-2b20-4485-9f87-f6e1a0021d18
+    - key: night_noise
+      satisfied: true
+      fact_id: af0be588-3c96-44f8-9f52-7fba3b962c2a
+  - osm_id: node/10759614063
+    grade: 0
+    checks:
+    - key: null
+      satisfied: false
+      fact_id: null
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: 5b238746-af62-45dd-896a-eac76d619da9
+    - key: night_noise
+      satisfied: true
+      fact_id: 25ed2198-14ed-47ba-996b-0bfbc9d62922
+  - osm_id: node/10853513205
+    grade: 0
+    checks:
+    - key: null
+      satisfied: false
+      fact_id: null
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: 429b2545-fcfd-43d9-8e6e-1a65bec237d9
+    - key: night_noise
+      satisfied: true
+      fact_id: 19ebbdd0-fb3a-48c3-9510-7e5be1bd2f37
+  - osm_id: node/10858734694
+    grade: 0
+    checks:
+    - key: null
+      satisfied: false
+      fact_id: null
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: 514bcb81-314f-429e-ab53-4c52d776fa73
+    - key: night_noise
+      satisfied: true
+      fact_id: 646b4284-df0b-4417-87f7-42ec2f48f963
+  - osm_id: node/10974113805
+    grade: 0
+    checks:
+    - key: null
+      satisfied: false
+      fact_id: null
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: 91d13e4d-166f-43a3-8d5e-1b8c0b05d1c5
+    - key: night_noise
+      satisfied: true
+      fact_id: 45a468a0-b96e-44cc-8bd7-b6d02a9b8fc6
+  - osm_id: node/11016631786
+    grade: 0
+    checks:
+    - key: null
+      satisfied: false
+      fact_id: null
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: 23e17f4d-d9cf-4913-8833-bce513475fd7
+    - key: night_noise
+      satisfied: true
+      fact_id: ea2f8e25-83af-4357-871f-2859a1ce5557
+  - osm_id: node/11016631787
+    grade: 0
+    checks:
+    - key: null
+      satisfied: false
+      fact_id: null
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: 003e886d-8fd1-44e5-85f0-25bf42e35408
+    - key: night_noise
+      satisfied: true
+      fact_id: b0b47a10-a08b-4085-850e-2e9e57f55aa2
+  - osm_id: node/11029913505
+    grade: 2
+    checks:
+    - key: null
+      satisfied: false
+      fact_id: null
+    - key: aircraft_noise
+      satisfied: true
+      fact_id: c1fe87fb-18fb-4372-b616-91ba05b8e24b
+    - key: night_noise
+      satisfied: true
+      fact_id: 0329e3af-ade8-44cb-a13f-3199c82ac26f
+- id: R2-23
+  query: Ищу отель в Адлере на декабрь, чтобы обязательно был тёплый бассейн с подогревом,
+    желательно открытый. Вид на море был бы плюсом. По цене до 10500 за сутки.
+  judgments:
+  - osm_id: node/10058556917
+    grade: 2
+    checks:
+    - key: null
+      satisfied: false
+      fact_id: null
+    - key: sea_view
+      satisfied: true
+      fact_id: 873fa0a1-44ca-4330-bc31-f2482203c4cc
+  - osm_id: node/10058760244
+    grade: 0
+    checks:
+    - key: null
+      satisfied: false
+      fact_id: null
+    - key: sea_view
+      satisfied: false
+      fact_id: null
+  - osm_id: node/10058780093
+    grade: 0
+    checks:
+    - key: null
+      satisfied: false
+      fact_id: null
+    - key: sea_view
+      satisfied: false
+      fact_id: null
+  - osm_id: node/10574256210
+    grade: 2
+    checks:
+    - key: null
+      satisfied: false
+      fact_id: null
+    - key: sea_view
+      satisfied: true
+      fact_id: 4d675e43-3947-42be-8acf-6d2398e67021
+  - osm_id: node/10759613919
+    grade: 2
+    checks:
+    - key: null
+      satisfied: false
+      fact_id: null
+    - key: sea_view
+      satisfied: true
+      fact_id: dd329098-6055-494e-a846-55fd71258dc7
+  - osm_id: node/10759614063
+    grade: 0
+    checks:
+    - key: null
+      satisfied: false
+      fact_id: null
+    - key: sea_view
+      satisfied: false
+      fact_id: null
+  - osm_id: node/10853513205
+    grade: 0
+    checks:
+    - key: null
+      satisfied: false
+      fact_id: null
+    - key: sea_view
+      satisfied: false
+      fact_id: null
+  - osm_id: node/10858734694
+    grade: 2
+    checks:
+    - key: null
+      satisfied: false
+      fact_id: null
+    - key: sea_view
+      satisfied: true
+      fact_id: e2840f93-a31e-4d6c-b4fd-c40c5b88249f
+  - osm_id: node/10974113805
+    grade: 0
+    checks:
+    - key: null
+      satisfied: false
+      fact_id: null
+    - key: sea_view
+      satisfied: false
+      fact_id: null
+  - osm_id: node/11016631786
+    grade: 2
+    checks:
+    - key: null
+      satisfied: false
+      fact_id: null
+    - key: sea_view
+      satisfied: true
+      fact_id: 4dbd249d-fda7-449e-80ed-4bbbd14e5e21
+  - osm_id: node/11016631787
+    grade: 0
+    checks:
+    - key: null
+      satisfied: false
+      fact_id: null
+    - key: sea_view
+      satisfied: false
+      fact_id: null
+  - osm_id: node/11029913505
+    grade: 0
+    checks:
+    - key: null
+      satisfied: false
+      fact_id: null
+    - key: sea_view
+      satisfied: false
+      fact_id: null
+- id: R2-25
+  query: Сириус зарядка для электрокара
+  judgments:
+  - osm_id: node/10213051617
+    grade: 3
+    checks:
+    - key: ev_charging
+      satisfied: true
+      fact_id: d4892c1f-8fd7-447a-8487-1b6cc52b6173
+  - osm_id: node/10734977305
+    grade: 3
+    checks:
+    - key: ev_charging
+      satisfied: true
+      fact_id: 501c779e-8745-4c33-9f14-b359d13d0606
+  - osm_id: node/10759613912
+    grade: 3
+    checks:
+    - key: ev_charging
+      satisfied: true
+      fact_id: 9d1006f0-eb23-4b2c-b314-e0d573be8df7
+  - osm_id: node/10810801627
+    grade: 0
+    checks:
+    - key: ev_charging
+      satisfied: false
+      fact_id: null
+  - osm_id: node/11138788609
+    grade: 3
+    checks:
+    - key: ev_charging
+      satisfied: true
+      fact_id: e9064cd8-31e9-484c-8d11-4aac098e29db
+  - osm_id: node/11190910581
+    grade: 3
+    checks:
+    - key: ev_charging
+      satisfied: true
+      fact_id: cf71e983-cb12-41f7-896c-df5a773117c6
+  - osm_id: node/11238118158
+    grade: 0
+    checks:
+    - key: ev_charging
+      satisfied: false
+      fact_id: null
+  - osm_id: node/11304222982
+    grade: 3
+    checks:
+    - key: ev_charging
+      satisfied: true
+      fact_id: 42b6b2e6-17c3-4372-91ed-813731d05bd2
+  - osm_id: node/11482391574
+    grade: 3
+    checks:
+    - key: ev_charging
+      satisfied: true
+      fact_id: 6509421f-0a90-4852-8c0b-7f1831810da0
+  - osm_id: node/11637552371
+    grade: 3
+    checks:
+    - key: ev_charging
+      satisfied: true
+      fact_id: 98a4e044-5a38-430c-a619-ed6947b6fef1
+  - osm_id: node/11637558670
+    grade: 3
+    checks:
+    - key: ev_charging
+      satisfied: true
+      fact_id: 8d29b236-2697-4a5d-90f5-a046ecff5b21
+  - osm_id: node/11958163713
+    grade: 3
+    checks:
+    - key: ev_charging
+      satisfied: true
+      fact_id: 7b53fdad-af9d-424c-90df-acb1ac26efa2
+- id: R2-26
+  query: Сириус с 3 по 8 ноября, двое взрослых без детей. Хочется вид на море именно
+    из номера, а ещё лучше чтоб закат прямо над морем был из окна. Парковка нужна,
+    приезжаем на машине.
+  judgments:
+  - osm_id: node/10213051617
+    grade: 2
+    checks:
+    - key: sea_view
+      satisfied: true
+      fact_id: 7658aab1-12ee-4e8b-9c49-c81cedffd34e
+    - key: sunset_over_sea
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: true
+      fact_id: 70172b9c-61e2-4349-a442-62b5710db058
+  - osm_id: node/10734977305
+    grade: 2
+    checks:
+    - key: sea_view
+      satisfied: true
+      fact_id: 28d9549f-b819-43fa-a9fc-32eaabcd723f
+    - key: sunset_over_sea
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: true
+      fact_id: 44e022e4-0597-4372-a48c-2a352ce2ddf4
+  - osm_id: node/10759613912
+    grade: 1
+    checks:
+    - key: sea_view
+      satisfied: false
+      fact_id: null
+    - key: sunset_over_sea
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: true
+      fact_id: 3b06db0b-1596-4733-a24c-638908e445d6
+  - osm_id: node/10810801627
+    grade: 1
+    checks:
+    - key: sea_view
+      satisfied: true
+      fact_id: 7f8943c2-dad0-4356-8964-998c1dcf070c
+    - key: sunset_over_sea
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: false
+      fact_id: null
+  - osm_id: node/11138788609
+    grade: 1
+    checks:
+    - key: sea_view
+      satisfied: false
+      fact_id: null
+    - key: sunset_over_sea
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: true
+      fact_id: f22e3a11-8d2c-4449-8bb7-28d91ee37cf9
+  - osm_id: node/11190910581
+    grade: 3
+    checks:
+    - key: sea_view
+      satisfied: true
+      fact_id: 0337d46b-320e-446e-8597-24429c07a9dd
+    - key: sunset_over_sea
+      satisfied: true
+      fact_id: f4e7e05d-e992-4005-83e7-fcc30dc6a21a
+    - key: parking
+      satisfied: true
+      fact_id: d99f3cef-e574-46f1-b0ed-6f5cdd5464e3
+  - osm_id: node/11238118158
+    grade: 0
+    checks:
+    - key: sea_view
+      satisfied: false
+      fact_id: null
+    - key: sunset_over_sea
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: false
+      fact_id: null
+  - osm_id: node/11304222982
+    grade: 1
+    checks:
+    - key: sea_view
+      satisfied: false
+      fact_id: null
+    - key: sunset_over_sea
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: true
+      fact_id: 01fdb5c7-9f5d-4f49-b965-afa4b88caff0
+  - osm_id: node/11482391574
+    grade: 1
+    checks:
+    - key: sea_view
+      satisfied: false
+      fact_id: null
+    - key: sunset_over_sea
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: true
+      fact_id: fe8337ae-3c60-4d47-aae4-d9141a4f8d91
+  - osm_id: node/11637552371
+    grade: 1
+    checks:
+    - key: sea_view
+      satisfied: false
+      fact_id: null
+    - key: sunset_over_sea
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: true
+      fact_id: 6b797d69-5fd1-4ac9-a7b3-baf089ca94fb
+  - osm_id: node/11637558670
+    grade: 2
+    checks:
+    - key: sea_view
+      satisfied: true
+      fact_id: a35449c8-fcc4-44b7-ad87-e63a061421c1
+    - key: sunset_over_sea
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: true
+      fact_id: 491905f1-ae25-4eb2-9b78-2cc3f86e49c7
+  - osm_id: node/11958163713
+    grade: 1
+    checks:
+    - key: sea_view
+      satisfied: false
+      fact_id: null
+    - key: sunset_over_sea
+      satisfied: false
+      fact_id: null
+    - key: parking
+      satisfied: true
+      fact_id: 2c467687-992e-4d04-9385-e1f214523917
+evidence:
+  ab52db5e-2658-426e-af98-2191716fe1f3:
+    osm_id: node/10759606594
+    characteristic: playground_walk
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  cf71e983-cb12-41f7-896c-df5a773117c6:
+    osm_id: node/11190910581
+    characteristic: ev_charging
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  91d13e4d-166f-43a3-8d5e-1b8c0b05d1c5:
+    osm_id: node/10974113805
+    characteristic: aircraft_noise
+    scope: {}
+    value: true
+    confidence: 0.7
+    source: computed
+    is_demo: false
+  ecd2a623-6c16-4566-b3c4-7d2806312c42:
+    osm_id: node/10574256210
+    characteristic: aircraft_noise
+    scope: {}
+    value: true
+    confidence: 0.7
+    source: computed
+    is_demo: false
+  82da4f0a-9b2a-4e59-8970-ab15ede192f8:
+    osm_id: node/10574256210
+    characteristic: climate
+    scope:
+      months:
+      - 10
+    value:
+      water: 21.1
+      air_max: 21.3
+      air_min: 15.4
+      rain_days: 10.9
+      sun_hours: 8.8
+      daylight_h: 11.0
+    confidence: 0.9
+    source: open_data
+    is_demo: false
+  297640e4-4ac0-4d01-974c-ac43ea912c4f:
+    osm_id: node/10759614063
+    characteristic: food_late
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  7625fd39-b3d7-4c3b-a7ac-38ddf0f0b679:
+    osm_id: node/10118233110
+    characteristic: climate
+    scope:
+      months:
+      - 10
+    value:
+      water: 21.1
+      air_max: 19.5
+      air_min: 15.7
+      rain_days: 10.0
+      sun_hours: 8.9
+      daylight_h: 11.0
+    confidence: 0.9
+    source: open_data
+    is_demo: false
+  3016a85d-645d-4e44-a980-d9b67fbbc634:
+    osm_id: node/10118233110
+    characteristic: day_noise
+    scope: {}
+    value: true
+    confidence: 0.8932
+    source: computed
+    is_demo: false
+  0875e5dc-e8f2-4d32-9cc8-3102abfcb181:
+    osm_id: node/10118233110
+    characteristic: night_noise
+    scope:
+      facades:
+      - N
+      - E
+      - SE
+    value: true
+    confidence: 0.86
+    source: computed
+    is_demo: false
+  5b238746-af62-45dd-896a-eac76d619da9:
+    osm_id: node/10759614063
+    characteristic: aircraft_noise
+    scope: {}
+    value: true
+    confidence: 0.7
+    source: computed
+    is_demo: false
+  9e76ef48-8d39-4edc-8f41-cc0d1a9cac3d:
+    osm_id: node/11016631787
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.7042
+    source: open_data
+    is_demo: false
+  2156fa26-c5b6-479e-bf61-46d8b93f78ed:
+    osm_id: node/10759614063
+    characteristic: playground_walk
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  175933bc-7c6c-4d3b-aabb-7eb08d473d80:
+    osm_id: node/10759614063
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.7042
+    source: open_data
+    is_demo: false
+  25ed2198-14ed-47ba-996b-0bfbc9d62922:
+    osm_id: node/10759614063
+    characteristic: night_noise
+    scope:
+      facades:
+      - E
+      - S
+      - W
+    value: true
+    confidence: 0.8367
+    source: computed
+    is_demo: false
+  064e2c72-09a5-4b23-bac6-373fab984fa2:
+    osm_id: node/10058760244
+    characteristic: aircraft_noise
+    scope: {}
+    value: true
+    confidence: 0.7
+    source: computed
+    is_demo: false
+  75e67ad9-6650-4396-88eb-eab5927515fe:
+    osm_id: node/10058760244
+    characteristic: climate
+    scope:
+      months:
+      - 10
+    value:
+      water: 21.1
+      air_max: 21.3
+      air_min: 15.4
+      rain_days: 10.9
+      sun_hours: 8.8
+      daylight_h: 11.0
+    confidence: 0.9
+    source: open_data
+    is_demo: false
+  4aa36a68-f24e-4a29-b511-6ff96adfdea5:
+    osm_id: node/10058556917
+    characteristic: climate
+    scope:
+      months:
+      - 10
+    value:
+      water: 21.1
+      air_max: 21.3
+      air_min: 15.4
+      rain_days: 10.9
+      sun_hours: 8.8
+      daylight_h: 11.0
+    confidence: 0.9
+    source: open_data
+    is_demo: false
+  4b1b90ca-d8af-4700-83d6-4ee9d6d5f747:
+    osm_id: node/10058556917
+    characteristic: kids_hospital
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  94f2d6b4-6a24-4b31-b00f-1bfa7e0cb60b:
+    osm_id: node/10058760244
+    characteristic: food_late
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  45a468a0-b96e-44cc-8bd7-b6d02a9b8fc6:
+    osm_id: node/10974113805
+    characteristic: night_noise
+    scope:
+      facades:
+      - N
+      - E
+      - S
+    value: true
+    confidence: 0.8803
+    source: computed
+    is_demo: false
+  4d675e43-3947-42be-8acf-6d2398e67021:
+    osm_id: node/10574256210
+    characteristic: sea_view
+    scope:
+      facades:
+      - SE
+      - SW
+      - NW
+      floorFrom: 7
+    value: true
+    confidence: 0.95
+    source: computed
+    is_demo: false
+  fe999711-9b2c-4d25-adc4-0c7984479703:
+    osm_id: node/10974113805
+    characteristic: playground_walk
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  5e4f3e88-2dd7-4203-992d-62cd2a117e2d:
+    osm_id: node/10058556917
+    characteristic: night_noise
+    scope: {}
+    value: true
+    confidence: 0.8897
+    source: computed
+    is_demo: false
+  78d54c2d-939a-4c6a-af03-8cd3ba044047:
+    osm_id: node/10058556917
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.6667
+    source: open_data
+    is_demo: false
+  961117b2-d317-4aad-a364-98c795a1fd76:
+    osm_id: node/10058760244
+    characteristic: night_noise
+    scope: {}
+    value: true
+    confidence: 0.8902
+    source: computed
+    is_demo: false
+  0d013fb5-f482-4107-9a4c-7d806a0c114c:
+    osm_id: node/10058760244
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.6667
+    source: open_data
+    is_demo: false
+  3c5dc67c-430d-49a9-b938-875cb3d3174d:
+    osm_id: node/10058760244
+    characteristic: stroller_to_sea
+    scope: {}
+    value: true
+    confidence: 0.783
+    source: computed
+    is_demo: false
+  873fa0a1-44ca-4330-bc31-f2482203c4cc:
+    osm_id: node/10058556917
+    characteristic: sea_view
+    scope:
+      facades:
+      - SW
+      floorFrom: 5
+    value: true
+    confidence: 0.8125
+    source: computed
+    is_demo: false
+  1282f6ba-ffcc-4032-b7ec-e78e61f0019d:
+    osm_id: node/10058556917
+    characteristic: stroller_to_sea
+    scope: {}
+    value: true
+    confidence: 0.799
+    source: computed
+    is_demo: false
+  92534df3-74dd-444a-a958-f1a09bbded1a:
+    osm_id: node/10118233110
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.7042
+    source: open_data
+    is_demo: false
+  36e6e235-1974-4705-b9a4-6f2207536a67:
+    osm_id: node/10118233110
+    characteristic: playground_walk
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  8e9385b7-2db2-42ed-935d-a9f4c6cc9f86:
+    osm_id: node/10118233110
+    characteristic: sea_view
+    scope:
+      facades:
+      - E
+      floorTo: 6
+      floorFrom: 5
+    value: true
+    confidence: 0.75
+    source: computed
+    is_demo: false
+  1910265a-cf5d-4682-8ce2-c0511d2ca483:
+    osm_id: node/10118233110
+    characteristic: sea_view
+    scope:
+      facades:
+      - S
+      - SW
+    value: true
+    confidence: 0.95
+    source: computed
+    is_demo: false
+  9b53314d-4fd9-4b86-835e-34bee288e3ce:
+    osm_id: node/10118233110
+    characteristic: stroller_to_sea
+    scope: {}
+    value: true
+    confidence: 0.728
+    source: computed
+    is_demo: false
+  e2840f93-a31e-4d6c-b4fd-c40c5b88249f:
+    osm_id: node/10858734694
+    characteristic: sea_view
+    scope:
+      facades:
+      - N
+      - S
+      - W
+      floorFrom: 5
+    value: true
+    confidence: 0.95
+    source: computed
+    is_demo: false
+  f20cac80-fed9-432c-8877-8c463e0b072d:
+    osm_id: node/10858734694
+    characteristic: stroller_to_sea
+    scope: {}
+    value: true
+    confidence: 0.72
+    source: computed
+    is_demo: false
+  1279bd93-6bcd-4064-ab57-33104719ac21:
+    osm_id: node/10058780093
+    characteristic: stroller_to_sea
+    scope: {}
+    value: true
+    confidence: 0.804
+    source: computed
+    is_demo: false
+  003e886d-8fd1-44e5-85f0-25bf42e35408:
+    osm_id: node/11016631787
+    characteristic: aircraft_noise
+    scope: {}
+    value: true
+    confidence: 0.7
+    source: computed
+    is_demo: false
+  17921c52-b785-4db8-8f77-0198ddee3afa:
+    osm_id: node/11016631787
+    characteristic: kids_hospital
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  6bb95817-5ff6-4562-bfd3-72564fca609b:
+    osm_id: node/11016638375
+    characteristic: sunset_over_sea
+    scope:
+      months:
+      - 11
+      facades:
+      - S
+      - NW
+      floorFrom: 13
+    value: true
+    confidence: 0.9437
+    source: computed
+    is_demo: false
+  65d2b0ae-8ee8-4503-a641-8ff33e4a010e:
+    osm_id: node/10058780093
+    characteristic: aircraft_noise
+    scope: {}
+    value: true
+    confidence: 0.7
+    source: computed
+    is_demo: false
+  c811502d-24b0-426a-b44c-d30be227bd69:
+    osm_id: node/10058780093
+    characteristic: food_late
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  321113cc-ed34-4493-ad74-023a465496b3:
+    osm_id: node/10058780093
+    characteristic: kids_hospital
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  da213b66-414b-4f5e-b613-e996f8a766e8:
+    osm_id: node/11016631787
+    characteristic: stroller_to_sea
+    scope: {}
+    value: true
+    confidence: 0.668
+    source: computed
+    is_demo: false
+  82df6b38-6ddc-408c-9b37-3931af177eac:
+    osm_id: node/10058780093
+    characteristic: night_noise
+    scope: {}
+    value: true
+    confidence: 0.8912
+    source: computed
+    is_demo: false
+  732031fd-666e-4fcd-a83e-ac1cb9f6f2d4:
+    osm_id: node/10058780093
+    characteristic: playground_walk
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  3dd2aa71-c758-44dc-9dcf-b10a945aebd3:
+    osm_id: node/11016638373
+    characteristic: day_noise
+    scope:
+      facades:
+      - NE
+      - SE
+      - SW
+    value: true
+    confidence: 0.8767
+    source: computed
+    is_demo: false
+  8fa30825-8803-4e37-9ab7-9ca31f3785e6:
+    osm_id: node/10853513205
+    characteristic: kids_hospital
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  b838f8c8-47dc-4988-bdb3-f81059bbbd30:
+    osm_id: node/11029913505
+    characteristic: food_late
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  4f588d9b-e54a-4888-a30e-995edaff103b:
+    osm_id: node/11029913505
+    characteristic: kids_hospital
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  af0be588-3c96-44f8-9f52-7fba3b962c2a:
+    osm_id: node/10759613919
+    characteristic: night_noise
+    scope:
+      facades:
+      - N
+    value: true
+    confidence: 0.763
+    source: computed
+    is_demo: false
+  de42d30c-8ccd-423b-82c5-bacbaf9418e3:
+    osm_id: node/10853513205
+    characteristic: playground_walk
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  fc3cc902-3484-47b1-92df-293efc2b4c25:
+    osm_id: node/11138786395
+    characteristic: day_noise
+    scope:
+      facades:
+      - N
+    value: true
+    confidence: 0.892
+    source: computed
+    is_demo: false
+  18f69076-ef44-4b9e-98cb-4136c9b2cc92:
+    osm_id: node/10759613919
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.6667
+    source: open_data
+    is_demo: false
+  ae18e79e-2118-44e3-91bd-c2b3af6d1e2b:
+    osm_id: node/10759613919
+    characteristic: playground_walk
+    scope: {}
+    value: true
+    confidence: 0.7519
+    source: open_data
+    is_demo: false
+  47fea7d8-fbd7-4720-8525-38886726eaa4:
+    osm_id: node/10759613919
+    characteristic: stroller_to_sea
+    scope: {}
+    value: true
+    confidence: 0.685
+    source: computed
+    is_demo: false
+  0b91b8ee-f929-4e3f-ade7-fe5c0b028b47:
+    osm_id: node/10118233110
+    characteristic: sunset_over_sea
+    scope:
+      months:
+      - 11
+      facades:
+      - S
+      - SW
+    value: true
+    confidence: 0.95
+    source: computed
+    is_demo: false
+  70a3b921-8476-49c4-b0c0-d885d00fd7d7:
+    osm_id: node/11016638375
+    characteristic: day_noise
+    scope: {}
+    value: true
+    confidence: 0.8853
+    source: computed
+    is_demo: false
+  56fefba1-b777-4711-8f99-220c9de886a1:
+    osm_id: node/11016638373
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.6667
+    source: open_data
+    is_demo: false
+  c7971825-0c79-4a99-8611-a7f2d6b99aff:
+    osm_id: node/11016638373
+    characteristic: pharmacy_24_7
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  df6630e6-902c-4c27-954b-4bba5a5d7c41:
+    osm_id: node/11016638373
+    characteristic: playground_walk
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  eb2f5103-fac8-411a-98ab-6df8d4885de2:
+    osm_id: node/11016638373
+    characteristic: steep_streets
+    scope: {}
+    value: false
+    confidence: 0.8
+    source: computed
+    is_demo: false
+  c1fe87fb-18fb-4372-b616-91ba05b8e24b:
+    osm_id: node/11029913505
+    characteristic: aircraft_noise
+    scope: {}
+    value: true
+    confidence: 0.7
+    source: computed
+    is_demo: false
+  368f01c2-0a47-4ec7-a047-1888836901cf:
+    osm_id: node/11029913505
+    characteristic: stroller_to_sea
+    scope: {}
+    value: true
+    confidence: 0.652
+    source: computed
+    is_demo: false
+  c8bc4fcb-2110-4ccd-a3b2-d95e7f464dcd:
+    osm_id: node/11016631786
+    characteristic: playground_walk
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  4dbd249d-fda7-449e-80ed-4bbbd14e5e21:
+    osm_id: node/11016631786
+    characteristic: sea_view
+    scope:
+      facades:
+      - N
+      floorFrom: 2
+    value: true
+    confidence: 0.95
+    source: computed
+    is_demo: false
+  5161f3be-a653-493a-a67c-5c2720da0988:
+    osm_id: node/11016638375
+    characteristic: night_noise
+    scope:
+      facades:
+      - NE
+      - SW
+      - W
+      - NW
+    value: true
+    confidence: 0.8782
+    source: computed
+    is_demo: false
+  822e8a1f-009d-4a19-a0a4-928c85b252a3:
+    osm_id: node/11016638375
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.7042
+    source: open_data
+    is_demo: false
+  b4b76811-e26e-4e52-a885-2b9e6da57839:
+    osm_id: node/11016638375
+    characteristic: pharmacy_24_7
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  58f7cb02-96f7-44e3-a19b-facb2b4e2fcd:
+    osm_id: node/11016638375
+    characteristic: playground_walk
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  514bcb81-314f-429e-ab53-4c52d776fa73:
+    osm_id: node/10858734694
+    characteristic: aircraft_noise
+    scope: {}
+    value: true
+    confidence: 0.7
+    source: computed
+    is_demo: false
+  2ad03846-6e1d-4996-ad9c-933107a41ec1:
+    osm_id: node/10574256210
+    characteristic: food_late
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  c4f818f2-2efe-404b-9879-296da2b891c5:
+    osm_id: node/10574256210
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.7042
+    source: open_data
+    is_demo: false
+  81126129-ee74-4a1e-9c18-722dc903a1e8:
+    osm_id: node/10858734694
+    characteristic: kids_hospital
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  9635b75e-c14f-4edb-84b1-dac736fd39da:
+    osm_id: node/10858734694
+    characteristic: playground_walk
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  8fda3e59-15d2-47a7-a764-30bdf8c7df0e:
+    osm_id: node/11304222978
+    characteristic: day_noise
+    scope: {}
+    value: true
+    confidence: 0.8895
+    source: computed
+    is_demo: false
+  8f225e29-27c8-43e6-b5b2-08227ce200d8:
+    osm_id: node/11304222978
+    characteristic: night_noise
+    scope:
+      facades:
+      - NE
+      - SE
+      - SW
+    value: true
+    confidence: 0.8827
+    source: computed
+    is_demo: false
+  c6bb2e59-1e97-4d21-8e71-7173f13699b8:
+    osm_id: node/10858734694
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.7042
+    source: open_data
+    is_demo: false
+  19dda6e6-63dd-411c-b66c-317e365823ea:
+    osm_id: node/10574256210
+    characteristic: kids_hospital
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  646b4284-df0b-4417-87f7-42ec2f48f963:
+    osm_id: node/10858734694
+    characteristic: night_noise
+    scope:
+      facades:
+      - N
+    value: true
+    confidence: 0.88
+    source: computed
+    is_demo: false
+  6a0027ae-ef7f-4d24-b50a-78c805b14993:
+    osm_id: node/10574256210
+    characteristic: night_noise
+    scope: {}
+    value: true
+    confidence: 0.8845
+    source: computed
+    is_demo: false
+  9b8ac93b-b360-4363-981f-4bcc39303ca0:
+    osm_id: node/10574256210
+    characteristic: playground_walk
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  81984c8f-dda0-4cc3-b2f8-f6df82e7db84:
+    osm_id: node/11304222978
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.7042
+    source: open_data
+    is_demo: false
+  c62d35fc-e3f4-48d9-ad8c-0b4da75cf9d2:
+    osm_id: node/11304222978
+    characteristic: pharmacy_24_7
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  eb6e7406-5a59-4d4c-9856-4a083f6745fb:
+    osm_id: node/10058556917
+    characteristic: aircraft_noise
+    scope: {}
+    value: true
+    confidence: 0.7
+    source: computed
+    is_demo: false
+  8a8c648d-f331-416a-981b-1013430d8830:
+    osm_id: node/10058556917
+    characteristic: food_late
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  400ee050-8250-4236-a24d-2cd379cf8a84:
+    osm_id: node/11304222978
+    characteristic: sea_view
+    scope:
+      facades:
+      - SE
+      - NW
+      floorFrom: 4
+    value: true
+    confidence: 0.95
+    source: computed
+    is_demo: false
+  17682f7e-9e7f-448b-8c83-3b9f9327ef57:
+    osm_id: node/11304222978
+    characteristic: sunset_over_sea
+    scope:
+      months:
+      - 11
+      facades:
+      - SW
+      floorTo: 1
+    value: true
+    confidence: 0.6875
+    source: computed
+    is_demo: false
+  8c0d31da-3054-4493-8b08-eeeebce4bdc0:
+    osm_id: node/10759606596
+    characteristic: night_noise
+    scope:
+      facades:
+      - NE
+      - SW
+    value: true
+    confidence: 0.869
+    source: computed
+    is_demo: false
+  704b806c-1b31-46a1-a97b-cd2b49dc14ae:
+    osm_id: node/10058556917
+    characteristic: playground_walk
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  befb58aa-1d5f-4543-94a3-6932108aa48a:
+    osm_id: node/11138786328
+    characteristic: day_noise
+    scope:
+      facades:
+      - NE
+    value: true
+    confidence: 0.858
+    source: computed
+    is_demo: false
+  25dec440-4400-4f10-b3a6-76ae698c9d2d:
+    osm_id: node/10058760244
+    characteristic: kids_hospital
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  718dbc22-54d9-4f68-825c-c9dffbcce002:
+    osm_id: node/10759606594
+    characteristic: climate
+    scope:
+      months:
+      - 10
+    value:
+      water: 21.1
+      air_max: 19.5
+      air_min: 15.7
+      rain_days: 10.0
+      sun_hours: 8.9
+      daylight_h: 11.0
+    confidence: 0.9
+    source: open_data
+    is_demo: false
+  e0d95c52-8cea-4914-a939-25ccdcf601e5:
+    osm_id: node/11138786328
+    characteristic: night_noise
+    scope:
+      facades:
+      - SE
+    value: true
+    confidence: 0.868
+    source: computed
+    is_demo: false
+  cc649be1-886d-44d8-8317-aa5d81795a80:
+    osm_id: node/11138786328
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.7042
+    source: open_data
+    is_demo: false
+  aa9846d2-a176-42f2-8eb6-f95b6b279175:
+    osm_id: node/11138786328
+    characteristic: pharmacy_24_7
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  7053b804-5053-401b-8810-1c862c0b95e3:
+    osm_id: node/11138786328
+    characteristic: playground_walk
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  d206106c-44de-4ca7-8055-47311c79ace2:
+    osm_id: node/11138786328
+    characteristic: steep_streets
+    scope: {}
+    value: false
+    confidence: 0.8
+    source: computed
+    is_demo: false
+  6104d938-e1cf-4eb3-9c11-25ed3065cb41:
+    osm_id: node/10058760244
+    characteristic: playground_walk
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  6c5b2f95-c203-4d4b-afde-bb7ed2bd502d:
+    osm_id: node/11016638375
+    characteristic: sea_view
+    scope:
+      facades:
+      - SE
+      floorTo: 12
+      floorFrom: 7
+    value: true
+    confidence: 0.75
+    source: computed
+    is_demo: false
+  b5a4248d-a94b-499e-bff3-8d28ec70d19d:
+    osm_id: node/11016638375
+    characteristic: sea_view
+    scope:
+      facades:
+      - S
+      - SW
+      floorFrom: 7
+    value: true
+    confidence: 0.95
+    source: computed
+    is_demo: false
+  5a8b4095-3a49-4b7f-8e16-d94abd4fe5ff:
+    osm_id: node/6181072994
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.7042
+    source: open_data
+    is_demo: false
+  5a8a84f0-c171-4bf4-af72-78362c2d39dd:
+    osm_id: node/6181072994
+    characteristic: steep_streets
+    scope: {}
+    value: false
+    confidence: 0.8
+    source: computed
+    is_demo: false
+  50d494da-c0db-460a-8e8f-ef9a1b60bdb4:
+    osm_id: node/11016631786
+    characteristic: kids_hospital
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  23e17f4d-d9cf-4913-8833-bce513475fd7:
+    osm_id: node/11016631786
+    characteristic: aircraft_noise
+    scope: {}
+    value: true
+    confidence: 0.7
+    source: computed
+    is_demo: false
+  0329e3af-ade8-44cb-a13f-3199c82ac26f:
+    osm_id: node/11029913505
+    characteristic: night_noise
+    scope:
+      facades:
+      - NE
+    value: true
+    confidence: 0.866
+    source: computed
+    is_demo: false
+  d296737e-aac1-4334-bffd-d04c7f570d78:
+    osm_id: node/11029913505
+    characteristic: playground_walk
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  ea2f8e25-83af-4357-871f-2859a1ce5557:
+    osm_id: node/11016631786
+    characteristic: night_noise
+    scope: {}
+    value: true
+    confidence: 0.8958
+    source: computed
+    is_demo: false
+  86e5332c-4586-4809-a207-992e18a8a52a:
+    osm_id: node/11029913505
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.7042
+    source: open_data
+    is_demo: false
+  f5cf9375-ffcd-408f-bab3-d96bef524d10:
+    osm_id: node/11016631786
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.7042
+    source: open_data
+    is_demo: false
+  3ded70b2-8b3b-4b33-bb82-77a941458dce:
+    osm_id: node/10759606596
+    characteristic: climate
+    scope:
+      months:
+      - 10
+    value:
+      water: 21.1
+      air_max: 19.5
+      air_min: 15.7
+      rain_days: 10.0
+      sun_hours: 8.9
+      daylight_h: 11.0
+    confidence: 0.9
+    source: open_data
+    is_demo: false
+  9e36acc7-ea02-4176-9fc0-ed9666093043:
+    osm_id: node/10759606596
+    characteristic: day_noise
+    scope: {}
+    value: true
+    confidence: 0.8815
+    source: computed
+    is_demo: false
+  908df178-339f-4a91-b032-0fc3e18c0099:
+    osm_id: node/11016638373
+    characteristic: night_noise
+    scope: {}
+    value: true
+    confidence: 0.8653
+    source: computed
+    is_demo: false
+  bfa7e12c-12f2-4a73-8a82-cdee2e52c99c:
+    osm_id: node/11304222978
+    characteristic: playground_walk
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  d86606fb-c5e1-4bad-a6e6-f1d445f68d43:
+    osm_id: node/6181072994
+    characteristic: remote_work
+    scope: {}
+    value: true
+    confidence: 0.897
+    source: computed
+    is_demo: false
+  10cdf1ab-245c-4266-85fd-b1438cc966d9:
+    osm_id: node/4369348389
+    characteristic: day_noise
+    scope:
+      facades:
+      - N
+      - S
+      - W
+      - NW
+    value: true
+    confidence: 0.8832
+    source: computed
+    is_demo: false
+  3eb0c672-5802-403b-8a6b-fe9eee31486c:
+    osm_id: node/10967527654
+    characteristic: day_noise
+    scope:
+      facades:
+      - SE
+    value: true
+    confidence: 0.886
+    source: computed
+    is_demo: false
+  7d08103a-f289-4baf-8cb0-6fe9ae6ea3c7:
+    osm_id: node/4369348389
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.7042
+    source: open_data
+    is_demo: false
+  766b9efd-148f-4795-bcc7-10e5993502ed:
+    osm_id: node/11119611105
+    characteristic: remote_work
+    scope: {}
+    value: true
+    confidence: 0.9
+    source: computed
+    is_demo: false
+  2894e3ea-880c-44be-830c-2eb67571b2ac:
+    osm_id: node/4369348389
+    characteristic: remote_work
+    scope: {}
+    value: true
+    confidence: 0.883
+    source: computed
+    is_demo: false
+  2323adad-06c1-4fe8-92f1-29e7b32fb345:
+    osm_id: node/7151225626
+    characteristic: day_noise
+    scope:
+      facades:
+      - NE
+    value: true
+    confidence: 0.9
+    source: computed
+    is_demo: false
+  47b92325-ae04-469a-8c29-e2d47b994458:
+    osm_id: node/7151225626
+    characteristic: day_noise
+    scope:
+      facades:
+      - SE
+      - NW
+    value: true
+    confidence: 0.8515
+    source: computed
+    is_demo: false
+  20270350-f082-432e-8008-5735157215ab:
+    osm_id: node/7151225626
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.6667
+    source: open_data
+    is_demo: false
+  16ac2c1f-fd71-4130-b996-f83226079da6:
+    osm_id: node/7151225626
+    characteristic: sea_view
+    scope:
+      facades:
+      - SE
+      floorFrom: 2
+    value: true
+    confidence: 0.95
+    source: computed
+    is_demo: false
+  29b99265-5ec0-4bf3-aa56-06113ba0bb37:
+    osm_id: node/7151225626
+    characteristic: remote_work
+    scope: {}
+    value: true
+    confidence: 0.9
+    source: computed
+    is_demo: false
+  fb635c24-d59e-4ab1-875f-19befad78e2d:
+    osm_id: node/10759614063
+    characteristic: climate
+    scope:
+      months:
+      - 10
+    value:
+      water: 21.1
+      air_max: 21.3
+      air_min: 15.4
+      rain_days: 10.9
+      sun_hours: 8.8
+      daylight_h: 11.0
+    confidence: 0.9
+    source: open_data
+    is_demo: false
+  de71e82d-bb13-4385-8c86-e952ef3e2f28:
+    osm_id: node/10759614063
+    characteristic: kids_hospital
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  429b2545-fcfd-43d9-8e6e-1a65bec237d9:
+    osm_id: node/10853513205
+    characteristic: aircraft_noise
+    scope: {}
+    value: true
+    confidence: 0.7
+    source: computed
+    is_demo: false
+  a185d698-c12e-49a0-bb73-66bb54cd4930:
+    osm_id: node/10853513205
+    characteristic: food_late
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  19ebbdd0-fb3a-48c3-9510-7e5be1bd2f37:
+    osm_id: node/10853513205
+    characteristic: night_noise
+    scope: {}
+    value: true
+    confidence: 0.8902
+    source: computed
+    is_demo: false
+  d1b6c16a-5a88-4629-897d-6b373293352b:
+    osm_id: node/10058780093
+    characteristic: climate
+    scope:
+      months:
+      - 10
+    value:
+      water: 21.1
+      air_max: 21.3
+      air_min: 15.4
+      rain_days: 10.9
+      sun_hours: 8.8
+      daylight_h: 11.0
+    confidence: 0.9
+    source: open_data
+    is_demo: false
+  c362e738-8bbe-4d2a-9228-1c979a3ead57:
+    osm_id: node/10759613919
+    characteristic: climate
+    scope:
+      months:
+      - 10
+    value:
+      water: 21.1
+      air_max: 21.3
+      air_min: 15.4
+      rain_days: 10.9
+      sun_hours: 8.8
+      daylight_h: 11.0
+    confidence: 0.9
+    source: open_data
+    is_demo: false
+  66582980-2b20-4485-9f87-f6e1a0021d18:
+    osm_id: node/10759613919
+    characteristic: aircraft_noise
+    scope: {}
+    value: true
+    confidence: 0.7
+    source: computed
+    is_demo: false
+  61d04f21-04a7-4c27-8787-627aefc1c205:
+    osm_id: node/10759613919
+    characteristic: kids_hospital
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  dd329098-6055-494e-a846-55fd71258dc7:
+    osm_id: node/10759613919
+    characteristic: sea_view
+    scope:
+      facades:
+      - N
+      floorTo: 2
+      floorFrom: 2
+    value: true
+    confidence: 0.875
+    source: computed
+    is_demo: false
+  b0b47a10-a08b-4085-850e-2e9e57f55aa2:
+    osm_id: node/11016631787
+    characteristic: night_noise
+    scope:
+      facades:
+      - N
+      - E
+    value: true
+    confidence: 0.8815
+    source: computed
+    is_demo: false
+  bbdcb10a-2327-48c7-ae8c-8811ded6d3a2:
+    osm_id: node/11016631787
+    characteristic: playground_walk
+    scope: {}
+    value: true
+    confidence: 0.7519
+    source: open_data
+    is_demo: false
+  4baa07ac-5670-4750-af69-a1175bba0737:
+    osm_id: node/10759606596
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.7042
+    source: open_data
+    is_demo: false
+  b43021c7-954b-430f-a879-464e5e8e53c0:
+    osm_id: node/10759606596
+    characteristic: pharmacy_24_7
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  4a3c3b24-daa4-40af-82c7-ede27d79fd47:
+    osm_id: node/10759606596
+    characteristic: playground_walk
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  0c02b451-b5a3-4c7f-909e-1f4b4f6f20fb:
+    osm_id: node/10759606596
+    characteristic: steep_streets
+    scope: {}
+    value: false
+    confidence: 0.8
+    source: computed
+    is_demo: false
+  f34a3bf7-1749-4328-a1fa-2a07524b7b2b:
+    osm_id: node/10759606594
+    characteristic: day_noise
+    scope: {}
+    value: true
+    confidence: 0.8977
+    source: computed
+    is_demo: false
+  a9449eea-3502-415b-9962-151c7f7e6657:
+    osm_id: node/11138786395
+    characteristic: night_noise
+    scope:
+      facades:
+      - N
+    value: true
+    confidence: 0.841
+    source: computed
+    is_demo: false
+  a79f9d0d-baf6-46a4-894d-f6b2a143d647:
+    osm_id: node/11138786395
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.7042
+    source: open_data
+    is_demo: false
+  e7d4b370-9c99-49b7-b70b-4051069633dd:
+    osm_id: node/11138786395
+    characteristic: pharmacy_24_7
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  32410ede-44f5-4709-958a-631899744424:
+    osm_id: node/11138786395
+    characteristic: playground_walk
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  d1d7a1c0-99f5-41d9-ad15-d7af0ba8de5d:
+    osm_id: node/11138786395
+    characteristic: steep_streets
+    scope: {}
+    value: false
+    confidence: 0.8
+    source: computed
+    is_demo: false
+  61341951-c82f-49d7-85ae-e36a0cb15dc3:
+    osm_id: node/10967527654
+    characteristic: night_noise
+    scope:
+      facades:
+      - SE
+    value: true
+    confidence: 0.773
+    source: computed
+    is_demo: false
+  a964c3f8-ef4c-445a-aaf4-f15213bc42c0:
+    osm_id: node/10967527654
+    characteristic: playground_walk
+    scope: {}
+    value: true
+    confidence: 0.7519
+    source: open_data
+    is_demo: false
+  d380517f-7c30-49ce-a526-34a2caee75d6:
+    osm_id: node/10759606594
+    characteristic: night_noise
+    scope:
+      facades:
+      - N
+      - S
+      - W
+    value: true
+    confidence: 0.8913
+    source: computed
+    is_demo: false
+  4dccf373-d598-48f8-91a4-6f9b347c6a94:
+    osm_id: node/10759606594
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.6667
+    source: open_data
+    is_demo: false
+  71129202-e560-4b49-9bc2-e245efe78f31:
+    osm_id: node/10759606594
+    characteristic: sea_view
+    scope:
+      facades:
+      - E
+    value: true
+    confidence: 0.95
+    source: computed
+    is_demo: false
+  28eaddac-5c6b-43b4-866f-78b958d863a4:
+    osm_id: node/11067209459
+    characteristic: day_noise
+    scope: {}
+    value: true
+    confidence: 0.8962
+    source: computed
+    is_demo: false
+  c486c0c1-d938-4c3a-8dba-b61d00f2d1b9:
+    osm_id: node/11138786401
+    characteristic: day_noise
+    scope: {}
+    value: true
+    confidence: 0.8967
+    source: computed
+    is_demo: false
+  034894c2-d3ab-4995-b5ac-aa2dc8a95a94:
+    osm_id: node/11138786401
+    characteristic: night_noise
+    scope:
+      facades:
+      - N
+      - E
+    value: true
+    confidence: 0.8975
+    source: computed
+    is_demo: false
+  0b2a1ad5-4d44-47ec-a7b3-9659369eecc8:
+    osm_id: node/11067209459
+    characteristic: night_noise
+    scope: {}
+    value: true
+    confidence: 0.89
+    source: computed
+    is_demo: false
+  c794043a-18a7-4ceb-b5e9-c78e2c608c2e:
+    osm_id: node/11067209459
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.6667
+    source: open_data
+    is_demo: false
+  0ef10b72-f5e9-46a0-aba9-6279d06b283f:
+    osm_id: node/11067209459
+    characteristic: playground_walk
+    scope: {}
+    value: true
+    confidence: 0.7519
+    source: open_data
+    is_demo: false
+  d6b9d3f1-fa15-4d17-be89-28daad6f6908:
+    osm_id: node/11067209459
+    characteristic: sea_view
+    scope:
+      facades:
+      - SE
+    value: true
+    confidence: 0.95
+    source: computed
+    is_demo: false
+  3dcd680b-9aa7-45aa-b071-29205f4d50ed:
+    osm_id: node/11138786401
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.6667
+    source: open_data
+    is_demo: false
+  020b3765-6e94-4c57-b606-f756eb656b6d:
+    osm_id: node/11138786401
+    characteristic: playground_walk
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  35f4ce2b-9f90-48a3-b04c-cc7f43eaf800:
+    osm_id: node/11119611105
+    characteristic: day_noise
+    scope: {}
+    value: true
+    confidence: 0.8997
+    source: computed
+    is_demo: false
+  df347151-753c-4cbb-9788-a3d5c0eef45b:
+    osm_id: node/6181072994
+    characteristic: day_noise
+    scope: {}
+    value: true
+    confidence: 0.8972
+    source: computed
+    is_demo: false
+  103ffb7c-483c-43b5-b794-c66dfff841f7:
+    osm_id: node/4323769893
+    characteristic: day_noise
+    scope: {}
+    value: true
+    confidence: 0.8967
+    source: computed
+    is_demo: false
+  3811a91c-050c-4288-9f3f-8aa7901130e2:
+    osm_id: node/4323769893
+    characteristic: sea_view
+    scope:
+      facades:
+      - SE
+      floorFrom: 2
+    value: true
+    confidence: 0.95
+    source: computed
+    is_demo: false
+  167759a5-5d49-493c-9f68-f3ece81a46d0:
+    osm_id: node/4323769893
+    characteristic: remote_work
+    scope: {}
+    value: true
+    confidence: 0.897
+    source: computed
+    is_demo: false
+  7b8ce311-c122-471f-b52a-7b3afcd362fe:
+    osm_id: node/4370807729
+    characteristic: day_noise
+    scope:
+      facades:
+      - NE
+      - SE
+      - SW
+    value: true
+    confidence: 0.8913
+    source: computed
+    is_demo: false
+  c91e1197-9fde-462e-afa6-0298a1d0533a:
+    osm_id: node/11016638369
+    characteristic: day_noise
+    scope:
+      facades:
+      - SE
+    value: true
+    confidence: 0.877
+    source: computed
+    is_demo: false
+  1f464860-c890-4c67-9647-601c78d552cd:
+    osm_id: node/11016638369
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.7042
+    source: open_data
+    is_demo: false
+  0281c806-5f69-4eff-9bd9-76745c2e332b:
+    osm_id: node/4370807729
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.6667
+    source: open_data
+    is_demo: false
+  68d12ee9-1f1d-4dd9-9f1d-0c31e7643907:
+    osm_id: node/4370807729
+    characteristic: sea_view
+    scope:
+      facades:
+      - SW
+      - NW
+    value: true
+    confidence: 0.95
+    source: computed
+    is_demo: false
+  6fffbe0c-4368-48af-a7f8-1e36ff5636cc:
+    osm_id: node/11016638369
+    characteristic: night_noise
+    scope:
+      facades:
+      - NE
+    value: true
+    confidence: 0.71
+    source: computed
+    is_demo: false
+  9d7de1ac-7fa4-431b-bdcc-122809c77dd5:
+    osm_id: node/11016638369
+    characteristic: pharmacy_24_7
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  4983f2d8-12c1-48e1-a332-2fe774359b0f:
+    osm_id: node/11016638369
+    characteristic: playground_walk
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  2e868bd2-b5e4-4d27-ab64-0123535e3e6d:
+    osm_id: node/11016638369
+    characteristic: sea_view
+    scope:
+      facades:
+      - SE
+      floorFrom: 13
+    value: true
+    confidence: 0.95
+    source: computed
+    is_demo: false
+  43f256b9-7885-4b72-9296-02d9aaffa649:
+    osm_id: node/11016638369
+    characteristic: sea_view
+    scope:
+      facades:
+      - W
+      - NW
+      floorFrom: 7
+    value: true
+    confidence: 0.95
+    source: computed
+    is_demo: false
+  6815685c-38fb-409e-845a-52ad2899205c:
+    osm_id: node/4370807729
+    characteristic: remote_work
+    scope: {}
+    value: true
+    confidence: 0.891
+    source: computed
+    is_demo: false
+  5edffd90-ea28-4043-82f7-f03404173edf:
+    osm_id: node/4370076889
+    characteristic: day_noise
+    scope:
+      facades:
+      - NE
+      - NW
+    value: true
+    confidence: 0.887
+    source: computed
+    is_demo: false
+  a0510bb8-cd02-4390-af0c-3be87226dd89:
+    osm_id: node/4370076889
+    characteristic: day_noise
+    scope:
+      facades:
+      - SE
+      - SW
+    value: true
+    confidence: 0.8645
+    source: computed
+    is_demo: false
+  956dd995-f005-4dbc-b04f-556e98001df8:
+    osm_id: node/4370076889
+    characteristic: mountain_view
+    scope:
+      facades:
+      - NE
+      floorTo: 2
+      floorFrom: 2
+    value: true
+    confidence: 0.75
+    source: computed
+    is_demo: false
+  597b126e-6e81-4986-a42d-d1dae1d1087a:
+    osm_id: node/4370076889
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.6667
+    source: open_data
+    is_demo: false
+  66170b23-aeba-4f72-a07f-8de3cec07615:
+    osm_id: node/11016638369
+    characteristic: sunset_over_sea
+    scope:
+      months:
+      - 11
+      facades:
+      - W
+      - NW
+      floorFrom: 7
+    value: true
+    confidence: 0.9437
+    source: computed
+    is_demo: false
+  d34fab69-a267-4bbc-9c1e-0b7ca3aeebd6:
+    osm_id: node/4370076889
+    characteristic: sea_view
+    scope:
+      facades:
+      - SE
+      - SW
+      floorFrom: 2
+    value: true
+    confidence: 0.95
+    source: computed
+    is_demo: false
+  77e94e09-817b-410e-8b4a-8a105f9d3815:
+    osm_id: node/4370076889
+    characteristic: remote_work
+    scope: {}
+    value: true
+    confidence: 0.887
+    source: computed
+    is_demo: false
+  e2a1a462-41bd-4202-84e0-38d5836de05f:
+    osm_id: node/6590015485
+    characteristic: day_noise
+    scope: {}
+    value: true
+    confidence: 0.891
+    source: computed
+    is_demo: false
+  ea8cf413-6780-47b7-9290-9063e0c37e66:
+    osm_id: node/6590015485
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.6667
+    source: open_data
+    is_demo: false
+  c4ff08cf-5e20-47ea-902e-4384dc15abac:
+    osm_id: node/5014222522
+    characteristic: day_noise
+    scope: {}
+    value: true
+    confidence: 0.8983
+    source: computed
+    is_demo: false
+  e4ccae8c-940b-4407-9c75-d2af7c8ebc38:
+    osm_id: node/6590015485
+    characteristic: sea_view
+    scope:
+      facades:
+      - S
+    value: true
+    confidence: 0.95
+    source: computed
+    is_demo: false
+  895a84c2-f7d0-4477-80a0-34cceff92c54:
+    osm_id: node/6590015485
+    characteristic: remote_work
+    scope: {}
+    value: true
+    confidence: 0.891
+    source: computed
+    is_demo: false
+  9128b00e-df78-47a5-bda0-332fbf8a6194:
+    osm_id: node/13108695501
+    characteristic: day_noise
+    scope: {}
+    value: true
+    confidence: 0.8995
+    source: computed
+    is_demo: false
+  72de5e36-e09a-41db-a94d-b8a690bc2c7d:
+    osm_id: node/5014222522
+    characteristic: remote_work
+    scope: {}
+    value: true
+    confidence: 0.898
+    source: computed
+    is_demo: false
+  22eafb9f-b4bf-4a47-9012-5600a1475133:
+    osm_id: node/13108695501
+    characteristic: sea_view
+    scope:
+      facades:
+      - SE
+      - SW
+      - NW
+    value: true
+    confidence: 0.95
+    source: computed
+    is_demo: false
+  82c7d037-0cd2-4299-a3e8-36179eab6c05:
+    osm_id: node/13108695501
+    characteristic: remote_work
+    scope: {}
+    value: true
+    confidence: 0.899
+    source: computed
+    is_demo: false
+  7b007575-5d9a-4a84-8ff9-e547e53f958c:
+    osm_id: node/4369173790
+    characteristic: day_noise
+    scope:
+      facades:
+      - N
+      - SE
+      - S
+      - SW
+      - W
+    value: true
+    confidence: 0.8828
+    source: computed
+    is_demo: false
+  025e9bbc-ea02-4a90-bec1-eea99525f6d9:
+    osm_id: node/4369173790
+    characteristic: day_noise
+    scope:
+      facades:
+      - E
+      - NW
+    value: true
+    confidence: 0.873
+    source: computed
+    is_demo: false
+  bd3be5e6-b82a-430b-be94-f4f85aebf032:
+    osm_id: node/4369173790
+    characteristic: mountain_view
+    scope:
+      facades:
+      - E
+      floorTo: 5
+    value: true
+    confidence: 0.8125
+    source: computed
+    is_demo: false
+  c0227392-f9d4-46eb-a250-3c8839b6e0c4:
+    osm_id: node/4369173790
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.6667
+    source: open_data
+    is_demo: false
+  7d5f9437-0d22-4fd2-866a-414270155e5b:
+    osm_id: node/4369173790
+    characteristic: sea_view
+    scope:
+      facades:
+      - E
+      - SE
+      - S
+      - SW
+      floorFrom: 6
+    value: true
+    confidence: 0.95
+    source: computed
+    is_demo: false
+  07e03cbe-7443-4ae0-aba4-219fc16cb501:
+    osm_id: node/14002340401
+    characteristic: day_noise
+    scope: {}
+    value: true
+    confidence: 0.899
+    source: computed
+    is_demo: false
+  0a0621dc-233e-4f67-aa28-5a990f91284b:
+    osm_id: node/14002340401
+    characteristic: sea_view
+    scope:
+      facades:
+      - SE
+      floorTo: 2
+      floorFrom: 2
+    value: true
+    confidence: 0.6875
+    source: computed
+    is_demo: false
+  d4892c1f-8fd7-447a-8487-1b6cc52b6173:
+    osm_id: node/10213051617
+    characteristic: ev_charging
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  663226a2-106e-4d6f-b1f2-5cc67cf09279:
+    osm_id: node/4369173790
+    characteristic: remote_work
+    scope: {}
+    value: true
+    confidence: 0.883
+    source: computed
+    is_demo: false
+  9a6ee2ad-33e6-48cd-b829-4d07d51194a7:
+    osm_id: node/10213051617
+    characteristic: climate
+    scope:
+      months:
+      - 10
+    value:
+      water: 21.1
+      air_max: 21.3
+      air_min: 15.4
+      rain_days: 10.9
+      sun_hours: 8.8
+      daylight_h: 11.0
+    confidence: 0.9
+    source: open_data
+    is_demo: false
+  3d471a7d-5ff2-4ead-b1f6-a72ba41d0552:
+    osm_id: node/14002340401
+    characteristic: remote_work
+    scope: {}
+    value: true
+    confidence: 0.899
+    source: computed
+    is_demo: false
+  70172b9c-61e2-4349-a442-62b5710db058:
+    osm_id: node/10213051617
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.6667
+    source: open_data
+    is_demo: false
+  7658aab1-12ee-4e8b-9c49-c81cedffd34e:
+    osm_id: node/10213051617
+    characteristic: sea_view
+    scope:
+      facades:
+      - SW
+      floorFrom: 4
+    value: true
+    confidence: 0.95
+    source: computed
+    is_demo: false
+  d99f3cef-e574-46f1-b0ed-6f5cdd5464e3:
+    osm_id: node/11190910581
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.7042
+    source: open_data
+    is_demo: false
+  0337d46b-320e-446e-8597-24429c07a9dd:
+    osm_id: node/11190910581
+    characteristic: sea_view
+    scope:
+      facades:
+      - SE
+      - S
+      - SW
+    value: true
+    confidence: 0.95
+    source: computed
+    is_demo: false
+  8d29b236-2697-4a5d-90f5-a046ecff5b21:
+    osm_id: node/11637558670
+    characteristic: ev_charging
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  491905f1-ae25-4eb2-9b78-2cc3f86e49c7:
+    osm_id: node/11637558670
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.7042
+    source: open_data
+    is_demo: false
+  a35449c8-fcc4-44b7-ad87-e63a061421c1:
+    osm_id: node/11637558670
+    characteristic: sea_view
+    scope:
+      facades:
+      - SE
+      floorTo: 6
+      floorFrom: 5
+    value: true
+    confidence: 0.875
+    source: computed
+    is_demo: false
+  42b6b2e6-17c3-4372-91ed-813731d05bd2:
+    osm_id: node/11304222982
+    characteristic: ev_charging
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  f4e7e05d-e992-4005-83e7-fcc30dc6a21a:
+    osm_id: node/11190910581
+    characteristic: sunset_over_sea
+    scope:
+      months:
+      - 11
+      facades:
+      - SW
+      floorTo: 2
+    value: true
+    confidence: 0.6875
+    source: computed
+    is_demo: false
+  7b53fdad-af9d-424c-90df-acb1ac26efa2:
+    osm_id: node/11958163713
+    characteristic: ev_charging
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  01fdb5c7-9f5d-4f49-b965-afa4b88caff0:
+    osm_id: node/11304222982
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.6667
+    source: open_data
+    is_demo: false
+  2c467687-992e-4d04-9385-e1f214523917:
+    osm_id: node/11958163713
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.7042
+    source: open_data
+    is_demo: false
+  681a2f56-f2bf-4c4e-a5f9-7a7662516f64:
+    osm_id: node/10759613912
+    characteristic: climate
+    scope:
+      months:
+      - 10
+    value:
+      water: 20.9
+      air_max: 21.3
+      air_min: 15.5
+      rain_days: 10.9
+      sun_hours: 8.8
+      daylight_h: 11.0
+    confidence: 0.9
+    source: open_data
+    is_demo: false
+  9d1006f0-eb23-4b2c-b314-e0d573be8df7:
+    osm_id: node/10759613912
+    characteristic: ev_charging
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  e9064cd8-31e9-484c-8d11-4aac098e29db:
+    osm_id: node/11138788609
+    characteristic: ev_charging
+    scope: {}
+    value: true
+    confidence: 0.7519
+    source: open_data
+    is_demo: false
+  98a4e044-5a38-430c-a619-ed6947b6fef1:
+    osm_id: node/11637552371
+    characteristic: ev_charging
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  031fea5c-3394-4df0-ae1b-35b698f8425b:
+    osm_id: node/10734977305
+    characteristic: climate
+    scope:
+      months:
+      - 10
+    value:
+      water: 20.9
+      air_max: 21.3
+      air_min: 15.5
+      rain_days: 10.9
+      sun_hours: 8.8
+      daylight_h: 11.0
+    confidence: 0.9
+    source: open_data
+    is_demo: false
+  501c779e-8745-4c33-9f14-b359d13d0606:
+    osm_id: node/10734977305
+    characteristic: ev_charging
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  44e022e4-0597-4372-a48c-2a352ce2ddf4:
+    osm_id: node/10734977305
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.7042
+    source: open_data
+    is_demo: false
+  3b06db0b-1596-4733-a24c-638908e445d6:
+    osm_id: node/10759613912
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.7042
+    source: open_data
+    is_demo: false
+  f22e3a11-8d2c-4449-8bb7-28d91ee37cf9:
+    osm_id: node/11138788609
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.7042
+    source: open_data
+    is_demo: false
+  6b797d69-5fd1-4ac9-a7b3-baf089ca94fb:
+    osm_id: node/11637552371
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.7042
+    source: open_data
+    is_demo: false
+  28d9549f-b819-43fa-a9fc-32eaabcd723f:
+    osm_id: node/10734977305
+    characteristic: sea_view
+    scope:
+      facades:
+      - SE
+      - SW
+      floorFrom: 4
+    value: true
+    confidence: 0.9375
+    source: computed
+    is_demo: false
+  6509421f-0a90-4852-8c0b-7f1831810da0:
+    osm_id: node/11482391574
+    characteristic: ev_charging
+    scope: {}
+    value: true
+    confidence: 0.8002
+    source: open_data
+    is_demo: false
+  fe8337ae-3c60-4d47-aae4-d9141a4f8d91:
+    osm_id: node/11482391574
+    characteristic: parking
+    scope: {}
+    value: true
+    confidence: 0.7042
+    source: open_data
+    is_demo: false
+  7f8943c2-dad0-4356-8964-998c1dcf070c:
+    osm_id: node/10810801627
+    characteristic: sea_view
+    scope:
+      facades:
+      - S
+      floorFrom: 3
+    value: true
+    confidence: 0.875
+    source: computed
+    is_demo: false
+  c2a2e7f5-5e59-49f6-a779-6e2fd9ec99a1:
+    osm_id: node/10759614063
+    characteristic: sunrise
+    scope:
+      months:
+      - 10
+      facades:
+      - S
+      floorTo: 2
+      floorFrom: 2
+    value: true
+    confidence: 0.6875
+    source: computed
+    is_demo: false
+  eac8b811-1d63-494a-beac-b2a3817b36a0:
+    osm_id: node/10058780093
+    characteristic: sunrise
+    scope:
+      months:
+      - 1
+      - 10
+      - 11
+      facades:
+      - SE
+    value: true
+    confidence: 0.8125
+    source: computed
+    is_demo: false
+  4665ad11-8181-49f4-9c55-c43ad80c0550:
+    osm_id: node/10759613919
+    characteristic: sunrise
+    scope:
+      months:
+      - 10
+      facades:
+      - E
+      floorFrom: 3
+    value: true
+    confidence: 0.75
+    source: computed
+    is_demo: false
+  685b58b9-68c6-4669-9e63-e040d0a0b145:
+    osm_id: node/10574256210
+    characteristic: sunrise
+    scope:
+      months:
+      - 10
+      facades:
+      - NE
+      floorTo: 6
+      floorFrom: 4
+    value: true
+    confidence: 0.875
+    source: computed
+    is_demo: false
+  751a22fd-8ae7-41fd-8420-d804f1f7b91e:
+    osm_id: node/10058556917
+    characteristic: sunrise
+    scope:
+      months:
+      - 10
+      facades:
+      - NE
+      floorFrom: 5
+    value: true
+    confidence: 0.8125
+    source: computed
+    is_demo: false
+  df5f393b-a102-423c-accb-729dfa68e4d2:
+    osm_id: node/10118233110
+    characteristic: sunrise
+    scope:
+      months:
+      - 10
+      facades:
+      - NE
+      floorFrom: 7
+    value: true
+    confidence: 0.6875
+    source: computed
+    is_demo: false
