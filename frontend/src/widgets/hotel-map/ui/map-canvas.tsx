@@ -12,7 +12,13 @@ maplibregl.setWorkerUrl(workerUrl);
 const CENTER: [number, number] = [39.75, 43.58];
 const STYLE = "https://tiles.openfreemap.org/styles/liberty";
 
-export default function MapCanvas({ items, active, onHover, onSelect }: CoastMapProps) {
+export default function MapCanvas({
+  items,
+  active,
+  onHover,
+  onSelect,
+  scrollZoom = true,
+}: CoastMapProps) {
   const container = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<maplibregl.Map | null>(null);
   const [failed, setFailed] = useState(false);
@@ -30,6 +36,9 @@ export default function MapCanvas({ items, active, onHover, onSelect }: CoastMap
         style: STYLE,
         center: CENTER,
         zoom: 10,
+        scrollZoom,
+        cooperativeGestures: !scrollZoom,
+        locale: { "CooperativeGesturesHandler.MobileHelpText": "Перемещайте карту двумя пальцами" },
         attributionControl: { compact: true },
         dragRotate: false,
         pitchWithRotate: false,
@@ -47,7 +56,7 @@ export default function MapCanvas({ items, active, onHover, onSelect }: CoastMap
     return () => {
       instance.remove();
     };
-  }, []);
+  }, [scrollZoom]);
 
   const fit = useCallback(() => {
     if (!map) return;
@@ -127,7 +136,7 @@ export default function MapCanvas({ items, active, onHover, onSelect }: CoastMap
         </button>
       </div>
       <span className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-card/85 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-muted-foreground shadow-soft backdrop-blur">
-        тяните · колесо приближает
+        {scrollZoom ? "тяните · колесо приближает" : "масштаб — кнопками + и −"}
       </span>
     </>
   );
