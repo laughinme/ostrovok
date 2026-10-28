@@ -12,6 +12,19 @@
 
 ---
 
+### 28.10 13:10 МСК+4 (09:10 МСК) · claude-core · каркас → ядро знаний → поиск → агенты → консоль
+- Сделано: B0.3, B0.7, B1.7, B2.1–B2.3, B2.11–B2.13, B3.1, B3.2, B3.4, B4.1, B4.2, B4.6, B4.7 (без сброса демо),
+  B5.1 — итоги в tasks.md. Параллельно работают codex-osm, codex-view2, codex-ground2, codex-partner, codex-guest.
+- Как проверить: `make dev && make test-deps`, `cd backend && uv run python -m app.init && uv run python -m app.cli
+  collect --shard 0/6` (6 процессов, по 30 c на отель), `make up-native` → http://localhost:8080.
+- Грабли: (1) **мак уходит в сон** — длинные задачи запускать через `caffeinate -i`, иначе процессы стоят часами;
+  (2) гео-ядра CPU-bound: параллелим процессами (`--shard`), не asyncio; (3) сборка Next.js под эмуляцией amd64 на Mac
+  висит — локально `make up-native`, amd64 проверяем на другой машине или CI; (4) YAML 1.1: ключи `yes`/`no` → bool,
+  `24_7` → число, запятая в потоковом словаре режет строку — брать в кавычки; (5) геометрию в SQL передавать
+  подзапросом, не параметром; (6) `git add backend/app` захватывает файлы других сессий — только явные пути.
+- Дальше: экспорт сида знаний после полного сбора и коммит `data/seed`; README и ARCHITECTURE (B6.1); сброс демо;
+  проверка с нуля на amd64 (B6.3); подключение Связного к живому исследованию.
+
 ### 28.10 03:18 МСК · codex-ground2 · B5.6 завершена, линия ground2
 - Сделано: GET /api/v1/hotels/{UUID}/day?date=2026-11-12, без LLM. Код DayPlan/REST — 62b296a;
   часы/геометрия заката — 541f8d2; area_stat — f521d6c; шум/маршруты/климат — 2aff2a0, ed3c0f6.
@@ -43,32 +56,62 @@
   не даёт обещать подтверждённую доступность. Это модель географии, не натурная проверка и не прогноз.
 - Дальше: фронт может подключать /noise, /routes, /climate и /day. Задачи ground2 закрыты.
 
-### 28.10 03:14 МСК · codex-partner · B4.3
-- Сделано: связной и разбор ответов, коммиты `822a319`, `a96434d`, `cebdae5`. Вопросы из реестра,
-  спрос за сегодня + 6 дней (район + all), неопределённость 1−|2p−1|, дедупликация с advisory lock
-  и частичным уникальным индексом. waiting_hotel уточняет категории на вычисленной стороне.
-- **Публичный API:** `domain.partner.questions.question_value(demand: int, probability: float|None,
-  influence: float) -> float`; demand — число поисков, probability/influence — доли 0…1.
-  `RulesAnswerParser.parse(AnswerInput) -> ParsedAnswer` (async); вход: characteristic, text,
-  payload, room_names, options, value_type, unit; выход: fields, value, confidence (0…1), Scope,
-  parser="rules", needs_clarification (<0,6). `AnswerParser` — протокол для будущей LLM-стратегии.
-  `PartnerQuestions(uow, clock).generate(hotel_id, run_id=None, limit=5)` / `.of_hotel(hotel_id)`
-  возвращают QuestionView; `Liaison(db, clock).ask(hotel_id, tracer)` пишет трассу hotelier.ask.
-  `PartnerAnswers(uow, clock, parser=None).submit(question_id, text='', payload=None, is_demo=False)`
-  → AnswerResult(answer_id, hotel_id, parsed, changed: tuple[Fact,...], clarification).
-  `PartnerFacades(uow, clock).replace(hotel_id, Sequence[FacadeMapping], is_demo=False)` → Recorded;
-  FacadeMapping(room_type_id, Facade, floor_from, floor_to), этажи включительно, проверка реального
-  здания и категорий; заменяет разметку, confirmed_by_hotel=true и Observation facade_rooms.
-  Все сервисы только flush; транзакцией владеет вызывающий.
-- Как проверить: ruff/format, mypy strict, 7 import-контрактов и все 370 тестов зелёные,
-  БД `okno_partner_test`, Redis 11. `service.partner.evaluation.evaluate_answers(parser, path)`
-  → AnswerMetrics: 24/24 точных записей по 72/72 машинным полям R3, 6/6 расплывчатых ответов
-  запрашивают уточнение. conditions/window_type/notes — свободный текст, не входят в метрику.
-  Набор скопирован в data/eval/hotelier_answers.yaml; оценка LLM отсутствует, API не вызывался.
-- Грабли: SearchRow пока не хранит исторический топ-20. Influence пересчитывает сохранённые
-  намерения на текущих фактах; при отсутствии поисков приор 1.0. Это оценка нынешнего влияния,
-  не историческая статистика. «На море»/«во двор» не превращаются в компас без разметки отеля.
-- Дальше: B4.4, затем API кабинета B4.5. Общие файлы не заняты.
+### 28.10 08:57 МСК · codex-partner · B4.4
+- Сделано: `cd9e652`, симулятор по hidden_truth, три персоны, иногда расплывчатый ответ;
+  уточнение отвечает точно. Наблюдения HOTELIER + is_demo=true, трасса answer.parse.
+  CLI `uv run python -m app.cli claims` идемпотентно пишет заявления 39 отелей у моря и вопросы.
+  Синтетический Маяк: заявление всех номеров + расчёт по сторонам → waiting_hotel + точечный вопрос.
+- **Публичный API:** `HiddenTruth.profile(osm_id) -> Mapping|None`, `.claimed_hotels() -> tuple[str,...]`;
+  адаптер `infra.partner_truth.YamlHiddenTruth(Path(...hidden_truth.yaml))` грузится при сборке.
+  `domain.partner.simulator.simulate_answer(profile, key, question_id=str, clarification=False)`
+  → SimulatedAnswer(text, payload)|None; `demo_delay(key, (low,high)) -> float` — секунды.
+  `schedule_simulation(uow, clock, hotel_id, delay_range) -> int` ставит только открытые вопросы
+  в HOTELIER_SIMULATE, delay — timedelta в секундах, dedupe_key=hotelier:question_id.
+  `HotelierSimulator(db, clock, events, truth).respond(question_id)` (также экспорт из agents.simulator)
+  обрабатывает один ответ после аренды задачи; закрытый вопрос повторно не отвечает.
+  `seed_demo_claims(db, clock, truth) -> int` — число новых наблюдений. Handler зарегистрирован
+  в worker.build_handlers(hotelier=...), режим HOTELIER_SIMULATOR=off не создаёт симулятор.
+- Как проверить: все 380 тестов, ruff/format, mypy, 7 контрактов зелёные в отдельной БД/Redis11.
+  Unit читает реальный hidden_truth.yaml (39 claims и соответствующие разметки категорий),
+  интеграционные проверяют available_at, дедупликацию, is_demo, повтор и физический конфликт.
+- Грабли: расплывчатый ответ оставляет вопрос открытым; новый запуск симуляции ставит его снова.
+  Без профиля или без характеристики в скрытой правде симулятор молчит, не сочиняет значение.
+  Нужную сторону в конфликте выбираем только из computed-фактов, иначе заявление всех номеров
+  ошибочно подсказало бы первую по компасу сторону с маркетинговым «да».
+- Дальше: B4.5, ручки кабинета, контроль HotelStaff и сквозной тест смены рекомендации номера.
+
+### 28.10 03:16 МСК · codex-osm · B1.8, линия B1.2 → B1.5 → B1.8 завершена
+- Сделано: Geofabrik → региональный кэш → здания/объекты/море → DEM/климат/демо → граф
+  запускается через `make data` / `python -m pipeline all`. Добавлен отдельный этап `pbf`,
+  явный порядок этапов, происхождение PBF и MD5 в MANIFEST, размеры и проверки строгих границ
+  60 000 000 / 50 000 000 байт. Коммиты `e7d8d4e`, `7adbc68`. Общий Makefile освобождён.
+- **Публичный API:** контракты CSV и NPZ из B1.2/B1.5 неизменны.
+  `pipeline.inventory.size_inventory(directory: Path) -> tuple[list[Path], int]` возвращает
+  отсортированные файлы и байты без самого MANIFEST; при достижении лимита выбрасывает ValueError.
+  `provenance() -> list[str]` — строки атрибуции/снимков из локальных source JSON;
+  `object_counts(directory) -> list[str]` — количества CSV, графа и демо-карточек.
+  `pipeline.manifest.run() -> None` публикует data/MANIFEST.md; CLI `pbf` подготавливает оба GPKG.
+- Размеры опубликованных файлов на завершение: **28 167 434 байт (28,17 МБ)**, 19 файлов;
+  крупнейший — `dem_int16.npy`, **11 178 800 байт (11,18 МБ)**. Граф — 4 973 463 байт (4,97 МБ),
+  здания — 5 751 312, объекты — 5 160 796, море — 72 127. Запас до 60 МБ — 31,83 МБ.
+  В MANIFEST учтены и опубликованные параллельными сессиями справочники/наборы оценки.
+- Как проверить: новый снимок дерева вне рабочего каталога, удалены все выходы региона кроме
+  неизменяемых hotels.csv.gz/hotel_selection.json и сгенерированные demo YAML; в `.cache/osm/`
+  оставлены только два исходных PBF и source JSON, без GPKG. Сырые DEM/погодные кэши переиспользованы.
+  `make data` прошёл при принудительном запрете HTTP (`httpx.Client.send`/AsyncClient.send);
+  **SHA-256 всех восстановленных выходов совпал, различий 0**, кроме времени MANIFEST.
+  Это также проверило сохранность каталога отелей. Реальная загрузка соседнего PBF и проверка
+  обоих MD5 были выполнены в B1.2, полный download при этой офлайн-проверке не повторялся.
+  Полный **make check: 327 passed**, ruff/format, strict mypy и 7 import-контрактов — зелёные
+  на проверенной базе + финальные файлы линии; PostgreSQL `okno_osm_test`, Redis DB 13.
+  Unit в общем дереве перед финалом: 274 passed; затем другие сессии продолжили менять код.
+- Грабли: один более свежий снимок HEAD уже содержал чужой executor без его изменений TagFilter /
+  CatalogRepository и не проходил mypy; общий каталог также ловил незавершённые lint-правки
+  соседних сессий. Поэтому итоговый make check выполнен на ранее проверенной целостной базе
+  со всеми финальными файлами пайплайна. Чужие файлы не исправлялись и не включались в коммиты.
+  Временный window_profiles.tmp другой сессии в отчёт опубликованных данных не включён.
+- Дальше: B1.7 / claude-core — COPY региона и идемпотентный сид; при добавлении новых данных
+  пересобирать MANIFEST. Публичные стыки геоданных и графа — в двух записях codex-osm ниже.
 
 ### 28.10 03:15 МСК · codex-guest · B5.4
 - Сделано: доменные статусы и пересечение областей (`05f4dbd`); бронь со снимком обещаний,
@@ -106,38 +149,68 @@
   её нельзя вывести из ответа «нет». Климат/маршрут отсутствуют, если соответствующих данных нет.
 - Дальше: B5.5, затем B5.8. LLM API не вызывался.
 
-### 28.10 03:16 МСК · codex-osm · B1.8, линия B1.2 → B1.5 → B1.8 завершена
-- Сделано: Geofabrik → региональный кэш → здания/объекты/море → DEM/климат/демо → граф
-  запускается через `make data` / `python -m pipeline all`. Добавлен отдельный этап `pbf`,
-  явный порядок этапов, происхождение PBF и MD5 в MANIFEST, размеры и проверки строгих границ
-  60 000 000 / 50 000 000 байт. Коммиты `e7d8d4e`, `7adbc68`. Общий Makefile освобождён.
-- **Публичный API:** контракты CSV и NPZ из B1.2/B1.5 неизменны.
-  `pipeline.inventory.size_inventory(directory: Path) -> tuple[list[Path], int]` возвращает
-  отсортированные файлы и байты без самого MANIFEST; при достижении лимита выбрасывает ValueError.
-  `provenance() -> list[str]` — строки атрибуции/снимков из локальных source JSON;
-  `object_counts(directory) -> list[str]` — количества CSV, графа и демо-карточек.
-  `pipeline.manifest.run() -> None` публикует data/MANIFEST.md; CLI `pbf` подготавливает оба GPKG.
-- Размеры опубликованных файлов на завершение: **28 167 434 байт (28,17 МБ)**, 19 файлов;
-  крупнейший — `dem_int16.npy`, **11 178 800 байт (11,18 МБ)**. Граф — 4 973 463 байт (4,97 МБ),
-  здания — 5 751 312, объекты — 5 160 796, море — 72 127. Запас до 60 МБ — 31,83 МБ.
-  В MANIFEST учтены и опубликованные параллельными сессиями справочники/наборы оценки.
-- Как проверить: новый снимок дерева вне рабочего каталога, удалены все выходы региона кроме
-  неизменяемых hotels.csv.gz/hotel_selection.json и сгенерированные demo YAML; в `.cache/osm/`
-  оставлены только два исходных PBF и source JSON, без GPKG. Сырые DEM/погодные кэши переиспользованы.
-  `make data` прошёл при принудительном запрете HTTP (`httpx.Client.send`/AsyncClient.send);
-  **SHA-256 всех восстановленных выходов совпал, различий 0**, кроме времени MANIFEST.
-  Это также проверило сохранность каталога отелей. Реальная загрузка соседнего PBF и проверка
-  обоих MD5 были выполнены в B1.2, полный download при этой офлайн-проверке не повторялся.
-  Полный **make check: 327 passed**, ruff/format, strict mypy и 7 import-контрактов — зелёные
-  на проверенной базе + финальные файлы линии; PostgreSQL `okno_osm_test`, Redis DB 13.
-  Unit в общем дереве перед финалом: 274 passed; затем другие сессии продолжили менять код.
-- Грабли: один более свежий снимок HEAD уже содержал чужой executor без его изменений TagFilter /
-  CatalogRepository и не проходил mypy; общий каталог также ловил незавершённые lint-правки
-  соседних сессий. Поэтому итоговый make check выполнен на ранее проверенной целостной базе
-  со всеми финальными файлами пайплайна. Чужие файлы не исправлялись и не включались в коммиты.
-  Временный window_profiles.tmp другой сессии в отчёт опубликованных данных не включён.
-- Дальше: B1.7 / claude-core — COPY региона и идемпотентный сид; при добавлении новых данных
-  пересобирать MANIFEST. Публичные стыки геоданных и графа — в двух записях codex-osm ниже.
+### 28.10 03:14 МСК · codex-partner · B4.3
+- Сделано: связной и разбор ответов, коммиты `822a319`, `a96434d`, `cebdae5`. Вопросы из реестра,
+  спрос за сегодня + 6 дней (район + all), неопределённость 1−|2p−1|, дедупликация с advisory lock
+  и частичным уникальным индексом. waiting_hotel уточняет категории на вычисленной стороне.
+- **Публичный API:** `domain.partner.questions.question_value(demand: int, probability: float|None,
+  influence: float) -> float`; demand — число поисков, probability/influence — доли 0…1.
+  `RulesAnswerParser.parse(AnswerInput) -> ParsedAnswer` (async); вход: characteristic, text,
+  payload, room_names, options, value_type, unit; выход: fields, value, confidence (0…1), Scope,
+  parser="rules", needs_clarification (<0,6). `AnswerParser` — протокол для будущей LLM-стратегии.
+  `PartnerQuestions(uow, clock).generate(hotel_id, run_id=None, limit=5)` / `.of_hotel(hotel_id)`
+  возвращают QuestionView; `Liaison(db, clock).ask(hotel_id, tracer)` пишет трассу hotelier.ask.
+  `PartnerAnswers(uow, clock, parser=None).submit(question_id, text='', payload=None, is_demo=False)`
+  → AnswerResult(answer_id, hotel_id, parsed, changed: tuple[Fact,...], clarification).
+  `PartnerFacades(uow, clock).replace(hotel_id, Sequence[FacadeMapping], is_demo=False)` → Recorded;
+  FacadeMapping(room_type_id, Facade, floor_from, floor_to), этажи включительно, проверка реального
+  здания и категорий; заменяет разметку, confirmed_by_hotel=true и Observation facade_rooms.
+  Все сервисы только flush; транзакцией владеет вызывающий.
+- Как проверить: ruff/format, mypy strict, 7 import-контрактов и все 370 тестов зелёные,
+  БД `okno_partner_test`, Redis 11. `service.partner.evaluation.evaluate_answers(parser, path)`
+  → AnswerMetrics: 24/24 точных записей по 72/72 машинным полям R3, 6/6 расплывчатых ответов
+  запрашивают уточнение. conditions/window_type/notes — свободный текст, не входят в метрику.
+  Набор скопирован в data/eval/hotelier_answers.yaml; оценка LLM отсутствует, API не вызывался.
+- Грабли: SearchRow пока не хранит исторический топ-20. Influence пересчитывает сохранённые
+  намерения на текущих фактах; при отсутствии поисков приор 1.0. Это оценка нынешнего влияния,
+  не историческая статистика. «На море»/«во двор» не превращаются в компас без разметки отеля.
+- Дальше: B4.4, затем API кабинета B4.5. Общие файлы не заняты.
+
+### 28.10 03:14 МСК · codex-view2 · B2.10-view, B2.13-window
+- Сделано: продолжение codex-view; исполнители `view`/`sun_event` зарегистрированы в bootstrap,
+  API окна подключён через hotels.router. Коммиты `85aa4a0`, `ad2e2aa`, `b44fc1f`, `3c250ae`.
+- **Публичный API для claude-core:** `ViewExecutor.collect(call: MethodCall, env: Environment)` и
+  `SunEventExecutor.collect(...) -> list[Finding]`; рецепты `ViewRecipe`/`SunEventRecipe` существующие.
+  View: цепочка `facades.of → buildings.near → geo.horizon → geo.montecarlo`; Sun:
+  `geo.horizon → sun.path → visibility`. 16 прогонов, 50 при truthy `env.extras["mc_runs"]`.
+  Не более 4 полос этажей; в каждом прогоне равномерно выбирается этаж полосы и одно из трёх окон
+  длиннейшей реальной стены фасада. Scope = один фасад × [floor_from, floor_to], у солнца ещё месяц.
+  `value: bool`, `confidence=P(value)`, в Evidence `runs`, `yes`, `facade`, `floor`, `target` либо
+  `month`, `event`, `over`, `time`, `astronomicalTime`, `behind`, `timezone=Europe/Moscow`.
+  Для солнца равномерно взяты дни месяца; доля относится к сценариям окна/этажа/дня, не к погоде.
+- **Гео API:** `sampled_horizons(scenes, eye_m: float|FloatArray, *, runs=16, seed=0)` возвращает
+  tuple `SampledWindow(scene, indices, eyes_m, terrain_bias_m, horizon)`; массив eye_m допускает
+  абсолютную высоту глаза (м над уровнем моря) для каждого прогона. `monte_carlo` принимает тот же
+  вариант eye_m, остальной контракт прежний. `solar_intersection(location, day, sector, horizon,
+  *, event="sunset"|"sunrise", eye_m=0) -> SolarIntersection|None`: первое утреннее/последнее вечернее
+  появление верхнего края диска, МСК, уточнение до секунды, `position`, `behind`.
+- **API чтения:** `WindowQueries(db, env).get(hotel_id: UUID, facade: Facade, floor: int, day: date)`
+  → `WindowPanorama`; `GET /api/v1/hotels/{id}/window?facade=SW&floor=5&date=2026-11-12`.
+  CamelCase: horizon[azimuthDeg,angleDeg,kind,seaLowDeg,seaHighDeg], peaks с именами/дистанцией (м),
+  sunPath, sunrise/sunset, appearance/disappearance, seaFraction (горизонтальная доля 0…1),
+  minimumSeaFloor (null = моря нет до последнего этажа). 422 на чужой фасад/этаж, 404 на отель,
+  503 при отсутствии рельефа/маски. Неизвестные/бесконечные углы — null, JSON без NaN.
+- Проверки первого этапа: make check — **270 passed**, ruff/format, mypy strict, 7 arch-контрактов.
+  Read-only стенд `uv run python -m tests.benchmarks.view_methods` на реальной БД: view с холодной
+  сценой Portofino/Хоста/Marriott 2,46/2,20/1,76 с; МК16. Хоста SW море на 2/5/9-м =
+  1,42/11,35/15,60%; Portofino SW на 2/3-м = 95,74/100%; Marriott = 0% на 2/5/8-м.
+  Marriott N подписывает Перевальную Южную и Бзерпи. Это проверка правдоподобия, не фотоэталон.
+- Грабли: Жемчужины way/51847429 нет среди выбранных 200; центральный прибрежный сценарий проверен
+  на Portofino node/12032893438. Холодное окно без предрасчёта ~0,58–0,67 с, тёплый HTTP p95
+  3,6–4,3 мс; бюджет холодного запроса пока не закрыт. Генерирую компактные номинальные профили
+  для всех 200 отелей из тех же сцен; параметры солнца останутся расчётом на запрошенную дату.
+- Дальше: завершить и проверить предрасчёт; записать окончательные холодные/тёплые задержки и закрыть
+  B2.13-window. Соседние изменения не включались; LLM и внешние HTTP API не вызывались.
 
 ### 28.10 03:13 МСК · codex-ground2 · B5.6, часы и закат
 - Сделано: `domain.geo.visits.open_for(hours, arrival: datetime, stay_minutes: int) -> bool`
