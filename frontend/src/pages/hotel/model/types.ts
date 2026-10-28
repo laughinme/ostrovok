@@ -21,10 +21,11 @@ export interface Fact {
   sourceLabel: string;
   method: string;
   observedAt?: string;
-  sources: [string, string][];
+  sources: [string, string, string?][];
   caveats: string;
   history: string;
   evidence?: "horizon" | "noise" | "route" | "map";
+  evidenceItems?: { summary: string; attribution: string }[];
 }
 export interface Characteristic {
   key: string;
@@ -51,6 +52,7 @@ export interface RoomType {
   area: number;
   bed: string;
   facades: Facade[];
+  orientationLabel?: string;
   floors: [number, number];
   view: string;
   photo: string;
