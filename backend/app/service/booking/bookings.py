@@ -102,7 +102,7 @@ class BookingService:
     async def _variant(self, request: BookingRequest) -> Variant:
         intent = Intent(None, (), TripDraft(), ())
         if request.search_id:
-            intent = (await SearchService(self._uow, self._clock).get(request.search_id)).intent
+            intent = await SearchService(self._uow, self._clock).intent(request.search_id)
         intent = replace(
             intent, trip=TripDraft(check_in=request.check_in, check_out=request.check_out)
         )
