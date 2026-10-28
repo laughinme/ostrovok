@@ -1,26 +1,45 @@
 .hotel-detail .hotel-similar {
   margin: 36px 0 48px;
   padding: 28px;
-  border: 1px solid var(--line);
+  border: 1px solid #b5dc94;
   border-radius: var(--r-lg);
-  background: var(--surface);
+  background: var(--verified);
   scroll-margin-top: 145px;
 }
 .hotel-similar h2 {
-  font-size: 24px;
+  color: var(--primary);
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: -0.035em;
+}
+.hotel-detail .hotel-similar-results {
+  grid-column: 1 / -1;
+  min-width: 0;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+}
+.hotel-similar-results > h2 {
+  font-size: 21px;
   font-weight: 700;
   letter-spacing: -0.025em;
 }
 .hotel-similar header > p,
-.hotel-similar .similar-hint {
+.hotel-similar .similar-hint,
+.hotel-similar-results .similar-hint {
   margin-top: 10px;
   color: var(--muted);
   font-size: 13px;
   line-height: 1.7;
 }
+.hotel-similar header > p,
+.hotel-similar > .similar-hint {
+  color: var(--on-verified);
+}
 .similar-modifiers {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
   gap: 10px;
   margin: 20px 0 14px;
 }
@@ -40,6 +59,13 @@
   font-weight: 600;
   color: var(--primary);
 }
+.similar-modifiers button {
+  justify-content: flex-start;
+  background: var(--surface);
+}
+.similar-modifiers button svg {
+  flex-shrink: 0;
+}
 .similar-modifiers button:hover,
 .similar-more:hover {
   border-color: var(--primary);
@@ -49,7 +75,8 @@
   background: var(--primary);
   border-color: var(--primary);
 }
-.hotel-similar :is(button, a, summary):focus-visible {
+.hotel-similar :is(button, a, summary):focus-visible,
+.hotel-similar-results :is(button, a, summary):focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 4px;
 }
@@ -154,9 +181,9 @@
   margin-top: 14px;
 }
 @media (max-width: 760px) {
-  .hotel-detail .hotel-similar {
+  .hotel-detail .hotel-similar,
+  .hotel-detail .hotel-similar-results {
     padding: 22px 18px;
-    margin-block: 28px;
   }
   .hotel-similar h2 {
     font-size: 21px;
