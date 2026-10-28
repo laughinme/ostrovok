@@ -8,8 +8,11 @@ from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass, field
 from datetime import date
 from enum import StrEnum
+from functools import lru_cache
+from itertools import pairwise
 from typing import Any
 
+import snowballstemmer
 from rapidfuzz import fuzz
 
 from app.domain.knowledge.characteristic import Checkable
@@ -45,6 +48,12 @@ _MINUTES_AFTER = re.compile(r"минут[а-я]*\s+(\d+)")
 _FLOOR = re.compile(
     r"(?:с|от|выше)\s+(\d+|[а-я]+?)(?:-?го|-?ого)?\s+этаж|этаж[а-я]*\s+(?:с|от)\s+([а-я]+|\d+)"
 )
+_DECLINE = re.compile(
+    r"\bне\s+(?:нуж|надо|важ|интерес|беспоко|волну|требу|принципиальн|критичн)"
+    r"|\bбез\s+разницы"
+)
+_DECLINE_WINDOW = 3
+_PREFIX_STEM = 4
 _WEIGHT = re.compile(r"(\d+)\s*(?:кг|кило)")
 
 
@@ -104,8 +113,8 @@ def parse_intent(text: str, vocabulary: Vocabulary, *, today: date) -> Intent:
         norm = normalize(sentence)
         importance = _importance(norm)
         params = _params(norm)
-        keys = _match(norm, vocabulary)
         clauses = [normalize(c) for c in re.split(r",|\bно\b|\bа ещё\b", sentence) if c.strip()]
+        keys = [k for k in _match(norm, vocabulary) if not _declined(k, clauses, vocabulary)]
         for key in keys:
             if key in seen:
                 continue
@@ -175,9 +184,37 @@ _STOPWORDS = frozenset(
 
 
 def stems(text: str) -> frozenset[str]:
-    """Crude Russian stemming by prefix: «ночью» and «ночь», «самолёты» and «самолётов» meet."""
-    words = [w for w in re.findall(r"[а-яa-z0-9]+", text) if w not in _STOPWORDS]
-    return frozenset(w if len(w) < 4 else w[:4] if len(w) < 7 else w[:5] for w in words)
+    """Snowball stems: «ночью» and «ночь», «закат» and «закатом», «тихий» and «тихо» meet."""
+    words = re.findall(r"[а-яa-z0-9]+", text)
+    # «у моря» is about being near the sea, not just about the sea: keep the preposition's sense.
+    near = {"у" + _stem(after) for before, after in pairwise(words) if before == "у"}
+    return frozenset(_stem(w) for w in words if w not in _STOPWORDS) | near
+
+
+def covers(present: frozenset[str], phrase: frozenset[str]) -> bool:
+    """Every phrase stem occurs in the text; a long stem also matches a longer word form."""
+    return all(any(_same(word, stem) for word in present) for stem in phrase)
+
+
+def _same(word: str, stem: str) -> bool:
+    # Snowball keeps some suffixes and fleeting vowels: «собак» ~ «собакен», «ступен» ~ «ступенек»,
+    # «стройплощадк» ~ «стройплощадок». Long stems may differ in their last two letters.
+    if word == stem:
+        return True
+    common = next(
+        (i for i, (a, b) in enumerate(zip(word, stem, strict=False)) if a != b),
+        min(len(word), len(stem)),
+    )
+    return (common == len(stem) and common >= _PREFIX_STEM) or (
+        common > _PREFIX_STEM and common >= max(len(word), len(stem)) - 2
+    )
+
+
+@lru_cache(maxsize=8192)
+def _stem(word: str) -> str:
+    # A fresh stemmer per new word: the Snowball object keeps state between calls.
+    stem: str = snowballstemmer.stemmer("russian").stemWord(word)
+    return stem
 
 
 def _match(norm: str, vocabulary: Vocabulary) -> list[str]:
@@ -190,7 +227,7 @@ def _match(norm: str, vocabulary: Vocabulary) -> list[str]:
     best: dict[str, frozenset[str]] = {}
     for key, phrases in vocabulary.stems.items():
         for phrase in phrases:
-            if phrase and phrase <= present and len(phrase) > len(best.get(key, frozenset())):
+            if phrase and covers(present, phrase) and len(phrase) > len(best.get(key, frozenset())):
                 best[key] = phrase
     keys = [
         key
@@ -212,13 +249,36 @@ def _fuzzy(norm: str, vocabulary: Vocabulary) -> list[tuple[int, str]]:
     return best[:2]
 
 
+def _declined(key: str, clauses: Sequence[str], vocabulary: Vocabulary) -> bool:
+    """
+    «Вид на море не нужен», «парковка — всё равно»: the wish is dropped when a refusal stands
+    within three words of it in every clause that names it.
+    """
+    naming = 0
+    for clause in clauses:
+        words = re.findall(r"[а-яa-z0-9]+", clause)
+        word_stems = [_stem(w) for w in words]
+        for phrase in vocabulary.stems[key]:
+            if not phrase or not covers(frozenset(word_stems), phrase):
+                continue
+            at = [i for i, stem in enumerate(word_stems) if any(_same(stem, p) for p in phrase)]
+            near = " ".join(
+                words[max(min(at) - _DECLINE_WINDOW, 0) : max(at) + _DECLINE_WINDOW + 1]
+            )
+            if not _DECLINE.search(near):
+                return False
+            naming += 1
+            break
+    return naming > 0
+
+
 def _clause_importance(
     key: str, clauses: Sequence[str], vocabulary: Vocabulary
 ) -> Importance | None:
     """«Обязательно тихо, желательно вид на море»: each wish takes the cue of its own clause."""
     for clause in clauses:
         present = stems(clause)
-        if any(phrase and phrase <= present for phrase in vocabulary.stems[key]):
+        if any(phrase and covers(present, phrase) for phrase in vocabulary.stems[key]):
             cued = _importance(clause)
             return cued if cued is not Importance.IMPORTANT else None
     return None
