@@ -1,7 +1,8 @@
 from dataclasses import replace
+from typing import Annotated, Literal
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Query, status
 
 from app.api.deps import ClockDep, IntentParserDep, SearchServiceDep, UowDep, rate_limit
 from app.api.guest_deps import OptionalGuestDep
@@ -25,12 +26,18 @@ router = APIRouter(tags=["Search"])
 @router.post(
     path="/intents",
     summary="Text → chips, trip and hints (called while the guest types)",
+    description="`planner=rules` answers in milliseconds: call it on every keystroke and the "
+    "default (LLM when configured, 1–3 s) when the guest pauses or submits.",
     dependencies=[Depends(rate_limit("intents"))],
 )
 async def parse_intent(
-    payload: IntentRequest, parser: IntentParserDep, clock: ClockDep
+    payload: IntentRequest,
+    parser: IntentParserDep,
+    clock: ClockDep,
+    planner: Annotated[Literal["auto", "rules"], Query()] = "auto",
 ) -> IntentModel:
-    return IntentModel.from_domain(await parser.parse(payload.text, today=clock.now().date()))
+    intent = await parser.parse(payload.text, today=clock.now().date(), llm=planner == "auto")
+    return IntentModel.from_domain(intent)
 
 
 @router.post(
