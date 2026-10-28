@@ -1,6 +1,6 @@
 import { Toaster } from "@/shared/ui";
 import { Header } from "@/widgets/site-header";
-import { HeadContent, Scripts } from "@tanstack/react-router";
+import { HeadContent, Scripts, useRouterState } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 export function RootShell({ children }: { children: ReactNode }) {
   return (
@@ -16,9 +16,17 @@ export function RootShell({ children }: { children: ReactNode }) {
   );
 }
 export function RootLayout({ children }: { children: ReactNode }) {
+  const surface = useRouterState({
+    select: (state) =>
+      state.matches.some((match) => match.routeId === "/")
+        ? "landing"
+        : state.matches.some((match) => match.routeId === "/search")
+          ? "search"
+          : "app",
+  });
   return (
     <>
-      <Header />
+      {surface !== "landing" && <Header tone={surface === "search" ? "clear" : "lime"} />}
       {children}
       <Toaster />
     </>
