@@ -23,8 +23,8 @@ export function useConsoleAction<T, V>(
   return useMutation({
     mutationFn: action,
     onSuccess: (data) => {
-      void client.invalidateQueries({ queryKey: ["console"] });
       onSuccess?.(data);
+      return client.invalidateQueries({ queryKey: ["console"] });
     },
   });
 }
