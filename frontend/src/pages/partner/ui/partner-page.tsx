@@ -1,217 +1,357 @@
-import { Beam, StatusPill } from "@/entities/hotel";
+import { StatusPill } from "@/entities/hotel";
 import { useHotelProfile } from "@/features/manage-hotel-profile";
-import { cn } from "@/shared/lib";
-import { RequestState } from "@/shared/ui";
-import { AnimatePresence, motion } from "framer-motion";
+import { getApiMode } from "@/shared/api";
+import { Reveal, RequestState } from "@/shared/ui";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
-  Bot,
+  ArrowDown,
+  ArrowUpRight,
   Check,
+  ChevronRight,
+  CircleCheck,
   History,
-  MessageCircleQuestion,
+  MessageCircle,
   Pencil,
   Send,
-  TrendingUp,
-  Users,
+  ShieldCheck,
+  Sparkles,
 } from "lucide-react";
+import { useEffect, useRef, useState, type RefObject } from "react";
+import { ProfileIllustration } from "./profile-illustration";
+import "./partner-page.css";
+
+type Profile = ReturnType<typeof useHotelProfile>;
+
 export function PartnerPage() {
+  const profile = useHotelProfile();
   const {
     hotel,
-    facts,
     qs,
-    msgs,
-    input,
-    setInput,
-    history,
-    send,
-    confirm,
+    facts,
     coverage,
+    coverageKnown,
+    coverageTotal,
+    confirmed,
+    conflicts,
     pending,
     error,
     retry,
-    selectQuestion,
-    correct,
-    saving,
-  } = useHotelProfile();
+  } = profile;
+  const input = useRef<HTMLTextAreaElement>(null);
+  const reduce = useReducedMotion();
   if (!hotel || pending || error)
     return <RequestState pending={pending} error={error} retry={retry} />;
+  const open = qs.filter((question) => !question.done);
+  const selectQuestion = (id: string) => {
+    profile.selectQuestion(id);
+    input.current?.focus({ preventScroll: true });
+    document
+      .getElementById("partner-assistant")
+      ?.scrollIntoView({ behavior: reduce ? "instant" : "smooth", block: "nearest" });
+  };
+  const correct = (id: string) => {
+    profile.correct(id);
+    input.current?.focus({ preventScroll: true });
+    document
+      .getElementById("partner-assistant")
+      ?.scrollIntoView({ behavior: reduce ? "instant" : "smooth", block: "nearest" });
+  };
   return (
-    <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
-      <div className="flex flex-wrap items-end justify-between gap-6">
-        <div className="flex items-center gap-4">
-          <img
-            src={hotel.image}
-            alt={hotel.name}
-            width={1024}
-            height={768}
-            className="h-20 w-20 rounded-2xl object-cover"
-          />
-          <div>
-            <p className="font-mono text-xs uppercase tracking-widest text-coral">
+    <main className="partner-page">
+      <div className="partner-shell">
+        <Reveal className="partner-hero">
+          <div className="partner-hero-copy">
+            <p className="partner-eyebrow">
+              <ShieldCheck size={15} />
               Кабинет отельера
             </p>
-            <h1 className="text-4xl">{hotel.name}</h1>
-            <p className="text-sm text-muted-foreground">{hotel.district}</p>
-          </div>
-        </div>
-        <div className="flex gap-3">
-          <Stat
-            icon={Users}
-            label="вопросов от агента"
-            value={qs.filter((question) => !question.done).length.toLocaleString("ru")}
-          />
-          <Stat icon={TrendingUp} label="полнота профиля" value={`${coverage}%`} />
-        </div>
-      </div>
-
-      <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_1.1fr]">
-        <div className="space-y-6">
-          <section className="rounded-3xl border bg-card p-6">
-            <h2 className="flex items-center gap-2 text-2xl">
-              <MessageCircleQuestion className="h-5 w-5 text-coral" /> Вопросы от агента
-            </h2>
-            <ul className="mt-4 space-y-3">
-              {qs.map((q) => (
-                <li
-                  key={q.id}
-                  className={cn("rounded-2xl border p-4 transition", q.done && "opacity-50")}
-                >
-                  <div className="flex items-start gap-3">
-                    <div className="flex-1">
-                      <p className="font-medium">{q.text}</p>
-                      <p className="mt-1 text-xs text-muted-foreground">{q.why}</p>
-                    </div>
-                    {q.done ? (
-                      <Check className="h-5 w-5 text-conf-high" />
-                    ) : (
-                      <button
-                        onClick={() => selectQuestion(q.id)}
-                        className="rounded-full bg-foreground px-3 py-1 text-xs text-background"
-                      >
-                        Ответить
-                      </button>
-                    )}
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </section>
-
-          <section className="rounded-3xl border bg-card p-6">
-            <h2 className="text-2xl">Что AI знает о вашем отеле</h2>
-            <div className="mt-4 divide-y">
-              <AnimatePresence initial={false}>
-                {facts.map((f) => (
-                  <motion.div layout key={f.id ?? f.label} className="py-4">
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <p className="font-medium">{f.label}</p>
-                        <p className="text-sm text-muted-foreground">{f.value}</p>
-                      </div>
-                      <StatusPill status={f.status} />
-                    </div>
-                    <Beam value={f.confidence} status={f.status} className="mt-2" />
-                    <div className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
-                      <span>
-                        {f.source} · {f.checkedAt}
-                      </span>
-                      {f.status !== "confirmed" && (
-                        <span className="ml-auto flex gap-2">
-                          <button
-                            onClick={() => f.id && confirm(f.id)}
-                            className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-foreground hover:border-conf-high"
-                          >
-                            <Check className="h-3 w-3" /> Верно
-                          </button>
-                          <button
-                            onClick={() => f.id && correct(f.id)}
-                            className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-foreground hover:border-coral"
-                          >
-                            <Pencil className="h-3 w-3" /> Исправить
-                          </button>
-                        </span>
-                      )}
-                    </div>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            </div>
-          </section>
-        </div>
-
-        <div className="space-y-6">
-          <section className="flex h-[560px] flex-col rounded-3xl bg-night p-4 text-night-foreground">
-            <div className="flex items-center gap-2 border-b border-night-muted/20 px-2 pb-3">
-              <span className="grid h-8 w-8 place-items-center rounded-full bg-sunset">
-                <Bot className="h-4 w-4" />
-              </span>
+            <h1>
+              Хороший отдых —<br />в деталях.
+            </h1>
+            <div className="partner-hotel">
+              <img src={hotel.image} alt={hotel.name} width={64} height={64} />
               <div>
-                <p className="text-sm font-medium">Агент Луча</p>
-                <p className="text-[11px] text-night-muted">Демо-отельер · Салют</p>
+                <b>{hotel.name}</b>
+                <span>{hotel.address || hotel.district}</span>
               </div>
             </div>
-            <div className="flex-1 space-y-3 overflow-y-auto p-2">
-              {msgs.map((m, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className={cn(
-                    "max-w-[85%] rounded-2xl px-4 py-2.5 text-sm",
-                    m.from === "me"
-                      ? "ml-auto bg-coral text-primary-foreground"
-                      : "bg-night-foreground/10",
-                  )}
-                >
-                  {m.text}
-                </motion.div>
-              ))}
+          </div>
+          <div className="partner-hero-profile">
+            <ProfileIllustration coverage={coverage} />
+            <div>
+              <b>Расскажите чуть больше.</b>
+              <span>
+                Проверено {coverageKnown} из {coverageTotal} характеристик отеля
+              </span>
             </div>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                send(input);
-              }}
-              className="flex gap-2 rounded-2xl bg-night-foreground/10 p-1.5"
-            >
-              <input
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Ответьте своими словами…"
-                className="flex-1 bg-transparent px-3 text-sm outline-none placeholder:text-night-muted"
-              />
-              <button className="rounded-xl bg-sunset p-2.5" disabled={saving}>
-                <Send className="h-4 w-4" />
-              </button>
-            </form>
-          </section>
-
-          <section className="rounded-3xl border bg-card p-6">
-            <h2 className="flex items-center gap-2 text-2xl">
-              <History className="h-5 w-5" /> История изменений
-            </h2>
-            <ol className="mt-4 space-y-3 border-l pl-4">
-              {history.map((h, i) => (
-                <motion.li layout key={h.text + i} className="relative text-sm">
-                  <span className="absolute -left-[21px] top-1.5 h-2.5 w-2.5 rounded-full bg-coral" />
-                  <span className="font-mono text-xs text-muted-foreground">{h.t}</span> — {h.text}
-                </motion.li>
-              ))}
-            </ol>
-          </section>
+          </div>
+        </Reveal>
+        <div className="partner-overview-line">
+          <p>
+            <b>{open.length}</b>вопроса ждут ответа
+          </p>
+          <p>
+            <b>{confirmed}</b>фактов подтверждено вами
+          </p>
+          <p>
+            <b>{facts.length}</b>характеристик в профиле
+          </p>
+          <a href="#partner-facts">
+            Проверить профиль
+            <ArrowDown size={15} />
+          </a>
+        </div>
+        <div className="partner-workspace">
+          <div className="partner-main-column">
+            <Reveal className="partner-questions">
+              <div className="partner-section-heading">
+                <div>
+                  <span>Путешественники спрашивают</span>
+                  <h2>
+                    Помогите выбрать
+                    <br />
+                    ваш отель.
+                  </h2>
+                </div>
+                <MessageCircle size={26} />
+              </div>
+              <div className="partner-question-list">
+                {qs.length === 0 && (
+                  <div className="partner-all-done">
+                    <CircleCheck size={22} />
+                    <p>Новых вопросов пока нет. Можно проверить факты ниже.</p>
+                  </div>
+                )}
+                {qs.map((question) => (
+                  <article
+                    key={question.id}
+                    className={`partner-question${question.done ? " is-done" : ""}${profile.selectedId === question.id ? " is-selected" : ""}`}
+                  >
+                    <div>
+                      <h3>{question.text}</h3>
+                      <p>{question.why}</p>
+                    </div>
+                    {question.done ? (
+                      <span className="partner-question-done">
+                        <Check size={16} />
+                        Ответили
+                      </span>
+                    ) : (
+                      <button
+                        onClick={() => selectQuestion(question.id)}
+                        aria-label={`Ответить: ${question.text}`}
+                      >
+                        Ответить
+                        <ArrowUpRight size={15} />
+                      </button>
+                    )}
+                  </article>
+                ))}
+              </div>
+            </Reveal>
+            {conflicts.length > 0 && (
+              <section className="partner-conflicts">
+                <h2>Есть расхождения в данных</h2>
+                {conflicts.map((conflict) => (
+                  <p key={conflict.id}>{conflict.resolution || conflict.rule}</p>
+                ))}
+              </section>
+            )}
+            <PartnerFacts profile={profile} onCorrect={correct} />
+          </div>
+          <aside className="partner-sidebar">
+            <PartnerAssistant profile={profile} inputRef={input} />
+            <section className="partner-history">
+              <div>
+                <History size={17} />
+                <h2>История изменений</h2>
+              </div>
+              {profile.history.length ? (
+                <ol>
+                  {profile.history.map((item, index) => (
+                    <li key={index}>
+                      <span>{item.t}</span>
+                      <p>{item.text}</p>
+                    </li>
+                  ))}
+                </ol>
+              ) : (
+                <p>Здесь появятся ваши ответы и подтверждённые факты.</p>
+              )}
+            </section>
+          </aside>
         </div>
       </div>
     </main>
   );
 }
 
-function Stat({ icon: Icon, label, value }: { icon: typeof Users; label: string; value: string }) {
+function PartnerAssistant({
+  profile,
+  inputRef,
+}: {
+  profile: Profile;
+  inputRef: RefObject<HTMLTextAreaElement | null>;
+}) {
+  const messages = useRef<HTMLDivElement>(null);
+  const reduce = useReducedMotion();
+  useEffect(() => {
+    if (messages.current) messages.current.scrollTop = messages.current.scrollHeight;
+  }, [profile.msgs.length]);
   return (
-    <div className="rounded-2xl border bg-card px-4 py-3">
-      <p className="flex items-center gap-2 font-mono text-2xl font-semibold">
-        <Icon className="h-4 w-4 text-coral" />
-        {value}
+    <section id="partner-assistant" className="partner-assistant">
+      <div className="partner-assistant-heading">
+        <span className="partner-agent-icon">
+          <Sparkles size={19} />
+        </span>
+        <div>
+          <h2>На связи с Лучом</h2>
+          <p>
+            <i />
+            Помощник вашего отеля
+          </p>
+        </div>
+        <ShieldCheck size={20} />
+      </div>
+      <div
+        className="partner-messages"
+        ref={messages}
+        aria-live="polite"
+        aria-label="Переписка с помощником"
+      >
+        <AnimatePresence initial={false}>
+          {profile.msgs.map((message, index) => (
+            <motion.div
+              key={index}
+              initial={reduce ? false : { opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: reduce ? 0 : 0.2 }}
+              className={`partner-message partner-message--${message.from}`}
+            >
+              <span>{message.from === "bot" ? "Луч" : "Вы"}</span>
+              <p>{message.text}</p>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+        {profile.saving && (
+          <p className="partner-writing" role="status">
+            Сохраняем ответ…
+          </p>
+        )}
+      </div>
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          profile.send(profile.input);
+        }}
+      >
+        <label className="sr-only" htmlFor="partner-answer">
+          Ответ помощнику
+        </label>
+        <textarea
+          id="partner-answer"
+          ref={inputRef}
+          value={profile.input}
+          onChange={(event) => profile.setInput(event.target.value)}
+          rows={2}
+          placeholder="Ответьте своими словами…"
+          onKeyDown={(event) => {
+            if (event.key === "Enter" && !event.shiftKey) {
+              event.preventDefault();
+              profile.send(profile.input);
+            }
+          }}
+        />
+        <button
+          type="submit"
+          disabled={profile.saving || !profile.input.trim()}
+          aria-label="Отправить ответ"
+        >
+          <Send size={18} />
+        </button>
+      </form>
+      <p className="partner-assistant-note">
+        {getApiMode() === "demo"
+          ? "Демо: изменения остаются в этом браузере."
+          : "Ответ сохранится в профиле отеля вместе с источником."}
       </p>
-      <p className="max-w-[160px] text-xs text-muted-foreground">{label}</p>
-    </div>
+    </section>
+  );
+}
+
+function PartnerFacts({
+  profile,
+  onCorrect,
+}: {
+  profile: Profile;
+  onCorrect: (id: string) => void;
+}) {
+  const [filter, setFilter] = useState("Все");
+  const facts = profile.facts.filter(
+    (fact) =>
+      filter === "Все" ||
+      (filter === "Подтверждено" ? fact.status === "confirmed" : fact.status !== "confirmed"),
+  );
+  return (
+    <section id="partner-facts" className="partner-facts">
+      <div className="partner-facts-heading">
+        <div>
+          <span>Точность начинается с вас</span>
+          <h2>Профиль в деталях</h2>
+        </div>
+        <span>{profile.facts.length}</span>
+      </div>
+      <div className="partner-fact-filters" role="group" aria-label="Фильтр фактов">
+        {["Все", "Нужно проверить", "Подтверждено"].map((label) => (
+          <button key={label} aria-pressed={filter === label} onClick={() => setFilter(label)}>
+            {label}
+          </button>
+        ))}
+      </div>
+      <div className="partner-fact-list">
+        {facts.length === 0 && (
+          <div className="partner-all-done">
+            <CircleCheck size={22} />
+            <p>В этой категории пока нет фактов.</p>
+          </div>
+        )}
+        {facts.map((fact) => (
+          <article key={fact.id ?? fact.label} className="partner-fact">
+            <div className="partner-fact-top">
+              <h3>{fact.label}</h3>
+              <StatusPill status={fact.status} />
+            </div>
+            <p>{fact.value}</p>
+            <div
+              className="partner-fact-confidence"
+              aria-label={`Уверенность ${Math.round(fact.confidence * 100)}%`}
+            >
+              <span style={{ width: `${Math.round(fact.confidence * 100)}%` }} />
+            </div>
+            <div className="partner-fact-bottom">
+              <span>
+                {fact.source} · {fact.checkedAt}
+              </span>
+              <div>
+                {fact.status !== "confirmed" && (
+                  <button
+                    disabled={profile.saving}
+                    onClick={() => fact.id && profile.confirm(fact.id)}
+                  >
+                    <Check size={13} />
+                    Верно
+                  </button>
+                )}
+                <button disabled={profile.saving} onClick={() => fact.id && onCorrect(fact.id)}>
+                  <Pencil size={12} />
+                  Уточнить
+                  <ChevronRight size={12} />
+                </button>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
   );
 }
