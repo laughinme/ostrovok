@@ -1,0 +1,162 @@
+.trips-screen {
+  --ink: #0b1533;
+  --surface: #fff;
+  --raised: #f4f7ff;
+  --muted: #5b6580;
+  --line: #e1e6f2;
+  --primary: #1b4de4;
+  --on-primary: #fff;
+  --scene: #0a1c66;
+  --on-scene-muted: #d5deff;
+  --verified: #c9f59a;
+  --on-verified: #2c4a10;
+  --yes: #1e8f4e;
+  --canvas: #f2f4f8;
+  --font: Onest, system-ui, sans-serif;
+  --font-code: ui-monospace, Menlo, monospace;
+  --r-sm: 10px;
+  --r-lg: 22px;
+  --r-pill: 999px;
+  --pano-sky-top: #1a3fc4;
+  --pano-sky-low: #8fb0ff;
+  --pano-sea-top: #1534a8;
+  --pano-sea-low: #0b1f6e;
+  --pano-sun: var(--verified);
+  --pano-land: #0b1b55;
+  --pano-land-far: #29429e;
+  --pano-build: #0a1648;
+  --pano-build-edge: #2a3f99;
+  --pano-tick: #c8d4ff;
+  --pano-label: #fff;
+  min-height: calc(100svh - var(--site-header-height));
+  color: var(--ink);
+  background: var(--canvas);
+  font: 400 15px/1.5 var(--font);
+}
+.trips-screen h1,
+.trips-screen h2,
+.trips-screen h3 {
+  font-family: var(--font);
+}
+.trip-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px 32px 80px;
+}
+.trips-screen .seg {
+  display: inline-flex;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  background: #fff;
+  font-size: 13px;
+}
+.trips-screen .seg button {
+  min-height: 44px;
+  padding: 7px 14px;
+  color: var(--muted);
+  cursor: pointer;
+}
+.trips-screen .seg button.on {
+  color: #fff;
+  background: var(--primary);
+}
+.trips-screen button:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: -4px;
+}
+.trips-screen .big-seg {
+  margin-top: 24px;
+}
+.trips-screen .big-seg button {
+  padding: 9px 18px;
+  font-size: 14.5px;
+}
+.trips-screen .h-md {
+  margin: 32px 0 14px;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.trips-screen .card-w {
+  padding: 22px 24px;
+  border-radius: var(--r-lg);
+  background: #fff;
+}
+.trips-screen .expect {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+.trips-screen .expect .card-w {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.trips-screen .expect svg {
+  color: var(--primary);
+}
+.trips-screen .expect h3 {
+  font-size: 16px;
+  font-weight: 700;
+}
+.trips-screen .expect b {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.trips-screen .expect p {
+  color: var(--muted);
+  font-size: 14px;
+}
+.trips-screen .num {
+  font-variant-numeric: tabular-nums;
+}
+.trips-screen .muted {
+  color: var(--muted);
+}
+.trips-screen .fb {
+  margin-top: 14px;
+  padding: 4px 20px;
+}
+.trips-screen .fb-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+.trips-screen .fb-row:last-child {
+  border-bottom: 0;
+}
+.trips-screen .fb-row b,
+.trips-screen .fb-row span {
+  display: block;
+}
+.trips-screen .fb-row span {
+  color: var(--muted);
+  font-size: 13px;
+}
+.trips-screen .thanks {
+  margin-top: 12px;
+  color: var(--yes);
+  font-weight: 600;
+}
+@media (max-width: 900px) {
+  .trips-screen .expect {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 600px) {
+  .trip-page {
+    padding: 12px 16px 60px;
+  }
+  .trips-screen .expect,
+  .trips-screen .fb-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .trips-screen .fb-row .seg {
+    justify-self: start;
+  }
+}
