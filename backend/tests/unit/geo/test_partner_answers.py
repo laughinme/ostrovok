@@ -47,3 +47,38 @@ async def test_text_does_not_invent_a_seaward_compass_direction() -> None:
 async def test_invalid_boolean_form_needs_clarification() -> None:
     result = await RulesAnswerParser().parse(AnswerInput("blackout", payload={"value": "yes"}))
     assert result.needs_clarification
+
+
+async def test_choice_no_is_a_boolean_not_a_truthy_string() -> None:
+    result = await RulesAnswerParser().parse(
+        AnswerInput("blackout", payload={"choice": "Нет"}, options=("Да", "Нет"))
+    )
+    assert result.value is False
+    assert not result.needs_clarification
+
+
+async def test_numeric_answer_rejects_multiple_ambiguous_numbers() -> None:
+    parser = RulesAnswerParser()
+    result = await parser.parse(AnswerInput("pet_fee", "1500 ₽", value_type="number"))
+    assert result.value == 1500
+    result = await parser.parse(AnswerInput("pet_fee", "500 или 1500 ₽", value_type="number"))
+    assert result.needs_clarification
+
+
+@pytest.mark.parametrize(
+    "case", [c for c in yaml.safe_load(DATA.read_text()) if c["clarity"] != "low"]
+)
+async def test_r3_machine_fields(case: dict[str, object]) -> None:
+    parsed = await RulesAnswerParser().parse(
+        AnswerInput(str(case["question_key"]), str(case["answer_text"]))
+    )
+    expected = case["expected"]
+    assert isinstance(expected, dict)
+    for key, value in expected.items():
+        if key in {"conditions", "window_type", "notes"}:
+            continue
+        actual = parsed.fields.get(key)
+        if key == "room_types" and value == "all":
+            assert not actual
+        else:
+            assert actual == value
