@@ -5,3 +5,5 @@ export { Toaster } from "./toaster";
 export { TravelAirplane } from "./travel-airplane";
 export { RequestState } from "./request-state";
 export { Panorama } from "./panorama";
+export { LoadingSignal } from "./loading-signal";
+export { Reveal } from "./reveal";
