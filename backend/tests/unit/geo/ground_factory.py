@@ -37,4 +37,5 @@ def ground_env() -> Environment:
     reader.tagged.return_value = []
     reader.feature.return_value = None
     reader.facts_values.return_value = []
+    reader.facts_of.return_value = []
     return Environment(reader=reader, clock=SystemClock())
