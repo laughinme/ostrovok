@@ -37,7 +37,11 @@ class SearchView:
 def trip_window(intent: Intent) -> TripWindow:
     trip = intent.trip
     if trip.check_in:
-        end = trip.check_out or trip.check_in
+        end = (
+            max(trip.check_in, trip.check_out - timedelta(days=1))
+            if trip.check_out
+            else trip.check_in
+        )
         months: set[int] = set()
         cursor = date(trip.check_in.year, trip.check_in.month, 1)
         while cursor <= end:
