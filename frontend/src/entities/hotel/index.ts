@@ -12,6 +12,7 @@ export type { Criterion, Fact, FactStatus, Hotel } from "./model/types";
 export { formatReviewCount } from "./model/format-review-count";
 export { characteristicLabel } from "./model/characteristic-label";
 export { Beam } from "./ui/confidence-beam";
+export { BestOfferRibbon } from "./ui/best-offer-ribbon";
 export { Price } from "./ui/price";
 export { RatingBadge } from "./ui/rating-badge";
 export { StatusPill } from "./ui/status-pill";
