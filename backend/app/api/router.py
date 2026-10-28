@@ -10,6 +10,7 @@ from app.api.v1 import (
     ground,
     hotels,
     me,
+    onboarding,
     partner,
     quality,
     runs,
@@ -30,6 +31,7 @@ v1_router.include_router(runs.router)
 v1_router.include_router(search.router)
 v1_router.include_router(compare.router)
 v1_router.include_router(console.router)
+v1_router.include_router(onboarding.router)
 v1_router.include_router(quality.router)
 
 api_router = APIRouter(prefix="/api")

@@ -9,7 +9,7 @@ from app.db.database import Database
 from app.db.repositories.catalog import hotel_geo
 from app.domain.agents import AgentKind, Planner
 from app.service.agents.researcher import Researcher
-from app.service.agents.runtime import AgentRunner, Tracer, create_run
+from app.service.agents.runtime import AgentBody, AgentRunner, Tracer, create_run
 from app.service.ports import Clock
 
 logger = logging.getLogger(__name__)
@@ -56,6 +56,7 @@ class CollectService:
         *,
         characteristics_keys: Sequence[str] | None = None,
         run_id: UUID | None = None,
+        after_study: AgentBody | None = None,
     ) -> int:
         async with self._db.unit_of_work() as uow:
             row = await uow.catalog.hotel(hotel_id)
@@ -77,6 +78,8 @@ class CollectService:
         async def body(tracer: Tracer) -> None:
             nonlocal changed
             changed = await self._researcher.study(hotel, characteristics, tracer)
+            if after_study is not None:
+                await after_study(tracer)
 
         await self._runner.run(run_id, body)
         return changed
