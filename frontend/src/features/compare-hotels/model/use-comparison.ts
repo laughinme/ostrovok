@@ -1,6 +1,13 @@
-import { catalogQuery, criterionKeys, hotelFromApi, type Criterion } from "@/entities/hotel";
+import {
+  CRITERIA,
+  catalogQuery,
+  criterionKeys,
+  hotelFromApi,
+  type Criterion,
+} from "@/entities/hotel";
 import { api, type components } from "@/shared/api";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { comparisonCopy } from "../lib/comparison-copy";
 
 export function useComparison(ids: string[], criteria: Criterion[]) {
   const catalog = useQuery(catalogQuery);
@@ -16,7 +23,7 @@ export function useComparison(ids: string[], criteria: Criterion[]) {
           chips: criteria.map((criterion) => ({
             id: criterion,
             characteristic: criterionKeys[criterion],
-            label: criterion,
+            label: CRITERIA[criterion].label,
             importance: "important",
             checkable: ["work", "pets"].includes(criterion) ? "ask_hotelier" : "compute",
             params: {},
@@ -25,21 +32,26 @@ export function useComparison(ids: string[], criteria: Criterion[]) {
         signal,
       }),
     enabled: selectedIds.length >= 2,
-    staleTime: 30000,
+    placeholderData: keepPreviousData,
     retry: false,
   });
   const selected =
     comparison.data?.matches
       .flatMap((match) => {
         const raw = catalog.data?.find((hotel) => hotel.id === match.hotelId);
-        return raw
-          ? [
-              {
-                h: hotelFromApi(raw, match, comparison.data?.intent),
-                s: Math.round(match.score * 100),
-              },
-            ]
-          : [];
+        if (!raw) return [];
+        const hotel = hotelFromApi(raw, match, comparison.data?.intent);
+        return [
+          {
+            h: {
+              ...hotel,
+              pros: hotel.pros.map(comparisonCopy).filter(Boolean),
+              cons: hotel.cons.map(comparisonCopy).filter(Boolean),
+              facts: hotel.facts.map((fact) => ({ ...fact, label: comparisonCopy(fact.label) })),
+            },
+            s: Math.round(match.score * 100),
+          },
+        ];
       })
       .sort((a, b) => b.s - a.s) ?? [];
   return {
