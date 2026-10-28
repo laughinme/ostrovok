@@ -53,6 +53,7 @@ export function LandingSearch({
   onSubmit(placeholder: string): void;
 }) {
   const fileInput = useRef<HTMLInputElement>(null);
+  const [fileError, setFileError] = useState<string | null>(null);
   const photo = usePhotoInput(onQuery);
   const voice = useVoiceInput(query, onQuery);
   const busy = photo.status === "loading";
@@ -75,14 +76,33 @@ export function LandingSearch({
       <input
         ref={fileInput}
         type="file"
-        accept="image/jpeg,image/png,image/webp"
+        accept="image/jpeg,image/png,image/webp,.txt,text/plain"
         hidden
-        aria-label="Фото желаемого отдыха"
-        onChange={(event) => {
+        aria-label="Фото желаемого отдыха или описание в файле .txt"
+        onChange={async (event) => {
           const file = event.target.files?.[0];
           event.target.value = "";
           if (!file) return;
           voice.cancel();
+          setFileError(null);
+          if (file.type === "text/plain" || file.name.toLowerCase().endsWith(".txt")) {
+            photo.clear();
+            if (file.size > 32000) {
+              setFileError("Выберите текстовый файл не больше 32 КБ.");
+              return;
+            }
+            try {
+              const text = (await file.text()).trim();
+              if (!text) {
+                setFileError("Файл пуст. Добавьте описание поездки.");
+                return;
+              }
+              onQuery([query.trim(), text].filter(Boolean).join("\n").slice(0, 4000));
+            } catch {
+              setFileError("Не удалось прочитать файл.");
+            }
+            return;
+          }
           void photo.select(file);
         }}
       />
@@ -91,7 +111,7 @@ export function LandingSearch({
           type="button"
           className="icon-btn wish-attachment"
           aria-label="Хочу как на этом фото"
-          title="Хочу как на этом фото · JPG, PNG или WebP до 5 МБ"
+          title="Фото JPG, PNG или WebP до 5 МБ или описание поездки .txt до 32 КБ"
           aria-busy={busy}
           disabled={busy}
           onClick={() => fileInput.current?.click()}
@@ -101,12 +121,14 @@ export function LandingSearch({
         <textarea
           value={query}
           rows={2}
+          maxLength={4000}
           placeholder={placeholder}
           aria-label="Опишите поездку своими словами"
           aria-describedby="wish-input-status"
           onChange={(event) => {
             voice.cancel();
             photo.clear();
+            setFileError(null);
             onQuery(event.target.value);
           }}
           onKeyDown={(event) => {
@@ -126,6 +148,7 @@ export function LandingSearch({
             disabled={busy}
             onClick={() => {
               photo.clear();
+              setFileError(null);
               voice.toggle();
             }}
             aria-label={voice.listening ? "Остановить голосовой ввод" : "Сказать голосом"}
@@ -140,6 +163,11 @@ export function LandingSearch({
         </button>
       </div>
       <div id="wish-input-status" className="wish-input-status">
+        {fileError && (
+          <p className="wish-status" role="alert">
+            {fileError}
+          </p>
+        )}
         {(voice.listening || voice.error) && (
           <p className="wish-status" role={voice.error ? "alert" : "status"}>
             {voice.listening ? "Слушаю… Нажмите на микрофон, чтобы закончить." : voice.error}
