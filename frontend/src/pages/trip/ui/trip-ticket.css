@@ -95,6 +95,13 @@
   min-width: 0;
 }
 .ticket-hotel-photo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: var(--muted);
+  font-size: 9px;
   height: 100px;
   overflow: hidden;
   border-radius: var(--r-sm);
@@ -106,6 +113,7 @@
   object-fit: cover;
 }
 .ticket-hotel h1 {
+  overflow-wrap: anywhere;
   margin-top: 8px;
   font-size: 20px;
   font-weight: 750;
@@ -182,6 +190,7 @@
   line-height: 1.4;
 }
 .ticket-statuses li > div > span {
+  overflow-wrap: anywhere;
   display: block;
   color: var(--muted);
   font-size: 10px;
@@ -252,7 +261,7 @@
 }
 .ticket-stub-date > b {
   display: block;
-  font-size: 48px;
+  font-size: 28px;
   line-height: 1.15;
   font-weight: 650;
   font-variant-numeric: tabular-nums;
@@ -338,12 +347,28 @@
   );
 }
 .ticket-code {
+  overflow-wrap: anywhere;
   display: block;
   margin-top: 8px;
   text-align: center;
   color: var(--on-scene-muted);
   font: 8px var(--font-code);
-  letter-spacing: 0.17em;
+  letter-spacing: 0.04em;
+}
+.ticket-stub-price {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-top: 1px solid rgb(255 255 255 / 25%);
+  padding-top: 14px;
+}
+.ticket-stub-price b {
+  font-size: 23px;
+}
+.ticket-stub-price span,
+.ticket-stub-price small {
+  color: var(--on-scene-muted);
+  font-size: 10px;
 }
 
 @media (max-width: 1100px) and (min-width: 801px) {
@@ -479,7 +504,7 @@
     gap: 18px;
   }
   .ticket-stub-date > b {
-    font-size: 38px;
+    font-size: 24px;
   }
   .ticket-stub-room b {
     font-size: 19px;
