@@ -29,8 +29,9 @@ services:
     restart: unless-stopped
 
   redis:
+    # Pulled, not built, so no platform pin: under qemu on Apple Silicon (Docker Desktop without Rosetta)
+    # the amd64 redis-server segfaults; the multi-arch image runs natively there and is amd64 on x86.
     image: redis:8.2.2-alpine3.22
-    platform: linux/amd64
     env_file: .env
     command: ["redis-server", "--save", "", "--appendonly", "no"]
     healthcheck:
