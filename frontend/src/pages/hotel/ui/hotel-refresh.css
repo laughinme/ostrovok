@@ -62,35 +62,9 @@
 }
 .hotel-detail .hotel-intro-actions {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  flex-shrink: 0;
-  gap: 12px;
-}
-.hotel-detail .hotel-intro-tools,
-.hotel-detail .hotel-intro-comparison {
-  display: flex;
   align-items: center;
-  gap: 10px;
-}
-.hotel-detail .hotel-intro-heading {
-  min-width: 0;
-}
-.hotel-detail .hotel-intro-comparison svg {
   flex-shrink: 0;
-}
-.hotel-detail .hotel-intro-comparison .hotel-compare-action {
-  color: var(--primary);
-  border-color: var(--primary);
-}
-.hotel-detail .hotel-intro-comparison a:hover,
-.hotel-detail .hotel-intro-comparison button:hover {
-  background: #eaf0ff;
-  border-color: var(--primary);
-}
-.hotel-detail .hotel-intro-comparison :focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 3px;
+  gap: 10px;
 }
 .hotel-detail .hotel-guest-rating {
   display: inline-flex;
@@ -122,8 +96,7 @@
   white-space: nowrap;
 }
 .hotel-detail .hotel-square-button,
-.hotel-detail .hotel-compare-action,
-.hotel-detail .hotel-compare-link {
+.hotel-detail .hotel-compare-action {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -731,20 +704,6 @@
   }
   .hotel-detail .hotel-intro-actions {
     width: 100%;
-    align-items: stretch;
-  }
-  .hotel-detail .hotel-intro-comparison {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    align-items: stretch;
-  }
-  .hotel-detail .hotel-intro-comparison > * {
-    min-width: 0;
-    padding: 10px;
-    gap: 6px;
-    font-size: 12px;
-    line-height: 1.5;
-    text-align: center;
   }
   .hotel-detail .hotel-guest-rating {
     margin-right: auto;
