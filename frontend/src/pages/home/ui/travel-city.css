@@ -1,0 +1,200 @@
+.landing-page .home-sky--city {
+  background: radial-gradient(ellipse at 50% 18%, var(--verified), var(--lime) 78%);
+}
+.landing-page .home-sky--city .home-sky-route {
+  opacity: 0.9;
+}
+.landing-page .home-sky--city .home-sky-plane {
+  --sky-plane-angle: -14deg;
+  left: 39.0278%;
+  top: 13.8462%;
+}
+.landing-page .home-sky--city .home-sky-cloud--left-high {
+  --sky-opacity: 0.95;
+  left: 5%;
+  top: 28%;
+  width: 94px;
+}
+.landing-page .home-sky--city .home-sky-cloud--top {
+  --sky-opacity: 0.25;
+  left: auto;
+  right: 22%;
+  top: 12%;
+  width: 82px;
+}
+.landing-page .home-sky--city .home-sky-cloud--right-high {
+  --sky-opacity: 0.95;
+  right: 2%;
+  top: 28%;
+  width: 72px;
+}
+.landing-page .home-sky--city .home-sky-cloud--right-middle {
+  --sky-opacity: 0.25;
+  right: 10%;
+  top: 55%;
+  width: 84px;
+}
+.landing-page .home-sky--city .home-sky-cloud--left-low {
+  --sky-opacity: 0.25;
+  left: 7%;
+  bottom: 34%;
+  width: 88px;
+}
+.landing-page .home-sky--city .home-sky-cloud--left-middle {
+  display: none;
+}
+.landing-page .home-sky--city .home-sky-cloud--right-low {
+  display: none;
+}
+.landing-page .home-sky--city .home-sky-symbols {
+  opacity: 0.85;
+}
+.landing-page .home-sky-tablet-route {
+  display: none;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.9;
+}
+.landing-page .home-city-ring {
+  width: 12px;
+  height: 12px;
+  opacity: 0.85;
+}
+.landing-page .home-city-ring--left {
+  left: 4.3%;
+  top: 45%;
+}
+.landing-page .home-city-ring--right {
+  right: 3.8%;
+  top: 41%;
+}
+.landing-page .home-city-ring--top {
+  right: 5.2%;
+  top: 20%;
+}
+.landing-page .home-sky-city {
+  bottom: 0;
+  left: 50%;
+  width: 100%;
+  min-width: 1100px;
+  height: 260px;
+  transform: translateX(-50%);
+}
+.landing-page .home-city-distant {
+  opacity: 0.2;
+}
+.landing-page .home-city-building--white {
+  --city-facade: #f4faff;
+  --city-side: #8bc6e4;
+  --city-window: #197ac8;
+  --city-window-light: #9adcec;
+}
+.landing-page .home-city-building--blue {
+  --city-facade: var(--primary);
+  --city-side: #1547bd;
+  --city-window: #82cbe8;
+  --city-window-light: #c3efb8;
+}
+.landing-page .home-city-building--sky {
+  --city-facade: #258fd2;
+  --city-side: #1777ba;
+  --city-window: #1565b9;
+  --city-window-light: #99d5e8;
+}
+.landing-page .home-city-building--teal {
+  --city-facade: #176f9c;
+  --city-side: #15578e;
+  --city-window: #68bcd5;
+  --city-window-light: #b1dfbd;
+}
+@media (max-width: 1100px) {
+  .landing-page .home-sky-city {
+    height: 210px;
+  }
+}
+@media (min-width: 721px) and (max-width: 1100px) {
+  .landing-page .home-sky--city .home-sky-route {
+    display: none;
+  }
+  .landing-page .home-sky--city .home-sky-tablet-route {
+    display: block;
+  }
+}
+@media (max-width: 720px) {
+  .landing-page .home-sky--city .home-sky-plane {
+    --sky-plane-angle: -15deg;
+    left: 74.52%;
+    top: 76.4px;
+  }
+  .landing-page .home-sky--city .home-sky-cloud--left-high {
+    --sky-opacity: 0.65;
+    left: -20px;
+    top: 12%;
+    width: 65px;
+  }
+  .landing-page .home-sky--city .home-sky-cloud--top {
+    right: 39%;
+    top: 98px;
+    width: 50px;
+  }
+  .landing-page .home-sky--city .home-sky-cloud--right-high {
+    --sky-opacity: 0.65;
+    right: -17px;
+    top: 33%;
+    width: 54px;
+  }
+  .landing-page .home-sky--city .home-sky-cloud--left-low {
+    left: -18px;
+    bottom: 260px;
+    width: 62px;
+  }
+  .landing-page .home-sky-city {
+    height: 200px;
+  }
+  .landing-page .home-city-ring {
+    width: 9px;
+    height: 9px;
+    opacity: 0.5;
+  }
+  .landing-page .home-city-ring--right {
+    top: 40%;
+    right: 2%;
+  }
+  .landing-page .home-city-ring--top {
+    top: 17%;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .landing-page .home-city-building {
+    animation: home-city-rise 850ms var(--ease-out) var(--building-delay) both;
+  }
+  .landing-page .home-city-distant {
+    animation: home-city-distant-in 800ms var(--ease-out) 80ms both;
+  }
+  .landing-page .home-city-ring,
+  .landing-page .home-sky-tablet-route {
+    --sky-detail-opacity: 0.85;
+    animation: home-sky-detail-in 600ms var(--ease-out) 300ms both;
+  }
+}
+@keyframes home-city-rise {
+  from {
+    opacity: 0;
+    transform: translateY(90px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes home-city-distant-in {
+  from {
+    opacity: 0;
+    transform: translateY(35px);
+  }
+  to {
+    opacity: 0.2;
+    transform: translateY(0);
+  }
+}
