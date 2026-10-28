@@ -23,12 +23,21 @@ class FactDetail:
     history: tuple[FactChange, ...]
 
 
+def breadth(fact: Fact) -> int:
+    """How much of the hotel a fact covers, roughly: sides × floors × months."""
+    scope = fact.scope
+    sides = len(scope.facades) if scope.facades else 8
+    floors = (scope.floor_to or 30) - (scope.floor_from or 1) + 1
+    months = len(scope.months) if scope.months else 12
+    return sides * floors * months
+
+
 def headline(facts: Sequence[Fact]) -> Fact:
-    """The one fact a summary shows: the best «yes» if there is one, else the surest answer."""
+    """The one fact a summary shows: the best «yes» if there is one, else the surest answer;
+    among equally sure ones, the one that covers more of the hotel."""
     positive = [f for f in facts if f.value is True]
-    if positive:
-        return max(positive, key=lambda f: f.confidence)
-    return max(facts, key=lambda f: (f.confidence, f.scope.key == "f=*|fl=*|m=*|rt=*"))
+    pool = positive or list(facts)
+    return max(pool, key=lambda f: (round(f.confidence, 2), breadth(f)))
 
 
 def yes_probability(fact: Fact) -> float | None:

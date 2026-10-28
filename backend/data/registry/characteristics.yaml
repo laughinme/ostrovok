@@ -175,7 +175,7 @@ characteristics:
     recipe: {kind: poi_nearby, poi: {tags: {amenity: [charging_station]}}, within_m: 1500}
     ttl_days: 90
     authority: freshest
-    statement: {yes: Зарядка для электромобиля в 1,5 км, no: Зарядки для электромобиля рядом нет}
+    statement: {yes: "Зарядка для электромобиля в 1,5 км", no: "Зарядки для электромобиля рядом нет"}
 
   - key: climate
     title: Погода и море в даты
