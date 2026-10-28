@@ -114,6 +114,23 @@ services:
       retries: 30
     restart: unless-stopped
 
+  # Optional local model (D-29): `docker compose --profile local-llm up`, then
+  # `docker compose exec ollama ollama pull qwen2.5:3b` and in .env
+  # LLM_BASE_URL=http://ollama:11434/v1, LLM_API_KEY=ollama, LLM_MODEL=qwen2.5:3b.
+  ollama:
+    image: ollama/ollama:0.12.6
+    platform: linux/amd64
+    profiles: ["local-llm"]
+    volumes:
+      - ollama:/root/.ollama
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+    restart: unless-stopped
+
 volumes:
   pgdata:
   jwt-keys:
+  ollama:
