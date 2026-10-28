@@ -19,8 +19,8 @@ API: `https://okno-api.fly.dev` (`/health`, `/api/ready`, `/api/docs`).
 
 ## Секреты Fly (`fly secrets list -a okno-api`)
 
-`DATABASE_URL`, `REDIS_URL`, `CSRF_HMAC_KEY`, `JWT_PRIVATE_KEY`, `JWT_PUBLIC_KEY`; позже `CORS_ALLOW_ORIGINS`
-(адрес фронта на Vercel) и `LLM_*`. Пароль БД — секрет `POSTGRES_PASSWORD` приложения `okno-db`. В git их нет.
+`DATABASE_URL`, `REDIS_URL`, `CSRF_HMAC_KEY`, `JWT_PRIVATE_KEY`, `JWT_PUBLIC_KEY`, `LLM_*` (с 28.10: gpt-5.6-luna,
+300 вызовов в день); позже `CORS_ALLOW_ORIGINS` (адрес фронта на Vercel). Пароль БД — секрет `POSTGRES_PASSWORD` приложения `okno-db`. В git их нет.
 
 ## Вручную
 
