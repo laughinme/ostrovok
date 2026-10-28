@@ -1,4 +1,11 @@
-import { CRITERIA, PhotoCredit, photoInfo, type Criterion, type Hotel } from "@/entities/hotel";
+import {
+  CRITERIA,
+  formatReviewCount,
+  PhotoCredit,
+  photoInfo,
+  type Criterion,
+  type Hotel,
+} from "@/entities/hotel";
 import { MatchRing, Reveal } from "@/shared/ui";
 import { ArrowRight, Heart, Images, MapPin, Scale, ShieldCheck, Waves } from "lucide-react";
 import { Photo } from "./visuals";
@@ -51,7 +58,7 @@ export function HotelOverview({
             <span aria-label={`Оценка ${h.rating.toLocaleString("ru")} из 10`}>
               {h.rating.toLocaleString("ru", { minimumFractionDigits: 1 })}
             </span>
-            <small>Демо-оценка</small>
+            <small>{formatReviewCount(h.reviewCount)}</small>
           </div>
           <button
             className={`hotel-square-button${favorite ? " is-selected" : ""}`}

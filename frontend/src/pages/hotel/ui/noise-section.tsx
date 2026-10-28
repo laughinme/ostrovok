@@ -161,7 +161,11 @@ export function NoiseSection({ hotel }: { hotel: Hotel }) {
                 <ChevronRight size={19} aria-hidden="true" />
               </button>
             </div>
-            <small>Геометрия условная</small>
+            <small>
+              {hotel.backend?.floors
+                ? `Этажей: ${hotel.backend.floors} · геометрия условная`
+                : "Геометрия условная"}
+            </small>
           </div>
         </div>
         <div className="noise-inspector">
