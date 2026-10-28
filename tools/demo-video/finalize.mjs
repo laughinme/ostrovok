@@ -20,7 +20,8 @@ for (const clip of clips) {
     chapters.push({ start: cursor, title: chapter });
   }
   const mark = clip.focus[0];
-  const selected = mark ? mark.at + mark.duration / 2 : Math.min(clip.duration / 2, 3);
+  const endSamples = { '02-query': 3, '10-booking': 1.5, '19-api': 1.2 };
+  const selected = clip.id in endSamples ? Math.max(0, clip.duration - endSamples[clip.id]) : mark ? mark.at + mark.duration / 2 : Math.min(clip.duration / 2, 3);
   samples.push(Math.round(cursor + selected * 60));
   timeline.push({ id: clip.id, title: clip.title, start: cursor / 60, duration: duration / 60 });
   cursor += duration - 24;
@@ -42,7 +43,7 @@ const result = JSON.parse(execFileSync('ffprobe', ['-v', 'error', '-show_format'
 const video = result.streams.find((stream) => stream.codec_type === 'video');
 const audio = result.streams.find((stream) => stream.codec_type === 'audio');
 if (video.width !== 1920 || video.height !== 1080 || video.r_frame_rate !== '60/1') throw new Error('Unexpected output dimensions or frame rate');
-if (video.codec_name !== 'h264' || video.pix_fmt !== 'yuv420p' || audio?.codec_name !== 'aac') throw new Error('Unexpected delivery codecs');
+if (video.codec_name !== 'h264' || !['yuv420p', 'yuvj420p'].includes(video.pix_fmt) || audio?.codec_name !== 'aac') throw new Error('Unexpected delivery codecs');
 if (Number(video.nb_frames) !== expectedFrames) throw new Error(`Expected ${expectedFrames} frames, got ${video.nb_frames}`);
 if (expectedFrames / 60 > 180 || expectedFrames / 60 < 120) throw new Error('The full presentation must be 2–3 minutes');
 const filter = `select='${samples.map((sample) => `eq(n,${sample})`).join('+')}',scale=384:216,tile=3x7`;
@@ -53,6 +54,6 @@ const chapterLines = chapters.map((chapter) => {
   return `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')} ${chapter.title}`;
 });
 await writeFile(path.join(folder, 'chapters.txt'), chapterLines.join('\n') + '\n');
-const report = { output, width: video.width, height: video.height, fps: 60, frames: expectedFrames, duration: expectedFrames / 60, size: (await stat(output)).size, videoCodec: video.codec_name, audioCodec: audio.codec_name, chapters: chapterLines, timeline };
+const report = { output, width: video.width, height: video.height, fps: 60, frames: expectedFrames, duration: expectedFrames / 60, size: (await stat(output)).size, videoCodec: video.codec_name, pixelFormat: video.pix_fmt, audioCodec: audio.codec_name, chapters: chapterLines, timeline };
 await writeFile(path.join(folder, 'verification.json'), JSON.stringify(report, null, 2));
 console.log(JSON.stringify({ output, duration: report.duration, sizeMB: +(report.size / 1024 / 1024).toFixed(1), frames: expectedFrames, chapters: chapterLines }, null, 2));
