@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { readPanorama } from "./panorama";
+import { readPanorama, readPanoramaLayout } from "./panorama";
 
 describe("demo window readings", () => {
   it("preserves the previous southwest reading at floor four", () => {
@@ -18,5 +18,29 @@ describe("demo window readings", () => {
       expect(values.every((value) => value >= 0 && value <= 100)).toBe(true);
       expect(values.slice(1).every((value, index) => value >= values[index]!)).toBe(true);
     }
+  });
+  it("lowers nearby buildings in the view as the observer moves upstairs", () => {
+    for (const facade of ["SW", "SE", "NE", "NW"] as const) {
+      const low = readPanoramaLayout(facade, 1);
+      const high = readPanoramaLayout(facade, 8);
+      high.buildings.forEach((building, index) => {
+        expect(building.elevation).toBeLessThan(low.buildings[index]!.elevation);
+        expect(building.baseElevation).toBeLessThan(low.buildings[index]!.baseElevation);
+        expect(building.baseElevation).toBeLessThan(building.elevation);
+        expect(building.from).toBeGreaterThanOrEqual(0);
+        expect(building.to).toBeLessThanOrEqual(1);
+      });
+    }
+  });
+  it("keeps the illustrated sea horizon consistent with the visibility reading", () => {
+    const high = readPanoramaLayout("SW", 8);
+    expect(readPanorama("SW", 8).seaShare).toBe(100);
+    const sea = high.sea!;
+    const inSea = high.buildings.filter(
+      (building) => building.to > sea.from && building.from < sea.to,
+    );
+    expect(inSea.length).toBeGreaterThan(0);
+    expect(inSea.every((building) => building.elevation < 0)).toBe(true);
+    expect(readPanoramaLayout("NE", 4).sea).toBeNull();
   });
 });

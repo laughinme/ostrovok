@@ -691,3 +691,9 @@
 .hotel-detail .window-method-tooltip .attrib > p {
   margin-top: 6px;
 }
+
+.hotel-detail .window-frame.window-frame-demo {
+  height: auto;
+  aspect-ratio: 12 / 7;
+  background: #d6e5e8;
+}

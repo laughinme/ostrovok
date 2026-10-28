@@ -392,3 +392,19 @@ export function readPanorama(key: Facade, floor: number): PanoReading {
     mountains: key === "NE" || key === "SE",
   };
 }
+
+export function readPanoramaLayout(key: Facade, floor: number) {
+  const scene = FACADES[key];
+  const eye = floor * 3 - 1.5;
+  return {
+    sea: scene.sea ? { from: scene.sea[0] / SPAN, to: scene.sea[1] / SPAN } : null,
+    sun: scene.sun === null ? null : scene.sun / SPAN,
+    buildings: scene.buildings.map((building) => ({
+      from: building.a / SPAN,
+      to: building.b / SPAN,
+      elevation: (Math.atan2(building.h - eye, building.d) * 180) / Math.PI,
+      baseElevation: (Math.atan2(-eye, building.d) * 180) / Math.PI,
+      floors: Math.max(1, Math.round(building.h / 3)),
+    })),
+  };
+}
