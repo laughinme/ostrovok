@@ -26,7 +26,6 @@ import "./hotel-detail.css";
 import "./hotel-refresh.css";
 import { HotelAbout, HotelOverview } from "./hotel-overview";
 import { HotelNearby } from "./hotel-nearby";
-import { HotelFacts } from "./hotel-facts";
 import { getApiMode } from "@/shared/api";
 const DAYS = [
   ["пн", 10, 17, "16:58", 18, 10],
@@ -103,6 +102,14 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
           onCompare={() => toggleCompare(h.id)}
           onPhoto={setLb}
           onSection={scrollTo}
+        />
+
+        <HotelAbout
+          hotel={hotel}
+          details={h}
+          selectedId={why?.id}
+          onFact={setWhy}
+          demo={designDemo}
         />
 
         <section className="sec-h2" id="rooms">
@@ -204,8 +211,6 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
           </section>
         ))}
 
-        <HotelAbout hotel={hotel} details={h} />
-
         <section className="sec-h2">
           <h2>Как это будет</h2>
           <p>Ваш номер в ваши даты: вид, ночь, утро и погода — с доказательствами</p>
@@ -249,8 +254,6 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
         ) : (
           <ClimateSection hotel={hotel} />
         )}
-
-        <HotelFacts facts={h.facts} selectedId={why?.id} onFact={setWhy} demo={designDemo} />
 
         {h.unknowns.length > 0 && (
           <section className="sec-h2">
