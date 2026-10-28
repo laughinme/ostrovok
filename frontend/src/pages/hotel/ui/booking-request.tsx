@@ -114,7 +114,6 @@ export function BookingRequest({
                 {nights ? bookingNightLabel(nights) : "Выберите период"}
               </span>
             </div>
-            <BookingCalendar value={range} min={today} onChange={setRange} />
             <div className="booking-guest-row">
               <GuestCounter
                 label="Взрослые"
@@ -133,6 +132,7 @@ export function BookingRequest({
                 onChange={setChildren}
               />
             </div>
+            <BookingCalendar value={range} min={today} onChange={setRange} />
             {(hotel.searchContext?.trip.adults ?? 0) > capacity && (
               <p role="note" className="booking-note">
                 Этот номер рассчитан на {capacity} {capacity === 1 ? "гостя" : "гостей"}, а в поиске
