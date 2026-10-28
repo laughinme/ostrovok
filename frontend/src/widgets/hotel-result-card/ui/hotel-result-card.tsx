@@ -56,7 +56,7 @@ export function HotelResultCard({
       layout
       initial={reducedMotion ? false : { opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: reducedMotion ? 0 : index * 0.04 }}
+      transition={{ delay: reducedMotion || highlighted ? 0 : index * 0.04 }}
       onMouseEnter={() => onHover(r.hotel.id)}
       onMouseLeave={() => onHover(null)}
       aria-label={r.hotel.name}
