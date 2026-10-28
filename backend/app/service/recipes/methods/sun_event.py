@@ -9,7 +9,7 @@ import numpy as np
 
 from app.domain.geo.horizon import evaluate_horizon
 from app.domain.geo.montecarlo import sampled_horizons
-from app.domain.geo.solar_visibility import event_visible, solar_intersection
+from app.domain.geo.solar_visibility import event_visible, rises_into_view, solar_intersection
 from app.domain.geo.sun import SunPosition, sun_events
 from app.domain.knowledge.characteristic import MethodKind
 from app.domain.knowledge.observation import Evidence, EvidenceKind
@@ -75,8 +75,16 @@ def _findings(
             )
             samples = sampled_horizons(windows, eyes, runs=runs)
             for month, positions in events.items():
+                morning = recipe.event == "sunrise" and recipe.over == "any"
                 yes = sum(
-                    event_visible(
+                    rises_into_view(
+                        scene.hotel.location,
+                        positions[int(index)],
+                        sample.scene,
+                        sample.horizon.row(row),
+                    )
+                    if morning
+                    else event_visible(
                         positions[int(index)],
                         sample.scene,
                         sample.horizon.row(row),
