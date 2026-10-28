@@ -62,7 +62,7 @@ export function ComparePage() {
         ))}
       </div>
 
-      <RequestState pending={pending} error={error} retry={retry} />
+      <RequestState page={scored.length === 0} pending={pending} error={error} retry={retry} />
       <ComparePodium entries={scored} />
 
       <div className="mt-6 grid gap-4 md:grid-cols-3">

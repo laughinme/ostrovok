@@ -9,5 +9,5 @@ export function SearchPage({ query = "Тихий отель у моря" }: { qu
   useEffect(() => {
     if (!pending || error) void navigate({ to: "/results", search: { q: query }, replace: true });
   }, [pending, error, navigate, query]);
-  return <RequestState pending={pending} error={error} />;
+  return <RequestState page pending={pending} error={error} />;
 }

@@ -64,6 +64,7 @@ export function WhyPanel({ fact: summary, hotel }: { fact: Fact; hotel: HotelDet
     <div className="why">
       {hotel.api && (
         <RequestState
+          pending={detail.isPending}
           error={detail.error}
           retry={() => {
             void detail.refetch();

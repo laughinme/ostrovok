@@ -17,6 +17,7 @@ import type { Fact, RoomType, RatePlan } from "../model/types";
 import { FACADE_NAME } from "../lib/building";
 import { rub } from "../lib/format";
 import { BookingRequest } from "./booking-request";
+import { BookingModal } from "./booking-modal";
 import { BeachSection } from "./beach-section";
 import { NoiseSection } from "./noise-section";
 import { WindowSection } from "./window-section";
@@ -339,13 +340,18 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
       </Drawer>
       <Lightbox items={gallery} index={lb} hotel={h} onClose={() => setLb(null)} onIndex={setLb} />
       <Toast text={toast} />
-      <Drawer
-        open={booking != null}
-        onClose={() => setBooking(null)}
-        label="Заявка на бронирование"
-      >
-        {booking && <BookingRequest hotel={hotel} room={booking.room} rate={booking.rate} />}
-      </Drawer>
+      {booking && (
+        <BookingModal onClose={() => setBooking(null)}>
+          {(titleId) => (
+            <BookingRequest
+              hotel={hotel}
+              room={booking.room}
+              rate={booking.rate}
+              titleId={titleId}
+            />
+          )}
+        </BookingModal>
+      )}
     </main>
   );
 }
