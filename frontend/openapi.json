@@ -2175,6 +2175,53 @@
         }
       }
     },
+    "/api/v1/intents/photo": {
+      "post": {
+        "tags": [
+          "Search"
+        ],
+        "summary": "Фото → редактируемое желание гостя; фото не сохраняется",
+        "operationId": "photo_intent_api_v1_intents_photo_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PhotoIntentRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PhotoIntentResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid photo"
+          },
+          "503": {
+            "description": "LLM unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/moods": {
       "get": {
         "tags": [
@@ -6256,6 +6303,44 @@
           "title"
         ],
         "title": "PersonaOut"
+      },
+      "PhotoIntentRequest": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Image",
+            "description": "Base64 image, at most 5 MiB decoded"
+          },
+          "mediaType": {
+            "type": "string",
+            "enum": [
+              "image/jpeg",
+              "image/png",
+              "image/webp"
+            ],
+            "title": "Mediatype"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image",
+          "mediaType"
+        ],
+        "title": "PhotoIntentRequest"
+      },
+      "PhotoIntentResponse": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "title": "Text"
+          }
+        },
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "title": "PhotoIntentResponse"
       },
       "Planner": {
         "type": "string",

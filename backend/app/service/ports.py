@@ -109,6 +109,15 @@ class LanguageModel(Protocol):
     ) -> LlmResult[T]: ...
 
 
+class VisionLanguageModel(Protocol):
+    @property
+    def available(self) -> bool: ...
+
+    async def structured_image[T: BaseModel](
+        self, *, task: str, system: str, prompt: str, image: bytes, media_type: str, output: type[T]
+    ) -> LlmResult[T]: ...
+
+
 # ── Geo ──────────────────────────────────────────────────────────────────
 
 
