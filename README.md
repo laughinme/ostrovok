@@ -163,6 +163,29 @@ db                      PostgreSQL 17 + PostGIS          redis   события 
 - **Код:** модульный монолит, слои `api → service → domain` с адаптерами `db` и `infra`; границы проверяет
   import-linter, типы — mypy strict, поведение — unit и интеграционные тесты на настоящем PostGIS.
 
+## API и MCP: подключить О!кно к Claude / ChatGPT
+
+Публичный сервер: `https://okno-api.fly.dev/mcp` (Streamable HTTP, без авторизации).
+Локально после запуска Compose: `http://localhost:8080/mcp`; облачным коннекторам нужен публичный URL.
+REST: [OpenAPI](https://okno-api.fly.dev/api/docs), примеры — на странице `/developers`.
+
+- **Claude:** Customize → Connectors → + Add → Add custom connector. Имя «О!кно», URL выше,
+  Continue → No sign in → Add. В чате включите через «+» → Connectors.
+  В Team/Enterprise сервер сначала добавляет администратор через Organization settings → Connectors.
+  [Официальная инструкция Claude](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp).
+- **ChatGPT (веб):** Plugins → «+» → Add custom MCP server. Имя «О!кно», Server URL выше,
+  No authentication → Create as a plugin; установите плагин и выберите его через `@` в чате.
+  Возможность подключения зависит от разрешений рабочего пространства.
+  [Официальная инструкция ChatGPT](https://developers.openai.com/api/docs/guides/custom-mcp-server).
+
+Пример: «Через О!кно найди тихий номер с закатом над морем в Сочи на 12–15 ноября вдвоём.
+Покажи три варианта, какой номер просить и доказательства».
+
+`search_hotels` возвращает вердикты и `factId`; `get_hotel_knowledge` — отель и страницу фактов
+(10 по умолчанию, следующий `offset` в `nextOffset`); `explain_fact` — источники и подробности.
+Также доступны `compare_hotels` и `list_characteristics`. Все пять инструментов только читают данные.
+Регион — Большой Сочи; цены и номера — демо, наличие мест и бронирование MCP не подтверждает.
+
 ## Данные
 
 Демо-данные лежат в репозитории (`backend/data/`, ~30 МБ) и загружаются автоматически. Как они получены —
