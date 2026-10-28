@@ -4,7 +4,7 @@ from pathlib import Path
 
 from sqlalchemy import delete, text
 
-from app.db.models import Building, CharacteristicRow
+from app.db.models import Building, CharacteristicRow, Hotel
 from app.db.uow import UnitOfWork
 from app.service.knowledge.registry import RegistryLoader
 from app.service.seed_export import KnowledgeSeedLoader
@@ -32,6 +32,7 @@ class DemoReset:
         session = self._uow.session
         for table in RUNTIME_TABLES:
             await session.execute(text(f"DELETE FROM {table}"))  # noqa: S608 - fixed names
+        await session.execute(delete(Hotel).where(Hotel.demo["onboarded"].as_boolean().is_(True)))
         await session.execute(delete(Building).where(Building.added_by != "osm"))
         await session.execute(
             delete(CharacteristicRow).where(CharacteristicRow.status != "published")

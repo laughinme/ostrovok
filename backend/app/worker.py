@@ -21,6 +21,7 @@ from app.infra.events import RedisEventBus
 from app.infra.partner_truth import YamlHiddenTruth
 from app.service.agents.collect import CollectService
 from app.service.agents.freshness import FreshnessScan
+from app.service.agents.onboarding import OnboardHotel
 from app.service.agents.simulator import HotelierSimulator
 from app.service.agents.wishes import WishResearch
 from app.service.booking.simulator import BookingSimulator
@@ -171,6 +172,12 @@ def build_handlers(
     async def world_changed(job: ClaimedJob) -> None:
         await _agents().watcher.react(_run(job), UUID(job.payload["change_id"]))
 
+    async def hotel_onboard(job: ClaimedJob) -> None:
+        a = _agents()
+        await OnboardHotel(collect, a.runner, a.env.clock).run(
+            _run(job), UUID(job.payload["hotel_id"])
+        )
+
     async def freshness_scan(_: ClaimedJob) -> None:
         queued = await FreshnessScan(_agents().runner.db, SystemClock()).run()
         logger.info("freshness scan queued %s re-checks", queued)
@@ -184,6 +191,7 @@ def build_handlers(
         JobKind.RESEARCH_WISH: research_wish,
         JobKind.BOOKING_FACT_CHANGED: booking_fact_changed,
         JobKind.RESEARCH_COLLECT: research_collect,
+        JobKind.HOTEL_ONBOARD: hotel_onboard,
         JobKind.BOOKING_SIMULATE: booking_simulate,
     }
 
