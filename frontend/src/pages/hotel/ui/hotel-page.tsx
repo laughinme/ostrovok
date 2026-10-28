@@ -11,9 +11,9 @@ import { CoastMap } from "@/widgets/hotel-map";
 import { Drawer, Lightbox, WhyPanel, type GalleryItem } from "./overlays";
 import { Conf, Icon, Mark, SrcTag, Toast } from "./detail-ui";
 import { useToast } from "../lib/use-toast";
-import { Building, Panorama, Photo } from "./visuals";
+import { Panorama, Photo } from "./visuals";
 import { createHotelDetails } from "../model/hotel-details";
-import type { Fact, RoomType, RatePlan, Facade } from "../model/types";
+import type { Fact, RoomType, RatePlan } from "../model/types";
 import { FACADE_NAME } from "../lib/building";
 import { rub } from "../lib/format";
 import { verdict } from "../lib/score";
@@ -22,32 +22,12 @@ import { BeachSection } from "./beach-section";
 import { NoiseSection } from "./noise-section";
 import { WindowSection } from "./window-section";
 import { ClimateSection } from "./climate-section";
-import { dateLabel, tripDates } from "../model/geo";
+import { tripDates } from "../model/geo";
 import "./hotel-detail.css";
 import "./hotel-refresh.css";
 import { HotelOverview } from "./hotel-overview";
 import { HotelNearby } from "./hotel-nearby";
 import { getApiMode } from "@/shared/api";
-const FACADE_TEXT: Record<Facade, string> = {
-  N: "север",
-  E: "восток",
-  S: "юг",
-  W: "запад",
-  NE: "горы",
-  SE: "море частично",
-  SW: "море и закат",
-  NW: "город",
-};
-const FACADE_COLOR: Record<Facade, string> = {
-  N: "#9BD08A",
-  E: "#9DB5F5",
-  S: "var(--primary)",
-  W: "#C9D0E2",
-  NE: "#9BD08A",
-  SE: "#9DB5F5",
-  SW: "var(--primary)",
-  NW: "#C9D0E2",
-};
 const DAYS = [
   ["пн", 10, 17, "16:58", 18, 10],
   ["вт", 11, 16, "16:57", 18, 25],
@@ -75,10 +55,6 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
     room: RoomType;
     rate: RatePlan;
   } | null>(null);
-  const [facade, setFacade] = useState<Facade>(h.bestFacade);
-  const [floor, setFloor] = useState(h.bestFloor);
-  const [reading, setReading] = useState({ seaShare: 0, sunVisible: false });
-  const [noise, setNoise] = useState<"night" | "day">("night");
   const [why, setWhy] = useState<Fact | null>(null);
   const [lb, setLb] = useState<number | null>(null);
   const [asked, setAsked] = useState<Set<string>>(new Set());
@@ -97,7 +73,6 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
     ],
     [h],
   );
-  const roomsForFacade = h.rooms.filter((r) => r.facades.includes(facade));
   const scrollTo = (id: string) =>
     document
       .getElementById(id)
@@ -135,105 +110,7 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
           <p>Ваш номер в ваши даты: вид, ночь, утро и погода — с доказательствами</p>
         </section>
 
-        {designDemo ? (
-          <>
-            <section className="window-card card-w" id="window">
-              <div className="w-head">
-                <h3>Ваше окно</h3>
-                <svg className="compass" viewBox="-30 -30 60 60" aria-hidden="true">
-                  <g transform="rotate(45)">
-                    {(["NE", "SE", "SW", "NW"] as Facade[]).map((f, i) => (
-                      <path
-                        key={f}
-                        d={
-                          [
-                            "M0 0 L0 -26 A26 26 0 0 1 26 0 Z",
-                            "M0 0 L26 0 A26 26 0 0 1 0 26 Z",
-                            "M0 0 L0 26 A26 26 0 0 1 -26 0 Z",
-                            "M0 0 L-26 0 A26 26 0 0 1 0 -26 Z",
-                          ][i]
-                        }
-                        fill={FACADE_COLOR[f]}
-                        opacity={f === facade ? 1 : 0.35}
-                      />
-                    ))}
-                  </g>
-                  <circle r="6" fill="#fff" stroke="var(--ink)" strokeWidth="1.5" />
-                  <text y="-29" textAnchor="middle" fontSize="9" fontWeight="700" fill="var(--ink)">
-                    С
-                  </text>
-                </svg>
-                <div className="fac" role="group" aria-label="Сторона здания">
-                  {(["NE", "SE", "SW", "NW"] as Facade[]).map((f) => (
-                    <button
-                      key={f}
-                      className={f === facade ? "on" : ""}
-                      aria-pressed={f === facade}
-                      onClick={() => setFacade(f)}
-                    >
-                      <i style={{ background: FACADE_COLOR[f] }} />
-                      {FACADE_NAME[f]} · {FACADE_TEXT[f]}
-                    </button>
-                  ))}
-                </div>
-                <span className="read">
-                  {designDemo
-                    ? "10–15 ноября · пример расчёта"
-                    : "Иллюстрация · расположение уточняется"}
-                </span>
-              </div>
-              <div className="w-stage">
-                <Panorama facade={facade} floor={floor} onReading={setReading} />
-              </div>
-              <div className="w-foot">
-                <label className="floor">
-                  Этаж <b className="num">{floor}</b>
-                  <input
-                    type="range"
-                    min={1}
-                    max={h.totalFloors}
-                    value={floor}
-                    onChange={(e) => setFloor(+e.target.value)}
-                    aria-label="Этаж"
-                  />
-                </label>
-                <span className="read">
-                  море в окне{" "}
-                  <b className="num">{reading.seaShare ? `${reading.seaShare}%` : "не видно"}</b>
-                </span>
-                <span className="read">
-                  закат <b>{reading.sunVisible ? "видно" : "не видно"}</b>
-                </span>
-              </div>
-              <div className="w-note">
-                {roomsForFacade.length ? (
-                  <>
-                    <Mark v="yes" />
-                    <span>
-                      На {FACADE_NAME[facade]} выходят номера{" "}
-                      <b>{roomsForFacade.map((r) => r.name).join(", ")}</b>, этажи{" "}
-                      {roomsForFacade[0]!.floors.join("–")}. Условное распределение номеров в
-                      прототипе; уточните у отеля.
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <Mark v="partial" />
-                    <span>На {FACADE_NAME[facade]} размещение номеров пока не подтверждено.</span>
-                  </>
-                )}
-              </div>
-              <div className="attrib">
-                © OpenStreetMap contributors · Copernicus DEM GLO-30 · геометрия в прототипе
-                условная
-              </div>
-            </section>
-          </>
-        ) : (
-          <>
-            <WindowSection hotel={hotel} detail={h} />
-          </>
-        )}
+        <WindowSection hotel={hotel} detail={h} />
 
         <NoiseSection hotel={hotel} />
 
