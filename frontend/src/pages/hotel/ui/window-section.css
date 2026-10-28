@@ -206,7 +206,7 @@
 .hotel-detail .window-view-shell {
   position: relative;
   padding: 24px 32px 38px;
-  background: #eaf2ed;
+  background: color-mix(in srgb, var(--verified) 18%, var(--surface));
 }
 .hotel-detail .window-view-caption {
   display: flex;
@@ -214,7 +214,7 @@
   justify-content: space-between;
   gap: 12px;
   margin-bottom: 16px;
-  color: #48635d;
+  color: var(--ink);
   font-size: 11px;
 }
 .hotel-detail .window-view-caption > span:last-child {
@@ -278,7 +278,7 @@
   display: block;
   margin-top: 15px;
   text-align: center;
-  color: #5f7b73;
+  color: var(--muted);
   font-size: 9px;
 }
 .hotel-detail .window-scene-state {
@@ -696,4 +696,31 @@
   height: auto;
   aspect-ratio: 12 / 7;
   background: #d6e5e8;
+}
+
+.hotel-detail .window-visible-objects {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+  list-style: none;
+}
+.hotel-detail .window-visible-objects li {
+  padding: 5px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 10px;
+}
+
+.hotel-detail .window-illustration {
+  --view-sky-top: var(--scene-raised);
+  --view-sky-low: color-mix(in srgb, var(--primary) 24%, var(--surface));
+  --view-hill-far: color-mix(in srgb, var(--on-verified) 60%, var(--verified));
+  --view-building-side: color-mix(in srgb, var(--primary) 30%, var(--surface));
+  --view-building-roof: color-mix(in srgb, var(--primary) 50%, var(--surface));
+  --view-tree-light: var(--verified);
+  --view-tree-dark: color-mix(in srgb, var(--on-verified) 40%, var(--verified));
 }

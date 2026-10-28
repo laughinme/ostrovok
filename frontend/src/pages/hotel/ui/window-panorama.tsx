@@ -1,244 +1,90 @@
-import {
-  Component,
-  lazy,
-  Suspense,
-  useCallback,
-  useMemo,
-  useRef,
-  useState,
-  type ReactNode,
-} from "react";
-import { useQuery } from "@tanstack/react-query";
-import { useReducedMotion } from "framer-motion";
-import { Box, Eye, Minus, MoveHorizontal, Plus, RotateCcw } from "lucide-react";
-import { ClientOnly } from "@/shared/ui";
-import { FACADE_ANGLE } from "../model/geo";
-import {
-  schematicContext,
-  type WindowContexts,
-  type WindowSceneData,
-} from "../model/window-context";
-import { WindowContextFallback } from "./window-context-fallback";
-import "./window-context.css";
+import { useId } from "react";
+import type { WindowView } from "../model/window-view";
+import { BuildingObject, MountainObject, SeaObject, TreeObject } from "./window-view-objects";
 
-const Scene = lazy(() => import("./window-context-scene"));
-class SceneBoundary extends Component<
-  { children: ReactNode; onFailure(): void },
-  { failed: boolean }
-> {
-  override state = { failed: false };
-  static getDerivedStateFromError() {
-    return { failed: true };
-  }
-  override componentDidCatch() {
-    this.props.onFailure();
-  }
-  override render() {
-    return this.state.failed ? null : this.props.children;
-  }
-}
-
-export function WindowPanorama({
-  data,
-  osmId,
-  mode,
-  onModeChange: setMode,
-  active = true,
-}: {
-  data: WindowSceneData;
-  active?: boolean;
-  osmId?: string | undefined;
-  mode: "overview" | "eye";
-  onModeChange(mode: "overview" | "eye"): void;
-}) {
-  const [rotation, setRotation] = useState(0);
-  const [zoom, setZoom] = useState(1);
-  const [ready, setReady] = useState(false);
-  const onReady = useCallback(() => setReady(true), []);
-  const onFailure = useCallback(() => setReady(false), []);
-  const reducedMotion = useReducedMotion() ?? false;
-  const labelRef = useRef<HTMLSpanElement>(null);
-  const drag = useRef<{ x: number; rotation: number } | null>(null);
-  const contexts = useQuery({
-    queryKey: ["window-contexts", 1],
-    queryFn: async ({ signal }) => {
-      const response = await fetch("/data/window-contexts.json", { signal });
-      if (!response.ok) throw new Error("Контуры окрестностей недоступны");
-      return (await response.json()) as WindowContexts;
-    },
-    enabled: active && !!osmId,
-    staleTime: Infinity,
-    retry: 0,
-  });
-  const source = osmId ? contexts.data?.hotels[osmId] : undefined;
-  const generated = useMemo(() => schematicContext(data), [data]);
-  const context = source ?? generated;
-  const cameraBearing = (FACADE_ANGLE[data.facade] * Math.PI) / 180 + rotation + Math.PI + 0.55;
-  const northRotation =
-    mode === "overview"
-      ? (Math.atan2(Math.sin(cameraBearing), Math.cos(cameraBearing) * 0.633) * 180) / Math.PI
-      : -FACADE_ANGLE[data.facade] - (rotation * 180) / Math.PI;
-  const reset = () => {
-    setRotation(0);
-    setZoom(1);
-  };
+export function WindowPanorama({ scene, floor }: { scene: WindowView; floor: number }) {
+  const id = useId();
   return (
-    <div className="window-context" data-mode={mode}>
-      <div className="window-context-toolbar">
-        <div
-          className="window-context-modes"
-          role="group"
-          aria-label="Режим просмотра окрестностей"
-        >
-          <button
-            type="button"
-            aria-pressed={mode === "overview"}
-            onClick={() => {
-              setMode("overview");
-              reset();
-            }}
-          >
-            <Box size={16} />
-            3D-схема
-          </button>
-          <button
-            type="button"
-            aria-pressed={mode === "eye"}
-            onClick={() => {
-              setMode("eye");
-              reset();
-            }}
-          >
-            <Eye size={16} />
-            Из окна
-          </button>
-        </div>
-        <button
-          className="window-context-reset"
-          type="button"
-          aria-label="Вернуть исходный вид"
-          onClick={reset}
-        >
-          <RotateCcw size={17} />
-        </button>
-      </div>
-      <div
-        className="window-context-viewport"
-        role="img"
-        tabIndex={0}
-        onKeyDown={(event) => {
-          if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
-            event.preventDefault();
-            setRotation((value) => value + ((event.key === "ArrowLeft" ? -1 : 1) * Math.PI) / 12);
-          }
-        }}
-        aria-label={`Объёмная схема окрестностей, сторона ${data.facade}, этаж ${data.floor}`}
-        data-renderer={ready ? "webgl" : "fallback"}
-        onPointerDown={(event) => {
-          if (event.button !== 0) return;
-          drag.current = { x: event.clientX, rotation };
-        }}
-        onPointerMove={(event) => {
-          if (!drag.current) return;
-          const delta = event.clientX - drag.current.x;
-          if (Math.abs(delta) > 5) {
-            if (
-              event.target instanceof HTMLCanvasElement &&
-              !event.target.hasPointerCapture(event.pointerId)
-            )
-              event.target.setPointerCapture(event.pointerId);
-            setRotation(drag.current.rotation - delta * 0.008);
-          }
-        }}
-        onPointerUp={() => {
-          drag.current = null;
-        }}
-        onPointerCancel={() => {
-          drag.current = null;
-        }}
-        onLostPointerCapture={() => {
-          drag.current = null;
-        }}
-      >
-        {!ready && (
-          <div className="window-context-backup" style={{ transform: `scale(${zoom})` }}>
-            <WindowContextFallback
-              context={context}
-              rotation={cameraBearing - Math.PI / 4 - 0.35}
-            />
-          </div>
-        )}
-        <div className={`window-context-webgl${ready ? " is-ready" : ""}`}>
-          <SceneBoundary onFailure={onFailure}>
-            <ClientOnly>
-              <Suspense fallback={null}>
-                {active && (
-                  <Scene
-                    context={context}
-                    data={data}
-                    mode={mode}
-                    rotation={rotation}
-                    zoom={zoom}
-                    reducedMotion={reducedMotion}
-                    onReady={onReady}
-                    onUnavailable={onFailure}
-                    labelRef={labelRef}
-                  />
-                )}
-              </Suspense>
-            </ClientOnly>
-          </SceneBoundary>
-        </div>
-        {mode === "overview" && (
-          <span className="window-context-origin" ref={labelRef}>
-            <i />
-            Ваш номер · {data.floor} этаж
-          </span>
-        )}
-        <span
-          className="window-context-compass"
-          style={{ transform: `rotate(${northRotation}deg)` }}
-        >
-          ↑<small>С</small>
-        </span>
-      </div>
-      <div className="window-context-bottom">
-        <span>
-          <MoveHorizontal size={15} />
-          Потяните, чтобы осмотреть
-        </span>
-        <div className="window-context-zoom">
-          <button
-            type="button"
-            aria-label="Отдалить 3D-схему"
-            disabled={zoom <= 0.8}
-            onClick={() => setZoom((value) => Math.max(0.8, value - 0.2))}
-          >
-            <Minus size={16} />
-          </button>
-          <button
-            type="button"
-            aria-label="Приблизить 3D-схему"
-            disabled={zoom >= 1.6}
-            onClick={() => setZoom((value) => Math.min(1.6, value + 0.2))}
-          >
-            <Plus size={16} />
-          </button>
-        </div>
-      </div>
-      <div className="window-context-legend">
-        <span>
-          <i />
-          Ваш отель
-        </span>
-        <span>
-          <i />
-          Соседние здания
-        </span>
-        <small>
-          {source ? "Контуры OSM · высоты и рельеф упрощены" : "Условная 3D-схема по горизонту"}
-        </small>
-      </div>
-    </div>
+    <svg
+      className="window-illustration"
+      viewBox="0 0 960 560"
+      preserveAspectRatio="xMidYMid meet"
+      role="img"
+      aria-label={`Условный вид из окна, ${floor} этаж. ${scene.objects.join(", ") || "Подтверждённых объектов нет"}. Форма и положение объектов схематичны.`}
+    >
+      <defs>
+        <linearGradient id={`${id}-sky`} x2="0" y2="1">
+          <stop stopColor="var(--view-sky-top)" />
+          <stop offset="1" stopColor="var(--view-sky-low)" />
+        </linearGradient>
+        <linearGradient id={`${id}-water`} x2="0" y2="1">
+          <stop stopColor="var(--primary)" />
+          <stop offset="1" stopColor="var(--scene)" />
+        </linearGradient>
+        <linearGradient id={`${id}-ridge`} x2="0" y2="1">
+          <stop stopColor="var(--scene-raised)" />
+          <stop offset="1" stopColor="var(--scene)" />
+        </linearGradient>
+        <radialGradient id={`${id}-glow`}>
+          <stop stopColor="var(--verified)" stopOpacity=".85" />
+          <stop offset="1" stopColor="var(--verified)" stopOpacity="0" />
+        </radialGradient>
+        <pattern id={`${id}-unknown`} width="18" height="18" patternUnits="userSpaceOnUse">
+          <path
+            d="M-4 4 4-4M0 18 18 0M14 22 22 14"
+            stroke="var(--muted)"
+            strokeWidth="1"
+            opacity=".35"
+          />
+        </pattern>
+      </defs>
+      <rect width="960" height="560" fill={`url(#${id}-sky)`} />
+      <g fill="var(--surface)" opacity=".75" aria-hidden="true">
+        <path d="M40 92c42-13 59-7 84-9s47-15 77-8c17 4 23 10 43 11-50 8-130 9-204 6Z" />
+        <path d="M628 61c38-12 58-10 79-5s48-8 69-1l38 8c-63 7-114 7-186-2Z" />
+      </g>
+      <rect y="270" width="960" height="290" fill="var(--verified)" />
+      {scene.mountains.map((span, index) => (
+        <MountainObject key={index} span={span} fill={`url(#${id}-ridge)`} />
+      ))}
+      {scene.sea.map((span, index) => (
+        <SeaObject key={index} span={span} fill={`url(#${id}-water)`} />
+      ))}
+      {scene.sun !== null && (
+        <g data-window-object="sunset">
+          <circle cx={scene.sun * 960} cy="244" r="90" fill={`url(#${id}-glow)`} />
+          <circle cx={scene.sun * 960} cy="244" r="21" fill="var(--verified)" />
+        </g>
+      )}
+      {scene.buildings.length > 0 && (
+        <path
+          d={`M0 ${scene.buildings[0]!.base + 18} ${scene.buildings.map((building) => `L${building.from * 960} ${building.base}H${building.to * 960}`).join(" ")}L960 ${scene.buildings.at(-1)!.base + 18}V560H0Z`}
+          fill="var(--lime-deep)"
+        />
+      )}
+      {scene.buildings.map((building, index) => (
+        <BuildingObject key={index} building={building} index={index} />
+      ))}
+      {scene.trees.map((tree, index) => (
+        <TreeObject key={index} {...tree} />
+      ))}
+      {scene.unknown.map((span, index) => (
+        <g key={index} data-window-object="unknown">
+          <rect
+            x={span.from * 960}
+            width={(span.to - span.from) * 960}
+            height="560"
+            fill="var(--raised)"
+            opacity=".85"
+          />
+          <rect
+            x={span.from * 960}
+            width={(span.to - span.from) * 960}
+            height="560"
+            fill={`url(#${id}-unknown)`}
+          />
+        </g>
+      ))}
+    </svg>
   );
 }
