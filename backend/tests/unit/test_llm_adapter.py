@@ -3,6 +3,7 @@ import json
 import pytest
 from pydantic import BaseModel
 from pydantic_ai import ModelMessage, ModelResponse, TextPart, ToolCallPart, models
+from pydantic_ai.exceptions import UnexpectedModelBehavior
 from pydantic_ai.models.function import AgentInfo, FunctionModel
 
 from app.infra.llm.guards import DailyLimit
@@ -97,3 +98,21 @@ async def test_no_key_means_unavailable() -> None:
 
 def test_text_part_is_importable() -> None:
     assert TextPart(content="ok").content == "ok"
+
+
+async def test_bad_output_does_not_disable_other_tasks() -> None:
+    attempts = 0
+
+    def model(messages: list[ModelMessage], info: AgentInfo) -> ModelResponse:
+        nonlocal attempts
+        attempts += 1
+        if attempts == 1:
+            raise UnexpectedModelBehavior("invalid output for this question")
+        return _final(info, {"value": 2})
+
+    llm = _llm(model)
+    with pytest.raises(LlmUnavailableError):
+        await llm.structured(task="t", system="s", prompt="bad", output=Answer)
+    assert llm.available
+    result = await llm.structured(task="t", system="s", prompt="good", output=Answer)
+    assert result.output.value == 2

@@ -129,9 +129,9 @@ def comparison_table(runs: list[Mapping[str, Any]]) -> str:
     header = (
         "Модель (рассуждения) | F1 намерений dev/hold | ответы dev/hold | переспросы hold | "
         "Куратор метод dev/hold | объяснения | p50 намерений, с | p50 Куратора, с | "
-        "$ за 1000 разборов | $ прогон"
+        "$ за 1000 разборов | $ прогон | LLM hold: запросы/ответы/Куратор"
     )
-    lines = [header, " | ".join(["---"] * 10)]
+    lines = [header, " | ".join(["---"] * 11)]
     for run in runs:
         fast = run["usage"]["fast"]["tasks"].get("intent", {})
         strong = run["usage"]["strong"]["tasks"].get("curator", {})
@@ -161,7 +161,17 @@ def comparison_table(runs: list[Mapping[str, Any]]) -> str:
                     f"{strong['p50Ms'] / 1000:.1f}" if strong.get("p50Ms") else "—",
                     f"{per_call * 1000:.2f}" if per_call else "—",
                     str(run["costUsd"]),
+                    _coverage(run),
                 ]
             )
         )
     return "\n".join(lines)
+
+
+def _coverage(run: Mapping[str, Any]) -> str:
+    hold = run["sets"].get("holdout", {})
+    parts = []
+    for task, count in (("intents", "n"), ("answers", "evaluated"), ("curator", "n")):
+        metric = hold.get(task, {}).get("llm", {})
+        parts.append(f"{metric.get(count, '?')}/{metric.get('requested', '?')}")
+    return "; ".join(parts)
