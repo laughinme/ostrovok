@@ -532,7 +532,8 @@ Affine/rasterio (`lon=a*col+b*row+c`, `lat=d*col+e*row+f`, угол пиксел
 ## Этап 6. Сдача
 
 ### B6.1 · README и ARCHITECTURE.md бэкенда
-Статус: в работе · codex-docs · 28.10 09:07 МСК
+Статус: done · codex-docs · 28.10 09:19 МСК
+Итог: Документация бэкенда для жюри сверена с кодом: ARCHITECTURE (коммит 62cf208), README с запуском, окружением и расширением — в коммите этой записи. Корневой README остаётся claude-core.
 Область codex-docs: `backend/README.md` и `backend/ARCHITECTURE.md`; корневой README — claude-core.
 Зависит от: B4.7
 Что: README по шаблону правил (01 §4): режимы с ключом и без, провайдер и модель, учётки, атрибуции;
