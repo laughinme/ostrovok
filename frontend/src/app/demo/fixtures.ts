@@ -14,6 +14,12 @@ const criteria = Object.keys(criterionKeys) as Criterion[];
 export const demoHotels: ApiHotel[] = hotels.map((hotel, index) => {
   const id = `demo-${hotel.id}`;
   const floors = index === 1 ? 4 : 8;
+  const beach = hotel.walk.find((place) => place.kind === "beach");
+  const beachMinutes = beach?.minutes ?? 660;
+  const beachDistance = beachMinutes * 70;
+  const beachLocation: [number, number] = beach
+    ? [hotel.lngLat[0] - beachDistance / 100000, hotel.lngLat[1] - beachDistance / 140000]
+    : [39.919, 43.417];
   const facts: ApiFact[] = criteria.map((criterion) => {
     const score = hotel.scores[criterion] / 100;
     const unknown = index === 2 && criterion === "work";
@@ -38,8 +44,13 @@ export const demoHotels: ApiHotel[] = hotels.map((hotel, index) => {
               ["NE", "SE", "SW", "NW"].map((facade, i) => ({
                 kind: "noise_facades" as const,
                 summary: "Синтетический шум для проверки визуализации",
-                attribution: "Демо-сценарий",
-                params: { facade, period, indexDb: 32 + i * 7 + (period === "day" ? 6 : 0) },
+                attribution: "Демо-сценарий · не измерение шума",
+                params: {
+                  facade,
+                  period,
+                  indexDb:
+                    Math.min(...hotel.noise) + [0, 12, 3, 8][i]! + (period === "day" ? 6 : 0),
+                },
               })),
             )
           : [],
@@ -47,7 +58,6 @@ export const demoHotels: ApiHotel[] = hotels.map((hotel, index) => {
       isDemo: true,
     };
   });
-  const beach = hotel.walk.find((place) => place.kind === "beach");
   facts.push({
     id: `${id}:beach_walk`,
     hotelId: id,
@@ -55,7 +65,7 @@ export const demoHotels: ApiHotel[] = hotels.map((hotel, index) => {
     statement: "Пешком до пляжа",
     scopeText: "Демонстрационный маршрут",
     scope: {},
-    value: { minutes: beach?.minutes ?? 12 },
+    value: { minutes: beachMinutes },
     confidence: 0.85,
     confidenceLabel: "скорее да",
     source: "demo_card",
@@ -82,7 +92,7 @@ export const demoHotels: ApiHotel[] = hotels.map((hotel, index) => {
       rating: hotel.rating,
       ratingLabel: "Демо-оценка",
       tagline: hotel.tagline,
-      amenities: ["Wi-Fi", "Завтрак", "Демо-данные для дизайна"],
+      amenities: ["Wi-Fi", "Завтрак", "Кондиционер", "Парковка", "Семейные номера"],
     },
     rooms: [
       {
@@ -133,14 +143,47 @@ export const demoHotels: ApiHotel[] = hotels.map((hotel, index) => {
       },
     ],
     facts,
-    unknowns: facts
-      .filter((fact) => fact.status === "stale")
-      .map((fact) => ({
-        characteristic: fact.characteristic,
-        question: "Уточнить стабильность Wi-Fi",
-        why: "Демонстрация состояния «пока не знаем»",
-      })),
-    nearby: [],
+    unknowns: [
+      {
+        characteristic: "remote_work",
+        question: "Есть ли рабочий стол и стабильный Wi-Fi в номере?",
+        why: "Уточним оснащение выбранной категории перед поездкой",
+      },
+      {
+        characteristic: "pets_policy",
+        question: "Можно ли приехать с питомцем?",
+        why: "Уточним ограничения по весу и доплату за размещение",
+      },
+    ],
+    nearby: [
+      {
+        kind: "beach",
+        title: "Пляж",
+        name: beach?.name ?? "Адлерский пляж",
+        distanceM: beachDistance,
+        distanceText: beach ? `${beachMinutes} мин пешком` : "Около 46 км · нужен транспорт",
+        location: beachLocation,
+      },
+      ...hotel.walk
+        .filter((place) => place.kind !== "beach")
+        .map((place, placeIndex) => ({
+          kind:
+            (
+              { transport: "station", shop: "grocery", kids: "playground" } as Record<
+                string,
+                string
+              >
+            )[place.kind] ?? place.kind,
+          title: "",
+          name: place.name,
+          distanceM: place.minutes * 70,
+          distanceText: `${place.minutes} мин пешком`,
+          location: [
+            hotel.lngLat[0] + 0.001 * (placeIndex + 1),
+            hotel.lngLat[1] + 0.0006 * (placeIndex + 1),
+          ] as [number, number],
+        })),
+    ],
   };
 });
 
