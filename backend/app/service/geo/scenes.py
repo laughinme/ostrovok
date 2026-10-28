@@ -5,6 +5,7 @@ from collections import OrderedDict
 from dataclasses import dataclass, field
 from math import cos, radians, sin
 from time import monotonic
+from uuid import UUID, uuid4
 
 from shapely import Polygon
 from shapely.geometry.base import BaseGeometry
@@ -33,6 +34,7 @@ class HotelScene:
     base_m: float
     peaks: tuple[Peak, ...]
     windows: dict[Facade, tuple[Scene, ...]] = field(default_factory=dict)
+    cache_key: UUID = field(default_factory=uuid4)
 
     def prepare(self, facade: Facade) -> tuple[Scene, ...]:
         if facade not in self.hotel.facades:
