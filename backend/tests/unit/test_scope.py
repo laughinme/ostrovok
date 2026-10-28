@@ -1,7 +1,10 @@
+from typing import get_args
+
 import pytest
 from hypothesis import given, settings
 from hypothesis import strategies as st
 
+from app.api.schemas.knowledge import FacadeName
 from app.domain.knowledge.scope import (
     MONTHS,
     Cell,
@@ -91,3 +94,7 @@ def test_compression_is_exact(data: st.DataObject) -> None:
             covered[cell] = value
 
     assert covered == values
+
+
+def test_openapi_facade_names_match_the_domain() -> None:
+    assert set(get_args(FacadeName)) == {f.value for f in Facade}

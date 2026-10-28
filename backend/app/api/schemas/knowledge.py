@@ -18,10 +18,13 @@ EvidenceKind = Literal[
 ]  # fmt: skip
 
 
+FacadeName = Literal["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
+
+
 class ScopeJson(TypedDict, total=False):
     """ScopeOut on the wire: an absent field means «all» (08 §9)."""
 
-    facades: list[Facade]
+    facades: list[FacadeName]
     floorFrom: int
     floorTo: int
     months: list[int]
