@@ -1,19 +1,22 @@
 import { useCompare } from "@/features/compare-hotels";
 import { CriteriaFilter, useSearchFilters } from "@/features/hotel-search";
+import { ResearchOffers, useLiveResearch, type SearchResult } from "@/features/live-research";
 import { cn } from "@/shared/lib";
 import { RequestState } from "@/shared/ui";
 import { CoastMap } from "@/widgets/hotel-map";
+import { AgentTrace } from "@/widgets/agent-trace";
 import { HotelResultCard } from "@/widgets/hotel-result-card";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { List, Map as MapIcon, Scale, Search, Sparkles } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 export function ResultsPage({
   query: q = "Тихий отель у моря с хорошей инфраструктурой",
 }: {
   query?: string | undefined;
 }) {
   const navigate = useNavigate();
+  const [liveSearch, setLiveSearch] = useState<SearchResult | null>(null);
   const {
     refine,
     setRefine,
@@ -27,7 +30,11 @@ export function ResultsPage({
     error,
     retry,
     search: searchResult,
-  } = useSearchFilters(q);
+  } = useSearchFilters(q, liveSearch);
+  const live = useLiveResearch(
+    searchResult?.searchId,
+    useCallback((next: SearchResult | null) => setLiveSearch(next), []),
+  );
   const [hover, setHover] = useState<string | null>(null);
   const [view, setView] = useState<"list" | "map">("list");
   const ids = useCompare((state) => state.ids);
@@ -40,7 +47,10 @@ export function ResultsPage({
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            refineQuery();
+            if (searchResult && refine.trim()) {
+              void live.wish(refine.trim());
+              setRefine("");
+            } else refineQuery();
           }}
           className="flex w-full max-w-md items-center gap-2 rounded-2xl border bg-card p-1.5 pl-4"
         >
@@ -58,7 +68,13 @@ export function ResultsPage({
       </div>
 
       <div className="mt-6 flex flex-wrap items-center gap-2">
-        <CriteriaFilter value={criteria} onToggle={toggleCriterion} />
+        <CriteriaFilter
+          value={criteria}
+          onToggle={(criterion) => {
+            live.reset();
+            toggleCriterion(criterion);
+          }}
+        />
         <label className="ml-auto flex items-center gap-2 text-xs text-muted-foreground">
           до <span className="font-mono text-foreground">{maxPrice.toLocaleString("ru")} ₽</span>
           <input
@@ -88,6 +104,24 @@ export function ResultsPage({
       </div>
 
       <RequestState pending={pending} error={error} retry={retry} />
+      {searchResult && !live.label && (
+        <ResearchOffers
+          search={searchResult}
+          busy={live.busy}
+          onResearch={(chipId, title) => void live.research(chipId, title)}
+        />
+      )}
+      {live.label && (
+        <div className="mt-6">
+          {live.runId || live.busy ? (
+            <AgentTrace run={live.run} title={live.label} compact />
+          ) : (
+            <p className="rounded-2xl border bg-card px-4 py-3 text-sm">
+              {live.error ?? "Пожелание добавлено: всё нужное уже известно, выдача обновлена."}
+            </p>
+          )}
+        </div>
+      )}
       <div className="mt-6 grid gap-6 lg:grid-cols-[1.35fr_1fr]">
         <div className={cn("space-y-4", view === "map" && "hidden lg:block")}>
           {!pending && !error && ranked.length === 0 && (
