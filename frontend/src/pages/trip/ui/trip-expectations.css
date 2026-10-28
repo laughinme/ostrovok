@@ -26,19 +26,10 @@
 }
 .expectations-heading p {
   margin-top: 7px;
-  max-width: 480px;
+  max-width: 560px;
   font-size: 12px;
   line-height: 1.6;
   color: #5b6580;
-}
-.expectations-snapshot {
-  margin-left: auto;
-  flex-shrink: 0;
-  padding: 7px 10px;
-  border: 1px solid #dce2ed;
-  border-radius: 8px;
-  color: #5b6580;
-  font-size: 10px;
 }
 .expectations-filters {
   display: flex;
@@ -73,17 +64,39 @@
 }
 .expectation-groups {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: start;
   gap: 14px;
 }
-.expectation-group {
+.expectation-groups[data-masonry="ready"] {
+  grid-auto-rows: 1px;
+  row-gap: 0;
+}
+.expectation-tile {
   min-width: 0;
-  padding: 22px;
+  padding-bottom: 14px;
+}
+.expectation-groups[data-filtered="true"] {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 720px;
+}
+.expectation-group {
+  width: 100%;
+  min-width: 0;
+  padding: 22px 20px;
   border: 1px solid #dce2ed;
   border-radius: 20px;
   background: white;
   animation: expectation-in 0.22s ease-out both;
+}
+.expectation-group[data-topic="quiet"],
+.expectation-group[data-topic="weather"] {
+  background: #f5f7ff;
+  border-color: #e4e8fa;
+}
+.expectation-group[data-topic="route"] {
+  background: #f3f9ee;
+  border-color: #e0ecd6;
 }
 .expectation-group h4 {
   display: flex;
@@ -101,23 +114,46 @@
   color: #74809a;
   font-size: 11px;
   font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+.expectation-group-scope {
+  margin: 10px 0 4px;
+  font-size: 10px;
+  line-height: 1.6;
+  color: #5b6580;
+  overflow-wrap: anywhere;
 }
 .expectation-group ul {
   list-style: none;
   margin-top: 8px;
 }
 .expectation-group li {
-  padding: 14px 0;
-  border-bottom: 1px solid #edf0f6;
+  border-bottom: 1px solid #0b15330d;
 }
 .expectation-group li:last-child {
-  padding-bottom: 0;
   border-bottom: 0;
 }
-.expectation-group li > p {
+.expectation-fact > summary {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 48px;
+  padding: 14px 0;
+  list-style: none;
+  cursor: pointer;
+}
+.expectation-group li:last-child .expectation-fact:not([open]) > summary {
+  padding-bottom: 0;
+}
+.expectation-fact > summary > span {
+  min-width: 0;
+}
+.expectation-statement {
+  display: block;
   font-size: 13px;
   font-weight: 500;
-  line-height: 1.55;
+  line-height: 1.6;
   overflow-wrap: anywhere;
 }
 .expectation-scope,
@@ -129,13 +165,32 @@
   line-height: 1.6;
   overflow-wrap: anywhere;
 }
+.expectation-evidence {
+  padding: 0 0 14px;
+}
 .expectation-source {
-  color: #74809a;
+  margin-top: 0;
 }
 .expectation-status {
-  display: inline-block;
-  margin-top: 8px;
-  color: #9a4e25;
+  display: block;
+  margin-top: 6px;
+  color: #934718;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+.expectation-booked {
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #fff2df;
+  font-size: 11px;
+  line-height: 1.6;
+}
+.expectation-booked b {
+  display: block;
+  margin-bottom: 4px;
+  color: #934718;
   font-size: 10px;
   font-weight: 500;
 }
@@ -147,22 +202,8 @@
   font-size: 11px;
   line-height: 1.6;
 }
-.expectations-current,
-.expectations-caveats {
-  margin-top: 14px;
-  border: 1px solid #dce2ed;
-  border-radius: 18px;
-  background: white;
-}
-.expectations-current summary,
-.expectations-caveats summary {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-height: 80px;
-  padding: 20px 22px;
-  list-style: none;
-  cursor: pointer;
+.expectation-notes p + p {
+  margin-top: 6px;
 }
 .trip-expectations summary::-webkit-details-marker {
   display: none;
@@ -176,36 +217,37 @@
   width: 16px;
   transition: transform 0.2s;
 }
+.expectation-fact > summary > svg {
+  margin-top: 3px;
+  opacity: 0.6;
+}
 .trip-expectations details[open] > summary > svg:last-child {
   transform: rotate(180deg);
 }
-.trip-expectations summary > span {
+.expectations-caveats {
+  border: 1px solid #dce2ed;
+  border-radius: 18px;
+  background: #f5f7ff;
+}
+.expectations-caveats > summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 76px;
+  padding: 18px 22px;
+  list-style: none;
+  cursor: pointer;
+}
+.expectations-caveats summary > span {
   font-size: 13px;
   font-weight: 500;
 }
-.trip-expectations summary small {
+.expectations-caveats summary small {
   display: block;
   margin-top: 4px;
   font-size: 11px;
   font-weight: 400;
   color: #5b6580;
-}
-.expectations-current-content {
-  padding: 0 16px 16px;
-}
-.expectations-current-content > p {
-  margin: 0 6px 18px;
-  font-size: 12px;
-  line-height: 1.6;
-  color: #5b6580;
-}
-.expectations-current .expectation-group {
-  background: #f7f9fd;
-  border-color: transparent;
-}
-.expectations-caveats {
-  background: #edf2ff;
-  border-color: transparent;
 }
 .expectations-caveats > ul {
   margin: 0 22px 22px 52px;
@@ -218,6 +260,7 @@
   line-height: 1.7;
 }
 .expectations-empty {
+  margin-bottom: 14px;
   padding: 20px;
   border: 1px dashed #c6d0e4;
   border-radius: 16px;
@@ -235,11 +278,14 @@
     transform: none;
   }
 }
+@media (max-width: 1180px) {
+  .expectation-groups {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
 @media (max-width: 760px) {
   .expectations-heading {
-    display: grid;
-    grid-template-columns: 38px minmax(0, 1fr);
-    align-items: start;
+    align-items: flex-start;
     gap: 10px;
   }
   .expectations-heading > div {
@@ -258,12 +304,6 @@
     height: 38px;
     border-radius: 12px;
   }
-  .expectations-snapshot {
-    grid-column: 2;
-    width: max-content;
-    margin: 0;
-    font-size: 9px;
-  }
   .expectations-filters {
     gap: 6px;
   }
@@ -273,17 +313,12 @@
   }
   .expectation-groups {
     grid-template-columns: minmax(0, 1fr);
-    gap: 10px;
   }
   .expectation-group {
     padding: 18px;
   }
-  .expectations-current summary,
-  .expectations-caveats summary {
+  .expectations-caveats > summary {
     padding: 18px 16px;
-  }
-  .expectations-current-content {
-    padding: 0 10px 10px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
