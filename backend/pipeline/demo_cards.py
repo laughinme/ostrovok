@@ -7,6 +7,12 @@ from typing import Any
 
 import yaml
 
+BEDS = {
+    1: "Односпальная",
+    2: "Двуспальная или две односпальные",
+    3: "Двуспальная и диван-кровать",
+}
+
 SEED = 20261028
 REFERENCE = Path(__file__).with_name("demo_reference.yaml")
 AMENITIES = {
@@ -85,9 +91,7 @@ def _rooms(
                 "id": room_id,
                 "name": category["name"],
                 "area": rng.randint(*category["area_m2"]),
-                "bed": "Двуспальная и диван-кровать"
-                if capacity > 2
-                else "Двуспальная или две односпальные",
+                "bed": BEDS[min(capacity, 3)],
                 "capacity": capacity,
                 "isDemo": True,
                 "rates": rates(room_id, price, breakfast=breakfast),
