@@ -1,4 +1,4 @@
-import { demoApi } from "@/entities/session";
+import { tripQuery, tripsQuery } from "@/features/manage-trips";
 import type { components } from "@/shared/api";
 import type { TripRecord } from "./trip";
 import type { TripDetails } from "./expectations";
@@ -10,14 +10,8 @@ export interface BookingTripSummary {
   hotelArea: string;
   createdAt: string;
 }
-export const bookingTripsQuery = {
-  queryKey: ["trips", "guest_anna"],
-  queryFn: () => demoApi<BookingTripSummary[]>("guest_anna", "/me/trips"),
-};
-export const bookingTripQuery = (id: string) => ({
-  queryKey: ["trips", "guest_anna", id],
-  queryFn: () => demoApi<TripDetails>("guest_anna", `/trips/${encodeURIComponent(id)}`),
-});
+export const bookingTripsQuery = tripsQuery;
+export const bookingTripQuery = tripQuery;
 export function bookingTripRecord(item: BookingTripSummary): TripRecord {
   const booking = item.booking;
   return {

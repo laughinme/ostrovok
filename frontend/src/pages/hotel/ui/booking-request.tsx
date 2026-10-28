@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { tripsQuery } from "@/features/manage-trips";
 import { useState, type FormEvent } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { Hotel } from "@/entities/hotel";
@@ -7,6 +8,7 @@ import { getApiMode, type components } from "@/shared/api";
 import type { RatePlan, RoomType } from "../model/types";
 import { rub } from "../lib/format";
 import { Mark } from "./detail-ui";
+import { tripDates } from "../model/geo";
 
 export function BookingRequest({
   hotel,
@@ -18,18 +20,19 @@ export function BookingRequest({
   rate: RatePlan;
 }) {
   const queryClient = useQueryClient();
-  const [checkIn, setCheckIn] = useState(hotel.searchContext?.trip.from ?? "2026-11-10");
+  const dates = tripDates(hotel.searchContext?.trip);
+  const [checkIn, setCheckIn] = useState(dates.from);
+  const [checkOut, setCheckOut] = useState(dates.to);
+  const capacity = room.capacity ?? 4;
+  const [adults, setAdults] = useState(Math.min(hotel.searchContext?.trip.adults ?? 2, capacity));
   const designDemo = getApiMode() === "demo";
-  const [checkOut, setCheckOut] = useState(hotel.searchContext?.trip.to ?? "2026-11-15");
-  const [adults, setAdults] = useState(
-    hotel.searchContext?.trip.adults ?? Math.min(2, room.capacity ?? 2),
-  );
   const [children, setChildren] = useState(hotel.searchContext?.trip.children ?? 0);
   const [request, setRequest] = useState(room.request ?? "");
   const nights = Math.max(0, (Date.parse(checkOut) - Date.parse(checkIn)) / 86400000);
   const booking = useMutation({
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["trips", "guest_anna"] });
+      void queryClient.invalidateQueries({ queryKey: tripsQuery.queryKey });
     },
     mutationFn: () => {
       if (!rate.id || !hotel.backend) throw new Error("Для этого номера нет тарифа на сервере");
@@ -99,13 +102,19 @@ export function BookingRequest({
               onChange={(event) => setCheckOut(event.target.value)}
             />
           </label>
+          {(hotel.searchContext?.trip.adults ?? 0) > capacity && (
+            <p role="note" className="sub">
+              Этот номер рассчитан на {capacity} {capacity === 1 ? "гостя" : "гостей"}, а в поиске
+              вас {hotel.searchContext?.trip.adults}. Выберите категорию просторнее.
+            </p>
+          )}
           <label>
             Взрослые
             <input
               type="number"
               required
               min={1}
-              max={10}
+              max={capacity}
               value={adults}
               onChange={(event) => setAdults(Number(event.target.value))}
             />

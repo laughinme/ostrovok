@@ -1,3 +1,4 @@
+import asyncio
 from dataclasses import dataclass
 
 import numpy as np
@@ -24,10 +25,12 @@ async def hotel_route(
     hotel: HotelGeo, env: Environment, target: str, profile: WalkProfile
 ) -> RouteView:
     targets = await route_targets(hotel, env, target)
-    walk = nearest_walk(env.router, hotel.location, targets, profile, terrain=env.terrain)
+    walk = await asyncio.to_thread(
+        nearest_walk, env.router, hotel.location, targets, profile, terrain=env.terrain
+    )
     if walk is None:
         raise NotFoundError("Нет доступного маршрута для выбранного профиля или цели")
-    return route_view(hotel, env, walk)
+    return await asyncio.to_thread(route_view, hotel, env, walk)
 
 
 def route_view(hotel: HotelGeo, env: Environment, walk: Walk) -> RouteView:

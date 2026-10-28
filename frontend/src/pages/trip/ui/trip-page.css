@@ -310,3 +310,76 @@
     font-size: 19px;
   }
 }
+
+.trip-notice {
+  margin: 16px 0;
+  padding: 18px;
+  border: 1px solid #dce2ed;
+  border-radius: 16px;
+}
+.trip-action {
+  color: #2146e4;
+  text-decoration: underline;
+}
+.trip-conditions {
+  margin-top: 24px;
+}
+.trip-conditions .expect {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.trip-conditions .card-w {
+  padding: 18px;
+  background: #f3f6fc;
+  border-radius: 16px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.trip-conditions h3 {
+  font-weight: 600;
+  margin: 8px 0;
+}
+.trip-conditions .num {
+  display: block;
+  font-size: 23px;
+  color: #2146e4;
+}
+.trip-conditions .muted {
+  color: #5b6580;
+  font-size: 10px;
+}
+.trip-sunsets > div {
+  display: flex;
+  justify-content: space-between;
+}
+.trip-feedback .fb-row {
+  padding: 14px 0;
+  border-bottom: 1px solid #dce2ed;
+}
+.trips-screen .fb {
+  margin-top: 20px;
+}
+.trips-screen .fb-row {
+  padding: 14px 0;
+  border-bottom: 1px solid #dce2ed;
+}
+.trips-screen .fb-row .seg {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.trips-screen .fb-row button {
+  padding: 10px 16px;
+  border: 1px solid #dce2ed;
+  border-radius: 999px;
+}
+.trips-screen .fb-row button.on {
+  background: #2146e4;
+  color: white;
+}
+@media (max-width: 760px) {
+  .trip-conditions .expect {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -6,10 +6,10 @@ from dataclasses import dataclass
 from typing import Any
 from uuid import UUID
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 
 from app.core.errors import ErrorCode, NotFoundError
-from app.db.models import FacadeRoom, RoomType
+from app.db.models import FacadeRoom, FactRow, Hotel, RoomType
 from app.db.repositories.catalog import hotel_geo
 from app.db.uow import UnitOfWork
 from app.domain.catalog import DISTRICT_TITLES, NEARBY_KINDS, HotelGeo, Nearby, nearby_places
@@ -67,6 +67,19 @@ class HotelView:
 class HotelQueries:
     def __init__(self, uow: UnitOfWork) -> None:
         self._uow = uow
+
+    async def version(self) -> tuple[object, ...]:
+        """Changes whenever the list would: a fact or a hotel is added, updated or removed."""
+        row = (
+            await self._uow.session.execute(
+                select(
+                    func.count(FactRow.id),
+                    func.max(FactRow.updated_at),
+                    select(func.count(Hotel.id)).scalar_subquery(),
+                )
+            )
+        ).one()
+        return tuple(row)
 
     async def many(self, ids: Sequence[UUID] | None = None) -> list[HotelView]:
         rows = await self._uow.catalog.hotels(ids)

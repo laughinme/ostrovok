@@ -377,7 +377,7 @@ hotels:
     - id: node/10213051617:room:1
       name: Студия
       area: 22
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -450,7 +450,7 @@ hotels:
     - id: node/10574256210:room:1
       name: Студия
       area: 32
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -693,7 +693,7 @@ hotels:
     - id: node/10759606596:room:1
       name: Компактный стандарт
       area: 19
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -840,7 +840,7 @@ hotels:
     - id: node/10759613919:room:1
       name: Бюджетный номер
       area: 13
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -1060,7 +1060,7 @@ hotels:
     - id: node/10853513205:room:1
       name: Бюджетный номер
       area: 17
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -1135,7 +1135,7 @@ hotels:
     - id: node/10858734694:room:1
       name: Компактный стандарт
       area: 22
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -1230,7 +1230,7 @@ hotels:
     - id: node/10967527654:room:1
       name: Компактный стандарт
       area: 22
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -1611,7 +1611,7 @@ hotels:
     - id: node/11016638369:room:1
       name: Студия
       area: 30
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -1709,7 +1709,7 @@ hotels:
     - id: node/11016638373:room:1
       name: Компактный стандарт
       area: 21
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -1898,7 +1898,7 @@ hotels:
     - id: node/11029913505:room:1
       name: Бюджетный номер
       area: 17
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -2424,7 +2424,7 @@ hotels:
     - id: node/11138786395:room:1
       name: Студия
       area: 30
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -2516,7 +2516,7 @@ hotels:
     - id: node/11138786397:room:1
       name: Бюджетный номер
       area: 15
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -2569,7 +2569,7 @@ hotels:
     - id: node/11138786401:room:1
       name: Бюджетный номер
       area: 16
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -2664,7 +2664,7 @@ hotels:
     - id: node/11138788609:room:1
       name: Компактный стандарт
       area: 23
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -2717,7 +2717,7 @@ hotels:
     - id: node/11190910581:room:1
       name: Компактный стандарт
       area: 20
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -2813,7 +2813,7 @@ hotels:
     - id: node/11238118158:room:1
       name: Компактный стандарт
       area: 21
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -3099,7 +3099,7 @@ hotels:
     - id: node/11304222981:room:1
       name: Компактный стандарт
       area: 22
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -3216,7 +3216,7 @@ hotels:
     - id: node/11304222982:room:1
       name: Компактный стандарт
       area: 19
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -3449,7 +3449,7 @@ hotels:
     - id: node/11304222984:room:1
       name: Компактный стандарт
       area: 22
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -3566,7 +3566,7 @@ hotels:
     - id: node/11304222985:room:1
       name: Компактный стандарт
       area: 20
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -3683,7 +3683,7 @@ hotels:
     - id: node/11304222987:room:1
       name: Компактный стандарт
       area: 22
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -3945,7 +3945,7 @@ hotels:
     - id: node/11497670982:room:1
       name: Компактный стандарт
       area: 21
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -4042,7 +4042,7 @@ hotels:
     - id: node/11521416444:room:1
       name: Компактный стандарт
       area: 21
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -4094,7 +4094,7 @@ hotels:
     - id: node/11637552371:room:1
       name: Компактный стандарт
       area: 21
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -4210,7 +4210,7 @@ hotels:
     - id: node/11637558670:room:1
       name: Студия
       area: 20
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -4305,7 +4305,7 @@ hotels:
     - id: node/11843545829:room:1
       name: Бюджетный номер
       area: 16
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -4411,7 +4411,7 @@ hotels:
     - id: node/11843545856:room:1
       name: Компактный стандарт
       area: 22
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -4563,7 +4563,7 @@ hotels:
     - id: node/11843545861:room:1
       name: Компактный стандарт
       area: 21
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -4680,7 +4680,7 @@ hotels:
     - id: node/11843553789:room:1
       name: Компактный стандарт
       area: 23
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -4963,7 +4963,7 @@ hotels:
     - id: node/11843553792:room:1
       name: Компактный стандарт
       area: 21
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -5057,7 +5057,7 @@ hotels:
     - id: node/11843553793:room:1
       name: Компактный стандарт
       area: 23
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -5175,7 +5175,7 @@ hotels:
     - id: node/11843553834:room:1
       name: Компактный стандарт
       area: 22
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -5293,7 +5293,7 @@ hotels:
     - id: node/11843553838:room:1
       name: Компактный стандарт
       area: 19
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -5410,7 +5410,7 @@ hotels:
     - id: node/11843553839:room:1
       name: Компактный стандарт
       area: 23
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -5525,7 +5525,7 @@ hotels:
     - id: node/11843553851:room:1
       name: Студия
       area: 24
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -5622,7 +5622,7 @@ hotels:
     - id: node/11866202895:room:1
       name: Компактный стандарт
       area: 21
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -5697,7 +5697,7 @@ hotels:
     - id: node/11874180256:room:1
       name: Бюджетный номер
       area: 13
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -5825,7 +5825,7 @@ hotels:
     - id: node/11878294032:room:1
       name: Компактный стандарт
       area: 20
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -5991,7 +5991,7 @@ hotels:
     - id: node/11958139262:room:1
       name: Компактный стандарт
       area: 19
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -6275,7 +6275,7 @@ hotels:
     - id: node/11958163769:room:1
       name: Бюджетный номер
       area: 13
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -6327,7 +6327,7 @@ hotels:
     - id: node/11958163786:room:1
       name: Компактный стандарт
       area: 22
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -6471,7 +6471,7 @@ hotels:
     - id: node/12032893438:room:1
       name: Компактный стандарт
       area: 19
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -6852,7 +6852,7 @@ hotels:
     - id: node/12184779499:room:1
       name: Студия
       area: 28
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -7088,7 +7088,7 @@ hotels:
     - id: node/12416060227:room:1
       name: Студия
       area: 30
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -7162,7 +7162,7 @@ hotels:
     - id: node/12541096667:room:1
       name: Студия
       area: 29
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -7216,7 +7216,7 @@ hotels:
     - id: node/12560021804:room:1
       name: Компактный стандарт
       area: 23
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -7329,7 +7329,7 @@ hotels:
     - id: node/12732332501:room:1
       name: Бюджетный номер
       area: 15
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -7383,7 +7383,7 @@ hotels:
     - id: node/12747840301:room:1
       name: Бюджетный номер
       area: 17
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -8066,7 +8066,7 @@ hotels:
     - id: node/13100429523:room:1
       name: Студия
       area: 21
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -8139,7 +8139,7 @@ hotels:
     - id: node/13108695501:room:1
       name: Бюджетный номер
       area: 18
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -8189,7 +8189,7 @@ hotels:
     - id: node/13114325896:room:1
       name: Студия
       area: 23
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -8412,7 +8412,7 @@ hotels:
     - id: node/13301736401:room:1
       name: Компактный стандарт
       area: 20
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -8528,7 +8528,7 @@ hotels:
     - id: node/13301736402:room:1
       name: Компактный стандарт
       area: 20
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -8644,7 +8644,7 @@ hotels:
     - id: node/13301736501:room:1
       name: Компактный стандарт
       area: 21
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -8832,7 +8832,7 @@ hotels:
     - id: node/13438392946:room:1
       name: Компактный стандарт
       area: 21
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -9116,7 +9116,7 @@ hotels:
     - id: node/13825065360:room:1
       name: Компактный стандарт
       area: 22
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -9191,7 +9191,7 @@ hotels:
     - id: node/13825076875:room:1
       name: Компактный стандарт
       area: 19
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -9287,7 +9287,7 @@ hotels:
     - id: node/13825400642:room:1
       name: Компактный стандарт
       area: 23
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -9709,7 +9709,7 @@ hotels:
     - id: node/1589583311:room:1
       name: Компактный стандарт
       area: 21
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -9880,7 +9880,7 @@ hotels:
     - id: node/1589583328:room:1
       name: Компактный стандарт
       area: 22
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -10113,7 +10113,7 @@ hotels:
     - id: node/1859715975:room:1
       name: Бюджетный номер
       area: 15
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -10283,7 +10283,7 @@ hotels:
     - id: node/2178886260:room:1
       name: Компактный стандарт
       area: 22
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -10336,7 +10336,7 @@ hotels:
     - id: node/2181712522:room:1
       name: Компактный стандарт
       area: 23
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -10600,7 +10600,7 @@ hotels:
     - id: node/2514339346:room:1
       name: Компактный стандарт
       area: 23
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -10771,7 +10771,7 @@ hotels:
     - id: node/2870121087:room:1
       name: Бюджетный номер
       area: 18
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -10823,7 +10823,7 @@ hotels:
     - id: node/3143192173:room:1
       name: Бюджетный номер
       area: 18
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -11234,7 +11234,7 @@ hotels:
     - id: node/4209373299:room:1
       name: Бюджетный номер
       area: 15
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -11289,7 +11289,7 @@ hotels:
     - id: node/4281963807:room:1
       name: Компактный стандарт
       area: 19
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -11404,7 +11404,7 @@ hotels:
     - id: node/4323769893:room:1
       name: Бюджетный номер
       area: 16
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -11477,7 +11477,7 @@ hotels:
     - id: node/4325712906:room:1
       name: Бюджетный номер
       area: 17
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -11530,7 +11530,7 @@ hotels:
     - id: node/4331507393:room:1
       name: Компактный стандарт
       area: 20
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -11722,7 +11722,7 @@ hotels:
     - id: node/4369348389:room:1
       name: Компактный стандарт
       area: 22
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -11910,7 +11910,7 @@ hotels:
     - id: node/4370807729:room:1
       name: Компактный стандарт
       area: 22
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -11964,7 +11964,7 @@ hotels:
     - id: node/4393265790:room:1
       name: Компактный стандарт
       area: 22
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -12080,7 +12080,7 @@ hotels:
     - id: node/4398105389:room:1
       name: Компактный стандарт
       area: 23
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -12357,7 +12357,7 @@ hotels:
     - id: node/4426452243:room:1
       name: Бюджетный номер
       area: 15
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -12558,7 +12558,7 @@ hotels:
     - id: node/4467961989:room:1
       name: Компактный стандарт
       area: 20
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -12724,7 +12724,7 @@ hotels:
     - id: node/4601243306:room:1
       name: Студия
       area: 26
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -12890,7 +12890,7 @@ hotels:
     - id: node/4601243308:room:1
       name: Студия
       area: 20
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -12998,7 +12998,7 @@ hotels:
     - id: node/4695569234:room:1
       name: Бюджетный номер
       area: 13
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -13270,7 +13270,7 @@ hotels:
     - id: node/4986725623:room:1
       name: Компактный стандарт
       area: 20
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -13416,7 +13416,7 @@ hotels:
     - id: node/5329922057:room:1
       name: Студия
       area: 27
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -13806,7 +13806,7 @@ hotels:
     - id: node/7948116896:room:1
       name: Компактный стандарт
       area: 22
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -13977,7 +13977,7 @@ hotels:
     - id: node/8504620920:room:1
       name: Компактный стандарт
       area: 19
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -14168,7 +14168,7 @@ hotels:
     - id: node/9079226417:room:1
       name: Компактный стандарт
       area: 23
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -14403,7 +14403,7 @@ hotels:
     - id: way/113123465:room:1
       name: Компактный стандарт
       area: 23
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -14857,7 +14857,7 @@ hotels:
     - id: way/113147804:room:1
       name: Компактный стандарт
       area: 21
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -14987,7 +14987,7 @@ hotels:
     - id: way/176568487:room:1
       name: Компактный стандарт
       area: 23
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -15082,7 +15082,7 @@ hotels:
     - id: way/194163834:room:1
       name: Бюджетный номер
       area: 17
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -15135,7 +15135,7 @@ hotels:
     - id: way/194163839:room:1
       name: Бюджетный номер
       area: 16
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -15302,7 +15302,7 @@ hotels:
     - id: way/194163843:room:1
       name: Бюджетный номер
       area: 18
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -15490,7 +15490,7 @@ hotels:
     - id: way/194163851:room:1
       name: Бюджетный номер
       area: 14
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -15563,7 +15563,7 @@ hotels:
     - id: way/221585297:room:1
       name: Компактный стандарт
       area: 21
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -15731,7 +15731,7 @@ hotels:
     - id: way/221585406:room:1
       name: Компактный стандарт
       area: 20
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -15825,7 +15825,7 @@ hotels:
     - id: way/221585440:room:1
       name: Компактный стандарт
       area: 22
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -16037,7 +16037,7 @@ hotels:
     - id: way/221585763:room:1
       name: Студия
       area: 30
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -16380,7 +16380,7 @@ hotels:
     - id: way/53498769:room:1
       name: Компактный стандарт
       area: 22
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -16433,7 +16433,7 @@ hotels:
     - id: way/53498776:room:1
       name: Компактный стандарт
       area: 22
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:
@@ -16626,7 +16626,7 @@ hotels:
     - id: way/53537049:room:1
       name: Компактный стандарт
       area: 23
-      bed: Двуспальная или две односпальные
+      bed: Односпальная
       capacity: 1
       isDemo: true
       rates:

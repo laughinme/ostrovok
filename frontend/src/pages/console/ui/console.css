@@ -1,0 +1,195 @@
+.console-page {
+  font-variant-numeric: tabular-nums;
+}
+.console-page button,
+.console-page summary {
+  cursor: pointer;
+}
+.console-page :is(button, select, textarea, input, summary):focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+}
+.console-page button:disabled {
+  cursor: wait;
+  opacity: 0.5;
+}
+.console-page h2 {
+  font-size: 1.4rem;
+}
+.console-section-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.console-section-heading p {
+  margin-top: 8px;
+  color: var(--color-muted-foreground);
+  font-size: 14px;
+}
+.console-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  text-align: left;
+  font-size: 14px;
+}
+.console-nav:hover {
+  background: var(--color-muted);
+}
+.console-nav[aria-current] {
+  background: var(--color-night);
+  color: var(--color-sun);
+}
+.console-panel {
+  border: 1px solid var(--color-border);
+  border-radius: 24px;
+  background: var(--color-card);
+}
+.console-notice {
+  padding: 20px;
+  border-radius: 16px;
+  background: var(--color-muted);
+  margin-bottom: 16px;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+.console-notice[role="alert"] {
+  border: 1px solid var(--color-coral);
+}
+.console-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 44px;
+  padding: 10px 18px;
+  border-radius: 14px;
+  background: var(--color-primary);
+  color: var(--color-primary-foreground);
+  font-size: 14px;
+  font-weight: 600;
+}
+.console-button.secondary {
+  border: 1px solid var(--color-border);
+  background: var(--color-card);
+  color: var(--color-foreground);
+}
+.console-button:hover:not(:disabled) {
+  filter: brightness(0.95);
+}
+.console-field {
+  display: grid;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+}
+.console-field :is(input, textarea, select) {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-card);
+  color: var(--color-foreground);
+  font: inherit;
+}
+.console-field textarea {
+  resize: vertical;
+  font-size: 16px;
+}
+.console-run {
+  display: block;
+  width: 100%;
+  padding: 18px;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+.console-run:hover,
+.console-run[aria-pressed="true"] {
+  background: var(--color-muted);
+}
+.console-run[aria-pressed="true"] strong {
+  color: var(--color-primary);
+}
+.console-badge {
+  display: inline-block;
+  padding: 4px 9px;
+  border-radius: 99px;
+  background: var(--color-muted);
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.console-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  background: var(--color-card);
+}
+.console-table {
+  width: 100%;
+  text-align: left;
+  font-size: 13px;
+}
+.console-table :is(th, td) {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: top;
+}
+.console-table th {
+  color: var(--color-muted-foreground);
+  font-size: 12px;
+  font-weight: 500;
+}
+.console-table tr:last-child td {
+  border-bottom: 0;
+}
+.console-details {
+  min-width: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  background: var(--color-card);
+  font-size: 13px;
+}
+.console-details summary {
+  padding: 14px;
+  overflow-wrap: anywhere;
+}
+.console-details pre {
+  max-height: 420px;
+  overflow: auto;
+  padding: 16px;
+  border-top: 1px solid var(--color-border);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 12px;
+}
+.console-page [aria-label="Ход агента"] {
+  overflow-wrap: anywhere;
+}
+@media (prefers-reduced-motion: reduce) {
+  .console-page *,
+  .console-page *::before,
+  .console-page *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.console-run-list {
+  max-height: 640px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+@media (max-width: 1279px) {
+  .console-run-list {
+    max-height: 340px;
+  }
+}

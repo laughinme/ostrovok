@@ -1,6 +1,6 @@
 export type Verdict = "yes" | "partial" | "no" | "unknown";
 export type SourceKind = "computed" | "open_data" | "hotelier" | "guest" | "demo_card";
-export type Facade = "NE" | "SE" | "SW" | "NW";
+export type Facade = import("@/shared/api").components["schemas"]["Facade"];
 export type Importance = "must" | "important" | "nice";
 export type Checkable = "compute" | "ask_hotelier" | "cannot";
 export interface Scope {
@@ -88,7 +88,7 @@ export interface HotelDetails {
   nearby: [string, string, string][];
   rooms: RoomType[];
   facts: Fact[];
-  unknowns: [string, string][];
+  unknowns: { key: string | null; question: string; why: string }[];
 }
 export interface HotelMatch {
   hotel: HotelDetails;

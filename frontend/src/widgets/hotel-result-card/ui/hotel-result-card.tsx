@@ -214,7 +214,7 @@ export function HotelResultCard({
                   <span
                     key={fact.id ?? fact.label}
                     className="inline-flex min-w-0 items-center gap-1.5 rounded-full bg-muted px-2.5 py-1 text-[11px] leading-snug"
-                    title={`${fact.label}: ${fact.value} · ${fact.status === "confirmed" ? "Подтверждено" : fact.status === "computed" ? "Вычислено AI" : "Предположение"} · ${fact.source} · ${fact.checkedAt}`}
+                    title={`${fact.label}: ${fact.value} · ${fact.status === "confirmed" ? "Подтверждено" : fact.status === "computed" ? "Расчёт по открытым данным" : "Предположение"} · ${fact.source} · ${fact.checkedAt}`}
                   >
                     <Icon
                       className={cn(

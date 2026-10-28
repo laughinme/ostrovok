@@ -6,13 +6,13 @@ export const Route = createFileRoute("/results")({
   }),
   head: () => ({
     meta: [
-      { title: "Подобранные отели Сочи — Луч" },
+      { title: "Подобранные отели Сочи — О!кно" },
       {
         name: "description",
         content:
           "Отели, отсортированные по совпадению с вашим запросом, с объяснениями и компромиссами.",
       },
-      { property: "og:title", content: "Подобранные отели Сочи — Луч" },
+      { property: "og:title", content: "Подобранные отели Сочи — О!кно" },
       { property: "og:description", content: "AI объясняет, почему каждый отель вам подходит." },
     ],
   }),

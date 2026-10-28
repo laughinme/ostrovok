@@ -6345,6 +6345,18 @@
             "type": "object",
             "title": "Search"
           },
+          "officialClaims": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Officialclaims"
+          },
           "evaluationDate": {
             "type": "string",
             "title": "Evaluationdate"

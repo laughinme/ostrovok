@@ -9,6 +9,12 @@ describe("query matching", () => {
       "sea",
     ]);
   });
+  it("does not read children, mountains or pets inside other words", () => {
+    expect(
+      parseQuery("Хочу тихий номер, чтобы видеть закат над морем, в городе, песчаный пляж, сезон"),
+    ).toEqual(["quiet", "sunset", "sea"]);
+    expect(parseQuery("с детьми и собакой, вид на горы")).toEqual(["kids", "pets", "mountains"]);
+  });
   it("ranks the mountain chalet first for mountains", () => {
     expect(rank(parseQuery("вид на горы"))[0]!.hotel.id).toBe("gornyi-priyut");
   });

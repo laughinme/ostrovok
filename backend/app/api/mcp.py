@@ -12,11 +12,18 @@ from app.service.ports import Clock
 READ_ONLY = ToolAnnotations(
     readOnlyHint=True, destructiveHint=False, idempotentHint=True, openWorldHint=False
 )
-TRANSPORT_SECURITY = TransportSecuritySettings(
-    enable_dns_rebinding_protection=True,
-    allowed_hosts=["localhost", "localhost:*", "127.0.0.1", "127.0.0.1:*", "[::1]", "[::1]:*"],
-    allowed_origins=["http://localhost:8080", "http://localhost:3000", "http://127.0.0.1:8080"],
-)
+LOCAL_HOSTS = ["localhost", "localhost:*", "127.0.0.1", "127.0.0.1:*", "[::1]", "[::1]:*"]
+LOCAL_ORIGINS = ["http://localhost:8080", "http://localhost:3000", "http://127.0.0.1:8080"]
+
+
+def transport_security(settings: Settings) -> TransportSecuritySettings:
+    """Local hosts always; a deployment adds its public hosts (MCP_PUBLIC_HOSTS)."""
+    public = settings.mcp_hosts
+    return TransportSecuritySettings(
+        enable_dns_rebinding_protection=True,
+        allowed_hosts=[*LOCAL_HOSTS, *public],
+        allowed_origins=[*LOCAL_ORIGINS, *(f"https://{host}" for host in public)],
+    )
 
 
 def build_mcp(
