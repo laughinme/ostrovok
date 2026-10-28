@@ -96,6 +96,21 @@ describe("window visibility", () => {
       ),
     ).toBe("нет данных");
   });
+  it("interpolates the horizon at the exact solar azimuth", () => {
+    const horizon = [
+      { azimuthDeg: 350, angleDeg: 0, kind: "terrain" as const, seaLowDeg: null, seaHighDeg: null },
+      { azimuthDeg: 10, angleDeg: 1, kind: "terrain" as const, seaLowDeg: null, seaHighDeg: null },
+    ];
+    expect(
+      solarVisibility(
+        { ...data, horizon, sunrise: { ...data.sunrise, azimuthDeg: 355 } },
+        "sunrise",
+      ),
+    ).toBe("виден");
+    expect(
+      solarVisibility({ ...data, horizon, sunrise: { ...data.sunrise, azimuthDeg: 5 } }, "sunrise"),
+    ).toBe("закрыт горизонтом");
+  });
 });
 
 it("fits every route vertex, preserves turns and rejects missing geometry", () => {

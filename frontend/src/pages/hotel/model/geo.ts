@@ -82,11 +82,21 @@ export function solarVisibility(data: WindowData, event: "sunrise" | "sunset") {
     offset > Math.max(...rays.map((ray) => ray.offset))
   )
     return "вне окна";
-  const ray = rays.reduce((a, b) =>
-    Math.abs(a.offset - offset) < Math.abs(b.offset - offset) ? a : b,
-  );
-  if (ray.angleDeg == null || ray.kind === "unknown") return "нет данных";
-  return ray.angleDeg < 0.5 ? "виден" : "закрыт горизонтом";
+  const before = rays.filter((ray) => ray.offset <= offset).sort((a, b) => b.offset - a.offset)[0];
+  const after = rays.filter((ray) => ray.offset >= offset).sort((a, b) => a.offset - b.offset)[0];
+  if (
+    !before ||
+    !after ||
+    before.angleDeg == null ||
+    after.angleDeg == null ||
+    before.kind === "unknown" ||
+    after.kind === "unknown"
+  )
+    return "нет данных";
+  const fraction =
+    after.offset === before.offset ? 0 : (offset - before.offset) / (after.offset - before.offset);
+  const angle = before.angleDeg + (after.angleDeg - before.angleDeg) * fraction;
+  return angle < 0.5 ? "виден" : "закрыт горизонтом";
 }
 export function elevationPath(profile: RouteData["elevationProfile"]) {
   const heights = profile.flatMap(([, height]) => (height == null ? [] : [height]));
