@@ -112,13 +112,17 @@ export function HotelAbout({
 }) {
   const [expanded, setExpanded] = useState(false);
   const description = hotel.description || h.tagline;
+  const tradeoff = demo ? null : hotel.searchMatch?.tradeoff;
   const preferred =
     hotel.searchMatch?.perChip.flatMap((chip) => (chip.factId ? [chip.factId] : [])) ?? [];
   const highlights = selectHotelHighlights(h.facts, preferred);
   const topics = groupHotelInfo([], highlights);
   return (
     <>
-      <Reveal className="hotel-about hotel-about--with-facts hotel-about--summary" delay={0.1}>
+      <Reveal
+        className={`hotel-about hotel-about--with-facts hotel-about--summary${demo ? " hotel-about--demo" : ""}`}
+        delay={0.1}
+      >
         <section id="hotel-about" className="hotel-about-copy">
           <div className="hotel-about-summary-heading">
             <h2 id="hotel-about-title">Об отеле</h2>
@@ -172,7 +176,7 @@ export function HotelAbout({
             )}
           </div>
         )}
-        <Tradeoff text={hotel.searchMatch?.tradeoff} />
+        <Tradeoff text={tradeoff} />
       </Reveal>
       {expanded && (
         <HotelInfoModal name={h.name} onClose={() => setExpanded(false)}>
@@ -185,7 +189,7 @@ export function HotelAbout({
             demo={demo}
             embedded
           />
-          <Tradeoff text={hotel.searchMatch?.tradeoff} />
+          <Tradeoff text={tradeoff} />
         </HotelInfoModal>
       )}
     </>
