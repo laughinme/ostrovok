@@ -20,6 +20,7 @@ from app.domain.jobs import ClaimedJob, JobKind, NewJob
 from app.infra.events import RedisEventBus
 from app.infra.partner_truth import YamlHiddenTruth
 from app.service.agents.collect import CollectService
+from app.service.agents.freshness import FreshnessScan
 from app.service.agents.simulator import HotelierSimulator
 from app.service.agents.wishes import WishResearch
 from app.service.booking.simulator import BookingSimulator
@@ -170,10 +171,15 @@ def build_handlers(
     async def world_changed(job: ClaimedJob) -> None:
         await _agents().watcher.react(_run(job), UUID(job.payload["change_id"]))
 
+    async def freshness_scan(_: ClaimedJob) -> None:
+        queued = await FreshnessScan(_agents().runner.db, SystemClock()).run()
+        logger.info("freshness scan queued %s re-checks", queued)
+
     return {
         JobKind.CURATOR_LEARN: curator_learn,
         JobKind.CHARACTERISTIC_PUBLISH: characteristic_publish,
         JobKind.WORLD_CHANGED: world_changed,
+        JobKind.FRESHNESS_SCAN: freshness_scan,
         JobKind.HOTELIER_SIMULATE: hotelier_simulate,
         JobKind.RESEARCH_WISH: research_wish,
         JobKind.BOOKING_FACT_CHANGED: booking_fact_changed,
