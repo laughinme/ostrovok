@@ -106,6 +106,7 @@ synonyms:
     - завтрак сразу после рассвета
   mountain_view:
     positive:
+    - mountain view
     - вид на горы
     - горы из окна
     - номер с видом на горы
@@ -140,6 +141,9 @@ synonyms:
     - с пляжа красиво видны горы
   night_noise:
     positive:
+    - quiet hotel
+    - quiet at night
+    - тишина
     - тихий отель
     - тихий номер
     - тихое место
@@ -213,6 +217,7 @@ synonyms:
     - дневное освещение номера хорошее?
   beach_walk:
     positive:
+    - near the beach
     - у моря
     - рядом с морем
     - недалеко от моря
@@ -621,6 +626,8 @@ synonyms:
     - какая сегодня погода в Москве
   pets_policy:
     positive:
+    - pet friendly
+    - с псом
     - можно с собакой
     - разрешены животные?
     - pet friendly

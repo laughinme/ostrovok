@@ -16,8 +16,9 @@ import snowballstemmer
 from rapidfuzz import fuzz
 
 from app.domain.knowledge.characteristic import Checkable
+from app.domain.search.region import REGION_HINT, outside_region
 from app.domain.search.text import normalize, sentences, to_number
-from app.domain.search.trip import TripDraft, parse_trip
+from app.domain.search.trip import TripDraft, parse_trip, trip_hints
 
 
 class Importance(StrEnum):
@@ -243,7 +244,16 @@ def _fuzzy(norm: str, vocabulary: Vocabulary) -> list[tuple[int, str]]:
     """Typos like «вид на морэ»: only multi-word phrases, to keep false matches out."""
     best: list[tuple[int, str]] = []
     for key, phrases in vocabulary.phrases.items():
-        score = max((fuzz.partial_ratio(p, norm) for p in phrases if " " in p), default=0)
+        score = max(
+            (
+                fuzz.partial_ratio(p, norm)
+                for p in phrases
+                if " " in p
+                and len(norm) >= len(p) * 0.8
+                and any(len(word) >= 3 and word in stems(norm) for word in stems(p))
+            ),
+            default=0,
+        )
         if score >= 90:
             best.append((0, key))
     return best[:2]
@@ -254,6 +264,19 @@ def _declined(key: str, clauses: Sequence[str], vocabulary: Vocabulary) -> bool:
     «Вид на море не нужен», «парковка — всё равно»: the wish is dropped when a refusal stands
     within three words of it in every clause that names it.
     """
+    absence = {
+        "pets_policy": r"\bбез (?:собак|животн|питомц)",
+        "parking": r"\bбез машин",
+        "playground_walk": r"\bбез дет",
+    }.get(key)
+    if absence and any(re.search(absence, clause) for clause in clauses):
+        positive = [clause for clause in clauses if not re.search(absence, clause)]
+        if not any(
+            phrase and covers(stems(clause), phrase)
+            for clause in positive
+            for phrase in vocabulary.stems[key]
+        ):
+            return True
     naming = 0
     for clause in clauses:
         words = re.findall(r"[а-яa-z0-9]+", clause)
@@ -348,7 +371,9 @@ def _unknown(
 
 
 def _hints(text: str, chips: Sequence[Chip], trip: TripDraft) -> tuple[str, ...]:
-    hints = []
+    hints = list(trip_hints(text, trip))
+    if outside_region(text):
+        hints.insert(0, REGION_HINT)
     norm = normalize(text)
     subjective = [cue for cue in _SUBJECTIVE if cue in norm]
     if subjective:
@@ -363,4 +388,4 @@ def _hints(text: str, chips: Sequence[Chip], trip: TripDraft) -> tuple[str, ...]
         hints.append("Укажите даты — посчитаем закат и погоду именно на них")
     elif not chips and not subjective:
         hints.append("Опишите, что важно: вид, тишина, дорога до моря, что рядом")
-    return tuple(hints[:2])
+    return tuple(hints)

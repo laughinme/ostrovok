@@ -27,6 +27,7 @@ def test_invalid_dates_become_a_hint(text: str) -> None:
         ("12.11.2026–15.11.2026", date(2026, 11, 12), date(2026, 11, 15)),
         ("12 ноября 2027", date(2027, 11, 12), None),
         ("30 декабря по 3 января", date(2026, 12, 30), date(2027, 1, 3)),
+        ("30 декабря по 3 января 2027", date(2026, 12, 30), date(2027, 1, 3)),
     ],
 )
 def test_dates(text: str, start: date, end: date | None) -> None:
@@ -49,6 +50,7 @@ def test_months_have_no_invented_days() -> None:
         ("0 взрослых и 0 детей", None, 0),
         ("100 взрослых и 25 детей", None, None),
         ("вдвоём без детей", 2, 0),
+        ("один взрослый и один ребёнок", 1, 1),
         ("one adult and one child", 1, 1),
         ("two adults and 0 children", 2, 0),
         ("нас трое", 3, None),
@@ -68,3 +70,8 @@ def test_small_budget_needs_currency_and_huge_budget_is_not_invented() -> None:
 
 def test_relative_dates_follow_sochi_not_utc_midnight() -> None:
     assert today_in_sochi(datetime(2026, 10, 28, 22, tzinfo=UTC)) == TODAY
+
+
+def test_area_refusal_and_english_district() -> None:
+    assert parse_trip("только не центр, хочу Хосту", today=TODAY).area == "khosta"
+    assert parse_trip("two adults in Adler", today=TODAY).area == "adler"

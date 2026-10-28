@@ -64,3 +64,22 @@ def test_refusal_far_from_a_wish_keeps_it(vocabulary: Vocabulary) -> None:
     text = "нужна парковка обязательно машина своя а вот завтрак нам не нужен совсем"
 
     assert "parking" in _keys(text, vocabulary)
+
+
+@pytest.mark.parametrize("text", ["Сочи", "море", "бассейн", "2026-11-12 — 2026-11-15"])
+def test_short_input_has_no_fuzzy_inventions(text: str, vocabulary: Vocabulary) -> None:
+    assert not _keys(text, vocabulary)
+
+
+@pytest.mark.parametrize(
+    ("text", "keys"),
+    [
+        ("quiet hotel with sea view for two adults", {"night_noise", "sea_view"}),
+        ("pet friendly hotel near the beach", {"pets_policy", "beach_walk"}),
+        ("без собаки, нужен вид на море", {"sea_view"}),
+        ("на выходных без машины", set()),
+        ("тишина", {"night_noise"}),
+    ],
+)
+def test_jury_phrases(text: str, keys: set[str], vocabulary: Vocabulary) -> None:
+    assert _keys(text, vocabulary) == keys
