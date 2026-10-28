@@ -12,6 +12,36 @@
 
 ---
 
+### 28.10 09:45 МСК · codex-onboard · B5.2
+- Сделано: резерв 17 настоящих OSM-отелей (4/1/4/4/4 по районам), все вне основного каталога
+  и его зданий; полные буферы шума/зданий/POI 1,5/2/2,5 км покрыты существующими выгрузками.
+  Скрипт `pipeline.reserve_hotels` включён в `pipeline all`; основной каталог и окружение не менялись.
+  Коммиты `0a88d57`, `8fa9321`. Миграций и новых библиотек нет; LLM не вызывался.
+- **Публичный API:** `HotelOnboarding(uow,clock,data_dir).reserve() -> list[ReserveHotel]`,
+  `.start(osm_id: str) -> tuple[UUID,UUID]` (run_id,hotel_id), async. ReserveHotel: osm_id,name,
+  district,location=(lon,lat) WGS84,floors. start атомарно создаёт отель с реальными фасадами
+  `building_facades`, запуск и `hotel.onboard`; неизвестный резерв — 404, повтор/гонка — 409.
+  `OnboardHotel(collect,runner,clock).run(run_id,hotel_id)` вызывает CollectService.study по всем
+  опубликованным характеристикам, затем Liaison.ask. Новый необязательный аргумент study:
+  `after_study: AgentBody|None` — async callback(Tracer) внутри той же трассы, до run.finished.
+  Ошибка исследования/Связного оставляет job для повтора; вопросы не дублируются.
+- **REST:** GET `/api/v1/console/hotels/reserve` → массив {osmId,name,district,location,floors};
+  POST `/api/v1/console/hotels` {osmId} → 202 {runId,hotelId}, обе ручки CONSOLE_WRITE.
+  Сброс демо удаляет отели с demo.onboarded=true и зависимые записи, резерв снова доступен.
+- Как проверить: отдельная БД okno_onboard_test / Redis 14; полный pytest — **444 passed**,
+  ruff/check/format, strict mypy, 7 архитектурных контрактов зелёные. Интеграционные тесты:
+  вставка+очередь, реальные исполнители, вопросы, поиск, reset, 401/403/404/409/422,
+  конкурентное добавление и повтор после сбоя Связного. Unit проверяет уникальность резерва и контуры.
+  Реальная сцена: `TEST_DATABASE_URL=.../okno_onboard_test TEST_REDIS_URL=redis://localhost:6380/14
+  caffeinate -i uv run python -m tests.benchmarks.onboarding [osm_id]` (из backend).
+  LS Towns way/51677372 — **4,654 с**, 65 фактов/19 характеристик/5 вопросов;
+  Гала-Альпик node/2083241632 — **6,065 с**, 50 фактов/17 характеристик/5 вопросов.
+  Оба run/job=done, находятся поиском; для горного отеля нет маршрута к морю — остаётся неизвестным.
+- Грабли: бенчмарк очищает только okno_onboard_test, грузит маленькое реальное окружение и
+  ссылается на runtime-растр/граф; полный data/seed не грузит и не меняет. Замер включает
+  POST, захват задачи и её исполнение; ожидание очереди под нагрузкой отдельно не измерялось.
+- Дальше: B3.5 — подборки; compare/similar уже сделал codex-guest в B5.8.
+
 ### 28.10 09:39 МСК · codex-guest · финал B5.4 → B5.5 → B5.8
 - Сделано: линия завершена, задачи done, общие зависимости освобождены. Статусы/бронь/поездка,
   профиль, сравнение/похожие и MCP описаны в записях ниже; код разбит на смысловые коммиты.
