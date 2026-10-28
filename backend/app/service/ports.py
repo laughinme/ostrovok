@@ -59,11 +59,20 @@ class Usage:
 
 @dataclass(frozen=True, slots=True)
 class LlmResult[T]:
+    """
+    For a cache hit (`cached`), `usage` and `latency_ms` are those of the call that produced
+    the answer: nothing is spent now, but the evaluation still sees its price and speed.
+    """
+
     output: T
     usage: Usage
     model: str
     cached: bool = False
     latency_ms: int = 0
+
+    @property
+    def spent(self) -> Usage:
+        return Usage() if self.cached else self.usage
 
 
 @dataclass(frozen=True, slots=True)
