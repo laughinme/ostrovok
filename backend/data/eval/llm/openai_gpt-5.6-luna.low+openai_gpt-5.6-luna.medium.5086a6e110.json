@@ -268,11 +268,11 @@
           "requested": 40,
           "micro": {
             "tp": 90,
-            "fp": 4,
+            "fp": 5,
             "fn": 1,
-            "precision": 0.9574468085106383,
+            "precision": 0.9473684210526315,
             "recall": 0.989010989010989,
-            "f1": 0.972972972972973
+            "f1": 0.967741935483871
           },
           "perKey": {
             "ac": {
@@ -346,6 +346,14 @@
               "precision": 1.0,
               "recall": 1.0,
               "f1": 1.0
+            },
+            "facade_rooms": {
+              "tp": 0,
+              "fp": 1,
+              "fn": 0,
+              "precision": 0.0,
+              "recall": null,
+              "f1": 0.0
             },
             "food_late": {
               "tp": 2,
@@ -500,17 +508,17 @@
             },
             "adults": {
               "n": 40,
-              "correct": 40,
+              "correct": 39,
               "specified": 29,
-              "specifiedCorrect": 29,
-              "accuracy": 1.0
+              "specifiedCorrect": 28,
+              "accuracy": 0.975
             },
             "children": {
               "n": 40,
-              "correct": 30,
+              "correct": 29,
               "specified": 22,
-              "specifiedCorrect": 12,
-              "accuracy": 0.75
+              "specifiedCorrect": 11,
+              "accuracy": 0.725
             },
             "budget_per_night": {
               "n": 40,
@@ -520,8 +528,8 @@
               "accuracy": 1.0
             }
           },
-          "tripAccuracy": 0.9583333333333334,
-          "unknownCountAccuracy": 0.85,
+          "tripAccuracy": 0.95,
+          "unknownCountAccuracy": 0.8,
           "rulesResults": 0
         }
       },
@@ -550,12 +558,12 @@
           "evaluated": 30,
           "rules_results": 0,
           "accepted": 24,
-          "exact_records": 22,
-          "exact_fields": 70,
+          "exact_records": 23,
+          "exact_fields": 71,
           "total_fields": 72,
           "correct_clarifications": 6,
           "total_ambiguous": 6,
-          "fieldAccuracy": 0.9722222222222222,
+          "fieldAccuracy": 0.9861111111111112,
           "clarificationAccuracy": 1.0,
           "excludedFields": [
             "conditions",
@@ -730,15 +738,15 @@
           "requested": 21,
           "rulesResults": 0,
           "methodAccuracy": 0.8571428571428571,
-          "parameterAccuracy": 0.7307692307692307,
-          "correctParams": 19,
+          "parameterAccuracy": 0.7692307692307693,
+          "correctParams": 20,
           "totalParams": 26,
           "cases": [
             {
               "description": "Хинкальная или грузинский ресторан в 10 минутах пешком",
               "expected": "poi_nearby",
               "actual": "poi_nearby",
-              "correctParams": 3,
+              "correctParams": 4,
               "totalParams": 4
             },
             {
@@ -849,7 +857,7 @@
             {
               "description": "Отель удобен для отдыха с маленьким ребёнком",
               "expected": "derived",
-              "actual": "ask_hotelier",
+              "actual": "cannot_check",
               "correctParams": 0,
               "totalParams": 1
             },
@@ -1161,12 +1169,12 @@
           "n": 40,
           "requested": 40,
           "micro": {
-            "tp": 56,
-            "fp": 0,
-            "fn": 0,
-            "precision": 1.0,
-            "recall": 1.0,
-            "f1": 1.0
+            "tp": 54,
+            "fp": 2,
+            "fn": 2,
+            "precision": 0.9642857142857143,
+            "recall": 0.9642857142857143,
+            "f1": 0.9642857142857143
           },
           "perKey": {
             "ac": {
@@ -1227,11 +1235,11 @@
             },
             "elevator": {
               "tp": 3,
-              "fp": 0,
+              "fp": 1,
               "fn": 0,
-              "precision": 1.0,
+              "precision": 0.75,
               "recall": 1.0,
-              "f1": 1.0
+              "f1": 0.8571428571428571
             },
             "ev_charging": {
               "tp": 2,
@@ -1242,20 +1250,20 @@
               "f1": 1.0
             },
             "facade_rooms": {
-              "tp": 3,
-              "fp": 0,
-              "fn": 0,
-              "precision": 1.0,
-              "recall": 1.0,
-              "f1": 1.0
+              "tp": 2,
+              "fp": 1,
+              "fn": 1,
+              "precision": 0.6666666666666666,
+              "recall": 0.6666666666666666,
+              "f1": 0.6666666666666666
             },
             "food_late": {
-              "tp": 2,
+              "tp": 1,
               "fp": 0,
-              "fn": 0,
+              "fn": 1,
               "precision": 1.0,
-              "recall": 1.0,
-              "f1": 1.0
+              "recall": 0.5,
+              "f1": 0.6666666666666666
             },
             "kids_hospital": {
               "tp": 2,
@@ -1423,7 +1431,7 @@
             }
           },
           "tripAccuracy": 1.0,
-          "unknownCountAccuracy": 0.925,
+          "unknownCountAccuracy": 0.9,
           "rulesResults": 0
         }
       },
@@ -1452,12 +1460,12 @@
           "evaluated": 30,
           "rules_results": 0,
           "accepted": 19,
-          "exact_records": 16,
-          "exact_fields": 63,
+          "exact_records": 17,
+          "exact_fields": 64,
           "total_fields": 67,
           "correct_clarifications": 8,
           "total_ambiguous": 8,
-          "fieldAccuracy": 0.9402985074626866,
+          "fieldAccuracy": 0.9552238805970149,
           "clarificationAccuracy": 1.0,
           "excludedFields": [
             "conditions",
@@ -1590,8 +1598,8 @@
           "requested": 15,
           "rulesResults": 0,
           "methodAccuracy": 0.9333333333333333,
-          "parameterAccuracy": 0.8928571428571429,
-          "correctParams": 25,
+          "parameterAccuracy": 0.8214285714285714,
+          "correctParams": 23,
           "totalParams": 28,
           "cases": [
             {
@@ -1605,14 +1613,14 @@
               "description": "Для дождливых дней в центре Сочи хотим хотя бы два музея в радиусе двух с половиной километров",
               "expected": "poi_nearby",
               "actual": "poi_nearby",
-              "correctParams": 4,
+              "correctParams": 3,
               "totalParams": 4
             },
             {
               "description": "В Адлере ищем японский ресторан максимум в двенадцати минутах ходьбы от отеля, время работы сейчас не важно",
               "expected": "poi_nearby",
-              "actual": "poi_nearby",
-              "correctParams": 3,
+              "actual": "cannot_check",
+              "correctParams": 0,
               "totalParams": 4
             },
             {
@@ -1625,8 +1633,8 @@
             {
               "description": "Для гостиницы в Красной Поляне проверить, будут ли горы занимать хотя бы десятую часть поля зрения из окон выбранного фасада и этажа",
               "expected": "view",
-              "actual": "ask_hotelier",
-              "correctParams": 0,
+              "actual": "view",
+              "correctParams": 2,
               "totalParams": 2
             },
             {
@@ -1712,15 +1720,15 @@
     "examples": [
       {
         "rules": "✗ до пляжа 5,5 мин пешком, обратно 5,6 мин · подъём 7 м",
-        "llm": "До пляжа 5,5 мин пешком, обратно 5,6 мин с подъёмом 7 м, зато ночью тихо."
+        "llm": "Пляж — 5,5 минуты пешком, обратно — 5,6 минуты с подъёмом 7 м; зато ночью тихо."
       },
       {
         "rules": "✗ до пляжа 6,0 мин пешком, обратно 6,1 мин · подъём 3 м",
-        "llm": "До пляжа 6,0 мин пешком, обратно 6,1 мин с подъёмом 3 м, зато ночью тихо."
+        "llm": "До пляжа 6,0 мин пешком, обратно 6,1 мин с подъёмом 3 м, зато ночью тихо; фасад СЗ."
       },
       {
         "rules": "✗ до пляжа 9,2 мин пешком, обратно 11 мин · подъём 5 м",
-        "llm": "До пляжа — 9,2 мин пешком, обратно — 11 мин с подъёмом 5 м."
+        "llm": "До пляжа — 9,2 мин пешком, обратно 11 мин, с подъёмом 5 м."
       }
     ]
   },
@@ -1731,40 +1739,40 @@
           "calls": 60,
           "cached": 0,
           "failed": 0,
-          "p50Ms": 2218,
-          "p95Ms": 3320,
-          "inputTokens": 54830,
+          "p50Ms": 2410,
+          "p95Ms": 3600,
+          "inputTokens": 55831,
           "cachedTokens": 0,
-          "outputTokens": 6716,
-          "costUsd": 0.019,
-          "costPerCallUsd": 0.000317
+          "outputTokens": 6837,
+          "costUsd": 0.0194,
+          "costPerCallUsd": 0.000323
         },
         "explain": {
           "calls": 3,
           "cached": 0,
           "failed": 0,
-          "p50Ms": 2464,
-          "p95Ms": 2982,
+          "p50Ms": 2943,
+          "p95Ms": 3639,
           "inputTokens": 603,
           "cachedTokens": 0,
-          "outputTokens": 320,
-          "costUsd": 0.0005,
-          "costPerCallUsd": 0.000168
+          "outputTokens": 484,
+          "costUsd": 0.0007,
+          "costPerCallUsd": 0.000234
         },
         "intent": {
           "calls": 80,
           "cached": 0,
           "failed": 0,
-          "p50Ms": 2821,
-          "p95Ms": 4728,
+          "p50Ms": 2976,
+          "p95Ms": 4535,
           "inputTokens": 74972,
           "cachedTokens": 0,
-          "outputTokens": 17527,
-          "costUsd": 0.036,
-          "costPerCallUsd": 0.00045
+          "outputTokens": 17333,
+          "costUsd": 0.0358,
+          "costPerCallUsd": 0.000447
         }
       },
-      "costUsd": 0.0556
+      "costUsd": 0.0559
     },
     "strong": {
       "tasks": {
@@ -1772,20 +1780,20 @@
           "calls": 36,
           "cached": 0,
           "failed": 0,
-          "p50Ms": 3350,
-          "p95Ms": 7972,
-          "inputTokens": 125209,
-          "cachedTokens": 112234,
-          "outputTokens": 9465,
-          "costUsd": 0.0162,
-          "costPerCallUsd": 0.00045
+          "p50Ms": 3542,
+          "p95Ms": 9647,
+          "inputTokens": 125186,
+          "cachedTokens": 114623,
+          "outputTokens": 8968,
+          "costUsd": 0.0152,
+          "costPerCallUsd": 0.000421
         }
       },
-      "costUsd": 0.0162
+      "costUsd": 0.0152
     }
   },
-  "costUsd": 0.0718,
-  "generatedAt": "2026-10-28T21:41:20.624728+00:00",
+  "costUsd": 0.0711,
+  "generatedAt": "2026-10-28T22:41:03.325553+00:00",
   "evaluationVersion": 2,
   "cacheOnly": false,
   "model": "openai/gpt-5.6-luna",
