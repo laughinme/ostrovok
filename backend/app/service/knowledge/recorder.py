@@ -13,6 +13,7 @@ from uuid import UUID, uuid4
 from app.db.models import ConflictRow, FactRow, FactVersionRow
 from app.db.repositories.knowledge import fact_to_row
 from app.db.uow import UnitOfWork
+from app.domain.jobs import JobKind, NewJob
 from app.domain.knowledge.characteristic import Characteristic
 from app.domain.knowledge.fact import Fact, FactStatus
 from app.domain.knowledge.observation import Observation
@@ -122,6 +123,15 @@ class KnowledgeStore:
         for gone in existing.values():
             await self._uow.session.delete(gone)
         await self._uow.flush()
+        if changed or existing:
+            await self._uow.jobs.enqueue(
+                NewJob(
+                    JobKind.BOOKING_FACT_CHANGED,
+                    {"hotel_id": str(hotel_id), "characteristic": characteristic.key},
+                    dedupe_key=f"booking-facts:{hotel_id}:{characteristic.key}",
+                ),
+                now=now,
+            )
         return changed
 
     async def _apply_conflict(

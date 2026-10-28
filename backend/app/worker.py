@@ -19,6 +19,7 @@ from app.db.database import Database
 from app.domain.jobs import ClaimedJob, JobKind, NewJob
 from app.infra.events import RedisEventBus
 from app.service.agents.collect import CollectService
+from app.service.booking.simulator import BookingSimulator
 from app.service.jobs import Handler, JobQueue, JobRunner
 from app.service.ports import Clock, SystemClock
 
@@ -52,7 +53,13 @@ class Worker:
     """
 
     def __init__(
-        self, runner: JobRunner, queue: JobQueue, clock: Clock, *, slots: int, poll_sec: float
+        self,
+        runner: JobRunner,
+        queue: JobQueue,
+        clock: Clock,
+        *,
+        slots: int,
+        poll_sec: float,
     ) -> None:
         self._runner = runner
         self._queue = queue
@@ -99,7 +106,9 @@ class Worker:
             self._next_tick[periodic.kind] = now + periodic.every
 
 
-def build_handlers(collect: CollectService) -> dict[JobKind, Handler]:
+def build_handlers(
+    collect: CollectService, booking: BookingSimulator | None = None
+) -> dict[JobKind, Handler]:
     """Kind → handler; each handler only unpacks the payload and calls one agent."""
 
     async def research_collect(job: ClaimedJob) -> None:
@@ -110,7 +119,21 @@ def build_handlers(collect: CollectService) -> dict[JobKind, Handler]:
             run_id=job.run_id,
         )
 
-    return {JobKind.RESEARCH_COLLECT: research_collect}
+    async def booking_simulate(job: ClaimedJob) -> None:
+        if booking is None:
+            raise RuntimeError("Booking simulator is not configured")
+        await booking.respond(UUID(job.payload["booking_id"]))
+
+    async def booking_fact_changed(job: ClaimedJob) -> None:
+        if booking is None:
+            raise RuntimeError("Booking simulator is not configured")
+        await booking.notify_changes(UUID(job.payload["hotel_id"]), job.payload["characteristic"])
+
+    return {
+        JobKind.RESEARCH_COLLECT: research_collect,
+        JobKind.BOOKING_SIMULATE: booking_simulate,
+        JobKind.BOOKING_FACT_CHANGED: booking_fact_changed,
+    }
 
 
 async def run_worker(settings: Settings) -> None:
@@ -126,7 +149,7 @@ async def run_worker(settings: Settings) -> None:
 
     runner = JobRunner(
         db,
-        build_handlers(collect),
+        build_handlers(collect, BookingSimulator(db, clock, RedisEventBus(redis))),
         clock,
         worker_id=f"{socket.gethostname()}:{os.getpid()}",
         lease=timedelta(seconds=settings.jobs_lease_sec),
