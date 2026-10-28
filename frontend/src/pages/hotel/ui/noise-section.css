@@ -199,82 +199,6 @@
   color: #66718b;
   font-size: 11px;
 }
-.hotel-detail .noise-facades {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-  margin-top: 20px;
-}
-.hotel-detail .noise-facades > button {
-  display: grid;
-  grid-template-columns: 30px minmax(0, 1fr);
-  align-items: center;
-  gap: 12px 9px;
-  min-width: 0;
-  min-height: 105px;
-  padding: 12px;
-  border: 1px solid #e1e6ef;
-  border-radius: 14px;
-  background: #fff;
-  color: #0b1533;
-  text-align: left;
-  cursor: pointer;
-  transition:
-    background 180ms,
-    border-color 180ms;
-}
-.hotel-detail .noise-facades > button:hover {
-  border-color: #a8b8ef;
-  background: #f7f9ff;
-}
-.hotel-detail .noise-facades > button[aria-pressed="true"] {
-  border-color: #2146e4;
-  background: #f1f5ff;
-  box-shadow: inset 0 0 0 1px #2146e4;
-}
-.hotel-detail .noise-side-icon {
-  display: grid;
-  place-items: center;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: #f1f4f9;
-  color: #65728d;
-}
-.hotel-detail .noise-facades > button[aria-pressed="true"] .noise-side-icon {
-  background: #2146e4;
-  color: #fff;
-}
-.hotel-detail .noise-side-name b {
-  display: block;
-  font-size: 12px;
-  font-weight: 600;
-}
-.hotel-detail .noise-side-name small {
-  display: block;
-  margin-top: 3px;
-  color: #69768d;
-  font-size: 9px;
-  line-height: 1.35;
-  overflow-wrap: anywhere;
-}
-.hotel-detail .noise-side-reading {
-  display: flex;
-  grid-column: 1/-1;
-  align-items: center;
-  justify-content: space-between;
-  gap: 6px;
-  font-size: 12px;
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
-}
-.hotel-detail .noise-reading-dot {
-  width: 6px;
-  height: 6px;
-  flex-shrink: 0;
-  border-radius: 50%;
-  background: var(--facade-color);
-}
 .hotel-detail .noise-request-status:has(.geo-status) {
   margin-top: 18px;
 }
@@ -546,10 +470,6 @@
   }
   .hotel-detail .noise-selected-reading strong {
     font-size: 44px;
-  }
-  .hotel-detail .noise-facades {
-    gap: 10px;
-    margin-top: 18px;
   }
   .hotel-detail .noise-method summary {
     flex-wrap: wrap;
