@@ -25,7 +25,7 @@ import { ClimateSection } from "./climate-section";
 import { tripDates } from "../model/geo";
 import "./hotel-detail.css";
 import "./hotel-refresh.css";
-import { HotelOverview } from "./hotel-overview";
+import { HotelAbout, HotelOverview } from "./hotel-overview";
 import { HotelNearby } from "./hotel-nearby";
 import { getApiMode } from "@/shared/api";
 const DAYS = [
@@ -104,50 +104,6 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
           onPhoto={setLb}
           onSection={scrollTo}
         />
-
-        <section className="sec-h2">
-          <h2>Как это будет</h2>
-          <p>Ваш номер в ваши даты: вид, ночь, утро и погода — с доказательствами</p>
-        </section>
-
-        <WindowSection hotel={hotel} detail={h} />
-
-        <NoiseSection hotel={hotel} />
-
-        <BeachSection hotel={hotel} />
-
-        {designDemo ? (
-          <section className="dates card-w">
-            <div className="rp-h">
-              <h3>Ваши даты</h3>
-              <span className="sub">Демонстрационная сводка, не прогноз</span>
-            </div>
-            <div className="days num">
-              {DAYS.map(([wd, d, t, s, w, r]) => (
-                <div className="day" key={d}>
-                  <span className="d">
-                    {wd}, {d} ноября
-                  </span>
-                  <b>{t}°</b>
-                  <span className="row">
-                    <Icon name="sun" size={14} />
-                    закат {s}
-                  </span>
-                  <span className="row">
-                    <Icon name="wave" size={14} />
-                    вода {w}°
-                  </span>
-                  <span className="row">
-                    <Icon name="question" size={14} />
-                    дождь {r}%
-                  </span>
-                </div>
-              ))}
-            </div>
-          </section>
-        ) : (
-          <ClimateSection hotel={hotel} />
-        )}
 
         <section className="sec-h2" id="rooms">
           <h2>Доступные номера</h2>
@@ -248,6 +204,52 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
             </div>
           </section>
         ))}
+
+        <HotelAbout hotel={hotel} details={h} />
+
+        <section className="sec-h2">
+          <h2>Как это будет</h2>
+          <p>Ваш номер в ваши даты: вид, ночь, утро и погода — с доказательствами</p>
+        </section>
+
+        <WindowSection hotel={hotel} detail={h} />
+
+        <NoiseSection hotel={hotel} />
+
+        <BeachSection hotel={hotel} />
+
+        {designDemo ? (
+          <section className="dates card-w">
+            <div className="rp-h">
+              <h3>Ваши даты</h3>
+              <span className="sub">Демонстрационная сводка, не прогноз</span>
+            </div>
+            <div className="days num">
+              {DAYS.map(([wd, d, t, s, w, r]) => (
+                <div className="day" key={d}>
+                  <span className="d">
+                    {wd}, {d} ноября
+                  </span>
+                  <b>{t}°</b>
+                  <span className="row">
+                    <Icon name="sun" size={14} />
+                    закат {s}
+                  </span>
+                  <span className="row">
+                    <Icon name="wave" size={14} />
+                    вода {w}°
+                  </span>
+                  <span className="row">
+                    <Icon name="question" size={14} />
+                    дождь {r}%
+                  </span>
+                </div>
+              ))}
+            </div>
+          </section>
+        ) : (
+          <ClimateSection hotel={hotel} />
+        )}
 
         <section className="sec-h2" id="hotel-facts">
           <h2>За каждым фактом — источник</h2>
