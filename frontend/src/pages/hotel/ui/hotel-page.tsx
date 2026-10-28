@@ -12,36 +12,21 @@ import { Drawer, Lightbox, WhyPanel, type GalleryItem } from "./overlays";
 import { Conf, Icon, Mark, Ring, SrcTag, Stars, Toast } from "./detail-ui";
 import { useToast } from "../lib/use-toast";
 import { Building, Panorama, Photo } from "./visuals";
-import { createHotelDetails, nearbyRoute } from "../model/hotel-details";
-import type { Facade, Fact, RoomType, RatePlan } from "../model/types";
+import { createHotelDetails } from "../model/hotel-details";
+import type { Fact, RoomType, RatePlan } from "../model/types";
 import { FACADE_NAME } from "../lib/building";
 import { decimal, rub } from "../lib/format";
 import { verdict } from "../lib/score";
 import { BookingRequest } from "./booking-request";
-import { DetailMap } from "./detail-map";
+import { BeachSection } from "./beach-section";
+import { NoiseSection } from "./noise-section";
+import { WindowSection } from "./window-section";
+import { ClimateSection } from "./climate-section";
+import { dateLabel, tripDates } from "../model/geo";
 import "./hotel-detail.css";
-const FACADE_TEXT: Record<Facade, string> = {
-  NE: "горы",
-  SE: "море частично",
-  SW: "море и закат",
-  NW: "город",
-};
-const FACADE_COLOR: Record<Facade, string> = {
-  NE: "#9BD08A",
-  SE: "#9DB5F5",
-  SW: "var(--primary)",
-  NW: "#C9D0E2",
-};
-const DAYS = [
-  ["пн", 10, 17, "16:58", 18, 10],
-  ["вт", 11, 16, "16:57", 18, 25],
-  ["ср", 12, 15, "16:56", 17, 40],
-  ["чт", 13, 16, "16:55", 17, 20],
-  ["пт", 14, 17, "16:54", 17, 10],
-  ["сб", 15, 16, "16:53", 17, 15],
-] as const;
 export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | undefined }) {
   const h = useMemo(() => createHotelDetails(hotel), [hotel]);
+  const dates = tripDates(hotel.searchContext?.trip);
   const criteria = useMemo(() => parseQuery(q ?? ""), [q]);
   const chips = criteria.map((key) => ({ key }));
   const match = hotel.searchMatch
@@ -57,10 +42,6 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
     room: RoomType;
     rate: RatePlan;
   } | null>(null);
-  const [facade, setFacade] = useState<Facade>(h.bestFacade);
-  const [floor, setFloor] = useState(h.bestFloor);
-  const [reading, setReading] = useState({ seaShare: 0, sunVisible: false });
-  const [noise, setNoise] = useState<"night" | "day">("night");
   const [why, setWhy] = useState<Fact | null>(null);
   const [lb, setLb] = useState<number | null>(null);
   const [asked, setAsked] = useState<Set<string>>(new Set());
@@ -75,14 +56,10 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
   const gallery: GalleryItem[] = useMemo(
     () => [
       ...h.photos.map((key) => ({ kind: "photo" as const, key })),
-      { kind: "view" as const },
-      { kind: "noise" as const },
+      ...(!h.api ? [{ kind: "view" as const }, { kind: "noise" as const }] : []),
     ],
     [h],
   );
-  const route = useMemo(() => nearbyRoute(hotel), [hotel]);
-  const noiseSides = h.noise[noise];
-  const roomsForFacade = h.rooms.filter((r) => r.facades.includes(facade));
   const scrollTo = (id: string) =>
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   const inCmp = compare.includes(h.id);
@@ -245,251 +222,19 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
           <p>Ваш номер в ваши даты: вид, ночь, утро и погода — с доказательствами</p>
         </section>
 
-        <section className="window-card card-w" id="window">
-          <div className="w-head">
-            <h3>Ваше окно</h3>
-            <svg className="compass" viewBox="-30 -30 60 60" aria-hidden="true">
-              <g transform="rotate(45)">
-                {(["NE", "SE", "SW", "NW"] as Facade[]).map((f, i) => (
-                  <path
-                    key={f}
-                    d={
-                      [
-                        "M0 0 L0 -26 A26 26 0 0 1 26 0 Z",
-                        "M0 0 L26 0 A26 26 0 0 1 0 26 Z",
-                        "M0 0 L0 26 A26 26 0 0 1 -26 0 Z",
-                        "M0 0 L-26 0 A26 26 0 0 1 0 -26 Z",
-                      ][i]
-                    }
-                    fill={FACADE_COLOR[f]}
-                    opacity={f === facade ? 1 : 0.35}
-                  />
-                ))}
-              </g>
-              <circle r="6" fill="#fff" stroke="var(--ink)" strokeWidth="1.5" />
-              <text y="-29" textAnchor="middle" fontSize="9" fontWeight="700" fill="var(--ink)">
-                С
-              </text>
-            </svg>
-            <div className="fac" role="group" aria-label="Сторона здания">
-              {(["NE", "SE", "SW", "NW"] as Facade[]).map((f) => (
-                <button
-                  key={f}
-                  className={f === facade ? "on" : ""}
-                  aria-pressed={f === facade}
-                  onClick={() => setFacade(f)}
-                >
-                  <i style={{ background: FACADE_COLOR[f] }} />
-                  {FACADE_NAME[f]} · {FACADE_TEXT[f]}
-                </button>
-              ))}
-            </div>
-            <span className="read">
-              10–15 ноября · закат <b>16:53–16:58</b>
-            </span>
-          </div>
-          <div className="w-stage">
-            <Panorama facade={facade} floor={floor} onReading={setReading} />
-          </div>
-          <div className="w-foot">
-            <label className="floor">
-              Этаж <b className="num">{floor}</b>
-              <input
-                type="range"
-                min={1}
-                max={h.totalFloors}
-                value={floor}
-                onChange={(e) => setFloor(+e.target.value)}
-                aria-label="Этаж"
-              />
-            </label>
-            <span className="read">
-              море в окне{" "}
-              <b className="num">{reading.seaShare ? `${reading.seaShare}%` : "не видно"}</b>
-            </span>
-            <span className="read">
-              закат <b>{reading.sunVisible ? "видно" : "не видно"}</b>
-            </span>
-          </div>
-          <div className="w-note">
-            {roomsForFacade.length ? (
-              <>
-                <Mark v="yes" />
-                <span>
-                  На {FACADE_NAME[facade]} выходят номера{" "}
-                  <b>{roomsForFacade.map((r) => r.name).join(", ")}</b>, этажи{" "}
-                  {roomsForFacade[0]!.floors.join("–")}. Условное распределение номеров в прототипе;
-                  уточните у отеля.
-                </span>
-              </>
-            ) : (
-              <>
-                <Mark v="partial" />
-                <span>На {FACADE_NAME[facade]} размещение номеров пока не подтверждено.</span>
-              </>
-            )}
-          </div>
-          <div className="attrib">
-            © OpenStreetMap contributors · Copernicus DEM GLO-30 · геометрия в прототипе условная
-          </div>
-        </section>
+        <WindowSection hotel={hotel} detail={h} />
 
-        <section className="row-panel card-w" id="night">
-          <div className="rp-media light">
-            <Building
-              floors={h.totalFloors}
-              name={h.name}
-              sides={Object.fromEntries(
-                Object.entries(noiseSides).map(([k, v]) => [k, { color: v[0], text: v[1] }]),
-              )}
-            />
-          </div>
-          <div className="rp-side">
-            <div className="rp-h">
-              <h3>Ваша ночь</h3>
-              <div className="seg">
-                <button className={noise === "day" ? "on" : ""} onClick={() => setNoise("day")}>
-                  <Icon name="sun" size={14} /> День
-                </button>
-                <button className={noise === "night" ? "on" : ""} onClick={() => setNoise("night")}>
-                  <Icon name="moon" size={14} /> Ночь
-                </button>
-              </div>
-            </div>
-            <p className="sub">Сколько шума у каждой стороны здания</p>
-            <ul className="legend">
-              {Object.entries(noiseSides).map(([k, [c, db, src]]) => (
-                <li key={k}>
-                  <span className="sw" style={{ background: c }} />
-                  <span>
-                    {FACADE_NAME[k as Facade]} · {src}
-                  </span>
-                  <b className="num">{db}</b>
-                </li>
-              ))}
-            </ul>
-            <div className="verdict-box">
-              <Mark v="yes" />
-              <span>
-                Ночью от{" "}
-                <b>{hotel.noise.length ? Math.round(Math.min(...hotel.noise)) : "нет данных"} дБ</b>{" "}
-                по данным карточки. Распределение шума по сторонам условное: перед поездкой уточним
-                сторону и тип окон.
-              </span>
-            </div>
-          </div>
-        </section>
+        <NoiseSection hotel={hotel} />
 
-        <section className="row-panel card-w morning" id="morning">
-          <div className="rp-media">
-            <DetailMap hotel={hotel} route={route} />
-          </div>
-          <div className="rp-side">
-            <div className="rp-h">
-              <h3>Ваше утро</h3>
-            </div>
-            <p className="sub">{route.destination} и что есть поблизости</p>
-            <svg className="elev" viewBox="0 0 400 110" aria-label="Профиль высот">
-              <defs>
-                <linearGradient id="elevg" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0" stopColor="var(--primary)" stopOpacity=".22" />
-                  <stop offset="1" stopColor="var(--primary)" stopOpacity="0" />
-                </linearGradient>
-              </defs>
-              <rect
-                x="120"
-                y="8"
-                width="70"
-                height="70"
-                fill="var(--verified)"
-                opacity=".5"
-                rx="4"
-              />
-              <path
-                d="M10 14 C 60 15, 90 20, 120 26 L 190 70 C 230 86, 290 92, 390 96 L 390 100 L 10 100 Z"
-                fill="url(#elevg)"
-              />
-              <path
-                d="M10 14 C 60 15, 90 20, 120 26 L 190 70 C 230 86, 290 92, 390 96"
-                fill="none"
-                stroke="var(--primary)"
-                strokeWidth="3"
-              />
-              <text
-                x="155"
-                y="20"
-                fontSize="11"
-                textAnchor="middle"
-                fill="var(--ink)"
-                fontWeight="600"
-              >
-                Схема пути
-              </text>
-              <text x="10" y="108" fontSize="11" fill="var(--muted)">
-                отель
-              </text>
-              <text x="390" y="108" fontSize="11" fill="var(--muted)" textAnchor="end">
-                {route.destination}
-              </text>
-            </svg>
-            <ol className="route">
-              {route.stops.map(([name, description]) => (
-                <li key={name}>
-                  <b>{name}</b>
-                  <span>{description}</span>
-                </li>
-              ))}
-            </ol>
-            <div className="times num">
-              <div>
-                <b>{route.minutes} мин</b>
-                <span>до места</span>
-              </div>
-              <div>
-                <b>{hotel.walk.length}</b>
-                <span>мест рядом</span>
-              </div>
-              <div>
-                <b>уточним</b>
-                <span>перепад высот</span>
-              </div>
-            </div>
-          </div>
-        </section>
+        <BeachSection hotel={hotel} />
 
-        <section className="dates card-w">
-          <div className="rp-h">
-            <h3>Ваши даты</h3>
-            <span className="sub">Демонстрационная сводка, не прогноз</span>
-          </div>
-          <div className="days num">
-            {DAYS.map(([wd, d, t, s, w, r]) => (
-              <div className="day" key={d}>
-                <span className="d">
-                  {wd}, {d} ноября
-                </span>
-                <b>{t}°</b>
-                <span className="row">
-                  <Icon name="sun" size={14} />
-                  закат {s}
-                </span>
-                <span className="row">
-                  <Icon name="wave" size={14} />
-                  вода {w}°
-                </span>
-                <span className="row">
-                  <Icon name="question" size={14} />
-                  дождь {r}%
-                </span>
-              </div>
-            ))}
-          </div>
-        </section>
+        <ClimateSection hotel={hotel} />
 
         <section className="sec-h2" id="rooms">
           <h2>Доступные номера</h2>
           <p>
-            10–15 ноября · 5 ночей · 2 взрослых · стороны и этажи — по ответу отеля, вид — по
+            {dateLabel(dates.from)} — {dateLabel(dates.to)} · взрослые:{" "}
+            {hotel.searchContext?.trip.adults ?? 2} · стороны и этажи — по ответу отеля, вид — по
             расчёту
           </p>
         </section>
@@ -499,13 +244,15 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
               {r.recommended && <span className="rec-l">Подходит вам больше всего</span>}
               <div className="room-ph">
                 <Photo k={r.photo} alt={r.name} credit={false} />
-                <span className="room-view">
-                  <Panorama
-                    facade={r.facades[0] ?? h.bestFacade}
-                    floor={Math.min(r.floors[1], Math.max(r.floors[0], h.bestFloor))}
-                    labels={false}
-                  />
-                </span>
+                {!h.api && (
+                  <span className="room-view">
+                    <Panorama
+                      facade={r.facades[0] ?? h.bestFacade}
+                      floor={Math.min(r.floors[1], Math.max(r.floors[0], h.bestFloor))}
+                      labels={false}
+                    />
+                  </span>
+                )}
               </div>
               <h3>{r.name}</h3>
               <ul className="feat">

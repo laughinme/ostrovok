@@ -1,4 +1,4 @@
-import type { Facade } from "../model/types";
+type Facade = "NE" | "SE" | "SW" | "NW";
 import { svgElement as el } from "@/shared/lib";
 type Point = [number, number];
 export interface SideStyle {
@@ -9,7 +9,8 @@ export interface BuildingApi {
   set(sides: Partial<Record<Facade, SideStyle>>): void;
   pick(facade: Facade | null, color: string): void;
 }
-export const FACADE_NAME: Record<Facade, string> = { NE: "СВ", SE: "ЮВ", SW: "ЮЗ", NW: "СЗ" };
+export { FACADE_LABEL as FACADE_NAME } from "../model/geo";
+import { FACADE_LABEL } from "../model/geo";
 let sequence = 0;
 const W = 640,
   H = 360;
@@ -38,7 +39,7 @@ const SIDES: Record<Facade, [number, number, Point]> = {
   SW: [2, 3, [0, 1]],
   NW: [3, 0, [-1, 0]],
 };
-const NAME = FACADE_NAME;
+const NAME = FACADE_LABEL;
 const normal = ([x, y]: Point): Point => [
   x * Math.cos(ROT) - y * Math.sin(ROT),
   x * Math.sin(ROT) + y * Math.cos(ROT),
