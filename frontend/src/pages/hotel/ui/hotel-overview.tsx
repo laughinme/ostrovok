@@ -1,4 +1,11 @@
-import { CRITERIA, formatReviewCount, type Criterion, type Hotel } from "@/entities/hotel";
+import {
+  CRITERIA,
+  formatReviewCount,
+  PhotoCredit,
+  photoInfo,
+  type Criterion,
+  type Hotel,
+} from "@/entities/hotel";
 import { MatchRing, Reveal } from "@/shared/ui";
 import {
   Check,
@@ -42,6 +49,7 @@ export function HotelOverview({
   onSection: (id: string) => void;
 }) {
   const photos = h.photos.slice(0, 3);
+  const sources = Array.from(new Map(photos.map((src) => [photoInfo(src)?.author, src])).values());
   return (
     <>
       <Reveal className="hotel-intro">
@@ -156,6 +164,17 @@ export function HotelOverview({
           </div>
         </aside>
       </Reveal>
+      <div className="hotel-photo-sources">
+        {sources.map((src) => (
+          <PhotoCredit key={src} src={src} compact={photoInfo(src)?.kind === "ai"} />
+        ))}
+        {photos.some((src) => photoInfo(src)?.kind === "ai") && (
+          <p>
+            AI-кадры — вымышленные иллюстрации, не фотографии этого отеля. Интерьер и вид из номера
+            нужно уточнить.
+          </p>
+        )}
+      </div>
       <nav className="hotel-section-nav" aria-label="Об отеле">
         <a href="#hotel-about">Об отеле</a>
         <a href="#rooms">
