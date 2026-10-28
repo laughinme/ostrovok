@@ -9,10 +9,12 @@ export class ApiError extends Error {
   }
 }
 
-export async function api<T>(
-  path: string,
-  options: { method?: string; body?: unknown; signal?: AbortSignal; token?: string } = {},
-): Promise<T> {
+export async function api<T>(path: string, options: ApiOptions = {}): Promise<T> {
+  if (getApiMode() === "demo") {
+    const transport = getDemoTransport();
+    if (!transport) throw new ApiError(503, "Демо-режим ещё не готов. Обновите страницу.");
+    return (await transport(path, options)) as T;
+  }
   const origin = import.meta.env.SSR
     ? (process.env["BACKEND_URL"] ?? "https://okno-api.fly.dev")
     : "";
@@ -42,3 +44,5 @@ export async function api<T>(
   if (body === null) throw new ApiError(502, "Сервис вернул некорректный ответ");
   return body as T;
 }
+import { getApiMode } from "./execution-mode";
+import { getDemoTransport, type ApiOptions } from "./demo-transport";
