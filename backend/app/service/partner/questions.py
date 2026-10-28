@@ -120,6 +120,25 @@ class PartnerQuestions:
         ]
         drafts = await self._conflicts(hotel_id, facts, drafts)
         existing = await self.of_hotel(hotel_id)
+        for draft in drafts:
+            if draft.conflict_id:
+                opened = next(
+                    (
+                        q
+                        for q in existing
+                        if q.characteristic == draft.characteristic and q.status == "open"
+                    ),
+                    None,
+                )
+                if opened:
+                    row = await self._uow.session.get(HotelierQuestion, opened.id)
+                    if row is not None:
+                        row.text, row.why = draft.text, draft.why
+                        row.context = {"conflictId": draft.conflict_id, "facade": draft.facade}
+                    conflict = await self._uow.session.get(ConflictRow, UUID(draft.conflict_id))
+                    if conflict:
+                        conflict.question_id = opened.id
+        await self._uow.flush()
         excluded = {q.characteristic for q in existing}
         slots = max(0, min(5, max(3, limit)) - sum(q.status == "open" for q in existing))
         candidates = sorted(

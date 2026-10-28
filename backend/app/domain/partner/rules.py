@@ -95,6 +95,8 @@ class RulesAnswerParser:
         if answer.payload:
             return self._structured(answer)
         text = normalize(answer.text)
+        if answer.value_type in {"number", "category"}:
+            return self._scalar(answer, text)
         fields = _fields(answer, text)
         value = _value(answer, fields)
         certain = value is not None and not ambiguous(text)
@@ -123,6 +125,9 @@ class RulesAnswerParser:
         if "choice" in payload:
             value = payload["choice"]
             valid = isinstance(value, str) and value in answer.options
+            if valid and answer.value_type == "probability":
+                value = boolean(normalize(str(value)), answer.characteristic)
+                valid = isinstance(value, bool)
         else:
             value = payload.get("value")
             valid = (
@@ -135,3 +140,14 @@ class RulesAnswerParser:
                 else isinstance(value, str) and value in answer.options
             )
         return ParsedAnswer(payload, value, 1.0 if valid else 0.0)
+
+    def _scalar(self, answer: AnswerInput, text: str) -> ParsedAnswer:
+        if answer.value_type == "category":
+            matches = [option for option in answer.options if normalize(option) == text.strip()]
+            value: Any = matches[0] if len(matches) == 1 else None
+        else:
+            numbers = re.findall(r"(?<!\w)-?\d+(?:[.,]\d+)?", text)
+            value = float(numbers[0].replace(",", ".")) if len(numbers) == 1 else None
+        return ParsedAnswer(
+            {"value": value}, value, 0.95 if value is not None and not ambiguous(text) else 0.35
+        )
