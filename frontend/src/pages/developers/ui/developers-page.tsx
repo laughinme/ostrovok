@@ -1,6 +1,17 @@
 import { api } from "@/shared/api";
-import { Blocks, Bot, Copy, Play, Plug, ShieldCheck } from "lucide-react";
+import {
+  Blocks,
+  Bot,
+  Check,
+  CodeXml,
+  Copy,
+  LoaderCircle,
+  Play,
+  Plug,
+  ShieldCheck,
+} from "lucide-react";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { EXAMPLES, MCP_TOOLS, curl, mcpConfig, preview, type Example } from "../model/examples";
 
 function useOrigin(): string {
@@ -11,24 +22,84 @@ function useOrigin(): string {
 
 function CopyButton({ text }: { text: string }) {
   const [done, setDone] = useState(false);
+  useEffect(() => {
+    if (!done) return;
+    const timeout = window.setTimeout(() => setDone(false), 2000);
+    return () => window.clearTimeout(timeout);
+  }, [done]);
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setDone(true);
+    } catch {
+      toast.error("Не удалось скопировать. Выделите и скопируйте код вручную.");
+    }
+  };
+  const label = done ? "Скопировано" : "Копировать код";
   return (
     <button
       type="button"
-      onClick={() => {
-        void navigator.clipboard?.writeText(text).then(() => setDone(true));
-      }}
-      className="inline-flex items-center gap-1.5 rounded-lg border bg-card px-2.5 py-1 text-xs"
+      onClick={() => void copy()}
+      aria-label={label}
+      title={label}
+      className="inline-flex size-11 shrink-0 items-center justify-center rounded-full transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current motion-reduce:transition-none"
     >
-      <Copy className="h-3.5 w-3.5" /> {done ? "Скопировано" : "Копировать"}
+      {done ? (
+        <Check className="size-4" aria-hidden="true" />
+      ) : (
+        <Copy className="size-4" aria-hidden="true" />
+      )}
+      <span className="sr-only" role="status">
+        {done ? "Код скопирован" : ""}
+      </span>
     </button>
   );
 }
 
-function Code({ children }: { children: string }) {
+function Code({
+  children,
+  language = "JSON",
+  onRun,
+  busy = false,
+}: {
+  children: string;
+  language?: string;
+  onRun?: () => void;
+  busy?: boolean;
+}) {
   return (
-    <pre className="overflow-x-auto whitespace-pre-wrap break-words rounded-2xl bg-night p-4 font-mono text-[12.5px] leading-relaxed text-night-foreground">
-      {children}
-    </pre>
+    <div className="min-w-0 overflow-hidden rounded-2xl bg-night text-night-foreground">
+      <div className="flex min-h-16 items-center justify-between gap-2 px-3 py-2 sm:px-4">
+        <span className="flex items-center gap-2 text-xs font-medium sm:text-sm">
+          <CodeXml className="size-4 shrink-0" aria-hidden="true" />
+          {language}
+        </span>
+        <div className="flex shrink-0 items-center gap-1">
+          <CopyButton text={children} />
+          {onRun && (
+            <button
+              type="button"
+              disabled={busy}
+              onClick={onRun}
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-white/25 px-3 text-xs font-medium transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current disabled:cursor-wait disabled:opacity-60 motion-reduce:transition-none sm:px-4 sm:text-sm"
+            >
+              {busy ? (
+                <LoaderCircle
+                  className="size-4 animate-spin motion-reduce:animate-none"
+                  aria-hidden="true"
+                />
+              ) : (
+                <Play className="size-4" aria-hidden="true" />
+              )}
+              {busy ? "Выполняем…" : "Запустить"}
+            </button>
+          )}
+        </div>
+      </div>
+      <pre className="overflow-x-auto whitespace-pre-wrap break-words px-4 pb-5 pt-2 font-mono text-[12.5px] leading-relaxed">
+        <code>{children}</code>
+      </pre>
+    </div>
   );
 }
 
@@ -51,7 +122,7 @@ function LiveExample({ example, origin }: { example: Example; origin: string }) 
     }
   };
   return (
-    <article className="rounded-3xl border bg-card p-5">
+    <article className="min-w-0 rounded-3xl border bg-card p-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h3 className="text-lg font-semibold">{example.title}</h3>
@@ -62,27 +133,22 @@ function LiveExample({ example, origin }: { example: Example; origin: string }) 
         </span>
       </div>
       <div className="mt-4">
-        <Code>{curl(origin, example)}</Code>
+        <Code language="cURL" onRun={() => void run()} busy={busy}>
+          {curl(origin, example)}
+        </Code>
       </div>
-      <div className="mt-3 flex flex-wrap items-center gap-2">
-        <button
-          type="button"
-          disabled={busy}
-          onClick={() => void run()}
-          className="inline-flex items-center gap-2 rounded-xl bg-foreground px-3 py-2 text-xs font-semibold text-background disabled:opacity-50"
-        >
-          <Play className="h-3.5 w-3.5" /> {busy ? "Выполняем…" : "Выполнить"}
-        </button>
-        <CopyButton text={curl(origin, example)} />
-        {state && "ms" in state && (
-          <span className="text-xs text-muted-foreground">ответ за {state.ms} мс</span>
+      <div aria-live="polite" aria-busy={busy}>
+        {state && (
+          <div className="mt-3">
+            <p className="mb-2 text-xs text-muted-foreground">
+              {"error" in state ? "Ошибка запроса" : `Ответ за ${state.ms} мс`}
+            </p>
+            <Code language={"error" in state ? "Ошибка" : "JSON"}>
+              {"error" in state ? state.error : state.body}
+            </Code>
+          </div>
         )}
       </div>
-      {state && (
-        <div className="mt-3">
-          <Code>{"error" in state ? state.error : state.body}</Code>
-        </div>
-      )}
     </article>
   );
 }
@@ -141,7 +207,6 @@ export function DevelopersPage() {
             <Code>{mcpConfig(origin)}</Code>
           </div>
           <div className="mt-3 flex gap-2">
-            <CopyButton text={mcpConfig(origin)} />
             <a
               href="/api/docs"
               target="_blank"
