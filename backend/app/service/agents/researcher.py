@@ -24,6 +24,8 @@ from app.service.recipes.executor import (
 )
 
 HOTEL_CHANNEL = "hotel:{}"
+# A computation is a model of the world, not a measurement: it never claims certainty.
+MODEL_CONFIDENCE_CAP = 0.95
 FACTS_CHANNEL = "facts"
 # Facts that read other facts go last, after what they depend on is known.
 _LAST = (MethodKind.DERIVED,)
@@ -43,7 +45,7 @@ def to_observation(
         characteristic_version=characteristic.version,
         scope=finding.scope,
         value=finding.value,
-        confidence=finding.confidence,
+        confidence=min(finding.confidence, MODEL_CONFIDENCE_CAP),
         source=finding.source,
         source_ref=finding.source_ref,
         method=finding.method,
