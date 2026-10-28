@@ -1,4 +1,5 @@
 import { PartnerPage } from "@/pages/partner";
+import { SessionGate } from "@/features/authenticate";
 import { createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/partner")({
   head: () => ({
@@ -16,5 +17,9 @@ export const Route = createFileRoute("/partner")({
       },
     ],
   }),
-  component: PartnerPage,
+  component: () => (
+    <SessionGate role="hotelier">
+      <PartnerPage />
+    </SessionGate>
+  ),
 });

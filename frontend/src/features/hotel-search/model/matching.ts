@@ -13,7 +13,7 @@ const KEYWORDS: Record<Criterion, RegExp> = {
 
 export function parseQuery(q: string): Criterion[] {
   const found = (Object.keys(KEYWORDS) as Criterion[]).filter((c) => KEYWORDS[c].test(q));
-  return found.length ? found : ["quiet", "sea", "infra"];
+  return found;
 }
 
 export function scoreHotel(h: Hotel, criteria: Criterion[]): number {

@@ -10,12 +10,13 @@ export function useAskHotel(hotelId: string, searchId: string | undefined) {
   return {
     asked,
     run: run.data,
-    error,
+    error: error ?? run.error?.message ?? null,
     ask: async (characteristic: string, question: string) => {
       setError(null);
       setAsked((current) => new Set(current).add(characteristic));
       try {
         setRunId((await askHotel(hotelId, characteristic, searchId, question)).runId);
+        return true;
       } catch {
         setAsked((current) => {
           const next = new Set(current);
@@ -23,6 +24,7 @@ export function useAskHotel(hotelId: string, searchId: string | undefined) {
           return next;
         });
         setError("Не получилось отправить вопрос, попробуйте ещё раз");
+        return false;
       }
     },
   };

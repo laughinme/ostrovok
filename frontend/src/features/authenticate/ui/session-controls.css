@@ -1,0 +1,213 @@
+.session-open,
+.session-menu summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  border: 1px solid currentColor;
+  border-radius: 99px;
+  padding: 8px 14px;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.session-menu {
+  position: relative;
+  max-width: 220px;
+}
+.session-menu summary {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.session-menu > div {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  z-index: 60;
+  display: grid;
+  gap: 8px;
+  min-width: 220px;
+  max-width: calc(100vw - 48px);
+  padding: 16px;
+  border: 1px solid #e1e6f2;
+  border-radius: 16px;
+  background: white;
+  color: #0b1533;
+  box-shadow: 0 16px 48px #0b15331a;
+}
+.session-menu > div > span {
+  overflow-wrap: anywhere;
+  font-size: 12px;
+  color: #5b6580;
+}
+.session-menu button {
+  min-height: 44px;
+  text-align: left;
+}
+.session-menu p {
+  font-size: 12px;
+  color: #b32923;
+}
+.session-dialog {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: min(480px, calc(100% - 24px));
+  max-height: calc(100dvh - 32px);
+  overflow: auto;
+  border: 1px solid #e1e6f2;
+  border-radius: 24px;
+  padding: 32px;
+  background: white;
+  color: #0b1533;
+  font:
+    400 15px/1.5 Onest,
+    system-ui,
+    sans-serif;
+  box-shadow: 0 24px 100px #0b15333d;
+}
+.session-dialog::backdrop {
+  background: #0b15338c;
+}
+.session-dialog h2 {
+  font-size: 24px;
+  line-height: 1.25;
+  margin: 0 36px 12px 0;
+}
+.session-dialog > p {
+  color: #5b6580;
+  margin-bottom: 24px;
+}
+.session-close {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #f1f4f9;
+}
+.session-dialog fieldset {
+  border: 0;
+  padding: 0;
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+.session-dialog label {
+  display: grid;
+  gap: 6px;
+  font-weight: 500;
+}
+.session-dialog input {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 12px;
+  border: 1px solid #aab5ca;
+  border-radius: 12px;
+  background: #fff;
+  color: #0b1533;
+  font: inherit;
+}
+.session-dialog small {
+  color: #5b6580;
+}
+.session-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 12px 20px;
+  border: 0;
+  border-radius: 12px;
+  background: #1b4de4;
+  color: white;
+  font:
+    500 15px/1.4 Onest,
+    system-ui,
+    sans-serif;
+  cursor: pointer;
+}
+.session-text {
+  min-height: 44px;
+  color: #1b4de4;
+}
+.session-dialog button:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+.session-error {
+  color: #b32923 !important;
+  overflow-wrap: anywhere;
+}
+.session-personas {
+  margin-top: 24px;
+  border-top: 1px solid #e1e6f2;
+  padding-top: 16px;
+}
+.session-personas summary {
+  cursor: pointer;
+  min-height: 44px;
+}
+.session-personas p {
+  font-size: 13px;
+  color: #5b6580;
+}
+.session-personas > button {
+  display: grid;
+  gap: 3px;
+  width: 100%;
+  text-align: left;
+  border: 1px solid #e1e6f2;
+  border-radius: 12px;
+  padding: 12px;
+  margin-top: 8px;
+  min-height: 60px;
+}
+.session-personas > button span {
+  font-size: 12px;
+  color: #5b6580;
+}
+.session-gate {
+  max-width: 680px;
+  margin: 64px auto;
+  padding: 24px;
+}
+.session-gate h1 {
+  font-size: 30px;
+  line-height: 1.2;
+}
+.session-gate p {
+  margin: 20px 0;
+  color: #5b6580;
+}
+.session-gate > a {
+  display: block;
+  margin-top: 20px;
+  color: #1b4de4;
+}
+.session-dialog :focus-visible,
+.session-gate :focus-visible,
+.session-menu :focus-visible {
+  outline: 2px solid #1b4de4;
+  outline-offset: 3px;
+}
+@media (max-width: 720px) {
+  .session-menu {
+    max-width: 100%;
+  }
+  .session-menu > div {
+    position: static;
+    box-shadow: none;
+    margin-top: 8px;
+  }
+  .session-dialog {
+    padding: 28px 20px;
+  }
+  .session-gate {
+    margin: 32px auto;
+  }
+}

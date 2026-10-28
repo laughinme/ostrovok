@@ -274,8 +274,9 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
                   disabled={sent}
                   onClick={() => {
                     if (key && hotel.backend) {
-                      void ask.ask(key, question);
-                      showToast("Вопрос отправлен отелю. Агент следит за ответом.");
+                      void ask.ask(key, question).then((sent) => {
+                        if (sent) showToast("Вопрос отправлен отелю. Агент следит за ответом.");
+                      });
                     } else {
                       setAsked((a) => new Set(a).add(question));
                       showToast("Вопрос записан. В демо-отеле его некому отправить.");

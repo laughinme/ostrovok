@@ -21,10 +21,10 @@ export function TripPage({ initialBookingId }: { initialBookingId?: string } = {
   const [expanded, setExpanded] = useState<string | null>(initialBookingId ?? null);
   const [post, setPost] = useState(false);
   const [answers, setAnswers] = useState<Record<string, string>>({});
-  const bookings = useQuery({ ...bookingTripsQuery, enabled: !demo });
+  const bookings = useQuery(bookingTripsQuery);
   const selected = useQuery({
     ...bookingTripQuery(initialBookingId ?? ""),
-    enabled: !demo && !!initialBookingId,
+    enabled: !!initialBookingId && (!demo || initialBookingId.startsWith("demo-booking-")),
   });
   const selectedHotel = useQuery({
     ...hotelQuery(selected.data?.booking.hotelId ?? ""),
@@ -42,7 +42,7 @@ export function TripPage({ initialBookingId }: { initialBookingId?: string } = {
       }),
     );
   }
-  const trips = (demo ? demoTrips : records).filter(
+  const trips = (demo ? [...records, ...demoTrips] : records).filter(
     (item) =>
       filter === "Все поездки" ||
       (filter === "Предстоящие"

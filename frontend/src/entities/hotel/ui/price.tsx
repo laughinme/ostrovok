@@ -8,6 +8,8 @@ export function Price({
   suffix?: string;
   className?: string;
 }) {
+  if (!Number.isFinite(value) || value <= 0)
+    return <span className={cn("text-sm text-muted-foreground", className)}>Цена уточняется</span>;
   return (
     <span className={cn("inline-flex items-end gap-2", className)}>
       <span className="text-3xl font-bold leading-none tabular-nums tracking-tight">

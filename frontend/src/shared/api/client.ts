@@ -18,7 +18,7 @@ export async function api<T>(path: string, options: ApiOptions = {}): Promise<T>
   const origin = import.meta.env.SSR
     ? (process.env["BACKEND_URL"] ?? "https://okno-api.fly.dev")
     : "";
-  const headers = new Headers({ Accept: "application/json" });
+  const headers = new Headers({ Accept: "application/json", ...options.headers });
   if (options.body !== undefined) headers.set("Content-Type", "application/json");
   if (options.token) headers.set("Authorization", `Bearer ${options.token}`);
   const signal = options.signal
@@ -34,10 +34,14 @@ export async function api<T>(path: string, options: ApiOptions = {}): Promise<T>
   if (response.status === 204) return undefined as T;
   const body: unknown = await response.json().catch(() => null);
   if (!response.ok) {
-    const problem = body as { detail?: string; error_code?: string } | null;
+    const problem = body as { detail?: unknown; error_code?: string } | null;
     throw new ApiError(
       response.status,
-      problem?.detail ?? `Сервис вернул ошибку ${response.status}`,
+      typeof problem?.detail === "string"
+        ? problem.detail
+        : response.status === 422
+          ? "Проверьте заполненные поля и выбранные условия."
+          : `Сервис вернул ошибку ${response.status}`,
       problem?.error_code,
     );
   }

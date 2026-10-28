@@ -4,7 +4,7 @@ import { tripsQuery } from "@/features/manage-trips";
 import { useState, type FormEvent } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { Hotel } from "@/entities/hotel";
-import { demoApi } from "@/entities/session";
+import { sessionApi, useSession } from "@/entities/session";
 import { getApiMode, type components } from "@/shared/api";
 import type { RatePlan, RoomType } from "../model/types";
 import { rub } from "../lib/format";
@@ -30,6 +30,7 @@ export function BookingRequest({
   titleId: string;
 }) {
   const queryClient = useQueryClient();
+  const { account, open: signIn } = useSession();
   const dates = tripDates(hotel.searchContext?.trip);
   const [today] = useState(bookingToday);
   const [range, setRange] = useState(() => {
@@ -39,33 +40,41 @@ export function BookingRequest({
   const checkIn = range.from;
   const checkOut = range.to;
   const capacity = room.capacity ?? 4;
-  const [adults, setAdults] = useState(Math.min(hotel.searchContext?.trip.adults ?? 2, capacity));
+  const [adults, setAdults] = useState(hotel.searchContext?.trip.adults ?? 2);
   const designDemo = getApiMode() === "demo";
   const [children, setChildren] = useState(hotel.searchContext?.trip.children ?? 0);
   const [request, setRequest] = useState(room.request ?? "");
   const nights = bookingNights(range);
+  const overCapacity = adults + children > capacity;
   const booking = useMutation({
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["trips", "guest_anna"] });
       void queryClient.invalidateQueries({ queryKey: tripsQuery.queryKey });
     },
     mutationFn: () => {
       if (!rate.id || !hotel.backend) throw new Error("Для этого номера нет тарифа на сервере");
-      return demoApi<components["schemas"]["BookingOut"]>("guest_anna", "/bookings", "POST", {
-        hotelId: hotel.id,
-        roomTypeId: room.id,
-        ratePlanId: rate.id,
-        checkIn,
-        checkOut,
-        guests: { adults, children },
-        ...(hotel.searchContext ? { searchId: hotel.searchContext.id } : {}),
-        request,
+      if (overCapacity) throw new Error("Выберите номер с подходящей вместимостью.");
+      return sessionApi<components["schemas"]["BookingOut"]>("/bookings", {
+        method: "POST",
+        body: {
+          hotelId: hotel.id,
+          roomTypeId: room.id,
+          ratePlanId: rate.id,
+          checkIn,
+          checkOut,
+          guests: { adults, children },
+          ...(hotel.searchContext ? { searchId: hotel.searchContext.id } : {}),
+          request,
+        },
       });
     },
   });
   const submit = (event: FormEvent) => {
     event.preventDefault();
-    if (nights > 0 && !booking.isPending && !booking.isSuccess) booking.mutate();
+    if (!designDemo && !account) {
+      signIn();
+      return;
+    }
+    if (nights > 0 && !overCapacity && !booking.isPending && !booking.isSuccess) booking.mutate();
   };
   return (
     <div className="booking-request">
@@ -89,11 +98,11 @@ export function BookingRequest({
               ? `Заявка ${booking.data.id} создана локально. В отель и LLM ничего не отправлено.`
               : `Заявка ${booking.data.id} сохранена. Статус: запрос отправлен демо-отельеру. Оплата не списывается.`}
           </p>
-          {!designDemo && (
+          {
             <Link to="/trips/$id" params={{ id: booking.data.id }}>
               Открыть мою бронь →
             </Link>
-          )}
+          }
         </div>
       ) : (
         <form onSubmit={submit}>
@@ -133,10 +142,10 @@ export function BookingRequest({
               />
             </div>
             <BookingCalendar value={range} min={today} onChange={setRange} />
-            {(hotel.searchContext?.trip.adults ?? 0) > capacity && (
+            {overCapacity && (
               <p role="note" className="booking-note">
                 Этот номер рассчитан на {capacity} {capacity === 1 ? "гостя" : "гостей"}, а в поиске
-                вас {hotel.searchContext?.trip.adults}. Выберите категорию просторнее.
+                вас {adults + children}. Выберите категорию просторнее или измените состав гостей.
               </p>
             )}
             <label className="booking-wishes">
@@ -168,14 +177,25 @@ export function BookingRequest({
             <button
               className="booking-submit"
               type="submit"
-              disabled={booking.isPending || nights <= 0}
+              disabled={
+                booking.isPending ||
+                nights <= 0 ||
+                overCapacity ||
+                (!designDemo && !!account && account.role !== "guest")
+              }
             >
-              {booking.isPending ? "Отправляем…" : "Создать демо-заявку"}
+              {booking.isPending
+                ? "Отправляем…"
+                : !designDemo && !account
+                  ? "Войти и создать заявку"
+                  : "Создать демо-заявку"}
             </button>
             <p className="booking-note">
               {designDemo
                 ? "Тестовый сценарий: заявка и ответ имитируются без отправки на сервер."
-                : "Демо-вход: Анна. Заявка сохранится в сервисе, ответ отеля симулируется."}
+                : account && account.role !== "guest"
+                  ? "Для заявки войдите в аккаунт гостя."
+                  : "Заявка сохранится в вашем аккаунте. Тарифы и ответ отеля демонстрационные, оплата не производится."}
             </p>
             {booking.error && (
               <p className="booking-error" role="alert">

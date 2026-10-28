@@ -35,7 +35,8 @@ export function LandingFooter({
         </div>
       </div>
       <div className="foot-b">
-        Отели, цифры и ответы AI — условные данные. Фотографии — иллюстрации.
+        География и расчёты — по открытым данным. Цены, рейтинги и бронирование — демо. Фотографии
+        для настроения.
         <button type="button" className="foot-variants" onClick={onToggleVariants}>
           {variantsOn ? "Выключить другие лендинги" : "Включить другие лендинги"}
         </button>

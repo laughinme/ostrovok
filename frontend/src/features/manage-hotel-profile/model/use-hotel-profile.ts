@@ -1,6 +1,6 @@
-import { catalogQuery, factFromApi, hotelFromApi } from "@/entities/hotel";
-import { demoApi } from "@/entities/session";
-import { type components } from "@/shared/api";
+import { catalogQuery, factFromApi, hotelFromApi, hotelQuery } from "@/entities/hotel";
+import { demoApi, useSession } from "@/entities/session";
+import { api, getApiMode, type components } from "@/shared/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -8,12 +8,26 @@ import { toast } from "sonner";
 type Question = components["schemas"]["QuestionOut"];
 type Overview = components["schemas"]["PartnerOverviewOut"];
 type Answer = components["schemas"]["AnswerOut"];
-const persona = "hotelier_salut";
 
 export function useHotelProfile() {
   const client = useQueryClient();
+  const account = useSession((state) => state.account);
+  const [selectedHotelId, selectHotel] = useState<string | null>(null);
+  const persona = account?.persona ?? "hotelier_salut";
+  const demo = getApiMode() === "demo";
+  const personas = useQuery({
+    queryKey: ["auth", "personas"],
+    queryFn: ({ signal }) =>
+      api<components["schemas"]["PersonaOut"][]>("/auth/personas", { signal }),
+    enabled: !demo,
+  });
   const catalog = useQuery(catalogQuery);
-  const raw = catalog.data?.find((hotel) => hotel.osmId === "node/1521215547");
+  const ownedOsmIds = demo
+    ? ["node/1521215547"]
+    : (personas.data?.find((item) => item.key === account?.persona)?.hotels ?? []);
+  const availableHotels = catalog.data?.filter((hotel) => ownedOsmIds.includes(hotel.osmId)) ?? [];
+  const raw = availableHotels.find((hotel) => hotel.id === selectedHotelId) ?? availableHotels[0];
+  const detail = useQuery({ ...hotelQuery(raw?.id ?? ""), enabled: !!raw });
   const overview = useQuery({
     queryKey: ["partner", raw?.id],
     queryFn: () => demoApi<Overview>(persona, `/partner/hotels/${raw!.id}`),
@@ -127,7 +141,9 @@ export function useHotelProfile() {
     }
   };
   return {
-    hotel: raw ? hotelFromApi(raw) : undefined,
+    availableHotels,
+    selectHotel,
+    hotel: detail.data ?? (raw ? hotelFromApi(raw) : undefined),
     facts,
     qs:
       questions.data?.map((question) => ({
@@ -157,15 +173,26 @@ export function useHotelProfile() {
       setTarget(null);
       setInput("");
     },
-    pending: catalog.isPending || (!!raw && (overview.isPending || questions.isPending)),
+    pending:
+      catalog.isPending ||
+      (!demo && personas.isPending) ||
+      (!!raw && (detail.isPending || overview.isPending || questions.isPending)),
     error:
       (!catalog.data ? catalog.error : null) ??
+      (!detail.data ? detail.error : null) ??
       (!overview.data ? overview.error : null) ??
       (!questions.data ? questions.error : null) ??
-      (!catalog.isPending && !raw ? new Error("Демо-отель Салют отсутствует в каталоге") : null),
+      personas.error ??
+      (!catalog.isPending && (demo || personas.isSuccess) && !raw
+        ? new Error(
+            "К этому аккаунту пока не привязан отель. Выберите аккаунт отельера с назначенным объектом.",
+          )
+        : null),
     retry: () => {
       void catalog.refetch();
+      if (!demo) void personas.refetch();
       if (raw) {
+        void detail.refetch();
         void overview.refetch();
         void questions.refetch();
       }

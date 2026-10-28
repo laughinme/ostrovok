@@ -1,5 +1,5 @@
 import { characteristicLabel, type ApiFact, type Hotel } from "@/entities/hotel";
-import type { components } from "@/shared/api";
+import { getApiMode, type components } from "@/shared/api";
 import type { Facade, Fact, HotelDetails } from "./types";
 
 const facades: Facade[] = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
@@ -80,7 +80,7 @@ export function apiHotelDetails(hotel: Hotel): HotelDetails {
     rating: raw.demo.rating,
     reviewCount: hotel.reviewCount,
     ratingLabel: raw.demo.ratingLabel,
-    tagline: raw.demo.tagline,
+    tagline: hotel.description,
     photos: hotel.gallery,
     bestFloor,
     bestFacade,
@@ -110,7 +110,7 @@ export function apiHotelDetails(hotel: Hotel): HotelDetails {
         ],
       ]),
     ),
-    amenities: raw.demo.amenities,
+    amenities: getApiMode() === "demo" ? raw.demo.amenities : [],
     nearby: raw.nearby.length
       ? raw.nearby.map((place) => [
           (

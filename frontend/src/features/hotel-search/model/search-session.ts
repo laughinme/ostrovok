@@ -1,7 +1,7 @@
-import type { Criterion } from "@/entities/hotel";
+import type { ApiIntent } from "@/entities/hotel";
 import { create } from "zustand";
 
-type SearchFilters = { text: string; criteria: Criterion[]; budget: number | null };
+type SearchFilters = { text: string; intent?: ApiIntent; budget: number | null };
 interface SearchSession {
   lastQuery: string | undefined;
   filters: Record<string, SearchFilters>;

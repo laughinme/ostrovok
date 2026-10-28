@@ -1,4 +1,4 @@
-import { api, type components } from "@/shared/api";
+import { api, getApiMode, type components } from "@/shared/api";
 import type { Criterion, Fact, Hotel } from "../model/types";
 import { hotels } from "./demo-hotels";
 
@@ -47,7 +47,18 @@ function probability(fact: ApiFact | undefined): number | null {
 }
 
 export function hotelFromApi(raw: ApiHotel, match?: ApiMatch, intent?: ApiIntent): Hotel {
-  const preview = hotels.find((hotel) => raw.id === `demo-${hotel.id}`);
+  const demo = getApiMode() === "demo";
+  const preview = demo ? hotels.find((hotel) => raw.id === `demo-${hotel.id}`) : undefined;
+  const verified = raw.facts.filter(
+    (fact) => fact.status === "ok" && !fact.isDemo && fact.source !== "demo_card",
+  );
+  const description = demo
+    ? raw.demo.tagline
+    : verified
+        .slice(0, 3)
+        .map((fact) => fact.statement)
+        .join(". ") ||
+      `${raw.area}. Сведения о расположении — из OpenStreetMap. Условия размещения уточняются.`;
   const scores = {} as Record<Criterion, number>;
   const unknownCriteria: Criterion[] = [];
   for (const criterion of Object.keys(criterionKeys) as Criterion[]) {
@@ -90,8 +101,8 @@ export function hotelFromApi(raw: ApiHotel, match?: ApiMatch, intent?: ApiIntent
     reviewCount: preview?.reviewCount ?? 0,
     stars: raw.stars ?? 0,
     lngLat: raw.location,
-    tagline: match?.tradeoff ?? raw.demo.tagline,
-    description: raw.demo.tagline,
+    tagline: match?.tradeoff ?? description,
+    description,
     scores,
     noise,
     views: [],
@@ -107,7 +118,7 @@ export function hotelFromApi(raw: ApiHotel, match?: ApiMatch, intent?: ApiIntent
     facts: raw.facts.map(factFromApi),
     pros:
       match?.perChip.filter((item) => item.verdict === "yes").map((item) => item.line) ??
-      raw.demo.amenities,
+      (demo ? raw.demo.amenities : verified.slice(0, 4).map((fact) => fact.statement)),
     cons: match?.tradeoff
       ? [match.tradeoff]
       : raw.facts.filter((fact) => fact.status !== "ok").map((fact) => fact.statement),

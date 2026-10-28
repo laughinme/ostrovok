@@ -18,7 +18,8 @@ describe("hotel geo mappings", () => {
       fallback: false,
     });
     expect(tripDates({ from: "2027-01-30" }).to).toBe("2027-02-04");
-    expect(tripDates().date).toBe("2026-11-15");
+    expect(tripDates(undefined, new Date("2026-12-29T22:00:00Z")).date).toBe("2027-01-06");
+    expect(tripDates({ month: 2 }, new Date("2026-12-29T22:00:00Z")).date).toBe("2027-02-15");
     expect(tripDates().from).toBe(tripDates().date);
     expect(tripDates({ to: "2027-02-04" }).from).toBe("2027-01-30");
   });

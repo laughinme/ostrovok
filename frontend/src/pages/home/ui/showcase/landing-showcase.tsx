@@ -15,7 +15,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { TravelAirplane } from "@/shared/ui";
 import { Logo } from "@/widgets/site-header";
-import { MOODS } from "../../model/catalog";
+import type { Mood } from "../../model/use-moods";
 import { Photo } from "../landing-ui";
 import { TravelCity } from "../travel-city";
 import type { HotelScene } from "./hotel-scene";
@@ -26,11 +26,11 @@ import "./landing-showcase.css";
 
 const cx = (...items: (string | false)[]) => items.filter(Boolean).join(" ");
 
-function PhotoCollections({ onMood }: { onMood(mood: (typeof MOODS)[number]): void }) {
+function PhotoCollections({ onMood, moods }: { onMood(mood: Mood): void; moods: Mood[] }) {
   return (
     <section className="photo-collections" aria-label="Подборки по настроению">
       <div className="collection-grid">
-        {MOODS.map((mood) => (
+        {moods.map((mood) => (
           <button
             className="collection-card"
             type="button"
@@ -48,7 +48,9 @@ function PhotoCollections({ onMood }: { onMood(mood: (typeof MOODS)[number]): vo
           </button>
         ))}
       </div>
-      <p className="collection-note">Большой Сочи · демо-подборки, фотографии для настроения</p>
+      <p className="collection-note">
+        Большой Сочи · фотографии для настроения, количество отелей по данным сервиса
+      </p>
     </section>
   );
 }
@@ -436,7 +438,7 @@ function ArrivalBackdrop() {
   );
 }
 
-export function LandingShowcase({ onMood }: { onMood(mood: (typeof MOODS)[number]): void }) {
+export function LandingShowcase({ onMood, moods }: { onMood(mood: Mood): void; moods: Mood[] }) {
   const root = useRef<HTMLDivElement>(null);
   const focusTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   useLandingMotion(root);
@@ -458,7 +460,7 @@ export function LandingShowcase({ onMood }: { onMood(mood: (typeof MOODS)[number
   return (
     <div className="landing-showcase" ref={root}>
       <LandingFlight />
-      <PhotoCollections onMood={onMood} />
+      <PhotoCollections onMood={onMood} moods={moods} />
       <section className="intro showcase-container" id="how">
         <div className="intro-head" data-reveal>
           <h2>

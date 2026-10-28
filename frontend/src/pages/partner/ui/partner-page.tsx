@@ -20,9 +20,10 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import "./partner-page.css";
+import { PartnerManagement } from "./partner-management";
 
 type Profile = ReturnType<typeof useHotelProfile>;
-type Section = "questions" | "facts" | "history";
+type Section = "questions" | "facts" | "management" | "history";
 
 export function PartnerPage() {
   const profile = useHotelProfile();
@@ -54,6 +55,22 @@ export function PartnerPage() {
       <div className="partner-shell">
         <aside className="partner-rail" aria-label="Навигация по кабинету">
           <div className="partner-property">
+            {profile.availableHotels.length > 1 && (
+              <label className="mb-3 block text-sm">
+                Ваш отель
+                <select
+                  className="mt-2 min-h-11 w-full rounded-xl border px-3"
+                  value={hotel.id}
+                  onChange={(event) => profile.selectHotel(event.target.value)}
+                >
+                  {profile.availableHotels.map((item) => (
+                    <option key={item.id} value={item.id}>
+                      {item.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
             <img src={hotel.image} alt="" width={216} height={132} />
             <span className="partner-property-label">Ваш отель</span>
             <h2>{hotel.name}</h2>
@@ -67,6 +84,7 @@ export function PartnerPage() {
               [
                 ["questions", "Вопросы гостей", MessageCircle, open.length],
                 ["facts", "Факты об отеле", ClipboardList, profile.facts.length],
+                ["management", "Номера и заявки", ClipboardList, 0],
                 ["history", "История изменений", History, profile.history.length],
               ] as const
             ).map(([id, label, Icon, count]) => (
@@ -163,6 +181,7 @@ export function PartnerPage() {
             setFilter={setQuestionFilter}
           />
           <PartnerFacts profile={profile} />
+          {hotel.backend && <PartnerManagement key={hotel.id} hotel={hotel.backend} />}
           <section
             id="partner-history"
             className="partner-panel partner-history"

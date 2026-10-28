@@ -1,4 +1,6 @@
 import { Toaster } from "@/shared/ui";
+import { SessionDialog } from "@/features/authenticate";
+import { getApiMode } from "@/shared/api";
 import { Header } from "@/widgets/site-header";
 import { HeadContent, Scripts, useRouterState } from "@tanstack/react-router";
 import type { ReactNode } from "react";
@@ -18,6 +20,12 @@ export function RootShell({ children }: { children: ReactNode }) {
   );
 }
 export function RootLayout({ children }: { children: ReactNode }) {
+  const catalogPage = useRouterState({
+    select: (state) =>
+      ["/results", "/compare", "/favorites", "/trips"].includes(state.location.pathname) ||
+      state.location.pathname.startsWith("/hotel/") ||
+      state.location.pathname.startsWith("/trips/"),
+  });
   const loading = useLoadingActivity();
   const surface = useRouterState({
     select: (state) =>
@@ -38,10 +46,21 @@ export function RootLayout({ children }: { children: ReactNode }) {
         aria-busy={loading.active}
       >
         {surface !== "landing" && <Header tone={surface === "search" ? "clear" : "lime"} />}
+        {catalogPage && (
+          <p
+            className="mx-auto max-w-7xl px-4 pt-4 text-xs text-muted-foreground sm:px-6"
+            role="note"
+          >
+            {getApiMode() === "demo"
+              ? "Демо: все данные и действия локальные, запросы в сервис и отели не отправляются."
+              : "Прототип: цены, рейтинги, категории номеров и ответы отеля — демонстрационные. Расположение и расчёты — по открытым данным."}
+          </p>
+        )}
         {children}
         <Toaster />
       </div>
       <LoadingOverlay {...loading} />
+      <SessionDialog />
     </>
   );
 }

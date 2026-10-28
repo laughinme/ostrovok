@@ -1,4 +1,4 @@
-import { api } from "@/shared/api";
+import { api, getApiMode } from "@/shared/api";
 import {
   Blocks,
   Bot,
@@ -175,7 +175,7 @@ export function DevelopersPage() {
           {
             icon: Blocks,
             title: "REST API",
-            text: "63 ручки, OpenAPI-схема, типы для фронта генерируются из неё",
+            text: "OpenAPI-схема, типы для фронта генерируются из неё",
           },
           {
             icon: Bot,
@@ -231,7 +231,9 @@ export function DevelopersPage() {
       <section className="mt-12">
         <h2 className="text-2xl">Попробовать API прямо здесь</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          Запросы уходят в настоящий бэкенд. Без ключа LLM разбор делают правила, с ключом — модель.
+          {getApiMode() === "demo"
+            ? "В режиме «Демо» ответы локальные. Чтобы проверить настоящий API, переключитесь в режим «Гость»."
+            : "Запросы уходят в настоящий бэкенд. Без ключа LLM разбор делают правила, с ключом — модель."}
         </p>
         <div className="mt-6 grid items-start gap-4 lg:grid-cols-2">
           {EXAMPLES.map((example) => (

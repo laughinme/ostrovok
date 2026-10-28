@@ -7,6 +7,9 @@ type State = {
   facts: Record<string, components["schemas"]["FactOut"]>;
   answered: string[];
   runs?: Record<string, components["schemas"]["AgentRunOut"]>;
+  bookings?: Record<string, { booking: components["schemas"]["BookingOut"]; createdAt: string }>;
+  taste?: components["schemas"]["TasteProfileOut"];
+  mappings?: Record<string, components["schemas"]["FacadeMappingIn"][]>;
 };
 let memory: State = { facts: {}, answered: [] };
 const STORAGE = "okno.design-demo.state";
@@ -34,6 +37,22 @@ function catalog() {
   return structuredClone(demoHotels).map((hotel) => ({
     ...hotel,
     facts: hotel.facts.map((fact) => saved.facts[fact.id] ?? fact),
+    rooms: hotel.rooms.map((room) => {
+      const mapped = saved.mappings?.[hotel.id]?.filter(
+        (mapping) => mapping.roomTypeId === room.id,
+      );
+      return mapped?.length
+        ? {
+            ...room,
+            facades: [...new Set(mapped.map((mapping) => mapping.facade))],
+            floors: [
+              Math.min(...mapped.map((mapping) => mapping.floorFrom)),
+              Math.max(...mapped.map((mapping) => mapping.floorTo)),
+            ] as [number, number],
+            confirmedByHotel: true,
+          }
+        : room;
+    }),
   }));
 }
 function required<T>(value: T | undefined): T {
@@ -53,6 +72,24 @@ export function demoResponse(path: string, options: ApiOptions = {}): unknown {
     return demoSearch(data as components["schemas"]["SearchRequest"], hotels);
   if (pieces[0] === "searches" && pieces.length === 2 && method === "GET")
     return restoreDemoSearch(pieces[1]!, hotels);
+  if (pieces[0] === "searches" && pieces[2] === "wishes" && method === "POST") {
+    const previous = restoreDemoSearch(pieces[1]!, hotels);
+    const addition = demoIntent(String(data["text"] ?? ""));
+    const chips = [
+      ...previous.intent.chips,
+      ...addition.chips.filter(
+        (chip) =>
+          !previous.intent.chips.some((item) => item.characteristic === chip.characteristic),
+      ),
+    ];
+    return {
+      runId: null,
+      search: demoSearch(
+        { text: String(data["text"] ?? ""), chips, trip: previous.intent.trip, useProfile: false },
+        hotels,
+      ),
+    } satisfies components["schemas"]["WishStarted"];
+  }
   if (pieces[0] === "searches" && pieces[2] === "research" && method === "POST") {
     const search = restoreDemoSearch(pieces[1]!, hotels);
     const characteristic = String(
@@ -117,6 +154,32 @@ export function demoResponse(path: string, options: ApiOptions = {}): unknown {
     if (pieces[2] === "routes" && pieces[3] === "beach" && pieces.length === 4)
       return demoBeachRoute(hotel, params.get("profile") ?? "walk");
   }
+  if (pieces[0] === "hotels" && pieces[2] === "similar" && method === "POST") {
+    const request = data as components["schemas"]["SimilarIn"];
+    const search = demoSearch(
+      {
+        chips:
+          request.chips ??
+          demoIntent(
+            request.change === "quieter"
+              ? "тихий номер"
+              : request.change === "closer_to_beach"
+                ? "у моря"
+                : "отель",
+          ).chips,
+        trip: request.trip ?? {},
+        useProfile: false,
+      },
+      hotels,
+    );
+    return {
+      sourceId: pieces[1]!,
+      change: request.change,
+      intent: search.intent,
+      matches: search.matches.filter((match) => match.hotelId !== pieces[1]),
+      caveats: ["Демонстрационный список похожих отелей. Все данные синтетические."],
+    } satisfies components["schemas"]["SimilarOut"];
+  }
   if (path === "/compare" && method === "POST") {
     const request = data as components["schemas"]["CompareIn"];
     const intent = {
@@ -146,6 +209,60 @@ export function demoResponse(path: string, options: ApiOptions = {}): unknown {
       token_type: "bearer",
       expires_in: 3600,
     } satisfies components["schemas"]["TokenPair"];
+  if (pathname === "/me/taste") {
+    const saved = state();
+    const profile = saved.taste ?? { enabled: false, summary: [], weights: [] };
+    if (method === "DELETE") {
+      saved.taste = { enabled: false, summary: [], weights: [] };
+      save(saved);
+      return;
+    }
+    if (method === "PATCH") {
+      const patch = data as components["schemas"]["TastePatch"];
+      saved.taste = {
+        ...profile,
+        enabled: patch.enabled ?? profile.enabled,
+        weights: patch.weights
+          ? [
+              ...profile.weights.filter(
+                (weight) =>
+                  !patch.weights!.some((item) => item.characteristic === weight.characteristic),
+              ),
+              ...patch.weights.map((weight) => ({ ...weight, because: "Задано в локальном демо" })),
+            ]
+          : profile.weights,
+      };
+      save(saved);
+      return saved.taste;
+    }
+    return profile;
+  }
+  if (pathname === "/me/trips" && method === "GET")
+    return Object.values(state().bookings ?? {}).map(({ booking, createdAt }) => {
+      const hotel = required(hotels.find((item) => item.id === booking.hotelId));
+      return {
+        booking,
+        createdAt,
+        hotelName: hotel.name,
+        hotelArea: hotel.area,
+      } satisfies components["schemas"]["TripSummaryOut"];
+    });
+  if (pieces[0] === "trips") {
+    const saved = state();
+    const item = required(saved.bookings?.[pieces[1]!]);
+    const hotel = required(hotels.find((hotel) => hotel.id === item.booking.hotelId));
+    if (pieces[2] === "feedback" && method === "POST") return;
+    if (pieces.length === 2 && method === "GET")
+      return {
+        booking: item.booking,
+        promised: [],
+        facts: hotel.facts,
+        climate: null,
+        sunsets: [],
+        beachRoute: demoBeachRoute(hotel),
+        caveats: ["Локальный демо-сценарий. Заявка и ответы не отправляются в отель."],
+      } satisfies components["schemas"]["TripOut"];
+  }
   if (pieces[0] === "facts" && pieces.length === 2 && method === "GET") {
     const fact = required(
       hotels.flatMap((hotel) => hotel.facts).find((item) => item.id === pieces[1]),
@@ -175,7 +292,7 @@ export function demoResponse(path: string, options: ApiOptions = {}): unknown {
     const hotel = required(hotels.find((item) => item.id === request.hotelId));
     const room = required(hotel.rooms.find((item) => item.id === request.roomTypeId));
     const rate = required(room.rates.find((item) => item.id === request.ratePlanId));
-    return {
+    const booking = {
       ...request,
       id: "demo-booking-" + Date.now().toString(36),
       request: request.request ?? "",
@@ -183,6 +300,13 @@ export function demoResponse(path: string, options: ApiOptions = {}): unknown {
       hotelReply: "Демонстрационная заявка. Она не отправляется в отель.",
       priceDemo: rate.priceDemo,
     } satisfies components["schemas"]["BookingOut"];
+    const saved = state();
+    saved.bookings = {
+      ...saved.bookings,
+      [booking.id]: { booking, createdAt: new Date().toISOString() },
+    };
+    save(saved);
+    return booking;
   }
   if (pieces[0] === "partner" && pieces[1] === "hotels" && method === "GET") {
     const hotel = required(hotels.find((item) => item.id === pieces[2]));
@@ -191,6 +315,18 @@ export function demoResponse(path: string, options: ApiOptions = {}): unknown {
         ...question,
         status: state().answered.includes(question.id) ? "answered" : "open",
       }));
+    if (pieces[3] === "requests")
+      return Object.values(state().bookings ?? {})
+        .map((item) => item.booking)
+        .filter((booking) => booking.hotelId === hotel.id);
+    if (pieces[3] === "demand")
+      return {
+        hotelId: hotel.id,
+        district: hotel.area,
+        days: 7,
+        items: [],
+      } satisfies components["schemas"]["DemandOut"];
+    if (pieces[3] === "notifications") return [];
     if (pieces.length === 3)
       return {
         hotelId: hotel.id,
@@ -199,6 +335,33 @@ export function demoResponse(path: string, options: ApiOptions = {}): unknown {
         conflicts: [],
         coverage: { known: 8, total: 10, share: 0.8 },
       } satisfies components["schemas"]["PartnerOverviewOut"];
+  }
+  if (
+    pieces[0] === "partner" &&
+    pieces[1] === "hotels" &&
+    pieces[3] === "facades" &&
+    method === "PUT"
+  ) {
+    const saved = state();
+    saved.mappings = {
+      ...saved.mappings,
+      [pieces[2]!]: (data as components["schemas"]["FacadesIn"]).mappings,
+    };
+    save(saved);
+    return { changedFacts: [] };
+  }
+  if (
+    pieces[0] === "partner" &&
+    pieces[1] === "requests" &&
+    pieces[3] === "decision" &&
+    method === "POST"
+  ) {
+    const saved = state();
+    const item = required(saved.bookings?.[pieces[2]!]);
+    const decision = data as components["schemas"]["DecisionIn"];
+    item.booking = { ...item.booking, status: decision.status, hotelReply: decision.reply };
+    save(saved);
+    return item.booking;
   }
   if (pieces[0] === "partner" && method === "POST") {
     const saved = state();
