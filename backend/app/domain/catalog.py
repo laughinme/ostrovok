@@ -1,9 +1,10 @@
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from uuid import NAMESPACE_URL, UUID, uuid5
 
 import numpy as np
-from shapely import Polygon
+import shapely
+from shapely import Point, Polygon
 from shapely.geometry.base import BaseGeometry
 
 from app.domain.geo.facades import FLOOR_HEIGHT_M, extract_facades
@@ -85,3 +86,85 @@ class BuildingShape:
     height_m: float
     levels: int | None
     height_source: str
+
+
+@dataclass(frozen=True, slots=True)
+class Nearby:
+    """The closest place of one everyday kind, straight-line distance from the hotel."""
+
+    kind: str
+    title: str
+    name: str | None
+    distance_m: float
+    osm_ref: str
+    location: LonLat
+
+
+# kind, title, search radius: what a guest asks about first, in the order the card shows them
+NEARBY_KINDS: tuple[tuple[str, str, float], ...] = (
+    ("beach", "Пляж", 2500),
+    ("food", "Кафе", 1200),
+    ("grocery", "Магазин", 1200),
+    ("pharmacy", "Аптека", 1200),
+    ("park", "Парк", 1200),
+    ("playground", "Детская площадка", 1200),
+    ("station", "Станция", 1200),
+)
+
+
+_KIND_BY_TAG: Mapping[tuple[str, str], str] = {
+    ("amenity", "cafe"): "food",
+    ("amenity", "restaurant"): "food",
+    ("amenity", "fast_food"): "food",
+    ("shop", "supermarket"): "grocery",
+    ("shop", "convenience"): "grocery",
+    ("amenity", "pharmacy"): "pharmacy",
+    ("leisure", "playground"): "playground",
+}
+
+
+_PRIVATE_GROUNDS = ("санатори", "пансионат", "детский сад", "школ", "больниц")
+
+
+def nearby_kind(feature: MapFeature) -> str | None:
+    if feature.kind in {"beach", "station"}:
+        return feature.kind
+    if feature.kind == "park":
+        # A sanatorium or kindergarten grounds mapped as leisure=park are not open to guests.
+        tags, name = feature.tags, (feature.name or "").lower()
+        grounds = bool({"tourism", "amenity"} & tags.keys()) and tags.get("tourism") != "attraction"
+        grounds |= any(word in name for word in _PRIVATE_GROUNDS)
+        return "park" if tags.get("leisure") == "park" and not grounds else None
+    return next((k for (tag, v), k in _KIND_BY_TAG.items() if feature.tags.get(tag) == v), None)
+
+
+def nearby_places(origin: LonLat, features: Sequence[MapFeature]) -> tuple[Nearby, ...]:
+    """
+    The nearest place of each kind within its radius. Named places win over unnamed ones of the
+    same kind: «Кафе "Магнолия"» helps the guest more than a nameless dot 30 m closer.
+    """
+    projection = LocalProjection(origin)
+    here = Point(0, 0)
+    best: dict[str, tuple[bool, float, MapFeature]] = {}
+    radius = {kind: r for kind, _, r in NEARBY_KINDS}
+    for feature in features:
+        kind = nearby_kind(feature)
+        if kind is None:
+            continue
+        distance = shapely.transform(feature.geometry, projection.forward).distance(here)
+        if distance > radius[kind]:
+            continue
+        rank = (feature.name is None, distance)
+        if kind not in best or rank < best[kind][:2]:
+            best[kind] = (*rank, feature)
+    places = []
+    for kind, title, _ in NEARBY_KINDS:
+        if kind in best:
+            _, distance, feature = best[kind]
+            point = feature.geometry.representative_point()
+            places.append(
+                Nearby(
+                    kind, title, feature.name, distance, feature.osm_id, LonLat(point.x, point.y)
+                )
+            )
+    return tuple(places)

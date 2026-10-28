@@ -4,6 +4,7 @@ from pydantic import Field
 
 from app.api.schemas.base import ApiModel
 from app.api.schemas.knowledge import FactOut
+from app.domain.catalog import Nearby
 from app.domain.knowledge.scope import Facade
 from app.service.catalog.hotels import HotelView, RoomView
 
@@ -76,11 +77,37 @@ class UnknownOut(ApiModel):
     why: str
 
 
+_KM = 1000
+
+
 class NearbyOut(ApiModel):
-    kind: str
-    name: str
-    distance_text: str
+    kind: str = Field(
+        ..., description="beach | food | grocery | pharmacy | park | playground | station"
+    )
+    title: str = Field(..., description="What it is, in Russian: «Пляж», «Аптека»")
+    name: str = Field(..., description="The OSM name, or the title when the place has none")
+    distance_m: int = Field(..., description="Straight-line distance from the hotel")
+    distance_text: str = Field(..., description="«350 м по прямой», «1,2 км по прямой»")
     osm_ref: str | None = None
+    location: tuple[float, float] = Field(..., description="lon, lat")
+
+    @classmethod
+    def from_domain(cls, place: Nearby) -> Self:
+        return cls(
+            kind=place.kind,
+            title=place.title,
+            name=place.name or place.title,
+            distance_m=round(place.distance_m),
+            distance_text=_distance_text(place.distance_m),
+            osm_ref=place.osm_ref,
+            location=(place.location.lon, place.location.lat),
+        )
+
+
+def _distance_text(metres: float) -> str:
+    if metres < _KM:
+        return f"{max(10, round(metres, -1)):.0f} м по прямой"
+    return f"{metres / _KM:.1f} км по прямой".replace(".", ",")
 
 
 class HotelOut(ApiModel):
@@ -120,5 +147,5 @@ class HotelOut(ApiModel):
                 UnknownOut(characteristic=u.characteristic, question=u.question, why=u.why)
                 for u in h.unknowns
             ],
-            nearby=[],
+            nearby=[NearbyOut.from_domain(p) for p in h.nearby],
         )

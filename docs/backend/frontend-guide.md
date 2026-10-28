@@ -65,5 +65,5 @@
 - `Trip`: плюс `month` (если назван только месяц) и `area` (`center|khosta|adler|sirius|krasnaya_polyana`).
 - `IntentChip.params`: ключи `maxWalkMinutes`, `minFloor`, `dogWeightKg`, `noClimb`, `what` (у неизвестного желания).
 - `SearchResult.research[].runId` появляется после старта исследования (сам поиск исследование не запускает).
-- `Hotel.osmId` — дополнительное поле; `Hotel.nearby` пока пустой.
+- `Hotel.osmId` — дополнительное поле. `Hotel.nearby` (только в `GET /hotels/{id}`, в списке пусто) — ближайшее место каждого вида из OSM в порядке показа: `kind` (beach, food, grocery, pharmacy, park, playground, station), `title`, `name`, `distanceM`, `distanceText` («350 м по прямой»), `osmRef`, `location` [lon, lat]. Расстояние по прямой; пешее время с подъёмами — `GET /hotels/{id}/routes/{target}`.
 - `Scope` приходит без пустых полей (пусто = «все»), как в контракте.
