@@ -2,6 +2,7 @@ import { ApiError, type ApiOptions, type components } from "@/shared/api";
 import { DEMO_DATE, demoHotels, demoQuestions } from "./fixtures";
 import { demoIntent, demoMatch, demoSearch, restoreDemoSearch } from "./search";
 import { demoBeachRoute, demoNoise } from "./geo";
+import { demoSimilar } from "./similar";
 
 type State = {
   facts: Record<string, components["schemas"]["FactOut"]>;
@@ -111,6 +112,12 @@ export function demoResponse(path: string, options: ApiOptions = {}): unknown {
   if (path === "/hotels" && method === "GET") return hotels;
   if (pieces[0] === "hotels" && pieces.length === 2 && method === "GET")
     return required(hotels.find((hotel) => hotel.id === pieces[1]));
+  if (pieces[0] === "hotels" && pieces[2] === "similar" && pieces.length === 3 && method === "POST")
+    return demoSimilar(
+      required(hotels.find((hotel) => hotel.id === pieces[1])),
+      hotels,
+      data as components["schemas"]["SimilarIn"],
+    );
   if (pieces[0] === "hotels" && method === "GET" && pieces.length > 2) {
     const hotel = required(hotels.find((item) => item.id === pieces[1]));
     if (pieces[2] === "noise" && pieces.length === 3) return demoNoise(hotel);
