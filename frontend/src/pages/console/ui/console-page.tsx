@@ -57,16 +57,18 @@ export function ConsolePage() {
             </button>
           ))}
         </nav>
-        <label className="console-field lg:hidden">
-          Раздел консоли
-          <select value={section} onChange={(event) => setSection(event.target.value)}>
-            {sections.map(([key, title]) => (
-              <option key={key} value={key}>
-                {title}
-              </option>
-            ))}
-          </select>
-        </label>
+        <div className="lg:hidden">
+          <label className="console-field">
+            Раздел консоли
+            <select value={section} onChange={(event) => setSection(event.target.value)}>
+              {sections.map(([key, title]) => (
+                <option key={key} value={key}>
+                  {title}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
         <section className="min-w-0" aria-label={sections.find(([key]) => key === section)?.[1]}>
           {section === "runs" && <Runs />}
           <div hidden={section !== "learn"}>

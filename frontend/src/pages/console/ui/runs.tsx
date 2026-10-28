@@ -43,7 +43,7 @@ export function Runs() {
           {query.data?.length === 0 && (
             <Empty>Запусков пока нет. Добавьте характеристику в разделе «Научить новому».</Empty>
           )}
-          <ul className="divide-y">
+          <ul className="console-run-list divide-y" aria-label="Последние запуски">
             {query.data?.map((run) => (
               <li key={run.id}>
                 <button

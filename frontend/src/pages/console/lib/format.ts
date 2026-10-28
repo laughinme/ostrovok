@@ -1,5 +1,5 @@
 import type { ApiRun } from "@/entities/agent-run";
-import type { RegistryEntry, Schema } from "../api/console";
+import type { Schema } from "../api/console";
 
 export function money(value: number | null | undefined): string {
   return value == null ? "—" : `$${value.toFixed(value < 0.01 ? 4 : 2)}`;
@@ -27,22 +27,14 @@ export function record(value: unknown): Record<string, unknown> {
     : {};
 }
 
-export function characteristicKey(
-  run: ApiRun | undefined,
-  registry: RegistryEntry[],
-  description: string,
-): string | null {
+export function characteristicKey(run: ApiRun | undefined): string | null {
   if (run?.status !== "done") return null;
   const decision = [...run.steps]
     .reverse()
     .find((step) => step.kind === "decision" && typeof record(step.output)["key"] === "string");
   const key =
     record(decision?.output)["key"] ?? run.subject?.["key"] ?? run.subject?.["characteristic"];
-  if (typeof key === "string" && key.length > 0) return key;
-  const matches = registry.filter(
-    (entry) => entry.learnedFrom === description && entry.status !== "published",
-  );
-  return matches.length === 1 ? (matches[0]?.key ?? null) : null;
+  return typeof key === "string" && key.length > 0 ? key : null;
 }
 
 export function nearbyBuilding(
