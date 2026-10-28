@@ -1,82 +1,51 @@
-import type { Facade, SourceKind, Verdict } from '@/shared/model';
+import type { components } from "@/shared/api";
 
-export interface Scope {
-  facades?: Facade[];
-  floorFrom?: number;
-  floorTo?: number;
-  months?: number[];
-  roomTypeIds?: string[];
-}
+export type Criterion =
+  "quiet" | "sunset" | "sea" | "work" | "kids" | "pets" | "mountains" | "infra";
+export type FactStatus = "confirmed" | "computed" | "assumed" | "conflict";
 
 export interface Fact {
-  id: string;
-  characteristic: string;
-  group: string;
-  statement: string;
-  scopeText: string;
+  id?: string;
+  label: string;
+  value: string;
   confidence: number;
-  source: SourceKind;
-  sourceLabel: string;
-  method: string;
-  observedAt?: string;
-  sources: [string, string][];
-  caveats: string;
-  history: string;
-  evidence?: 'horizon' | 'noise' | 'route' | 'map';
-}
-
-export interface RatePlan {
-  meal: string;
-  cancel: string;
-  pay: string;
-  price: number;
-  tag?: string;
-}
-
-export interface RoomType {
-  id: string;
-  name: string;
-  area: number;
-  bed: string;
-  facades: Facade[];
-  floors: [number, number];
-  view: string;
-  photo: string;
-  forYou: [Verdict, string][];
-  recommended?: boolean;
-  request?: string;
-  rates: RatePlan[];
+  status: FactStatus;
+  source: string;
+  checkedAt: string;
+  note?: string | undefined;
 }
 
 export interface Hotel {
+  backend?: components["schemas"]["HotelOut"];
+  searchMatch?: components["schemas"]["HotelMatchOut"];
+  searchContext?: { id: string; trip: components["schemas"]["TripModel"] };
+  unknownCriteria?: Criterion[];
   id: string;
   name: string;
-  stars: number;
   district: string;
   address: string;
-  lngLat: [number, number];
-  toCenter: string;
-  toSea: string;
+  image: string;
+  gallery: string[];
+  price: number;
   rating: number;
-  ratingLabel: string;
+  reviewCount: number;
+  stars: number;
+  lngLat: [number, number];
   tagline: string;
-  photos: string[];
-  bestFloor: number;
-  bestFacade: Facade;
-  priceFrom: number;
-  bestRoom: string;
-  tradeoff: string;
-  /** вероятность, что желание выполняется, и строка объяснения */
-  wish: Record<string, [number, string]>;
-  amenities: string[];
-  nearby: [string, string, string][];
-  rooms: RoomType[];
+  description: string;
+  scores: Record<Criterion, number>;
+  noise: number[];
+  views: { from: number; to: number; label: string }[];
+  sunsetAzimuth: number;
+  walk: {
+    name: string;
+    minutes: number;
+    kind: "beach" | "transport" | "park" | "shop" | "food" | "kids";
+  }[];
+  audiences: { kids: string; pets: string; work: string };
+  floors: { range: string; note: string; good: boolean }[];
+  discovered: string[];
   facts: Fact[];
-  unknowns: [string, string][];
-}
-
-export interface HotelMatch {
-  hotel: Hotel;
-  score: number;
-  risk: number;
+  pros: string[];
+  cons: string[];
 }
