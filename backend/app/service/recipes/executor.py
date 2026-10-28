@@ -45,6 +45,10 @@ class GeoReader:
     def __init__(self, db: Database) -> None:
         self._db = db
 
+    async def feature(self, osm_id: str) -> MapFeature | None:
+        async with self._db.unit_of_work() as uow:
+            return await uow.catalog.feature(osm_id)
+
     async def features_near(
         self, point: LonLat, radius_m: float, *, kinds: Sequence[str] | None = None
     ) -> list[MapFeature]:

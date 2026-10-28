@@ -10,13 +10,12 @@ from app.domain.knowledge.observation import (
 )
 from app.domain.knowledge.scope import Scope
 from app.domain.knowledge.values import ValueType
+from app.service.geo.targets import route_targets
 from app.service.recipes.executor import Environment, Finding, MethodCall, NoDataError
 from app.service.recipes.methods.reach import Walk, nearest_walk
 from app.service.recipes.models import WalkToRecipe
 
-_TARGET_KINDS = {"beach": ["beach"], "station": ["station"]}
 _SEARCH_RADIUS_M = 3000
-_SEA_TOUCH_DEG = 0.003  # ~250 m: a beach belongs to the sea if it touches it within this
 
 
 class WalkToExecutor:
@@ -28,15 +27,8 @@ class WalkToExecutor:
         recipe = call.recipe_of(WalkToRecipe)
         hotel = call.hotel
         if isinstance(recipe.target, str):
-            targets = await env.reader.features_near(
-                hotel.location, _SEARCH_RADIUS_M, kinds=_TARGET_KINDS.get(recipe.target, [])
-            )
+            targets = await route_targets(hotel, env, recipe.target)
             label = {"beach": "пляж", "station": "станция", "center": "центр"}[recipe.target]
-            if recipe.target == "beach" and env.sea is not None:
-                # River and lake beaches in the mountains are not what «до пляжа» means here.
-                targets = [
-                    t for t in targets if env.sea.intersects(t.geometry.buffer(_SEA_TOUCH_DEG))
-                ]
         else:
             targets = await env.reader.tagged(
                 recipe.target.tags, near=hotel.location, radius_m=_SEARCH_RADIUS_M
