@@ -1,9 +1,11 @@
 from datetime import timedelta
 from pathlib import Path
+from uuid import UUID, uuid4
 
 from httpx import AsyncClient
 
 from app.db.database import Database
+from app.db.models import AgentRunRow
 from app.domain.catalog import hotel_id
 from app.domain.knowledge.observation import Observation
 from app.domain.knowledge.scope import Facade, Scope
@@ -112,3 +114,30 @@ async def test_unknown_wish_offers_live_research(
     assert chip["characteristic"] is None
     assert chip["params"]["maxWalkMinutes"] == 10
     assert result["research"][0]["chipId"] == chip["id"]
+
+
+async def test_card_asks_one_hotel_about_its_unknown(
+    client: AsyncClient, db: Database, tmp_path: Path
+) -> None:
+    await _world(db, tmp_path)
+    search = (await client.post("/api/v1/searches", json={"text": "вид на море"})).json()
+    url = f"/api/v1/searches/{search['searchId']}/research"
+
+    started = await client.post(
+        url, json={"characteristic": "pets_policy", "hotelIds": [str(YARD)]}
+    )
+    both = await client.post(url, json={"chipId": "c1", "characteristic": "pets_policy"})
+    stranger = await client.post(
+        url, json={"characteristic": "pets_policy", "hotelIds": [str(uuid4())]}
+    )
+
+    assert started.status_code == 202, started.text
+    assert both.status_code == 422
+    assert stranger.status_code == 404
+    chips = (await client.get(f"/api/v1/searches/{search['searchId']}")).json()["intent"]["chips"]
+    pets = next(c for c in chips if c["characteristic"] == "pets_policy")
+    assert pets["importance"] == "nice"
+    async with db.unit_of_work() as uow:
+        run = await uow.session.get(AgentRunRow, UUID(started.json()["runId"]))
+    assert run is not None
+    assert run.subject["hotelIds"] == [str(YARD)]

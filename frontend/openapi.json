@@ -2127,7 +2127,7 @@
         "tags": [
           "Search"
         ],
-        "summary": "Research an unknown chip for the top hotels now («узнать вживую»)",
+        "summary": "Research a chip or a card unknown now («узнать вживую», «спросить отель»)",
         "operationId": "research_chip_api_v1_searches__search_id__research_post",
         "parameters": [
           {
@@ -6812,14 +6812,41 @@
       "ResearchRequest": {
         "properties": {
           "chipId": {
-            "type": "string",
-            "title": "Chipid"
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Chipid",
+            "description": "A chip of this search"
+          },
+          "characteristic": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Characteristic",
+            "description": "Or a registry key from a hotel card's unknowns; joins the search"
+          },
+          "hotelIds": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "maxItems": 8,
+            "title": "Hotelids",
+            "description": "Only these hotels; empty = top of result"
           }
         },
         "type": "object",
-        "required": [
-          "chipId"
-        ],
         "title": "ResearchRequest"
       },
       "ReserveHotelOut": {

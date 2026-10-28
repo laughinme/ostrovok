@@ -1,7 +1,8 @@
 from datetime import date
 from typing import Any, Literal, Self
+from uuid import UUID
 
-from pydantic import Field
+from pydantic import Field, model_validator
 
 from app.api.schemas.base import ApiModel
 from app.api.schemas.knowledge import ScopeOut
@@ -231,4 +232,16 @@ class WishStarted(ApiModel):
 
 
 class ResearchRequest(ApiModel):
-    chip_id: str
+    chip_id: str | None = Field(None, description="A chip of this search")
+    characteristic: str | None = Field(
+        None, description="Or a registry key from a hotel card's unknowns; joins the search"
+    )
+    hotel_ids: list[UUID] = Field(
+        default_factory=list, max_length=8, description="Only these hotels; empty = top of result"
+    )
+
+    @model_validator(mode="after")
+    def _one_target(self) -> Self:
+        if (self.chip_id is None) == (self.characteristic is None):
+            raise ValueError("Give either chipId or characteristic")
+        return self

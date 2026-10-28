@@ -17,8 +17,7 @@ from app.api.schemas.search import (
 )
 from app.domain.search.intent import Intent
 from app.domain.search.trip import TripDraft
-from app.service.agents.wishes import RESEARCH_TOP, add_wishes, start_wish_research
-from app.service.search.search import SearchNotFoundError
+from app.service.agents.wishes import add_wishes, research_on_request
 
 router = APIRouter(tags=["Search"])
 
@@ -98,15 +97,18 @@ async def add_wish(
 @router.post(
     path="/searches/{search_id}/research",
     status_code=status.HTTP_202_ACCEPTED,
-    summary="Research an unknown chip for the top hotels now («узнать вживую»)",
+    summary="Research a chip or a card unknown now («узнать вживую», «спросить отель»)",
 )
 async def research_chip(
     search_id: UUID, payload: ResearchRequest, svc: SearchServiceDep, uow: UowDep, clock: ClockDep
 ) -> RunStarted:
-    view = await svc.get(search_id)
-    chip = next((c for c in view.intent.chips if c.id == payload.chip_id), None)
-    if chip is None:
-        raise SearchNotFoundError("No such chip in this search")
-    top = [m.hotel.id for m in view.ranking.matches[:RESEARCH_TOP]]
-    run_id = await start_wish_research(uow, clock, search_id, [chip], top)
+    run_id = await research_on_request(
+        svc,
+        uow,
+        clock,
+        search_id,
+        chip_id=payload.chip_id,
+        characteristic=payload.characteristic,
+        hotel_ids=payload.hotel_ids,
+    )
     return RunStarted(run_id=str(run_id))

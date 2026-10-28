@@ -30,7 +30,7 @@
 | 4.4 Сравнение | `POST /compare` |
 | 4.5 Отель «Как это будет» | `GET /hotels/{id}`; окно — `GET /hotels/{id}/window?facade=SW&floor=5&date=2026-11-12`; шум — `/noise`; дорога — `/routes/beach?profile=walk`; погода — `/climate?from=&to=`; «Ваш день» — `/day?date=`; «как этот, но…» — `POST /hotels/{id}/similar` |
 | 4.6 «Почему мы так думаем» | `GET /facts/{factId}` — источники, история, доказательства (`evidence[].params` — чем перестроить картинку) |
-| 4.7 Живое исследование | `POST /searches/{id}/wishes {text}` → `{runId, search}`; или кнопка «узнать вживую» у чипа с вердиктом `unknown` — `POST /searches/{id}/research {chipId}` → `{runId}`; затем SSE `GET /runs/{runId}/events`; по `search.updated` или `run.finished` — перечитать `GET /searches/{id}` |
+| 4.7 Живое исследование | `POST /searches/{id}/wishes {text}` → `{runId, search}`; или кнопка «узнать вживую» у чипа с вердиктом `unknown` — `POST /searches/{id}/research {chipId}` → `{runId}`; «Спросить отель» в карточке — `POST /searches/{sid}/research {characteristic, hotelIds: [id]}` по ключу из `Hotel.unknowns` (пожелание добавится в поиск как «желательно»); затем SSE `GET /runs/{runId}/events`; по `search.updated` или `run.finished` — перечитать `GET /searches/{id}` |
 | 4.8 Бронь, 4.9 поездка | `POST /bookings`, `GET /me/trips` (список заявок гостя, новые сверху, `?limit=` до 100), `GET /trips/{id}`, `POST /trips/{id}/feedback`, `GET /me/notifications` |
 | 4.10 Профиль вкуса | `GET/PATCH/DELETE /me/taste` |
 | 4.11 Кабинет отельера | `/partner/hotels/{id}` (+ `/questions`, `/facades`, `/requests`, `/demand`, `/notifications`), `/partner/questions/{id}/answers`, `/partner/facts/{id}/confirm|correct`, `/partner/requests/{id}/decision` |

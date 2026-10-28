@@ -15,10 +15,11 @@ from app.db.uow import UnitOfWork
 from app.domain.agents import AgentKind, Planner
 from app.domain.jobs import JobKind
 from app.domain.knowledge.characteristic import MethodKind
-from app.domain.search.intent import Chip, Intent
+from app.domain.search.intent import Chip, Importance, Intent
 from app.service.agents.curator import Curator
 from app.service.agents.researcher import Researcher
 from app.service.agents.runtime import AgentRunner, Tracer, launch
+from app.service.catalog.hotels import HotelNotFoundError
 from app.service.knowledge.registry import Registry
 from app.service.ports import Clock, EventBus
 from app.service.search.search import SearchNotFoundError, SearchService
@@ -59,6 +60,47 @@ async def start_wish_research(
         },
         subject={"searchId": str(search_id), "hotelIds": [str(h) for h in hotel_ids]},
     )
+
+
+async def research_on_request(
+    svc: SearchService,
+    uow: UnitOfWork,
+    clock: Clock,
+    search_id: UUID,
+    *,
+    chip_id: str | None = None,
+    characteristic: str | None = None,
+    hotel_ids: Sequence[UUID] = (),
+) -> UUID:
+    """
+    «Узнать вживую» for a chip of the search, or «Спросить отель» from a hotel card about one of
+    its unknowns: a characteristic the search lacks joins it as a nice-to-have wish first.
+    Without `hotel_ids` the top of the result is researched.
+    """
+    view = await svc.get(search_id)
+    if characteristic is not None:
+        chip = next((c for c in view.intent.chips if c.characteristic == characteristic), None)
+        if chip is None:
+            known = await Registry(uow).get(characteristic)
+            chip = Chip(
+                id=f"c{len(view.intent.chips) + 1}",
+                label=known.title,
+                importance=Importance.NICE,
+                checkable=known.checkable,
+                characteristic=known.key,
+            )
+            view = await svc.update_intent(
+                search_id, replace(view.intent, chips=(*view.intent.chips, chip))
+            )
+    else:
+        chip = next((c for c in view.intent.chips if c.id == chip_id), None)
+        if chip is None:
+            raise SearchNotFoundError("No such chip in this search")
+    targets = list(dict.fromkeys(hotel_ids))
+    if targets and len(await uow.catalog.hotels(targets)) != len(targets):
+        raise HotelNotFoundError()
+    targets = targets or [m.hotel.id for m in view.ranking.matches[:RESEARCH_TOP]]
+    return await start_wish_research(uow, clock, search_id, [chip], targets)
 
 
 class WishResearch:
