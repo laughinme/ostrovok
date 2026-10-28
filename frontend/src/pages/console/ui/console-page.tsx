@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 import {
   Activity,
   BookOpen,
@@ -6,6 +6,7 @@ import {
   Building2,
   ChartNoAxesCombined,
   ListChecks,
+  Hotel,
   Settings2,
   ShieldAlert,
 } from "lucide-react";
@@ -17,10 +18,12 @@ import { Settings } from "./settings";
 import { World } from "./world";
 import { Conflicts } from "./conflicts";
 import { Quality } from "./quality";
+import { NewHotel } from "./new-hotel";
 import "./console.css";
 
 const sections = [
   ["runs", "Агенты", Activity],
+  ["onboarding", "Новый отель", Hotel],
   ["learn", "Научить новому", Brain],
   ["registry", "Реестр", BookOpen],
   ["llm", "Журнал LLM", ListChecks],
@@ -31,7 +34,12 @@ const sections = [
 ] as const;
 
 export function ConsolePage() {
-  const [section, setSection] = useState<string>("runs");
+  const search = useSearch({ from: "/console" });
+  const navigate = useNavigate({ from: "/console" });
+  const section = sections.some(([key]) => key === search.section) ? search.section : "runs";
+  const setSection = (section: string) => {
+    void navigate({ search: (previous) => ({ ...previous, section }) });
+  };
   return (
     <main className="console-page mx-auto max-w-[1440px] px-4 py-8 sm:px-6 lg:px-12 lg:py-10">
       <header className="mb-8 flex flex-wrap items-end justify-between gap-3">
@@ -71,6 +79,9 @@ export function ConsolePage() {
         </div>
         <section className="min-w-0" aria-label={sections.find(([key]) => key === section)?.[1]}>
           {section === "runs" && <Runs />}
+          <div hidden={section !== "onboarding"}>
+            <NewHotel active={section === "onboarding"} />
+          </div>
           <div hidden={section !== "learn"}>
             <Learn />
           </div>
