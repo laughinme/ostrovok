@@ -103,7 +103,7 @@ test-down: ## Stop and remove the test containers
 
 check: lint typecheck arch test ## Every backend check: lint, types, architecture, tests
 
-frontend-dev: ## Next.js with hot reload
+frontend-dev: ## TanStack Start with hot reload
 	npm --prefix frontend run dev
 
 frontend-check: ## Frontend lint, types, FSD architecture and build
