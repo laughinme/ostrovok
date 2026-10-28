@@ -44,7 +44,11 @@ def run_label(settings: Settings) -> str:
 
 
 async def evaluate_quality(
-    settings: Settings, *, use_llm: bool = False, overrides: dict[str, Any] | None = None
+    settings: Settings,
+    *,
+    use_llm: bool = False,
+    overrides: dict[str, Any] | None = None,
+    cache_only: bool = False,
 ) -> str:
     settings = eval_settings(settings, overrides or {}) if use_llm else settings
     if use_llm and not settings.llm_enabled:
@@ -55,8 +59,8 @@ async def evaluate_quality(
         llm_report = None
         if use_llm:
             # Without Redis: the evaluation counts its calls locally, not against the app's day.
-            fast = build_language_model(settings, db, None)
-            strong = build_language_model(settings, db, None, strong=True)
+            fast = build_language_model(settings, db, None, cache_only=cache_only)
+            strong = build_language_model(settings, db, None, strong=True, cache_only=cache_only)
             assert fast is not None  # noqa: S101 - llm_enabled checked above
             assert strong is not None  # noqa: S101
 
@@ -70,6 +74,7 @@ async def evaluate_quality(
             )
             llm_report["generatedAt"] = clock.now().isoformat()
             llm_report["evaluationVersion"] = 2
+            llm_report["cacheOnly"] = cache_only
             llm_report["model"] = settings.llm_model
             llm_report["strongModel"] = settings.llm_model_strong or settings.llm_model
             llm_report["thinking"] = settings.llm_thinking

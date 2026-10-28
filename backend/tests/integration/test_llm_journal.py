@@ -1,12 +1,12 @@
 """Every LLM call lands in the journal (answers, cache hits, failures); the console reads it."""
 
 import pytest
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from pydantic_ai import ModelMessage, ModelResponse, ToolCallPart
 from pydantic_ai.models.function import AgentInfo, FunctionModel
 
 from app.db.database import Database
-from app.infra.llm.cache import LlmCache
+from app.infra.llm.cache import LlmCache, cache_key, schema_fingerprint
 from app.infra.llm.guards import DailyLimit
 from app.infra.llm.journal import LlmJournal
 from app.infra.llm.pydantic_ai_model import PydanticAiLanguageModel
@@ -86,3 +86,39 @@ async def test_cache_does_not_cross_provider_boundaries(db: Database) -> None:
     await first.structured(task="intent", system="s", prompt="same", output=Chips)
     with pytest.raises(LlmUnavailableError):
         await second.structured(task="intent", system="s", prompt="same", output=Chips)
+
+
+class Dates(BaseModel):
+    from_: str | None = Field(None, alias="from")
+
+
+async def test_legacy_cache_preserves_aliased_fields(db: Database) -> None:
+    key = cache_key("", "fake", "default", "intent", "s", "p", schema_fingerprint(Dates), "[]")
+    cache = LlmCache(db)
+    await cache.put(key, model="fake", task="intent", output={"from_": "2026-11-12"}, usage={})
+    llm = PydanticAiLanguageModel(
+        FunctionModel(_broken),
+        model_name="fake",
+        timeout_sec=1,
+        limit=DailyLimit(None, 0),
+        cache=cache,
+        cache_only=True,
+    )
+    result = await llm.structured(task="intent", system="s", prompt="p", output=Dates)
+    assert result.output.from_ == "2026-11-12"
+    assert result.cached
+    with pytest.raises(LlmUnavailableError, match="no cached answer"):
+        await llm.structured(task="intent", system="s", prompt="missing", output=Dates)
+
+
+async def test_cache_round_trip_keeps_aliases(db: Database) -> None:
+    def model(messages: list[ModelMessage], info: AgentInfo) -> ModelResponse:
+        return ModelResponse(
+            parts=[ToolCallPart(info.output_tools[0].name, {"from": "2026-11-12"})]
+        )
+
+    llm = _llm(db, model)
+    first = await llm.structured(task="intent", system="s", prompt="dates", output=Dates)
+    cached = await llm.structured(task="intent", system="s", prompt="dates", output=Dates)
+    assert first.output == cached.output
+    assert cached.output.from_ == "2026-11-12"
