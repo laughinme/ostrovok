@@ -364,25 +364,31 @@ export function drawPanorama(
       rects[i]![1].style.y = y + 6 + "px";
       rects[i]![1].style.height = Math.max(0, H - y - 6) + "px";
     });
-    let seaShare = 0;
-    if (F.sea) {
-      let blocked = 0,
-        total = 0;
-      for (let d = F.sea[0]; d <= F.sea[1]; d++) {
-        total++;
-        if (F.buildings.some((b) => d >= b.a && d < b.b && topY(b, eye) < HZ)) blocked++;
-      }
-      seaShare = Math.round((100 * (1 - blocked / total) * (F.sea[1] - F.sea[0])) / 128);
+    return readPanorama(key, floor);
+  };
+}
+
+export function readPanorama(key: Facade, floor: number): PanoReading {
+  const F = FACADES[key];
+  const eye = floor * 3 - 1.5;
+  let seaShare = 0;
+  if (F.sea) {
+    let blocked = 0,
+      total = 0;
+    for (let d = F.sea[0]; d <= F.sea[1]; d++) {
+      total++;
+      if (F.buildings.some((b) => d >= b.a && d < b.b && topY(b, eye) < HZ)) blocked++;
     }
-    const sun = F.sun;
-    const sunVisible =
-      sun != null &&
-      Boolean(F.sunVisible) &&
-      !F.buildings.some((b) => sun >= b.a && sun < b.b && topY(b, eye) < HZ - 5);
-    return {
-      seaShare: Math.min(100, seaShare),
-      sunVisible,
-      mountains: key === "NE" || key === "SE",
-    };
+    seaShare = Math.round((100 * (1 - blocked / total) * (F.sea[1] - F.sea[0])) / 128);
+  }
+  const sun = F.sun;
+  const sunVisible =
+    sun != null &&
+    Boolean(F.sunVisible) &&
+    !F.buildings.some((b) => sun >= b.a && sun < b.b && topY(b, eye) < HZ - 5);
+  return {
+    seaShare: Math.min(100, seaShare),
+    sunVisible,
+    mountains: key === "NE" || key === "SE",
   };
 }
