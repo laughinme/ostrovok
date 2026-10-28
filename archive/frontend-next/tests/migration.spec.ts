@@ -26,7 +26,8 @@ test('search transitions to results, preserves criteria and completes a booking'
   await expect(page.getByRole('heading', { name: 'Бронь в один шаг' })).toBeVisible();
   await page.getByRole('button', { name: 'Забронировать', exact: true }).click();
   await expect(page).toHaveURL(/\/trips\//);
-  await expect(page.getByText('Отель подтвердил:', { exact: false })).toBeVisible();
+  await expect(page.locator('.ticket-statuses').getByText('Отель подтвердил', { exact: true })).toBeVisible();
+  await expect(page.locator('.ticket-stub-room')).toContainText('512');
 });
 
 test('Query cache survives navigation; failures offer retry; invalid hotels never fall back', async ({ page }) => {
