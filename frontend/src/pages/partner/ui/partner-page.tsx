@@ -1,6 +1,5 @@
 import { StatusPill } from "@/entities/hotel";
 import { useHotelProfile } from "@/features/manage-hotel-profile";
-import { getApiMode } from "@/shared/api";
 import { RequestState } from "@/shared/ui";
 import {
   ArrowDown,
@@ -98,12 +97,6 @@ export function PartnerPage() {
               <ArrowRight size={15} />
             </a>
           </div>
-          <p className="partner-mode-note">
-            <Info size={15} />
-            {getApiMode() === "demo"
-              ? "Демо-кабинет. Изменения сохраняются только в этом браузере."
-              : "Ваши ответы сохраняются в профиле отеля с указанием источника."}
-          </p>
         </aside>
 
         <div className="partner-content">

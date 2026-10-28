@@ -148,8 +148,7 @@
   background: var(--partner-blue);
   border-radius: 99px;
 }
-.partner-completeness p,
-.partner-mode-note {
+.partner-completeness p {
   color: var(--partner-muted);
   font-size: 12px;
   line-height: 1.7;
@@ -162,18 +161,6 @@
   color: var(--partner-blue);
   font-size: 12px;
   font-weight: 600;
-}
-.partner-mode-note {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  margin-top: 24px;
-  padding-top: 20px;
-  border-top: 1px solid var(--partner-line);
-}
-.partner-mode-note > svg {
-  flex-shrink: 0;
-  margin-top: 3px;
 }
 .partner-content {
   display: grid;
@@ -804,16 +791,6 @@
   .partner-completeness p,
   .partner-completeness a {
     display: none;
-  }
-  .partner-mode-note {
-    margin-top: 10px;
-    padding: 0;
-    border: 0;
-    font-size: 10px;
-  }
-  .partner-mode-note > svg {
-    width: 13px;
-    margin-top: 2px;
   }
   .partner-next-step {
     flex-wrap: nowrap;
