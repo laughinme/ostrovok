@@ -54,16 +54,11 @@ def test_blocked_node_splits_network_and_archive_loads(tmp_path):
     graph = topology.build_graph(network, lambda xy: np.zeros(len(xy)), blocked={b})
     assert len(graph.edges) == 2
     path = tmp_path / "graph.npz"
-    np.savez_compressed(
-        path,
-        nodes=graph.nodes,
-        edges=graph.edges,
-        length_m=graph.length_m,
-        steps=graph.steps,
-        crossings=graph.crossings,
-        uncertain=graph.uncertain,
-        osm_refs=np.asarray(graph.osm_refs),
-    )
+    writer = pytest.importorskip("pipeline.graph", exc_type=ImportError)
+    writer.save_graph(graph, path)
+    first = path.read_bytes()
+    writer.save_graph(graph, path)
+    assert path.read_bytes() == first
     loaded = WalkGraph.from_file(path)
     np.testing.assert_equal(loaded.nodes, graph.nodes)
     np.testing.assert_equal(loaded.edges, graph.edges)
