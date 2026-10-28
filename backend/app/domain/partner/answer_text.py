@@ -77,7 +77,9 @@ def _step_free(text: str) -> bool | None:
 
 def boolean(text: str, key: str) -> bool | None:
     if key == "step_free":
-        return _step_free(text)
+        step_free = _step_free(text)
+        if step_free is not None:
+            return step_free
     if key == "soundproofing":
         if re.search(r"шумоизоляц\w*.{0,12}нет|без.*шумоизоляц", text):
             return False
