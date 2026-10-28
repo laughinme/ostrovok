@@ -1,0 +1,108 @@
+.landing-page .wish-surface {
+  display: none;
+}
+.landing-page .wish .wish-attachment,
+.landing-page .wish .wish-mic {
+  flex: none;
+  width: 44px;
+  height: 44px;
+}
+.landing-page .band-lime .hero-c {
+  container-type: inline-size;
+}
+.landing-page .band-lime .wish {
+  --wish-cutout-width: 0px;
+  --wish-radius: 28px;
+  position: relative;
+  border: 0;
+  border-radius: var(--wish-radius);
+  padding: 16px 16px 16px 20px;
+  background: transparent;
+}
+.landing-page .band.band-lime .wish {
+  box-shadow: none;
+}
+.landing-page .band-lime .wish::before,
+.landing-page .band-lime .wish::after {
+  content: none;
+}
+.landing-page .band-lime .wish-surface {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  display: block;
+  border-radius: var(--wish-radius);
+  background: #fff;
+  filter: drop-shadow(0 20px 24px rgb(6 14 46 / 16%));
+  pointer-events: none;
+}
+.landing-page .wish-surface span {
+  display: none;
+}
+
+@container (min-width: 800px) {
+  .landing-page .band-lime .wish {
+    --wish-cutout-width: clamp(180px, calc(100cqw - 620px), 300px);
+  }
+  .landing-page .band-lime .wish-surface {
+    background: transparent;
+  }
+  .landing-page .band-lime .wish-surface span {
+    position: absolute;
+    display: block;
+  }
+  .landing-page .band-lime .wish-surface__top {
+    inset: 0 0 auto;
+    height: 72px;
+    border-radius: var(--wish-radius);
+    background: #fff;
+  }
+  .landing-page .band-lime .wish-surface__bottom {
+    inset: 0 var(--wish-cutout-width) 0 0;
+    border-radius: var(--wish-radius) 0 var(--wish-radius) var(--wish-radius);
+    background: #fff;
+  }
+  .landing-page .band-lime .wish-surface__join {
+    top: 72px;
+    left: calc(100% - var(--wish-cutout-width));
+    width: 32px;
+    height: 32px;
+    background: radial-gradient(circle at 100% 100%, transparent 31.5px, #fff 32px);
+  }
+  .landing-page .band-lime .wish-tools {
+    max-width: calc(100% - var(--wish-cutout-width));
+  }
+}
+
+@media (max-width: 720px) {
+  .landing-page .band-lime .wish {
+    padding: 14px;
+  }
+  .landing-page .wish .wish-row {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 8px;
+  }
+  .landing-page .wish .wish-row textarea {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    width: 100%;
+  }
+  .landing-page .wish .wish-attachment {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .landing-page .wish .wish-mic {
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: end;
+  }
+  .landing-page .wish .go {
+    grid-column: 3;
+    grid-row: 2;
+    justify-self: end;
+    min-width: 140px;
+    padding-inline: 18px;
+  }
+}
