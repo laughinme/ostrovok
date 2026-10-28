@@ -20,5 +20,6 @@ def test_all_runs_download_and_clip_before_export_and_manifest(monkeypatch):
         "pipeline.climate",
         "pipeline.hotels",
         "pipeline.graph",
+        "pipeline.window_profiles",
         "manifest",
     ]
