@@ -41,7 +41,9 @@ export async function api<T>(path: string, options: ApiOptions = {}): Promise<T>
     const problem = body as { detail?: unknown; error_code?: string } | null;
     throw new ApiError(
       response.status,
-      apiErrorMessage(response.status, problem?.detail),
+      response.status === 422 && !["/intents", "/searches"].includes(path.split("?")[0] ?? "")
+        ? "Проверьте заполненные поля и выбранные условия."
+        : apiErrorMessage(response.status, problem?.detail),
       problem?.error_code,
     );
   }

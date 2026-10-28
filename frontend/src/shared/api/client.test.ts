@@ -20,6 +20,18 @@ describe("API errors and mode separation", () => {
     );
     await expect(api("/searches")).rejects.toMatchObject({
       status: 422,
+      message: "Проверьте запрос: от 1 до 2000 символов, корректные даты и число гостей.",
+    });
+  });
+  it("keeps non-search validation messages about form fields", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(
+        async () => new Response(JSON.stringify({ detail: [{ msg: "Invalid" }] }), { status: 422 }),
+      ),
+    );
+    await expect(api("/bookings")).rejects.toMatchObject({
+      status: 422,
       message: "Проверьте заполненные поля и выбранные условия.",
     });
   });
@@ -30,7 +42,10 @@ describe("API errors and mode separation", () => {
       "fetch",
       vi.fn(async () => new Response(JSON.stringify({ detail: "Недоступно" }), { status: 503 })),
     );
-    await expect(api("/hotels")).rejects.toMatchObject({ status: 503, message: "Недоступно" });
+    await expect(api("/hotels")).rejects.toMatchObject({
+      status: 503,
+      message: "Сервис временно недоступен. Попробуйте ещё раз через минуту.",
+    });
     expect(demo).not.toHaveBeenCalled();
   });
   it("never sends a live request in demo mode, including unsupported operations", async () => {
