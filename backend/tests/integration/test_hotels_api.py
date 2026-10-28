@@ -112,3 +112,20 @@ async def test_finished_run_replays_steps_over_sse(client: AsyncClient, db: Data
     assert [s["kind"] for s in run["steps"]] == ["reason", "decision"]
     assert text.count("event: run.step") == 2
     assert "event: run.finished" in text
+
+
+async def test_hotel_list_is_reused_until_facts_change(
+    client: AsyncClient, db: Database, tmp_path: Path
+) -> None:
+    await run_seed(db, write_region(tmp_path), seed_loaders())
+    async with db.unit_of_work() as uow:
+        await RegistryLoader().load(uow, DATA)
+    before = await client.get("/api/v1/hotels")
+    again = await client.get("/api/v1/hotels")
+    await _knowledge(db, tmp_path)
+    after = (await client.get("/api/v1/hotels")).json()
+
+    assert before.content == again.content
+    assert before.headers["content-type"] == "application/json"
+    mayak = next(h for h in after if h["id"] == str(MAYAK))
+    assert any(f["characteristic"] == "sea_view" for f in mayak["facts"])
