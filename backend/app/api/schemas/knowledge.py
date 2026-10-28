@@ -63,11 +63,13 @@ class EvidenceOut(ApiModel):
     attribution: str
 
     @classmethod
-    def from_domain(cls, e: Evidence) -> Self:
+    def from_domain(cls, e: Evidence, *, compact: bool = False) -> Self:
+        # A map layer carries street geometry (~50 KB a hotel): lists leave it to GET /facts/{id}.
+        heavy = compact and e.kind.value == "map_layer"
         return cls(
             kind=e.kind.value,
             summary=e.summary,
-            params=dict(e.params) or None,
+            params=None if heavy else dict(e.params) or None,
             osm_refs=list(e.osm_refs),
             attribution=e.attribution,
         )
@@ -95,7 +97,7 @@ class FactOut(ApiModel):
     is_demo: bool
 
     @classmethod
-    def from_domain(cls, f: Fact) -> Self:
+    def from_domain(cls, f: Fact, *, compact: bool = False) -> Self:
         return cls(
             id=str(f.id),
             hotel_id=str(f.hotel_id),
@@ -112,7 +114,7 @@ class FactOut(ApiModel):
             observed_at=f.observed_at,
             valid_until=f.valid_until,
             status=f.status.value,
-            evidence=[EvidenceOut.from_domain(e) for e in f.evidence],
+            evidence=[EvidenceOut.from_domain(e, compact=compact) for e in f.evidence],
             caveats=list(f.caveats),
             conflict_id=str(f.conflict_id) if f.conflict_id else None,
             is_demo=f.is_demo,

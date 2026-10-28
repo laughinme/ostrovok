@@ -14,7 +14,7 @@ router.include_router(window_router)
 
 @router.get(path="/hotels", summary="Hotels of the region with a summary of what we know")
 async def list_hotels(svc: HotelQueriesDep) -> list[HotelOut]:
-    return [HotelOut.from_view(h) for h in await svc.many()]
+    return [HotelOut.from_view(h, compact=True) for h in await svc.many()]
 
 
 @router.get(

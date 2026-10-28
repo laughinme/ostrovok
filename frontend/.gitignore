@@ -29,3 +29,10 @@ dist-ssr
 *.sw?
 
 .vercel/
+
+# Build and test leftovers (old Next.js build, Playwright runs, image candidates)
+.next/
+next-env.d.ts
+*.tsbuildinfo
+test-results/
+scripts/.candidates/

@@ -128,7 +128,8 @@ class HotelOut(ApiModel):
     nearby: list[NearbyOut]
 
     @classmethod
-    def from_view(cls, h: HotelView) -> Self:
+    def from_view(cls, h: HotelView, *, compact: bool = False) -> Self:
+        """`compact` for lists: facts without heavy map geometry (the card loads it per fact)."""
         return cls(
             id=str(h.geo.id),
             osm_id=h.geo.osm_id,
@@ -142,7 +143,7 @@ class HotelOut(ApiModel):
             demo=HotelDemoOut.from_raw(h.demo),
             price_from_demo=h.price_from_demo,
             rooms=[RoomTypeOut.from_view(r) for r in h.rooms],
-            facts=[FactOut.from_domain(f) for f in h.facts],
+            facts=[FactOut.from_domain(f, compact=compact) for f in h.facts],
             unknowns=[
                 UnknownOut(characteristic=u.characteristic, question=u.question, why=u.why)
                 for u in h.unknowns
