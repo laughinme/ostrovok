@@ -41,6 +41,41 @@ export function newestTrips(trips: TripSummary[]) {
   return [...trips].sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
 }
 
+function promisedScope(value: unknown) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return "Область не указана";
+  const scope = value as Record<string, unknown>;
+  const facades: Record<string, string> = {
+    N: "С",
+    NE: "СВ",
+    E: "В",
+    SE: "ЮВ",
+    S: "Ю",
+    SW: "ЮЗ",
+    W: "З",
+    NW: "СЗ",
+  };
+  const sides = Array.isArray(scope["facades"])
+    ? scope["facades"]
+        .flatMap((side: unknown) =>
+          typeof side === "string" && facades[side] ? [facades[side]] : [],
+        )
+        .join(", ")
+    : "";
+  const from = typeof scope["floorFrom"] === "number" ? scope["floorFrom"] : null;
+  const to = typeof scope["floorTo"] === "number" ? scope["floorTo"] : null;
+  const floor =
+    from != null && to != null
+      ? from === to
+        ? `этаж ${from}`
+        : `этажи ${from}–${to}`
+      : from != null
+        ? `этаж ≥ ${from}`
+        : to != null
+          ? `этаж ≤ ${to}`
+          : "";
+  return [sides ? `${sides}-сторона` : "", floor].filter(Boolean).join(" · ") || "Весь отель";
+}
+
 export function promisedQuestions(promised: Trip["promised"]) {
   const seen = new Set<string>();
   return promised.flatMap((fact) => {
@@ -61,7 +96,7 @@ export function promisedQuestions(promised: Trip["promised"]) {
         : fact["characteristic"] === "sunset_over_sea" && fact["value"] === true
           ? "Был ли виден закат над морем?"
           : "Совпало ли ожидание?";
-    return [{ id, statement, question }];
+    return [{ id, statement, question, scopeText: promisedScope(fact["scope"]) }];
   });
 }
 

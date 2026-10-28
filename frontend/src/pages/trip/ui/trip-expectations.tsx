@@ -88,7 +88,10 @@ export function TripExpectations({ trip }: { trip: Trip }) {
       {promises.length ? (
         <ul className="trip-facts card-w">
           {promises.map((promise) => (
-            <li key={promise.id}>{promise.statement}</li>
+            <li key={promise.id}>
+              {promise.statement}
+              <p className="muted">{promise.scopeText}</p>
+            </li>
           ))}
         </ul>
       ) : (

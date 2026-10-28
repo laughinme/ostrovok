@@ -62,4 +62,32 @@ describe("trip presentation", () => {
     expect(feedbackError(new ApiError(409, "Conflict"))).toBe("Уже ответили");
     expect(feedbackError(new ApiError(503, "Попробуйте позже"))).toBe("Попробуйте позже");
   });
+
+  it("keeps separate scopes and negative promises when building questions", () => {
+    const facts = [
+      {
+        factId: "first",
+        statement: "Моря не видно",
+        characteristic: "sea_view",
+        value: false,
+        scope: { facades: ["N", "E"], floorFrom: 1, floorTo: 3 },
+      },
+      {
+        factId: "second",
+        statement: "Море видно",
+        characteristic: "sea_view",
+        value: true,
+        scope: { facades: ["SW"], floorFrom: 4, floorTo: 4 },
+      },
+    ];
+    const questions = promisedQuestions(facts);
+    expect(questions.map((item) => item.scopeText)).toEqual([
+      "С, В-сторона · этажи 1–3",
+      "ЮЗ-сторона · этаж 4",
+    ]);
+    expect(questions[0]?.question).toBe("Совпало ли ожидание?");
+    expect(feedbackPayload(facts, { first: false })).toEqual({
+      answers: [{ factId: "first", answer: false }],
+    });
+  });
 });
