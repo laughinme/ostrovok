@@ -35,6 +35,9 @@ export default defineConfig(({ mode }) => {
       react(),
     ],
     resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } },
+    optimizeDeps: {
+      include: ["@react-three/fiber", "three", "three/addons/geometries/RoundedBoxGeometry.js"],
+    },
     server: { port: 5173 },
   };
 });

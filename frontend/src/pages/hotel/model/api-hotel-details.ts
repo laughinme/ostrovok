@@ -20,6 +20,8 @@ export function detailFactFromApi(
     statement: fact.statement,
     scopeText: fact.scopeText,
     confidence: fact.confidence,
+    status: fact.status,
+    isDemo: fact.isDemo,
     source: fact.source,
     sourceLabel: fact.sourceLabel,
     method: fact.method,

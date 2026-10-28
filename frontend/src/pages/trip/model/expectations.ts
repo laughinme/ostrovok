@@ -12,6 +12,11 @@ export interface TripExpectation {
   status?: "ok" | "stale" | "conflict";
   caveats: string[];
 }
+export interface TripExpectationRow extends TripExpectation {
+  booked: TripExpectation | null;
+  latest: TripExpectation | null;
+  changed: boolean;
+}
 const directions: Record<string, string> = {
   N: "Север",
   NE: "Северо-восток",
@@ -97,4 +102,59 @@ export function currentExpectations(facts: TripDetails["facts"]): TripExpectatio
     status: fact.status,
     caveats: fact.caveats,
   }));
+}
+
+function scopeKey(value: unknown): string {
+  return JSON.stringify(
+    Object.entries(object(value))
+      .filter(([, item]) => item != null && (!Array.isArray(item) || item.length > 0))
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([key, item]) => [key, Array.isArray(item) ? [...item].sort() : item]),
+  );
+}
+
+export function mergedExpectations(
+  data: Pick<TripDetails, "promised" | "facts">,
+  roomNames: Record<string, string> = {},
+): TripExpectationRow[] {
+  const saved = promisedExpectations(data.promised, roomNames);
+  const current = currentExpectations(data.facts);
+  const matched = new Set<number>();
+  const rows = saved.map((booked, index): TripExpectationRow => {
+    const snapshot = data.promised[index]!;
+    const factId = string(snapshot["factId"]);
+    const byId = factId ? data.facts.findIndex((fact) => fact.id === factId) : -1;
+    const currentIndex =
+      byId >= 0
+        ? byId
+        : data.facts.findIndex(
+            (fact, currentIndex) =>
+              !matched.has(currentIndex) &&
+              fact.characteristic === booked.characteristic &&
+              scopeKey(fact.scope) === scopeKey(snapshot["scope"]),
+          );
+    const latest = current[currentIndex] ?? null;
+    if (latest) matched.add(currentIndex);
+    return {
+      ...booked,
+      ...latest,
+      id: booked.id,
+      scope: booked.scope,
+      caveats: [...new Set([...booked.caveats, ...(latest?.caveats ?? [])])],
+      booked,
+      latest,
+      changed:
+        latest !== null &&
+        (latest.statement !== booked.statement ||
+          latest.status !== "ok" ||
+          (snapshot["value"] !== undefined &&
+            JSON.stringify(snapshot["value"]) !== JSON.stringify(data.facts[currentIndex]!.value))),
+    };
+  });
+  current.forEach((latest, index) => {
+    if (!matched.has(index)) {
+      rows.push({ ...latest, id: `current-${latest.id}`, booked: null, latest, changed: false });
+    }
+  });
+  return rows;
 }

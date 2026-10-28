@@ -17,6 +17,8 @@ export interface Fact {
   statement: string;
   scopeText: string;
   confidence: number;
+  status?: "ok" | "stale" | "conflict";
+  isDemo?: boolean;
   source: SourceKind;
   sourceLabel: string;
   method: string;
