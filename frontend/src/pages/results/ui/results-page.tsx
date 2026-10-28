@@ -1,7 +1,7 @@
 import { useCompare } from "@/features/compare-hotels";
 import { CriteriaFilter, useSearchFilters } from "@/features/hotel-search";
 import { cn } from "@/shared/lib";
-import { DemoBadge } from "@/shared/ui";
+import { RequestState } from "@/shared/ui";
 import { CoastMap } from "@/widgets/hotel-map";
 import { HotelResultCard } from "@/widgets/hotel-result-card";
 import { Link, useNavigate } from "@tanstack/react-router";
@@ -23,6 +23,10 @@ export function ResultsPage({
     ranked,
     toggleCriterion,
     refineQuery,
+    pending,
+    error,
+    retry,
+    search: searchResult,
   } = useSearchFilters(q);
   const [hover, setHover] = useState<string | null>(null);
   const [view, setView] = useState<"list" | "map">("list");
@@ -31,13 +35,7 @@ export function ResultsPage({
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <div className="flex items-center gap-2">
-            <p className="font-mono text-xs uppercase tracking-widest text-coral">
-              Луч понял запрос
-            </p>
-            <DemoBadge />
-          </div>
-          <h1 className="mt-2 max-w-3xl text-3xl sm:text-4xl">«{q}»</h1>
+          <h1 className="max-w-3xl text-3xl sm:text-4xl">«{q}»</h1>
         </div>
         <form
           onSubmit={(e) => {
@@ -65,7 +63,7 @@ export function ResultsPage({
           до <span className="font-mono text-foreground">{maxPrice.toLocaleString("ru")} ₽</span>
           <input
             type="range"
-            min={7000}
+            min={1000}
             max={20000}
             step={500}
             value={maxPrice}
@@ -89,9 +87,10 @@ export function ResultsPage({
         </div>
       </div>
 
+      <RequestState pending={pending} error={error} retry={retry} />
       <div className="mt-6 grid gap-6 lg:grid-cols-[1.35fr_1fr]">
         <div className={cn("space-y-4", view === "map" && "hidden lg:block")}>
-          {ranked.length === 0 && (
+          {!pending && !error && ranked.length === 0 && (
             <p className="rounded-3xl border p-10 text-center text-muted-foreground">
               Под такой бюджет вариантов нет — попробуйте увеличить цену.
             </p>
@@ -119,7 +118,13 @@ export function ResultsPage({
               items={ranked.map((r) => ({ hotel: r.hotel, score: r.score }))}
               active={hover}
               onHover={setHover}
-              onSelect={(id) => navigate({ to: "/hotel/$id", params: { id }, search: { q } })}
+              onSelect={(id) =>
+                navigate({
+                  to: "/hotel/$id",
+                  params: { id },
+                  search: { q, sid: searchResult?.searchId },
+                })
+              }
             />
           </div>
         </aside>
