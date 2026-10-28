@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef } from "react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { TravelAirplane } from "@/shared/ui";
 
 export function LandingFlight() {
@@ -6,27 +7,29 @@ export function LandingFlight() {
   const plane = useRef<HTMLDivElement>(null);
   const route = useRef<SVGPathElement>(null);
   const darkClip = useRef<SVGRectElement>(null);
+  const routeLayer = useRef<SVGGElement>(null);
+  const progress = useRef<HTMLDivElement>(null);
   const trailId = `landing-flight-${useId().replace(/:/g, "")}`;
   useEffect(() => {
     const mq = matchMedia("(prefers-reduced-motion: reduce)");
+    const showcase = wrap.current?.closest<HTMLElement>(".landing-showcase");
+    const arrival = showcase?.querySelector<HTMLElement>(".arrival-icon");
+    const final = showcase?.querySelector<HTMLElement>(".final-cta");
+    const band = document.querySelector<HTMLElement>(".landing-page .band");
+    const hotel = showcase?.querySelector<HTMLElement>(".hotel-stage");
+    const proof = showcase?.querySelector<HTMLElement>(".landing-proof");
+    if (!showcase || !arrival || !final || !band || !hotel || !proof) return;
+    const copy = Array.from(
+      showcase.querySelectorAll<HTMLElement>(
+        "h2,.hotel-copy,.proof-heading p,.scene-facts,.evidence-stage,.evidence-list",
+      ),
+    );
     let frame = 0;
-    const paint = () => {
-      frame = 0;
-      if (!wrap.current || !plane.current || !route.current || !darkClip.current) return;
-      const arrival = wrap.current
-        .closest(".landing-showcase")
-        ?.querySelector<HTMLElement>(".arrival-icon");
-      const final = wrap.current
-        .closest(".landing-showcase")
-        ?.querySelector<HTMLElement>(".final-cta");
-      if (!arrival || !final) return;
+    const measure = () => {
       const mobile = innerWidth < 720;
-      const h = document.documentElement.scrollHeight;
       const w = innerWidth;
-      const start =
-        document.querySelector<HTMLElement>(".landing-page .band")!.offsetTop +
-        document.querySelector<HTMLElement>(".landing-page .band")!.clientHeight;
-      const maxScroll = Math.max(1, h - innerHeight);
+      const maxScroll = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+      const start = band.offsetTop + band.clientHeight;
       const finalTop = final.getBoundingClientRect().top + scrollY;
       const target = arrival.getBoundingClientRect();
       const destination = {
@@ -40,7 +43,6 @@ export function LandingFlight() {
       );
       const cruiseY = Math.min(250, innerHeight * 0.34);
       const cruiseLength = dockStart + cruiseY - start;
-      const p = Math.min(1, Math.max(0, (scrollY - start + cruiseY) / cruiseLength));
       const cruiseX = (t: number) =>
         mobile
           ? w - 18 + Math.sin(t * Math.PI * 3) * 15
@@ -56,7 +58,84 @@ export function LandingFlight() {
         x: destination.x - Math.cos((Math.PI * 25) / 180) * approach,
         y: destination.y + Math.sin((Math.PI * 25) / 180) * approach,
       };
-      wrap.current.style.height = `${h}px`;
+      const dark = proof.getBoundingClientRect();
+      const pin = ScrollTrigger.getAll().find((trigger) => trigger.trigger === hotel);
+      const pinStart = pin?.start ?? 0;
+      const pinLength = pin ? pin.end - pin.start : 0;
+      const pinOffset = Math.min(pinLength, Math.max(0, scrollY - pinStart));
+      const blockers = copy.map((el) => {
+        const rect = el.getBoundingClientRect();
+        const pinned = hotel.contains(el);
+        const offset = scrollY - (pinned ? pinOffset : 0);
+        return {
+          left: rect.left,
+          right: rect.right,
+          top: rect.top + offset,
+          bottom: rect.bottom + offset,
+          pinned,
+        };
+      });
+      let points = "";
+      const cruisePoints = Array.from({ length: 100 }, (_, i) => {
+        const t = i / 99;
+        points += `${i ? " L" : "M"}${cruiseX(t)} ${start + t * cruiseLength}`;
+        return points;
+      });
+      return {
+        w,
+        maxScroll,
+        start,
+        destination,
+        dockStart,
+        dockEnd,
+        cruiseY,
+        cruiseLength,
+        cruiseX,
+        cruisePoints,
+        departure,
+        control1,
+        control2,
+        darkTop: dark.top + scrollY,
+        darkHeight: dark.height,
+        planeSize: mobile ? 46 : 92,
+        arrivalWidth: arrival.offsetWidth,
+        pinStart,
+        pinLength,
+        blockers,
+      };
+    };
+    let layout: ReturnType<typeof measure> | undefined;
+    let dirty = true;
+    const paint = () => {
+      frame = 0;
+      if (!plane.current || !route.current || !darkClip.current || !routeLayer.current) return;
+      if (mq.matches) {
+        if (showcase.dataset["flight"] !== "static") showcase.dataset["flight"] = "static";
+        return;
+      }
+      if (dirty || !layout) {
+        layout = measure();
+        dirty = false;
+        darkClip.current.setAttribute("y", `${layout.darkTop}`);
+        darkClip.current.setAttribute("width", `${layout.w}`);
+        darkClip.current.setAttribute("height", `${layout.darkHeight}`);
+      }
+      const {
+        maxScroll,
+        start,
+        destination,
+        dockStart,
+        dockEnd,
+        cruiseY,
+        cruiseLength,
+        cruiseX,
+        cruisePoints,
+        departure,
+        control1,
+        control2,
+        planeSize,
+      } = layout;
+      const p = Math.min(1, Math.max(0, (scrollY - start + cruiseY) / cruiseLength));
       const landing = Math.min(1, Math.max(0, (scrollY - dockStart) / (dockEnd - dockStart)));
       const blend = landing * landing * (3 - 2 * landing);
       let planeX = cruiseX(p);
@@ -88,10 +167,7 @@ export function LandingFlight() {
         angle = (Math.atan2(dy, dx) * 180) / Math.PI;
       }
       const cruiseProgress = landing > 0 ? 1 : p;
-      const points = Array.from({ length: Math.floor(cruiseProgress * 99) + 1 }, (_, i) => {
-        const t = i / 99;
-        return `${i ? "L" : "M"}${cruiseX(t)} ${start + t * cruiseLength}`;
-      }).join(" ");
+      const points = cruisePoints[Math.floor(cruiseProgress * 99)];
       if (landing > 0) {
         const t = blend;
         const u = 1 - t;
@@ -110,63 +186,57 @@ export function LandingFlight() {
       } else {
         route.current.setAttribute("d", `${points} L${planeX} ${planeWorldY}`);
       }
-      const planeSize = mobile ? 46 : 92;
-      const scale = 1 + (arrival.offsetWidth / planeSize - 1) * blend;
+      const scale = 1 + (layout.arrivalWidth / planeSize - 1) * blend;
       const y = planeWorldY - scrollY;
       plane.current.style.transform = `translate3d(${planeX - planeSize / 2}px,${y - planeSize / 2}px,0) rotate(${angle}deg) scale(${scale})`;
       plane.current.style.setProperty("--flight-shadow", `${0.1 * (1 - blend)}`);
-      const darkSection = wrap.current
-        .closest(".landing-showcase")
-        ?.querySelector(".landing-proof")
-        ?.getBoundingClientRect();
-      const onDark = darkSection && y > darkSection.top && y < darkSection.bottom;
+      const onDark =
+        planeWorldY > layout.darkTop && planeWorldY < layout.darkTop + layout.darkHeight;
       plane.current.style.color = onDark ? "#c2ec92" : "#1b4de4";
-      darkClip.current.setAttribute("y", `${darkSection ? darkSection.top + scrollY : 0}`);
-      darkClip.current.setAttribute("width", `${w}`);
-      darkClip.current.setAttribute("height", `${darkSection?.height ?? 0}`);
-      const behindCopy = Array.from(
-        document.querySelectorAll(
-          "h2,.hotel-copy,.proof-heading p,.scene-facts,.evidence-stage,.evidence-list",
-        ),
-      ).some((el) => {
-        const r = el.getBoundingClientRect();
+      const pinOffset = Math.min(layout.pinLength, Math.max(0, scrollY - layout.pinStart));
+      const behindCopy = layout.blockers.some((r) => {
+        const offset = r.pinned ? pinOffset : 0;
         return (
           planeX - planeSize / 2 < r.right &&
           planeX + planeSize / 2 > r.left &&
-          y - planeSize / 2 < r.bottom &&
-          y + planeSize / 2 > r.top
+          planeWorldY - planeSize / 2 < r.bottom + offset &&
+          planeWorldY + planeSize / 2 > r.top + offset
         );
       });
       const docked = landing >= 1;
-      document.documentElement.dataset["flight"] = mq.matches
-        ? "static"
-        : docked
-          ? "docked"
-          : "flying";
+      const state = docked ? "docked" : "flying";
+      if (showcase.dataset["flight"] !== state) showcase.dataset["flight"] = state;
       const cruiseOpacity = behindCopy ? 0.12 : 0.65;
       plane.current.style.opacity =
-        mq.matches || docked || scrollY <= start - 220
-          ? "0"
-          : `${cruiseOpacity + (1 - cruiseOpacity) * blend}`;
-      document.documentElement.style.setProperty("--progress", `${(100 * scrollY) / maxScroll}%`);
+        docked || scrollY <= start - 220 ? "0" : `${cruiseOpacity + (1 - cruiseOpacity) * blend}`;
+      routeLayer.current.setAttribute("transform", `translate(0 ${-scrollY})`);
+      if (progress.current) progress.current.style.transform = `scaleX(${scrollY / maxScroll})`;
     };
     const queue = () => {
       if (!frame) frame = requestAnimationFrame(paint);
     };
-    const observer = new ResizeObserver(queue);
+    const invalidate = () => {
+      dirty = true;
+      queue();
+    };
+    const observer = new ResizeObserver(invalidate);
     observer.observe(document.body);
+    observer.observe(band);
+    observer.observe(proof);
+    observer.observe(final);
     addEventListener("scroll", queue, { passive: true });
-    addEventListener("resize", queue);
-    mq.addEventListener("change", queue);
+    addEventListener("resize", invalidate);
+    ScrollTrigger.addEventListener("refresh", invalidate);
+    mq.addEventListener("change", invalidate);
     paint();
     return () => {
       cancelAnimationFrame(frame);
       observer.disconnect();
       removeEventListener("scroll", queue);
-      removeEventListener("resize", queue);
-      mq.removeEventListener("change", queue);
-      delete document.documentElement.dataset["flight"];
-      document.documentElement.style.removeProperty("--progress");
+      removeEventListener("resize", invalidate);
+      ScrollTrigger.removeEventListener("refresh", invalidate);
+      mq.removeEventListener("change", invalidate);
+      delete showcase.dataset["flight"];
     };
   }, []);
   return (
@@ -186,14 +256,16 @@ export function LandingFlight() {
               <rect ref={darkClip} x="0" y="0" width="0" height="0" />
             </clipPath>
           </defs>
-          <path id={trailId} ref={route} />
-          <use href={`#${trailId}`} stroke="var(--verified)" clipPath={`url(#${trailId}-dark)`} />
+          <g ref={routeLayer}>
+            <path id={trailId} ref={route} />
+            <use href={`#${trailId}`} stroke="var(--verified)" clipPath={`url(#${trailId}-dark)`} />
+          </g>
         </svg>
       </div>
       <div className="travelling-plane" ref={plane} aria-hidden="true">
         <TravelAirplane />
       </div>
-      <div className="reading-progress" aria-hidden="true" />
+      <div className="reading-progress" ref={progress} aria-hidden="true" />
     </>
   );
 }

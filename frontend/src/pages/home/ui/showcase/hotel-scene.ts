@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
+import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 
 export interface HotelScene {
   setFloor(n: number): void;
@@ -62,6 +63,7 @@ export function createHotelScene(host: HTMLElement): HotelScene {
     sand = mat("#e8e3cc"),
     sea = mat("#719ce8", { roughness: 0.35, metalness: 0.18 });
   const rail = mat("#91a9ce", { metalness: 0.5, roughness: 0.3 });
+  const boxGeometries = new Map<string, RoundedBoxGeometry>();
   function box(
     w: number,
     h: number,
@@ -73,7 +75,13 @@ export function createHotelScene(host: HTMLElement): HotelScene {
     parent: THREE.Object3D = world,
     radius = 0.04,
   ) {
-    const mesh = new THREE.Mesh(new RoundedBoxGeometry(w, h, d, 2, radius), material);
+    const key = `${w},${h},${d},${radius}`;
+    let geometry = boxGeometries.get(key);
+    if (!geometry) {
+      geometry = new RoundedBoxGeometry(w, h, d, 2, radius);
+      boxGeometries.set(key, geometry);
+    }
+    const mesh = new THREE.Mesh(geometry, material);
     mesh.position.set(x, y, z);
     mesh.castShadow = true;
     mesh.receiveShadow = true;
@@ -183,6 +191,42 @@ export function createHotelScene(host: HTMLElement): HotelScene {
     );
     world.add(line);
   }
+  world.updateMatrixWorld(true);
+  const inverse = world.matrixWorld.clone().invert();
+  const batches = new Map<string, THREE.Mesh[]>();
+  const moving = new Set([floorBand, selectedWindow, sideWindow]);
+  world.traverse((object) => {
+    if (!(object instanceof THREE.Mesh) || moving.has(object) || Array.isArray(object.material))
+      return;
+    const key = `${object.material.id},${object.castShadow},${object.receiveShadow}`;
+    const batch = batches.get(key) ?? [];
+    batch.push(object);
+    batches.set(key, batch);
+  });
+  const movingGeometries = new Set<THREE.BufferGeometry>([...moving].map((mesh) => mesh.geometry));
+  const retiredGeometries = new Set<THREE.BufferGeometry>();
+  for (const batch of batches.values()) {
+    const geometries = batch.map((mesh) => {
+      const geometry = mesh.geometry.index ? mesh.geometry.toNonIndexed() : mesh.geometry.clone();
+      return geometry.applyMatrix4(new THREE.Matrix4().multiplyMatrices(inverse, mesh.matrixWorld));
+    });
+    const geometry = mergeGeometries(geometries);
+    geometries.forEach((part) => part.dispose());
+    if (!geometry) continue;
+    const first = batch[0]!;
+    const merged = new THREE.Mesh(geometry, first.material);
+    merged.castShadow = first.castShadow;
+    merged.receiveShadow = first.receiveShadow;
+    world.add(merged);
+    for (const mesh of batch) {
+      mesh.removeFromParent();
+      if (!movingGeometries.has(mesh.geometry)) retiredGeometries.add(mesh.geometry);
+    }
+  }
+  retiredGeometries.forEach((geometry) => geometry.dispose());
+  boxGeometries.clear();
+  renderer.shadowMap.autoUpdate = false;
+  renderer.shadowMap.needsUpdate = true;
   const mq = matchMedia("(prefers-reduced-motion: reduce)");
   let visible = true,
     disposed = false,
@@ -194,12 +238,15 @@ export function createHotelScene(host: HTMLElement): HotelScene {
   const render = () => {
     frame = 0;
     if (disposed || !visible) return;
+    const changed =
+      Math.abs(targetRotation - rotation) > 0.00001 || Math.abs(targetFloor - floorY) > 0.00001;
     rotation += (targetRotation - rotation) * (mq.matches ? 1 : 0.08);
     floorY += (targetFloor - floorY) * (mq.matches ? 1 : 0.12);
     world.rotation.y = rotation;
     floorBand.position.y = floorY + 0.21;
     selectedWindow.position.y = floorY - 0.07;
     sideWindow.position.y = floorY - 0.07;
+    if (changed) renderer.shadowMap.needsUpdate = true;
     renderer.render(scene, camera);
     if (Math.abs(targetRotation - rotation) > 0.001 || Math.abs(targetFloor - floorY) > 0.001)
       frame = requestAnimationFrame(render);
