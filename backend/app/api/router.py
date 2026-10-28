@@ -10,6 +10,7 @@ from app.api.v1 import (
     hotels,
     me,
     partner,
+    quality,
     runs,
     search,
     taste,
@@ -27,6 +28,7 @@ v1_router.include_router(characteristics.router)
 v1_router.include_router(runs.router)
 v1_router.include_router(search.router)
 v1_router.include_router(console.router)
+v1_router.include_router(quality.router)
 
 api_router = APIRouter(prefix="/api")
 api_router.include_router(system.health_router)

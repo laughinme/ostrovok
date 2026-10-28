@@ -15,6 +15,7 @@ from app.db.models import User
 from app.domain.catalog import hotel_id
 from app.domain.users import Role, normalize_email
 from app.infra.partner_truth import YamlHiddenTruth
+from app.quality_cli import evaluate_quality
 from app.service.agents.collect import CollectService
 from app.service.partner.claims import seed_demo_claims
 from app.service.ports import RecordingEventBus, SystemClock
@@ -96,6 +97,10 @@ def main() -> None:
     commands.add_parser("claims", help="seed demo sea-view claims from hidden truth")
     commands.add_parser("export-seed", help="dump knowledge and traces into data/seed")
     commands.add_parser("openapi", help="print the OpenAPI schema")
+    evaluation = commands.add_parser("eval", help="evaluate quality and save the report")
+    evaluation.add_argument(
+        "--llm", action="store_true", help="also evaluate LLM intents (uses credits)"
+    )
     args = parser.parse_args()
 
     settings = get_settings()
@@ -112,6 +117,8 @@ def main() -> None:
         result = asyncio.run(claims(settings))
     elif args.command == "export-seed":
         result = asyncio.run(export_seed(settings))
+    elif args.command == "eval":
+        result = asyncio.run(evaluate_quality(settings, use_llm=args.llm))
     else:
         from app.main import create_app  # noqa: PLC0415 - only this command needs the API
 
