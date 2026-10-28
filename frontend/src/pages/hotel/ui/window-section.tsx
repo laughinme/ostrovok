@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   ArrowRight,
   ArrowUp,
@@ -55,6 +55,7 @@ export function WindowSection({ hotel, detail }: { hotel: Hotel; detail: HotelDe
   const [floor, setFloor] = useState(Math.min(totalFloors, Math.max(1, detail.bestFloor)));
   const dates = tripDates(hotel.searchContext?.trip);
   const [selectedDate, setDate] = useState<string>();
+  const [sceneMode, setSceneMode] = useState<"overview" | "eye">("overview");
   const date = selectedDate ?? dates.date;
   const query = useGeoQuery<WindowData>(
     hotel.id,
@@ -62,6 +63,10 @@ export function WindowSection({ hotel, detail }: { hotel: Hotel; detail: HotelDe
     !demo && !!hotel.backend && !!facade && !!date,
   );
   const data = demo ? undefined : query.data;
+  const sceneData = useMemo(
+    () => ({ facade: facade ?? "SW", floor, horizon: data?.horizon ?? [] }),
+    [facade, floor, data],
+  );
   const known = demo || data?.horizon.some((ray) => ray.kind !== "unknown" && ray.angleDeg != null);
   const demoFacade = facade === "NE" || facade === "SE" || facade === "NW" ? facade : "SW";
   const reading = readPanorama(demoFacade, floor);
@@ -128,8 +133,9 @@ export function WindowSection({ hotel, detail }: { hotel: Hotel; detail: HotelDe
               ) : (
                 <>
                   <p>
-                    Иллюстрация построена по расчётным углам препятствий и видимым участкам моря.
-                    Облик зданий и зелень условные; это не фотография.
+                    Объёмная схема использует контуры соседних зданий и берег OSM. Высоты без
+                    исходных измерений оценочные, рельеф упрощён. Это схема, а не фотография из
+                    номера. Видимость моря и солнца берётся из расчёта горизонта.
                   </p>
                   <p>
                     {dates.fallback && !selectedDate
@@ -236,7 +242,7 @@ export function WindowSection({ hotel, detail }: { hotel: Hotel; detail: HotelDe
             <Info size={15} aria-hidden="true" />
             {demo
               ? "Иллюстрация помогает сравнить стороны. Это не фотография из номера."
-              : "Горизонт рассчитан. Облик зданий и зелень условные. Размещение номера подтвердит отель."}
+              : "Поверните 3D-схему или переключитесь на вид из окна. Размещение номера подтвердит отель."}
           </p>
         </aside>
         <div className="window-preview">
@@ -245,39 +251,59 @@ export function WindowSection({ hotel, detail }: { hotel: Hotel; detail: HotelDe
               <span>{facade ? names[facade] : "Сторона не указана"}</span>
               <span>{floor} этаж</span>
             </div>
-            <div className="window-frame window-frame-landscape">
-              <div className="window-scene" key={`${facade}-${demo ? "demo" : floor}-${date}`}>
-                {demo ? (
-                  <DemoWindowScene
-                    facade={demoFacade}
-                    floor={floor}
-                    sunVisible={reading.sunVisible}
-                  />
-                ) : (
-                  <>
-                    {data && known && <WindowPanorama data={data} />}
-                    {(!data || !known) && (
-                      <div className="window-scene-state">
-                        <Eye size={34} aria-hidden="true" />
-                        <GeoStatus
-                          pending={query.isLoading}
-                          error={query.error}
-                          retry={query.refetch}
-                          available={!!facade}
-                        />
-                        {data && !known && <p>Нет данных горизонта для этого окна</p>}
-                      </div>
+            {demo ? (
+              <>
+                <div className="window-frame window-frame-landscape">
+                  <div className="window-scene" key={`${facade}-demo-${date}`}>
+                    <DemoWindowScene
+                      facade={demoFacade}
+                      floor={floor}
+                      sunVisible={reading.sunVisible}
+                    />
+                  </div>
+                  <span className="window-mullion" aria-hidden="true" />
+                  <span className="window-handle" aria-hidden="true" />
+                </div>
+                <div className="window-sill" aria-hidden="true" />
+                <span className="window-scene-label">Иллюстрация вида</span>
+              </>
+            ) : facade && hotel.backend ? (
+              <>
+                <WindowPanorama
+                  active={query.visible}
+                  data={sceneData}
+                  osmId={hotel.backend?.osmId}
+                  mode={sceneMode}
+                  onModeChange={setSceneMode}
+                />
+                {(!data || !known) && (
+                  <div className="window-calculation-status">
+                    <GeoStatus
+                      pending={query.isLoading}
+                      error={query.error}
+                      retry={query.refetch}
+                      available={!!facade}
+                    />
+                    {data && !known && (
+                      <p>Схема окрестностей доступна. Данных для расчёта видимости пока нет.</p>
                     )}
-                  </>
+                  </div>
                 )}
+              </>
+            ) : (
+              <div className="window-frame window-frame-landscape">
+                <div className="window-scene-state">
+                  <Eye size={34} aria-hidden="true" />
+                  <GeoStatus
+                    pending={query.isLoading}
+                    error={query.error}
+                    retry={query.refetch}
+                    available={!!facade}
+                  />
+                  {data && !known && <p>Нет данных горизонта для этого окна</p>}
+                </div>
               </div>
-              <span className="window-mullion" aria-hidden="true" />
-              <span className="window-handle" aria-hidden="true" />
-            </div>
-            <div className="window-sill" aria-hidden="true" />
-            <span className="window-scene-label">
-              {demo ? "Иллюстрация вида" : "Иллюстрация по расчётному горизонту"}
-            </span>
+            )}
           </div>
           <dl className="window-view-metrics" aria-live="polite" aria-atomic="true">
             {metrics.map(({ label, value, hint, Icon }) => (
