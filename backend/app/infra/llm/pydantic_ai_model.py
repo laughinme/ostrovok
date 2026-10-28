@@ -5,6 +5,7 @@ failure — no key, provider error, timeout, schema mismatch, daily limit — be
 """
 
 import asyncio
+import hashlib
 import json
 import logging
 import time
@@ -15,7 +16,7 @@ from urllib.parse import urlsplit
 import pydantic_ai
 from openai import AsyncOpenAI
 from pydantic import BaseModel
-from pydantic_ai import Agent, Tool, UsageLimits
+from pydantic_ai import Agent, BinaryContent, Tool, UsageLimits
 from pydantic_ai.exceptions import UnexpectedModelBehavior, UsageLimitExceeded
 from pydantic_ai.models import Model
 from pydantic_ai.models.openai import OpenAIChatModel, OpenAIResponsesModel
@@ -122,6 +123,22 @@ class PydanticAiLanguageModel:
             task, system, prompt, output, tools=(), budget=Budget(max_requests=2)
         )
 
+    async def structured_image[T: BaseModel](
+        self, *, task: str, system: str, prompt: str, image: bytes, media_type: str, output: type[T]
+    ) -> LlmResult[T]:
+        fingerprint = hashlib.sha256(image).hexdigest()
+        return await self._run(
+            task,
+            system,
+            f"{prompt}\nФото: {media_type}, SHA-256 {fingerprint}",
+            output,
+            tools=(),
+            budget=Budget(max_requests=1, max_output_tokens=800),
+            image=BinaryContent(
+                data=image, media_type=media_type, vendor_metadata={"detail": "low"}
+            ),
+        )
+
     async def run_tools[T: BaseModel](
         self,
         *,
@@ -143,6 +160,7 @@ class PydanticAiLanguageModel:
         *,
         tools: Sequence[ToolSpec],
         budget: Budget,
+        image: BinaryContent | None = None,
     ) -> LlmResult[T]:
         if self._model is None:
             raise LlmUnavailableError("no LLM key configured")
@@ -186,12 +204,15 @@ class PydanticAiLanguageModel:
         if not await self._limit.take():
             await self._log(task, "limit", prompt, error="daily LLM call limit reached")
             raise LlmUnavailableError("daily LLM call limit reached")
+        settings = model_settings(self._thinking)
+        if image is not None:
+            settings["max_tokens"] = budget.max_output_tokens
         agent = Agent(
             self._model,
             output_type=output,
             instructions=system,
             tools=[_tool(t) for t in tools],
-            model_settings=model_settings(self._thinking),
+            model_settings=settings,
         )
         limits = UsageLimits(
             request_limit=budget.max_requests,
@@ -201,11 +222,12 @@ class PydanticAiLanguageModel:
         started = time.perf_counter()
         try:
             result = await asyncio.wait_for(
-                agent.run(prompt, usage_limits=limits),
+                agent.run([prompt, image] if image is not None else prompt, usage_limits=limits),
                 timeout=min(self._timeout, budget.max_seconds),
             )
         except Exception as exc:  # any provider, schema or limit failure means "use the rules"
-            logger.warning("LLM task %s failed: %r", task, exc)
+            error = type(exc).__name__ if image is not None else f"{type(exc).__name__}: {exc}"
+            logger.warning("LLM task %s failed: %s", task, error)
             if not isinstance(
                 exc, TimeoutError | ValueError | UnexpectedModelBehavior | UsageLimitExceeded
             ):
@@ -215,9 +237,9 @@ class PydanticAiLanguageModel:
                 "failed",
                 prompt,
                 latency_ms=_since(started),
-                error=f"{type(exc).__name__}: {exc}",
+                error=error,
             )
-            raise LlmUnavailableError(f"{type(exc).__name__}: {exc}") from exc
+            raise LlmUnavailableError(error) from exc
         latency = _since(started)
         self._breaker.reset()
         run_usage = result.usage

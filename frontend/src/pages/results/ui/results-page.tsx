@@ -12,8 +12,10 @@ import { List, Map as MapIcon, Scale, Search, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
 export function ResultsPage({
   query: q = "Тихий отель у моря с хорошей инфраструктурой",
+  hotelId,
 }: {
   query?: string | undefined;
+  hotelId?: string | undefined;
 }) {
   const navigate = useNavigate();
   const {
@@ -36,7 +38,8 @@ export function ResultsPage({
     canUseProfile,
     useProfile,
     setUseProfile,
-  } = useSearchFilters(q);
+    trip,
+  } = useSearchFilters(q, hotelId);
   const live = useLiveResearch(searchResult?.searchId, acceptSearch);
   const [visibleCount, setVisibleCount] = useState(20);
   const [hover, setHover] = useState<string | null>(null);
@@ -101,6 +104,14 @@ export function ResultsPage({
         </div>
       )}
 
+      {hotelId && (
+        <p className="mt-5 text-sm text-muted-foreground">
+          В подборе выбран отель из консоли.{" "}
+          <Link to="/results" search={{ q: "Все отели Сочи" }} className="text-primary underline">
+            Показать все отели
+          </Link>
+        </p>
+      )}
       <div className="mt-6 flex flex-wrap items-center gap-2">
         <CriteriaFilter
           value={criteria}
@@ -158,6 +169,14 @@ export function ResultsPage({
           </button>
         </div>
       </div>
+      {trip.month && !trip.from && (
+        <p className="mt-3 text-sm text-muted-foreground">
+          Месяц поездки:{" "}
+          {new Date(2026, trip.month - 1, 1).toLocaleDateString("ru-RU", { month: "long" })}.
+          Уточните даты, когда выберете.
+        </p>
+      )}
+
       {canUseProfile && (
         <label className="mt-4 flex min-h-11 items-center gap-2 text-sm">
           <input
@@ -212,8 +231,8 @@ export function ResultsPage({
         <div className={cn("space-y-4", view === "map" && "hidden lg:block")}>
           {!pending && !error && ranked.length === 0 && hints.length === 0 && (
             <p className="rounded-3xl border p-10 text-center text-muted-foreground">
-              По этим условиям вариантов пока нет. Попробуйте увеличить бюджет, уменьшить число
-              гостей или выбрать другой район Большого Сочи.
+              По этим условиям вариантов пока нет. Попробуйте увеличить бюджет или уточнить
+              пожелания.
             </p>
           )}
           {ranked.slice(0, renderedCount).map((result, index) => (

@@ -86,3 +86,17 @@ async def test_empty_budget_result_explains_how_to_continue(
     assert response.status_code == 201
     assert response.json()["matches"] == []
     assert any("увеличить бюджет" in h for h in response.json()["intent"]["hints"])
+
+
+async def test_unknown_prices_do_not_silently_confirm_the_budget(
+    client: AsyncClient,
+    db: Database,
+    tmp_path: Path,
+) -> None:
+    await _world(db, tmp_path)
+    response = await client.post("/api/v1/searches", json={"text": "тихий номер до 1000 рублей"})
+    assert response.status_code == 201
+    result = response.json()
+    assert result["matches"]
+    assert all(m["priceFromDemo"] is None for m in result["matches"])
+    assert any("Соответствие бюджету не подтверждено" in h for h in result["intent"]["hints"])

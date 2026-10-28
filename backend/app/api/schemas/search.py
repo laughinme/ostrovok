@@ -8,8 +8,7 @@ from app.api.schemas.base import ApiModel
 from app.api.schemas.knowledge import ScopeOut
 from app.domain.knowledge.characteristic import Checkable
 from app.domain.search.intent import Chip, Importance, Intent
-from app.domain.search.rank import NO_MATCHES_HINT, Ranking
-from app.domain.search.region import outside_region
+from app.domain.search.rank import Ranking, result_hints
 from app.domain.search.score import Match, request_text, variant_scope_text
 from app.domain.search.trip import TripDraft
 from app.service.search.search import SearchView
@@ -119,6 +118,7 @@ class SearchRequest(ApiModel):
     chips: list[IntentChipModel] | None = None
     trip: TripModel | None = None
     use_profile: bool = True
+    hotel_ids: list[UUID] | None = Field(None, min_length=1, max_length=20)
 
 
 class ChipResultOut(ApiModel):
@@ -218,8 +218,7 @@ class SearchResultOut(ApiModel):
     def from_view(cls, view: SearchView) -> Self:
         ranking: Ranking = view.ranking
         intent = IntentModel.from_domain(view.intent)
-        if not ranking.matches and not outside_region(view.intent.text):
-            intent.hints.append(NO_MATCHES_HINT)
+        intent.hints = list(result_hints(view.intent, ranking))
         return cls(
             search_id=str(view.id),
             intent=intent,
