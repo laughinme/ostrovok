@@ -8,6 +8,7 @@ from app.core.errors import ConflictError, DomainError
 from app.db.models import TripFeedbackRow
 from app.db.uow import UnitOfWork
 from app.domain.booking.status import BookingStatus, transition
+from app.domain.knowledge.confidence import beta_update
 from app.domain.knowledge.observation import Evidence, EvidenceKind, Observation
 from app.domain.knowledge.scope import scope_from_json
 from app.domain.knowledge.sources import SourceKind
@@ -73,8 +74,15 @@ class TripFeedback:
         key = str(promised["characteristic"])
         characteristic = await Registry(self._uow).get(key)
         value = promised["value"]
-        if not isinstance(value, bool):
-            raise DomainError("Для отзыва выберите проверяемое утверждение с ответом да/нет")
+        confidence = (
+            1.0
+            if isinstance(value, bool)
+            else beta_update(
+                float(str(promised["confidence"])),
+                yes=int(answer.answer),
+                no=int(not answer.answer),
+            )
+        )
         scope = promised["scope"]
         if not isinstance(scope, dict):
             raise DomainError("Область обещанного факта повреждена")
@@ -83,13 +91,16 @@ class TripFeedback:
             characteristic=key,
             characteristic_version=characteristic.version,
             scope=scope_from_json(scope),
-            value=value if answer.answer else not value,
-            confidence=1.0,
+            value=(value if answer.answer else not value) if isinstance(value, bool) else value,
+            confidence=confidence,
             source=SourceKind.GUEST,
             source_ref=f"trip:{booking_id}",
             method="guest.feedback",
             observed_at=self._clock.now(),
             valid_until=self._clock.now() + timedelta(days=characteristic.ttl_days),
+            caveats=()
+            if isinstance(value, bool)
+            else ("Гость оценил точность обещания; новое числовое значение не сообщено",),
             evidence=(
                 Evidence(
                     EvidenceKind.TEXT,

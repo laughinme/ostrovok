@@ -217,3 +217,54 @@ async def test_changed_promises_notify_only_future_guest_once(
     assert len(messages) == 1
     assert messages[0]["kind"] == "promise.changed"
     assert messages[0]["link"] == f"/trips/{booking['id']}"
+
+
+async def test_record_feedback_lowers_accuracy_without_inventing_a_new_measurement(
+    client: AsyncClient,
+    app: FastAPI,
+    db: Database,
+    tmp_path: Path,
+) -> None:
+    clock = FakeClock()
+    app.state.clock = clock
+    await world(db, tmp_path, clock)
+    async with db.unit_of_work() as uow:
+        await KnowledgeStore(uow, clock).record(
+            [
+                Observation(
+                    hotel_id=HOTEL,
+                    characteristic="beach_walk",
+                    characteristic_version=1,
+                    scope=Scope.everywhere(),
+                    value={"minutes": 18},
+                    confidence=0.9,
+                    source=SourceKind.COMPUTED,
+                    source_ref="walk:test",
+                    method="test",
+                    observed_at=clock.now(),
+                )
+            ],
+            reason="test",
+        )
+    guest = await register(client)
+    booking = (
+        await client.post("/api/v1/bookings", headers=guest.headers, json=booking_payload(clock))
+    ).json()
+    booking_id = UUID(booking["id"])
+    async with db.unit_of_work() as uow:
+        row = await uow.session.get(BookingRow, booking_id)
+        promise = next(p for p in row.promised if p["characteristic"] == "beach_walk")
+        await BookingService(uow, clock).decide(booking_id, BookingStatus.CONFIRMED, "Да")
+    clock.advance(timedelta(days=4))
+    response = await client.post(
+        f"/api/v1/trips/{booking_id}/feedback",
+        headers=guest.headers,
+        json={"answers": [{"factId": promise["factId"], "answer": False}]},
+    )
+    assert response.status_code == 204, response.text
+    async with db.unit_of_work() as uow:
+        facts = await uow.knowledge.facts([HOTEL], characteristic="beach_walk")
+        feedback = next(f for f in facts if f.source is SourceKind.GUEST)
+        assert feedback.value == {"minutes": 18}
+        assert feedback.confidence < promise["confidence"]
+        assert feedback.caveats

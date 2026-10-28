@@ -18,7 +18,7 @@ from app.service.booking.models import Booking, BookingNotFoundError, BookingReq
 from app.service.catalog.hotels import HotelNotFoundError
 from app.service.knowledge.facts import FactQueries
 from app.service.ports import Clock
-from app.service.search.candidates import load_candidates, load_facts
+from app.service.search.candidates import load_candidates, load_facts, with_room_variants
 from app.service.search.search import SearchService, trip_window
 
 MAX_NIGHTS = 366
@@ -110,6 +110,7 @@ class BookingService:
         hotel = next((h for h in hotels if h.id == request.hotel_id), None)
         if hotel is None:
             raise HotelNotFoundError()
+        hotel = await with_room_variants(self._uow, hotel, request.room_type_id)
         variants = tuple(
             v for v in hotel.variants if v.room_type_id in (None, request.room_type_id)
         )

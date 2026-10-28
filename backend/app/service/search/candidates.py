@@ -2,10 +2,12 @@
 
 from collections import defaultdict
 from collections.abc import Sequence
+from dataclasses import replace
 from uuid import UUID
 
 from sqlalchemy import select
 
+from app.core.errors import DomainError
 from app.db.models import FacadeRoom, RoomType
 from app.db.repositories.catalog import hotel_geo
 from app.db.uow import UnitOfWork
@@ -76,3 +78,16 @@ async def load_facts(
         for fact in await uow.knowledge.facts(hotel_ids, characteristic=key):
             result[fact.hotel_id][key].append(fact)
     return result
+
+
+async def with_room_variants(uow: UnitOfWork, hotel: SearchHotel, room_type_id: str) -> SearchHotel:
+    if any(v.room_type_id == room_type_id for v in hotel.variants):
+        return hotel
+    room = await uow.session.get(RoomType, room_type_id)
+    if room is None or room.hotel_id != hotel.id:
+        raise DomainError("Категория не принадлежит выбранному отелю")
+    variants = tuple(
+        replace(v, room_type_id=room.id, room_name=room.name)
+        for v in default_variants(hotel.facades, hotel.floors, _cheapest(room.rates))
+    )
+    return replace(hotel, variants=variants)

@@ -16,6 +16,7 @@ from app.domain.knowledge.fact import Fact
 from app.domain.knowledge.scope import MONTHS, Cell, Facade, Scope
 from app.domain.knowledge.statements import FACADE_SHORT, scope_text
 from app.domain.search.intent import WEIGHTS, Chip, Importance
+from app.domain.search.scoped_facts import compatible_facts, specificity
 
 UNKNOWN_PRIOR = 0.5
 DEFAULT_WALK_MINUTES = 15.0
@@ -120,6 +121,9 @@ def evaluate(
 ) -> tuple[float | None, Fact | None]:
     if not chip.characteristic or not facts:
         return None, None
+    facts = compatible_facts(facts, variant.scope, variant.room_type_id, trip.month_set())
+    if not facts:
+        return None, None
     sample = facts[0]
     if isinstance(sample.value, bool):
         return _probability_over_cells(chip, facts, variant, hotel, trip)
@@ -160,7 +164,7 @@ def _probability_over_cells(
 def _record(
     chip: Chip, facts: Sequence[Fact], trip: TripWindow
 ) -> tuple[float | None, Fact | None]:
-    fact = max(facts, key=lambda f: _month_overlap(f, trip))
+    fact = max(facts, key=lambda f: (_month_overlap(f, trip), specificity(f)))
     value: Mapping[str, Any] = fact.value if isinstance(fact.value, Mapping) else {}
     if "minutes" in value and value["minutes"] is not None:
         limit = float(chip.params.get("maxWalkMinutes", DEFAULT_WALK_MINUTES))
