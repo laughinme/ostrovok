@@ -1,9 +1,12 @@
 # Данные региона
 
 Запуск из корня: `make data`. Отдельные этапы:
-`cd backend && uv run --group pipeline python -m pipeline <osm|dem|climate|hotels|graph|manifest|all>`.
-Сырые ответы кэшируются в `backend/.cache/pipeline/` по SHA-256 запроса. Удаление кэша означает
-новый снимок источников. CSV.gz пишутся с фиксированным gzip mtime. API LLM не используется.
+`cd backend && uv run --group pipeline python -m pipeline <pbf|osm|dem|climate|hotels|graph|manifest|all>`.
+`all` выполняет pbf → osm → dem → climate → hotels → graph → manifest.
+`pbf` скачивает закреплённые снимки, проверяет MD5 и обрезает их в региональные GPKG;
+OSM-экспорт и граф читают этот общий кэш. Остальные сырые ответы — в `.cache/pipeline/`
+по SHA-256 запроса, GeoTIFF — в `.cache/spike/`. При удалении кэша исходники получаются повторно;
+OSM закреплён датой. CSV.gz пишутся с фиксированным gzip mtime. API LLM не используется.
 
 Проверки: `cd backend && uv run ruff check pipeline`; тесты пайплайна запускаются отдельно от приложения.
 MANIFEST формируется из реально существующих файлов; превышение бюджета приводит к ошибке.
