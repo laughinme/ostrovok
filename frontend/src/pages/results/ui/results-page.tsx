@@ -6,10 +6,10 @@ import { RequestState } from "@/shared/ui";
 import { CoastMap } from "@/widgets/hotel-map";
 import { AgentTrace } from "@/widgets/agent-trace";
 import { HotelResultCard } from "@/widgets/hotel-result-card";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { List, Map as MapIcon, Scale, Search, Sparkles } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 export function ResultsPage({
   query: q = "Тихий отель у моря с хорошей инфраструктурой",
 }: {
@@ -44,6 +44,12 @@ export function ResultsPage({
   const [visibleCount, setVisibleCount] = useState(20);
   const [hover, setHover] = useState<string | null>(null);
   const [view, setView] = useState<"list" | "map">("list");
+  const hash = useLocation({ select: (location) => location.hash });
+  useEffect(() => {
+    if (!pending && hash.startsWith("hotel-")) {
+      document.getElementById(hash)?.scrollIntoView({ block: "center" });
+    }
+  }, [hash, pending, ranked]);
   const ids = useCompare((state) => state.ids);
   return (
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
@@ -257,7 +263,7 @@ export function ResultsPage({
               index={index}
               criteria={criteria}
               query={q}
-              active={hover === result.hotel.id}
+              active={hover === result.hotel.id || hash === `hotel-${result.hotel.id}`}
               onHover={setHover}
             />
           ))}
