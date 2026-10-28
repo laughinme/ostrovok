@@ -1,0 +1,50 @@
+# Backend API + background worker, one image, two process groups.
+# `release_command` runs migrations and the idempotent seed once per deploy (python -m app.init),
+# so the API and worker machines never race on the same database.
+app = "okno-api"
+primary_region = "arn"
+
+[build]
+  dockerfile = "../../backend/Dockerfile"
+
+[deploy]
+  release_command = "python -m app.init"
+  strategy = "rolling"
+
+  [deploy.release_command_vm]
+    size = "performance-1x"
+
+[env]
+  APP_STAGE = "prod"
+  LOG_JSON = "true"
+  API_DOCS_ENABLED = "true"
+  COOKIE_SECURE = "true"
+  # The frontend on Vercel is a different site from okno-api.fly.dev.
+  COOKIE_SAMESITE = "none"
+  HOTELIER_SIMULATOR = "on"
+  # DATABASE_URL, REDIS_URL (Upstash), CSRF_HMAC_KEY, JWT_PRIVATE_KEY, JWT_PUBLIC_KEY, CORS_ALLOW_ORIGINS and the
+  # optional LLM_* keys are Fly secrets.
+
+[processes]
+  app = "uvicorn app.main:create_app --factory --host 0.0.0.0 --port 8000 --proxy-headers --forwarded-allow-ips '*' --no-access-log"
+  worker = "python -m app.worker"
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = "off"
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ["app"]
+
+  [[http_service.checks]]
+    interval = "15s"
+    timeout = "5s"
+    grace_period = "30s"
+    method = "GET"
+    path = "/health"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "1gb"
+  processes = ["app", "worker"]
