@@ -4,7 +4,10 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from redis.asyncio import Redis
+from starlette.routing import Route
 
+from app.api.mcp import TRANSPORT_SECURITY, build_mcp
+from app.api.mcp_lifespan import mcp_lifespan
 from app.api.middleware import RequestContextMiddleware
 from app.api.problems import register_exception_handlers
 from app.api.router import api_router
@@ -33,7 +36,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         app.state.events = RedisEventBus(app.state.redis)
         app.state.llm = build_language_model(settings, app.state.db, app.state.redis)
         try:
-            yield
+            async with mcp_lifespan(mcp_server):
+                yield
         finally:
             await app.state.redis.aclose()
             await app.state.db.dispose()
@@ -64,4 +68,13 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     register_exception_handlers(app, debug=settings.debug)
     app.include_router(health_router)
     app.include_router(api_router)
+    mcp_server = build_mcp(lambda: app.state.db, settings, app.state.clock)
+    app.state.mcp = mcp_server
+    transport = mcp_server.streamable_http_app(
+        json_response=True,
+        stateless_http=True,
+        transport_security=TRANSPORT_SECURITY,
+    )
+    # An exact ASGI route keeps the endpoint at /mcp without intercepting unrelated 404s.
+    app.router.routes.append(Route("/mcp", transport, methods=["GET", "POST", "DELETE"]))
     return app
