@@ -12,12 +12,13 @@ from app.db.database import Database
 from app.domain.catalog import BuildingShape, HotelGeo, MapFeature
 from app.domain.geo.types import LonLat
 from app.domain.knowledge.characteristic import Characteristic, MethodKind
+from app.domain.knowledge.fact import Fact
 from app.domain.knowledge.observation import Evidence
 from app.domain.knowledge.scope import Scope
 from app.domain.knowledge.sources import SourceKind
 from app.service.agents.runtime import Tracer
 from app.service.ports import Clock, Router, TerrainModel
-from app.service.recipes.models import Recipe
+from app.service.recipes.models import Recipe, TagFilter
 
 
 @dataclass(frozen=True, slots=True)
@@ -61,14 +62,25 @@ class GeoReader:
         async with self._db.unit_of_work() as uow:
             return await uow.catalog.features_tagged(tags, near=near, radius_m=radius_m)
 
+    async def matching(
+        self, tag_filter: TagFilter, *, near: LonLat | None = None, radius_m: float = 0
+    ) -> list[MapFeature]:
+        async with self._db.unit_of_work() as uow:
+            found = await uow.catalog.features_with_keys(
+                tag_filter.keys, near=near, radius_m=radius_m
+            )
+        return [f for f in found if tag_filter.matches(dict(f.tags))]
+
     async def buildings_near(self, point: LonLat, radius_m: float) -> list[BuildingShape]:
         async with self._db.unit_of_work() as uow:
             return await uow.catalog.buildings_near(point, radius_m)
 
-    async def facts_values(self, hotel: HotelGeo, key: str) -> list[tuple[Any, float]]:
+    async def facts_of(self, hotel: HotelGeo, key: str) -> list[Fact]:
         async with self._db.unit_of_work() as uow:
-            facts = await uow.knowledge.facts([hotel.id], characteristic=key)
-        return [(f.value, f.confidence) for f in facts]
+            return await uow.knowledge.facts([hotel.id], characteristic=key)
+
+    async def facts_values(self, hotel: HotelGeo, key: str) -> list[tuple[Any, float]]:
+        return [(f.value, f.confidence) for f in await self.facts_of(hotel, key)]
 
 
 @dataclass(slots=True)
