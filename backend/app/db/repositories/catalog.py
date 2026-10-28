@@ -50,6 +50,12 @@ class CatalogRepository:
     async def hotel_ids(self) -> list[UUID]:
         return list(await self._session.scalars(select(Hotel.id).order_by(Hotel.osm_id)))
 
+    async def feature(self, osm_id: str) -> MapFeature | None:
+        row = await self._session.scalar(select(OsmFeature).where(OsmFeature.osm_id == osm_id))
+        if row is None:
+            return None
+        return MapFeature(row.osm_id, row.kind, row.name, row.tags, to_shape(row.geom))
+
     async def features_near(
         self, point: LonLat, radius_m: float, *, kinds: Sequence[str] | None = None
     ) -> list[MapFeature]:

@@ -73,6 +73,9 @@ def nearest_walk(
                 route.there.climb_m,
                 route.back.climb_m,
             )
+        return None
+    if profile is not WalkProfile.WALK:
+        return None
     index = min(range(len(targets)), key=lambda i: haversine_m(origin, targets[i]))
     return _estimate(features[index], origin, targets[index], terrain)
 

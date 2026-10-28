@@ -2,27 +2,14 @@ from dataclasses import replace
 from math import exp
 from typing import ClassVar
 
-from app.domain.geo.noise import facade_noise
-from app.domain.geo.noise_sources import NoiseFeature, noise_sources
 from app.domain.knowledge.characteristic import Level, MethodKind
 from app.domain.knowledge.observation import OSM_ATTRIBUTION, Evidence, EvidenceKind
 from app.domain.knowledge.scope import Scope
 from app.domain.knowledge.statements import FACADE_SHORT
-from app.service.recipes.executor import Environment, Finding, MethodCall, NoDataError
-from app.service.recipes.methods.local_scene import LocalFrame
+from app.service.geo.noise import RADIUS_M, hotel_noise
+from app.service.recipes.executor import Environment, Finding, MethodCall
 from app.service.recipes.models import NoiseRecipe
 
-_SOURCE_KINDS = {
-    "road": ["road"],
-    "railway": ["railway"],
-    "bar_club": ["bar_club"],
-    "construction": ["construction"],
-    "aircraft": ["runway"],
-}
-_RADIUS_M = 600
-_SCREEN_RADIUS_M = 250
-# Adler runway at take-off, at 1 m in the same conditional units as roads (R5 has no number).
-AIRCRAFT_POWER_DB = 95.0
 _SPREAD_DB = 4.0  # how sharply "quiet" becomes "not quiet" around the threshold
 
 
@@ -33,38 +20,20 @@ class NoiseExecutor:
 
     async def collect(self, call: MethodCall, env: Environment) -> list[Finding]:
         recipe = call.recipe_of(NoiseRecipe)
-        hotel = call.hotel
-        frame = LocalFrame(hotel)
-        kinds = [k for s in recipe.sources for k in _SOURCE_KINDS[s]]
-        features = await env.reader.features_near(hotel.location, _RADIUS_M, kinds=kinds)
-        local = [NoiseFeature(f.osm_id, frame.to_local(f.geometry), f.tags) for f in features]
-        sources = noise_sources(local, aircraft_power_db=AIRCRAFT_POWER_DB)
-        roads = sum(1 for f in features if f.kind == "road")
+        scene = await hotel_noise(call.hotel, env, recipe.sources)
         await call.tracer.tool(
             "osm.sources",
-            summary=f"{len(sources.sources)} источников шума в {_RADIUS_M} м, дорог {roads}",
+            summary=f"{scene.source_count} источников шума в {RADIUS_M} м; "
+            f"дорог {scene.road_count}",
             args={"period": recipe.period, "sources": recipe.sources},
         )
-        buildings = await env.reader.buildings_near(hotel.location, _SCREEN_RADIUS_M)
-        screens = [frame.footprint, *frame.many_to_local([b.geometry for b in buildings])]
-        receivers = frame.receivers()
-        if not receivers:
-            raise NoDataError("у здания нет фасадов")
         findings = []
         lines = []
-        for receiver in receivers:
-            estimate = facade_noise(
-                receiver.point,
-                receiver.azimuth,
-                sources.sources,
-                recipe.period,
-                buildings=screens,
-                road_completeness=0.8 if roads else 0.5,
-                source_completeness=max(0.5, sources.completeness),
-            )
+        for receiver in scene.facades:
+            estimate = receiver.day if recipe.period == "day" else receiver.night
             index = estimate.index_db if estimate.index_db is not None else 20.0
             p_quiet = 1 / (1 + exp((index - recipe.quiet_below_db) / _SPREAD_DB))
-            trust = 0.8 * max(0.5, sources.completeness)
+            trust = 0.8 * max(0.5, scene.completeness)
             p = 0.5 + (p_quiet - 0.5) * trust
             quiet = p >= 0.5
             lines.append(f"{FACADE_SHORT[receiver.facade]} {index:.0f} дБ")

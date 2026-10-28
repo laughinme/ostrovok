@@ -12,6 +12,21 @@
 
 ---
 
+### 28.10 03:06 МСК · codex-ground2 · B2.13-geo, общий расчёт
+- Сделано: `service.geo.noise.hotel_noise(hotel, env, kinds=...) -> HotelNoise` готовит единую сцену
+  и возвращает `.facades: tuple[FacadeNoise(facade,day,night),...]`, completeness, source_count,
+  road_count, unmodelled_refs. day/night — прежний NoiseEstimate, index_db может быть None.
+  NoiseExecutor использует этот же расчёт. `service.geo.routes.hotel_route(hotel,env,target,profile)`
+  → RouteView(walk,coordinates,elevation_profile): геометрия WGS84 туда; профиль (м,м либо None).
+  target beach/center/station или osm:way/ID (также node/relation). `GeoReader.feature(osm_id)`
+  читает объект точно по ID. center — OSM place city/town или именованная администрация города;
+  не произвольный POI. `service.geo.climate.hotel_climate(hotel,env,start,end) -> TripClimate`
+  (estimate: ClimateEstimate,station,period): 1…366 ночей, end исключён, нормы, не прогноз.
+- Как проверить: make check в отдельной БД/Redis — 258 passed, ruff/format/mypy/7 контрактов зелёные.
+- Грабли: если граф есть, но пути нет, nearest_walk теперь возвращает None; не подменяет недоступный
+  путь прямой. Без графа stroller/wheelchair не обещают доступность. Для walk сохраняется явная оценка.
+- Дальше: подключение REST и проверка на реальных отелях; затем B5.6.
+
 ### 28.10 03:02 МСК · codex-ground2 · B2.10-ground
 - Сделано: area_stat/steep_share, графический слой уклонов и запасная оценка DEM; регистрация в bootstrap.
 - **Публичный API:** `service.geo.area.slopes_near(env, origin: LonLat, radius_m: float) -> SlopeStat`;
