@@ -4,6 +4,7 @@ from uuid import UUID
 from geoalchemy2 import Geography
 from geoalchemy2.shape import to_shape
 from sqlalchemy import cast, func, or_, select
+from sqlalchemy.dialects.postgresql import array
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.models import Building, Hotel, OsmFeature
@@ -73,6 +74,18 @@ class CatalogRepository:
         """Features matching any `key=value` pair, optionally within a radius."""
         conditions = [OsmFeature.tags[key].astext.in_(values) for key, values in tags.items()]
         stmt = select(OsmFeature).where(or_(*conditions))
+        if near is not None:
+            stmt = stmt.where(_near(OsmFeature.geom, near, radius_m))  # type: ignore[arg-type]
+        return [
+            MapFeature(r.osm_id, r.kind, r.name, r.tags, to_shape(r.geom))
+            for r in await self._session.scalars(stmt)
+        ]
+
+    async def features_with_keys(
+        self, keys: Sequence[str], *, near: LonLat | None = None, radius_m: float = 0
+    ) -> list[MapFeature]:
+        """Features having any of the tag keys; the exact filter runs in Python afterwards."""
+        stmt = select(OsmFeature).where(OsmFeature.tags.has_any(array(list(keys))))
         if near is not None:
             stmt = stmt.where(_near(OsmFeature.geom, near, radius_m))  # type: ignore[arg-type]
         return [

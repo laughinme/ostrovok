@@ -22,8 +22,10 @@ from app.infra.geo.terrain import NpyTerrain
 from app.infra.llm.cache import LlmCache
 from app.infra.llm.guards import DailyLimit
 from app.infra.llm.pydantic_ai_model import PydanticAiLanguageModel, openai_compatible
+from app.service.agents.curator import Curator
 from app.service.agents.researcher import Researcher
 from app.service.agents.runtime import AgentRunner
+from app.service.agents.wishes import WishResearch
 from app.service.ports import Clock, EventBus, LanguageModel
 from app.service.recipes.executor import Environment, GeoReader, MethodExecutor, executors_by_method
 from app.service.recipes.methods.area_stat import AreaStatExecutor
@@ -81,14 +83,28 @@ def default_executors() -> list[MethodExecutor]:
 class Agents:
     runner: AgentRunner
     researcher: Researcher
+    curator: Curator
+    wishes: WishResearch
     env: Environment
 
 
-def build_agents(db: Database, events: EventBus, clock: Clock, data_dir: Path) -> Agents:
+def build_agents(
+    db: Database,
+    events: EventBus,
+    clock: Clock,
+    data_dir: Path,
+    llm: LanguageModel | None = None,
+) -> Agents:
     env = build_environment(db, clock, data_dir)
+    executors = dict(executors_by_method(default_executors()))
+    runner = AgentRunner(db, events, clock)
+    researcher = Researcher(db, env, executors, events)
+    curator = Curator(db, env, executors, llm, data_dir)
     return Agents(
-        runner=AgentRunner(db, events, clock),
-        researcher=Researcher(db, env, executors_by_method(default_executors()), events),
+        runner=runner,
+        researcher=researcher,
+        curator=curator,
+        wishes=WishResearch(db, runner, researcher, curator, events, clock=clock),
         env=env,
     )
 

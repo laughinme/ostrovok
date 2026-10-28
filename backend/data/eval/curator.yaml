@@ -1,0 +1,285 @@
+- description: "Хинкальная или грузинский ресторан в 10 минутах пешком"
+  expected_method: poi_nearby
+  expected_params:
+    poi:
+      amenity: restaurant
+      cuisine: georgian
+    within:
+      walk_minutes: 10
+    open: any
+    min_count: 1
+  notes:
+    code: khinkali_10min
+    caveat: "OSM cuisine=georgian — приближение. Наличие хинкали в меню не гарантировано. Учитывать также cuisine с несколькими значениями."
+
+- description: "До пляжа с детской коляской не больше 15 минут, без лестниц и ступенек"
+  expected_method: walk_to
+  expected_params:
+    target: beach
+    profile: stroller
+    max_minutes: 15
+    max_climb_m: null
+    no_steps: true
+  notes:
+    code: stroller_beach_access
+    caveat: "Проверять пешеходный маршрут до доступного входа на пляж, а не расстояние по прямой. Отсутствие тегов ступеней в OSM не доказывает доступность маршрута."
+
+- description: "Круглосуточная аптека в радиусе 500 метров"
+  expected_method: poi_nearby
+  expected_params:
+    poi:
+      amenity: pharmacy
+    within:
+      meters: 500
+    open: 24_7
+    min_count: 1
+  notes:
+    code: pharmacy_24h_500m
+    caveat: "Проверять opening_hours=24/7. Отсутствующий график не считать круглосуточным. Радиус 500 м сам по себе не гарантирует пешеходную доступность."
+
+- description: "Из окна номера виден Олимпийский парк в Сириусе"
+  expected_method: view
+  expected_params:
+    target: landmark
+    landmark_name: "Олимпийский парк"
+  notes:
+    code: olympic_park_view
+    caveat: "landmark_name — необходимое расширение исходной схемы view, которая задаёт только target. Геометрия позволяет оценить потенциальную видимость, но без этажа, фасада и расположения номера вид из окна не подтверждён."
+
+- description: "Из отеля можно наблюдать закат над морем"
+  expected_method: sun_event
+  expected_params:
+    event: sunset
+    over: sea
+  notes:
+    code: sunset_over_sea
+    caveat: "Учитывать географическое положение, сезонное направление заката и рельеф. Результат геомодели не гарантирует наблюдение из конкретного номера или балкона."
+
+- description: "Ночью возле отеля высокий уровень уличного шума"
+  expected_method: noise
+  expected_params:
+    period: night
+  notes:
+    code: high_night_noise
+    caveat: "Модельный шум от дорог, железной дороги, аэропорта и других источников. Для бинарного признака нужен отдельно заданный порог. Не характеризует звукоизоляцию номера."
+
+- description: "Не меньше двух детских площадок в радиусе 500 метров"
+  expected_method: poi_nearby
+  expected_params:
+    poi:
+      leisure: playground
+    within:
+      meters: 500
+    open: any
+    min_count: 2
+  notes:
+    code: playgrounds_500m
+    caveat: "OSM подтверждает наличие объектов, но не их состояние, возрастные ограничения и фактическую доступность."
+
+- description: "Отель находится в зелёном районе, вокруг много деревьев и парков"
+  expected_method: area_stat
+  expected_params:
+    metric: green
+  notes:
+    code: green_neighborhood
+    caveat: "Возвращать количественную метрику озеленения. Радиус анализа и порог 'много зелени' должны быть определены в конфигурации модели. Не смешивать долю зелёных территорий с количеством деревьев."
+
+- description: "Можно заселиться с собакой весом 30 кг, желательно без доплаты"
+  expected_method: ask_hotelier
+  expected_params:
+    question: "Разрешено ли проживание с собакой весом 30 кг? Есть ли ограничения по породе или весу? Какая доплата?"
+    value_schema:
+      type: object
+      properties:
+        allowed:
+          type: [boolean, "null"]
+        max_weight_kg:
+          type: [number, "null"]
+        breed_restrictions:
+          type: [string, "null"]
+        extra_fee_rub:
+          type: [number, "null"]
+        fee_period:
+          type: [string, "null"]
+  notes:
+    code: dog_30kg_allowed
+    caveat: "allowed относится именно к собаке 30 кг. Общий ответ 'с животными можно' недостаточен. Уточнять, разовая доплата или за ночь."
+
+- description: "В номере есть собственная кухня с плитой и посудой"
+  expected_method: ask_hotelier
+  expected_params:
+    question: "В каких категориях номеров есть собственная кухня? Есть ли плита, холодильник, посуда и возможность готовить?"
+    value_schema:
+      type: object
+      properties:
+        kitchen_present:
+          type: [boolean, "null"]
+        room_types:
+          type: array
+          items:
+            type: string
+        stove:
+          type: [boolean, "null"]
+        refrigerator:
+          type: [boolean, "null"]
+        cookware:
+          type: [boolean, "null"]
+  notes:
+    code: kitchen_in_room
+    caveat: "Не путать кухню в номере с общей кухней или чайной станцией. Проверять оборудование для каждой категории номера."
+
+- description: "Wi-Fi в номере подходит для видеозвонков и удалённой работы"
+  expected_method: ask_hotelier
+  expected_params:
+    question: "Подходит ли Wi-Fi в номерах для видеозвонков? Какая реальная скорость загрузки и отдачи в Мбит/с? Есть ли ограничения трафика?"
+    value_schema:
+      type: object
+      properties:
+        suitable_for_calls:
+          type: [boolean, "null"]
+        download_mbps:
+          type: [number, "null"]
+        upload_mbps:
+          type: [number, "null"]
+        traffic_limit:
+          type: [boolean, "null"]
+  notes:
+    code: wifi_for_work
+    caveat: "Заявление отельера не является независимым измерением. Не считать наличие бесплатного Wi-Fi подтверждением стабильности видеосвязи."
+
+- description: "В номере есть удобный рабочий стол, стул и розетка рядом"
+  expected_method: ask_hotelier
+  expected_params:
+    question: "Есть ли в номере полноценный рабочий стол, отдельный стул и электрическая розетка рядом со столом?"
+    value_schema:
+      type: object
+      properties:
+        desk:
+          type: [boolean, "null"]
+        chair:
+          type: [boolean, "null"]
+        nearby_socket:
+          type: [boolean, "null"]
+        room_types:
+          type: array
+          items:
+            type: string
+  notes:
+    code: desk_with_socket
+    caveat: "Характеристика истинна, если все три условия выполняются в выбранной категории номера. Журнальный столик не считать полноценным рабочим местом."
+
+- description: "Для ребёнка до двух лет могут предоставить детскую кроватку"
+  expected_method: ask_hotelier
+  expected_params:
+    question: "Предоставляете ли детскую кроватку для ребёнка до двух лет? Бесплатно ли это и требуется ли предварительное бронирование?"
+    value_schema:
+      type: object
+      properties:
+        available:
+          type: [boolean, "null"]
+        free:
+          type: [boolean, "null"]
+        fee_rub_per_night:
+          type: [number, "null"]
+        advance_booking_required:
+          type: [boolean, "null"]
+  notes:
+    code: crib_available
+    caveat: "Наличие услуги не гарантирует свободную кроватку на конкретные даты. Для подтверждения бронирования необходим отдельный запрос."
+
+- description: "В номере есть плотные шторы блэкаут, чтобы утром было темно"
+  expected_method: ask_hotelier
+  expected_params:
+    question: "Установлены ли в номерах настоящие светонепроницаемые шторы блэкаут? Во всех ли категориях номеров?"
+    value_schema:
+      type: object
+      properties:
+        blackout_present:
+          type: [boolean, "null"]
+        all_room_types:
+          type: [boolean, "null"]
+        room_types:
+          type: array
+          items:
+            type: string
+  notes:
+    code: blackout_curtains
+    caveat: "Обычные плотные шторы не всегда обеспечивают затемнение. Учитывать конкретную категорию номера."
+
+- description: "В ванной комнате есть стиральная машина для личного пользования"
+  expected_method: ask_hotelier
+  expected_params:
+    question: "Есть ли собственная стиральная машина внутри номера или апартаментов? Или доступна только общая прачечная?"
+    value_schema:
+      type: object
+      properties:
+        private_washing_machine:
+          type: [boolean, "null"]
+        shared_laundry:
+          type: [boolean, "null"]
+        room_types:
+          type: array
+          items:
+            type: string
+  notes:
+    code: private_washing_machine
+    caveat: "Собственная стиральная машина и платная услуга прачечной — разные характеристики."
+
+- description: "Отель подходит для удалённой работы из номера"
+  expected_method: derived
+  expected_params:
+    expr:
+      all:
+        - wifi_for_work
+        - desk_with_socket
+  notes:
+    code: remote_work_friendly
+    caveat: "Требуются одновременно подходящий интернет и оборудованное рабочее место. Желательно, чтобы оба признака относились к одной категории номера."
+
+- description: "Отель удобен для отдыха с маленьким ребёнком"
+  expected_method: derived
+  expected_params:
+    expr:
+      all:
+        - crib_available
+        - any:
+            - stroller_beach_access
+            - playgrounds_500m
+  notes:
+    code: baby_friendly
+    caveat: "Упрощённое операционное определение: есть детская кроватка и хотя бы одна возможность для прогулок. Не гарантирует полную безопасность или наличие всех детских удобств."
+
+- description: "В отеле получится спокойно выспаться без яркого света и сильного уличного шума"
+  expected_method: derived
+  expected_params:
+    expr:
+      all:
+        - blackout_curtains
+        - not: high_night_noise
+  notes:
+    code: comfortable_sleep
+    caveat: "Отрицание допускается только при подтверждённом отсутствии высокого модельного шума. Неизвестное значение high_night_noise не превращать в false. Звукоизоляция стен и внутренний шум не учтены."
+
+- description: "В отеле очень уютно, прямо как дома"
+  expected_method: cannot_check
+  expected_params:
+    reason: "Уют — субъективное впечатление, зависящее от вкусов гостя, интерьера, освещения, запахов и личного опыта. Доступные методы не дают объективного критерия."
+  notes:
+    code: cozy_atmosphere
+    caveat: "Нельзя автоматически превращать высокий рейтинг, фотографии или слова отельера в доказательство уюта."
+
+- description: "В отеле романтическая атмосфера для поездки вдвоём"
+  expected_method: cannot_check
+  expected_params:
+    reason: "Романтичность субъективна и не имеет однозначного пространственного или технического определения."
+  notes:
+    code: romantic_atmosphere
+    caveat: "Вид на закат, балкон и красивый интерьер могут быть отдельными проверяемыми признаками, но сами по себе не доказывают романтическую атмосферу."
+
+- description: "В отеле по-настоящему душевно и чувствуешь себя желанным гостем"
+  expected_method: cannot_check
+  expected_params:
+    reason: "Ощущение гостеприимства и душевности зависит от персонала, обстоятельств проживания и личного восприятия гостя. Доступные методы не позволяют объективно подтвердить его."
+  notes:
+    code: heartfelt_hospitality
+    caveat: "Можно отдельно собирать оценки персонала или анализировать отзывы, но этих методов нет в заданном наборе. Не приравнивать рекламное обещание к установленному факту."

@@ -7,6 +7,8 @@ from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from app.domain.knowledge.tags import keys_of, tags_match
+
 ClimateMetric = Literal["air_max", "air_min", "water", "sun_hours", "rain_days", "daylight_h"]
 NoiseSource = Literal["road", "railway", "bar_club", "construction", "aircraft"]
 
@@ -20,10 +22,35 @@ class _Recipe(BaseModel):
 
 
 class TagFilter(_Recipe):
-    """OSM tag filter: any of `tags` pairs matches, e.g. {"cuisine": ["georgian"]}."""
+    """
+    OSM tag filter: any `tags` pair matches ({"amenity": ["pharmacy"]}), or any alternative in
+    `any_of` with all its pairs ({"amenity": ["restaurant"], "cuisine": ["georgian"]});
+    ["*"] means "the tag is present". Name filters narrow the result.
+    """
 
-    tags: dict[str, list[str]] = Field(min_length=1)
+    tags: dict[str, list[str]] = Field(default_factory=dict)
+    any_of: list[dict[str, list[str]]] = Field(default_factory=list, max_length=10)
     name_contains: list[str] = Field(default_factory=list)
+    name_regex: str | None = Field(None, max_length=200)
+
+    @model_validator(mode="after")
+    def _something_to_match(self) -> "TagFilter":
+        if not self.tags and not self.any_of:
+            raise ValueError("set tags or any_of")
+        return self
+
+    def matches(self, tags: dict[str, str]) -> bool:
+        return tags_match(
+            tags,
+            any_tag=self.tags,
+            any_of=self.any_of,
+            name_contains=self.name_contains,
+            name_regex=self.name_regex,
+        )
+
+    @property
+    def keys(self) -> list[str]:
+        return keys_of(self.tags, self.any_of)
 
 
 class ViewRecipe(_Recipe):

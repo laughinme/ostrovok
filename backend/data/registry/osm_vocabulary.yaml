@@ -1,0 +1,1047 @@
+# Словарь: 150 видов мест для гостей отелей Большого Сочи.
+#
+# osm: ИЛИ между элементами списка, И между тегами внутри элемента.
+# "*" означает наличие тега, [a, b] — любое из указанных значений.
+# Альтернативы с name: "*" — кандидаты, требующие проверки name_regex.
+# Остальные альтернативы работают самостоятельно по тегам.
+# name_regex проверяется по name, alt_name, official_name,
+# short_name и brand при их наличии.
+# Значения OSM, разделённые ";", следует разбивать при сопоставлении.
+#
+# coverage_note — качественная оценка для России:
+# high — обычно хорошо размечено;
+# medium — заметные пробелы;
+# low — редкая или непоследовательная разметка.
+# Это экспертная оценка, не статистический замер покрытия Сочи.
+#
+# Для условий «у моря», «рядом с пляжем» и похожих
+# необходим отдельный пространственный фильтр.
+# opening_hours необходимо проверять на актуальность.
+#
+# Источники: OSM Wiki
+# https://wiki.openstreetmap.org/wiki/Key:amenity
+# https://wiki.openstreetmap.org/wiki/Shop
+# https://wiki.openstreetmap.org/wiki/Key:leisure
+# https://wiki.openstreetmap.org/wiki/Key:tourism
+# https://wiki.openstreetmap.org/wiki/Key:healthcare
+# https://wiki.openstreetmap.org/wiki/Key:healthcare:speciality
+# https://wiki.openstreetmap.org/wiki/Key:cuisine
+# https://wiki.openstreetmap.org/wiki/Key:opening_hours
+# https://wiki.openstreetmap.org/wiki/Public_transport
+# https://wiki.openstreetmap.org/wiki/Key:aerialway
+# https://wiki.openstreetmap.org/wiki/Spa
+# https://wiki.openstreetmap.org/wiki/Pistes
+
+# ============================================
+# ЕДА И НОЧНАЯ ЖИЗНЬ — 31
+# ============================================
+
+хинкальная:
+  osm:
+    - {amenity: restaurant, name: "*"}
+    - {amenity: cafe, name: "*"}
+    - {amenity: fast_food, name: "*"}
+  name_regex: '(?i)хинкал|khinkal'
+  coverage_note: "low — отдельного устойчивого тега для хинкальных нет, помогают названия."
+  uncertain: true
+
+грузинская кухня:
+  osm:
+    - {amenity: [restaurant, cafe], cuisine: georgian}
+    - {amenity: [restaurant, cafe], name: "*"}
+  name_regex: '(?i)грузин|хачапур|сакартвел|тбилис|georgian'
+  coverage_note: "medium — тип кухни размечают не везде, названия помогают частично."
+  uncertain: true
+
+шаурмичная:
+  osm:
+    - {amenity: fast_food, name: "*"}
+    - {amenity: cafe, name: "*"}
+  name_regex: '(?i)шаурм|шаверм|shawarm|shaurm|донер|doner'
+  coverage_note: "low — обычно указан лишь fast_food, конкретное блюдо часто не размечено."
+  uncertain: true
+
+шашлычная:
+  osm:
+    - {amenity: [restaurant, cafe, fast_food], name: "*"}
+  name_regex: '(?i)шашлы|shashlik|шашлик'
+  coverage_note: "low — cuisine=barbecue не равен шашлычной, надёжнее искать название."
+  uncertain: true
+
+кофейня:
+  osm:
+    - {amenity: cafe, cuisine: coffee_shop}
+    - {amenity: cafe, name: "*"}
+  name_regex: '(?i)кофейн|кофе|coffee|coffe|эспрессо'
+  coverage_note: "medium — кафе нанесены широко, но подтип coffee_shop часто пропущен."
+  uncertain: true
+
+пекарня:
+  osm:
+    - {shop: bakery}
+    - {amenity: cafe, bakery: "yes"}
+  coverage_note: "high — пекарни обычно имеют стандартный shop=bakery."
+  uncertain: false
+
+столовая:
+  osm:
+    - {amenity: restaurant, name: "*"}
+    - {amenity: cafe, name: "*"}
+  name_regex: '(?i)столов(ая|ой)|кафе.?столовая|буфет'
+  coverage_note: "low — единообразной классификации столовых нет, часто обычное кафе."
+  uncertain: true
+
+ресторан:
+  osm:
+    - {amenity: restaurant}
+  coverage_note: "high — один из наиболее распространённых и понятных POI."
+  uncertain: false
+
+ресторан у моря:
+  osm:
+    - {amenity: restaurant}
+  coverage_note: "medium — рестораны нанесены хорошо, но «у моря» требует отдельной проверки расстояния до берега."
+  uncertain: true
+
+кафе:
+  osm:
+    - {amenity: cafe}
+  coverage_note: "high — стандартный массовый тег общепита."
+  uncertain: false
+
+фастфуд:
+  osm:
+    - {amenity: fast_food}
+  coverage_note: "high — тип заведения обычно размечается прямым тегом."
+  uncertain: false
+
+пиццерия:
+  osm:
+    - {amenity: [restaurant, fast_food], cuisine: pizza}
+  coverage_note: "medium — пиццерии есть, но cuisine часто отсутствует или содержит несколько кухонь."
+  uncertain: false
+
+суши-бар:
+  osm:
+    - {amenity: [restaurant, fast_food], cuisine: sushi}
+  coverage_note: "medium — кухня суши известна, но не у всех точек заполнено cuisine."
+  uncertain: false
+
+бургерная:
+  osm:
+    - {amenity: [restaurant, fast_food], cuisine: burger}
+  coverage_note: "medium — отдельная кухня обычно обозначается не у всех заведений."
+  uncertain: false
+
+блинная:
+  osm:
+    - {amenity: [cafe, restaurant, fast_food], cuisine: crepe}
+  coverage_note: "low — cuisine=crepe легитимен, но российские блинные нередко без этой детали."
+  uncertain: false
+
+кондитерская:
+  osm:
+    - {shop: confectionery}
+    - {shop: pastry}
+    - {amenity: cafe, cuisine: cake}
+  coverage_note: "medium — профильные магазины хорошо распознаются, кафе-кондитерские могут быть просто cafe."
+  uncertain: false
+
+мороженое:
+  osm:
+    - {amenity: ice_cream}
+    - {shop: ice_cream}
+    - {amenity: cafe, cuisine: ice_cream}
+  coverage_note: "medium — отдельные киоски и кафе могут оставаться без специализированного тега."
+  uncertain: false
+
+чайная:
+  osm:
+    - {amenity: cafe, name: "*"}
+  name_regex: '(?i)чайная|чайный.?дом|tea.?house|tea.?room'
+  coverage_note: "low — чайные обычно обозначены как cafe без отдельного подтипа."
+  uncertain: true
+
+вегетарианское кафе:
+  osm:
+    - {amenity: [cafe, restaurant], diet:vegetarian: only}
+    - {amenity: [cafe, restaurant], diet:vegan: only}
+  coverage_note: "low — diet:* размечен существенно реже, чем тип заведения."
+  uncertain: false
+
+халяльное кафе:
+  osm:
+    - {amenity: [cafe, restaurant, fast_food], diet:halal: "yes"}
+    - {amenity: [cafe, restaurant, fast_food], diet:halal: only}
+  coverage_note: "low — сведения о халяльности часто отсутствуют в тегах."
+  uncertain: false
+
+бар:
+  osm:
+    - {amenity: bar}
+  coverage_note: "high — общепринятый тип заведения."
+  uncertain: false
+
+паб:
+  osm:
+    - {amenity: pub}
+  coverage_note: "medium — в России часть пабов нанесена как bar или restaurant."
+  uncertain: false
+
+пивной сад:
+  osm:
+    - {amenity: biergarten}
+  coverage_note: "low — специализированный тег в России относительно редок."
+  uncertain: false
+
+ночной клуб:
+  osm:
+    - {amenity: nightclub}
+  coverage_note: "medium — клубы известны в OSM, но классификация ночных заведений неоднородна."
+  uncertain: false
+
+караоке-бар:
+  osm:
+    - {amenity: bar, karaoke: "yes"}
+    - {amenity: restaurant, karaoke: "yes"}
+    - {amenity: [bar, restaurant], name: "*"}
+  name_regex: '(?i)караоке|karaoke'
+  coverage_note: "low — наличие караоке редко проставлено структурированно."
+  uncertain: true
+
+кальянная:
+  osm:
+    - {amenity: hookah_lounge}
+    - {amenity: [bar, cafe], name: "*"}
+  name_regex: '(?i)кальян|hookah|shisha'
+  coverage_note: "medium — есть специальный тег, но часть мест классифицирована как bar/cafe."
+  uncertain: true
+
+фудкорт:
+  osm:
+    - {amenity: food_court}
+  coverage_note: "medium — в крупных ТЦ бывает нанесён, но некоторые общие зоны не выделены."
+  uncertain: false
+
+уличная еда:
+  osm:
+    - {amenity: fast_food, indoor_seating: "no"}
+    - {amenity: fast_food, outdoor_seating: "yes"}
+  coverage_note: "low — отдельного надёжного признака стритфуда нет; эти свойства не гарантируют формат."
+  uncertain: true
+
+рыбный ресторан:
+  osm:
+    - {amenity: restaurant, cuisine: seafood}
+  coverage_note: "low — специализация seafood заполнена у ограниченной части ресторанов."
+  uncertain: false
+
+кафе с террасой:
+  osm:
+    - {amenity: [cafe, restaurant], outdoor_seating: "yes"}
+  coverage_note: "medium — outdoor_seating встречается, но заполнен не для всех летних веранд."
+  uncertain: true
+
+кафе с завтраками:
+  osm:
+    - {amenity: [cafe, restaurant], cuisine: breakfast}
+    - {amenity: [cafe, restaurant], name: "*"}
+  name_regex: '(?i)завтрак|breakfast|брекфаст'
+  coverage_note: "low — меню завтраков часто никак не размечено; название помогает лишь частично."
+  uncertain: true
+
+# ============================================
+# МАГАЗИНЫ И БЫТОВЫЕ СЕРВИСЫ — 29
+# ============================================
+
+продуктовый магазин:
+  osm:
+    - {shop: [supermarket, convenience, food, grocery]}
+  coverage_note: "high — основные продуктовые магазины обычно указаны как supermarket/convenience."
+  uncertain: false
+
+супермаркет:
+  osm:
+    - {shop: supermarket}
+  coverage_note: "high — крупные продуктовые сети хорошо представлены."
+  uncertain: false
+
+круглосуточный магазин:
+  osm:
+    - {shop: [convenience, supermarket], opening_hours: "24/7"}
+  coverage_note: "medium — магазины есть, но режим работы часто отсутствует или меняется."
+  uncertain: false
+
+рынок:
+  osm:
+    - {amenity: marketplace}
+  coverage_note: "medium — основные рынки отмечены, небольшие и сезонные могут отсутствовать."
+  uncertain: false
+
+фермерский рынок:
+  osm:
+    - {amenity: marketplace, name: "*"}
+  name_regex: '(?i)фермер|эко.?рынок|сельскохозяйствен'
+  coverage_note: "low — специализация рынка чаще в названии, не в стандартном теге."
+  uncertain: true
+
+винный магазин:
+  osm:
+    - {shop: wine}
+  coverage_note: "medium — wine распознаётся, но часть точек размечена общим alcohol."
+  uncertain: false
+
+алкогольный магазин:
+  osm:
+    - {shop: [alcohol, wine]}
+  coverage_note: "high — сетевые алкомаркеты часто нанесены как alcohol."
+  uncertain: false
+
+почтовое отделение:
+  osm:
+    - {amenity: post_office}
+  coverage_note: "high — отделения почты обычно хорошо представлены и имеют отдельный POI."
+  uncertain: false
+
+мясная лавка:
+  osm:
+    - {shop: butcher}
+  coverage_note: "medium — специализированные точки часто отмечены, рыночные прилавки хуже."
+  uncertain: false
+
+рыбный магазин:
+  osm:
+    - {shop: seafood}
+  coverage_note: "medium — стационарные рыбные магазины обычно идентифицируемы, павильоны хуже."
+  uncertain: false
+
+овощной магазин:
+  osm:
+    - {shop: greengrocer}
+  coverage_note: "medium — отдельные лавки нанесены неплохо, палатки и рынки неполно."
+  uncertain: false
+
+отделение банка:
+  osm:
+    - {amenity: bank}
+  coverage_note: "high — банковские отделения часто нанесены, но режим работы может меняться."
+  uncertain: false
+
+магазин сладостей:
+  osm:
+    - {shop: confectionery}
+    - {shop: chocolate}
+  coverage_note: "medium — стационарные точки есть, но не все выделены из food."
+  uncertain: false
+
+парикмахерская:
+  osm:
+    - {shop: hairdresser}
+  coverage_note: "high — парикмахерские и барбершопы обычно размечаются единым тегом."
+  uncertain: false
+
+магазин чая:
+  osm:
+    - {shop: tea}
+  coverage_note: "medium — торговые точки часто имеют соответствующий shop, но не все."
+  uncertain: false
+
+салон красоты:
+  osm:
+    - {shop: beauty}
+  coverage_note: "high — распространённая и достаточно хорошо нанесённая услуга."
+  uncertain: false
+
+торговый центр:
+  osm:
+    - {shop: mall}
+  coverage_note: "high — крупные ТЦ обычно представлены контурами или POI."
+  uncertain: false
+
+химчистка:
+  osm:
+    - {shop: dry_cleaning}
+  coverage_note: "medium — специализированные пункты встречаются, не все приёмные точки нанесены."
+  uncertain: false
+
+сувенирный магазин:
+  osm:
+    - {shop: gift}
+  coverage_note: "medium — gift охватывает и подарки, поэтому не всегда только сувениры."
+  uncertain: true
+
+магазин одежды:
+  osm:
+    - {shop: clothes}
+  coverage_note: "high — массовый торговый тип, особенно в городах."
+  uncertain: false
+
+обувной магазин:
+  osm:
+    - {shop: shoes}
+  coverage_note: "high — типичный магазин с самостоятельным тегом."
+  uncertain: false
+
+спортивный магазин:
+  osm:
+    - {shop: sports}
+  coverage_note: "high — крупные спортивные точки часто размечены."
+  uncertain: false
+
+магазин электроники:
+  osm:
+    - {shop: electronics}
+  coverage_note: "high — тип часто указан у сетевых точек."
+  uncertain: false
+
+магазин мобильных телефонов:
+  osm:
+    - {shop: mobile_phone}
+  coverage_note: "high — салоны связи часто нанесены отдельным POI."
+  uncertain: false
+
+книжный магазин:
+  osm:
+    - {shop: books}
+  coverage_note: "high — общепринятый торговый тег."
+  uncertain: false
+
+цветочный магазин:
+  osm:
+    - {shop: florist}
+  coverage_note: "high — часто и однозначно размечаемые магазины."
+  uncertain: false
+
+детский магазин:
+  osm:
+    - {shop: baby_goods}
+  coverage_note: "medium — общий подтип часто смешан с одеждой и игрушками."
+  uncertain: true
+
+магазин игрушек:
+  osm:
+    - {shop: toys}
+  coverage_note: "medium — специализированные магазины есть, отделы в ТЦ обычно не выделяют."
+  uncertain: false
+
+газетный киоск:
+  osm:
+    - {shop: newsagent}
+    - {shop: kiosk, name: "*"}
+  name_regex: '(?i)газет|пресс|журнал|союзпечать|роспечать'
+  coverage_note: "medium — газетные киоски нередко обозначены просто kiosk."
+  uncertain: true
+
+# ============================================
+# МЕДИЦИНА — 18
+# ============================================
+
+аптека:
+  osm:
+    - {amenity: pharmacy}
+    - {healthcare: pharmacy}
+  coverage_note: "high — одна из наиболее полно размеченных коммерческих услуг."
+  uncertain: false
+
+круглосуточная аптека:
+  osm:
+    - {amenity: pharmacy, opening_hours: "24/7"}
+    - {healthcare: pharmacy, opening_hours: "24/7"}
+  coverage_note: "medium — аптеки известны, но opening_hours обновляется и указывается не всегда."
+  uncertain: false
+
+больница:
+  osm:
+    - {amenity: hospital}
+    - {healthcare: hospital}
+  coverage_note: "high — крупные медицинские учреждения обычно нанесены."
+  uncertain: false
+
+детская больница:
+  osm:
+    - {amenity: hospital, healthcare:speciality: paediatrics}
+    - {amenity: hospital, name: "*"}
+  name_regex: '(?i)детск|педиатр|дкб|child.*hospital'
+  coverage_note: "low — детский профиль обычно в названии, специальность часто не указана."
+  uncertain: true
+
+травмпункт:
+  osm:
+    - {amenity: clinic, healthcare:speciality: trauma}
+    - {amenity: clinic, name: "*"}
+    - {amenity: hospital, name: "*"}
+  name_regex: '(?i)травмпункт|травматолог|травм[а -]'
+  coverage_note: "low — специализированная неотложная помощь плохо отделена от общих клиник."
+  uncertain: true
+
+поликлиника:
+  osm:
+    - {amenity: clinic, name: "*"}
+  name_regex: '(?i)поликлиник|поликл\.'
+  coverage_note: "medium — clinic широко известен, но именно поликлиника чаще определяется названием."
+  uncertain: true
+
+стоматология:
+  osm:
+    - {amenity: dentist}
+    - {healthcare: dentist}
+  coverage_note: "high — частные стоматологии обычно хорошо представлены."
+  uncertain: false
+
+детский стоматолог:
+  osm:
+    - {amenity: dentist, healthcare:speciality: paediatric_dentistry}
+    - {healthcare: dentist, healthcare:speciality: paediatric_dentistry}
+    - {amenity: dentist, name: "*"}
+  name_regex: '(?i)детск|детям|педиатр|kids|junior'
+  coverage_note: "low — педиатрический профиль редко структурирован."
+  uncertain: true
+
+врачебный кабинет:
+  osm:
+    - {amenity: doctors}
+    - {healthcare: doctor}
+  coverage_note: "medium — индивидуальные кабинеты размечены существенно хуже крупных клиник."
+  uncertain: false
+
+медицинская лаборатория:
+  osm:
+    - {healthcare: laboratory}
+  coverage_note: "medium — сетевые диагностические лаборатории есть, иногда классифицированы как clinic."
+  uncertain: false
+
+пункт сдачи анализов:
+  osm:
+    - {healthcare: sample_collection}
+  coverage_note: "low — редкая детализация; многие пункты размечены только как лаборатории."
+  uncertain: false
+
+диагностический центр:
+  osm:
+    - {amenity: clinic, name: "*"}
+    - {healthcare: clinic, name: "*"}
+  name_regex: '(?i)диагност|мрт|кт.?центр|узи.?центр'
+  coverage_note: "low — услуга диагностики без названия не выводится из общего clinic."
+  uncertain: true
+
+оптика:
+  osm:
+    - {shop: optician}
+  coverage_note: "high — сеть оптик часто имеет точный shop=optician."
+  uncertain: false
+
+станция скорой помощи:
+  osm:
+    - {emergency: ambulance_station}
+  coverage_note: "medium — станции есть, но часть подразделений не нанесена как отдельный POI."
+  uncertain: false
+
+центр вакцинации:
+  osm:
+    - {healthcare: vaccination_centre}
+  coverage_note: "low — нередко услуга оказывается внутри клиники без отдельного POI."
+  uncertain: false
+
+реабилитационный центр:
+  osm:
+    - {healthcare: rehabilitation}
+    - {healthcare: hospital, healthcare:speciality: rehabilitation}
+  coverage_note: "low — медицинская реабилитация часто не обозначена отдельным типом."
+  uncertain: false
+
+массажный салон:
+  osm:
+    - {shop: massage}
+  coverage_note: "medium — профильные салоны есть, но часть объединена с beauty."
+  uncertain: false
+
+медицинский центр:
+  osm:
+    - {amenity: clinic}
+    - {healthcare: clinic}
+  coverage_note: "medium — клиники нанесены, но далеко не каждая имеет точное описание услуг."
+  uncertain: false
+
+# ============================================
+# ДЕТИ И СЕМЕЙНЫЙ ОТДЫХ — 12
+# ============================================
+
+детская площадка:
+  osm:
+    - {leisure: playground}
+  coverage_note: "high — уличные игровые площадки широко и однозначно отмечены."
+  uncertain: false
+
+детская игровая комната:
+  osm:
+    - {leisure: indoor_play}
+  coverage_note: "low — коммерческие игровые комнаты редко отделены от зданий ТЦ."
+  uncertain: false
+
+аквапарк:
+  osm:
+    - {leisure: water_park}
+  coverage_note: "high — крупные аквапарки хорошо узнаются по специальному тегу."
+  uncertain: false
+
+зоопарк:
+  osm:
+    - {tourism: zoo}
+  coverage_note: "high — заметные зоопарки обычно размечены как отдельные территории."
+  uncertain: false
+
+дельфинарий:
+  osm:
+    - {tourism: zoo, name: "*"}
+    - {tourism: aquarium, name: "*"}
+    - {tourism: attraction, name: "*"}
+  name_regex: '(?i)дельфинар|dolphinarium|дельфин.?шоу'
+  coverage_note: "low — отдельного широко принятого тега нет, обычно нужен поиск по имени."
+  uncertain: true
+
+океанариум:
+  osm:
+    - {tourism: aquarium}
+  coverage_note: "medium — крупные океанариумы известны, но часть тематических объектов размечена иначе."
+  uncertain: false
+
+парк аттракционов:
+  osm:
+    - {tourism: theme_park}
+  coverage_note: "medium — большие объекты есть, небольшие парки могут быть отмечены просто park."
+  uncertain: false
+
+колесо обозрения:
+  osm:
+    - {attraction: big_wheel}
+  coverage_note: "medium — сооружения узнаваемые, но отдельные аттракционы размечают не всегда."
+  uncertain: false
+
+батутный центр:
+  osm:
+    - {leisure: trampoline_park}
+  coverage_note: "medium — специальный тег есть, часть залов отмечена лишь sports_centre."
+  uncertain: false
+
+веревочный парк:
+  osm:
+    - {sport: climbing_adventure}
+  coverage_note: "low — приключенческую специализацию часто не указывают отдельным тегом."
+  uncertain: true
+
+детский развлекательный центр:
+  osm:
+    - {leisure: indoor_play}
+    - {leisure: trampoline_park}
+    - {tourism: theme_park}
+  coverage_note: "low — категория собирательная; теги описывают разные виды развлечений."
+  uncertain: true
+
+детский сад:
+  osm:
+    - {amenity: kindergarten}
+    - {amenity: childcare}
+  coverage_note: "high — учреждения образования часто нанесены по точным адресам."
+  uncertain: false
+
+# ============================================
+# ЖИВОТНЫЕ — 6
+# ============================================
+
+ветклиника:
+  osm:
+    - {amenity: veterinary}
+  coverage_note: "high — у веткабинетов есть устоявшийся общепринятый тег."
+  uncertain: false
+
+ветеринарная аптека:
+  osm:
+    - {amenity: veterinary_pharmacy}
+  coverage_note: "low — отдельный тег есть, но товары часто продают внутри ветклиник или зоомагазинов."
+  uncertain: false
+
+площадка для собак:
+  osm:
+    - {leisure: dog_park}
+  coverage_note: "medium — огороженные площадки попадают на карту не всегда."
+  uncertain: false
+
+зоомагазин:
+  osm:
+    - {shop: pet}
+  coverage_note: "high — стационарные магазины для животных обычно размечены."
+  uncertain: false
+
+груминг-салон:
+  osm:
+    - {shop: pet_grooming}
+  coverage_note: "medium — специализированные салоны есть, но данные неполны."
+  uncertain: false
+
+приют для животных:
+  osm:
+    - {amenity: animal_shelter}
+  coverage_note: "medium — крупные приюты могут быть нанесены, небольшие плохо представлены."
+  uncertain: false
+
+# ============================================
+# ТРАНСПОРТ И АВТОМОБИЛИ — 23
+# ============================================
+
+ж/д вокзал:
+  osm:
+    - {railway: station, station: train}
+    - {railway: station}
+  coverage_note: "high — станции хорошо нанесены, но не каждая railway=station является зданием вокзала."
+  uncertain: true
+
+железнодорожная платформа:
+  osm:
+    - {railway: platform}
+    - {public_transport: platform, train: "yes"}
+  coverage_note: "medium — станции размечены хорошо, отдельные платформы не везде."
+  uncertain: false
+
+станция электрички:
+  osm:
+    - {railway: [station, halt]}
+  coverage_note: "high — железнодорожные остановочные пункты есть, но тип поездов по тегу не различить."
+  uncertain: true
+
+автобусная остановка:
+  osm:
+    - {highway: bus_stop}
+    - {public_transport: platform, bus: "yes"}
+  coverage_note: "high — маршрутные автобусные остановки часто нанесены по всей стране."
+  uncertain: false
+
+автовокзал:
+  osm:
+    - {amenity: bus_station}
+  coverage_note: "high — крупные автовокзалы обычно хорошо представлены."
+  uncertain: false
+
+морской вокзал:
+  osm:
+    - {amenity: ferry_terminal, name: "*"}
+    - {leisure: marina, name: "*"}
+  name_regex: '(?i)морск(ой|ого).?вокзал|морвокзал|морпорт|seaport'
+  coverage_note: "low — морвокзал может быть обозначен зданием, портом или причалом, не единым POI."
+  uncertain: true
+
+аэропорт:
+  osm:
+    - {aeroway: aerodrome}
+  coverage_note: "high — официальные аэропорты и их границы хорошо размечены."
+  uncertain: false
+
+стоянка такси:
+  osm:
+    - {amenity: taxi}
+  coverage_note: "medium — выделенные стоянки есть, но вызов через приложение обычно без POI."
+  uncertain: false
+
+канатная дорога:
+  osm:
+    - {aerialway: [cable_car, gondola, chair_lift, mixed_lift]}
+  coverage_note: "high — трассы крупных канатных дорог курортов обычно подробно нанесены."
+  uncertain: false
+
+станция канатной дороги:
+  osm:
+    - {aerialway: station}
+  coverage_note: "high — крупные станции подъёмников обычно размечают."
+  uncertain: false
+
+кресельный подъемник:
+  osm:
+    - {aerialway: chair_lift}
+  coverage_note: "high — тип подъёмника обычно следует из aerialway."
+  uncertain: false
+
+бугельный подъемник:
+  osm:
+    - {aerialway: [t-bar, j-bar, platter, rope_tow]}
+  coverage_note: "medium — небольшие бугели могут быть не нанесены или сезонными."
+  uncertain: false
+
+парковка:
+  osm:
+    - {amenity: parking}
+  coverage_note: "high — отдельные автостоянки часто нанесены."
+  uncertain: false
+
+крытая парковка:
+  osm:
+    - {amenity: parking, covered: "yes"}
+    - {amenity: parking, parking: [underground, multi-storey]}
+  coverage_note: "medium — крытость часто не указана; многоэтажная не всегда полностью крытая."
+  uncertain: true
+
+многоуровневая парковка:
+  osm:
+    - {amenity: parking, parking: multi-storey}
+  coverage_note: "medium — большие паркинги хорошо видны, но тип сооружения не везде указан."
+  uncertain: false
+
+зарядка для электромобиля:
+  osm:
+    - {amenity: charging_station, motorcar: "yes"}
+    - {amenity: charging_station, socket:type2: "*"}
+    - {amenity: charging_station, socket:type2_combo: "*"}
+    - {amenity: charging_station, socket:chademo: "*"}
+  coverage_note: "medium — зарядные станции есть, но тип транспорта и коннекторы могут не указываться."
+  uncertain: true
+
+автозаправка:
+  osm:
+    - {amenity: fuel}
+  coverage_note: "high — АЗС являются стандартными и часто полными объектами карты."
+  uncertain: false
+
+прокат автомобилей:
+  osm:
+    - {amenity: car_rental}
+  coverage_note: "medium — прокаты есть, но маленькие офисы и стойки могут отсутствовать."
+  uncertain: false
+
+каршеринг:
+  osm:
+    - {amenity: car_sharing}
+  coverage_note: "low — обозначаются только постоянные станции, не свободно стоящие машины."
+  uncertain: true
+
+прокат велосипедов:
+  osm:
+    - {amenity: bicycle_rental}
+    - {shop: bicycle, service:bicycle:rental: "yes"}
+  coverage_note: "medium — отмечены пункты проката, но сезонные места часто пропущены."
+  uncertain: false
+
+велопарковка:
+  osm:
+    - {amenity: bicycle_parking}
+  coverage_note: "medium — зависит от активности локальных картографов."
+  uncertain: false
+
+прокат самокатов:
+  osm:
+    - {amenity: kick-scooter_rental}
+  coverage_note: "low — аренда без стационарной точки не картографируется в OSM."
+  uncertain: true
+
+морской причал:
+  osm:
+    - {man_made: pier}
+    - {amenity: ferry_terminal}
+  coverage_note: "medium — капитальные пирсы отмечены, но не каждый доступен для пассажирских судов."
+  uncertain: true
+
+# ============================================
+# ПРИРОДА, СПОРТ И ДОСУГ — 26
+# ============================================
+
+пляж:
+  osm:
+    - {natural: beach}
+    - {leisure: beach_resort}
+  coverage_note: "high — береговые пляжи заметны на карте, но границы бывают разной точности."
+  uncertain: false
+
+оборудованный пляж:
+  osm:
+    - {leisure: beach_resort}
+  coverage_note: "medium — управляемые пляжи не всегда выделяются отдельно от natural=beach."
+  uncertain: false
+
+песчаный пляж:
+  osm:
+    - {natural: beach, surface: sand}
+  coverage_note: "medium — поверхности пляжей указываются непоследовательно."
+  uncertain: false
+
+галечный пляж:
+  osm:
+    - {natural: beach, surface: [pebblestone, gravel]}
+  coverage_note: "medium — surface часто отсутствует; gravel может означать не круглую гальку."
+  uncertain: true
+
+набережная:
+  osm:
+    - {highway: footway, name: "*"}
+    - {highway: pedestrian, name: "*"}
+    - {highway: path, name: "*"}
+  name_regex: '(?i)набережн|променад|приморск(ая|ий).?(аллея|бульвар)'
+  coverage_note: "low — это линейный объект без единого специального тега; важна проверка близости к воде."
+  uncertain: true
+
+парк:
+  osm:
+    - {leisure: park}
+  coverage_note: "high — большинство крупных общественных парков размечено полигонами."
+  uncertain: false
+
+сквер:
+  osm:
+    - {leisure: park, name: "*"}
+  name_regex: '(?i)сквер'
+  coverage_note: "medium — скверы обычно имеют leisure=park, но термин не выделен отдельным тегом."
+  uncertain: true
+
+ботанический сад:
+  osm:
+    - {leisure: garden, garden:type: botanical}
+  coverage_note: "medium — известные сады нанесены, детали garden:type заполнены не везде."
+  uncertain: false
+
+смотровая площадка:
+  osm:
+    - {tourism: viewpoint}
+  coverage_note: "medium — туристические смотровые известны, неофициальные точки пропущены."
+  uncertain: false
+
+бассейн:
+  osm:
+    - {leisure: swimming_pool}
+    - {leisure: sports_centre, sport: swimming}
+  coverage_note: "medium — чаши бассейнов встречаются, но часть частная либо внутри отелей."
+  uncertain: true
+
+спортзал:
+  osm:
+    - {leisure: fitness_centre}
+    - {leisure: sports_centre, sport: fitness}
+  coverage_note: "high — сетевые фитнес-клубы обычно хорошо представлены."
+  uncertain: false
+
+спортивный комплекс:
+  osm:
+    - {leisure: sports_centre}
+    - {leisure: sports_hall}
+  coverage_note: "medium — крупные комплексы есть, небольшие залы часто пропущены."
+  uncertain: false
+
+спа-центр:
+  osm:
+    - {shop: beauty, beauty: spa}
+    - {tourism: spa_resort}
+  coverage_note: "low — spa часто лишь услуга отеля, устаревшие leisure=spa/amenity=spa намеренно не использованы."
+  uncertain: true
+
+баня:
+  osm:
+    - {amenity: public_bath, name: "*"}
+    - {leisure: sauna, name: "*"}
+  name_regex: '(?i)баня|бани|банный'
+  coverage_note: "medium — банные комплексы чаще обозначаются общими общественными банями или саунами."
+  uncertain: true
+
+сауна:
+  osm:
+    - {leisure: sauna}
+  coverage_note: "medium — отдельные сауны размечены, помещения внутри отелей часто не выделены."
+  uncertain: false
+
+хаммам:
+  osm:
+    - {amenity: public_bath, bath:type: hammam}
+  coverage_note: "low — тип турецкой бани в РФ почти никогда не выделяется по bath:type."
+  uncertain: false
+
+теннисный корт:
+  osm:
+    - {leisure: pitch, sport: tennis}
+  coverage_note: "high — отдельные корты относительно просто узнаются на аэрофото."
+  uncertain: false
+
+футбольное поле:
+  osm:
+    - {leisure: pitch, sport: soccer}
+  coverage_note: "high — школьные и городские футбольные площадки часто размечены."
+  uncertain: false
+
+баскетбольная площадка:
+  osm:
+    - {leisure: pitch, sport: basketball}
+  coverage_note: "medium — дворовые площадки часто отсутствуют."
+  uncertain: false
+
+волейбольная площадка:
+  osm:
+    - {leisure: pitch, sport: volleyball}
+  coverage_note: "medium — часть площадок сезонная или совместная с другими видами спорта."
+  uncertain: false
+
+горнолыжная трасса:
+  osm:
+    - {piste:type: downhill}
+  coverage_note: "high — в Красной Поляне трассы курортов обычно подробно описаны."
+  uncertain: false
+
+горнолыжный курорт:
+  osm:
+    - {landuse: winter_sports}
+  coverage_note: "medium — курорт может описываться сетью трасс и подъёмников без одного полигона."
+  uncertain: true
+
+пешеходный туристический маршрут:
+  osm:
+    - {type: route, route: hiking}
+    - {type: route, route: foot}
+  coverage_note: "medium — официальные маршруты часто есть, но для поиска нужна обработка геометрии relations."
+  uncertain: false
+
+водопад:
+  osm:
+    - {waterway: waterfall}
+  coverage_note: "medium — популярные водопады нанесены, мелкие или сезонные не всегда."
+  uncertain: false
+
+природный заповедник:
+  osm:
+    - {leisure: nature_reserve}
+    - {boundary: protected_area}
+    - {boundary: national_park}
+  coverage_note: "high — крупные охраняемые территории нанесены, но классы охраны различаются."
+  uncertain: true
+
+музей:
+  osm:
+    - {tourism: museum}
+  coverage_note: "high — известные туристические музеи обычно полно размечены."
+  uncertain: false
+
+# ============================================
+# ПОВСЕДНЕВНЫЕ УСЛУГИ — 5
+# ============================================
+
+банкомат:
+  osm:
+    - {amenity: atm}
+  coverage_note: "high — банкоматы массово нанесены, но отдельные могут быть закрыты или перенесены."
+  uncertain: false
+
+обмен валюты:
+  osm:
+    - {amenity: bureau_de_change}
+  coverage_note: "medium — обменные пункты есть, обмен в отделениях банков отдельным POI обычно не указан."
+  uncertain: false
+
+общественный туалет:
+  osm:
+    - {amenity: toilets}
+  coverage_note: "medium — стационарные туалеты есть, сезонные на пляжах часто пропущены."
+  uncertain: false
+
+прачечная:
+  osm:
+    - {shop: laundry}
+  coverage_note: "medium — коммерческие прачечные отмечены, услуги гостиницы обычно отдельным POI не отмечены."
+  uncertain: false
+
+камера хранения:
+  osm:
+    - {amenity: luggage_locker}
+    - {amenity: left_luggage}
+  coverage_note: "low — камеры хранения и сервисы временного хранения отмечены далеко не все."
+  uncertain: false
