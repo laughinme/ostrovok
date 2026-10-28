@@ -19,14 +19,23 @@ import { decimal, rub } from "../lib/format";
 import { verdict } from "../lib/score";
 import { BookingRequest } from "./booking-request";
 import { DetailMap } from "./detail-map";
+import { NoiseSection } from "./noise-section";
 import "./hotel-detail.css";
 const FACADE_TEXT: Record<Facade, string> = {
+  N: "север",
+  E: "восток",
+  S: "юг",
+  W: "запад",
   NE: "горы",
   SE: "море частично",
   SW: "море и закат",
   NW: "город",
 };
 const FACADE_COLOR: Record<Facade, string> = {
+  N: "#C9D0E2",
+  E: "#C9D0E2",
+  S: "#C9D0E2",
+  W: "#C9D0E2",
   NE: "#9BD08A",
   SE: "#9DB5F5",
   SW: "var(--primary)",
@@ -60,7 +69,6 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
   const [facade, setFacade] = useState<Facade>(h.bestFacade);
   const [floor, setFloor] = useState(h.bestFloor);
   const [reading, setReading] = useState({ seaShare: 0, sunVisible: false });
-  const [noise, setNoise] = useState<"night" | "day">("night");
   const [why, setWhy] = useState<Fact | null>(null);
   const [lb, setLb] = useState<number | null>(null);
   const [asked, setAsked] = useState<Set<string>>(new Set());
@@ -75,13 +83,11 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
   const gallery: GalleryItem[] = useMemo(
     () => [
       ...h.photos.map((key) => ({ kind: "photo" as const, key })),
-      { kind: "view" as const },
-      { kind: "noise" as const },
+      ...(!h.api ? [{ kind: "view" as const }, { kind: "noise" as const }] : []),
     ],
     [h],
   );
   const route = useMemo(() => nearbyRoute(hotel), [hotel]);
-  const noiseSides = h.noise[noise];
   const roomsForFacade = h.rooms.filter((r) => r.facades.includes(facade));
   const scrollTo = (id: string) =>
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -334,51 +340,7 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
           </div>
         </section>
 
-        <section className="row-panel card-w" id="night">
-          <div className="rp-media light">
-            <Building
-              floors={h.totalFloors}
-              name={h.name}
-              sides={Object.fromEntries(
-                Object.entries(noiseSides).map(([k, v]) => [k, { color: v[0], text: v[1] }]),
-              )}
-            />
-          </div>
-          <div className="rp-side">
-            <div className="rp-h">
-              <h3>Ваша ночь</h3>
-              <div className="seg">
-                <button className={noise === "day" ? "on" : ""} onClick={() => setNoise("day")}>
-                  <Icon name="sun" size={14} /> День
-                </button>
-                <button className={noise === "night" ? "on" : ""} onClick={() => setNoise("night")}>
-                  <Icon name="moon" size={14} /> Ночь
-                </button>
-              </div>
-            </div>
-            <p className="sub">Сколько шума у каждой стороны здания</p>
-            <ul className="legend">
-              {Object.entries(noiseSides).map(([k, [c, db, src]]) => (
-                <li key={k}>
-                  <span className="sw" style={{ background: c }} />
-                  <span>
-                    {FACADE_NAME[k as Facade]} · {src}
-                  </span>
-                  <b className="num">{db}</b>
-                </li>
-              ))}
-            </ul>
-            <div className="verdict-box">
-              <Mark v="yes" />
-              <span>
-                Ночью от{" "}
-                <b>{hotel.noise.length ? Math.round(Math.min(...hotel.noise)) : "нет данных"} дБ</b>{" "}
-                по данным карточки. Распределение шума по сторонам условное: перед поездкой уточним
-                сторону и тип окон.
-              </span>
-            </div>
-          </div>
-        </section>
+        <NoiseSection hotel={hotel} />
 
         <section className="row-panel card-w morning" id="morning">
           <div className="rp-media">
@@ -499,13 +461,15 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
               {r.recommended && <span className="rec-l">Подходит вам больше всего</span>}
               <div className="room-ph">
                 <Photo k={r.photo} alt={r.name} credit={false} />
-                <span className="room-view">
-                  <Panorama
-                    facade={r.facades[0] ?? h.bestFacade}
-                    floor={Math.min(r.floors[1], Math.max(r.floors[0], h.bestFloor))}
-                    labels={false}
-                  />
-                </span>
+                {!h.api && (
+                  <span className="room-view">
+                    <Panorama
+                      facade={r.facades[0] ?? h.bestFacade}
+                      floor={Math.min(r.floors[1], Math.max(r.floors[0], h.bestFloor))}
+                      labels={false}
+                    />
+                  </span>
+                )}
               </div>
               <h3>{r.name}</h3>
               <ul className="feat">

@@ -16,6 +16,8 @@ describe("hotel geo mappings", () => {
     const level = { indexDb: 0, category: null, confidence: 0.6, sources: [] };
     const data: NoiseData = {
       hotelId: "hotel",
+      attribution: "OSM",
+      caveats: [],
       facades: [{ facade: "N", day: level, night: level }],
       completeness: 0.5,
       unmodelledRefs: [],

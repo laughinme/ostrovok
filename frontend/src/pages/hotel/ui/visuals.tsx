@@ -1,9 +1,18 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Facade } from "../model/types";
 import { drawBuilding, type SideStyle } from "../lib/building";
-import { Panorama } from "@/shared/ui";
+import { Panorama as DemoPanorama } from "@/shared/ui";
 
-export { Panorama };
+export function Panorama(props: {
+  facade: Facade;
+  floor: number;
+  labels?: boolean;
+  onReading?: (reading: { seaShare: number; sunVisible: boolean; mountains: boolean }) => void;
+}) {
+  if (props.facade === "N" || props.facade === "E" || props.facade === "S" || props.facade === "W")
+    return <div className="map-fallback">Нет данных панорамы</div>;
+  return <DemoPanorama {...props} facade={props.facade} />;
+}
 
 export function Building({
   name,
