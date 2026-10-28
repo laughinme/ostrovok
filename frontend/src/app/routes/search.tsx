@@ -6,13 +6,13 @@ export const Route = createFileRoute("/search")({
   }),
   head: () => ({
     meta: [
-      { title: "Агенты Луча за работой" },
+      { title: "Подбираем ваш отдых — О!кно" },
       {
         name: "description",
-        content: "Смотрите в реальном времени, как AI-агенты разбирают запрос и проверяют отели.",
+        content: "Подбираем отели с учётом ваших пожеланий.",
       },
-      { property: "og:title", content: "Агенты Луча за работой" },
-      { property: "og:description", content: "Прозрачный процесс AI-поиска отеля." },
+      { property: "og:title", content: "Подбираем ваш отдых — О!кно" },
+      { property: "og:description", content: "Подбираем отели с учётом ваших пожеланий." },
     ],
   }),
   component: PageRoute,
