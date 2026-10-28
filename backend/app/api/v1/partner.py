@@ -23,7 +23,7 @@ from app.domain.booking.status import BookingStatus
 from app.service.partner.answers import PartnerAnswers
 from app.service.partner.catalog import PartnerCatalog
 from app.service.partner.demand import PartnerDemand
-from app.service.partner.events import publish_partner_facts
+from app.service.partner.events import publish_booking_decision, publish_partner_facts
 from app.service.partner.facades import PartnerFacades
 from app.service.partner.facts import PartnerFacts
 from app.service.partner.questions import PartnerQuestions
@@ -149,12 +149,21 @@ async def decide_request(
     access: PartnerAccessDep,
     uow: UowDep,
     clock: ClockDep,
+    events: EventsDep,
+    background: BackgroundTasks,
 ) -> BookingOut:
     await access.booking(user.id, booking_id)
-    booking = await PartnerRequests(uow, clock).decide(
+    decision = await PartnerRequests(uow, clock).decide(
         booking_id, BookingStatus(payload.status), payload.reply
     )
-    return BookingOut.from_domain(booking)
+    background.add_task(
+        publish_booking_decision,
+        events,
+        decision.guest_id,
+        decision.booking.id,
+        decision.booking.status.value,
+    )
+    return BookingOut.from_domain(decision.booking)
 
 
 @router.get("/hotels/{hotel_id}/demand")

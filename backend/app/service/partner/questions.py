@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from uuid import UUID, uuid4
 
 from sqlalchemy import select
+from sqlalchemy import text as sql_text
 from sqlalchemy.dialects.postgresql import insert
 
 from app.core.errors import ErrorCode, NotFoundError
@@ -219,7 +220,7 @@ class PartnerQuestions:
             )
             .on_conflict_do_nothing(
                 index_elements=["hotel_id", "characteristic"],
-                index_where=HotelierQuestion.status == "open",
+                index_where=sql_text("status = 'open'"),
             )
             .returning(HotelierQuestion.id)
         )

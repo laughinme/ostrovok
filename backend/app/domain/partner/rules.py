@@ -49,6 +49,10 @@ def _fields(answer: AnswerInput, text: str) -> dict[str, Any]:
         _positive_clause(text) if key in {"blackout", "remote_work"} else text, answer.room_names
     )
     scoped: dict[str, Any] = {"facade": facade.value if facade else None, "room_types": rooms}
+    if re.search(r"во двор|в сторону двора", text):
+        scoped["outlook"] = "courtyard"
+    elif re.search(r"на море|в сторону моря", text):
+        scoped["outlook"] = "sea"
     if key == "facade_rooms":
         low, high = floor_range(text)
         return {**scoped, "floor_from": low, "floor_to": high}
@@ -105,6 +109,19 @@ class RulesAnswerParser:
         if answer.characteristic == "facade_rooms":
             certain = certain and all(
                 fields.get(k) for k in ("facade", "room_types", "floor_from", "floor_to")
+            )
+        if answer.characteristic == "pets_policy" and fields.get("allowed"):
+            certain = (
+                certain
+                and bool(fields.get("species"))
+                and (
+                    fields.get("max_weight_kg") is not None
+                    or bool(
+                        re.search(
+                            r"без ограничений|никаких ограничений|ограничени\w* по весу нет", text
+                        )
+                    )
+                )
             )
         confidence = 0.95 if certain else 0.35
         facade = direction(text)
