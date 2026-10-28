@@ -128,6 +128,10 @@ export function WindowSection({ hotel, detail }: { hotel: Hotel; detail: HotelDe
               ) : (
                 <>
                   <p>
+                    Иллюстрация построена по расчётным углам препятствий и видимым участкам моря.
+                    Облик зданий и зелень условные; это не фотография.
+                  </p>
+                  <p>
                     {dates.fallback && !selectedDate
                       ? "Даты поездки не заданы; расчёт на середину ноября. "
                       : ""}
@@ -232,7 +236,7 @@ export function WindowSection({ hotel, detail }: { hotel: Hotel; detail: HotelDe
             <Info size={15} aria-hidden="true" />
             {demo
               ? "Иллюстрация помогает сравнить стороны. Это не фотография из номера."
-              : "Вид рассчитан по горизонту. Размещение номера подтвердит отель."}
+              : "Горизонт рассчитан. Облик зданий и зелень условные. Размещение номера подтвердит отель."}
           </p>
         </aside>
         <div className="window-preview">
@@ -241,7 +245,7 @@ export function WindowSection({ hotel, detail }: { hotel: Hotel; detail: HotelDe
               <span>{facade ? names[facade] : "Сторона не указана"}</span>
               <span>{floor} этаж</span>
             </div>
-            <div className={`window-frame${demo ? " window-frame-demo" : ""}`}>
+            <div className="window-frame window-frame-landscape">
               <div className="window-scene" key={`${facade}-${demo ? "demo" : floor}-${date}`}>
                 {demo ? (
                   <DemoWindowScene
@@ -272,7 +276,7 @@ export function WindowSection({ hotel, detail }: { hotel: Hotel; detail: HotelDe
             </div>
             <div className="window-sill" aria-hidden="true" />
             <span className="window-scene-label">
-              {demo ? "Иллюстрация вида" : "Расчётный горизонт"}
+              {demo ? "Иллюстрация вида" : "Иллюстрация по расчётному горизонту"}
             </span>
           </div>
           <dl className="window-view-metrics" aria-live="polite" aria-atomic="true">
