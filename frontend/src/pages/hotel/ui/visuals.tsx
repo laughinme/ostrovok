@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { Facade } from "../model/types";
 import { drawBuilding, type SideStyle } from "../lib/building";
 import { Panorama as DemoPanorama } from "@/shared/ui";
+import { photoInfo } from "@/entities/hotel";
 
 export function Panorama(props: {
   facade: Facade;
@@ -45,6 +46,7 @@ export function Photo({
   facade = "SW",
   floor = 5,
   className = "",
+  credit = true,
 }: {
   k: string;
   alt: string;
@@ -53,8 +55,9 @@ export function Photo({
   credit?: boolean;
   className?: string;
 }) {
-  const [failed, setFailed] = useState(false);
-  if (!k || failed)
+  const [failed, setFailed] = useState<string | null>(null);
+  const info = photoInfo(k);
+  if (!k || failed === k)
     return (
       <div className={`ph ph-fallback ${className}`}>
         <Panorama facade={facade} floor={floor} labels={false} />
@@ -62,7 +65,15 @@ export function Photo({
     );
   return (
     <figure className={`ph ${className}`}>
-      <img src={k} alt={alt} loading="lazy" decoding="async" onError={() => setFailed(true)} />
+      <img
+        key={k}
+        src={k}
+        alt={info?.alt ?? alt}
+        loading="lazy"
+        decoding="async"
+        onError={() => setFailed(k)}
+      />
+      {credit && info && <figcaption className="hotel-photo-label">{info.label}</figcaption>}
     </figure>
   );
 }

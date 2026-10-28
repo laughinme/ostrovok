@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { api, type components } from "@/shared/api";
 import { RequestState } from "@/shared/ui";
+import { PhotoCredit } from "@/entities/hotel";
 import { detailFactFromApi } from "../model/api-hotel-details";
 import { useEffect, type ReactNode } from "react";
 import type { Fact, HotelDetails } from "../model/types";
@@ -246,11 +247,13 @@ export function Lightbox({
               <Icon name="arrow" />
             </button>
             <span className="lb-credit">
-              {it.kind === "view"
-                ? "Расчёт вида из окна по рельефу и зданиям"
-                : it.kind === "noise"
-                  ? "Расчёт шума по сторонам здания"
-                  : "Фотографии отеля"}
+              {it.kind === "view" ? (
+                "Расчёт вида из окна по рельефу и зданиям"
+              ) : it.kind === "noise" ? (
+                "Расчёт шума по сторонам здания"
+              ) : (
+                <PhotoCredit src={it.key} />
+              )}
             </span>
           </div>
         </motion.div>

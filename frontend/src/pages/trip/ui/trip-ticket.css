@@ -431,3 +431,18 @@
 .trip-ticket--declined .ticket-status {
   color: #9a4e25;
 }
+
+.ticket-photo .ticket-photo-credit {
+  position: absolute;
+  top: 12px;
+  bottom: auto;
+  left: 12px;
+  right: 12px;
+  width: fit-content;
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: #fff;
+  color: #10265c;
+  font-size: 10px;
+  line-height: 1.3;
+}

@@ -1,4 +1,4 @@
-import type { Hotel } from "@/entities/hotel";
+import { photoInfo, type Hotel } from "@/entities/hotel";
 import { cn } from "@/shared/lib";
 import { Link } from "@tanstack/react-router";
 import { motion, useReducedMotion } from "framer-motion";
@@ -58,12 +58,17 @@ export function ComparePodium({ entries }: { entries: { h: Hotel; s: number }[] 
                   >
                     <img
                       src={h.image}
-                      alt={h.name}
+                      alt={photoInfo(h.image)?.alt ?? h.name}
                       width={1024}
                       height={768}
                       className="size-full object-cover transition-transform duration-500 group-hover/podium:scale-105 motion-reduce:transition-none"
                     />
                   </div>
+                  {photoInfo(h.image) && (
+                    <span className="mt-1 block text-center text-[9px] text-muted-foreground">
+                      {photoInfo(h.image)!.label}
+                    </span>
+                  )}
                   {index === 0 && (
                     <span className="compare-podium-crown-anchor" aria-hidden="true">
                       <svg

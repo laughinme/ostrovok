@@ -32,6 +32,7 @@ export function LandingFooter({
           <span>© OpenStreetMap contributors, ODbL</span>
           <span>Copernicus DEM GLO-30</span>
           <span>Open-Meteo, CC BY 4.0</span>
+          <a href="/hotel-photos/credits.html">Фотографии, авторы и лицензии</a>
         </div>
       </div>
       <div className="foot-b">

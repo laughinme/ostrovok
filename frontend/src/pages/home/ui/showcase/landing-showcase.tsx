@@ -48,7 +48,7 @@ function PhotoCollections({ onMood }: { onMood(mood: (typeof MOODS)[number]): vo
           </button>
         ))}
       </div>
-      <p className="collection-note">Большой Сочи · демо-подборки, фотографии для настроения</p>
+      <p className="collection-note">Большой Сочи · демо-подборки, AI-иллюстрации для настроения</p>
     </section>
   );
 }
@@ -549,6 +549,7 @@ export function LandingShowcase({ onMood }: { onMood(mood: (typeof MOODS)[number
             <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">
               Open-Meteo · CC BY 4.0
             </a>
+            <a href="/hotel-photos/credits.html">Фотографии, авторы и лицензии</a>
           </div>
         </div>
       </footer>
