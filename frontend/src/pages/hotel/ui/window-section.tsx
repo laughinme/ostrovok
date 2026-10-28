@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import {
   ArrowRight,
-  ArrowUp,
+  Building2,
+  Compass,
+  Mountain,
+  Trees,
   BedDouble,
   CalendarDays,
   ChevronDown,
@@ -17,8 +20,6 @@ import { getApiMode } from "@/shared/api";
 import { readPanorama } from "@/shared/lib";
 import { useGeoQuery } from "../lib/use-geo-query";
 import {
-  FACADE_ANGLE,
-  FACADE_LABEL,
   dateLabel,
   localTime,
   numberLabel,
@@ -28,11 +29,13 @@ import {
   type WindowData,
 } from "../model/geo";
 import type { HotelDetails } from "../model/types";
+import { NoiseCompass } from "./noise-compass";
 import { WindowPanorama } from "./window-panorama";
 import { WindowMethodTooltip } from "./window-method-tooltip";
 import { calculatedWindowView, demoWindowView } from "../model/window-view";
 import { GeoNotes, GeoStatus } from "./geo-status";
 import "./window-section.css";
+import "./window-controls.css";
 
 const names: Record<GeoFacade, string> = {
   N: "Север",
@@ -44,6 +47,7 @@ const names: Record<GeoFacade, string> = {
   W: "Запад",
   NW: "Северо-запад",
 };
+const objectIcons = { Море: Waves, Горы: Mountain, Дома: Building2, Деревья: Trees, Закат: Sun };
 const demoFacades: GeoFacade[] = ["NE", "SE", "SW", "NW"];
 
 export function WindowSection({ hotel, detail }: { hotel: Hotel; detail: HotelDetails }) {
@@ -153,7 +157,9 @@ export function WindowSection({ hotel, detail }: { hotel: Hotel; detail: HotelDe
               )}
             </WindowMethodTooltip>
           </div>
+          <p className="window-explorer-description">Что будет видно из вашего номера</p>
         </div>
+        {demo && <span className="window-demo-badge">Демо-вид</span>}
         {!demo && (
           <label className="window-date">
             <CalendarDays size={17} aria-hidden="true" />
@@ -173,35 +179,26 @@ export function WindowSection({ hotel, detail }: { hotel: Hotel; detail: HotelDe
       </header>
       <div className="window-explorer-layout">
         <aside className="window-controls" aria-label="Настройки вида из окна">
-          <div className="window-side-heading">
-            <span>Сторона номера</span>
-            <span className="window-north" aria-hidden="true">
-              <ArrowUp size={13} />С
-            </span>
-          </div>
-          <div className="window-directions" role="group" aria-label="Сторона здания">
-            {facades.map((value) => (
-              <button
-                type="button"
-                key={value}
-                aria-pressed={facade === value}
-                aria-label={`${FACADE_LABEL[value]} — ${names[value]}`}
-                onClick={() => setFacade(value)}
-              >
-                <ArrowUp
-                  size={16}
-                  style={{ transform: `rotate(${FACADE_ANGLE[value]}deg)` }}
-                  aria-hidden="true"
-                />
-                <span>
-                  <b>{FACADE_LABEL[value]}</b>
-                  <small>{names[value]}</small>
-                </span>
-              </button>
-            ))}
-            {!facades.length && (
-              <p className="window-control-empty">Стороны здания пока не размечены.</p>
-            )}
+          <div className="window-orientation">
+            <div className="window-side-heading">
+              <span>Сторона окна</span>
+              <Compass size={16} aria-hidden="true" />
+            </div>
+            <p className="window-selected-side" aria-live="polite">
+              {facade ? names[facade] : "Не указана"}
+            </p>
+            <NoiseCompass
+              sides={facades.map((side) => ({
+                facade: side,
+                text: names[side],
+                known: false,
+                color: "var(--primary)",
+              }))}
+              selected={facade}
+              onSelect={setFacade}
+              showValues={false}
+              label="Сторона окна на компасе"
+            />
           </div>
           <div className="window-floor-control">
             <label htmlFor="window-floor">Этаж</label>
@@ -237,6 +234,11 @@ export function WindowSection({ hotel, detail }: { hotel: Hotel; detail: HotelDe
               onChange={(event) => setFloor(Number(event.target.value))}
               aria-label="Этаж"
               aria-valuetext={`${floor} этаж из ${totalFloors}`}
+              style={
+                {
+                  "--floor-progress": `${totalFloors > 1 ? ((floor - 1) / (totalFloors - 1)) * 100 : 0}%`,
+                } as CSSProperties
+              }
             />
             <div className="window-floor-scale" aria-hidden="true">
               <span>1</span>
@@ -253,8 +255,14 @@ export function WindowSection({ hotel, detail }: { hotel: Hotel; detail: HotelDe
         <div className="window-preview">
           <div className="window-view-shell">
             <div className="window-view-caption">
-              <span>{facade ? names[facade] : "Сторона не указана"}</span>
-              <span>{floor} этаж</span>
+              <span>
+                <Compass size={14} aria-hidden="true" />
+                {facade ? names[facade] : "Сторона не указана"}
+              </span>
+              <span className="window-floor-tag">
+                <Building2 size={14} aria-hidden="true" />
+                {floor} этаж
+              </span>
             </div>
             <div className="window-frame window-frame-landscape">
               {known ? (
@@ -288,9 +296,15 @@ export function WindowSection({ hotel, detail }: { hotel: Hotel; detail: HotelDe
                 aria-label="Объекты в поле зрения"
                 aria-live="polite"
               >
-                {scene.objects.map((object) => (
-                  <li key={object}>{object}</li>
-                ))}
+                {scene.objects.map((object) => {
+                  const Icon = objectIcons[object as keyof typeof objectIcons] ?? Eye;
+                  return (
+                    <li key={object}>
+                      <Icon size={13} aria-hidden="true" />
+                      {object}
+                    </li>
+                  );
+                })}
                 {!scene.objects.length && <li>Подтверждённых объектов нет</li>}
               </ul>
             )}

@@ -1,0 +1,268 @@
+.hotel-detail .window-explorer-layout {
+  grid-template-columns: 300px minmax(0, 1fr);
+}
+.hotel-detail .window-controls {
+  padding: 24px;
+  gap: 0;
+}
+.hotel-detail .window-explorer-description {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.hotel-detail .window-demo-badge {
+  flex-shrink: 0;
+  padding: 7px 11px;
+  border-radius: var(--r-pill);
+  background: var(--raised);
+  color: var(--muted);
+  font-size: 11px;
+}
+.hotel-detail .window-side-heading {
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 500;
+}
+.hotel-detail .window-side-heading > svg {
+  color: var(--primary);
+}
+.hotel-detail .window-selected-side {
+  margin-top: 6px;
+  color: var(--ink);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.hotel-detail .window-orientation .noise-compass-control {
+  margin-top: 8px;
+}
+.hotel-detail .is-direction-only .noise-compass-direction {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px;
+  border-radius: 14px;
+}
+.hotel-detail .window-floor-control {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.hotel-detail .window-floor-control > label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted);
+}
+.hotel-detail .window-floor-stepper {
+  gap: 12px;
+  margin: 12px 0 16px;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+}
+.hotel-detail .window-floor-stepper button {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--raised);
+  color: var(--primary);
+  transition:
+    background var(--d-quick),
+    color var(--d-quick);
+}
+.hotel-detail .window-floor-stepper button:hover:not(:disabled) {
+  background: var(--lime);
+  color: var(--ink);
+}
+.hotel-detail .window-floor-stepper button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+.hotel-detail .window-floor-stepper b {
+  font-size: 28px;
+  letter-spacing: -0.03em;
+}
+.hotel-detail .window-floor-stepper small {
+  color: var(--muted);
+  font-size: 11px;
+}
+.hotel-detail .window-floor-control input[type="range"] {
+  display: block;
+  width: 100%;
+  height: 6px;
+  margin: 20px 0 14px;
+  border: 0;
+  border-radius: var(--r-pill);
+  background: linear-gradient(
+    to right,
+    var(--primary) var(--floor-progress),
+    var(--line) var(--floor-progress)
+  );
+  accent-color: var(--primary);
+  appearance: none;
+  cursor: pointer;
+  touch-action: pan-y;
+}
+.hotel-detail .window-floor-control input[type="range"]::-webkit-slider-thumb {
+  width: 20px;
+  height: 20px;
+  border: 3px solid var(--surface);
+  border-radius: 50%;
+  background: var(--primary);
+  outline: 1px solid var(--primary);
+  appearance: none;
+}
+.hotel-detail .window-floor-control input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: 3px solid var(--surface);
+  border-radius: 50%;
+  background: var(--primary);
+  outline: 1px solid var(--primary);
+}
+.hotel-detail .window-floor-control input[type="range"]:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.hotel-detail .window-control-note {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 10px;
+}
+.hotel-detail .window-view-caption > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.hotel-detail .window-view-caption svg {
+  color: var(--primary);
+  flex-shrink: 0;
+}
+.hotel-detail .window-floor-tag {
+  padding: 5px 9px;
+  border: 1px solid color-mix(in srgb, var(--lime-deep) 70%, var(--surface));
+  border-radius: var(--r-pill);
+  background: var(--surface);
+  color: var(--ink);
+}
+.hotel-detail .window-visible-objects {
+  gap: 7px;
+}
+.hotel-detail .window-visible-objects li {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 10px;
+  font-weight: 500;
+}
+.hotel-detail .window-visible-objects svg {
+  color: var(--primary);
+}
+.hotel-detail .window-date {
+  min-height: 48px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+}
+@media (max-width: 1050px) and (min-width: 761px) {
+  .hotel-detail .window-explorer-layout {
+    grid-template-columns: 270px minmax(0, 1fr);
+  }
+  .hotel-detail .window-controls {
+    padding: 20px 16px;
+  }
+}
+@media (max-width: 760px) {
+  .hotel-detail .window-explorer-heading {
+    gap: 12px;
+    padding: 20px;
+  }
+  .hotel-detail .window-explorer-description {
+    font-size: 11px;
+  }
+  .hotel-detail .window-controls {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 100px;
+    gap: 0 16px;
+    padding: 20px 16px 16px;
+  }
+  .hotel-detail .window-orientation {
+    min-width: 0;
+    grid-column: 1;
+  }
+  .hotel-detail .window-selected-side {
+    min-height: 22px;
+    font-size: 14px;
+  }
+  .hotel-detail .window-side-heading {
+    font-size: 10px;
+  }
+  .hotel-detail .window-orientation .noise-compass-control {
+    margin-top: 10px;
+  }
+  .hotel-detail .window-orientation .noise-compass-caption {
+    font-size: 9px;
+    line-height: 1.5;
+  }
+  .hotel-detail .window-floor-control {
+    grid-column: 2;
+    grid-row: 1;
+    margin: 0;
+    padding: 0 0 0 12px;
+    border: 0;
+    border-left: 1px solid var(--line);
+    text-align: center;
+  }
+  .hotel-detail .window-floor-stepper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 2px;
+    padding: 12px 0 0;
+    border: 0;
+    margin: 0;
+  }
+  .hotel-detail .window-floor-stepper > span {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    gap: 5px;
+  }
+  .hotel-detail .window-floor-stepper b {
+    font-size: 32px;
+  }
+  .hotel-detail .window-floor-stepper button {
+    width: 42px;
+    height: 44px;
+  }
+  .hotel-detail .window-floor-scale {
+    font-size: 9px;
+  }
+  .hotel-detail .window-control-note {
+    grid-column: 1 / -1;
+    margin-top: 16px;
+    padding-top: 12px;
+    font-size: 9px;
+  }
+  .hotel-detail .window-visible-objects {
+    gap: 5px;
+  }
+  .hotel-detail .window-visible-objects li {
+    padding: 5px 8px;
+    font-size: 9px;
+  }
+  .hotel-detail .window-demo-badge {
+    padding: 5px 9px;
+    font-size: 10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hotel-detail .window-floor-stepper button {
+    transition: none;
+  }
+}
