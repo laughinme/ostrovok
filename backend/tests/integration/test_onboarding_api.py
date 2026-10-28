@@ -188,7 +188,7 @@ async def test_failed_liaison_keeps_job_retryable(
         worker = _worker(db, data, clock)
         job = (await worker.claim(1))[0]
 
-        async def unavailable(*_args: object) -> None:
+        async def unavailable(*_args: object, **_kwargs: object) -> None:
             raise RuntimeError("Temporary liaison outage")
 
         with monkeypatch.context() as patch:
