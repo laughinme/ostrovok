@@ -58,7 +58,7 @@ export function HotelOverview({
             <span aria-label={`Оценка ${h.rating.toLocaleString("ru")} из 10`}>
               {h.rating.toLocaleString("ru", { minimumFractionDigits: 1 })}
             </span>
-            <small>{h.reviewCount ? formatReviewCount(h.reviewCount) : "Демо-оценка"}</small>
+            <small>{formatReviewCount(h.reviewCount)}</small>
           </div>
           <button
             className={`hotel-square-button${favorite ? " is-selected" : ""}`}
