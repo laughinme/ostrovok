@@ -18,7 +18,11 @@ export interface Fact {
 export interface Hotel {
   backend?: components["schemas"]["HotelOut"];
   searchMatch?: components["schemas"]["HotelMatchOut"];
-  searchContext?: { id: string; trip: components["schemas"]["TripModel"] };
+  searchContext?: {
+    id: string;
+    trip: components["schemas"]["TripModel"];
+    chips?: components["schemas"]["IntentChipModel"][];
+  };
   unknownCriteria?: Criterion[];
   id: string;
   name: string;
