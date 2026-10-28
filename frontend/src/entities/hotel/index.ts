@@ -10,6 +10,7 @@ export type { ApiHotel, ApiFact, ApiMatch, ApiIntent } from "./api/backend-hotel
 export { CRITERIA } from "./config/criteria";
 export type { Criterion, Fact, FactStatus, Hotel } from "./model/types";
 export { formatReviewCount } from "./model/format-review-count";
+export { characteristicLabel } from "./model/characteristic-label";
 export { Beam } from "./ui/confidence-beam";
 export { Price } from "./ui/price";
 export { RatingBadge } from "./ui/rating-badge";
