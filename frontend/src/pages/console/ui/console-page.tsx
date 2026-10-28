@@ -10,6 +10,8 @@ import {
   ShieldAlert,
 } from "lucide-react";
 import { Runs } from "./runs";
+import { Learn } from "./learn";
+import { Registry } from "./registry";
 import "./console.css";
 
 const sections = [
@@ -61,7 +63,11 @@ export function ConsolePage() {
           </select>
         </label>
         <section className="min-w-0" aria-label={sections.find(([key]) => key === section)?.[1]}>
-          {section === "runs" ? <Runs /> : <p className="console-notice">Раздел готовится</p>}
+          {section === "runs" && <Runs />}
+          <div hidden={section !== "learn"}>
+            <Learn />
+          </div>
+          {section === "registry" && <Registry />}
         </section>
       </div>
     </main>
