@@ -42,7 +42,7 @@ class KnowledgeTools:
         """
         async with self._database().unit_of_work() as uow:
             intent = Intent(None, (), TripDraft(), ())
-            if text and chips is None:
+            if text:
                 intent = await IntentParser(uow, self._data_dir).parse(
                     text, today=today_in_sochi(self._clock.now())
                 )

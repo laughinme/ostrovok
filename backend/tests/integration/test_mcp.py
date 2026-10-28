@@ -209,3 +209,22 @@ async def test_remote_connector_rejects_other_origins(app_factory: AppFactory, o
             json={"jsonrpc": "2.0", "id": 1, "method": "tools/list"},
         )
     assert response.status_code == 403
+
+
+async def test_mcp_keeps_region_warning_when_client_sends_edited_chips(
+    client: AsyncClient,
+    db: Database,
+    tmp_path: Path,
+) -> None:
+    await _world(db, tmp_path)
+    result = await rpc(
+        client,
+        "tools/call",
+        {
+            "name": "search_hotels",
+            "arguments": {"text": "Москва, тихий номер", "chips": []},
+        },
+    )
+    content = result["structuredContent"]
+    assert content["matches"] == []
+    assert any("Большом Сочи" in hint for hint in content["intent"]["hints"])
