@@ -32,7 +32,7 @@ function withSearch(
   const match = search.matches.find((item) => item.hotelId === hotel.id);
   return {
     ...hotelFromApi(hotel.backend, match, search.intent),
-    searchContext: { id: search.searchId, trip: search.intent.trip },
+    searchContext: { id: search.searchId, trip: search.intent.trip, chips: search.intent.chips },
   };
 }
 
