@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 .PHONY: help install env keys run worker migrate migration openapi lint fmt typecheck arch test-unit \
-	test-deps test test-down check up up-native down dev logs data collect eval eval-llm frontend-dev frontend-check
+	test-deps test test-down check up up-native down dev logs data collect export-seed eval eval-llm frontend-dev frontend-check
 
 BACKEND := backend
 UV := cd $(BACKEND) && uv run
@@ -52,8 +52,12 @@ openapi: ## Export the OpenAPI schema for the frontend into frontend/openapi.jso
 data: ## Rebuild data: pinned Geofabrik → regional cache → OSM, DEM, climate, demo, walk graph
 	$(UV) --group pipeline python -m pipeline all
 
-collect: ## Agents collect knowledge for every hotel → backend/data/seed (needs `make dev`)
-	$(UV) python -m app.cli collect --all
+collect: ## Agents research every hotel in 6 processes (needs `make dev`; keeps the Mac awake)
+	cd $(BACKEND) && awake=$$(command -v caffeinate >/dev/null && echo "caffeinate -i"); \
+	for i in 0 1 2 3 4 5; do $$awake uv run python -m app.cli collect --shard $$i/6 & done; wait
+
+export-seed: ## Dump collected knowledge and agent traces into backend/data/seed
+	$(UV) python -m app.cli export-seed
 
 eval: ## Quality metrics on the gold set (needs `make dev`)
 	$(UV) python -m app.cli eval
