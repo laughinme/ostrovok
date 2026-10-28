@@ -97,3 +97,20 @@ async def test_pet_form_cannot_store_a_string_as_allowed() -> None:
         )
     )
     assert result.needs_clarification
+
+
+@pytest.mark.parametrize(
+    ("text", "outlook"), [("Комфорт во двор", "courtyard"), ("Люкс на море", "sea")]
+)
+async def test_outlook_is_retained_without_inventing_a_compass_direction(
+    text: str, outlook: str
+) -> None:
+    result = await RulesAnswerParser().parse(AnswerInput("facade_rooms", text))
+    assert result.fields["outlook"] == outlook
+    assert result.fields["facade"] is None
+    assert result.needs_clarification
+
+
+async def test_unspecified_pet_weight_requires_clarification() -> None:
+    result = await RulesAnswerParser().parse(AnswerInput("pets_policy", "Да, с собакой можно"))
+    assert result.needs_clarification

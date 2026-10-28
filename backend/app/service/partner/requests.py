@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from uuid import UUID
 
 from sqlalchemy import select
@@ -6,8 +7,14 @@ from app.db.models import BookingRow, NotificationRow
 from app.db.uow import UnitOfWork
 from app.domain.booking.status import BookingStatus
 from app.service.booking.bookings import BookingService, booking_view
-from app.service.booking.models import Booking, Notification
+from app.service.booking.models import Booking, BookingNotFoundError, Notification
 from app.service.ports import Clock
+
+
+@dataclass(frozen=True, slots=True)
+class PartnerDecision:
+    booking: Booking
+    guest_id: UUID
 
 
 class PartnerRequests:
@@ -22,8 +29,12 @@ class PartnerRequests:
         )
         return [booking_view(row) for row in rows]
 
-    async def decide(self, booking_id: UUID, status: BookingStatus, reply: str) -> Booking:
-        return await BookingService(self._uow, self._clock).decide(booking_id, status, reply)
+    async def decide(self, booking_id: UUID, status: BookingStatus, reply: str) -> PartnerDecision:
+        booking = await BookingService(self._uow, self._clock).decide(booking_id, status, reply)
+        row = await self._uow.session.get(BookingRow, booking_id)
+        if row is None:
+            raise BookingNotFoundError()
+        return PartnerDecision(booking, row.user_id)
 
 
 async def hotel_notifications(uow: UnitOfWork, hotel_id: UUID) -> list[Notification]:

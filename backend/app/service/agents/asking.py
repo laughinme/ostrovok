@@ -3,6 +3,7 @@
 from collections.abc import Sequence
 from uuid import UUID, uuid4
 
+from sqlalchemy import text as sql_text
 from sqlalchemy.dialects.postgresql import insert
 
 from app.db.database import Database
@@ -48,7 +49,7 @@ class HotelAsker:
                     )
                     .on_conflict_do_nothing(
                         index_elements=["hotel_id", "characteristic"],
-                        index_where=HotelierQuestion.status == "open",
+                        index_where=sql_text("status = 'open'"),
                     )
                     .returning(HotelierQuestion.id)
                 )

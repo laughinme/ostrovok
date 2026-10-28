@@ -12,6 +12,47 @@
 
 ---
 
+### 28.10 09:20 МСК · codex-partner · B4.5, линия B4.3 → B4.4 → B4.5 завершена
+- Сделано: сервисы `06ea00b`, REST `d646b2d`; 10 путей `/api/v1/partner/*` в OpenAPI.
+  Обзор (все факты, конфликты, покрытие), подтверждение/исправление, вопросы и ответы,
+  разметка, запросы гостей и решения, недельный спрос, уведомления. Везде Permission.PARTNER_CABINET
+  + HotelStaff; чужой отель, факт, вопрос и бронь дают 403, гость не входит в кабинет.
+- **Публичный API:** `PartnerAccess(uow).hotel/question/fact/booking(user_id, object_id) -> UUID`
+  возвращают проверенный hotel_id; доменное `ensure_staff_of(is_staff=bool)` бросает NOT_HOTEL_STAFF.
+  `PartnerCatalog(uow).overview(hotel_id) -> PartnerOverview(hotel, facts, conflicts, known, total)`;
+  coverage.share — доля характеристик реестра, по которым есть факт (0…1).
+  `PartnerFacts(uow, clock, parser=None).confirm(fact_id)` / `.correct(fact_id, text='', payload=None,
+  scope=None) -> Recorded`; запись только через KnowledgeStore, физика не затирается заявлением.
+  `PartnerRequests(uow, clock).of_hotel(hotel_id) -> list[Booking]`;
+  `.decide(booking_id, BookingStatus, reply) -> PartnerDecision(booking, guest_id)` использует
+  `BookingService.decide` codex-guest: requested → confirmed|alternative_offered|declined, повтор 409.
+  `PartnerDemand(uow, clock).weekly(district) -> dict[str,int]`, сегодня + шесть дней, без будущих дат.
+  `resolve_scope(uow, hotel_id, Scope) -> Scope` проверяет этажи/стороны и переводит названия
+  категорий в принадлежащие отелю ID. `hotel_notifications(uow, hotel_id)` возвращает только audience=hotel.
+- **HTTP:** AnswerIn: `{text}`, `{choice: 'Да'|'Нет'}`, `{value: bool|number|record}` или
+  `{mappings: [{roomTypeId, facade: 'N'…'NW', floorFrom, floorTo}]}`; этажи целые и включительно.
+  PUT /facades принимает mappings; ответ на вопрос → answerId, parsed, parseConfidence, parser,
+  changedFacts, clarification. Низкая уверенность сохраняет ответ и оставляет вопрос открытым.
+  /correct принимает тот же ответ + необязательный Scope; /decision — `{status, reply}`.
+  Все оболочки camelCase; события fact.changed и notification публикуются после коммита транзакции.
+- Как проверить: снимок HEAD `c4a3947` + свои изменения: ruff/format, mypy strict, 7 контрактов и **415 passed**. Отдельная БД `okno_partner_test`, Redis 11. Сквозные тесты:
+  разметка переключает roomTypeId рекомендации и confirmedByHotel, подтверждение меняет поездку гостя,
+  уведомления разделены по аудитории; SSE уведомления о решении публикуются ровно один раз.
+  Реальный регион загружен в мою тестовую БД: 200 отелей, 39 новых demo-claims, повтор 0,
+  195 вопросов (по пять на отель с заявлением); три разметки выбранного реального отеля валидны,
+  записан facade_rooms. R3 повторно: 24/24 записей, 72/72 машинных полей, 6/6 уточнений.
+- Грабли: на полном регионе PostgreSQL переключился на generic prepared plan и параметр
+  `status=$n` перестал доказывать предикат частичного индекса. В PartnerQuestions и HotelAsker
+  теперь literal `status = 'open'`; регрессионный тест включает force_generic_plan.
+  «Во двор»/«на море» сохраняются в parsed.outlook=courtyard/sea, компас уточняется формой.
+  Разрешение животного без максимального веса или явного отсутствия лимита требует уточнения.
+  LLM API не вызывался; LLM-парсер подключается реализацией AnswerParser рядом с правилами.
+- Общий git: в d646b2d общий индекс между проверкой и коммитом захватил только две уже staged
+  записи codex-guest (B5.5 в tasks/progress); чужого кода там нет, историю не переписывал.
+  Заключительный коммит собирается через отдельный индекс, чтобы сохранить чужие staged-изменения.
+- Дальше: фронт может подключать кабинет по OpenAPI. Исторический influence пока оценивается
+  повторным ранжированием намерений на нынешних фактах (ограничение описано в B4.3).
+
 ### 28.10 09:19 МСК · codex-docs · B6.1 (документация бэкенда)
 - Сделано: `backend/ARCHITECTURE.md` (62cf208) описывает реальный слой знаний, планировщики,
   трассы, Scope, уверенность, гео, поиск, актуализацию, REST/SSE/MCP, слои, БД и качество.

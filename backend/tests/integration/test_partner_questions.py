@@ -2,6 +2,8 @@ import asyncio
 from datetime import timedelta
 from pathlib import Path
 
+from sqlalchemy import text
+
 from app.db.database import Database
 from app.db.models import DemandDaily
 from app.domain.catalog import hotel_id
@@ -60,3 +62,13 @@ async def test_questions_rank_weekly_demand_without_duplicates(
     assert questions[0].characteristic == "blackout"
     assert questions[0].value == 34
     assert "34 гостей" in questions[0].why
+
+
+async def test_question_deduplication_works_with_generic_prepared_plans(
+    db: Database, tmp_path: Path
+) -> None:
+    await partner_world(db, tmp_path)
+    async with db.unit_of_work() as uow:
+        await uow.session.execute(text("SET LOCAL plan_cache_mode = force_generic_plan"))
+        questions = await PartnerQuestions(uow, FakeClock()).generate(MAYAK)
+        assert len(questions) == 5

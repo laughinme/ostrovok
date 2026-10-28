@@ -7,6 +7,7 @@ from httpx import AsyncClient
 from app.db.database import Database
 from app.db.models import NotificationRow, RoomType
 from app.domain.catalog import hotel_id
+from app.service.ports import RecordingEventBus
 from tests.factories import FakeClock
 from tests.integration.test_partner_api import login_partner
 from tests.integration.test_partner_questions import MAYAK, partner_world
@@ -20,6 +21,8 @@ async def test_partner_decision_updates_guest_booking_and_notification(
     await partner_world(db, tmp_path)
     clock = FakeClock()
     app.state.clock = clock
+    events = RecordingEventBus()
+    app.state.events = events
     async with db.unit_of_work() as uow:
         uow.session.add_all(
             [
@@ -89,3 +92,8 @@ async def test_partner_decision_updates_guest_booking_and_notification(
         await client.get(f"/api/v1/partner/hotels/{MAYAK}/notifications", headers=headers)
     ).json()
     assert [n["title"] for n in notifications] == ["Для отеля"]
+
+    status_events = [event for channel, event in events.published if channel.startswith("user:")]
+    assert len(status_events) == 1
+    assert status_events[0]["bookingId"] == owned["id"]
+    assert status_events[0]["status"] == "confirmed"
