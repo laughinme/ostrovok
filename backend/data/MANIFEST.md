@@ -37,7 +37,7 @@ DEM и климат: точные URL, периоды и полнота — в d
 |---|---:|
 | demo/hidden_truth.yaml | 165,510 |
 | demo/history.yaml | 2,541 |
-| demo/room_types.yaml | 626,542 |
+| demo/room_types.yaml | 622,879 |
 | demo/users.yaml | 1,083 |
 | eval/README.md | 6,733 |
 | eval/curator.yaml | 15,251 |
