@@ -2,13 +2,14 @@ from datetime import date
 from typing import Any, Literal, Self
 from uuid import UUID
 
-from pydantic import Field, model_validator
+from pydantic import Field, field_validator, model_validator
 
 from app.api.schemas.base import ApiModel
 from app.api.schemas.knowledge import ScopeOut
 from app.domain.knowledge.characteristic import Checkable
 from app.domain.search.intent import Chip, Importance, Intent
-from app.domain.search.rank import Ranking
+from app.domain.search.rank import NO_MATCHES_HINT, Ranking
+from app.domain.search.region import outside_region
 from app.domain.search.score import Match, request_text, variant_scope_text
 from app.domain.search.trip import TripDraft
 from app.service.search.search import SearchView
@@ -86,6 +87,11 @@ class TripModel(ApiModel):
 
 class IntentRequest(ApiModel):
     text: str = Field(..., min_length=1, max_length=2000)
+
+    @field_validator("text", mode="before")
+    @classmethod
+    def _strip_text(cls, value: object) -> object:
+        return value.strip() if isinstance(value, str) else value
 
 
 class IntentModel(ApiModel):
@@ -211,9 +217,12 @@ class SearchResultOut(ApiModel):
     @classmethod
     def from_view(cls, view: SearchView) -> Self:
         ranking: Ranking = view.ranking
+        intent = IntentModel.from_domain(view.intent)
+        if not ranking.matches and not outside_region(view.intent.text):
+            intent.hints.append(NO_MATCHES_HINT)
         return cls(
             search_id=str(view.id),
-            intent=IntentModel.from_domain(view.intent),
+            intent=intent,
             matches=[HotelMatchOut.from_domain(m) for m in ranking.matches],
             relaxations=[
                 RelaxationOut(chip_id=r.chip_id, label=r.label, would_match=r.would_match)

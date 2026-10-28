@@ -15,6 +15,7 @@ from app.db.models import DemandDaily, SearchRow
 from app.db.uow import UnitOfWork
 from app.domain.search.intent import Intent
 from app.domain.search.rank import Filters, Ranking, rank
+from app.domain.search.region import outside_region
 from app.domain.search.score import TripWindow
 from app.service.ports import Clock, LanguageModel
 from app.service.search.candidates import load_candidates, load_facts
@@ -130,6 +131,8 @@ class SearchService:
         return intent
 
     async def rank(self, intent: Intent) -> Ranking:
+        if outside_region(intent.text):
+            return Ranking(matches=(), relaxations=(), research=())
         hotels = await load_candidates(self._uow, intent.trip.area)
         keys = [c.characteristic for c in intent.chips if c.characteristic]
         facts = await load_facts(self._uow, [h.id for h in hotels], keys)
