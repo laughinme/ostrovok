@@ -16,6 +16,7 @@ export function PhotoCredit({
     photo.kind === "ai"
       ? "Вымышленная сцена: не фотография этого отеля, номера или вида из окна"
       : `${photo.title} · ${photo.author} · ${photo.license} · ${photo.capturedAt} · ${photo.changes}`;
+  const year = photo.capturedAt.match(/^\d{4}/)?.[0];
   return (
     <span className={cn("photo-credit", className)} title={info}>
       <a
@@ -27,6 +28,7 @@ export function PhotoCredit({
         {photo.label}
         {!compact && photo.kind === "photo" && ` · ${photo.author}`}
       </a>
+      {!compact && photo.kind === "photo" && year && <span> · {year}</span>}
       {photo.kind === "photo" && (
         <>
           {" · "}
