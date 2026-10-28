@@ -1,10 +1,8 @@
 import { cn } from "@/shared/lib";
 import { Star } from "lucide-react";
-import { formatReviewCount } from "../model/format-review-count";
 
 export function RatingBadge({
   rating,
-  reviewCount,
   className,
 }: {
   rating: number;
@@ -23,7 +21,7 @@ export function RatingBadge({
         </span>
       </span>
       <span className="whitespace-nowrap text-[11px] leading-4 text-muted-foreground">
-        {formatReviewCount(reviewCount)}
+        Демо-рейтинг
       </span>
     </span>
   );
