@@ -1,7 +1,7 @@
 import { ApiError, type ApiOptions, type components } from "@/shared/api";
 import { DEMO_DATE, demoHotels, demoQuestions } from "./fixtures";
 import { demoIntent, demoMatch, demoSearch, restoreDemoSearch } from "./search";
-import { demoBeachRoute, demoNoise } from "./geo";
+import { demoBeachRoute, demoDirectionRoute, demoNoise } from "./geo";
 
 type State = {
   facts: Record<string, components["schemas"]["FactOut"]>;
@@ -150,6 +150,38 @@ export function demoResponse(path: string, options: ApiOptions = {}): unknown {
     return required(hotels.find((hotel) => hotel.id === pieces[1]));
   if (pieces[0] === "hotels" && method === "GET" && pieces.length > 2) {
     const hotel = required(hotels.find((item) => item.id === pieces[1]));
+    if (pieces[2] === "places" && pieces.length === 3) {
+      const text = (params.get("q") ?? "").toLocaleLowerCase("ru");
+      return hotel.nearby
+        .filter((place) => `${place.title} ${place.name}`.toLocaleLowerCase("ru").includes(text))
+        .map((place) => ({
+          ref: place.osmRef ?? `${place.kind}:${place.name}`,
+          name: place.name || place.title,
+          address: [place.title, place.distanceText].filter(Boolean).join(" · "),
+          location: place.location,
+          attribution: "Демо-данные",
+        }));
+    }
+    if (pieces[2] === "route" && pieces.length === 3)
+      return demoDirectionRoute(
+        hotel,
+        [Number(params.get("lon")), Number(params.get("lat"))],
+        params.get("name") ?? "Место рядом",
+        params.get("profile") ?? "walk",
+      );
+    if (pieces[2] === "routes" && ["station", "center"].includes(pieces[3] ?? "")) {
+      const place = hotel.nearby.find(
+        (item) => item.kind === (pieces[3] === "station" ? "station" : "center"),
+      );
+      if (!place)
+        return demoDirectionRoute(
+          hotel,
+          [hotel.location[0] + 0.006, hotel.location[1] + 0.004],
+          pieces[3] === "station" ? "Станция · демо" : "Центр · демо",
+          params.get("profile") ?? "walk",
+        );
+      return demoDirectionRoute(hotel, place.location, place.name, params.get("profile") ?? "walk");
+    }
     if (pieces[2] === "noise" && pieces.length === 3) return demoNoise(hotel);
     if (pieces[2] === "routes" && pieces[3] === "beach" && pieces.length === 4)
       return demoBeachRoute(hotel, params.get("profile") ?? "walk");

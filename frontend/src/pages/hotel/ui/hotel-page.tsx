@@ -7,7 +7,6 @@ import { useCompare } from "@/features/compare-hotels";
 import { useHotelFavorite } from "@/features/favorite-hotels";
 import { useAskHotel } from "@/features/live-research";
 import { AgentTrace } from "@/widgets/agent-trace";
-import { CoastMap } from "@/widgets/hotel-map";
 import { Lightbox, type GalleryItem } from "./overlays";
 import { FactSourcesModal } from "./fact-sources-modal";
 import { Icon, Mark, Toast } from "./detail-ui";
@@ -19,7 +18,6 @@ import { FACADE_NAME } from "../lib/building";
 import { rub } from "../lib/format";
 import { BookingRequest } from "./booking-request";
 import { BookingModal } from "./booking-modal";
-import { BeachSection } from "./beach-section";
 import { NoiseSection } from "./noise-section";
 import { WindowSection } from "./window-section";
 import { ClimateSection } from "./climate-section";
@@ -27,7 +25,7 @@ import { tripDates } from "../model/geo";
 import "./hotel-detail.css";
 import "./hotel-refresh.css";
 import { HotelAbout, HotelOverview } from "./hotel-overview";
-import { HotelNearby } from "./hotel-nearby";
+import { HotelDirections } from "./hotel-directions";
 import { getApiMode } from "@/shared/api";
 const DAYS = [
   ["пн", 10, 17, "16:58", 18, 10],
@@ -222,8 +220,6 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
 
         <NoiseSection hotel={hotel} />
 
-        <BeachSection hotel={hotel} />
-
         {designDemo ? (
           <section className="dates card-w">
             <div className="rp-h">
@@ -299,14 +295,7 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
           </div>
         )}
 
-        <section className="sec-h2" id="where">
-          <h2>Где находится</h2>
-          <p>{h.address}</p>
-        </section>
-        <HotelNearby places={h.nearby} onRoute={() => scrollTo("morning")} />
-        <div className="where card-w">
-          <CoastMap items={[{ hotel }]} scrollZoom={false} />
-        </div>
+        <HotelDirections hotel={hotel} />
 
         <div className="hp-actions">
           <button className={`btn-ghost${inCmp ? " on" : ""}`} onClick={() => toggleCompare(h.id)}>

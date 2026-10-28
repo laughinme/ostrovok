@@ -8,9 +8,7 @@ export function RouteScheme({ route, demo = false }: { route: RouteData; demo?: 
       className="geo-route-scheme"
       viewBox="0 0 640 360"
       role="img"
-      aria-label={
-        demo ? "Демонстрационная схема дороги к морю" : "Линия пешего маршрута по координатам OSM"
-      }
+      aria-label={demo ? "Демонстрационная схема маршрута" : "Линия маршрута по координатам OSM"}
     >
       <rect width="640" height="360" fill="var(--map-land)" />
       {demo && (
@@ -44,7 +42,7 @@ export function RouteScheme({ route, demo = false }: { route: RouteData; demo?: 
         <g key={index}>
           <circle cx={x} cy={y} r="7" fill="var(--primary)" />
           <text x={x} y={y! - 15} textAnchor="middle" fontSize="13" fill="var(--ink)">
-            {index ? "Пляж" : "Начало пути"}
+            {index ? (route.targetName ?? "Пункт назначения") : "Отель"}
           </text>
         </g>
       ))}
