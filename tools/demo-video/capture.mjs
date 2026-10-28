@@ -46,16 +46,16 @@ try {
     await glide(320, 2000);
     await sleep(2400);
   });
+  }
+  if (include('guest') || include('overview')) {
   await h.goto(state.hotelUrl);
   await page.getByRole('heading', { name: 'Ваше окно', exact: true }).waitFor({ timeout: 60000 });
   await scene('05-hotel', 'Гость', 'Не просто отель — конкретный номер', 'Фасад, этаж и ваши даты меняют впечатление', async () => {
-    await sleep(2000);
-    await frame(page.getByRole('heading', { name: 'Как это будет', exact: true }), 145, 2300);
-    await sleep(1400);
+    await sleep(4600);
   });
   }
+  if (part && ['hotel', 'source', 'booking'].includes(part)) await h.goto(state.hotelUrl);
   if (include('hotel')) {
-  if (part) await h.goto(state.hotelUrl);
   await frame(page.locator('#window'), 105);
   await sleep(2000);
   await scene('06-window', 'Доказательства', 'Загляните в своё окно до поездки', 'Рельеф, соседние здания и солнце в выбранные даты', async () => {
@@ -90,21 +90,27 @@ try {
     await glide(await page.evaluate(() => scrollY + 290), 2000);
     await sleep(2100);
   });
+  }
+  if (include('hotel') || include('source')) {
   const legacyWhy = page.getByRole('button', { name: /почему →/ }).first();
   const why = await legacyWhy.count() ? legacyWhy : page.locator('#hotel-facts button').filter({ hasText: 'расчёт' }).first();
   await frame(why, 310);
   await scene('09-source', 'Доказательства', 'У каждого факта есть «почему»', 'Источник, метод, уверенность и ограничения оценки', async () => {
     await tap(why);
     await sleep(1500);
-    await focus(page.getByRole('dialog').first(), 'Факт можно проверить', 4, 1.08);
+    await focus(page.getByRole('dialog').first(), 'Факт можно проверить', 4, 1.3);
     await tap(page.getByRole('button', { name: 'Закрыть', exact: true }));
   });
-  const book = page.getByRole('button', { name: 'Забронировать', exact: true }).first();
+  }
+  if (include('hotel') || include('booking')) {
+  const book = page.getByRole('button', { name: 'Забронировать', exact: true }).nth(2);
   await frame(book, 360);
   await scene('10-booking', 'Поездка', 'Пожелания доходят до заявки', 'Демонстрационная бронь · без оплаты', async () => {
     await tap(book);
     await sleep(1500);
-    await sleep(2400);
+    await tap(page.getByLabel('Взрослые', { exact: true }));
+    await page.getByLabel('Взрослые', { exact: true }).fill('2');
+    await sleep(1400);
     await tap(page.getByRole('button', { name: 'Создать демо-заявку', exact: true }));
     await sleep(1400);
   });
@@ -119,21 +125,30 @@ try {
   }
   if (include('partner')) {
   await h.goto('/partner');
-  await page.getByRole('heading', { name: /Хороший отдых/ }).waitFor({ timeout: 60000 });
+  await page.getByRole('heading', { name: 'Кабинет отельера', exact: true }).waitFor({ timeout: 60000 });
   await sleep(1600);
-  await scene('12-partner', 'Отельер', 'Отель отвечает обычным текстом', 'Помощник уточняет то, что нельзя узнать из геоданных', async () => {
+  await scene('12-partner', 'Отельер', 'Отель проверяет важные детали', 'Расчёт можно дополнить подтверждением отеля', async () => {
     await sleep(1600);
-    await frame(page.locator('#partner-assistant'), 150, 2200);
-    const answer = page.getByRole('button', { name: 'Ответить', exact: true }).first();
-    if (await answer.count()) await tap(answer);
-    await type(page.getByPlaceholder('Ответьте своими словами…'), 'Да, собак до 20 кг принимаем. Доплата 700 ₽ в сутки.', 36);
-    await tap(page.getByRole('button', { name: 'Отправить ответ', exact: true }));
+    const search = page.getByPlaceholder('Найти факт');
+    await frame(search, 180, 2000);
+    await type(search, 'парковка', 75);
+    const confirm = page.getByRole('button', { name: 'Всё верно', exact: true }).first();
+    if (!await confirm.count()) {
+      await search.fill('Самолётов');
+      await sleep(1000);
+    }
+    await sleep(1200);
+    const saved = page.waitForResponse((response) => response.url().includes('/partner/facts/') && response.url().endsWith('/confirm') && response.request().method() === 'POST');
+    await tap(confirm);
+    const response = await saved;
+    if (!response.ok()) throw new Error(`Hotel confirmation failed: ${response.status()}`);
+    await sleep(1500);
   });
-  await page.getByText('Сохраняем ответ…', { exact: true }).waitFor({ state: 'hidden', timeout: 60000 });
   await sleep(1600);
-  await frame(page.locator('#partner-assistant'), 125);
-  await scene('13-partner-answer', 'Отельер', 'Ответ становится знанием об отеле', 'Сохраняем содержание ответа и его источник', async () => {
-    await focus(page.getByLabel('Переписка с помощником'), 'Отельер — источник факта', 4.5, 1.14);
+  const history = page.getByRole('heading', { name: 'История изменений', exact: true });
+  await frame(history, 180);
+  await scene('13-partner-answer', 'Отельер', 'Подтверждение сохранено в истории', 'У знания появляется ещё один источник — отель', async () => {
+    await focus(history.locator('xpath=ancestor::section[1]'), 'Отельер — источник факта', 4.5, 1.14);
   });
   }
   if (include('agents')) {
@@ -155,9 +170,17 @@ try {
   });
   await page.getByText(/· готово/i).first().waitFor({ timeout: 150000 });
   await sleep(1200);
-  await frame(trace(), 290);
-  await scene('16-learned', 'Агенты', 'Рецепт готов, ход исследования сохранён', 'Реальное выполнение · ожидание между сценами сокращено', async () => {
-    await focus(trace(), 'Инструменты, данные и решение', 5, 1.12);
+  }
+  if (include('agents') || include('agents-result')) {
+  if (part === 'agents-result') {
+    await h.goto('/console');
+    await page.getByRole('combobox', { name: 'Агент', exact: true }).selectOption('curator');
+    await trace().locator('li').filter({ hasText: 'План (LLM)' }).first().waitFor({ timeout: 60000 });
+  }
+  await frame(trace(), 120);
+  await scene('16-learned', 'Агенты', 'Рецепт готов, ход исследования сохранён', 'Пробный прогон по OSM · ожидание между сценами сокращено', async () => {
+    await focus(trace().locator('li').filter({ hasText: 'План (LLM)' }).first(), 'Инструменты, данные и решение', 4.5, 1.15);
+    await sleep(600);
   });
   await glide(0);
   await tap(page.getByRole('button', { name: 'Качество', exact: true }));
@@ -170,14 +193,20 @@ try {
   }
   if (include('platform')) {
   await h.goto('/developers');
-  await scene('18-platform', 'API и MCP', 'Один слой знаний — для разных продуктов', 'REST API и MCP для внешних приложений и агентов', async () => {
-    await sleep(2300);
-    await frame(page.getByRole('button', { name: 'Выполнить', exact: true }).first(), 500, 2400);
-    await tap(page.getByRole('button', { name: 'Выполнить', exact: true }).first());
-    await page.getByText(/ответ за/).first().waitFor({ timeout: 60000 });
-    await sleep(1000);
-    await glide(await page.evaluate(() => scrollY + 240), 1600);
-    await sleep(2300);
+  await scene('18-platform', 'API и MCP', 'Знания доступны внешним агентам', 'MCP · подключение по Streamable HTTP · только чтение', async () => {
+    await sleep(1600);
+    await glide(330, 2000);
+    await sleep(2400);
+  });
+  const run = page.getByRole('button', { name: 'Запустить', exact: true }).first();
+  await frame(run, 290, 2000);
+  await scene('19-api', 'API и MCP', 'Тот же слой знаний — через API', 'Живой запрос к серверу из интерфейса для разработчиков', async () => {
+    const response = page.waitForResponse((response) => response.url().includes('/api/v1/intents') && response.request().method() === 'POST', { timeout: 60000 });
+    await tap(run);
+    await response;
+    await sleep(700);
+    await glide(await page.evaluate(() => scrollY + 220), 1600);
+    await sleep(3000);
   });
   }
 } catch (error) {

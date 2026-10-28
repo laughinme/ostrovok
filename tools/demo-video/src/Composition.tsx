@@ -2,7 +2,7 @@ import { AbsoluteFill, Audio, Easing, interpolate, OffthreadVideo, Sequence, sta
 import type { CSSProperties } from 'react';
 
 export type Focus = { at: number; duration: number; box: { x: number; y: number; width: number; height: number }; label: string; zoom: number };
-export type Clip = { id: string; chapter: string; title: string; description: string; src: string; duration: number; focus: Focus[] };
+export type Clip = { id: string; chapter: string; title: string; description: string; src: string; duration: number; trimBefore?: number; focus: Focus[] };
 export type FilmProps = { clips: Clip[]; music: boolean };
 export const FPS = 60;
 export const INTRO = 300;
@@ -44,7 +44,8 @@ function Shot({ clip }: { clip: Clip }) {
   const centerX = mark ? mark.box.x + mark.box.width / 2 : 720;
   const centerY = mark ? mark.box.y + mark.box.height / 2 : 405;
   const dx = Math.max(1440 * (1 - scale), Math.min(0, 720 - centerX * scale));
-  const dy = Math.max(810 * (1 - scale), Math.min(0, 405 - centerY * scale));
+  const targetY = mark && mark.box.height * scale > 810 ? -mark.box.y * scale : 405 - centerY * scale;
+  const dy = Math.max(810 * (1 - scale), Math.min(0, targetY));
   const alpha = interpolate(f, [0, OVERLAP], [0, 1], clamp);
   return <AbsoluteFill style={{ background: C.ink, opacity: alpha }}>
     <Brand />
@@ -55,7 +56,7 @@ function Shot({ clip }: { clip: Clip }) {
     <div style={panel}>
       <div style={{ width: 1440, height: 810, transformOrigin: '0 0', transform: 'scale(1.066666667)' }}>
         <div style={{ width: 1440, height: 810, transformOrigin: '0 0', transform: `translate(${dx}px,${dy}px) scale(${scale})` }}>
-          <OffthreadVideo muted src={staticFile(clip.src)} style={{ width: 1440, height: 810 }} />
+          <OffthreadVideo muted trimBefore={clip.trimBefore ?? 0} src={staticFile(clip.src)} style={{ width: 1440, height: 810 }} />
           {mark && <svg width="1440" height="810" style={{ position: 'absolute', inset: 0, opacity: power, pointerEvents: 'none' }}>
             <defs><mask id={`spot-${clip.id}`}><rect width="1440" height="810" fill="white" /><rect x={mark.box.x - 8} y={mark.box.y - 8} width={mark.box.width + 16} height={mark.box.height + 16} rx="15" fill="black" /></mask></defs>
             <rect width="1440" height="810" fill={C.ink} opacity=".2" mask={`url(#spot-${clip.id})`} />
@@ -103,6 +104,6 @@ export function Film({ clips, music }: FilmProps) {
     })}
     <Sequence from={cursor} durationInFrames={OUTRO}><Title closing /></Sequence>
     <div style={{ position: 'absolute', left: 0, bottom: 0, height: 4, width: `${(f / (duration - 1)) * 100}%`, background: C.lime }} />
-    {music && <Audio src={staticFile('music.wav')} volume={(at) => interpolate(at, [0, 90, duration - 180, duration], [0, .4, .4, 0], clamp)} />}
+    {music && <Audio src={staticFile('music.wav')} volume={(at) => interpolate(at, [0, 90, duration - 180, duration], [0, .8, .8, 0], clamp)} />}
   </AbsoluteFill>;
 }

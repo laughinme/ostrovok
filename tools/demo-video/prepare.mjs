@@ -4,6 +4,7 @@ import path from 'node:path';
 
 const source = path.resolve(process.env.CAPTURE_OUT ?? '../../.private/video-production/take-01');
 const manifest = JSON.parse(await readFile(path.join(source, 'manifest.json'), 'utf8'));
+const edits = JSON.parse(await readFile('edits.json', 'utf8'));
 if (!manifest.clips.length) throw new Error('No completed scenes to prepare');
 await mkdir('public/footage', { recursive: true });
 await mkdir('public/fonts', { recursive: true });
@@ -13,11 +14,19 @@ for (const clip of manifest.clips) {
   const old = await stat(output).catch(() => null);
   const raw = await stat(input);
   if (!old || old.mtimeMs < raw.mtimeMs) {
-    execFileSync('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', '-i', input, '-c:v', 'libx264', '-preset', 'fast', '-crf', '17', '-pix_fmt', 'yuv420p', '-r', '60', '-an', '-movflags', '+faststart', output]);
+    execFileSync('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', '-i', input, '-c:v', 'libx264', '-threads', '2', '-preset', 'fast', '-crf', '17', '-pix_fmt', 'yuv420p', '-r', '60', '-an', '-movflags', '+faststart', output]);
   }
   const meta = JSON.parse(execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration:stream=r_frame_rate,width,height', '-of', 'json', output]));
   if (meta.streams[0].r_frame_rate !== '60/1' || meta.streams[0].width !== 1440 || meta.streams[0].height !== 810) throw new Error(`Unexpected capture format: ${clip.id}`);
   clip.duration = Number(meta.format.duration);
+  const [head, tail] = edits[clip.id] ?? [0, 0];
+  clip.trimBefore = Math.round(head * 60);
+  clip.duration = Math.floor((clip.duration - head - tail) * 60) / 60;
+  if (clip.duration < 4) throw new Error(`Edit leaves too little time to read ${clip.id}`);
+  clip.focus = clip.focus.map((focus) => {
+    const at = Math.max(0, focus.at - head);
+    return { ...focus, at, duration: Math.min(focus.duration, clip.duration - at) };
+  }).filter((focus) => focus.duration >= 1);
   console.log(`Prepared ${clip.id}: ${clip.duration.toFixed(2)}s`);
 }
 for (const weight of [400, 600, 700, 800]) {
@@ -58,8 +67,8 @@ for (let index = 0; index < count; index++) {
   const note = chord[[2, 3, 1, 3][Math.floor(t / (beat * 2)) % 4]] * 2;
   const pluck = (Math.sin(2 * Math.PI * note * pulse) + .25 * Math.sin(4 * Math.PI * note * pulse)) * Math.exp(-pulse * 5) * Math.min(1, pulse * 70) * .09;
   const fade = Math.min(1, t / 3, (duration - t) / 4);
-  wav.writeInt16LE(Math.round(Math.max(-1, Math.min(1, (left + pluck) * fade)) * 32767), 44 + index * 4);
-  wav.writeInt16LE(Math.round(Math.max(-1, Math.min(1, (right + pluck * .85) * fade)) * 32767), 46 + index * 4);
+  wav.writeInt16LE(Math.round(Math.max(-1, Math.min(1, (left + pluck) * fade * 2)) * 32767), 44 + index * 4);
+  wav.writeInt16LE(Math.round(Math.max(-1, Math.min(1, (right + pluck * .85) * fade * 2)) * 32767), 46 + index * 4);
 }
 await writeFile('public/music.wav', wav);
 console.log(`Ready: ${manifest.clips.length} scenes, approximately ${duration.toFixed(1)}s`);
