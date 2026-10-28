@@ -19,20 +19,6 @@
   line-height: 1.4;
   letter-spacing: -0.045em;
 }
-.hotel-detail .window-explorer-heading p {
-  margin-top: 7px;
-  font-size: 12px;
-  color: #5b6580;
-  line-height: 1.6;
-}
-.hotel-detail .window-demo-label {
-  flex-shrink: 0;
-  padding: 8px 11px;
-  border: 1px solid #dce2ed;
-  border-radius: 8px;
-  color: #5b6580;
-  font-size: 10px;
-}
 .hotel-detail .window-date {
   display: flex;
   align-items: center;
@@ -522,9 +508,6 @@
   }
   .hotel-detail .window-explorer-heading h3 {
     font-size: 21px;
-  }
-  .hotel-detail .window-explorer-heading p {
-    font-size: 11px;
   }
   .hotel-detail .window-explorer-layout {
     display: flex;
