@@ -79,11 +79,15 @@ def _draft(
         probability = max(f.confidence for f in facts if f.characteristic == c.key)
     kind = str(c.recipe.get("answer_kind", "free_text"))
     return QuestionDraft(
-        c.key,
+        "facade_rooms" if c.method is not MethodKind.ASK_HOTELIER and c.question else c.key,
         (c.question or str(c.recipe.get("question", c.title))).replace("{facade}", "здания"),
         f"{demand} гостей за неделю искали: {c.title.lower()}",
         question_value(demand, probability, influence),
-        "choice" if kind == "yes_no" else kind,
+        "facade_mapping"
+        if c.method is not MethodKind.ASK_HOTELIER and c.question
+        else "choice"
+        if kind == "yes_no"
+        else kind,
         ("Да", "Нет") if kind == "yes_no" else tuple(c.recipe.get("options", ())),
     )
 
@@ -147,7 +151,10 @@ class PartnerQuestions:
             key=lambda d: (d.conflict_id is not None, d.value, d.characteristic),
             reverse=True,
         )
-        for draft in [d for d in candidates if d.characteristic not in excluded][:slots]:
+        unique: dict[str, QuestionDraft] = {}
+        for draft in candidates:
+            unique.setdefault(draft.characteristic, draft)
+        for draft in [d for d in unique.values() if d.characteristic not in excluded][:slots]:
             await self._insert(hotel_id, draft, run_id)
         return await self.of_hotel(hotel_id)
 

@@ -1,3 +1,4 @@
+import math
 import re
 from typing import Any
 
@@ -11,6 +12,7 @@ from app.domain.partner.answer_text import (
     room_names,
 )
 from app.domain.partner.answers import AnswerInput, ParsedAnswer
+from app.domain.partner.records import pet_record
 
 
 def pets(text: str) -> dict[str, Any]:
@@ -133,12 +135,17 @@ class RulesAnswerParser:
             valid = (
                 isinstance(value, bool)
                 if answer.value_type == "probability"
-                else isinstance(value, int | float) and not isinstance(value, bool)
+                else isinstance(value, int | float)
+                and not isinstance(value, bool)
+                and math.isfinite(value)
                 if answer.value_type == "number"
                 else isinstance(value, dict)
                 if answer.value_type == "record"
                 else isinstance(value, str) and value in answer.options
             )
+        if answer.characteristic == "pets_policy" and isinstance(value, dict):
+            value = pet_record(value)
+            valid = value is not None
         return ParsedAnswer(payload, value, 1.0 if valid else 0.0)
 
     def _scalar(self, answer: AnswerInput, text: str) -> ParsedAnswer:

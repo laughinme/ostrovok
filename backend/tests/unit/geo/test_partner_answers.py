@@ -82,3 +82,18 @@ async def test_r3_machine_fields(case: dict[str, object]) -> None:
             assert not actual
         else:
             assert actual == value
+
+
+async def test_step_free_simple_no_is_a_valid_negative_answer() -> None:
+    result = await RulesAnswerParser().parse(AnswerInput("step_free", "Нет"))
+    assert result.value is False
+    assert not result.needs_clarification
+
+
+async def test_pet_form_cannot_store_a_string_as_allowed() -> None:
+    result = await RulesAnswerParser().parse(
+        AnswerInput(
+            "pets_policy", payload={"value": {"allowed": "yes", "max_kg": -10}}, value_type="record"
+        )
+    )
+    assert result.needs_clarification

@@ -20,6 +20,7 @@ from app.service.knowledge.recorder import KnowledgeStore
 from app.service.knowledge.registry import Registry
 from app.service.partner.facades import FacadeMapping, PartnerFacades
 from app.service.partner.questions import QuestionNotFoundError
+from app.service.partner.scopes import resolve_scope
 from app.service.ports import Clock
 
 
@@ -102,6 +103,13 @@ class PartnerAnswers:
         )
         parsed = await self._parser.parse(answer)
         parsed = _resolve_rooms(parsed, rooms)
+        if not parsed.needs_clarification:
+            try:
+                parsed = replace(
+                    parsed, scope=await resolve_scope(self._uow, question.hotel_id, parsed.scope)
+                )
+            except DomainError:
+                parsed = replace(parsed, confidence=0.35)
         answer_id = uuid4()
         self._uow.session.add(
             HotelierAnswer(
@@ -139,7 +147,7 @@ class PartnerAnswers:
         is_demo: bool,
     ) -> tuple[Fact, ...]:
         if c.key == "facade_rooms":
-            mappings = _mapping(parsed)
+            mappings = facade_mappings(parsed)
             facades = PartnerFacades(self._uow, self._clock)
             if "mappings" not in parsed.fields:
                 pairs = {(m.room_type_id, m.facade) for m in mappings}
@@ -175,7 +183,7 @@ def _resolve_rooms(parsed: ParsedAnswer, rooms: list[RoomType]) -> ParsedAnswer:
     return replace(parsed, scope=replace(parsed.scope, room_types=frozenset(str(n) for n in found)))
 
 
-def _mapping(parsed: ParsedAnswer) -> list[FacadeMapping]:
+def facade_mappings(parsed: ParsedAnswer) -> list[FacadeMapping]:
     raw = parsed.fields.get("mappings")
     if isinstance(raw, list):
         try:
