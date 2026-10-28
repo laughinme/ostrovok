@@ -9,9 +9,40 @@ import { ComparePodium } from "./compare-podium";
 import "./compare-page.css";
 
 export function ComparePage() {
-  const { ids, toggle, criteria: crit, toggleCriterion } = useCompare();
+  const { ids, toggle, clear, criteria: crit, toggleCriterion } = useCompare();
   const { scored, pending, error, retry } = useComparison(ids, crit);
   const selected = scored.map(({ h }) => h);
+
+  if (ids.length < 2) {
+    return (
+      <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
+        <h1 className="text-4xl sm:text-5xl">Сравнение отелей</h1>
+        <section className="mt-8 rounded-3xl border bg-card px-6 py-12 text-center sm:py-16">
+          <h2 className="text-2xl sm:text-3xl">
+            {ids.length === 0 ? "Пока нечего сравнивать" : "Добавьте ещё один отель"}
+          </h2>
+          <p className="mx-auto mt-4 max-w-md text-muted-foreground">
+            {ids.length === 0
+              ? "Нажмите «Сравнить» у двух или трёх отелей в результатах поиска. Здесь появится сравнение по вашим критериям."
+              : "Выбран 1 отель. Нажмите «Сравнить» ещё у одного или двух отелей в результатах поиска."}
+          </p>
+          <Link
+            to="/results"
+            className="mt-6 inline-flex min-h-11 items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground"
+          >
+            Найти отели
+          </Link>
+          {ids.length > 0 && (
+            <div className="mt-3">
+              <button onClick={clear} className="min-h-11 px-4 text-sm text-muted-foreground">
+                Очистить сравнение
+              </button>
+            </div>
+          )}
+        </section>
+      </main>
+    );
+  }
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
@@ -56,6 +87,7 @@ export function ComparePage() {
               {ids.includes(h.id) && (
                 <button
                   onClick={() => toggle(h.id)}
+                  aria-label={`Убрать из сравнения — ${h.name}`}
                   className="glass absolute right-3 top-3 rounded-full p-1.5"
                 >
                   <X className="h-4 w-4" />
