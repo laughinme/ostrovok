@@ -40,3 +40,4 @@ class QualityReport(ApiModel):
     search: dict[str, Any]
     evaluation_date: str
     llm_status: str
+    llm: dict[str, Any] | None = None

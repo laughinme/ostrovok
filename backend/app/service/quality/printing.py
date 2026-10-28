@@ -65,3 +65,103 @@ def report_table(report: Mapping[str, Any]) -> str:
         "\nПоиск: рубрика по фактам расчёта, фиксированный пул; независимой разметкой не является."
     )
     return "\n".join(lines)
+
+
+def _pair(metric: Any, rules: Any, llm: Any) -> str:
+    return f"{_number(metric(rules))} → {_number(metric(llm))}"
+
+
+def _set_rows(name: str, result: Mapping[str, Any]) -> list[str]:
+    intents, answers, curator = result["intents"], result["answers"], result["curator"]
+    return [
+        f"{name}: намерения F1 | {_pair(lambda r: r['micro']['f1'], *intents.values())}",
+        f"{name}: поля поездки | {_pair(lambda r: r['tripAccuracy'], *intents.values())}",
+        f"{name}: ответы отеля, поля | {_pair(lambda r: r['fieldAccuracy'], *answers.values())}",
+        f"{name}: ответы отеля, переспросы | "
+        f"{_pair(lambda r: r['clarificationAccuracy'], *answers.values())}",
+        f"{name}: Куратор, метод | {_pair(lambda r: r['methodAccuracy'], *curator.values())}",
+        f"{name}: Куратор, параметры | "
+        f"{_pair(lambda r: r['parameterAccuracy'], *curator.values())}",
+    ]
+
+
+def llm_table(report: Mapping[str, Any]) -> str:
+    """Rules → LLM on each set, then what the calls cost and how long they took."""
+    lines = [
+        f"LLM {report['model']} ({report['thinking']}), Куратор {report['strongModel']} "
+        f"({report['thinkingStrong']})",
+        "Метрика | правила → LLM",
+        "--- | ---",
+    ]
+    for name, result in report["sets"].items():
+        lines.extend(_set_rows(name, result))
+    explained = report["explain"]
+    lines.append(
+        f"Объяснения: прошли проверку чисел | {explained['accepted']}/{explained['attempted']}"
+    )
+    lines.extend(
+        [
+            "",
+            "Задача | вызовы | из кэша | сбои | p50, мс | p95, мс | токены вход/кэш/выход | $",
+            "--- | --- | --- | --- | --- | --- | --- | ---",
+        ]
+    )
+    for tier in report["usage"].values():
+        for task, t in tier["tasks"].items():
+            lines.append(
+                f"{task} | {t['calls']} | {t['cached']} | {t['failed']} | {t['p50Ms']} | "
+                f"{t['p95Ms']} | {t['inputTokens']}/{t['cachedTokens']}/{t['outputTokens']} | "
+                f"{t['costUsd']}"
+            )
+    lines.append(f"\nВсего за прогон: ${report['costUsd']}")
+    return "\n".join(lines)
+
+
+def _metric(run: Mapping[str, Any], name: str, path: tuple[str, ...]) -> str:
+    value: Any = run["sets"].get(name)
+    for key in path:
+        value = value.get(key) if isinstance(value, Mapping) else None
+    return "—" if value is None else f"{value:.2f}"
+
+
+def comparison_table(runs: list[Mapping[str, Any]]) -> str:
+    """One row per model run: quality on both sets, speed and price (D-30)."""
+    header = (
+        "Модель (рассуждения) | F1 намерений dev/hold | ответы dev/hold | переспросы hold | "
+        "Куратор метод dev/hold | объяснения | p50 намерений, с | p50 Куратора, с | "
+        "$ за 1000 разборов | $ прогон"
+    )
+    lines = [header, " | ".join(["---"] * 10)]
+    for run in runs:
+        fast = run["usage"]["fast"]["tasks"].get("intent", {})
+        strong = run["usage"]["strong"]["tasks"].get("curator", {})
+        per_call = fast.get("costPerCallUsd")
+        name = f"{run['model']} ({run['thinking']})"
+        if run["strongModel"] != run["model"] or run["thinkingStrong"] != run["thinking"]:
+            name += f" + {run['strongModel']} ({run['thinkingStrong']})"
+        lines.append(
+            " | ".join(
+                [
+                    name,
+                    "/".join(
+                        _metric(run, s, ("intents", "llm", "micro", "f1"))
+                        for s in ("main", "holdout")
+                    ),
+                    "/".join(
+                        _metric(run, s, ("answers", "llm", "fieldAccuracy"))
+                        for s in ("main", "holdout")
+                    ),
+                    _metric(run, "holdout", ("answers", "llm", "clarificationAccuracy")),
+                    "/".join(
+                        _metric(run, s, ("curator", "llm", "methodAccuracy"))
+                        for s in ("main", "holdout")
+                    ),
+                    f"{run['explain']['accepted']}/{run['explain']['attempted']}",
+                    f"{fast['p50Ms'] / 1000:.1f}" if fast.get("p50Ms") else "—",
+                    f"{strong['p50Ms'] / 1000:.1f}" if strong.get("p50Ms") else "—",
+                    f"{per_call * 1000:.2f}" if per_call else "—",
+                    str(run["costUsd"]),
+                ]
+            )
+        )
+    return "\n".join(lines)
