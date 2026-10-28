@@ -1,3 +1,4 @@
+import asyncio
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
@@ -6,6 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from redis.asyncio import Redis
 from starlette.routing import Route
 
+from app.api.ground_deps import warm_ground
 from app.api.mcp import TRANSPORT_SECURITY, build_mcp
 from app.api.mcp_lifespan import mcp_lifespan
 from app.api.middleware import RequestContextMiddleware
@@ -35,6 +37,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         app.state.redis = Redis.from_url(settings.redis_url, decode_responses=True)
         app.state.events = RedisEventBus(app.state.redis)
         app.state.llm = build_language_model(settings, app.state.db, app.state.redis)
+        if settings.app_stage != "test":
+            # Health answers at once; the walk graph loads in the background.
+            app.state.ground_warmup = asyncio.create_task(
+                asyncio.to_thread(warm_ground, app, app.state.db, settings)
+            )
         try:
             async with mcp_lifespan(mcp_server):
                 yield
