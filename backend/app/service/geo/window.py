@@ -10,13 +10,16 @@ from uuid import UUID
 from app.core.errors import DomainError, ErrorCode
 from app.db.database import Database
 from app.db.repositories.catalog import hotel_geo
+from app.domain.catalog import HotelGeo
 from app.domain.geo.horizon import evaluate_horizon
+from app.domain.geo.panorama import WindowProfile
 from app.domain.geo.peaks import VisiblePeak, visible_peaks
 from app.domain.geo.scene import Obstacle
 from app.domain.geo.sea import minimum_floor
 from app.domain.geo.solar_visibility import SolarIntersection, solar_intersection
 from app.domain.geo.sun import SunEvents, SunPosition, sun_events, sun_path
 from app.domain.knowledge.scope import Facade
+from app.infra.geo.window_profiles import WindowProfiles
 from app.service.catalog.hotels import HotelNotFoundError
 from app.service.geo.scenes import HotelScene, scene_cache
 from app.service.recipes.executor import Environment, NoDataError
@@ -63,9 +66,15 @@ class WindowPanorama:
 
 
 class WindowQueries:
-    def __init__(self, db: Database, env: Environment) -> None:
+    def __init__(
+        self,
+        db: Database,
+        env: Environment,
+        profiles: WindowProfiles | None = None,
+    ) -> None:
         self._db = db
         self._env = env
+        self._profiles = profiles
         self._cache: OrderedDict[tuple[object, ...], WindowPanorama] = OrderedDict()
 
     async def get(self, hotel_id: UUID, facade: Facade, floor: int, day: date) -> WindowPanorama:
@@ -78,6 +87,23 @@ class WindowQueries:
             raise WindowRequestError("Фасад или этаж отсутствует у отеля")
         if self._env.sea is None:
             raise WindowUnavailableError("Нет маски моря")
+        profiles = self._profiles
+        if profiles is not None:
+            profile = profiles.get(hotel, facade, floor)
+            if profile is not None:
+                key = (hotel, facade, floor, day)
+                if key not in self._cache:
+                    self._cache[key] = await asyncio.to_thread(
+                        _from_profile,
+                        hotel,
+                        facade,
+                        floor,
+                        day,
+                        profile,
+                    )
+                self._cache.move_to_end(key)
+                self._trim()
+                return self._cache[key]
         try:
             scene = await scene_cache(self._env).get(hotel, self._env)
             return await self.panorama(scene, facade, floor, day)
@@ -93,9 +119,18 @@ class WindowQueries:
         if key not in self._cache:
             self._cache[key] = await asyncio.to_thread(_panorama, scene, facade, floor, day)
         self._cache.move_to_end(key)
+        self._trim()
+        return self._cache[key]
+
+    def invalidate(self) -> None:
+        """Call after changes to nearby buildings; persisted profiles describe the seeded region."""
+        self._cache.clear()
+        self._profiles = None
+        scene_cache(self._env).clear()
+
+    def _trim(self) -> None:
         while len(self._cache) > _PANORAMA_CACHE_SIZE:
             self._cache.popitem(last=False)
-        return self._cache[key]
 
 
 def _finite(value: float) -> float | None:
@@ -107,6 +142,25 @@ def _panorama(scene: HotelScene, facade: Facade, floor: int, day: date) -> Windo
     window = windows[1]
     eye = scene.eye(floor)
     horizon = evaluate_horizon(window, eye)
+    profile = WindowProfile(
+        window.azimuths_deg,
+        horizon,
+        visible_peaks(window, eye, scene.peaks),
+        minimum_floor(windows, scene.base_m, scene.hotel.floors),
+        eye,
+    )
+    return _from_profile(scene.hotel, facade, floor, day, profile)
+
+
+def _from_profile(
+    hotel: HotelGeo,
+    facade: Facade,
+    floor: int,
+    day: date,
+    profile: WindowProfile,
+) -> WindowPanorama:
+    horizon = profile.horizon
+    eye = profile.eye_m
     rays = tuple(
         HorizonRay(
             float(azimuth % 360),
@@ -116,7 +170,7 @@ def _panorama(scene: HotelScene, facade: Facade, floor: int, day: date) -> Windo
             _finite(high),
         )
         for azimuth, angle, kind, low, high in zip(
-            window.azimuths_deg,
+            profile.azimuths_deg,
             horizon.angle_deg,
             horizon.kind,
             horizon.sea_low_deg,
@@ -125,20 +179,20 @@ def _panorama(scene: HotelScene, facade: Facade, floor: int, day: date) -> Windo
         )
     )
     return WindowPanorama(
-        hotel_id=scene.hotel.id,
+        hotel_id=hotel.id,
         facade=facade,
         floor=floor,
         day=day,
         horizon=rays,
-        peaks=visible_peaks(window, eye, scene.peaks),
-        sun_path=sun_path(scene.hotel.location, day),
-        events=sun_events(scene.hotel.location, day, eye_elevation_m=max(0, eye)),
+        peaks=profile.peaks,
+        sun_path=sun_path(hotel.location, day),
+        events=sun_events(hotel.location, day, eye_elevation_m=max(0, eye)),
         disappearance=solar_intersection(
-            scene.hotel.location, day, window, horizon, event="sunset", eye_m=eye
+            hotel.location, day, profile, horizon, event="sunset", eye_m=eye
         ),
         appearance=solar_intersection(
-            scene.hotel.location, day, window, horizon, event="sunrise", eye_m=eye
+            hotel.location, day, profile, horizon, event="sunrise", eye_m=eye
         ),
         sea_fraction=horizon.sea_fraction,
-        minimum_sea_floor=minimum_floor(windows, scene.base_m, scene.hotel.floors),
+        minimum_sea_floor=profile.minimum_sea_floor,
     )

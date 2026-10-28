@@ -2,11 +2,12 @@
 
 from dataclasses import dataclass
 from datetime import date, datetime, time, timedelta
-from typing import Literal
+from typing import Literal, Protocol
 
 import numpy as np
 
-from app.domain.geo.scene import Horizon, Obstacle, Scene
+from app.domain.geo.projection import FloatArray
+from app.domain.geo.scene import Horizon, Obstacle
 from app.domain.geo.sun import (
     MOSCOW,
     SOLAR_RADIUS_DEG,
@@ -18,13 +19,20 @@ from app.domain.geo.sun import (
 from app.domain.geo.types import LonLat
 
 
+class AzimuthSector(Protocol):
+    @property
+    def azimuths_deg(self) -> FloatArray: ...
+
+
 @dataclass(frozen=True, slots=True)
 class SolarIntersection:
     position: SunPosition
     behind: str
 
 
-def event_visible(position: SunPosition, scene: Scene, horizon: Horizon, *, over_sea: bool) -> bool:
+def event_visible(
+    position: SunPosition, scene: AzimuthSector, horizon: Horizon, *, over_sea: bool
+) -> bool:
     """Astronomical event visible at <0.5° obstruction, optionally with a sea skyline."""
     angle = horizon_at(position.azimuth_deg, scene.azimuths_deg, horizon.angle_deg)
     ray = int(np.argmin(np.abs((scene.azimuths_deg - position.azimuth_deg + 180) % 360 - 180)))
@@ -35,7 +43,7 @@ def event_visible(position: SunPosition, scene: Scene, horizon: Horizon, *, over
 def solar_intersection(
     location: LonLat,
     day: date,
-    scene: Scene,
+    scene: AzimuthSector,
     horizon: Horizon,
     *,
     event: Literal["sunset", "sunrise"],
@@ -71,7 +79,7 @@ def solar_intersection(
     return SolarIntersection(position, behind if np.isfinite(angle) else "граница поля зрения")
 
 
-def _above(location: LonLat, at: datetime, scene: Scene, horizon: Horizon) -> bool:
+def _above(location: LonLat, at: datetime, scene: AzimuthSector, horizon: Horizon) -> bool:
     position = sun_position(location, at)
     angle = horizon_at(position.azimuth_deg, scene.azimuths_deg, horizon.angle_deg)
     return bool(position.elevation_deg + SOLAR_RADIUS_DEG > angle)
