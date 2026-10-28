@@ -105,15 +105,17 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
           onSection={scrollTo}
         />
 
-        <HotelAbout
-          hotel={hotel}
-          details={h}
-          selectedId={why?.id}
-          onFact={setWhy}
-          demo={designDemo}
-        />
+        <div className="hotel-summary-layout">
+          <HotelAbout
+            hotel={hotel}
+            details={h}
+            selectedId={why?.id}
+            onFact={setWhy}
+            demo={designDemo}
+          />
 
-        <SimilarHotelsSection hotel={hotel} query={q} />
+          <SimilarHotelsSection hotel={hotel} query={q} />
+        </div>
 
         <section className="sec-h2" id="rooms">
           <h2>Доступные номера</h2>
