@@ -9,7 +9,6 @@ import {
   MapPin,
   Scale,
   ShieldCheck,
-  Star,
   Waves,
 } from "lucide-react";
 import { Photo } from "./visuals";
@@ -59,8 +58,7 @@ export function HotelOverview({
         </div>
         <div className="hotel-intro-actions">
           <div className="hotel-guest-rating">
-            <span>
-              <Star size={19} fill="currentColor" />
+            <span aria-label={`Оценка ${h.rating.toLocaleString("ru")} из 10`}>
               {h.rating.toLocaleString("ru", { minimumFractionDigits: 1 })}
             </span>
             <small>{h.reviewCount ? formatReviewCount(h.reviewCount) : "Демо-оценка"}</small>
