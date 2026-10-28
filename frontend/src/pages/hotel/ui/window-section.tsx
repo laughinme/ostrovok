@@ -138,11 +138,8 @@ export function WindowSection({ hotel, detail }: { hotel: Hotel; detail: HotelDe
               )}
             </WindowMethodTooltip>
           </div>
-          <p>Посмотрите, что открывается с разных сторон и этажей.</p>
         </div>
-        {demo ? (
-          <span className="window-demo-label">Демонстрационный вид</span>
-        ) : (
+        {!demo && (
           <label className="window-date">
             <CalendarDays size={17} aria-hidden="true" />
             <span>
