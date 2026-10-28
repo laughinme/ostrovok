@@ -46,7 +46,14 @@ primary_region = "arn"
     method = "GET"
     path = "/health"
 
+# The API serves people: two shared CPUs and 2 GB (~$11/month) keep it responsive while agents
+# run in the worker; the worker stays on the smallest size.
+[[vm]]
+  size = "shared-cpu-2x"
+  memory = "2gb"
+  processes = ["app"]
+
 [[vm]]
   size = "shared-cpu-1x"
   memory = "1gb"
-  processes = ["app", "worker"]
+  processes = ["worker"]

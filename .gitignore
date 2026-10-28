@@ -218,3 +218,6 @@ design/captures/directions-v2/*
 # Archived frontend utilities
 !archive/frontend-next/src/**/lib/
 !archive/frontend-next/src/**/lib/**
+
+# Browser automation snapshots
+.playwright-mcp/
