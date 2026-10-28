@@ -1,23 +1,28 @@
-"""Attribution, provenance, object counts and enforced size budget."""
+"""Attribution, provenance, object counts and enforced decimal-MB size budget."""
 
-from collections import Counter
 from datetime import UTC, datetime
 
-from pipeline.storage import CACHE, DATA, read_csv
+from pipeline.inventory import FILE_LIMIT, TOTAL_LIMIT, object_counts, provenance, size_inventory
+from pipeline.storage import DATA
+
+ATTRIBUTION = [
+    "| Источник | Лицензия / атрибуция |",
+    "|---|---|",
+    "| [OpenStreetMap](https://www.openstreetmap.org/copyright) | "
+    "© OpenStreetMap contributors, ODbL 1.0; выгрузки Geofabrik |",
+    "| [Copernicus DEM](https://registry.opendata.aws/copernicus-dem/) | "
+    "Copernicus Digital Elevation Model, © DLR e.V. 2010–2014, "
+    "© Airbus Defence and Space GmbH 2014–2018; provided under the Copernicus DEM licence |",
+    "| [Open-Meteo](https://open-meteo.com/en/licence) | CC BY 4.0; "
+    "weather data by Open-Meteo and its model providers |",
+    "",
+]
 
 
 def run() -> None:
     DATA.mkdir(parents=True, exist_ok=True)
-    paths = sorted(p for p in DATA.rglob("*") if p.is_file() and p.name != "MANIFEST.md")
-    total = sum(p.stat().st_size for p in paths)
-    if total >= 60_000_000 or any(p.stat().st_size >= 50_000_000 for p in paths):
-        raise ValueError(f"Dataset budget exceeded: {total:,} bytes")
-    stamps = [p.stat().st_mtime for p in CACHE.glob("*.request.json")]
-    dates = (
-        " — ".join(datetime.fromtimestamp(t, UTC).isoformat() for t in [min(stamps), max(stamps)])
-        if stamps
-        else "ещё нет выгрузок"
-    )
+    paths, total = size_inventory(DATA)
+    largest = max((p.stat().st_size for p in paths), default=0)
     lines = [
         "# Данные региона О!кно",
         "",
@@ -26,39 +31,26 @@ def run() -> None:
         "",
         "Получение: `make data` или "
         "`cd backend && uv run --group pipeline python -m pipeline all`.",
-        "Повторный запуск использует сырые ответы в `backend/.cache/pipeline/`.",
+        "Порядок: скачать и проверить PBF → обрезать в GPKG → OSM → DEM → климат → демо → граф.",
+        "Повторный запуск использует `.cache/osm/`, `.cache/pipeline/` и `.cache/spike/`.",
+        "Сырые PBF/GPKG/GeoTIFF в git и в бюджет runtime-данных не входят.",
         "",
-        "| Источник | Лицензия / атрибуция |",
-        "|---|---|",
-        "| [OpenStreetMap](https://www.openstreetmap.org/copyright) | "
-        "© OpenStreetMap contributors, ODbL 1.0 |",
-        "| [Copernicus DEM](https://registry.opendata.aws/copernicus-dem/) | "
-        "Copernicus Digital Elevation Model, © DLR e.V. 2010–2014, "
-        "© Airbus Defence and Space GmbH 2014–2018; "
-        "provided under the Copernicus DEM licence |",
-        "| [Open-Meteo](https://open-meteo.com/en/licence) | CC BY 4.0; "
-        "weather data by Open-Meteo and its model providers |",
-        "",
-        "Дата получения сырых ответов (UTC): " + dates,
-        "",
+        *ATTRIBUTION,
+        *provenance(),
         "## Объекты",
         "",
-    ]
-    for name, field in [
-        ("hotels.csv.gz", "district"),
-        ("buildings.csv.gz", "height_source"),
-        ("osm_features.csv.gz", "kind"),
-    ]:
-        if (DATA / "region" / name).exists():
-            rows = read_csv(name)
-            counts = dict(sorted(Counter(r[field] for r in rows).items()))
-            lines.append(f"- {name}: {len(rows):,}; {counts}")
-    lines += ["", "## Размеры", "", "| Файл | Байт |", "|---|---:|"]
-    lines += [f"| {p.relative_to(DATA)} | {p.stat().st_size:,} |" for p in paths]
-    lines += [
-        f"| **Всего** | **{total:,}** |",
+        *object_counts(DATA),
         "",
-        "Бюджет: <60 МБ вместе, <50 МБ каждый файл.",
+        "## Размеры",
+        "",
+        "| Файл | Байт |",
+        "|---|---:|",
+        *[f"| {p.relative_to(DATA)} | {p.stat().st_size:,} |" for p in paths],
+        f"| **Всего без MANIFEST** | **{total:,}** |",
+        "",
+        f"Бюджет: <{TOTAL_LIMIT:,} байт вместе, <{FILE_LIMIT:,} байт каждый файл (десятичные МБ).",
+        f"Всего {total / 1e6:.2f} МБ, крупнейший файл {largest / 1e6:.2f} МБ; "
+        f"запас до общего лимита {(TOTAL_LIMIT - total) / 1e6:.2f} МБ.",
         "",
     ]
     (DATA / "MANIFEST.md").write_text("\n".join(lines), encoding="utf-8")
