@@ -96,11 +96,7 @@
   },
   "billing": {
     "spentRub": 8.65,
-    "balanceRub": 191.35,
-    "scope": "Initial full eval and short checks before direct RU follow-up; extra cost in polza-ru-smoke.json",
-    "automaticTopupRub": 100,
-    "automaticTopupMonthlyLimitRub": 1000,
-    "additionalTopupTriggeredRub": 100
+    "scope": "Initial full eval and short checks before direct RU follow-up; extra cost in polza-ru-smoke.json"
   },
   "checks": {
     "makeCheck": "509 passed; ruff, mypy, seven import contracts passed"
@@ -108,6 +104,7 @@
   "notes": [
     "Provider checks are a short sample, not an uptime guarantee.",
     "USD in the eval report is a model price estimate; RUB here is provider account billing.",
-    "Eight sequential tool calls used a QA request budget of nine; application limits were unchanged."
+    "Eight sequential tool calls used a QA request budget of nine; application limits were unchanged.",
+    "Historical checks before the explicit Polza OpenAI model-profile fix; final release checks are in polza-release.json."
   ]
 }
