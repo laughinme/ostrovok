@@ -1,6 +1,6 @@
 """The Intent agent (09 §4.2): the LLM planner when available, rules otherwise — same `Intent`."""
 
-from dataclasses import replace
+from dataclasses import asdict, replace
 from datetime import date
 from functools import cache
 from pathlib import Path
@@ -13,7 +13,7 @@ from app.db.uow import UnitOfWork
 from app.domain.knowledge.characteristic import Characteristic, Checkable
 from app.domain.search.intent import Chip, Importance, Intent, Vocabulary, parse_intent
 from app.domain.search.region import REGION_HINT, outside_region
-from app.domain.search.trip import TripDraft, trip_hints
+from app.domain.search.trip import TripDraft, parse_trip, trip_hints
 from app.service.agents.fallback import with_fallback
 from app.service.knowledge.registry import Registry
 from app.service.ports import LanguageModel, LlmUnavailableError
@@ -87,6 +87,29 @@ class IntentParser:
             return parse_intent(text, vocabulary, today=today)
 
         intent, _ = await with_fallback(self._llm if llm else None, by_llm, by_rules)
+        if intent.planner == "llm":
+            rules = parse_trip(text, today=today)
+            recovered_dates = intent.trip.check_in is None and rules.check_in is not None
+            trip = replace(
+                intent.trip,
+                **{
+                    key: value
+                    for key, value in asdict(rules).items()
+                    if getattr(intent.trip, key) is None
+                },
+            )
+            hints = tuple(
+                h
+                for h in intent.hints
+                if not recovered_dates
+                or not h.lower().startswith(("укажите даты", "уточните даты"))
+            )
+            if recovered_dates:
+                hints = (
+                    *hints,
+                    "Даты из запроса посчитаны по времени Сочи. Проверьте их перед выбором номера.",
+                )
+            intent = replace(intent, trip=trip, hints=hints)
         hints = (*intent.hints, *trip_hints(text, intent.trip))
         if outside_region(text):
             hints = (REGION_HINT, *hints)
