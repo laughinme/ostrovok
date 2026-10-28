@@ -7,11 +7,11 @@ moods:
       - {characteristic: sunset_over_sea, label: Закат над морем}
   - id: sleep
     title: Тишина и сон
-    description: Тихая сторона здания и плотные шторы для спокойного сна.
-    count_suffix: с тихой стороной и плотными шторами
+    description: Тихая сторона здания ночью и никаких взлетающих самолётов.
+    count_suffix: где ночью тихо и не слышно самолётов
     chips:
       - {characteristic: night_noise, label: Тихо ночью}
-      - {characteristic: blackout, label: Плотные шторы, checkable: ask_hotelier}
+      - {characteristic: aircraft_noise, label: Без самолётов}
   - id: beach
     title: Море в двух шагах
     description: До пляжа не больше десяти минут по пешеходному маршруту.
