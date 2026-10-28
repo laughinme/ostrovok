@@ -1,0 +1,124 @@
+[
+  {
+    "task": "intent",
+    "model": "google/gemini-3.5-flash-lite",
+    "prompt": "Центр Сочи, тысяч 8 за ночь, обязательно лифт, парковка не нужна.",
+    "output": {
+      "trip": {
+        "to": null,
+        "area": "center",
+        "from_": null,
+        "month": null,
+        "adults": null,
+        "children": null,
+        "budgetPerNight": 8000
+      },
+      "chips": [
+        {
+          "label": "Лифт",
+          "params": {},
+          "importance": "must",
+          "characteristic": "elevator"
+        }
+      ],
+      "hints": [
+        "Подберите отель с лифтом в Центре Сочи в пределах 8000 рублей за ночь."
+      ]
+    },
+    "tools": [],
+    "usage": {
+      "requests": 1,
+      "inputTokens": 839,
+      "cachedTokens": 0,
+      "outputTokens": 99
+    },
+    "costUsd": 0.0004992,
+    "latencyMs": 1665
+  },
+  {
+    "task": "answer",
+    "model": "google/gemini-3.5-flash-lite",
+    "prompt": "Характеристика: remote_work\nВопрос отелю: —\nКатегории номеров отеля: неизвестны\nКакие поля заполнить: desk, wifi_mbps, room_types, clear\n\nОтвет отельера:\nНу в центре у нас люди как-то работают, кто с ноутом в коридоре, кто в комнате. Где именно сейчас стоят столы, после перестановки не помню. Интернет вроде тянет, цифры не мерили и категории не сверяли.",
+    "output": {
+      "desk": null,
+      "clear": false,
+      "value": null,
+      "facade": null,
+      "number": null,
+      "option": null,
+      "allowed": null,
+      "outlook": null,
+      "species": [],
+      "elevator": null,
+      "floor_to": null,
+      "wifi_mbps": null,
+      "conditions": null,
+      "floor_from": null,
+      "room_types": [],
+      "max_weight_kg": null,
+      "no_weight_limit": false,
+      "fee_rub_per_night": null,
+      "step_free_entrance": null
+    },
+    "tools": [],
+    "usage": {
+      "requests": 1,
+      "inputTokens": 822,
+      "cachedTokens": 0,
+      "outputTokens": 14
+    },
+    "costUsd": 0.0002816,
+    "latencyMs": 605
+  },
+  {
+    "task": "curator",
+    "model": "google/gemini-3.5-flash-lite",
+    "prompt": "В гостинице на Поляне нужны противомоскитные сетки на всех открывающихся окнах номера; хочется заранее узнать подходящие категории",
+    "output": {
+      "no": "Противомоскитных сеток на окнах нет",
+      "key": "mosquito_nets",
+      "yes": "Противомоскитные сетки на окнах в категориях: {value}",
+      "title": "Противомоскитные сетки",
+      "reason": "Наличие противомоскитных сеток на окнах — это свойство номера, уточняемое у отельера.",
+      "recipe": {
+        "kind": "ask_hotelier",
+        "unit": null,
+        "options": [],
+        "question": "В каких категориях номеров на окнах установлены противомоскитные сетки?",
+        "answer_kind": "free_text"
+      },
+      "decision": "ask_hotelier",
+      "synonyms": [
+        "москитные сетки",
+        "противомоскитные сетки на окнах",
+        "сетки от комаров"
+      ]
+    },
+    "tools": [],
+    "usage": {
+      "requests": 2,
+      "inputTokens": 4816,
+      "cachedTokens": 0,
+      "outputTokens": 365
+    },
+    "costUsd": 0.0023573,
+    "latencyMs": 2907
+  },
+  {
+    "task": "explain",
+    "model": "google/gemini-3.5-flash-lite",
+    "prompt": "Отель: Ривьера Арт\nКомпромисс: ✗ до пляжа 5,5 мин пешком, обратно 5,6 мин · подъём 7 м\nФакты:\n✗ до пляжа 5,5 мин пешком, обратно 5,6 мин · подъём 7 м\n✓ ночью тихо · фасады ЮВ и ЮЗ",
+    "output": {
+      "tradeoff": "До пляжа 5,5 мин пешком, обратно 5,6 мин с подъёмом 7 м, зато ночью тихо, фасады ЮВ и ЮЗ."
+    },
+    "tools": [],
+    "usage": {
+      "requests": 1,
+      "inputTokens": 173,
+      "cachedTokens": 0,
+      "outputTokens": 53
+    },
+    "costUsd": 0.0001844,
+    "latencyMs": 1439
+  }
+]

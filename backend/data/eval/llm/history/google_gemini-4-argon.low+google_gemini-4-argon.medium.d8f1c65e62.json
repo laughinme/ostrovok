@@ -1,0 +1,1643 @@
+{
+  "sets": {
+    "main": {
+      "intents": {
+        "rules": {
+          "n": 40,
+          "requested": 40,
+          "micro": {
+            "tp": 75,
+            "fp": 6,
+            "fn": 16,
+            "precision": 0.9259259259259259,
+            "recall": 0.8241758241758241,
+            "f1": 0.872093023255814
+          },
+          "perKey": {
+            "ac": {
+              "tp": 3,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "aircraft_noise": {
+              "tp": 4,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "beach_walk": {
+              "tp": 4,
+              "fp": 0,
+              "fn": 1,
+              "precision": 1.0,
+              "recall": 0.8,
+              "f1": 0.8888888888888888
+            },
+            "blackout": {
+              "tp": 4,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "climate": {
+              "tp": 3,
+              "fp": 1,
+              "fn": 1,
+              "precision": 0.75,
+              "recall": 0.75,
+              "f1": 0.75
+            },
+            "construction_nearby": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 1,
+              "precision": 1.0,
+              "recall": 0.5,
+              "f1": 0.6666666666666666
+            },
+            "day_noise": {
+              "tp": 4,
+              "fp": 0,
+              "fn": 2,
+              "precision": 1.0,
+              "recall": 0.6666666666666666,
+              "f1": 0.8
+            },
+            "elevator": {
+              "tp": 6,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "ev_charging": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "food_late": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "precision": null,
+              "recall": 0.0,
+              "f1": 0.0
+            },
+            "kids_hospital": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "mountain_view": {
+              "tp": 6,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "night_noise": {
+              "tp": 6,
+              "fp": 3,
+              "fn": 1,
+              "precision": 0.6666666666666666,
+              "recall": 0.8571428571428571,
+              "f1": 0.75
+            },
+            "parking": {
+              "tp": 5,
+              "fp": 1,
+              "fn": 0,
+              "precision": 0.8333333333333334,
+              "recall": 1.0,
+              "f1": 0.9090909090909091
+            },
+            "pets_policy": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "precision": null,
+              "recall": 0.0,
+              "f1": 0.0
+            },
+            "pharmacy_24_7": {
+              "tp": 4,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "playground_walk": {
+              "tp": 3,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "remote_work": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 2,
+              "precision": 1.0,
+              "recall": 0.3333333333333333,
+              "f1": 0.5
+            },
+            "sea_view": {
+              "tp": 5,
+              "fp": 0,
+              "fn": 1,
+              "precision": 1.0,
+              "recall": 0.8333333333333334,
+              "f1": 0.9090909090909091
+            },
+            "soundproofing": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "steep_streets": {
+              "tp": 2,
+              "fp": 1,
+              "fn": 2,
+              "precision": 0.6666666666666666,
+              "recall": 0.5,
+              "f1": 0.5714285714285714
+            },
+            "step_free": {
+              "tp": 3,
+              "fp": 0,
+              "fn": 2,
+              "precision": 1.0,
+              "recall": 0.6,
+              "f1": 0.75
+            },
+            "stroller_to_sea": {
+              "tp": 3,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "sunrise": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "sunset_over_sea": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            }
+          },
+          "tripFields": {
+            "from": {
+              "n": 40,
+              "correct": 40,
+              "specified": 24,
+              "specifiedCorrect": 24,
+              "accuracy": 1.0
+            },
+            "to": {
+              "n": 40,
+              "correct": 40,
+              "specified": 24,
+              "specifiedCorrect": 24,
+              "accuracy": 1.0
+            },
+            "month": {
+              "n": 40,
+              "correct": 35,
+              "specified": 9,
+              "specifiedCorrect": 4,
+              "accuracy": 0.875
+            },
+            "adults": {
+              "n": 40,
+              "correct": 38,
+              "specified": 29,
+              "specifiedCorrect": 27,
+              "accuracy": 0.95
+            },
+            "children": {
+              "n": 40,
+              "correct": 25,
+              "specified": 22,
+              "specifiedCorrect": 7,
+              "accuracy": 0.625
+            },
+            "budget_per_night": {
+              "n": 40,
+              "correct": 37,
+              "specified": 16,
+              "specifiedCorrect": 13,
+              "accuracy": 0.925
+            }
+          },
+          "tripAccuracy": 0.8958333333333334,
+          "unknownCountAccuracy": 0.775,
+          "rulesResults": 40
+        },
+        "llm": {
+          "n": 19,
+          "requested": 40,
+          "micro": {
+            "tp": 45,
+            "fp": 1,
+            "fn": 0,
+            "precision": 0.9782608695652174,
+            "recall": 1.0,
+            "f1": 0.989010989010989
+          },
+          "perKey": {
+            "ac": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "aircraft_noise": {
+              "tp": 3,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "beach_walk": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "blackout": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "climate": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "construction_nearby": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "elevator": {
+              "tp": 4,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "ev_charging": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "food_late": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "kids_hospital": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "mountain_view": {
+              "tp": 3,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "night_noise": {
+              "tp": 5,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "parking": {
+              "tp": 3,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "pets_policy": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "pharmacy_24_7": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "playground_walk": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "remote_work": {
+              "tp": 0,
+              "fp": 1,
+              "fn": 0,
+              "precision": 0.0,
+              "recall": null,
+              "f1": 0.0
+            },
+            "sea_view": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "soundproofing": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "steep_streets": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "step_free": {
+              "tp": 4,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "stroller_to_sea": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "sunrise": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            }
+          },
+          "tripFields": {
+            "from": {
+              "n": 19,
+              "correct": 19,
+              "specified": 12,
+              "specifiedCorrect": 12,
+              "accuracy": 1.0
+            },
+            "to": {
+              "n": 19,
+              "correct": 19,
+              "specified": 12,
+              "specifiedCorrect": 12,
+              "accuracy": 1.0
+            },
+            "month": {
+              "n": 19,
+              "correct": 17,
+              "specified": 5,
+              "specifiedCorrect": 5,
+              "accuracy": 0.8947368421052632
+            },
+            "adults": {
+              "n": 19,
+              "correct": 19,
+              "specified": 14,
+              "specifiedCorrect": 14,
+              "accuracy": 1.0
+            },
+            "children": {
+              "n": 19,
+              "correct": 14,
+              "specified": 11,
+              "specifiedCorrect": 6,
+              "accuracy": 0.7368421052631579
+            },
+            "budget_per_night": {
+              "n": 19,
+              "correct": 19,
+              "specified": 10,
+              "specifiedCorrect": 10,
+              "accuracy": 1.0
+            }
+          },
+          "tripAccuracy": 0.9385964912280702,
+          "unknownCountAccuracy": 0.9473684210526315,
+          "rulesResults": 21
+        }
+      },
+      "answers": {
+        "rules": {
+          "requested": 30,
+          "evaluated": 30,
+          "rules_results": 30,
+          "accepted": 24,
+          "exact_records": 24,
+          "exact_fields": 72,
+          "total_fields": 72,
+          "correct_clarifications": 6,
+          "total_ambiguous": 6,
+          "fieldAccuracy": 1.0,
+          "clarificationAccuracy": 1.0,
+          "excludedFields": [
+            "conditions",
+            "window_type",
+            "notes"
+          ],
+          "note": "Машинные поля R3; свободный текст исключён; low clarity оценивается по переспросу"
+        },
+        "llm": {
+          "requested": 30,
+          "evaluated": 8,
+          "rules_results": 22,
+          "accepted": 6,
+          "exact_records": 6,
+          "exact_fields": 22,
+          "total_fields": 22,
+          "correct_clarifications": 2,
+          "total_ambiguous": 2,
+          "fieldAccuracy": 1.0,
+          "clarificationAccuracy": 1.0,
+          "excludedFields": [
+            "conditions",
+            "window_type",
+            "notes"
+          ],
+          "note": "Машинные поля R3; свободный текст исключён; low clarity оценивается по переспросу"
+        }
+      },
+      "curator": {
+        "rules": {
+          "n": 21,
+          "requested": 21,
+          "rulesResults": 0,
+          "methodAccuracy": 0.5714285714285714,
+          "parameterAccuracy": 0.5769230769230769,
+          "correctParams": 15,
+          "totalParams": 26,
+          "cases": [
+            {
+              "description": "Хинкальная или грузинский ресторан в 10 минутах пешком",
+              "expected": "poi_nearby",
+              "actual": "poi_nearby",
+              "correctParams": 3,
+              "totalParams": 4
+            },
+            {
+              "description": "До пляжа с детской коляской не больше 15 минут, без лестниц и ступенек",
+              "expected": "walk_to",
+              "actual": "walk_to",
+              "correctParams": 5,
+              "totalParams": 5
+            },
+            {
+              "description": "Круглосуточная аптека в радиусе 500 метров",
+              "expected": "poi_nearby",
+              "actual": "poi_nearby",
+              "correctParams": 4,
+              "totalParams": 4
+            },
+            {
+              "description": "Из окна номера виден Олимпийский парк в Сириусе",
+              "expected": "view",
+              "actual": "poi_nearby",
+              "correctParams": 0,
+              "totalParams": 2
+            },
+            {
+              "description": "Из отеля можно наблюдать закат над морем",
+              "expected": "sun_event",
+              "actual": "cannot_check",
+              "correctParams": 0,
+              "totalParams": 2
+            },
+            {
+              "description": "Ночью возле отеля высокий уровень уличного шума",
+              "expected": "noise",
+              "actual": "cannot_check",
+              "correctParams": 0,
+              "totalParams": 1
+            },
+            {
+              "description": "Не меньше двух детских площадок в радиусе 500 метров",
+              "expected": "poi_nearby",
+              "actual": "poi_nearby",
+              "correctParams": 3,
+              "totalParams": 4
+            },
+            {
+              "description": "Отель находится в зелёном районе, вокруг много деревьев и парков",
+              "expected": "area_stat",
+              "actual": "poi_nearby",
+              "correctParams": 0,
+              "totalParams": 1
+            },
+            {
+              "description": "Можно заселиться с собакой весом 30 кг, желательно без доплаты",
+              "expected": "ask_hotelier",
+              "actual": "ask_hotelier",
+              "correctParams": 0,
+              "totalParams": 0
+            },
+            {
+              "description": "В номере есть собственная кухня с плитой и посудой",
+              "expected": "ask_hotelier",
+              "actual": "ask_hotelier",
+              "correctParams": 0,
+              "totalParams": 0
+            },
+            {
+              "description": "Wi-Fi в номере подходит для видеозвонков и удалённой работы",
+              "expected": "ask_hotelier",
+              "actual": "ask_hotelier",
+              "correctParams": 0,
+              "totalParams": 0
+            },
+            {
+              "description": "В номере есть удобный рабочий стол, стул и розетка рядом",
+              "expected": "ask_hotelier",
+              "actual": "ask_hotelier",
+              "correctParams": 0,
+              "totalParams": 0
+            },
+            {
+              "description": "Для ребёнка до двух лет могут предоставить детскую кроватку",
+              "expected": "ask_hotelier",
+              "actual": "ask_hotelier",
+              "correctParams": 0,
+              "totalParams": 0
+            },
+            {
+              "description": "В номере есть плотные шторы блэкаут, чтобы утром было темно",
+              "expected": "ask_hotelier",
+              "actual": "ask_hotelier",
+              "correctParams": 0,
+              "totalParams": 0
+            },
+            {
+              "description": "В ванной комнате есть стиральная машина для личного пользования",
+              "expected": "ask_hotelier",
+              "actual": "cannot_check",
+              "correctParams": 0,
+              "totalParams": 0
+            },
+            {
+              "description": "Отель подходит для удалённой работы из номера",
+              "expected": "derived",
+              "actual": "cannot_check",
+              "correctParams": 0,
+              "totalParams": 1
+            },
+            {
+              "description": "Отель удобен для отдыха с маленьким ребёнком",
+              "expected": "derived",
+              "actual": "cannot_check",
+              "correctParams": 0,
+              "totalParams": 1
+            },
+            {
+              "description": "В отеле получится спокойно выспаться без яркого света и сильного уличного шума",
+              "expected": "derived",
+              "actual": "ask_hotelier",
+              "correctParams": 0,
+              "totalParams": 1
+            },
+            {
+              "description": "В отеле очень уютно, прямо как дома",
+              "expected": "cannot_check",
+              "actual": "cannot_check",
+              "correctParams": 0,
+              "totalParams": 0
+            },
+            {
+              "description": "В отеле романтическая атмосфера для поездки вдвоём",
+              "expected": "cannot_check",
+              "actual": "ask_hotelier",
+              "correctParams": 0,
+              "totalParams": 0
+            },
+            {
+              "description": "В отеле по-настоящему душевно и чувствуешь себя желанным гостем",
+              "expected": "cannot_check",
+              "actual": "cannot_check",
+              "correctParams": 0,
+              "totalParams": 0
+            }
+          ],
+          "note": "Свободные формулировки question/reason и value_schema (у нас answer_kind) исключены"
+        },
+        "llm": {
+          "n": 9,
+          "requested": 21,
+          "rulesResults": 12,
+          "methodAccuracy": 0.8888888888888888,
+          "parameterAccuracy": 0.6666666666666666,
+          "correctParams": 2,
+          "totalParams": 3,
+          "cases": [
+            {
+              "description": "Из отеля можно наблюдать закат над морем",
+              "expected": "sun_event",
+              "actual": "sun_event",
+              "correctParams": 2,
+              "totalParams": 2
+            },
+            {
+              "description": "Можно заселиться с собакой весом 30 кг, желательно без доплаты",
+              "expected": "ask_hotelier",
+              "actual": "ask_hotelier",
+              "correctParams": 0,
+              "totalParams": 0
+            },
+            {
+              "description": "Wi-Fi в номере подходит для видеозвонков и удалённой работы",
+              "expected": "ask_hotelier",
+              "actual": "ask_hotelier",
+              "correctParams": 0,
+              "totalParams": 0
+            },
+            {
+              "description": "В номере есть удобный рабочий стол, стул и розетка рядом",
+              "expected": "ask_hotelier",
+              "actual": "ask_hotelier",
+              "correctParams": 0,
+              "totalParams": 0
+            },
+            {
+              "description": "Для ребёнка до двух лет могут предоставить детскую кроватку",
+              "expected": "ask_hotelier",
+              "actual": "ask_hotelier",
+              "correctParams": 0,
+              "totalParams": 0
+            },
+            {
+              "description": "В номере есть плотные шторы блэкаут, чтобы утром было темно",
+              "expected": "ask_hotelier",
+              "actual": "ask_hotelier",
+              "correctParams": 0,
+              "totalParams": 0
+            },
+            {
+              "description": "Отель подходит для удалённой работы из номера",
+              "expected": "derived",
+              "actual": "ask_hotelier",
+              "correctParams": 0,
+              "totalParams": 1
+            },
+            {
+              "description": "В отеле романтическая атмосфера для поездки вдвоём",
+              "expected": "cannot_check",
+              "actual": "cannot_check",
+              "correctParams": 0,
+              "totalParams": 0
+            },
+            {
+              "description": "В отеле по-настоящему душевно и чувствуешь себя желанным гостем",
+              "expected": "cannot_check",
+              "actual": "cannot_check",
+              "correctParams": 0,
+              "totalParams": 0
+            }
+          ],
+          "note": "Свободные формулировки question/reason и value_schema (у нас answer_kind) исключены"
+        }
+      }
+    },
+    "holdout": {
+      "intents": {
+        "rules": {
+          "n": 40,
+          "requested": 40,
+          "micro": {
+            "tp": 39,
+            "fp": 17,
+            "fn": 17,
+            "precision": 0.6964285714285714,
+            "recall": 0.6964285714285714,
+            "f1": 0.6964285714285714
+          },
+          "perKey": {
+            "ac": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 1,
+              "precision": 1.0,
+              "recall": 0.6666666666666666,
+              "f1": 0.8
+            },
+            "aircraft_noise": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "beach_walk": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "blackout": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 1,
+              "precision": 1.0,
+              "recall": 0.6666666666666666,
+              "f1": 0.8
+            },
+            "climate": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "precision": null,
+              "recall": 0.0,
+              "f1": 0.0
+            },
+            "construction_nearby": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 1,
+              "precision": 1.0,
+              "recall": 0.5,
+              "f1": 0.6666666666666666
+            },
+            "day_noise": {
+              "tp": 1,
+              "fp": 1,
+              "fn": 1,
+              "precision": 0.5,
+              "recall": 0.5,
+              "f1": 0.5
+            },
+            "elevator": {
+              "tp": 3,
+              "fp": 2,
+              "fn": 0,
+              "precision": 0.6,
+              "recall": 1.0,
+              "f1": 0.75
+            },
+            "ev_charging": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "facade_rooms": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 3,
+              "precision": null,
+              "recall": 0.0,
+              "f1": 0.0
+            },
+            "food_late": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 1,
+              "precision": 1.0,
+              "recall": 0.5,
+              "f1": 0.6666666666666666
+            },
+            "kids_hospital": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 1,
+              "precision": 1.0,
+              "recall": 0.5,
+              "f1": 0.6666666666666666
+            },
+            "mountain_view": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 1,
+              "precision": 1.0,
+              "recall": 0.5,
+              "f1": 0.6666666666666666
+            },
+            "night_noise": {
+              "tp": 1,
+              "fp": 3,
+              "fn": 0,
+              "precision": 0.25,
+              "recall": 1.0,
+              "f1": 0.4
+            },
+            "parking": {
+              "tp": 4,
+              "fp": 3,
+              "fn": 0,
+              "precision": 0.5714285714285714,
+              "recall": 1.0,
+              "f1": 0.7272727272727273
+            },
+            "pets_policy": {
+              "tp": 4,
+              "fp": 0,
+              "fn": 1,
+              "precision": 1.0,
+              "recall": 0.8,
+              "f1": 0.8888888888888888
+            },
+            "pharmacy_24_7": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "playground_walk": {
+              "tp": 3,
+              "fp": 2,
+              "fn": 1,
+              "precision": 0.6,
+              "recall": 0.75,
+              "f1": 0.6666666666666666
+            },
+            "remote_work": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "sea_view": {
+              "tp": 0,
+              "fp": 4,
+              "fn": 1,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            },
+            "soundproofing": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "steep_streets": {
+              "tp": 0,
+              "fp": 0,
+              "fn": 2,
+              "precision": null,
+              "recall": 0.0,
+              "f1": 0.0
+            },
+            "step_free": {
+              "tp": 2,
+              "fp": 1,
+              "fn": 0,
+              "precision": 0.6666666666666666,
+              "recall": 1.0,
+              "f1": 0.8
+            },
+            "stroller_to_sea": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "sunrise": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "sunset_over_sea": {
+              "tp": 0,
+              "fp": 1,
+              "fn": 1,
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1": 0.0
+            }
+          },
+          "tripFields": {
+            "from": {
+              "n": 40,
+              "correct": 37,
+              "specified": 24,
+              "specifiedCorrect": 21,
+              "accuracy": 0.925
+            },
+            "to": {
+              "n": 40,
+              "correct": 34,
+              "specified": 24,
+              "specifiedCorrect": 18,
+              "accuracy": 0.85
+            },
+            "month": {
+              "n": 40,
+              "correct": 40,
+              "specified": 1,
+              "specifiedCorrect": 1,
+              "accuracy": 1.0
+            },
+            "adults": {
+              "n": 40,
+              "correct": 28,
+              "specified": 25,
+              "specifiedCorrect": 13,
+              "accuracy": 0.7
+            },
+            "children": {
+              "n": 40,
+              "correct": 19,
+              "specified": 26,
+              "specifiedCorrect": 5,
+              "accuracy": 0.475
+            },
+            "budget_per_night": {
+              "n": 40,
+              "correct": 35,
+              "specified": 14,
+              "specifiedCorrect": 9,
+              "accuracy": 0.875
+            }
+          },
+          "tripAccuracy": 0.8041666666666667,
+          "unknownCountAccuracy": 0.85,
+          "rulesResults": 40
+        },
+        "llm": {
+          "n": 28,
+          "requested": 40,
+          "micro": {
+            "tp": 34,
+            "fp": 1,
+            "fn": 0,
+            "precision": 0.9714285714285714,
+            "recall": 1.0,
+            "f1": 0.9855072463768116
+          },
+          "perKey": {
+            "ac": {
+              "tp": 3,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "aircraft_noise": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "beach_walk": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "blackout": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "construction_nearby": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "day_noise": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "elevator": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "ev_charging": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "facade_rooms": {
+              "tp": 2,
+              "fp": 1,
+              "fn": 0,
+              "precision": 0.6666666666666666,
+              "recall": 1.0,
+              "f1": 0.8
+            },
+            "food_late": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "kids_hospital": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "mountain_view": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "night_noise": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "parking": {
+              "tp": 3,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "pets_policy": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "pharmacy_24_7": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "playground_walk": {
+              "tp": 3,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "remote_work": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "sea_view": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "soundproofing": {
+              "tp": 2,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "steep_streets": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "step_free": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            },
+            "stroller_to_sea": {
+              "tp": 1,
+              "fp": 0,
+              "fn": 0,
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0
+            }
+          },
+          "tripFields": {
+            "from": {
+              "n": 28,
+              "correct": 28,
+              "specified": 14,
+              "specifiedCorrect": 14,
+              "accuracy": 1.0
+            },
+            "to": {
+              "n": 28,
+              "correct": 28,
+              "specified": 14,
+              "specifiedCorrect": 14,
+              "accuracy": 1.0
+            },
+            "month": {
+              "n": 28,
+              "correct": 27,
+              "specified": 1,
+              "specifiedCorrect": 1,
+              "accuracy": 0.9642857142857143
+            },
+            "adults": {
+              "n": 28,
+              "correct": 27,
+              "specified": 15,
+              "specifiedCorrect": 15,
+              "accuracy": 0.9642857142857143
+            },
+            "children": {
+              "n": 28,
+              "correct": 28,
+              "specified": 16,
+              "specifiedCorrect": 16,
+              "accuracy": 1.0
+            },
+            "budget_per_night": {
+              "n": 28,
+              "correct": 28,
+              "specified": 7,
+              "specifiedCorrect": 7,
+              "accuracy": 1.0
+            }
+          },
+          "tripAccuracy": 0.9880952380952381,
+          "unknownCountAccuracy": 0.9285714285714286,
+          "rulesResults": 12
+        }
+      },
+      "answers": {
+        "rules": {
+          "requested": 30,
+          "evaluated": 30,
+          "rules_results": 30,
+          "accepted": 16,
+          "exact_records": 1,
+          "exact_fields": 26,
+          "total_fields": 67,
+          "correct_clarifications": 7,
+          "total_ambiguous": 8,
+          "fieldAccuracy": 0.3880597014925373,
+          "clarificationAccuracy": 0.875,
+          "excludedFields": [
+            "conditions",
+            "window_type",
+            "notes"
+          ],
+          "note": "Машинные поля R3; свободный текст исключён; low clarity оценивается по переспросу"
+        },
+        "llm": {
+          "requested": 30,
+          "evaluated": 20,
+          "rules_results": 10,
+          "accepted": 15,
+          "exact_records": 14,
+          "exact_fields": 44,
+          "total_fields": 45,
+          "correct_clarifications": 5,
+          "total_ambiguous": 5,
+          "fieldAccuracy": 0.9777777777777777,
+          "clarificationAccuracy": 1.0,
+          "excludedFields": [
+            "conditions",
+            "window_type",
+            "notes"
+          ],
+          "note": "Машинные поля R3; свободный текст исключён; low clarity оценивается по переспросу"
+        }
+      },
+      "curator": {
+        "rules": {
+          "n": 15,
+          "requested": 15,
+          "rulesResults": 0,
+          "methodAccuracy": 0.4,
+          "parameterAccuracy": 0.2857142857142857,
+          "correctParams": 8,
+          "totalParams": 28,
+          "cases": [
+            {
+              "description": "В Имеретинке нужен круглосуточный продуктовый магазин не дальше 350 метров по прямой от гостиницы",
+              "expected": "poi_nearby",
+              "actual": "poi_nearby",
+              "correctParams": 4,
+              "totalParams": 4
+            },
+            {
+              "description": "Для дождливых дней в центре Сочи хотим хотя бы два музея в радиусе двух с половиной километров",
+              "expected": "poi_nearby",
+              "actual": "poi_nearby",
+              "correctParams": 2,
+              "totalParams": 4
+            },
+            {
+              "description": "В Адлере ищем японский ресторан максимум в двенадцати минутах ходьбы от отеля, время работы сейчас не важно",
+              "expected": "poi_nearby",
+              "actual": "poi_nearby",
+              "correctParams": 2,
+              "totalParams": 4
+            },
+            {
+              "description": "В Хосте от гостиницы до железнодорожной станции нужно доехать на инвалидной коляске за восемь минут: без ступеней, суммарный подъём не больше шести метров",
+              "expected": "walk_to",
+              "actual": "cannot_check",
+              "correctParams": 0,
+              "totalParams": 5
+            },
+            {
+              "description": "Для гостиницы в Красной Поляне проверить, будут ли горы занимать хотя бы десятую часть поля зрения из окон выбранного фасада и этажа",
+              "expected": "view",
+              "actual": "cannot_check",
+              "correctParams": 0,
+              "totalParams": 2
+            },
+            {
+              "description": "В центре Сочи проверить видимость самого восходящего солнца из окна на даты февральской поездки, море под солнцем необязательно",
+              "expected": "sun_event",
+              "actual": "cannot_check",
+              "correctParams": 0,
+              "totalParams": 2
+            },
+            {
+              "description": "В Адлере отдельно оценить дневной шум железной дороги у фасада; тихим считать уровень ниже 48 дБ, автодороги в этот расчёт не включать",
+              "expected": "noise",
+              "actual": "cannot_check",
+              "correctParams": 0,
+              "totalParams": 3
+            },
+            {
+              "description": "В Хосте проверить, занимает ли зелень хотя бы 40 процентов территории в пределах 600 метров от гостиницы",
+              "expected": "area_stat",
+              "actual": "cannot_check",
+              "correctParams": 0,
+              "totalParams": 3
+            },
+            {
+              "description": "В отеле в Сириусе нужен безглютеновый завтрак с отдельной подготовкой еды, чтобы не было контакта с обычной мукой",
+              "expected": "ask_hotelier",
+              "actual": "ask_hotelier",
+              "correctParams": 0,
+              "totalParams": 0
+            },
+            {
+              "description": "В центре Сочи необходимо гарантированно получить номер в семь утра 16 ноября 2026 года, а не ждать освобождения к обеду",
+              "expected": "ask_hotelier",
+              "actual": "cannot_check",
+              "correctParams": 0,
+              "totalParams": 0
+            },
+            {
+              "description": "После выселения в Хосте хотим оставить чемоданы в запираемой камере отеля до 22 часов того же дня и узнать стоимость",
+              "expected": "ask_hotelier",
+              "actual": "cannot_check",
+              "correctParams": 0,
+              "totalParams": 0
+            },
+            {
+              "description": "В гостинице на Поляне нужны противомоскитные сетки на всех открывающихся окнах номера; хочется заранее узнать подходящие категории",
+              "expected": "ask_hotelier",
+              "actual": "cannot_check",
+              "correctParams": 0,
+              "totalParams": 0
+            },
+            {
+              "description": "Для выбранного номера одновременно нужны кондиционер и возможность пользоваться лифтом до его этажа; оба признака уже есть в реестре",
+              "expected": "derived",
+              "actual": "poi_nearby",
+              "correctParams": 0,
+              "totalParams": 1
+            },
+            {
+              "description": "В Имеретинке нужен интерьер, который обязательно произведёт впечатление дорогого отдыха на всех моих подписчиков",
+              "expected": "cannot_check",
+              "actual": "cannot_check",
+              "correctParams": 0,
+              "totalParams": 0
+            },
+            {
+              "description": "За неделю в Красной Поляне хочу обязательно вернуть вдохновение и придумать сюжет новой книги благодаря отелю",
+              "expected": "cannot_check",
+              "actual": "cannot_check",
+              "correctParams": 0,
+              "totalParams": 0
+            }
+          ],
+          "note": "Свободные формулировки question/reason и value_schema (у нас answer_kind) исключены"
+        },
+        "llm": {
+          "n": 11,
+          "requested": 15,
+          "rulesResults": 4,
+          "methodAccuracy": 1.0,
+          "parameterAccuracy": 0.9375,
+          "correctParams": 15,
+          "totalParams": 16,
+          "cases": [
+            {
+              "description": "Для дождливых дней в центре Сочи хотим хотя бы два музея в радиусе двух с половиной километров",
+              "expected": "poi_nearby",
+              "actual": "poi_nearby",
+              "correctParams": 3,
+              "totalParams": 4
+            },
+            {
+              "description": "В Адлере ищем японский ресторан максимум в двенадцати минутах ходьбы от отеля, время работы сейчас не важно",
+              "expected": "poi_nearby",
+              "actual": "poi_nearby",
+              "correctParams": 4,
+              "totalParams": 4
+            },
+            {
+              "description": "Для гостиницы в Красной Поляне проверить, будут ли горы занимать хотя бы десятую часть поля зрения из окон выбранного фасада и этажа",
+              "expected": "view",
+              "actual": "view",
+              "correctParams": 2,
+              "totalParams": 2
+            },
+            {
+              "description": "В центре Сочи проверить видимость самого восходящего солнца из окна на даты февральской поездки, море под солнцем необязательно",
+              "expected": "sun_event",
+              "actual": "sun_event",
+              "correctParams": 2,
+              "totalParams": 2
+            },
+            {
+              "description": "В Адлере отдельно оценить дневной шум железной дороги у фасада; тихим считать уровень ниже 48 дБ, автодороги в этот расчёт не включать",
+              "expected": "noise",
+              "actual": "noise",
+              "correctParams": 3,
+              "totalParams": 3
+            },
+            {
+              "description": "В отеле в Сириусе нужен безглютеновый завтрак с отдельной подготовкой еды, чтобы не было контакта с обычной мукой",
+              "expected": "ask_hotelier",
+              "actual": "ask_hotelier",
+              "correctParams": 0,
+              "totalParams": 0
+            },
+            {
+              "description": "После выселения в Хосте хотим оставить чемоданы в запираемой камере отеля до 22 часов того же дня и узнать стоимость",
+              "expected": "ask_hotelier",
+              "actual": "ask_hotelier",
+              "correctParams": 0,
+              "totalParams": 0
+            },
+            {
+              "description": "В гостинице на Поляне нужны противомоскитные сетки на всех открывающихся окнах номера; хочется заранее узнать подходящие категории",
+              "expected": "ask_hotelier",
+              "actual": "ask_hotelier",
+              "correctParams": 0,
+              "totalParams": 0
+            },
+            {
+              "description": "Для выбранного номера одновременно нужны кондиционер и возможность пользоваться лифтом до его этажа; оба признака уже есть в реестре",
+              "expected": "derived",
+              "actual": "derived",
+              "correctParams": 1,
+              "totalParams": 1
+            },
+            {
+              "description": "В Имеретинке нужен интерьер, который обязательно произведёт впечатление дорогого отдыха на всех моих подписчиков",
+              "expected": "cannot_check",
+              "actual": "cannot_check",
+              "correctParams": 0,
+              "totalParams": 0
+            },
+            {
+              "description": "За неделю в Красной Поляне хочу обязательно вернуть вдохновение и придумать сюжет новой книги благодаря отелю",
+              "expected": "cannot_check",
+              "actual": "cannot_check",
+              "correctParams": 0,
+              "totalParams": 0
+            }
+          ],
+          "note": "Свободные формулировки question/reason и value_schema (у нас answer_kind) исключены"
+        }
+      }
+    }
+  },
+  "explain": {
+    "attempted": 3,
+    "accepted": 3,
+    "acceptedShare": 1.0,
+    "examples": [
+      {
+        "rules": "✗ до пляжа 5,5 мин пешком, обратно 5,6 мин · подъём 7 м",
+        "llm": "До пляжа 5,5 мин пешком, а на обратном пути в 5,6 мин ждёт подъём на 7 м, зато ночью в отеле тихо, а фасады выходят на ЮВ и ЮЗ."
+      },
+      {
+        "rules": "✗ до пляжа 6,0 мин пешком, обратно 6,1 мин · подъём 3 м",
+        "llm": "Ночью здесь тихо благодаря северо-западному фасаду, хотя пешая прогулка до пляжа займёт 6,0 мин, а обратный путь с подъёмом на 3 м — 6,1 мин."
+      },
+      {
+        "rules": "✗ до пляжа 9,2 мин пешком, обратно 11 мин · подъём 5 м",
+        "llm": "В отеле «Оливия» с В-фасадом ночью тихо, но дорога до пляжа займёт 9,2 мин пешком, а обратно — 11 мин с подъёмом 5 м."
+      }
+    ]
+  },
+  "usage": {
+    "fast": {
+      "tasks": {
+        "answer": {
+          "calls": 28,
+          "cached": 0,
+          "failed": 32,
+          "p50Ms": 6436,
+          "p95Ms": 13481,
+          "inputTokens": 32353,
+          "cachedTokens": 0,
+          "outputTokens": 1334,
+          "costUsd": 0.078,
+          "costPerCallUsd": 0.002787
+        },
+        "explain": {
+          "calls": 3,
+          "cached": 0,
+          "failed": 0,
+          "p50Ms": 4388,
+          "p95Ms": 5084,
+          "inputTokens": 702,
+          "cachedTokens": 0,
+          "outputTokens": 217,
+          "costUsd": 0.0036,
+          "costPerCallUsd": 0.001191
+        },
+        "intent": {
+          "calls": 47,
+          "cached": 0,
+          "failed": 33,
+          "p50Ms": 7455,
+          "p95Ms": 13847,
+          "inputTokens": 53394,
+          "cachedTokens": 0,
+          "outputTokens": 7140,
+          "costUsd": 0.1782,
+          "costPerCallUsd": 0.003791
+        }
+      },
+      "costUsd": 0.2598
+    },
+    "strong": {
+      "tasks": {
+        "curator": {
+          "calls": 20,
+          "cached": 0,
+          "failed": 16,
+          "p50Ms": 11258,
+          "p95Ms": 21102,
+          "inputTokens": 82982,
+          "cachedTokens": 10222,
+          "outputTokens": 4084,
+          "costUsd": 0.1874,
+          "costPerCallUsd": 0.009369
+        }
+      },
+      "costUsd": 0.1874
+    }
+  },
+  "costUsd": 0.4472,
+  "generatedAt": "2026-10-28T10:49:42.159753+00:00",
+  "evaluationVersion": 2,
+  "model": "google/gemini-4-argon",
+  "strongModel": "google/gemini-4-argon",
+  "thinking": "low",
+  "thinkingStrong": "medium",
+  "baseUrl": "https://aiplatform.googleapis.com/v1/projects/gen-lang-client-0737232738/locations/global/endpoints/openapi"
+}

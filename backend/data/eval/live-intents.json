@@ -1,0 +1,116 @@
+[
+  {
+    "mode": "rules",
+    "latencyMs": 74,
+    "response": {
+      "text": "Обязательно тихо ночью, желательно море из окна. Двое взрослых с 12 по 15 ноября 2026.",
+      "chips": [
+        {
+          "id": "c1",
+          "characteristic": "night_noise",
+          "label": "Тишина ночью",
+          "importance": "must",
+          "checkable": "compute",
+          "params": {},
+          "fromProfile": false
+        },
+        {
+          "id": "c2",
+          "characteristic": "sea_view",
+          "label": "Море из окна",
+          "importance": "nice",
+          "checkable": "compute",
+          "params": {},
+          "fromProfile": false
+        }
+      ],
+      "trip": {
+        "from": "2026-11-12",
+        "to": "2026-11-15",
+        "month": null,
+        "adults": 2,
+        "children": null,
+        "budgetPerNight": null,
+        "area": null
+      },
+      "hints": [],
+      "planner": "rules"
+    }
+  },
+  {
+    "mode": "auto",
+    "latencyMs": 31,
+    "response": {
+      "text": "Обязательно тихо ночью, желательно море из окна. Двое взрослых с 12 по 15 ноября 2026.",
+      "chips": [
+        {
+          "id": "c1",
+          "characteristic": "night_noise",
+          "label": "Тихо ночью",
+          "importance": "must",
+          "checkable": "compute",
+          "params": {},
+          "fromProfile": false
+        },
+        {
+          "id": "c2",
+          "characteristic": "sea_view",
+          "label": "Море из окна",
+          "importance": "nice",
+          "checkable": "compute",
+          "params": {},
+          "fromProfile": false
+        }
+      ],
+      "trip": {
+        "from": "2026-11-12",
+        "to": "2026-11-15",
+        "month": null,
+        "adults": 2,
+        "children": null,
+        "budgetPerNight": null,
+        "area": null
+      },
+      "hints": [],
+      "planner": "llm"
+    }
+  },
+  {
+    "mode": "auto",
+    "latencyMs": 17,
+    "response": {
+      "text": "Обязательно тихо ночью, желательно море из окна. Двое взрослых с 12 по 15 ноября 2026.",
+      "chips": [
+        {
+          "id": "c1",
+          "characteristic": "night_noise",
+          "label": "Тихо ночью",
+          "importance": "must",
+          "checkable": "compute",
+          "params": {},
+          "fromProfile": false
+        },
+        {
+          "id": "c2",
+          "characteristic": "sea_view",
+          "label": "Море из окна",
+          "importance": "nice",
+          "checkable": "compute",
+          "params": {},
+          "fromProfile": false
+        }
+      ],
+      "trip": {
+        "from": "2026-11-12",
+        "to": "2026-11-15",
+        "month": null,
+        "adults": 2,
+        "children": null,
+        "budgetPerNight": null,
+        "area": null
+      },
+      "hints": [],
+      "planner": "llm"
+    }
+  }
+]

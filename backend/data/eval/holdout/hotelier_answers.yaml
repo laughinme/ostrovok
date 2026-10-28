@@ -1,0 +1,257 @@
+- question_key: facade_rooms
+  answer_text: "Хоста, малый корпус. Восток: Urban Studio. Этажи 2–4. Других категорий на этом фасаде нет."
+  expected:
+    facade: E
+    room_types: ["Urban Studio"]
+    floor_from: 2
+    floor_to: 4
+  clarity: high
+
+- question_key: facade_rooms
+  answer_text: "Благодарим за обращение в нашу гостиницу в Сириусе. Категории Family Garden и Patio Twin ориентированы строго на север и занимают первый и второй этажи. Названия относятся к категориям, а не к отдельным номерам."
+  expected:
+    facade: N
+    room_types: ["Family Garden", "Patio Twin"]
+    floor_from: 1
+    floor_to: 2
+  clarity: high
+
+- question_key: facade_rooms
+  answer_text: "да у нас в Адлере Deluxe Sea View название историческое если по компасу окна на северо запад именно эта категория с седьмого по девятый этаж другие сейчас не обсуждаем"
+  expected:
+    facade: NW
+    room_types: ["Deluxe Sea View"]
+    floor_from: 7
+    floor_to: 9
+  clarity: high
+
+- question_key: facade_rooms
+  answer_text: "В центре Сочи у нас южный фасад точно есть. Какие номера на него смотрят, сейчас не соображу: после ремонта категории переименовали. По этажам тоже лучше у сменщика спросить, не хочу наврать."
+  expected:
+    facade: S
+    room_types: []
+    floor_from: null
+    floor_to: null
+  clarity: low
+
+- question_key: facade_rooms
+  answer_text: "В Поляне Mountain Loft на юго-востоке с шестого по восьмой. Стоп, восьмой — технический, я старый план открыла. Верно так: категория Mountain Loft, юго-восточная сторона, шестой и седьмой жилые этажи."
+  expected:
+    facade: SE
+    room_types: ["Mountain Loft"]
+    floor_from: 6
+    floor_to: 7
+  clarity: medium
+
+- question_key: facade_rooms
+  answer_text: "Наша Quiet Suite в Хосте на третьем этаже, окна строго на запад. В карточке администратора для этой же категории стоит восточная сторона. Оба документа свежие, какой верный, пока не выяснили."
+  expected:
+    facade: null
+    room_types: ["Quiet Suite"]
+    floor_from: 3
+    floor_to: 3
+  clarity: low
+
+- question_key: pets_policy
+  answer_text: "Вашего попугая в закрытой клетке в Сириусе разместим. Разрешены только птицы в клетках, ограничений по весу для них нет, доплата ноль рублей за ночь. Клетку нельзя оставлять на балконе."
+  expected:
+    allowed: true
+    species: ["bird"]
+    max_weight_kg: null
+    fee_rub_per_night: 0
+    conditions: "Разрешены только птицы в клетках; клетку нельзя оставлять на балконе; вес не ограничен"
+  clarity: high
+
+- question_key: pets_policy
+  answer_text: "Хоста. Кошки — да, до 6 кг включительно, 250 ₽/ночь. Собаки — нет. С вашей кошкой 5 кг можно. Переноска обязательна при проходе через общие зоны."
+  expected:
+    allowed: true
+    species: ["cat"]
+    max_weight_kg: 6
+    fee_rub_per_night: 250
+    conditions: "Кошки до 6 кг; собаки не допускаются; в общих зонах кошка должна находиться в переноске"
+  clarity: high
+
+- question_key: pets_policy
+  answer_text: "в поляне с вашей собакой тридцать килограмм возьмём у нас предел ровно тридцать килограмм включительно доплаты за ночь нет только на завтрак с собакой в зал нельзя"
+  expected:
+    allowed: true
+    species: ["dog"]
+    max_weight_kg: 30
+    fee_rub_per_night: 0
+    conditions: "Собаки до 30 кг включительно; вход с собакой в зал завтраков запрещён"
+  clarity: high
+
+- question_key: pets_policy
+  answer_text: "По вашему питомцу в Адлере однозначно не отвечу. В одни даты принимаем, в другие нет, и кого именно сейчас разрешают, у меня списка нет. Тариф тоже менялся, лучше запросить управляющего."
+  expected:
+    allowed: null
+    species: []
+    max_weight_kg: null
+    fee_rub_per_night: null
+    conditions: "Нужно уточнить действующие даты приёма, разрешённые виды животных и тариф у управляющего"
+  clarity: low
+
+- question_key: pets_policy
+  answer_text: "Уважаемый гость, собаку весом 22 кг в нашем отеле в центре Сочи разместить нельзя: проживание с любыми животными запрещено. Указанные в старом прайсе 1800 рублей за уборку больше не действуют."
+  expected:
+    allowed: false
+    species: []
+    max_weight_kg: null
+    fee_rub_per_night: null
+    conditions: "Действует запрет на проживание с любыми животными; прежняя разовая плата за уборку отменена"
+  clarity: high
+
+- question_key: pets_policy
+  answer_text: "С кошкой к нам в Имеретинку можно, менеджер подтвердил. Хотя в сегодняшнем распоряжении написано: кошек не заселять. Это про вашу бронь тоже, но что считать окончательным ответом, я пока не знаю. Про вес и оплату сведений нет."
+  expected:
+    allowed: null
+    species: ["cat"]
+    max_weight_kg: null
+    fee_rub_per_night: null
+    conditions: "Противоречивые действующие указания по одной брони с кошкой; требуется окончательное решение, вес и оплата неизвестны"
+  clarity: low
+
+- question_key: soundproofing
+  answer_text: "Адлер, восточная сторона, Studio Street: акустический триплекс и герметичный притвор. Специальная шумоизоляция окон предусмотрена именно в этой категории. Остальные категории этим ответом не подтверждаем."
+  expected:
+    facade: E
+    soundproof: true
+    window_type: "Акустический триплекс с герметичным притвором"
+    room_types: ["Studio Street"]
+  clarity: high
+
+- question_key: soundproofing
+  answer_text: "В Хосте у нас на южной стороне только Heritage Room. Там сохранены деревянные рамы с одинарным стеклом; акустической защиты у окон нет. Толстые стены есть, но это к окнам не относится."
+  expected:
+    facade: S
+    soundproof: false
+    window_type: "Деревянные рамы с одинарным стеклом"
+    room_types: ["Heritage Room"]
+  clarity: high
+
+- question_key: soundproofing
+  answer_text: "В центре ночью кто-то слышит улицу, кто-то вообще ничего, это как повезёт. Паспортов на окна у меня нет, про специальную защиту ничего не знаю. Какая сторона и категория у вас будет, тоже пока не определено."
+  expected:
+    facade: null
+    soundproof: null
+    window_type: null
+    room_types: []
+  clarity: low
+
+- question_key: soundproofing
+  answer_text: "да в Сириусе на запад в категории Arena Twin шумозащитные нет извините читаю соседнюю строку там обычный однокамерный стеклопакет без специальной шумоизоляции именно Arena Twin западная сторона"
+  expected:
+    facade: W
+    soundproof: false
+    window_type: "Обычный однокамерный стеклопакет без специальной шумоизоляции"
+    room_types: ["Arena Twin"]
+  clarity: medium
+
+- question_key: blackout
+  answer_text: "В нашем отеле на Поляне только штора для декора и тюль, так во всех категориях. Плотных светонепроницаемых штор нет ни в одном номере. На окнах жалюзи тоже не установлены."
+  expected:
+    blackout: false
+    room_types: all
+  clarity: high
+
+- question_key: blackout
+  answer_text: "Хоста: Sleep Studio и Garden King — рулонные шторы blackout, полностью перекрывают свет. В этих двух категориях установлены во всех номерах. Соседний корпус к ответу не относится."
+  expected:
+    blackout: true
+    room_types: ["Sleep Studio", "Garden King"]
+  clarity: high
+
+- question_key: blackout
+  answer_text: "По номеру City Single в центре Сочи сначала отправили вам старый ответ про блэкаут. Исправляем: после замены текстиля в City Single осталась только лёгкая полупрозрачная штора, плотной шторы сейчас нет."
+  expected:
+    blackout: false
+    room_types: ["City Single"]
+  clarity: medium
+
+- question_key: blackout
+  answer_text: "сейчас в Адлере с этим не скажу у нас часть штор сняли в химчистку что повесили взамен не видела насколько темно будет не знаю категорию надо у горничной узнать"
+  expected:
+    blackout: null
+    room_types: []
+  clarity: low
+
+- question_key: step_free
+  answer_text: "Сириус, одноэтажные бунгало. Лифтов нет и не предусмотрено. От тротуара до двери каждого номера ровный проход без ступеней и порогов, все комнаты на уровне входа."
+  expected:
+    elevator: false
+    step_free_entrance: true
+    notes: "Одноэтажные бунгало; лифта нет; от тротуара до всех номеров проход без ступеней и порогов"
+  clarity: high
+
+- question_key: step_free
+  answer_text: "В Хосте парадная лестница крутая, но гостям не обязательно по ней подниматься. Слева постоянно открыт вход вровень с тротуаром, дальше ровный коридор к номерам первого этажа. Лифта в здании нет."
+  expected:
+    elevator: false
+    step_free_entrance: true
+    notes: "Безбарьерный боковой вход и ровный проход доступны постоянно только к номерам первого этажа; лифта нет"
+  clarity: high
+
+- question_key: step_free
+  answer_text: "Красная Поляна, корпус Б: лифт работает, но попасть в здание можно только по наружной лестнице из девяти ступеней. Ни бокового входа, ни пандуса, ни подъёмной платформы нет. Сотрудник может помочь с багажом."
+  expected:
+    elevator: true
+    step_free_entrance: false
+    notes: "Корпус Б: единственный вход по 9 ступеням, альтернативного пути нет; работающий лифт внутри не устраняет лестницу"
+  clarity: high
+
+- question_key: step_free
+  answer_text: "В Адлере вход прямо с тротуара без перепада и порогов. Дальше пока не подскажу: про наличие лифта в этом корпусе информации у меня нет, расположение вашего номера ещё уточняем."
+  expected:
+    elevator: null
+    step_free_entrance: true
+    notes: "Подтверждён только вход без препятствий; лифт и доступность пути до выбранного номера неизвестны"
+  clarity: medium
+
+- question_key: step_free
+  answer_text: "В центре Сочи с доступом как-то решаем, вроде кого-то раньше закатывали. Точно как — по лестнице помогали или через служебную дверь — не помню. Про работающий лифт ничего обещать не могу."
+  expected:
+    elevator: null
+    step_free_entrance: null
+    notes: "Способ прохода и работоспособность лифта не подтверждены; требуется повторный вопрос о конкретном маршруте до номера"
+  clarity: low
+
+- question_key: remote_work
+  answer_text: "В Сириусе для Terrace Office есть письменный стол и рабочее кресло. Замер Wi-Fi внутри такого номера: скачивание 45 Мбит/с, отдача 18 Мбит/с. Результаты в холле выше, но мы приводим именно номер."
+  expected:
+    desk: true
+    wifi_mbps: 45
+    room_types: ["Terrace Office"]
+  clarity: high
+
+- question_key: remote_work
+  answer_text: "Хоста, Capsule Solo. Письменного стола нет, только полка под телефон. Внутри номера Wi-Fi по последнему замеру девяносто мегабит в секунду на скачивание."
+  expected:
+    desk: false
+    wifi_mbps: 90
+    room_types: ["Capsule Solo"]
+  clarity: high
+
+- question_key: remote_work
+  answer_text: "в Поляне Attic Studio со столом да письменный отдельный есть а вайфая в номере нет совсем только мобильная сеть если ваш оператор ловит у нас повторяю именно вайфай отсутствует"
+  expected:
+    desk: true
+    wifi_mbps: null
+    room_types: ["Attic Studio"]
+  clarity: high
+
+- question_key: remote_work
+  answer_text: "В Адлере для Harbour Studio в рекламном буклете стоит 300 Мбит/с. Это тариф провайдера на всё здание. В самом номере вчера измерили 32 Мбит/с на скачивание по Wi-Fi. Отдельного рабочего стола в этой категории нет."
+  expected:
+    desk: false
+    wifi_mbps: 32
+    room_types: ["Harbour Studio"]
+  clarity: medium
+
+- question_key: remote_work
+  answer_text: "Ну в центре у нас люди как-то работают, кто с ноутом в коридоре, кто в комнате. Где именно сейчас стоят столы, после перестановки не помню. Интернет вроде тянет, цифры не мерили и категории не сверяли."
+  expected:
+    desk: null
+    wifi_mbps: null
+    room_types: []
+  clarity: low

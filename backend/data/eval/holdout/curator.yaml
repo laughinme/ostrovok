@@ -1,0 +1,192 @@
+- description: "В Имеретинке нужен круглосуточный продуктовый магазин не дальше 350 метров по прямой от гостиницы"
+  expected_method: poi_nearby
+  expected_params:
+    poi:
+      shop: convenience
+    within:
+      meters: 350
+    open: "24_7"
+    min_count: 1
+  notes:
+    code: convenience_24h_350m
+    caveat: "Использовать shop=convenience и opening_hours=24/7. Неизвестный график не подтверждает круглосуточную работу; радиус не равен длине пешеходного маршрута. Имеретинка — Сириус/Имеретинская низменность."
+
+- description: "Для дождливых дней в центре Сочи хотим хотя бы два музея в радиусе двух с половиной километров"
+  expected_method: poi_nearby
+  expected_params:
+    poi:
+      tourism: museum
+    within:
+      meters: 2500
+    open: any
+    min_count: 2
+  notes:
+    code: museums_2500m
+    caveat: "tourism=museum — существующий тег OSM. Дедуплицировать узел и контур одного музея. Карта не гарантирует открытие в дождь, наличие билетов или работу музея на даты поездки."
+
+- description: "В Адлере ищем японский ресторан максимум в двенадцати минутах ходьбы от отеля, время работы сейчас не важно"
+  expected_method: poi_nearby
+  expected_params:
+    poi:
+      amenity: restaurant
+      cuisine: japanese
+    within:
+      walk_minutes: 12
+    open: any
+    min_count: 1
+  notes:
+    code: japanese_restaurant_walk12
+    caveat: "amenity=restaurant и cuisine=japanese должны относиться к одному объекту и применяться совместно. Учитывать cuisine с несколькими значениями; название с иероглифами не заменяет тег кухни."
+
+- description: "В Хосте от гостиницы до железнодорожной станции нужно доехать на инвалидной коляске за восемь минут: без ступеней, суммарный подъём не больше шести метров"
+  expected_method: walk_to
+  expected_params:
+    target: station
+    profile: wheelchair
+    max_minutes: 8
+    max_climb_m: 6
+    no_steps: true
+  notes:
+    code: wheelchair_station_walk8
+    caveat: "Оценивать маршрут к доступному входу на станцию, а не к центру её полигона. Пробелы в данных о бордюрах, ширине и покрытии оставляют неопределённость; маршрут не подтверждает доступ к платформам."
+
+- description: "Для гостиницы в Красной Поляне проверить, будут ли горы занимать хотя бы десятую часть поля зрения из окон выбранного фасада и этажа"
+  expected_method: view
+  expected_params:
+    target: mountains
+    min_share: 0.1
+  notes:
+    code: mountains_share_tenth
+    caveat: "Порог 0.1 явно задан в описании. Геомодель требует привязки к фасаду и этажу; без данных о конкретном окне не гарантирует картинку из выбранного номера. Не подменять горы любым повышением рельефа."
+
+- description: "В центре Сочи проверить видимость самого восходящего солнца из окна на даты февральской поездки, море под солнцем необязательно"
+  expected_method: sun_event
+  expected_params:
+    event: sunrise
+    over: any
+  notes:
+    code: february_sunrise_any_horizon
+    caveat: "Нужны даты, фасад, этаж и геометрия горизонта. Оценка положения солнца не гарантирует ясную погоду; просто светлая комната не доказывает видимость солнечного диска."
+
+- description: "В Адлере отдельно оценить дневной шум железной дороги у фасада; тихим считать уровень ниже 48 дБ, автодороги в этот расчёт не включать"
+  expected_method: noise
+  expected_params:
+    period: day
+    sources: [railway]
+    quiet_below_db: 48
+  notes:
+    code: daytime_railway_below48
+    caveat: "Только модельный вклад железной дороги. Указанный порог не является измерением или санитарным нормативом. Низкий вклад железной дороги не означает общей тишины и не учитывает шумоизоляцию окон."
+
+- description: "В Хосте проверить, занимает ли зелень хотя бы 40 процентов территории в пределах 600 метров от гостиницы"
+  expected_method: area_stat
+  expected_params:
+    metric: green_share
+    radius_m: 600
+    threshold: 0.4
+  notes:
+    code: greenery_share_600m
+    caveat: "Использовать долю площади картографированных зелёных территорий, а не число POI. Граница анализа и порог заданы явно; участки с доступом private могут входить в зелёную площадь, но не являются местами для прогулки."
+
+- description: "В отеле в Сириусе нужен безглютеновый завтрак с отдельной подготовкой еды, чтобы не было контакта с обычной мукой"
+  expected_method: ask_hotelier
+  expected_params:
+    question: "Готовите ли безглютеновый завтрак с отдельными поверхностями и инвентарём для предотвращения контакта с мукой? Нужно ли заказать заранее?"
+    value_schema:
+      type: object
+      properties:
+        gluten_free_breakfast:
+          type: [boolean, "null"]
+        separate_preparation:
+          type: [boolean, "null"]
+        advance_order_required:
+          type: [boolean, "null"]
+  notes:
+    code: gluten_free_separate_breakfast
+    caveat: "Наличие ресторана и теги cuisine или diet в OSM не подтверждают процессы гостиничной кухни. Ответ отельера фиксирует заявленную практику, но не служит независимой гарантией отсутствия следов глютена."
+
+- description: "В центре Сочи необходимо гарантированно получить номер в семь утра 16 ноября 2026 года, а не ждать освобождения к обеду"
+  expected_method: ask_hotelier
+  expected_params:
+    question: "Можно ли гарантированно заселиться 16.11.2026 в 07:00? Нужно ли оплатить предыдущую ночь, сколько составит доплата и как подтвердить ранний заезд?"
+    value_schema:
+      type: object
+      properties:
+        guaranteed:
+          type: [boolean, "null"]
+        previous_night_required:
+          type: [boolean, "null"]
+        extra_fee_rub:
+          type: [number, "null"]
+        confirmation_required:
+          type: [boolean, "null"]
+  notes:
+    code: guaranteed_checkin_0700
+    caveat: "Круглосуточная стойка и общее время заселения не подтверждают свободный номер в 07:00. Нужен ответ по дате и брони; обещание при наличии мест не равно гарантии."
+
+- description: "После выселения в Хосте хотим оставить чемоданы в запираемой камере отеля до 22 часов того же дня и узнать стоимость"
+  expected_method: ask_hotelier
+  expected_params:
+    question: "Есть ли запираемая камера хранения, доступная после выселения до 22:00 того же дня? Сколько стоит хранение и кто имеет доступ к багажу?"
+    value_schema:
+      type: object
+      properties:
+        storage_available:
+          type: [boolean, "null"]
+        locked:
+          type: [boolean, "null"]
+        available_until_2200:
+          type: [boolean, "null"]
+        fee_rub:
+          type: [number, "null"]
+        access_rules:
+          type: [string, "null"]
+  notes:
+    code: locked_luggage_after_checkout
+    caveat: "Место за стойкой без запирания не подтверждает камеру хранения. Часы работы гостиницы не означают возможность получить багаж в нужное время."
+
+- description: "В гостинице на Поляне нужны противомоскитные сетки на всех открывающихся окнах номера; хочется заранее узнать подходящие категории"
+  expected_method: ask_hotelier
+  expected_params:
+    question: "В каких категориях на всех открывающихся окнах номера установлены исправные противомоскитные сетки? Есть ли окна без сеток?"
+    value_schema:
+      type: object
+      properties:
+        all_openable_windows_screened:
+          type: [boolean, "null"]
+        room_types:
+          type: array
+          items:
+            type: string
+        exceptions:
+          type: [string, "null"]
+  notes:
+    code: mosquito_screens_all_windows
+    caveat: "Свойство оборудования конкретной категории, недоступное из геометрии здания или его адреса. Одной сетки на одном окне недостаточно; наличие сеток не гарантирует отсутствие насекомых."
+
+- description: "Для выбранного номера одновременно нужны кондиционер и возможность пользоваться лифтом до его этажа; оба признака уже есть в реестре"
+  expected_method: derived
+  expected_params:
+    expr:
+      all:
+        - ac
+        - elevator
+  notes:
+    code: ac_and_elevator
+    caveat: "Использовать существующие ac и elevator совместно, не задавать новый вопрос об их конъюнкции. Области фактов должны охватывать выбранные корпус, номер и этаж; неизвестность любого условия сохранять."
+
+- description: "В Имеретинке нужен интерьер, который обязательно произведёт впечатление дорогого отдыха на всех моих подписчиков"
+  expected_method: cannot_check
+  expected_params:
+    reason: "Впечатление дороговизны и реакция подписчиков субъективны; доступные методы не могут гарантировать одинаковую оценку разными людьми."
+  notes:
+    code: followers_luxury_impression
+    caveat: "Цена, звёздность и морской вид не являются доказательством будущей реакции аудитории. Можно уточнить конкретные требования к интерьеру, но их здесь нет."
+
+- description: "За неделю в Красной Поляне хочу обязательно вернуть вдохновение и придумать сюжет новой книги благодаря отелю"
+  expected_method: cannot_check
+  expected_params:
+    reason: "Будущее творческое состояние гостя и появление сюжета нельзя объективно вычислить по карте или подтвердить ответом отельера."
+  notes:
+    code: creative_inspiration_guaranteed
+    caveat: "Не подменять обещание вдохновения видом на горы, тишиной или количеством зелени: эти условия в описании отдельно не запрошены и не гарантируют творческий результат."
