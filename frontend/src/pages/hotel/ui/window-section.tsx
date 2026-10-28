@@ -241,8 +241,8 @@ export function WindowSection({ hotel, detail }: { hotel: Hotel; detail: HotelDe
               <span>{facade ? names[facade] : "Сторона не указана"}</span>
               <span>{floor} этаж</span>
             </div>
-            <div className="window-frame">
-              <div className="window-scene" key={`${facade}-${floor}-${date}`}>
+            <div className={`window-frame${demo ? " window-frame-demo" : ""}`}>
+              <div className="window-scene" key={`${facade}-${demo ? "demo" : floor}-${date}`}>
                 {demo ? (
                   <DemoWindowScene
                     facade={demoFacade}
