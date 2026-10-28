@@ -12,6 +12,25 @@
 
 ---
 
+### 28.10 03:08 МСК · codex-ground2 · B2.13-geo, REST
+- Сделано: GET /api/v1/hotels/{UUID}/noise, /routes/{target:path}, /climate?from=&to=;
+  camelCase-схемы `api.schemas.ground`, сервис GroundQueries(db,env), ленивое создание окружения
+  в sync-зависимости ground_queries (граф загружается в пуле потоков под Lock один раз).
+- **Публичный контракт:** noise → hotelId,facades[{facade,day,night}], у каждого периода indexDb
+  (условный индекс либо null),category,confidence,sources[{osmRef,kind,indexDb,distanceM,screened,
+  orientationLossDb}], completeness,unmodelledRefs,caveats,attribution.
+  routes принимает beach/center/station/osm:way/ID (node/relation тоже), profile=walk|stroller|wheelchair;
+  → targetRef,targetName,profile,there/back {minutes,lengthM,climbM,descentM,steps,crossings},
+  geometry GeoJSON LineString WGS84 туда, elevationProfile [(метры пути,метры высоты|null)],
+  estimated,uncertainShare,osmRefs,caveats,attribution. Нет пути — 404, неверные аргументы — 422.
+  climate → checkIn/checkOut,days,station,period,values/coverage/confidence с airMaxC/airMinC/waterC/
+  sunHours/rainDays/daylightH,monthDays,caveats,attribution. To исключён; неверный диапазон — 400.
+- Проверки: полный make check — 270 passed, ruff/format/mypy/7 контрактов зелёные.
+  Через реальный ASGI + локальный PostGIS: Морская звезда way/53549358 → пляж way/70118501,
+  1499 м, 17,6/18,7 мин; шум 4 фасада; климат 5 дней. Marriott way/227214566: море/пляж не выдуман,
+  маршрут 404, вода null, шум и климат 200. Жемчужина B1.0 не входит в каталог — корректный hotel 404.
+- Дальше: B5.6, «Ваш день» на трёх отелях, карты и профили для визуальной проверки.
+
 ### 28.10 03:06 МСК · codex-osm · B1.5
 - Сделано: реальный `walk_graph.npz`, 150 612 узлов, 322 182 направленных ребра, 4,85 МБ.
   Несокращённые сегменты OSM в 2 км от отелей, высоты NpyTerrain из DEM B1.3; foot/access,
