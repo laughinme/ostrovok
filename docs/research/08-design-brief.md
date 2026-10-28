@@ -622,10 +622,14 @@ interface DayPlan {
 
 interface QualityReport {
   generatedAt: string
-  perCharacteristic: { key: string; n: number; accuracy: number; ece: number; coverage: number }[]
-  hotelierShare: number         // доля фактов, для которых понадобился отель
-  parseAccuracy: { rules: number; llm?: number }
-  ndcg10: number
+  perCharacteristic: { key: string; n: number; accuracy: number | null; ece: number | null; coverage: number | null }[]
+  hotelierShare: number | null  // доля фактов, для которых понадобился отель; null при пустой БД
+  parseAccuracy: { rules: number | null; llm?: number }
+  ndcg10: number | null         // null, если нет запросов с положительной релевантностью
+  gold: { status: string; labels: number; matched: number; unmatched: number }
+  // Расширения OpenAPI: perCharacteristic[].reliability (10 бинов), currentCoverage,
+  // confidentCoverage, factCount; intents, hotelierAnswers, curator, search, knowledge, llmStatus.
+  // Без независимой разметки n=0, accuracy/ece=null: это не нулевая точность и не идеальная калибровка.
 }
 
 // ── События SSE ─────────────────────────────────────────────────────────

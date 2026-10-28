@@ -12,6 +12,50 @@
 
 ---
 
+### 28.10 09:27 МСК · codex-quality · B5.7
+- Сделано: `make eval` / `python -m app.cli eval`, JSON в существующую `quality_reports`,
+  `GET /api/v1/console/quality` (CONSOLE_READ, 404 до первого отчёта). Без миграций/новых библиотек.
+  Коммиты: `0b119dd`, `7082a8e`, `ef21be1`, `27c8c7d`.
+- **Публичный API:** async `service.quality.evaluate.evaluate(db: Database, data_dir: Path,
+  clock: Clock, *, llm: LanguageModel | None = None) -> dict[str, Any]` считает и сохраняет отчёт.
+  `QualityReports(uow).latest() -> dict[str, Any]` / `.save(report, generated_at) -> None` — async.
+  `domain.quality.metrics.ndcg_at_k(ranked: Sequence[str], relevance: Mapping[str,int], k=10)
+  -> float | None`; `calibration(samples: Sequence[tuple[float,bool]], bins=10) -> dict[str,object]`
+  возвращает n, accuracy, ECE и reliability (from,to,n,meanProbability,positiveRate).
+  `key_counts(expected: set[str], predicted: set[str]) -> KeyCounts`, `.scores()` — TP/FP/FN и P/R/F1.
+  Метрики безразмерные, 0…1; n — число сопоставленных независимых меток, покрытие — доля отелей.
+- **Контракт:** camelCase, 08 §9 уточнён (D-43). Без независимой разметки accuracy/ECE=null, n=0,
+  gold.status=«эталон не размечен»; gold.unmatched показывает неприменимые/неоднозначные метки.
+  perCharacteristic: coverage/currentCoverage/confidentCoverage (≥0,85), factCount и 10 бинов
+  диаграммы надёжности. knowledge — распределение уверенности и числа фактов/отелей/демо.
+  parseAccuracy.rules — машинные поля ответов отеля; F1 намерений — intents.rules.micro/perKey.
+- **Результат 28.10 09:27 МСК:** R2 (40): P=0,9259, R=0,8242, F1=0,8721, поездка=0,8958.
+  R3: 72/72 машинных поля, 6/6 расплывчатых ответов с переспросом.
+  R8 (21): метод=0,5714, параметры=0,4545. Поиск nDCG@10=0,91762287 (20/20), 240 оценок,
+  16 запросов различают кандидатов, 4 имеют одинаковые оценки, пул по 12 отелей.
+  Снимок БД: 200 отелей, 19 269 фактов (21 демо); hotelierShare=0,00519; sea_view/mountain_view/night_noise=100%,
+  beach_walk=82%, stroller_to_sea=80,5%; оснащение/правила отеля ещё без фактов.
+- **Честность:** search_queries.yaml — оценки команды по фактам расчёта, автоматически по явной
+  рубрике в одном фасаде/этаже/месяце; без фотографий, не независимый gold. Набор фиксируется
+  отдельно `python -m pipeline.quality_search`; eval его не перезаписывает. gold.yaml пустой,
+  с форматом ручной разметки; ECE не выдуман. Обычный eval не создаёт LLM даже при наличии ключа
+  (есть тест). `--llm` только для намерений, с кэшем и общим Redis-лимитом; откаты исключены из
+  метрик LLM. LLM не вызывался.
+- Отчёт прогона: `6f37a1cf-c578-40f0-b5ca-f612c3ffab4b`, generatedAt=2026-10-28T06:27:33Z.
+  После параллельного пересчёта рассветов и демо-заявлений числа изменились относительно 09:21;
+  поисковые оценки остались фиксированными. Схема API проверена на всех 26 характеристиках/10 бинах.
+- Как проверить: `make eval`; методология/числа в `backend/data/eval/README.md`. Полный **make check:
+  423 passed**, strict mypy, ruff check/format, 7 импорт-контрактов — зелёные в отдельном worktree
+  на HEAD `0b32cd1` + свои изменения, с существующим pipeline group. PostgreSQL `okno_quality_test`,
+  Redis DB 13, caffeinate -i. Интеграционные: запись, последняя версия, 401/403/404/200 и защита
+  обычного CLI от построения платного адаптера.
+- Грабли: общий MCP в app/main.py был в незавершённой правке (mypy/lifespan), поэтому снимок по D-42.
+  Общий router закоммичен как HEAD+свои строки, чужой compare сохранён в рабочем дереве.
+  В первом коммите метрик вместе с tasks.md попала соседняя отметка B6.1 (только статус, без кода);
+  последующие общие файлы коммитились отдельным индексом. В R8 `24_7` взят в кавычки (иначе 247).
+- Дальше: F6 строит диаграмму по reliability; команда размечает gold.yaml по открытым материалам;
+  B3.3 сравнивает модели R2/R3/R8. Недостающие методы Куратора видны в cases отчёта.
+
 ### 28.10 ~10:30 МСК · claude-core · точка A по бэкенду
 - Сделано: полный сбор знаний по 200 отелям (6 процессов, `caffeinate -i`), заявления демо-отельеров (`cli claims`),
   сид `backend/data/seed` (19 МБ; 19 269 фактов, 39 конфликтов, 195 вопросов, 473 трассы). Исправлен рассвет (за горы).
