@@ -156,8 +156,9 @@ export function WindowSection({ hotel, detail }: { hotel: Hotel; detail: HotelDe
                   <p>
                     Иллюстрация собирается из готовых объектов: море, горы, дома и деревья. Они
                     появляются по расчёту видимости или фактам для выбранной стороны и этажа. Форма,
-                    размер и расположение объектов условные: это не фотография из номера.
-                    Заштрихованные участки означают, что данных не хватает.
+                    размер и расположение объектов условные: это не фотография из номера. Схема
+                    показывает тип вида целиком, а не точные угловые сектора. Неполнота исходных
+                    данных отмечается отдельно.
                   </p>
                   <p>
                     {dates.fallback && !selectedDate
@@ -337,8 +338,14 @@ export function WindowSection({ hotel, detail }: { hotel: Hotel; detail: HotelDe
               </ul>
             )}
             <p className="window-scene-label">
-              {demo ? "Демо-сцена" : "Схематичный вид"} · объекты условные, видимость — по данным
+              {demo ? "Демо-сцена" : "Схематичный вид"} · тип вида, без точного расположения
+              объектов
             </p>
+            {known && !updating && scene.unknown.length > 0 && (
+              <p className="window-scene-label">
+                Не все направления изучены · показаны известные типы вида
+              </p>
+            )}
           </div>
           <dl className="window-view-metrics" aria-live="polite" aria-atomic="true">
             {metrics.map(({ label, value, hint, Icon }) => (
