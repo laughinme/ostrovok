@@ -1,4 +1,11 @@
-import { BestOfferRibbon, CRITERIA, StatusPill, type Criterion } from "@/entities/hotel";
+import {
+  BestOfferRibbon,
+  CRITERIA,
+  StatusPill,
+  PhotoCredit,
+  photoInfo,
+  type Criterion,
+} from "@/entities/hotel";
 import { useCompare, useComparison } from "@/features/compare-hotels";
 import { cn } from "@/shared/lib";
 import { MatchRing, RequestState } from "@/shared/ui";
@@ -79,11 +86,16 @@ export function ComparePage() {
               <div className="relative h-40 shrink-0">
                 <img
                   src={h.image}
-                  alt={h.name}
+                  alt={photoInfo(h.image)?.alt ?? h.name}
                   loading="lazy"
                   width={1024}
                   height={768}
                   className="h-full w-full object-cover"
+                />
+                <PhotoCredit
+                  src={h.image}
+                  compact
+                  className="absolute bottom-2 left-2 rounded-md bg-white/95 px-2 py-1 text-[10px] text-night"
                 />
                 {ids.includes(h.id) && (
                   <button
