@@ -36,6 +36,7 @@
   --color-ring-offset-background: var(--background);
   --color-coral: var(--coral);
   --color-sun: var(--sun);
+  --color-award-gold: var(--award-gold);
   --color-sea: var(--sea);
   --color-pin: var(--pin);
   --color-night: var(--night);
@@ -47,6 +48,12 @@
   --color-conf-mid: var(--conf-mid);
   --color-conf-low: var(--conf-low);
   --color-conf-conflict: var(--conf-conflict);
+  --color-status-computed: var(--status-computed);
+  --color-status-computed-foreground: var(--status-computed-foreground);
+  --color-status-assumed: var(--status-assumed);
+  --color-status-assumed-foreground: var(--status-assumed-foreground);
+  --color-status-conflict: var(--status-conflict);
+  --color-status-conflict-foreground: var(--status-conflict-foreground);
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
@@ -85,6 +92,7 @@
   --ring: oklch(0.48 0.22 265);
   --coral: oklch(0.48 0.22 265);
   --sun: oklch(0.9 0.14 135);
+  --award-gold: #f5b000;
   --sea: oklch(0.58 0.17 262);
   --sand: oklch(0.955 0.006 265);
   --tint: oklch(0.955 0.02 262);
@@ -95,6 +103,12 @@
   --conf-mid: oklch(0.62 0.02 265);
   --conf-low: oklch(0.62 0.02 265);
   --conf-conflict: oklch(0.52 0.17 25);
+  --status-computed: oklch(0.945 0.008 245);
+  --status-computed-foreground: oklch(0.43 0.025 245);
+  --status-assumed: oklch(0.95 0.012 80);
+  --status-assumed-foreground: oklch(0.46 0.028 80);
+  --status-conflict: oklch(0.95 0.022 45);
+  --status-conflict-foreground: oklch(0.43 0.065 40);
   --pin: oklch(0.62 0.19 25);
   --gradient-sunset: linear-gradient(120deg, oklch(0.48 0.22 265), oklch(0.56 0.2 258));
   --gradient-beam: linear-gradient(90deg, var(--coral), var(--sun));
