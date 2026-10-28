@@ -5802,15 +5802,28 @@
         "properties": {
           "kind": {
             "type": "string",
-            "title": "Kind"
+            "title": "Kind",
+            "description": "beach | food | grocery | pharmacy | park | playground | station"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title",
+            "description": "What it is, in Russian: «Пляж», «Аптека»"
           },
           "name": {
             "type": "string",
-            "title": "Name"
+            "title": "Name",
+            "description": "The OSM name, or the title when the place has none"
+          },
+          "distanceM": {
+            "type": "integer",
+            "title": "Distancem",
+            "description": "Straight-line distance from the hotel"
           },
           "distanceText": {
             "type": "string",
-            "title": "Distancetext"
+            "title": "Distancetext",
+            "description": "«350 м по прямой», «1,2 км по прямой»"
           },
           "osmRef": {
             "anyOf": [
@@ -5822,13 +5835,31 @@
               }
             ],
             "title": "Osmref"
+          },
+          "location": {
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Location",
+            "description": "lon, lat"
           }
         },
         "type": "object",
         "required": [
           "kind",
+          "title",
           "name",
-          "distanceText"
+          "distanceM",
+          "distanceText",
+          "location"
         ],
         "title": "NearbyOut"
       },

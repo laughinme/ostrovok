@@ -12,11 +12,14 @@ from app.core.errors import ErrorCode, NotFoundError
 from app.db.models import FacadeRoom, RoomType
 from app.db.repositories.catalog import hotel_geo
 from app.db.uow import UnitOfWork
-from app.domain.catalog import DISTRICT_TITLES, HotelGeo
+from app.domain.catalog import DISTRICT_TITLES, NEARBY_KINDS, HotelGeo, Nearby, nearby_places
 from app.domain.knowledge.characteristic import Characteristic, CharacteristicStatus, MethodKind
 from app.domain.knowledge.fact import Fact
 from app.service.knowledge.facts import FactQueries, headline
 from app.service.knowledge.registry import Registry
+
+# Everything but beaches is looked up this close: the card lists walking-distance places.
+_AROUND_M = 1200
 
 
 class HotelNotFoundError(NotFoundError):
@@ -54,6 +57,7 @@ class HotelView:
     rooms: tuple[RoomView, ...]
     facts: tuple[Fact, ...]
     unknowns: tuple[Unknown, ...]
+    nearby: tuple[Nearby, ...] = ()
 
     @property
     def area(self) -> str:
@@ -90,8 +94,9 @@ class HotelQueries:
             raise HotelNotFoundError()
         facts = await FactQueries(self._uow).of_hotel(hotel_id)
         registry = await Registry(self._uow).all()
+        geo = hotel_geo(row)
         return HotelView(
-            geo=hotel_geo(row),
+            geo=geo,
             stars=row.stars,
             address=row.address or "",
             demo=row.demo,
@@ -99,7 +104,16 @@ class HotelQueries:
             rooms=tuple(await self._rooms(hotel_id)),
             facts=tuple(_summary(facts)),
             unknowns=tuple(_unknowns(registry, facts)),
+            nearby=await self._nearby(geo),
         )
+
+    async def _nearby(self, geo: HotelGeo) -> tuple[Nearby, ...]:
+        reach = max(radius for _, _, radius in NEARBY_KINDS)
+        beaches = await self._uow.catalog.features_near(geo.location, reach, kinds=["beach"])
+        around = await self._uow.catalog.features_near(
+            geo.location, _AROUND_M, kinds=["poi", "park", "station"]
+        )
+        return nearby_places(geo.location, [*beaches, *around])
 
     async def _rooms(self, hotel_id: UUID) -> list[RoomView]:
         rooms = (
