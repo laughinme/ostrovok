@@ -111,6 +111,7 @@ class SearchRequest(ApiModel):
     text: str | None = Field(None, max_length=2000)
     chips: list[IntentChipModel] | None = None
     trip: TripModel | None = None
+    use_profile: bool = True
 
 
 class ChipResultOut(ApiModel):

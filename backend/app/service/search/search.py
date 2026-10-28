@@ -1,7 +1,7 @@
 """Search (09 §7): intent → candidates → ranking. Searches are stored as intents and
 re-ranked on every read, so a result reread after live research shows the new facts."""
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import date, timedelta
 from typing import Any
 from uuid import UUID, uuid4
@@ -16,9 +16,10 @@ from app.domain.search.intent import Intent
 from app.domain.search.rank import Filters, Ranking, rank
 from app.domain.search.score import TripWindow
 from app.service.ports import Clock, LanguageModel
-from app.service.search.explain import explain
 from app.service.search.candidates import load_candidates, load_facts
+from app.service.search.explain import explain
 from app.service.search.serialize import intent_from_json, intent_to_json
+from app.service.search.taste import TasteService
 
 
 class SearchNotFoundError(NotFoundError):
@@ -52,11 +53,19 @@ class SearchService:
         self._clock = clock
         self._llm = llm
 
-    async def search(self, intent: Intent, *, user_id: UUID | None = None) -> SearchView:
+    async def search(
+        self, intent: Intent, *, user_id: UUID | None = None, use_profile: bool = True
+    ) -> SearchView:
         search_id = uuid4()
         self._uow.session.add(
-            SearchRow(id=search_id, user_id=user_id, intent=intent_to_json(intent))
+            SearchRow(
+                id=search_id,
+                user_id=user_id,
+                intent=intent_to_json(intent),
+                result={"useProfile": use_profile},
+            )
         )
+        intent = await self._personalize(intent, user_id, use_profile)
         await self._count_demand(intent)
         await self._uow.flush()
         return SearchView(search_id, intent, await explain(await self.rank(intent), self._llm))
@@ -65,7 +74,9 @@ class SearchService:
         row = await self._uow.session.get(SearchRow, search_id)
         if row is None:
             raise SearchNotFoundError()
-        intent = intent_from_json(row.intent)
+        intent = await self._personalize(
+            intent_from_json(row.intent), row.user_id, row.result.get("useProfile", True)
+        )
         return SearchView(search_id, intent, await self.rank(intent))
 
     async def update_intent(self, search_id: UUID, intent: Intent) -> SearchView:
@@ -75,7 +86,14 @@ class SearchService:
         row.intent = intent_to_json(intent)
         row.updated_at = self._clock.now()
         await self._uow.flush()
+        intent = await self._personalize(intent, row.user_id, row.result.get("useProfile", True))
         return SearchView(search_id, intent, await self.rank(intent))
+
+    async def _personalize(self, intent: Intent, user_id: UUID | None, enabled: bool) -> Intent:
+        intent = replace(intent, chips=tuple(c for c in intent.chips if not c.from_profile))
+        if user_id is not None and enabled:
+            return await TasteService(self._uow, self._clock).apply(intent, user_id)
+        return intent
 
     async def rank(self, intent: Intent) -> Ranking:
         hotels = await load_candidates(self._uow, intent.trip.area)

@@ -4,6 +4,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, status
 
 from app.api.deps import ClockDep, IntentParserDep, SearchServiceDep, UowDep, rate_limit
+from app.api.guest_deps import OptionalGuestDep
 from app.api.schemas.agents import RunStarted
 from app.api.schemas.search import (
     IntentModel,
@@ -38,7 +39,11 @@ async def parse_intent(
     summary="Run a search: matches with verdicts, the room to ask for, relaxations",
 )
 async def create_search(
-    payload: SearchRequest, parser: IntentParserDep, svc: SearchServiceDep, clock: ClockDep
+    payload: SearchRequest,
+    parser: IntentParserDep,
+    svc: SearchServiceDep,
+    clock: ClockDep,
+    user: OptionalGuestDep,
 ) -> SearchResultOut:
     intent = Intent(text=payload.text, chips=(), trip=TripDraft(), hints=())
     if payload.text and payload.chips is None:
@@ -47,7 +52,9 @@ async def create_search(
         intent = replace(intent, chips=tuple(c.to_domain() for c in payload.chips))
     if payload.trip is not None:
         intent = replace(intent, trip=payload.trip.to_domain())
-    return SearchResultOut.from_view(await svc.search(intent))
+    return SearchResultOut.from_view(
+        await svc.search(intent, user_id=user.id if user else None, use_profile=payload.use_profile)
+    )
 
 
 @router.get(

@@ -12,6 +12,7 @@ from app.api.v1 import (
     partner,
     runs,
     search,
+    taste,
 )
 
 v1_router = APIRouter(prefix="/v1")
@@ -19,6 +20,7 @@ v1_router.include_router(auth.router)
 v1_router.include_router(me.router)
 v1_router.include_router(partner.router)
 v1_router.include_router(bookings.router)
+v1_router.include_router(taste.router)
 v1_router.include_router(hotels.router)
 v1_router.include_router(ground.router)
 v1_router.include_router(characteristics.router)
