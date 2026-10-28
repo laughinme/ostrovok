@@ -38,6 +38,7 @@ export function ResultsPage({
     canUseProfile,
     useProfile,
     setUseProfile,
+    trip,
   } = useSearchFilters(q, hotelId);
   const live = useLiveResearch(searchResult?.searchId, acceptSearch);
   const [visibleCount, setVisibleCount] = useState(20);
@@ -168,6 +169,14 @@ export function ResultsPage({
           </button>
         </div>
       </div>
+      {trip.month && !trip.from && (
+        <p className="mt-3 text-sm text-muted-foreground">
+          Месяц поездки:{" "}
+          {new Date(2026, trip.month - 1, 1).toLocaleDateString("ru-RU", { month: "long" })}.
+          Уточните даты, когда выберете.
+        </p>
+      )}
+
       {canUseProfile && (
         <label className="mt-4 flex min-h-11 items-center gap-2 text-sm">
           <input
@@ -222,7 +231,8 @@ export function ResultsPage({
         <div className={cn("space-y-4", view === "map" && "hidden lg:block")}>
           {!pending && !error && ranked.length === 0 && hints.length === 0 && (
             <p className="rounded-3xl border p-10 text-center text-muted-foreground">
-              Под эти условия вариантов пока нет. Измените бюджет или уточните пожелания.
+              По этим условиям вариантов пока нет. Попробуйте увеличить бюджет или уточнить
+              пожелания.
             </p>
           )}
           {ranked.slice(0, renderedCount).map((result, index) => (
