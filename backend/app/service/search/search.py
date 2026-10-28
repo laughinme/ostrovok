@@ -15,7 +15,8 @@ from app.db.uow import UnitOfWork
 from app.domain.search.intent import Intent
 from app.domain.search.rank import Filters, Ranking, rank
 from app.domain.search.score import TripWindow
-from app.service.ports import Clock
+from app.service.ports import Clock, LanguageModel
+from app.service.search.explain import explain
 from app.service.search.candidates import load_candidates, load_facts
 from app.service.search.serialize import intent_from_json, intent_to_json
 
@@ -46,9 +47,10 @@ def trip_window(intent: Intent) -> TripWindow:
 
 
 class SearchService:
-    def __init__(self, uow: UnitOfWork, clock: Clock) -> None:
+    def __init__(self, uow: UnitOfWork, clock: Clock, llm: LanguageModel | None = None) -> None:
         self._uow = uow
         self._clock = clock
+        self._llm = llm
 
     async def search(self, intent: Intent, *, user_id: UUID | None = None) -> SearchView:
         search_id = uuid4()
@@ -57,7 +59,7 @@ class SearchService:
         )
         await self._count_demand(intent)
         await self._uow.flush()
-        return SearchView(search_id, intent, await self.rank(intent))
+        return SearchView(search_id, intent, await explain(await self.rank(intent), self._llm))
 
     async def get(self, search_id: UUID) -> SearchView:
         row = await self._uow.session.get(SearchRow, search_id)
