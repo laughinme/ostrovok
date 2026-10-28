@@ -1,4 +1,4 @@
-import { ClientOnly } from "@/shared/ui";
+import { ClientOnly, LoadingSignal } from "@/shared/ui";
 import { lazy, Suspense } from "react";
 import type { CoastMapProps } from "../model/types";
 
@@ -7,12 +7,12 @@ const MapCanvas = lazy(() => import("./map-canvas"));
 export function CoastMap(props: CoastMapProps) {
   return (
     <div
-      className="relative h-full w-full touch-none overflow-hidden rounded-3xl bg-sand select-none"
+      className={`relative h-full w-full overflow-hidden rounded-3xl bg-sand select-none ${props.scrollZoom === false ? "touch-pan-y" : "touch-none"}`}
       role="region"
       aria-label="Карта отелей"
     >
       <ClientOnly>
-        <Suspense fallback={null}>
+        <Suspense fallback={<LoadingSignal />}>
           <MapCanvas {...props} />
         </Suspense>
       </ClientOnly>
