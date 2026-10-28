@@ -5,13 +5,20 @@ import { NoiseScenePlaceholder } from "./noise-scene-placeholder";
 
 const Scene = lazy(() => import("./noise-scene"));
 
-class SceneBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
+class SceneBoundary extends Component<
+  { children: ReactNode; floors: number },
+  { failed: boolean }
+> {
   override state = { failed: false };
   static getDerivedStateFromError() {
     return { failed: true };
   }
   override render() {
-    return this.state.failed ? <NoiseScenePlaceholder /> : this.props.children;
+    return this.state.failed ? (
+      <NoiseScenePlaceholder floors={this.props.floors} />
+    ) : (
+      this.props.children
+    );
   }
 }
 
@@ -24,7 +31,7 @@ export function NoiseSceneView({
   return (
     <div
       className="noise-scene-canvas"
-      aria-label="Объёмная схема отеля. Выберите сторону кнопками рядом или поверните модель."
+      aria-label={`Объёмная схема отеля. Этажей: ${props.floors}. Выберите сторону кнопками рядом или поверните модель.`}
       onPointerDown={(event) => {
         if (!(event.target instanceof HTMLCanvasElement) || event.button !== 0) return;
         drag.current = { x: event.clientX, rotation: props.rotation, pointer: event.pointerId };
@@ -44,14 +51,14 @@ export function NoiseSceneView({
         drag.current = null;
       }}
     >
-      <SceneBoundary>
-        <ClientOnly fallback={<NoiseScenePlaceholder />}>
+      <SceneBoundary floors={props.floors}>
+        <ClientOnly fallback={<NoiseScenePlaceholder floors={props.floors} />}>
           {ready ? (
-            <Suspense fallback={<NoiseScenePlaceholder />}>
+            <Suspense fallback={<NoiseScenePlaceholder floors={props.floors} />}>
               <Scene {...props} />
             </Suspense>
           ) : (
-            <NoiseScenePlaceholder />
+            <NoiseScenePlaceholder floors={props.floors} />
           )}
         </ClientOnly>
       </SceneBoundary>
