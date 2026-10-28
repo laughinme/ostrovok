@@ -62,7 +62,7 @@ class Settings(BaseSettings):
     # LLM: any OpenAI-compatible endpoint; without a key every LLM port falls back to rules
     llm_base_url: str = ""
     llm_api_key: SecretStr = SecretStr("")
-    llm_model: str = ""
+    llm_model: str = "gpt-5.6-luna"
     llm_model_strong: str = ""
     llm_thinking: LlmThinking = "low"
     llm_thinking_strong: LlmThinking = "medium"
