@@ -107,3 +107,7 @@ class WorldChangeStarted(ApiModel):
 class SettingsModel(ApiModel):
     llm_mode: Literal["auto", "off"]
     llm_available: bool = False
+
+
+class DemoResetOut(ApiModel):
+    summary: str

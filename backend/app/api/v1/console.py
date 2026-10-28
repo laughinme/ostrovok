@@ -5,11 +5,12 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, Query, status
 
-from app.api.deps import ClockDep, LlmDep, RunQueriesDep, UowDep, require
+from app.api.deps import ClockDep, LlmDep, RunQueriesDep, SettingsDep, UowDep, require
 from app.api.schemas.agents import AgentRunOut, RunStarted
 from app.api.schemas.console import (
     BuildingRequest,
     ConflictOut,
+    DemoResetOut,
     LearnRequest,
     RegistryLineOut,
     ResolveRequest,
@@ -20,6 +21,7 @@ from app.api.schemas.console import (
 from app.domain.agents import AgentKind
 from app.domain.users import Permission
 from app.service.console.conflicts import ConflictDesk
+from app.service.console.demo import DemoReset
 from app.service.console.publish import start_learning, start_publish
 from app.service.console.registry import RegistryStats
 from app.service.console.settings import AppSettings
@@ -135,3 +137,12 @@ async def get_settings(uow: UowDep, llm: LlmDep) -> SettingsModel:
 async def put_settings(payload: SettingsModel, uow: UowDep, llm: LlmDep) -> SettingsModel:
     await AppSettings(uow).set_llm_mode(payload.llm_mode)
     return SettingsModel(llm_mode=payload.llm_mode, llm_available=llm is not None)
+
+
+@router.post(
+    path="/demo/reset",
+    dependencies=write,
+    summary="Back to the seeded demo: knowledge from the seed, no bookings, questions or changes",
+)
+async def demo_reset(uow: UowDep, settings: SettingsDep) -> DemoResetOut:
+    return DemoResetOut(summary=await DemoReset(uow, settings.data_dir).reset())
