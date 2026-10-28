@@ -96,6 +96,15 @@ export function ResultsPage({
         </form>
       </div>
 
+      <RequestState page={!searchResult} pending={pending} error={error} retry={retry} />
+      {hints.length > 0 && !error && (
+        <div className="mt-6 space-y-2 rounded-2xl border bg-card p-5 text-sm" role="status">
+          {hints.map((hint) => (
+            <p key={hint}>{hint}</p>
+          ))}
+        </div>
+      )}
+
       <div className="mt-6 flex flex-wrap items-center gap-2">
         <CriteriaFilter
           value={criteria}
@@ -162,6 +171,14 @@ export function ResultsPage({
         }}
       />
 
+      {trip.month && !trip.from && (
+        <p className="mt-3 text-sm text-muted-foreground">
+          Месяц поездки:{" "}
+          {new Date(2026, trip.month - 1, 1).toLocaleDateString("ru-RU", { month: "long" })}.
+          Уточните даты, когда выберете.
+        </p>
+      )}
+
       {chips.length > 0 && (
         <section aria-label="Ваши пожелания" className="mt-5 rounded-2xl border bg-card p-4">
           <h2 className="text-base">Что учитываем при подборе</h2>
@@ -217,13 +234,6 @@ export function ResultsPage({
           Учитывать мой профиль вкуса
         </label>
       )}
-      {hints.length > 0 && !error && (
-        <div className="mt-6 space-y-2 rounded-2xl border bg-card p-5 text-sm" role="status">
-          {hints.map((hint) => (
-            <p key={hint}>{hint}</p>
-          ))}
-        </div>
-      )}
       {searchResult?.relaxations.map((relaxation) => (
         <button
           key={relaxation.chipId}
@@ -238,7 +248,6 @@ export function ResultsPage({
         </button>
       ))}
 
-      <RequestState page={!searchResult} pending={pending} error={error} retry={retry} />
       {updating && (
         <p role="status" className="mt-4 text-sm text-muted-foreground">
           Обновляем подбор под новые условия…

@@ -51,8 +51,6 @@ def main() -> None:
         if intent["status"] == 200:
             data = intent["data"]
             trip = dict(data["trip"])
-            if trip.get("budgetPerNight") is None:
-                trip["budgetPerNight"] = 20000
             if args.public:
                 time.sleep(0.5)
             search = post(
