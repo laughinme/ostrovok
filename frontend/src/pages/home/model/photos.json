@@ -1,0 +1,506 @@
+{
+  "ext-1": {
+    "src": "/demo/photos/ext-1.jpg",
+    "title": "File:Grand Hotel Brighton Close-Up of Sea-Facing Balconies.jpg",
+    "author": "KyotoWatanabe",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Grand_Hotel_Brighton_Close-Up_of_Sea-Facing_Balconies.jpg"
+  },
+  "ext-2": {
+    "src": "/demo/photos/ext-2.jpg",
+    "title": "File:Sea View from Balcony - panoramio.jpg",
+    "author": "Phill Walker",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Sea_View_from_Balcony_-_panoramio.jpg"
+  },
+  "ext-3": {
+    "src": "/demo/photos/ext-3.jpg",
+    "title": "File:Сочи, дендрарий - panoramio.jpg",
+    "author": "Сашка Денисов",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "page": "https://commons.wikimedia.org/wiki/File:%D0%A1%D0%BE%D1%87%D0%B8,_%D0%B4%D0%B5%D0%BD%D0%B4%D1%80%D0%B0%D1%80%D0%B8%D0%B9_-_panoramio.jpg"
+  },
+  "ext-4": {
+    "src": "/demo/photos/ext-4.jpg",
+    "title": "File:Khosta1.JPG",
+    "author": "Sergei Kazantsev",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Khosta1.JPG"
+  },
+  "ext-5": {
+    "src": "/demo/photos/ext-5.jpg",
+    "title": "File:Dendrarium Sochi Mauritanian arbour.jpg",
+    "author": "unknown",
+    "license": "Public domain",
+    "licenseUrl": "",
+    "page": "https://commons.wikimedia.org/wiki/File:Dendrarium_Sochi_Mauritanian_arbour.jpg"
+  },
+  "ext-6": {
+    "src": "/demo/photos/ext-6.jpg",
+    "title": "File:Beach in Lazarevskoye, Sochi.jpg",
+    "author": "Bestalex",
+    "license": "CC0",
+    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "page": "https://commons.wikimedia.org/wiki/File:Beach_in_Lazarevskoye,_Sochi.jpg"
+  },
+  "ext-7": {
+    "src": "/demo/photos/ext-7.jpg",
+    "title": "File:Alpine resort Gazprom in Krasnaya Polyana.jpg",
+    "author": "Sergei Kazantsev",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Alpine_resort_Gazprom_in_Krasnaya_Polyana.jpg"
+  },
+  "ext-8": {
+    "src": "/demo/photos/ext-8.jpg",
+    "title": "File:Sochi - panoramio (2).jpg",
+    "author": "Сашка Денисов",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Sochi_-_panoramio_(2).jpg"
+  },
+  "room-1": {
+    "src": "/demo/photos/room-1.jpg",
+    "title": "File:TW 台灣 Taiwan 台北市 Taipei City 中正區 Zhongzheng District 忠孝西路一段 Zhongxiao West Road 1 section 台北凱撒大飯店 Caesar Park Taipei hotel room window curtain n beds night August 2019 SSG 03.jpg",
+    "author": "Fung Hong Yuenai",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:TW_%E5%8F%B0%E7%81%A3_Taiwan_%E5%8F%B0%E5%8C%97%E5%B8%82_Taipei_City_%E4%B8%AD%E6%AD%A3%E5%8D%80_Zhongzheng_District_%E5%BF%A0%E5%AD%9D%E8%A5%BF%E8%B7%AF%E4%B8%80%E6%AE%B5_Zhongxiao_West_Road_1_section_%E5%8F%B0%E5%8C%97%E5%87%B1%E6%92%92%E5%A4%A7%E9%A3%AF%E5%BA%97_Caesar_Park_Taipei_hotel_room_window_curtain_n_beds_night_August_2019_SSG_03.jpg"
+  },
+  "room-2": {
+    "src": "/demo/photos/room-2.jpg",
+    "title": "File:Lobby lounge of Amantaka Suite Amantaka luxury Resort & Hotel Luang Prabang Laos.jpg",
+    "author": "Basile Morin",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Lobby_lounge_of_Amantaka_Suite_Amantaka_luxury_Resort_%26_Hotel_Luang_Prabang_Laos.jpg"
+  },
+  "room-3": {
+    "src": "/demo/photos/room-3.jpg",
+    "title": "File:Kruisherenhotel, hotel room 2.jpg",
+    "author": "Kleon3",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Kruisherenhotel,_hotel_room_2.jpg"
+  },
+  "balcony-1": {
+    "src": "/demo/photos/balcony-1.jpg",
+    "title": "File:Rio-hotel-upstairs-pool 14 14 35 177000.jpeg",
+    "author": "Grandmaster Huon",
+    "license": "CC0",
+    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "page": "https://commons.wikimedia.org/wiki/File:Rio-hotel-upstairs-pool_14_14_35_177000.jpeg"
+  },
+  "balcony-2": {
+    "src": "/demo/photos/balcony-2.jpg",
+    "title": "File:Pineda de Mar - Passeig Maritim - Taurus Park Hotel - View on the beach of the Mediterranean Sea 03.jpg",
+    "author": "Txllxt TxllxT",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Pineda_de_Mar_-_Passeig_Maritim_-_Taurus_Park_Hotel_-_View_on_the_beach_of_the_Mediterranean_Sea_03.jpg"
+  },
+  "balcony-3": {
+    "src": "/demo/photos/balcony-3.jpg",
+    "title": "File:Rio-hotel-upstairs-pool 14 14 20 881000.jpeg",
+    "author": "Grandmaster Huon",
+    "license": "CC0",
+    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "page": "https://commons.wikimedia.org/wiki/File:Rio-hotel-upstairs-pool_14_14_20_881000.jpeg"
+  },
+  "pool-1": {
+    "src": "/demo/photos/pool-1.jpg",
+    "title": "File:Swimming Pool Pantelleria September 2014 (216951789).jpeg",
+    "author": "Dario Dominico",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Swimming_Pool_Pantelleria_September_2014_(216951789).jpeg"
+  },
+  "pool-2": {
+    "src": "/demo/photos/pool-2.jpg",
+    "title": "File:Swimming pool at the Los Arboles boutique resort and hotel in Palm Springs, California LCCN2013631641.tif",
+    "author": "Carol M. Highsmith",
+    "license": "Public domain",
+    "licenseUrl": "",
+    "page": "https://commons.wikimedia.org/wiki/File:Swimming_pool_at_the_Los_Arboles_boutique_resort_and_hotel_in_Palm_Springs,_California_LCCN2013631641.tif"
+  },
+  "lobby-1": {
+    "src": "/demo/photos/lobby-1.jpg",
+    "title": "File:Lobby hall with couches and chandelier at The Fullerton Bay Hotel Singapore.jpg",
+    "author": "Basile Morin",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Lobby_hall_with_couches_and_chandelier_at_The_Fullerton_Bay_Hotel_Singapore.jpg"
+  },
+  "lobby-2": {
+    "src": "/demo/photos/lobby-2.jpg",
+    "title": "File:Interior of the lobby coffee and drinks at The Fullerton Bay Hotel Singapore.jpg",
+    "author": "Basile Morin",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Interior_of_the_lobby_coffee_and_drinks_at_The_Fullerton_Bay_Hotel_Singapore.jpg"
+  },
+  "breakfast-1": {
+    "src": "/demo/photos/breakfast-1.jpg",
+    "title": "File:Breakfast buffet Marriott Hotel Lima 01.jpg",
+    "author": "Kim",
+    "license": "CC BY-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Breakfast_buffet_Marriott_Hotel_Lima_01.jpg"
+  },
+  "beach-1": {
+    "src": "/demo/photos/beach-1.jpg",
+    "title": "File:Chkalovskiy Beach in Adler, Sochi 1.jpg",
+    "author": "Narek75",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Chkalovskiy_Beach_in_Adler,_Sochi_1.jpg"
+  },
+  "beach-2": {
+    "src": "/demo/photos/beach-2.jpg",
+    "title": "File:Chkalovskiy Beach in Adler, Sochi 2.jpg",
+    "author": "Narek75",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Chkalovskiy_Beach_in_Adler,_Sochi_2.jpg"
+  },
+  "beach-3": {
+    "src": "/demo/photos/beach-3.jpg",
+    "title": "File:Вид с пирса на Лазаревский пляж.jpg",
+    "author": "olivka33",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "page": "https://commons.wikimedia.org/wiki/File:%D0%92%D0%B8%D0%B4_%D1%81_%D0%BF%D0%B8%D1%80%D1%81%D0%B0_%D0%BD%D0%B0_%D0%9B%D0%B0%D0%B7%D0%B0%D1%80%D0%B5%D0%B2%D1%81%D0%BA%D0%B8%D0%B9_%D0%BF%D0%BB%D1%8F%D0%B6.jpg"
+  },
+  "beach-4": {
+    "src": "/demo/photos/beach-4.jpg",
+    "title": "File:Chkalovskiy Beach in Adler, Sochi.jpg",
+    "author": "Narek75",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Chkalovskiy_Beach_in_Adler,_Sochi.jpg"
+  },
+  "mountains-1": {
+    "src": "/demo/photos/mountains-1.jpg",
+    "title": "File:Sochi mountain village.jpg",
+    "author": "Mahmoodrezamo",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Sochi_mountain_village.jpg"
+  },
+  "mountains-2": {
+    "src": "/demo/photos/mountains-2.jpg",
+    "title": "File:Krasnaya Polyana Mountains (261532271).jpeg",
+    "author": "Alexxx Malev",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Krasnaya_Polyana_Mountains_(261532271).jpeg"
+  },
+  "mountains-3": {
+    "src": "/demo/photos/mountains-3.jpg",
+    "title": "File:Krasnaya Polyana Mountains (261402723).jpeg",
+    "author": "Alexxx Malev",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Krasnaya_Polyana_Mountains_(261402723).jpeg"
+  },
+  "park-1": {
+    "src": "/demo/photos/park-1.jpg",
+    "title": "File:Dendrarium Sochi main entrance.jpg",
+    "author": "Yufereff",
+    "license": "Public domain",
+    "licenseUrl": "",
+    "page": "https://commons.wikimedia.org/wiki/File:Dendrarium_Sochi_main_entrance.jpg"
+  },
+  "street-1": {
+    "src": "/demo/photos/street-1.jpg",
+    "title": "File:Knyaz Vladimir сruise ship, Sea Port of Sochi.jpg",
+    "author": "Niklitov",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Knyaz_Vladimir_%D1%81ruise_ship,_Sea_Port_of_Sochi.jpg"
+  },
+  "street-2": {
+    "src": "/demo/photos/street-2.jpg",
+    "title": "File:Batumi Sunset On The Black Sea (55651140).jpeg",
+    "author": "Kyle Lamothe",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Batumi_Sunset_On_The_Black_Sea_(55651140).jpeg"
+  },
+  "mood-sea": {
+    "src": "/demo/photos/mood-sea.jpg",
+    "title": "File:Chkalovskiy Beach in Adler, Sochi 3.jpg",
+    "author": "Narek75",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Chkalovskiy_Beach_in_Adler,_Sochi_3.jpg"
+  },
+  "mood-mountains": {
+    "src": "/demo/photos/mood-mountains.jpg",
+    "title": "File:Krasnaya Polyana Mountains (261532271).jpeg",
+    "author": "Alexxx Malev",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Krasnaya_Polyana_Mountains_(261532271).jpeg"
+  },
+  "mood-kids": {
+    "src": "/demo/photos/mood-kids.jpg",
+    "title": "File:Chkalovskiy Beach in Adler, Sochi 1.jpg",
+    "author": "Narek75",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Chkalovskiy_Beach_in_Adler,_Sochi_1.jpg"
+  },
+  "mood-sunset": {
+    "src": "/demo/photos/mood-sunset.jpg",
+    "title": "File:RIAN archive 499451 On a beach in Sochi.jpg",
+    "author": "Mikhail Mordasov / Михаил Мордасов",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "page": "https://commons.wikimedia.org/wiki/File:RIAN_archive_499451_On_a_beach_in_Sochi.jpg"
+  },
+  "lux-bright-room": {
+    "src": "/demo/lux/bright-room.jpg",
+    "title": "bright-room.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-cabin": {
+    "src": "/demo/lux/cabin.jpg",
+    "title": "cabin.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-coast": {
+    "src": "/demo/lux/coast.jpg",
+    "title": "coast.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-day-pool": {
+    "src": "/demo/lux/day-pool.jpg",
+    "title": "day-pool.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-day-resort": {
+    "src": "/demo/lux/day-resort.jpg",
+    "title": "day-resort.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h1": {
+    "src": "/demo/lux/h1.jpg",
+    "title": "h1.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h1a": {
+    "src": "/demo/lux/h1a.jpg",
+    "title": "h1a.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h1b": {
+    "src": "/demo/lux/h1b.jpg",
+    "title": "h1b.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h2": {
+    "src": "/demo/lux/h2.jpg",
+    "title": "h2.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h2a": {
+    "src": "/demo/lux/h2a.jpg",
+    "title": "h2a.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h2b": {
+    "src": "/demo/lux/h2b.jpg",
+    "title": "h2b.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h3": {
+    "src": "/demo/lux/h3.jpg",
+    "title": "h3.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h3a": {
+    "src": "/demo/lux/h3a.jpg",
+    "title": "h3a.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h3b": {
+    "src": "/demo/lux/h3b.jpg",
+    "title": "h3b.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h4": {
+    "src": "/demo/lux/h4.jpg",
+    "title": "h4.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h4a": {
+    "src": "/demo/lux/h4a.jpg",
+    "title": "h4a.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h4b": {
+    "src": "/demo/lux/h4b.jpg",
+    "title": "h4b.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h5": {
+    "src": "/demo/lux/h5.jpg",
+    "title": "h5.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h5a": {
+    "src": "/demo/lux/h5a.jpg",
+    "title": "h5a.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h5b": {
+    "src": "/demo/lux/h5b.jpg",
+    "title": "h5b.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h6": {
+    "src": "/demo/lux/h6.jpg",
+    "title": "h6.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h6a": {
+    "src": "/demo/lux/h6a.jpg",
+    "title": "h6a.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-h6b": {
+    "src": "/demo/lux/h6b.jpg",
+    "title": "h6b.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-hero": {
+    "src": "/demo/lux/hero.jpg",
+    "title": "hero.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-interior": {
+    "src": "/demo/lux/interior.jpg",
+    "title": "interior.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-mountains": {
+    "src": "/demo/lux/mountains.jpg",
+    "title": "mountains.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-room": {
+    "src": "/demo/lux/room.jpg",
+    "title": "room.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-sea": {
+    "src": "/demo/lux/sea.jpg",
+    "title": "sea.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-suite": {
+    "src": "/demo/lux/suite.jpg",
+    "title": "suite.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  },
+  "lux-terrace": {
+    "src": "/demo/lux/terrace.jpg",
+    "title": "terrace.jpg",
+    "author": "Демо-иллюстрация (Unsplash / сгенерировано)",
+    "license": "демо",
+    "licenseUrl": "",
+    "page": ""
+  }
+}
