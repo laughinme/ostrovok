@@ -5,3 +5,4 @@ export { useSearchFilters } from "./model/use-search-filters";
 export { useSearchSession } from "./model/search-session";
 export { CriteriaFilter } from "./ui/criteria-filter";
 export { HotelSearchForm } from "./ui/search-form";
+export { TripPreferences } from "./ui/trip-preferences";

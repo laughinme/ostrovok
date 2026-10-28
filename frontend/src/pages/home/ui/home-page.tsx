@@ -3,7 +3,10 @@ import { rememberFlightDeparture } from "@/features/search-flight";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { buildLandingQuery } from "../model/build-query";
-import { EXAMPLES, MOODS } from "../model/catalog";
+import { EXAMPLES } from "../model/catalog";
+import { useMoods, type Mood } from "../model/use-moods";
+import { useSearchSession } from "@/features/hotel-search";
+import { RequestState } from "@/shared/ui";
 import type { IntentChip } from "../model/types";
 import { Examples, Landing, ProofCard } from "./landing-sections";
 import { LandingShowcase } from "./showcase/landing-showcase";
@@ -28,6 +31,7 @@ function save(key: string, value: string) {
 }
 
 export function HomePage() {
+  const moods = useMoods();
   const navigate = useNavigate();
   const search = useSearch({ strict: false }) as { v?: string; variants?: string };
   const [query, setQuery] = useState("");
@@ -58,7 +62,21 @@ export function HomePage() {
     rememberFlightDeparture(q, document.querySelector<HTMLElement>("[data-flight-scene]"));
     void navigate({ to: "/search", search: { q } });
   };
-  const onMood = (mood: (typeof MOODS)[number]) => go(mood.title, mood.chips);
+  const onMood = (mood: Mood) => {
+    if (mood.apiChips) {
+      useSearchSession.getState().remember(mood.title, {
+        text: mood.title,
+        budget: null,
+        intent: {
+          text: mood.title,
+          chips: mood.apiChips,
+          trip: { month: mood.month ?? null },
+          planner: "rules",
+        },
+      });
+    }
+    go(mood.title, mood.chips);
+  };
   const onExample = (text: string) => go(text);
   const selectVariant = (next: Variant) => {
     setStored(next);
@@ -116,7 +134,7 @@ export function HomePage() {
                 <div className="hero-copy">
                   <span className="kicker">
                     <Icon name="spark" size={15} />
-                    Большой Сочи · 214 отелей посчитано по этажам
+                    Большой Сочи · проверяем условия по этажам
                   </span>
                   <h1>Опишите отдых — покажем, каким будет ваш номер</h1>
                   <p className="lede">
@@ -169,15 +187,21 @@ export function HomePage() {
               <span>
                 <b className="num">6 мин</b> до пляжа, 64 ступени
               </span>
-              <span className="muted-w">посчитано по рельефу и зданиям</span>
+              <span className="muted-w">Демонстрационный пример расчёта</span>
             </div>
           )}
         </section>
+        <RequestState
+          pending={moods.pending}
+          error={moods.error}
+          retry={() => void moods.retry()}
+        />
         {variant === "lime" ? (
-          <LandingShowcase onMood={onMood} />
+          <LandingShowcase onMood={onMood} moods={moods.moods} />
         ) : (
           <Landing
             onMood={onMood}
+            moods={moods.moods}
             showMoods
             variantsOn={enabled}
             onToggleVariants={toggleVariants}

@@ -13,32 +13,46 @@ export function useLiveResearch(
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const run = useAgentRun(runId);
-  const refreshed = useRef<string | null>(null);
+  const generation = useRef(0);
+  const finished = isFinished(run.data);
+  useEffect(
+    () => () => {
+      generation.current += 1;
+    },
+    [],
+  );
 
   useEffect(() => {
-    if (!searchId || !runId || !isFinished(run.data) || refreshed.current === runId) return;
-    refreshed.current = runId;
+    if (!searchId || !runId || !finished) return;
+    const controller = new AbortController();
     const timers = REFRESH_AFTER_MS.map((delay) =>
       setTimeout(() => {
-        readSearch(searchId)
+        readSearch(searchId, controller.signal)
           .then(onSearch)
-          .catch(() => setError("Не удалось обновить выдачу"));
+          .catch(() => {
+            if (!controller.signal.aborted) setError("Не удалось обновить выдачу");
+          });
       }, delay),
     );
-    return () => timers.forEach(clearTimeout);
-  }, [searchId, runId, run.data, onSearch]);
+    return () => {
+      controller.abort();
+      timers.forEach(clearTimeout);
+    };
+  }, [searchId, runId, finished, onSearch]);
 
   async function launch(title: string, start: () => Promise<string | null | undefined>) {
+    const active = ++generation.current;
     setBusy(true);
     setError(null);
     setLabel(title);
     try {
       const id = await start();
+      if (active !== generation.current) return;
       setRunId(id ?? null);
     } catch {
-      setError("Агент не запустился, попробуйте ещё раз");
+      if (active === generation.current) setError("Агент не запустился, попробуйте ещё раз");
     } finally {
-      setBusy(false);
+      if (active === generation.current) setBusy(false);
     }
   }
 
@@ -46,13 +60,14 @@ export function useLiveResearch(
     runId,
     run: run.data,
     label,
-    error,
-    busy,
+    error: error ?? run.error?.message ?? null,
+    busy: busy || (!!runId && !finished && !run.error),
     wish: (text: string) =>
       searchId
         ? launch(`Новое пожелание: «${text}»`, async () => {
+            const active = generation.current;
             const started = await addWish(searchId, text);
-            onSearch(started.search);
+            if (active === generation.current) onSearch(started.search);
             return started.runId;
           })
         : Promise.resolve(),
@@ -64,6 +79,9 @@ export function useLiveResearch(
           )
         : Promise.resolve(),
     reset: () => {
+      generation.current += 1;
+      setBusy(false);
+      setError(null);
       setRunId(null);
       setLabel(null);
       onSearch(null);

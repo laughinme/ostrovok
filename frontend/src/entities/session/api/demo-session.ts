@@ -1,10 +1,16 @@
-import { api, ApiError, type components } from "@/shared/api";
+import { api, ApiError, getApiMode, type components } from "@/shared/api";
+import { sessionApi } from "./session";
 
 type Session = components["schemas"]["TokenPair"];
 const sessions = new Map<string, { token: string; expiresAt: number }>();
 const pending = new Map<string, Promise<string>>();
 
 export function getDemoSession(persona: string): Promise<string> {
+  if (getApiMode() !== "demo") {
+    return Promise.reject(
+      new ApiError(400, "Локальная демо-сессия доступна только в режиме «Демо»."),
+    );
+  }
   const current = sessions.get(persona);
   if (current && current.expiresAt > Date.now() + 30000) return Promise.resolve(current.token);
   const existing = pending.get(persona);
@@ -28,6 +34,9 @@ export async function demoApi<T>(
   method = "GET",
   body?: unknown,
 ): Promise<T> {
+  if (getApiMode() !== "demo") {
+    return sessionApi<T>(path, { method, ...(body !== undefined ? { body } : {}) });
+  }
   const token = await getDemoSession(persona);
   try {
     return await api<T>(path, { method, token, ...(body !== undefined ? { body } : {}) });

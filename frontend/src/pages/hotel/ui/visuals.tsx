@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { Facade } from "../model/types";
 import { drawBuilding, type SideStyle } from "../lib/building";
 import { Panorama as DemoPanorama } from "@/shared/ui";
+import { getApiMode } from "@/shared/api";
 
 export function Panorama(props: {
   facade: Facade;
@@ -56,8 +57,12 @@ export function Photo({
   const [failed, setFailed] = useState(false);
   if (!k || failed)
     return (
-      <div className={`ph ph-fallback ${className}`}>
-        <Panorama facade={facade} floor={floor} labels={false} />
+      <div className={`ph ph-fallback ${className}`} role="img" aria-label={alt}>
+        {getApiMode() === "demo" ? (
+          <Panorama facade={facade} floor={floor} labels={false} />
+        ) : (
+          <span>Фото пока нет</span>
+        )}
       </div>
     );
   return (

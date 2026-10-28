@@ -24,12 +24,20 @@ export const FACADE_ANGLE: Record<GeoFacade, number> = {
   W: 270,
   NW: 315,
 };
-export function tripDates(trip?: components["schemas"]["TripModel"]) {
+export function tripDates(trip?: components["schemas"]["TripModel"], now = new Date()) {
+  const today = new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Moscow" }).format(now);
+  const year = Number(today.slice(0, 4));
+  const currentMonth = Number(today.slice(5, 7));
+  const month = trip?.month;
+  const example =
+    month && month >= 1 && month <= 12
+      ? month === currentMonth
+        ? today
+        : `${year + (month < currentMonth ? 1 : 0)}-${String(month).padStart(2, "0")}-15`
+      : new Date(Date.parse(today) + 7 * 86400000).toISOString().slice(0, 10);
   const from =
     trip?.from ??
-    (trip?.to
-      ? new Date(Date.parse(trip.to) - 5 * 86400000).toISOString().slice(0, 10)
-      : "2026-11-15");
+    (trip?.to ? new Date(Date.parse(trip.to) - 5 * 86400000).toISOString().slice(0, 10) : example);
   const to = trip?.to ?? new Date(Date.parse(from) + 5 * 86400000).toISOString().slice(0, 10);
   return { from, to, date: from, fallback: !trip?.from && !trip?.to };
 }

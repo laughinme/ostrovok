@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { MOODS } from "../model/catalog";
+import type { Mood } from "../model/use-moods";
 import { LandingFooter } from "./landing-chrome";
 import { Icon, Photo, Mark, SrcTag } from "./landing-ui";
 
@@ -33,7 +33,7 @@ function ProofCard() {
       <Photo k="lux-h1a" alt="Номер с видом на закат над морем" credit={false} />
       <span className="pp-tag">
         <Icon name="pin" size={14} />
-        Закатный берег · номер 512 · ЮЗ, 5 этаж
+        Демо-сцена · номер 512 · ЮЗ, 5 этаж
       </span>
       <motion.div
         className="pp-card"
@@ -63,15 +63,15 @@ function ProofCard() {
           Найти отель с доказательствами →
         </Link>
       </motion.div>
-      <figcaption>Фото для настроения</figcaption>
+      <figcaption>Демонстрационный пример, фото для настроения</figcaption>
     </motion.figure>
   );
 }
 
-function MoodStrip({ onMood }: { onMood(m: (typeof MOODS)[number]): void }) {
+function MoodStrip({ onMood, moods }: { onMood(m: Mood): void; moods: Mood[] }) {
   return (
     <div className="mood-strip">
-      {MOODS.map((m) => (
+      {moods.map((m) => (
         <button key={m.id} type="button" className="mood" onClick={() => onMood(m)}>
           <Photo k={m.photo} alt="" credit={false} />
           <span className="mood-t">
@@ -89,11 +89,13 @@ function MoodStrip({ onMood }: { onMood(m: (typeof MOODS)[number]): void }) {
 
 function Landing({
   onMood,
+  moods,
   showMoods,
   variantsOn,
   onToggleVariants,
 }: {
-  onMood(m: (typeof MOODS)[number]): void;
+  onMood(m: Mood): void;
+  moods: Mood[];
   showMoods: boolean;
   variantsOn: boolean;
   onToggleVariants(): void;
@@ -107,7 +109,7 @@ function Landing({
             <p>Подборки собраны из наших расчётов, а не из рекламы</p>
           </div>
           <div className="moods">
-            {MOODS.map((m) => (
+            {moods.map((m) => (
               <button key={m.id} type="button" className="mood" onClick={() => onMood(m)}>
                 <Photo k={m.photo} alt="" credit={false} />
                 <span className="mood-t">
@@ -214,17 +216,16 @@ function Landing({
 
       <section className="sec-l tiles4">
         <div className="tile-a">
-          <b className="num">214</b>
+          <b className="num">Сочи</b>
           <span>
-            отелей Большого Сочи
-            <br />
-            посчитано по этажам
+            Отели Большого Сочи
+            <br />с данными по этажам
           </span>
         </div>
         <div className="tile-a">
-          <b className="num">38</b>
+          <b className="num">Факты</b>
           <span>
-            характеристик сверх
+            характеристики сверх
             <br />
             карточки отеля
           </span>
@@ -239,15 +240,10 @@ function Landing({
             Открыть кабинет <Icon name="arrow" size={16} />
           </span>
         </Link>
-        <a
-          className="tile-c"
-          href="https://github.com/laughinme/ostrovok/blob/main/frontend/ARCHITECTURE.md"
-          target="_blank"
-          rel="noreferrer"
-        >
+        <a className="tile-c" href="/developers" target="_blank" rel="noreferrer">
           <h3>Разработчикам и AI-агентам</h3>
           <p>Те же факты с доказательствами через API и MCP.</p>
-          <code>{"GET /api/v1/hotels/{hotelId}/facts"}</code>
+          <code>{"GET /api/v1/hotels/{hotelId}"}</code>
           <span className="goto">
             Документация <Icon name="arrow" size={16} />
           </span>

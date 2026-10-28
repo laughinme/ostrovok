@@ -1,4 +1,5 @@
 import { TripPage } from "@/pages/trip";
+import { SessionGate } from "@/features/authenticate";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/trips_/$id")({
@@ -11,5 +12,9 @@ export const Route = createFileRoute("/trips_/$id")({
 
 function BookingTripPage() {
   const { id } = Route.useParams();
-  return <TripPage initialBookingId={id} />;
+  return (
+    <SessionGate role="guest">
+      <TripPage initialBookingId={id} />
+    </SessionGate>
+  );
 }

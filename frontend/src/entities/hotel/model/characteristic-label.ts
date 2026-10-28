@@ -12,6 +12,12 @@ const labels: Record<string, string> = {
   beach_access: "Доступ к пляжу",
   sea_share: "Вид на море",
   wifi: "Интернет",
+  aircraft_noise: "Шум самолётов",
+  day_noise: "Тишина днём",
+  blackout_curtains: "Плотные шторы",
+  stroller_to_sea: "К морю с коляской",
+  steep_streets: "Подъёмы и крутые улицы",
+  sunrise: "Рассвет из окна",
 };
 
 export function characteristicLabel(key: string) {

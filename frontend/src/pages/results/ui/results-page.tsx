@@ -1,6 +1,6 @@
 import { useCompare } from "@/features/compare-hotels";
-import { CriteriaFilter, useSearchFilters } from "@/features/hotel-search";
-import { ResearchOffers, useLiveResearch, type SearchResult } from "@/features/live-research";
+import { CriteriaFilter, TripPreferences, useSearchFilters } from "@/features/hotel-search";
+import { ResearchOffers, useLiveResearch } from "@/features/live-research";
 import { cn } from "@/shared/lib";
 import { RequestState } from "@/shared/ui";
 import { CoastMap } from "@/widgets/hotel-map";
@@ -9,14 +9,13 @@ import { HotelResultCard } from "@/widgets/hotel-result-card";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { List, Map as MapIcon, Scale, Search, Sparkles } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 export function ResultsPage({
   query: q = "Тихий отель у моря с хорошей инфраструктурой",
 }: {
   query?: string | undefined;
 }) {
   const navigate = useNavigate();
-  const [liveSearch, setLiveSearch] = useState<SearchResult | null>(null);
   const {
     refine,
     setRefine,
@@ -30,11 +29,19 @@ export function ResultsPage({
     error,
     retry,
     search: searchResult,
-  } = useSearchFilters(q, liveSearch);
-  const live = useLiveResearch(
-    searchResult?.searchId,
-    useCallback((next: SearchResult | null) => setLiveSearch(next), []),
-  );
+    chips,
+    changeImportance,
+    removeChip,
+    acceptSearch,
+    updating,
+    canUseProfile,
+    useProfile,
+    setUseProfile,
+    trip,
+    changeTrip,
+  } = useSearchFilters(q);
+  const live = useLiveResearch(searchResult?.searchId, acceptSearch);
+  const [visibleCount, setVisibleCount] = useState(20);
   const [hover, setHover] = useState<string | null>(null);
   const [view, setView] = useState<"list" | "map">("list");
   const ids = useCompare((state) => state.ids);
@@ -56,12 +63,17 @@ export function ResultsPage({
         >
           <Sparkles className="h-4 w-4 text-coral" />
           <input
+            aria-label="Уточнение пожеланий"
             value={refine}
             onChange={(e) => setRefine(e.target.value)}
             placeholder="Уточните: «и чтобы с собакой»"
-            className="flex-1 bg-transparent text-sm outline-none"
+            className="min-w-0 flex-1 bg-transparent text-sm outline-none"
           />
-          <button className="rounded-xl bg-foreground px-3 py-2 text-xs text-background">
+          <button
+            aria-label="Добавить пожелание"
+            disabled={live.busy}
+            className="min-h-11 rounded-xl bg-foreground px-3 py-2 text-xs text-background disabled:opacity-50"
+          >
             <Search className="h-4 w-4" />
           </button>
         </form>
@@ -76,25 +88,47 @@ export function ResultsPage({
           }}
         />
         <label className="ml-auto flex items-center gap-2 text-xs text-muted-foreground">
-          до <span className="font-mono text-foreground">{maxPrice.toLocaleString("ru")} ₽</span>
+          <span className="font-mono text-foreground">
+            {maxPrice ? `до ${maxPrice.toLocaleString("ru")} ₽` : "Без ограничения цены"}
+          </span>
           <input
             type="range"
             min={1000}
-            max={20000}
+            max={50000}
             step={500}
-            value={maxPrice}
-            onChange={(e) => setMaxPrice(+e.target.value)}
+            aria-label="Бюджет за ночь"
+            value={maxPrice ?? 50000}
+            onChange={(e) => {
+              live.reset();
+              setMaxPrice(+e.target.value);
+            }}
             className="accent-coral"
           />
         </label>
+        {maxPrice !== null && (
+          <button
+            type="button"
+            className="min-h-11 px-2 text-xs underline"
+            onClick={() => {
+              live.reset();
+              setMaxPrice(null);
+            }}
+          >
+            Снять ограничение
+          </button>
+        )}
         <div className="flex rounded-full border p-0.5 lg:hidden">
           <button
+            aria-label="Показать список"
+            aria-pressed={view === "list"}
             onClick={() => setView("list")}
             className={cn("rounded-full p-1.5", view === "list" && "bg-muted")}
           >
             <List className="h-4 w-4" />
           </button>
           <button
+            aria-label="Показать карту"
+            aria-pressed={view === "map"}
             onClick={() => setView("map")}
             className={cn("rounded-full p-1.5", view === "map" && "bg-muted")}
           >
@@ -102,8 +136,95 @@ export function ResultsPage({
           </button>
         </div>
       </div>
+      <TripPreferences
+        key={JSON.stringify(trip)}
+        trip={trip}
+        onApply={(next) => {
+          live.reset();
+          changeTrip(next);
+        }}
+      />
+
+      {chips.length > 0 && (
+        <section aria-label="Ваши пожелания" className="mt-5 rounded-2xl border bg-card p-4">
+          <h2 className="text-base">Что учитываем при подборе</h2>
+          <div className="mt-3 flex flex-wrap gap-3">
+            {chips.map((chip) => (
+              <div
+                key={chip.id}
+                className="flex max-w-full flex-wrap items-center gap-2 rounded-xl bg-muted px-3 py-2 text-sm"
+              >
+                <span className="break-words">
+                  {chip.label}
+                  {chip.fromProfile ? " · из профиля" : ""}
+                </span>
+                <select
+                  className="min-h-11 max-w-full bg-transparent text-xs"
+                  aria-label={`Важность: ${chip.label}`}
+                  value={chip.importance}
+                  onChange={(event) => {
+                    live.reset();
+                    changeImportance(chip.id, event.target.value as typeof chip.importance);
+                  }}
+                >
+                  <option value="must">Обязательно</option>
+                  <option value="important">Важно</option>
+                  <option value="nice">Желательно</option>
+                </select>
+                <button
+                  type="button"
+                  className="min-h-11 min-w-11"
+                  aria-label={`Убрать: ${chip.label}`}
+                  onClick={() => {
+                    live.reset();
+                    removeChip(chip.id);
+                  }}
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+      {canUseProfile && (
+        <label className="mt-4 flex min-h-11 items-center gap-2 text-sm">
+          <input
+            type="checkbox"
+            checked={useProfile}
+            onChange={(event) => {
+              live.reset();
+              setUseProfile(event.target.checked);
+            }}
+          />
+          Учитывать мой профиль вкуса
+        </label>
+      )}
+      {searchResult?.intent.hints?.map((hint) => (
+        <p key={hint} className="mt-3 text-sm text-muted-foreground">
+          {hint}
+        </p>
+      ))}
+      {searchResult?.relaxations.map((relaxation) => (
+        <button
+          key={relaxation.chipId}
+          type="button"
+          className="mt-3 min-h-11 rounded-xl border px-4 py-2 text-sm"
+          onClick={() => {
+            live.reset();
+            removeChip(relaxation.chipId);
+          }}
+        >
+          {relaxation.label} · вариантов: {relaxation.wouldMatch}
+        </button>
+      ))}
 
       <RequestState page={!searchResult} pending={pending} error={error} retry={retry} />
+      {updating && (
+        <p role="status" className="mt-4 text-sm text-muted-foreground">
+          Обновляем подбор под новые условия…
+        </p>
+      )}
       {searchResult && !live.label && (
         <ResearchOffers
           search={searchResult}
@@ -113,7 +234,7 @@ export function ResultsPage({
       )}
       {live.label && (
         <div className="mt-6">
-          {live.runId || live.busy ? (
+          {!live.error && (live.runId || live.busy) ? (
             <AgentTrace run={live.run} title={live.label} compact />
           ) : (
             <p className="rounded-2xl border bg-card px-4 py-3 text-sm">
@@ -126,10 +247,10 @@ export function ResultsPage({
         <div className={cn("space-y-4", view === "map" && "hidden lg:block")}>
           {!pending && !error && ranked.length === 0 && (
             <p className="rounded-3xl border p-10 text-center text-muted-foreground">
-              Под такой бюджет вариантов нет — попробуйте увеличить цену.
+              Под эти условия вариантов пока нет. Измените бюджет или важность пожеланий.
             </p>
           )}
-          {ranked.map((result, index) => (
+          {ranked.slice(0, visibleCount).map((result, index) => (
             <HotelResultCard
               key={result.hotel.id}
               result={result}
@@ -140,6 +261,15 @@ export function ResultsPage({
               onHover={setHover}
             />
           ))}
+          {ranked.length > visibleCount && (
+            <button
+              type="button"
+              className="min-h-11 w-full rounded-2xl border px-5 py-3"
+              onClick={() => setVisibleCount((count) => count + 20)}
+            >
+              Показать ещё {Math.min(20, ranked.length - visibleCount)} из {ranked.length}
+            </button>
+          )}
         </div>
         <aside
           className={cn(

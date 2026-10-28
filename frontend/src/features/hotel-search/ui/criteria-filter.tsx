@@ -12,9 +12,11 @@ export function CriteriaFilter({
       {(Object.keys(CRITERIA) as Criterion[]).map((criterion) => (
         <button
           key={criterion}
+          type="button"
+          aria-pressed={value.includes(criterion)}
           onClick={() => onToggle(criterion)}
           className={cn(
-            "rounded-full border px-3 py-1.5 text-xs transition",
+            "min-h-11 rounded-full border px-3 py-1.5 text-xs transition",
             value.includes(criterion)
               ? "border-foreground bg-foreground text-background"
               : "hover:border-foreground",

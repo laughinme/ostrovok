@@ -55,7 +55,7 @@
 .site-header .site-header__nav {
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 12px;
   font-size: 14px;
 }
 .site-header .site-header__nav a {
@@ -171,7 +171,7 @@
     padding-inline: 10px;
   }
 }
-@media (max-width: 720px) {
+@media (max-width: 1180px) {
   :root {
     --site-header-height: 66px;
   }
@@ -246,7 +246,7 @@
 .site-header--blue .site-header__count {
   background: #0b1533;
 }
-@media (max-width: 720px) {
+@media (max-width: 1180px) {
   .site-header__wave {
     height: 18px;
   }

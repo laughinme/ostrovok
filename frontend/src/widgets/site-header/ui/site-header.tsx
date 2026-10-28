@@ -1,16 +1,18 @@
 import { useCompare } from "@/features/compare-hotels";
 import { useSearchSession } from "@/features/hotel-search";
+import { SessionControls } from "@/features/authenticate";
 import { cn } from "@/shared/lib";
 import { getApiMode, setApiMode, type ApiMode } from "@/shared/api";
 import { useQueryClient } from "@tanstack/react-query";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
-import { useId, useRef, useState, type MouseEvent } from "react";
+import { useEffect, useId, useRef, useState, type MouseEvent } from "react";
 import "./site-header.css";
 
 const ITEMS = [
   { to: "/results", label: "Подбор" },
   { to: "/compare", label: "Сравнение" },
+  { to: "/favorites", label: "Избранное" },
   { to: "/trips", label: "Мои поездки" },
   { to: "/console", label: "Консоль" },
   { to: "/developers", label: "API и MCP" },
@@ -45,6 +47,9 @@ export function Header({
   const partner = path.startsWith("/partner");
   const demo = getApiMode() === "demo";
   const client = useQueryClient();
+  useEffect(() => {
+    void useCompare.persist.rehydrate();
+  }, []);
   const closeMenu = () => setMenuOpen(false);
   const selectRole = (event: MouseEvent<HTMLAnchorElement>, mode: ApiMode, destination: string) => {
     closeMenu();
@@ -106,6 +111,7 @@ export function Header({
               </Link>
             );
           })}
+          <SessionControls />
         </nav>
         <div className="site-header__roles" role="group" aria-label="Роль">
           <Link

@@ -181,7 +181,7 @@ export function HotelResultCard({
 
           <div className="hotel-card-footer mt-auto border-t">
             <div className="hotel-card-price">
-              <p className="mb-1 text-[11px] text-muted-foreground">Цена за ночь</p>
+              <p className="mb-1 text-[11px] text-muted-foreground">Демо-цена за ночь</p>
               <Price value={r.hotel.price} suffix="" />
             </div>
             <CardControl

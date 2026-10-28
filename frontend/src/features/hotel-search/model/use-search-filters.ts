@@ -1,55 +1,97 @@
-import { catalogQuery, hotelFromApi, type ApiIntent, type Criterion } from "@/entities/hotel";
+import {
+  catalogQuery,
+  criterionKeys,
+  hotelFromApi,
+  type ApiIntent,
+  type Criterion,
+} from "@/entities/hotel";
+import { sessionApi, useSession } from "@/entities/session";
 import { api, type components } from "@/shared/api";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { useEffect, useMemo, useState } from "react";
-import { parseQuery } from "./matching";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { intentForCriteria } from "./api-search";
 import { useSearchSession } from "./search-session";
-export function useSearchFilters(
-  query: string,
-  live: components["schemas"]["SearchResultOut"] | null = null,
-) {
+
+type SearchResult = components["schemas"]["SearchResultOut"];
+type Importance = components["schemas"]["Importance"];
+
+export function useSearchFilters(query: string) {
   const saved = useSearchSession.getState().filters[query];
+  const account = useSession((state) => state.account);
   const [refine, setRefine] = useState("");
-  const [criteria, setCriteria] = useState<Criterion[]>(() => saved?.criteria ?? parseQuery(query));
+  const [draft, setDraft] = useState<ApiIntent | null>(() => saved?.intent ?? null);
   const [budget, setMaxPrice] = useState<number | null>(() => saved?.budget ?? null);
   const [text, setText] = useState(() => saved?.text ?? query);
-  useEffect(() => {
-    useSearchSession.getState().remember(query, { text, criteria, budget });
-  }, [query, text, criteria, budget]);
+  const [useProfile, setUseProfile] = useState(true);
+  const [adopted, setAdopted] = useState<{ search: SearchResult; intent: ApiIntent } | null>(null);
   const intent = useQuery({
     queryKey: ["intent", text],
     queryFn: ({ signal }) => api<ApiIntent>("/intents", { method: "POST", body: { text }, signal }),
     retry: false,
     retryOnMount: false,
     refetchOnWindowFocus: false,
+    enabled: !draft,
   });
   const catalog = useQuery({ ...catalogQuery, retryOnMount: false });
-  const maxPrice = budget ?? Math.min(20000, intent.data?.trip.budgetPerNight ?? 20000);
-  const chips = intentForCriteria(
-    intent.data ?? { chips: [], trip: {}, planner: "rules" },
-    criteria,
+  const base = draft ?? intent.data;
+  const maxPrice = budget ?? base?.trip.budgetPerNight ?? null;
+  const searchIntent = useMemo(
+    () =>
+      base
+        ? {
+            ...base,
+            trip: { ...base.trip, budgetPerNight: maxPrice },
+          }
+        : null,
+    [base, maxPrice],
   );
+  const criteria = useMemo(
+    () =>
+      (Object.keys(criterionKeys) as Criterion[]).filter((criterion) =>
+        base?.chips.some((chip) => chip.characteristic === criterionKeys[criterion]),
+      ),
+    [base],
+  );
+  useEffect(() => {
+    useSearchSession
+      .getState()
+      .remember(query, { text, budget, ...(base ? { intent: base } : {}) });
+  }, [query, text, budget, base]);
+  const adoptedCurrent =
+    adopted && JSON.stringify(adopted.intent) === JSON.stringify(searchIntent)
+      ? adopted.search
+      : null;
+  const personalized = !!account && account.role === "guest" && useProfile;
   const search = useQuery({
-    queryKey: ["search", text, chips, intent.data?.trip, maxPrice],
+    queryKey: ["search", searchIntent, account?.id, personalized],
     queryFn: ({ signal }) =>
-      api<components["schemas"]["SearchResultOut"]>("/searches", {
+      (personalized ? sessionApi<SearchResult> : api<SearchResult>)("/searches", {
         method: "POST",
         body: {
-          text,
-          chips,
-          trip: { ...intent.data?.trip, budgetPerNight: maxPrice },
-          useProfile: false,
+          text: searchIntent?.text ?? text,
+          chips: searchIntent?.chips,
+          trip: searchIntent?.trip,
+          useProfile: personalized,
         },
         signal,
       }),
-    enabled: !!intent.data,
+    enabled: !!searchIntent && !adoptedCurrent,
     placeholderData: keepPreviousData,
     retry: false,
     retryOnMount: false,
     refetchOnWindowFocus: false,
   });
-  const current = live ?? search.data;
+  const current = adoptedCurrent ?? search.data;
+  const visibleChips = [
+    ...(base?.chips ?? []),
+    ...(personalized
+      ? (current?.intent.chips.filter(
+          (chip) =>
+            chip.fromProfile &&
+            !base?.chips.some((item) => item.characteristic === chip.characteristic),
+        ) ?? [])
+      : []),
+  ];
   const ranked = useMemo(() => {
     const hotels = new Map(catalog.data?.map((hotel) => [hotel.id, hotel]));
     return (current?.matches ?? []).flatMap((match) => {
@@ -70,37 +112,87 @@ export function useSearchFilters(
       ];
     });
   }, [catalog.data, current, criteria]);
-  const toggleCriterion = (criterion: Criterion) =>
-    setCriteria((current) =>
-      current.includes(criterion)
-        ? current.length > 1
-          ? current.filter((item) => item !== criterion)
-          : current
-        : [...current, criterion],
-    );
-  const refineQuery = () => {
-    if (!refine.trim()) return;
-    setText((current) => `${current}. ${refine.trim()}`);
-    setMaxPrice(null);
-    setCriteria((current) => Array.from(new Set([...current, ...parseQuery(refine)])));
-    setRefine("");
-  };
+  const acceptSearch = useCallback((next: SearchResult | null) => {
+    if (!next) return;
+    setDraft(next.intent);
+    setMaxPrice(next.intent.trip.budgetPerNight ?? null);
+    setAdopted({
+      search: next,
+      intent: {
+        ...next.intent,
+        trip: { ...next.intent.trip, budgetPerNight: next.intent.trip.budgetPerNight ?? null },
+      },
+    });
+  }, []);
+  function editChips(chips: ApiIntent["chips"]) {
+    if (base) setDraft({ ...base, chips });
+    setAdopted(null);
+  }
   return {
     refine,
     setRefine,
     criteria,
     maxPrice,
-    setMaxPrice,
+    setMaxPrice: (value: number | null) => {
+      setMaxPrice(value);
+      if (base) setDraft({ ...base, trip: { ...base.trip, budgetPerNight: value } });
+      setAdopted(null);
+    },
     ranked,
     search: current,
-    pending: intent.isPending || catalog.isPending || search.isPending,
-    error: intent.error ?? catalog.error ?? search.error,
+    chips: visibleChips,
+    useProfile,
+    setUseProfile: (value: boolean) => {
+      setUseProfile(value);
+      if (!value && base)
+        setDraft({ ...base, chips: base.chips.filter((chip) => !chip.fromProfile) });
+      setAdopted(null);
+    },
+    trip: base?.trip ?? {},
+    changeTrip: (trip: components["schemas"]["TripModel"]) => {
+      if (base) setDraft({ ...base, trip: { ...base.trip, ...trip } });
+      setAdopted(null);
+    },
+    canUseProfile: account?.role === "guest",
+    acceptSearch,
+    pending:
+      (!base && intent.isPending) || catalog.isPending || (!adoptedCurrent && search.isPending),
+    updating: search.isFetching && !!search.data,
+    error:
+      (!base ? intent.error : null) ?? catalog.error ?? (!adoptedCurrent ? search.error : null),
     retry: () => {
       void intent.refetch();
       void catalog.refetch();
-      if (intent.data) void search.refetch();
+      if (searchIntent) void search.refetch();
     },
-    toggleCriterion,
-    refineQuery,
+    toggleCriterion: (criterion: Criterion) => {
+      if (!base) return;
+      const selected = criteria.includes(criterion)
+        ? criteria.filter((item) => item !== criterion)
+        : [...criteria, criterion];
+      editChips(intentForCriteria(base, selected));
+    },
+    changeImportance: (id: string, importance: Importance) =>
+      editChips(
+        visibleChips.map((chip) =>
+          chip.id === id ? { ...chip, importance, fromProfile: false } : chip,
+        ),
+      ),
+    removeChip: (id: string) => {
+      const chip = visibleChips.find((item) => item.id === id);
+      if (chip?.fromProfile) setUseProfile(false);
+      editChips(
+        visibleChips
+          .filter((item) => item.id !== id)
+          .map((item) => (chip?.fromProfile ? { ...item, fromProfile: false } : item)),
+      );
+    },
+    refineQuery: () => {
+      if (!refine.trim()) return;
+      setText((current) => `${current}. ${refine.trim()}`);
+      setDraft(null);
+      setAdopted(null);
+      setRefine("");
+    },
   };
 }

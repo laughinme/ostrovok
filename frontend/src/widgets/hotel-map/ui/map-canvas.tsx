@@ -6,6 +6,7 @@ import workerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?url";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import type { CoastMapProps } from "../model/types";
+import { clusterHotels } from "../model/clusters";
 
 maplibregl.setWorkerUrl(workerUrl);
 
@@ -22,6 +23,7 @@ export default function MapCanvas({
   const container = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<maplibregl.Map | null>(null);
   const [failed, setFailed] = useState(false);
+  const [zoom, setZoom] = useState(10);
   const west = items.length ? Math.min(...items.map(({ hotel }) => hotel.lngLat[0])) : null;
   const east = items.length ? Math.max(...items.map(({ hotel }) => hotel.lngLat[0])) : null;
   const south = items.length ? Math.min(...items.map(({ hotel }) => hotel.lngLat[1])) : null;
@@ -49,6 +51,7 @@ export default function MapCanvas({
     }
     instance.touchZoomRotate.disableRotation();
     instance.on("load", () => setFailed(false));
+    instance.on("zoomend", () => setZoom(instance.getZoom()));
     instance.on("error", () => {
       if (!instance.isStyleLoaded()) setFailed(true);
     });
@@ -91,16 +94,25 @@ export default function MapCanvas({
     <>
       <div ref={container} className="h-full w-full" />
       {map &&
-        items.map((item) => (
-          <HotelMapPin
-            key={item.hotel.id}
-            map={map}
-            item={item}
-            active={active === item.hotel.id}
-            onHover={onHover}
-            onSelect={onSelect}
-          />
-        ))}
+        clusterHotels(items, zoom, active).map((cluster) =>
+          cluster.items.length > 1 ? (
+            <ClusterPin
+              key={cluster.key}
+              map={map}
+              count={cluster.items.length}
+              center={cluster.center}
+            />
+          ) : (
+            <HotelMapPin
+              key={cluster.items[0]!.hotel.id}
+              map={map}
+              item={cluster.items[0]!}
+              active={active === cluster.items[0]!.hotel.id}
+              onHover={onHover}
+              onSelect={onSelect}
+            />
+          ),
+        )}
       {failed && (
         <div
           role="status"
@@ -114,7 +126,7 @@ export default function MapCanvas({
           type="button"
           onClick={() => map?.zoomIn()}
           aria-label="Приблизить"
-          className="grid h-8 w-8 place-items-center rounded-xl border bg-card/90 text-foreground shadow-soft backdrop-blur transition hover:bg-card"
+          className="grid h-11 w-11 place-items-center rounded-xl border bg-card/90 text-foreground shadow-soft backdrop-blur transition hover:bg-card"
         >
           <Plus className="h-4 w-4" />
         </button>
@@ -122,7 +134,7 @@ export default function MapCanvas({
           type="button"
           onClick={() => map?.zoomOut()}
           aria-label="Отдалить"
-          className="grid h-8 w-8 place-items-center rounded-xl border bg-card/90 text-foreground shadow-soft backdrop-blur transition hover:bg-card"
+          className="grid h-11 w-11 place-items-center rounded-xl border bg-card/90 text-foreground shadow-soft backdrop-blur transition hover:bg-card"
         >
           <Minus className="h-4 w-4" />
         </button>
@@ -130,7 +142,7 @@ export default function MapCanvas({
           type="button"
           onClick={fit}
           aria-label="Вернуть вид"
-          className="grid h-8 w-8 place-items-center rounded-xl border bg-card/90 text-foreground shadow-soft backdrop-blur transition hover:bg-card"
+          className="grid h-11 w-11 place-items-center rounded-xl border bg-card/90 text-foreground shadow-soft backdrop-blur transition hover:bg-card"
         >
           <Maximize2 className="h-3.5 w-3.5" />
         </button>
@@ -202,6 +214,41 @@ function HotelMapPin({
       >
         {score !== undefined ? `${score}%` : hotel.name}
       </span>
+    </button>,
+    element,
+  );
+}
+
+function ClusterPin({
+  map,
+  count,
+  center: [lng, lat],
+}: {
+  map: maplibregl.Map;
+  count: number;
+  center: [number, number];
+}) {
+  const [element] = useState(() => document.createElement("div"));
+  useEffect(() => {
+    const marker = new maplibregl.Marker({ element }).setLngLat([lng, lat]).addTo(map);
+    return () => {
+      marker.remove();
+    };
+  }, [map, element, lng, lat]);
+  return createPortal(
+    <button
+      type="button"
+      aria-label={`Приблизить группу: ${count} отелей`}
+      className="grid min-h-11 min-w-11 place-items-center rounded-full border-2 border-white bg-primary px-3 font-mono text-sm font-semibold text-white shadow-soft"
+      onClick={() =>
+        map.easeTo({
+          center: [lng, lat],
+          zoom: Math.min(16, map.getZoom() + 2),
+          duration: matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 250,
+        })
+      }
+    >
+      {count}
     </button>,
     element,
   );
