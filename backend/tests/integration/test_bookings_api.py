@@ -170,6 +170,10 @@ async def test_booking_validates_rate_capacity_and_ownership(
     other = await register(client, email="other@example.com")
     response = await client.get(f"/api/v1/trips/{booking['id']}", headers=other.headers)
     assert response.status_code == 404
+    mine = (await client.get("/api/v1/me/trips", headers=guest.headers)).json()
+    assert [t["booking"]["id"] for t in mine] == [booking["id"]]
+    assert mine[0]["hotelName"]
+    assert (await client.get("/api/v1/me/trips", headers=other.headers)).json() == []
     unknown = {"answers": [{"factId": str(uuid4()), "answer": True}]}
     async with db.unit_of_work() as uow:
         await BookingService(uow, clock).decide(UUID(booking["id"]), BookingStatus.CONFIRMED, "Да")

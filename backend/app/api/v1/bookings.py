@@ -2,16 +2,23 @@ from dataclasses import asdict
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Response
+from fastapi import APIRouter, Depends, Query, Response
 
 from app.api.deps import ClockDep, UowDep, require
 from app.api.ground_deps import GroundQueriesDep
-from app.api.schemas.booking import BookingIn, BookingOut, FeedbackIn, NotificationOut, TripOut
+from app.api.schemas.booking import (
+    BookingIn,
+    BookingOut,
+    FeedbackIn,
+    NotificationOut,
+    TripOut,
+    TripSummaryOut,
+)
 from app.domain.users import CurrentUser, Permission
 from app.service.booking.bookings import BookingService
 from app.service.booking.feedback import FeedbackAnswer, TripFeedback
 from app.service.booking.notifications import guest_notifications
-from app.service.booking.trips import TripQueries
+from app.service.booking.trips import TripQueries, guest_trips
 
 GuestDep = Annotated[CurrentUser, Depends(require(Permission.TRIPS))]
 router = APIRouter(tags=["Trips"])
@@ -24,6 +31,14 @@ async def create_booking(
     return BookingOut.from_domain(
         await BookingService(uow, clock).create(user.id, payload.to_domain())
     )
+
+
+@router.get("/me/trips")
+async def my_trips(
+    user: GuestDep, uow: UowDep, limit: Annotated[int, Query(ge=1, le=100)] = 50
+) -> list[TripSummaryOut]:
+    """The guest's booking requests, newest first, with the hotel name for the list."""
+    return [TripSummaryOut.from_summary(t) for t in await guest_trips(uow, user.id, limit)]
 
 
 @router.get("/trips/{booking_id}")
