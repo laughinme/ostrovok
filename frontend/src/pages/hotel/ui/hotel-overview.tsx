@@ -1,10 +1,4 @@
-import {
-  CRITERIA,
-  PhotoCredit,
-  photoInfo,
-  type Criterion,
-  type Hotel,
-} from "@/entities/hotel";
+import { CRITERIA, PhotoCredit, photoInfo, type Criterion, type Hotel } from "@/entities/hotel";
 import { MatchRing, Reveal } from "@/shared/ui";
 import { ArrowRight, Heart, Images, MapPin, Scale, ShieldCheck, Waves } from "lucide-react";
 import { Photo } from "./visuals";
