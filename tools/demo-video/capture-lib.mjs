@@ -1,5 +1,5 @@
 import { chromium } from 'playwright';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 
@@ -33,7 +33,8 @@ export async function createCapture({ base, out }) {
       errors.push(`${response.status()} ${new URL(response.url()).pathname}`);
     }
   });
-  const manifest = { base, viewport, fps: 60, clips: [], errors };
+  const previous = JSON.parse(await readFile(path.join(out, 'manifest.json'), 'utf8').catch(() => '{"clips":[]}'));
+  const manifest = { base, viewport, fps: 60, clips: previous.clips, errors };
   let clip;
   let started;
 
@@ -118,7 +119,7 @@ export async function createCapture({ base, out }) {
   };
 
   const scene = async (id, chapter, title, description, action) => {
-    clip = { id, chapter, title, description, src: `footage/${id}.mp4`, focus: [] };
+    clip = { id, chapter, title, description, url: page.url(), src: `footage/${id}.mp4`, focus: [] };
     const raw = path.join(out, `${id}.webm`);
     await page.screencast.start({ path: raw, fps: 60, size: viewport, quality: 95 });
     started = Date.now();
@@ -132,7 +133,7 @@ export async function createCapture({ base, out }) {
     }
     const meta = JSON.parse(execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'json', raw]));
     clip.duration = Number(meta.format.duration);
-    manifest.clips.push(clip);
+    manifest.clips = manifest.clips.filter((item) => item.id !== id).concat(clip).sort((a, b) => a.id.localeCompare(b.id));
     await writeFile(path.join(out, 'manifest.json'), JSON.stringify(manifest, null, 2));
     console.log(`${id}: ${clip.duration.toFixed(1)}s — ${title}`);
   };

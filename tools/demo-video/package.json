@@ -1,7 +1,7 @@
 {
   "name": "demo-video",
   "version": "1.0.0",
-  "description": "My Remotion video",
+  "description": "О!кно product demo capture and edit",
   "repository": {},
   "license": "UNLICENSED",
   "engines": {
@@ -29,6 +29,9 @@
     "build": "remotion bundle",
     "upgrade": "remotion upgrade",
     "lint": "eslint src && tsc"
+    ,"capture": "node capture.mjs"
+    ,"prepare": "node prepare.mjs"
+    ,"render": "remotion render Okno ../../.private/video-production/okno-presentation.mp4 --concurrency=3 --crf=18"
   },
   "allowScripts": {
     "esbuild": false
