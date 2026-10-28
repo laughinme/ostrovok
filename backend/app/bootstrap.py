@@ -149,6 +149,7 @@ def build_language_model(
     return PydanticAiLanguageModel(
         model,
         model_name=name,
+        provider_url=settings.llm_base_url or "https://api.openai.com/v1",
         timeout_sec=settings.llm_timeout_sec * (2 if strong else 1),
         limit=DailyLimit(redis, settings.llm_daily_call_limit),
         thinking=settings.llm_thinking_strong if strong else settings.llm_thinking,

@@ -27,10 +27,13 @@ def _broken(messages: list[ModelMessage], info: AgentInfo) -> ModelResponse:
     raise RuntimeError("provider is down")
 
 
-def _llm(db: Database, function: object, *, name: str = "gpt-5.4-mini") -> PydanticAiLanguageModel:
+def _llm(
+    db: Database, function: object, *, name: str = "gpt-5.4-mini", provider: str = ""
+) -> PydanticAiLanguageModel:
     return PydanticAiLanguageModel(
         FunctionModel(function),  # type: ignore[arg-type]
         model_name=name,
+        provider_url=provider,
         timeout_sec=5,
         limit=DailyLimit(None, 10),
         cache=LlmCache(db),
@@ -56,6 +59,9 @@ async def test_calls_are_journaled_and_priced(app_factory: AppFactory) -> None:
 
     assert first.usage.cost_usd > 0
     assert first.latency_ms >= 0
+    assert again.usage == first.usage
+    assert again.latency_ms == first.latency_ms
+    assert again.spent.cost_usd == 0
     assert again.cached
     assert [c["status"] for c in calls] == ["failed", "cached", "ok"]
     assert calls[2]["output"] == {"keys": ["sea_view"]}
@@ -72,3 +78,11 @@ async def test_journal_is_for_operators(app_factory: AppFactory) -> None:
         response = await client.get("/api/v1/console/llm/calls", headers=guest.headers)
 
     assert response.status_code == 403
+
+
+async def test_cache_does_not_cross_provider_boundaries(db: Database) -> None:
+    first = _llm(db, _answer, provider="https://first.example/v1")
+    second = _llm(db, _broken, provider="https://second.example/v1")
+    await first.structured(task="intent", system="s", prompt="same", output=Chips)
+    with pytest.raises(LlmUnavailableError):
+        await second.structured(task="intent", system="s", prompt="same", output=Chips)

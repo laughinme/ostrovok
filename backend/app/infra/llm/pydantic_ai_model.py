@@ -5,12 +5,15 @@ failure — no key, provider error, timeout, schema mismatch, daily limit — be
 """
 
 import asyncio
+import json
 import logging
 import time
 from collections.abc import Sequence
 from typing import Any
+from urllib.parse import urlsplit
 
 import pydantic_ai
+from openai import AsyncOpenAI
 from pydantic import BaseModel
 from pydantic_ai import Agent, Tool, UsageLimits
 from pydantic_ai.models import Model
@@ -47,8 +50,21 @@ def openai_compatible(base_url: str, api_key: str, model: str) -> Model:
     together (Chat Completions rejects the pair for gpt-5.4+). Every other OpenAI-compatible
     endpoint (Gemini, OpenRouter, Yandex, Ollama) through Chat Completions.
     """
-    provider = OpenAIProvider(base_url=base_url or None, api_key=api_key)
-    if not base_url or OPENAI_API in base_url:
+    host = urlsplit(base_url).hostname if base_url else OPENAI_API
+    headers: dict[str, Any] | None = (
+        {"x-goog-api-key": api_key, "Authorization": ""}
+        if host
+        and (host == "aiplatform.googleapis.com" or host.endswith("-aiplatform.googleapis.com"))
+        else None
+    )
+    client = AsyncOpenAI(
+        base_url=base_url or "https://api.openai.com/v1",
+        api_key=api_key,
+        default_headers=headers,
+        max_retries=0,
+    )
+    provider = OpenAIProvider(openai_client=client)
+    if host == OPENAI_API:
         return OpenAIResponsesModel(model, provider=provider)
     return OpenAIChatModel(model, provider=provider)
 
@@ -59,6 +75,7 @@ class PydanticAiLanguageModel:
         model: Model | None,
         *,
         model_name: str,
+        provider_url: str = "",
         timeout_sec: float,
         limit: DailyLimit,
         thinking: Thinking = "default",
@@ -70,6 +87,7 @@ class PydanticAiLanguageModel:
         self._switch = switch
         self._model = model
         self._name = model_name
+        self._provider_url = provider_url.rstrip("/")
         self._timeout = timeout_sec
         self._limit = limit
         self._thinking = thinking
@@ -121,13 +139,16 @@ class PydanticAiLanguageModel:
         if self._switch is not None and not await self._switch.on():
             raise LlmUnavailableError("LLM выключена в консоли")
         key = cache_key(
+            self._provider_url,
             self._name,
             self._thinking,
             task,
             system,
             prompt,
             schema_fingerprint(output),
-            ",".join(t.name for t in tools),
+            json.dumps(
+                [(t.name, t.description, t.args.model_json_schema()) for t in tools], sort_keys=True
+            ),
         )
         if self._cache is not None and (hit := await self._cache.get(key)):
             cached = output.model_validate(hit["output"])
