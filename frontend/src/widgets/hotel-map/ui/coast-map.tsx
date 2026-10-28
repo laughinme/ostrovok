@@ -1,4 +1,4 @@
-import { ClientOnly, LoadingSignal } from "@/shared/ui";
+import { ClientOnly, RequestState } from "@/shared/ui";
 import { getApiMode } from "@/shared/api";
 import { DemoMap } from "./demo-map";
 import { lazy, Suspense } from "react";
@@ -17,7 +17,7 @@ export function CoastMap(props: CoastMapProps) {
         <DemoMap {...props} />
       ) : (
         <ClientOnly>
-          <Suspense fallback={<LoadingSignal />}>
+          <Suspense fallback={<RequestState pending />}>
             <MapCanvas {...props} />
           </Suspense>
         </ClientOnly>

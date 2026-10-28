@@ -47,7 +47,7 @@ export function PartnerPage() {
   }, [pending, error]);
 
   if (!hotel || pending || error)
-    return <RequestState pending={pending} error={error} retry={retry} />;
+    return <RequestState page pending={pending} error={error} retry={retry} />;
 
   return (
     <main className="partner-page">

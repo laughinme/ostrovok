@@ -79,6 +79,7 @@ export function TripPage({ initialBookingId }: { initialBookingId?: string } = {
         </div>
         {!demo && (
           <RequestState
+            page
             pending={bookings.isPending}
             error={bookings.error}
             retry={() => void bookings.refetch()}
@@ -86,6 +87,7 @@ export function TripPage({ initialBookingId }: { initialBookingId?: string } = {
         )}
         {!demo && initialBookingId && (
           <RequestState
+            page
             pending={selected.isPending}
             error={selected.error}
             retry={() => void selected.refetch()}

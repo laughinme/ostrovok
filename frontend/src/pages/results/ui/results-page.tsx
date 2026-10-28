@@ -103,7 +103,7 @@ export function ResultsPage({
         </div>
       </div>
 
-      <RequestState pending={pending} error={error} retry={retry} />
+      <RequestState page={!searchResult} pending={pending} error={error} retry={retry} />
       {searchResult && !live.label && (
         <ResearchOffers
           search={searchResult}

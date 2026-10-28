@@ -1,6 +1,6 @@
 import type { Hotel } from "@/entities/hotel";
 import { getApiMode } from "@/shared/api";
-import { ClientOnly, LoadingSignal } from "@/shared/ui";
+import { ClientOnly, RequestState } from "@/shared/ui";
 import { lazy, Suspense } from "react";
 import type { RouteData } from "../model/geo";
 import { RouteScheme } from "./route-scheme";
@@ -10,7 +10,7 @@ export function DetailMap({ hotel, route }: { hotel: Hotel; route: RouteData }) 
   if (route.geometry.coordinates.length < 2) return <RouteScheme route={route} />;
   return (
     <ClientOnly>
-      <Suspense fallback={<LoadingSignal />}>
+      <Suspense fallback={<RequestState pending />}>
         <RouteMap hotel={hotel} route={route} />
       </Suspense>
     </ClientOnly>
