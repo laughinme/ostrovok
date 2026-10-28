@@ -148,7 +148,7 @@ def _probability_over_cells(
         covering = [f for f in facts if f.scope.contains(cell)]
         if not covering:
             continue
-        fact = max(covering, key=lambda f: f.confidence)
+        fact = max(covering, key=lambda f: (specificity(f), f.confidence))
         total += fact.confidence if fact.value else 1 - fact.confidence
         counted += 1
         coverage[fact.id] = coverage.get(fact.id, 0) + 1

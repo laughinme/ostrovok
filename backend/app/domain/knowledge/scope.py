@@ -118,6 +118,18 @@ class Scope:
         return (cell for cell in grid.cells() if self.contains(cell))
 
 
+def encloses(outer: Scope, inner: Scope) -> bool:
+    if (outer.floor_from or 1) > (inner.floor_from or 1):
+        return False
+    if outer.floor_to is not None and (inner.floor_to is None or inner.floor_to > outer.floor_to):
+        return False
+    for name in ("facades", "months", "room_types"):
+        broad, narrow = getattr(outer, name), getattr(inner, name)
+        if broad is not None and (narrow is None or not narrow <= broad):
+            return False
+    return True
+
+
 def compress[V](values: Mapping[Cell, V], grid: Grid) -> list[tuple[Scope, V]]:
     """
     Fold per-cell answers back into a few scopes. Greedy and exact: every returned scope covers
