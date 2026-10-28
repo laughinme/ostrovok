@@ -86,13 +86,18 @@
   "network": {
     "httpProxyEnvironment": false,
     "directModelsStatus": 200,
-    "egressCountry": "FR",
-    "russiaWithoutVpnVerified": false
+    "initialGeoLookupCountry": "FR",
+    "initialGeoLookupUsedVpn": true,
+    "egressCountry": "RU",
+    "egressCity": "Новосибирск",
+    "russiaWithoutVpnVerified": true,
+    "verification": "polza-ru-smoke.json",
+    "checkedAt": "2026-10-28T21:51:14.438072+00:00"
   },
   "billing": {
     "spentRub": 8.65,
     "balanceRub": 191.35,
-    "scope": "Full eval and short provider checks; account had no earlier paid requests",
+    "scope": "Initial full eval and short checks before direct RU follow-up; extra cost in polza-ru-smoke.json",
     "automaticTopupRub": 100,
     "automaticTopupMonthlyLimitRub": 1000,
     "additionalTopupTriggeredRub": 100
