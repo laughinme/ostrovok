@@ -1,9 +1,13 @@
-import type { ApiFact, Hotel } from "@/entities/hotel";
+import { characteristicLabel, type ApiFact, type Hotel } from "@/entities/hotel";
 import type { components } from "@/shared/api";
 import type { Facade, Fact, HotelDetails } from "./types";
 
 const facades: Facade[] = ["NE", "SE", "SW", "NW"];
 const isFacade = (value: string): value is Facade => facades.includes(value as Facade);
+const observed = (value: string) =>
+  Number.isNaN(Date.parse(value))
+    ? value
+    : new Date(value).toLocaleDateString("ru-RU", { timeZone: "Europe/Moscow" });
 
 export function detailFactFromApi(
   fact: ApiFact,
@@ -12,7 +16,7 @@ export function detailFactFromApi(
   return {
     id: fact.id,
     characteristic: fact.characteristic,
-    group: fact.characteristic,
+    group: characteristicLabel(fact.characteristic),
     statement: fact.statement,
     scopeText: fact.scopeText,
     confidence: fact.confidence,
@@ -20,18 +24,25 @@ export function detailFactFromApi(
     sourceLabel: fact.sourceLabel,
     method: fact.method,
     observedAt: fact.observedAt,
-    sources: detail?.sources.map((source) => [source.label, source.observedAt]) ?? [
-      [fact.sourceLabel, fact.observedAt],
-    ],
+    sources: detail?.sources.map((source) => [
+      source.label,
+      observed(source.observedAt),
+      source.ref ?? "",
+    ]) ?? [[fact.sourceLabel, observed(fact.observedAt)]],
+    evidenceItems: Array.from(
+      new Map(
+        fact.evidence.map((item) => [
+          `${item.summary}:${item.attribution}`,
+          { summary: item.summary, attribution: item.attribution },
+        ]),
+      ).values(),
+    ),
     caveats:
-      [
-        ...fact.caveats,
-        ...fact.evidence.map((e) => `${e.summary} · ${e.attribution}`),
-        ...(fact.isDemo ? ["Демонстрационные данные"] : []),
-      ].join(" · ") || "Дополнительных оговорок нет",
+      [...fact.caveats, ...(fact.isDemo ? ["Демонстрационные данные"] : [])].join(" · ") ||
+      "Дополнительных оговорок нет",
     history:
       detail?.history.map((item) => `${item.at}: ${item.statement} · ${item.reason}`).join("\n") ||
-      `Последняя проверка: ${fact.observedAt}. Статус: ${fact.status}`,
+      `Последняя проверка: ${observed(fact.observedAt)}. Статус: ${{ ok: "актуально", stale: "нужно перепроверить", conflict: "есть противоречие" }[fact.status]}`,
   };
 }
 
@@ -42,8 +53,14 @@ export function apiHotelDetails(hotel: Hotel): HotelDetails {
   const recommendedFacades = Array.isArray(scope?.["facades"])
     ? scope["facades"].filter((value): value is string => typeof value === "string")
     : [];
-  const bestFacade = recommendedFacades.find(isFacade) ?? raw.facades.find(isFacade) ?? "SW";
-  const bestFloor = typeof scope?.["floorFrom"] === "number" ? scope["floorFrom"] : 1;
+  const primaryRoom = raw.rooms.find((room) => room.confirmedByHotel) ?? raw.rooms[0];
+  const bestFacade =
+    recommendedFacades.find(isFacade) ??
+    primaryRoom?.facades.find(isFacade) ??
+    raw.facades.find(isFacade) ??
+    "SW";
+  const bestFloor =
+    typeof scope?.["floorFrom"] === "number" ? scope["floorFrom"] : (primaryRoom?.floors?.[0] ?? 1);
   const noiseFor = (time: "day" | "night") =>
     Object.fromEntries(
       facades.map((facade) => {
@@ -81,14 +98,14 @@ export function apiHotelDetails(hotel: Hotel): HotelDetails {
     toCenter: raw.area,
     toSea: beach ? `${beach.minutes} мин до пляжа` : "Дорога до пляжа пока не известна",
     rating: raw.demo.rating,
-    reviewCount: 0,
-    ratingLabel: `${raw.demo.ratingLabel} · демо`,
+    reviewCount: hotel.reviewCount,
+    ratingLabel: raw.demo.ratingLabel,
     tagline: raw.demo.tagline,
     photos: hotel.gallery,
     bestFloor,
     bestFacade,
-    priceFrom: raw.priceFromDemo ?? 0,
-    bestRoom: recommendation?.roomName ?? "Выберите категорию номера",
+    priceFrom: hotel.price,
+    bestRoom: recommendation?.roomName ?? primaryRoom?.name ?? "Уточним варианты размещения",
     tradeoff:
       hotel.searchMatch?.tradeoff ?? "Разметку номера и доступность нужно подтвердить у отеля",
     wish: Object.fromEntries(
@@ -114,7 +131,9 @@ export function apiHotelDetails(hotel: Hotel): HotelDetails {
       ]),
     ),
     amenities: raw.demo.amenities,
-    nearby: hotel.walk.map((place) => ["beach", place.name, `${place.minutes} мин`]),
+    nearby: raw.nearby.length
+      ? raw.nearby.map((place) => [place.kind, place.name, place.distanceText])
+      : hotel.walk.map((place) => ["beach", place.name, `${place.minutes} мин`]),
     rooms: raw.rooms.map((room) => ({
       id: room.id,
       capacity: room.capacity,
@@ -122,11 +141,26 @@ export function apiHotelDetails(hotel: Hotel): HotelDetails {
       area: room.area,
       bed: room.bed,
       facades: room.facades.filter(isFacade),
+      orientationLabel: room.facades
+        .map(
+          (facade) =>
+            ({
+              N: "Север",
+              NE: "Северо-восток",
+              E: "Восток",
+              SE: "Юго-восток",
+              S: "Юг",
+              SW: "Юго-запад",
+              W: "Запад",
+              NW: "Северо-запад",
+            })[facade],
+        )
+        .join(" + "),
       floors: room.floors ?? [1, raw.floors],
       view: room.confirmedByHotel
         ? "Сторона подтверждена отелем; вид зависит от этажа"
         : "Размещение и вид не подтверждены отелем",
-      photo: "/hotel-placeholder.svg",
+      photo: hotel.image,
       forYou: [],
       recommended: room.id === recommendation?.roomTypeId,
       request:
