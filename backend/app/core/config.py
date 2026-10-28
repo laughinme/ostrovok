@@ -76,6 +76,11 @@ class Settings(BaseSettings):
     hotelier_simulator: Literal["on", "off"] = "on"
     simulator_delay_sec: str = "5-30"
 
+    geocoding_url: str = "https://nominatim.openstreetmap.org/search"
+    geocoding_user_agent: str = (
+        "OknoTravel/1.0 (https://github.com/ostrovok-hackathon-2026/chupapis)"
+    )
+
     # Region data, registry and seed shipped with the image
     data_dir: Path = BASE_DIR / "data"
 

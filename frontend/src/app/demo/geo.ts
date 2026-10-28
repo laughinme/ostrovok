@@ -104,3 +104,32 @@ export function demoNoise(hotel: ApiHotel): components["schemas"]["NoiseOut"] {
     caveats: ["Условный индекс для демонстрации интерфейса, не измерение шума у реального отеля."],
   };
 }
+
+export function demoDirectionRoute(
+  hotel: ApiHotel,
+  point: [number, number],
+  name: string,
+  profile = "walk",
+): Route {
+  const route = demoBeachRoute(hotel, profile);
+  const [lon, lat] = hotel.location;
+  const knownPlace = hotel.nearby.find(
+    (place) => place.location[0] === point[0] && place.location[1] === point[1],
+  );
+  const distance =
+    knownPlace?.distanceM ?? Math.hypot((point[0] - lon) * 80000, (point[1] - lat) * 111000) * 1.3;
+  const minutes = Math.max(1, Math.ceil(distance / (profile === "walk" ? 75 : 55)));
+  return {
+    ...route,
+    targetRef: `demo-point:${point.join(",")}`,
+    targetName: name,
+    there: { ...route.there, lengthM: Math.round(distance), minutes },
+    back: { ...route.back, lengthM: Math.round(distance), minutes: minutes + 1 },
+    geometry: { type: "LineString", coordinates: [[lon, lat], [lon, point[1]], point] },
+    elevationProfile: [
+      [0, 12],
+      [distance * 0.5, 8],
+      [distance, 4],
+    ],
+  };
+}

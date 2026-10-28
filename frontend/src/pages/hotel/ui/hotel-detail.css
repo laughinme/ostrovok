@@ -1816,11 +1816,6 @@
   position: relative;
   overflow: hidden;
 }
-.hotel-detail .hp-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 24px;
-}
 .hotel-detail .sticky-cta {
   position: fixed;
   left: 50%;
@@ -2063,9 +2058,6 @@
   .hotel-detail .lb-credit {
     flex-basis: 100%;
     margin-left: 0;
-  }
-  .hotel-detail .hp-actions {
-    flex-wrap: wrap;
   }
   .hotel-detail .days {
     grid-template-columns: repeat(2, minmax(0, 1fr));
