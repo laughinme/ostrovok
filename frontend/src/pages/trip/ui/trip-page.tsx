@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { ArrowUpRight, Check, ChevronRight, MessageSquare, ShieldCheck } from "lucide-react";
+import { Check, ChevronRight, MessageSquare } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { getApiMode } from "@/shared/api";
 import { RequestState, Reveal, TravelAirplane } from "@/shared/ui";
@@ -142,19 +142,6 @@ export function TripPage({ initialBookingId }: { initialBookingId?: string } = {
                               ))}
                             </div>
                           )}
-                          <div className="trip-request">
-                            <ShieldCheck size={19} />
-                            <div>
-                              <b>Пожелания к размещению</b>
-                              <p>{item.hotel.rooms[0]?.request || "Особых пожеланий не указано"}</p>
-                            </div>
-                            {item.hotelId && (
-                              <Link to="/hotel/$id" params={{ id: item.hotelId }}>
-                                Об отеле
-                                <ArrowUpRight size={16} />
-                              </Link>
-                            )}
-                          </div>
                           <TripExpectations data={demoExpectations(item)} />
                         </>
                       ) : (
