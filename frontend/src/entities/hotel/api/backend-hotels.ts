@@ -1,5 +1,6 @@
 import { api, type components } from "@/shared/api";
 import type { Criterion, Fact, Hotel } from "../model/types";
+import { hotels } from "./demo-hotels";
 
 export type ApiHotel = components["schemas"]["HotelOut"];
 export type ApiFact = components["schemas"]["FactOut"];
@@ -46,6 +47,7 @@ function probability(fact: ApiFact | undefined): number | null {
 }
 
 export function hotelFromApi(raw: ApiHotel, match?: ApiMatch, intent?: ApiIntent): Hotel {
+  const preview = hotels.find((hotel) => raw.id === `demo-${hotel.id}`);
   const scores = {} as Record<Criterion, number>;
   const unknownCriteria: Criterion[] = [];
   for (const criterion of Object.keys(criterionKeys) as Criterion[]) {
@@ -81,11 +83,11 @@ export function hotelFromApi(raw: ApiHotel, match?: ApiMatch, intent?: ApiIntent
     name: raw.name,
     district: raw.area,
     address: raw.address || raw.area,
-    image: "/hotel-placeholder.svg",
-    gallery: ["/hotel-placeholder.svg"],
+    image: preview?.image ?? "/hotel-placeholder.svg",
+    gallery: preview?.gallery ?? ["/hotel-placeholder.svg"],
     price: match?.recommendation?.priceDemo ?? raw.priceFromDemo ?? 0,
     rating: raw.demo.rating,
-    reviewCount: 0,
+    reviewCount: preview?.reviewCount ?? 0,
     stars: raw.stars ?? 0,
     lngLat: raw.location,
     tagline: match?.tradeoff ?? raw.demo.tagline,
@@ -115,7 +117,6 @@ export function hotelFromApi(raw: ApiHotel, match?: ApiMatch, intent?: ApiIntent
 export const catalogQuery = {
   queryKey: ["hotels", "catalog"],
   queryFn: ({ signal }: { signal: AbortSignal }) => api<ApiHotel[]>("/hotels", { signal }),
-  staleTime: 60000,
 };
 
 export function hotelQuery(id: string) {
@@ -123,6 +124,5 @@ export function hotelQuery(id: string) {
     queryKey: ["hotels", id],
     queryFn: async ({ signal }: { signal: AbortSignal }) =>
       hotelFromApi(await api<ApiHotel>(`/hotels/${encodeURIComponent(id)}`, { signal })),
-    staleTime: 30000,
   };
 }
