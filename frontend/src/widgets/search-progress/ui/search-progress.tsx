@@ -1,26 +1,39 @@
-import { getFlightDeparture } from "@/features/search-flight";
-import { useSearchFilters } from "@/features/hotel-search";
+import type { FlightDeparture } from "@/features/search-flight";
 import { TravelAirplane } from "@/shared/ui";
-import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
-import { startSearchFlight } from "./search-flight-motion";
+import { startSearchFlight, type SearchFlightController } from "./search-flight-motion";
 import { VectorEarth } from "./vector-earth";
 import "./search-progress.css";
 
-export function SearchProgress({ query: q }: { query: string }) {
-  useSearchFilters(q);
-  const navigate = useNavigate();
+export function SearchProgress({
+  active = true,
+  title = "Загружаем данные",
+  departure,
+}: {
+  active?: boolean;
+  title?: string;
+  departure?: FlightDeparture | undefined;
+}) {
   const scene = useRef<HTMLElement>(null);
+  const controller = useRef<SearchFlightController | null>(null);
 
   useEffect(() => {
     if (!scene.current) return;
-    return startSearchFlight(scene.current, getFlightDeparture(q), () => {
-      void navigate({ to: "/results", search: { q }, replace: true });
-    });
-  }, [navigate, q]);
+    const flight = startSearchFlight(scene.current, departure);
+    controller.current = flight;
+    return () => {
+      flight.stop();
+      controller.current = null;
+    };
+  }, [departure]);
+
+  useEffect(() => {
+    if (active) controller.current?.resume();
+    else controller.current?.finish();
+  }, [active]);
 
   return (
-    <main ref={scene} className="search-flight-screen">
+    <section ref={scene} className="search-flight-screen" aria-label={title}>
       <div className="search-flight-art" aria-hidden="true">
         <div className="search-flight-earth">
           <VectorEarth />
@@ -30,16 +43,17 @@ export function SearchProgress({ query: q }: { query: string }) {
         </div>
       </div>
       <section className="search-flight-copy" role="status" aria-live="polite">
-        <h1>Подбираем ваш отдых</h1>
+        <h1>{title}</h1>
         <div
           className="search-flight-progress"
           role="progressbar"
-          aria-label="Подбор отелей"
-          aria-valuetext="Подбираем отели под ваш запрос"
+          aria-label={title}
+          aria-valuetext={active ? "Загрузка продолжается" : "Готово"}
+          aria-valuenow={active ? undefined : 100}
         >
           <span />
         </div>
       </section>
-    </main>
+    </section>
   );
 }

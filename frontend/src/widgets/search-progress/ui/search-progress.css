@@ -31,7 +31,7 @@
   left: 50%;
   width: min(60vw, 68svh, 640px);
   aspect-ratio: 1;
-  opacity: 0;
+  opacity: 1;
   transform: translate(-50%, -50%);
 }
 .search-flight-earth-svg {
@@ -47,7 +47,7 @@
   width: clamp(112px, 13.5vw, 180px);
   aspect-ratio: 5 / 4;
   color: #fff;
-  opacity: 0;
+  opacity: 1;
   transform: translate(-50%, -50%) rotate(-12deg);
 }
 .search-flight-airplane {
@@ -64,7 +64,7 @@
   left: 50%;
   width: min(640px, calc(100% - 32px));
   text-align: center;
-  opacity: 0;
+  opacity: 1;
   transform: translateX(-50%);
 }
 .search-flight-copy h1 {
