@@ -1,0 +1,22 @@
+# PostGIS for the hosted backend. Private network only (no [http_service]): okno-api reaches it
+# at okno-db.internal:5432. Create once: see deploy/fly/README.md.
+app = "okno-db"
+primary_region = "arn"
+
+[build]
+  image = "postgis/postgis:17-3.5"
+
+[env]
+  PGDATA = "/var/lib/postgresql/data/pgdata"
+  POSTGRES_DB = "okno"
+  POSTGRES_USER = "okno"
+  # POSTGRES_PASSWORD is a Fly secret.
+
+[mounts]
+  source = "pgdata"
+  destination = "/var/lib/postgresql/data"
+  initial_size = "3gb"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "1gb"
