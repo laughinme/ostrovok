@@ -100,6 +100,7 @@ class PartnerAnswers:
             tuple(question.options),
             c.value_type.value,
             c.unit,
+            question.text,
         )
         parsed = await self._parser.parse(answer)
         parsed = _resolve_rooms(parsed, rooms)

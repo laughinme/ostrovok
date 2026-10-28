@@ -33,6 +33,8 @@ class UsageOut(ApiModel):
     requests: int = 0
     input_tokens: int = 0
     output_tokens: int = 0
+    cached_tokens: int = 0
+    cost_usd: float = 0.0
 
 
 class AgentRunOut(ApiModel):

@@ -21,6 +21,7 @@ from app.infra.geo.router import ScipyRouter
 from app.infra.geo.terrain import NpyTerrain
 from app.infra.llm.cache import LlmCache
 from app.infra.llm.guards import DailyLimit, ModeSwitch
+from app.infra.llm.journal import LlmJournal
 from app.infra.llm.pydantic_ai_model import PydanticAiLanguageModel, openai_compatible
 from app.service.agents.asking import HotelAsker
 from app.service.agents.curator import Curator
@@ -100,13 +101,14 @@ def build_agents(
     data_dir: Path,
     llm: LanguageModel | None = None,
     *,
+    llm_strong: LanguageModel | None = None,
     simulator_delay: tuple[float, float] | None = (5.0, 30.0),
 ) -> Agents:
     env = build_environment(db, clock, data_dir)
     executors = dict(executors_by_method(default_executors()))
     runner = AgentRunner(db, events, clock)
     researcher = Researcher(db, env, executors, events)
-    curator = Curator(db, env, executors, llm, data_dir)
+    curator = Curator(db, env, executors, llm_strong or llm, data_dir)
     return Agents(
         runner=runner,
         researcher=researcher,
@@ -133,20 +135,24 @@ def build_agents(
 
 
 def build_language_model(
-    settings: Settings, db: Database, redis: Redis | None
+    settings: Settings, db: Database, redis: Redis | None, *, strong: bool = False
 ) -> LanguageModel | None:
-    """None when there is no key or LLM_MODE=off: every LLM port then runs on rules."""
+    """
+    None when there is no key or LLM_MODE=off: every LLM port then runs on rules. `strong` is the
+    Curator's model (LLM_MODEL_STRONG, else LLM_MODEL) with its own reasoning effort.
+    """
     if not settings.llm_enabled:
         logger.info("LLM is off (no key or LLM_MODE=off): rule-based planners only")
         return None
-    model = openai_compatible(
-        settings.llm_base_url, settings.llm_api_key.get_secret_value(), settings.llm_model
-    )
+    name = (settings.llm_model_strong or settings.llm_model) if strong else settings.llm_model
+    model = openai_compatible(settings.llm_base_url, settings.llm_api_key.get_secret_value(), name)
     return PydanticAiLanguageModel(
         model,
-        model_name=settings.llm_model,
-        timeout_sec=settings.llm_timeout_sec,
+        model_name=name,
+        timeout_sec=settings.llm_timeout_sec * (2 if strong else 1),
         limit=DailyLimit(redis, settings.llm_daily_call_limit),
+        thinking=settings.llm_thinking_strong if strong else settings.llm_thinking,
         cache=LlmCache(db),
         switch=ModeSwitch(db),
+        journal=LlmJournal(db),
     )

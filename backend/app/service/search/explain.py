@@ -1,5 +1,6 @@
 """The Explainer (09 §7.7): optional LLM wording of a trade-off, checked by code."""
 
+import asyncio
 from dataclasses import replace
 
 from pydantic import BaseModel, Field
@@ -24,10 +25,9 @@ class Rephrased(BaseModel):
 async def explain(ranking: Ranking, llm: LanguageModel | None) -> Ranking:
     if llm is None or not llm.available:
         return ranking
-    matches = list(ranking.matches)
-    for i, match in enumerate(matches[:EXPLAIN_TOP]):
-        matches[i] = await _one(match, llm)
-    return replace(ranking, matches=tuple(matches))
+    top = ranking.matches[:EXPLAIN_TOP]
+    rephrased = await asyncio.gather(*(_one(match, llm) for match in top))
+    return replace(ranking, matches=(*rephrased, *ranking.matches[EXPLAIN_TOP:]))
 
 
 async def _one(match: Match, llm: LanguageModel) -> Match:

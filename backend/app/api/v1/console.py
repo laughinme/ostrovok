@@ -1,5 +1,6 @@
 """Ostrovok's knowledge console: registry, agents, conflicts, changes of the world (09 §9)."""
 
+from datetime import datetime
 from typing import Annotated
 from uuid import UUID
 
@@ -12,16 +13,21 @@ from app.api.schemas.console import (
     ConflictOut,
     DemoResetOut,
     LearnRequest,
+    LlmCallOut,
+    LlmSpendOut,
+    LlmUsageOut,
     RegistryLineOut,
     ResolveRequest,
     SettingsModel,
     WorldChangeOut,
     WorldChangeStarted,
 )
+from app.core.config import Settings
 from app.domain.agents import AgentKind
 from app.domain.users import Permission
 from app.service.console.conflicts import ConflictDesk
 from app.service.console.demo import DemoReset
+from app.service.console.llm import LlmJournalView, day_start
 from app.service.console.publish import start_learning, start_publish
 from app.service.console.registry import RegistryStats
 from app.service.console.settings import AppSettings
@@ -128,15 +134,55 @@ async def revert_building(change_id: UUID, uow: UowDep, clock: ClockDep) -> RunS
     return RunStarted(run_id=str(await WorldEditor(uow, clock).revert(change_id)))
 
 
+def _settings_out(mode: str, llm: object, settings: Settings) -> SettingsModel:
+    on = llm is not None
+    return SettingsModel(
+        llm_mode=mode,
+        llm_available=on,
+        llm_model=settings.llm_model if on else None,
+        llm_model_strong=(settings.llm_model_strong or settings.llm_model) if on else None,
+    )
+
+
 @router.get(path="/settings", summary="Runtime switches")
-async def get_settings(uow: UowDep, llm: LlmDep) -> SettingsModel:
-    return SettingsModel(llm_mode=await AppSettings(uow).llm_mode(), llm_available=llm is not None)
+async def get_settings(uow: UowDep, llm: LlmDep, settings: SettingsDep) -> SettingsModel:
+    return _settings_out(await AppSettings(uow).llm_mode(), llm, settings)
 
 
 @router.put(path="/settings", dependencies=write, summary="LLM mode: auto or off (rules only)")
-async def put_settings(payload: SettingsModel, uow: UowDep, llm: LlmDep) -> SettingsModel:
+async def put_settings(
+    payload: SettingsModel, uow: UowDep, llm: LlmDep, settings: SettingsDep
+) -> SettingsModel:
     await AppSettings(uow).set_llm_mode(payload.llm_mode)
-    return SettingsModel(llm_mode=payload.llm_mode, llm_available=llm is not None)
+    return _settings_out(payload.llm_mode, llm, settings)
+
+
+@router.get(path="/llm/calls", summary="LLM journal: prompt, answer, tool calls, tokens, price")
+async def llm_calls(
+    uow: UowDep,
+    task: Annotated[str | None, Query(description="intent, answer, curator, explain")] = None,
+    limit: Annotated[int, Query(ge=1, le=200)] = 50,
+) -> list[LlmCallOut]:
+    calls = await LlmJournalView(uow).recent(task=task, limit=limit)
+    return [LlmCallOut.model_validate(c, from_attributes=True) for c in calls]
+
+
+def _spend(spend: object) -> LlmSpendOut:
+    return LlmSpendOut.model_validate(spend, from_attributes=True)
+
+
+@router.get(path="/llm/usage", summary="LLM spend today and in total, by task and model")
+async def llm_usage(uow: UowDep, clock: ClockDep) -> LlmUsageOut:
+    view = LlmJournalView(uow)
+    now = clock.now()
+    today = [_spend(s) for s in await view.spend(day_start(now))]
+    total = [_spend(s) for s in await view.spend(datetime.min.replace(tzinfo=now.tzinfo))]
+    return LlmUsageOut(
+        today=today,
+        total=total,
+        today_cost_usd=round(sum(s.cost_usd for s in today), 4),
+        total_cost_usd=round(sum(s.cost_usd for s in total), 4),
+    )
 
 
 @router.post(

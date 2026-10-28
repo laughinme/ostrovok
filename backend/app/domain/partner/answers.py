@@ -14,6 +14,7 @@ class AnswerInput:
     options: tuple[str, ...] = ()
     value_type: str = "probability"
     unit: str | None = None
+    question: str = ""
 
 
 @dataclass(frozen=True, slots=True)

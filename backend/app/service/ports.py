@@ -42,6 +42,19 @@ class Usage:
     requests: int = 0
     input_tokens: int = 0
     output_tokens: int = 0
+    cached_tokens: int = 0
+    """Input tokens the provider served from its prompt cache (billed cheaper)."""
+    cost_usd: float = 0.0
+    """Best-effort price from genai-prices; 0 for a cache hit or an unpriced model."""
+
+    def __add__(self, other: "Usage") -> "Usage":
+        return Usage(
+            self.requests + other.requests,
+            self.input_tokens + other.input_tokens,
+            self.output_tokens + other.output_tokens,
+            self.cached_tokens + other.cached_tokens,
+            self.cost_usd + other.cost_usd,
+        )
 
 
 @dataclass(frozen=True, slots=True)
@@ -50,6 +63,7 @@ class LlmResult[T]:
     usage: Usage
     model: str
     cached: bool = False
+    latency_ms: int = 0
 
 
 @dataclass(frozen=True, slots=True)

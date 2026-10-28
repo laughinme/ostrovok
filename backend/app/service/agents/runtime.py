@@ -17,7 +17,7 @@ from app.db.database import Database
 from app.db.uow import UnitOfWork
 from app.domain.agents import AgentKind, Planner, RunStatus, Step, StepKind
 from app.domain.jobs import JobKind, NewJob
-from app.service.ports import Clock, EventBus, Usage
+from app.service.ports import Clock, EventBus, LlmResult, Usage
 
 logger = logging.getLogger(__name__)
 
@@ -90,10 +90,30 @@ class Tracer:
         )
 
     def add_usage(self, usage: Usage) -> None:
-        self.usage = Usage(
-            requests=self.usage.requests + usage.requests,
-            input_tokens=self.usage.input_tokens + usage.input_tokens,
-            output_tokens=self.usage.output_tokens + usage.output_tokens,
+        self.usage += usage
+
+    async def llm(self, task: str, result: LlmResult[Any]) -> None:
+        """One LLM call as a trace step: model, tokens, time and price."""
+        self.add_usage(result.usage)
+        u = result.usage
+        summary = (
+            f"{result.model}: ответ из кэша"
+            if result.cached
+            else f"{result.model}: {u.input_tokens} → {u.output_tokens} токенов, "
+            f"{result.latency_ms / 1000:.1f} с, ${u.cost_usd:.4f}"
+        )
+        await self.tool(
+            f"llm.{task}",
+            summary=summary,
+            output={
+                "model": result.model,
+                "cached": result.cached,
+                "inputTokens": u.input_tokens,
+                "cachedTokens": u.cached_tokens,
+                "outputTokens": u.output_tokens,
+                "costUsd": round(u.cost_usd, 6),
+            },
+            duration_ms=result.latency_ms,
         )
 
     async def _write(
@@ -239,4 +259,6 @@ class AgentRunner:
                     "requests": usage.requests,
                     "inputTokens": usage.input_tokens,
                     "outputTokens": usage.output_tokens,
+                    "cachedTokens": usage.cached_tokens,
+                    "costUsd": round(usage.cost_usd, 6),
                 }

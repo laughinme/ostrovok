@@ -12,7 +12,8 @@ from typing import Any, Literal
 from uuid import UUID
 
 import yaml
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
+from rapidfuzz import fuzz, process
 
 from app.db.database import Database
 from app.db.repositories.catalog import hotel_geo
@@ -31,11 +32,12 @@ from app.service.agents.runtime import Tracer
 from app.service.knowledge.registry import InvalidRecipeError, Registry, validate_recipe
 from app.service.ports import Budget, LanguageModel, ToolSpec
 from app.service.recipes.executor import Environment, MethodCall, MethodExecutor, NoDataError
-from app.service.recipes.models import TagFilter
+from app.service.recipes.models import AskHotelierRecipe, Recipe, TagFilter
 
 PROMPTS = Path(__file__).resolve().parent / "prompts"
 SAMPLE_DISTRICTS = ("center", "khosta", "adler", "sirius", "krasnaya_polyana")
 _TTL = {MethodKind.POI_NEARBY: 90, MethodKind.ASK_HOTELIER: 180}
+VOCABULARY_MATCH = 70  # rapidfuzz WRatio: «аптеки» finds «аптека», «бар» does not find «барбершоп»
 
 
 @cache
@@ -48,15 +50,29 @@ class LlmDraft(BaseModel):
     decision: Literal["compute", "ask_hotelier", "cannot"]
     key: str = Field("", pattern=r"^[a-z0-9_]{0,48}$")
     title: str = ""
-    recipe: dict[str, Any] = Field(default_factory=dict)
+    recipe: Recipe | None = None
     yes: str = ""
     no: str = ""
-    synonyms: list[str] = Field(default_factory=list)
-    reason: str = ""
+    synonyms: list[str] = Field(default_factory=list, max_length=8)
+    reason: str = Field("", description="Почему этот метод и эти параметры, одной фразой")
+
+    @model_validator(mode="after")
+    def _recipe_fits_decision(self) -> "LlmDraft":
+        if self.decision == "cannot":
+            return self
+        if self.recipe is None or not self.key or not self.title:
+            raise ValueError("compute и ask_hotelier требуют key, title и recipe")
+        if (self.decision == "ask_hotelier") != isinstance(self.recipe, AskHotelierRecipe):
+            raise ValueError("ask_hotelier ⇔ recipe.kind = ask_hotelier")
+        return self
 
 
 class TagQuery(BaseModel):
     filter: TagFilter
+
+
+class WordQuery(BaseModel):
+    word: str = Field(description="Как гость называет место: «аптека», «хинкальная», «рынок»")
 
 
 @dataclass(frozen=True, slots=True)
@@ -92,7 +108,7 @@ class Curator:
         sample: Sequence[UUID] = (),
     ) -> Lesson:
         await tracer.reason(f"Новое желание: «{description}». Ищу, чем это проверить")
-        draft = await self._plan(description, tracer)
+        draft = await self.plan(description, tracer)
         if draft.decision is Decision.CANNOT:
             await tracer.decide(f"Проверить не можем: {draft.reason}")
             return Lesson(None, draft, ())
@@ -126,29 +142,36 @@ class Curator:
         )
         return Lesson(characteristic, draft, trial)
 
-    async def _plan(self, description: str, tracer: Tracer) -> RecipeDraft:
+    async def plan(self, description: str, tracer: Tracer) -> RecipeDraft:
         places = _places(self._data_dir)
 
         async def by_llm(llm: LanguageModel) -> RecipeDraft:
+            async with self._db.unit_of_work() as uow:
+                registry = await Registry(uow).all()
+            catalog = "\n".join(f"- {c.key} — {c.title}" for c in registry)
             result = await llm.run_tools(
                 task="curator",
-                system=(PROMPTS / "curator.md").read_text(encoding="utf-8"),
+                system=(PROMPTS / "curator.md")
+                .read_text(encoding="utf-8")
+                .replace("{catalog}", catalog),
                 prompt=description,
-                tools=[self._tag_stats_tool()],
+                tools=self._tools(tracer, places),
                 output=LlmDraft,
-                budget=Budget(max_requests=6, max_tool_calls=6, max_seconds=20),
+                budget=Budget(max_requests=8, max_tool_calls=8, max_seconds=45),
             )
-            tracer.add_usage(result.usage)
+            await tracer.llm("curator", result)
             out = result.output
+            recipe = out.recipe.model_dump(mode="json") if out.recipe else {}
             return RecipeDraft(
                 decision=Decision(out.decision),
                 reason=out.reason or "план LLM",
                 key=out.key,
                 title=out.title,
-                recipe=out.recipe,
+                recipe=recipe,
                 yes=out.yes or out.title,
                 no=out.no or f"{out.title} — нет",
                 synonyms=tuple(out.synonyms),
+                question=recipe.get("question"),
             )
 
         async def by_rules() -> RecipeDraft:
@@ -161,18 +184,56 @@ class Curator:
         )
         return draft
 
-    def _tag_stats_tool(self) -> ToolSpec:
-        async def call(args: BaseModel) -> dict[str, int]:
+    def _tools(self, tracer: Tracer, places: Sequence[Any]) -> list[ToolSpec]:
+        """The LLM's tools; every call is a step in the trace, like the rules planner's."""
+
+        async def tag_stats(args: BaseModel) -> dict[str, Any]:
             assert isinstance(args, TagQuery)  # noqa: S101 - the adapter validated it
             found = await self._env.reader.matching(args.filter)
-            return {"count": len(found), "named": sum(1 for f in found if f.name)}
+            named = [f.name for f in found if f.name]
+            await tracer.tool(
+                "osm.tag_stats",
+                summary=f"{len(found)} объектов в регионе, у {len(named)} есть название",
+                args=args.filter.model_dump(exclude_defaults=True),
+            )
+            return {"count": len(found), "named": len(named), "examples": named[:5]}
 
-        return ToolSpec(
-            name="osm_tag_stats",
-            description="How many OSM objects in the region match a tag filter (and are named)",
-            args=TagQuery,
-            call=call,
-        )
+        async def vocabulary(args: BaseModel) -> list[dict[str, Any]]:
+            assert isinstance(args, WordQuery)  # noqa: S101 - the adapter validated it
+            names = {t.name: t for t in places}
+            hits = process.extract(args.word.lower(), list(names), scorer=fuzz.WRatio, limit=3)
+            terms = [names[name] for name, score, _ in hits if score >= VOCABULARY_MATCH]
+            await tracer.tool(
+                "osm.vocabulary",
+                summary=f"«{args.word}» → " + (", ".join(t.name for t in terms) or "в словаре нет"),
+                args={"word": args.word},
+            )
+            return [
+                {
+                    "term": t.name,
+                    "any_of": [dict(a) for a in t.any_of],
+                    "name_regex": t.name_regex,
+                    "uncertain": t.uncertain,
+                }
+                for t in terms
+            ]
+
+        return [
+            ToolSpec(
+                name="osm_tag_stats",
+                description="Сколько объектов OSM в регионе подходит под фильтр тегов, "
+                "сколько из них с названием, и до пяти названий для примера",
+                args=TagQuery,
+                call=tag_stats,
+            ),
+            ToolSpec(
+                name="osm_vocabulary",
+                description="Словарь «слово гостя → теги OSM» (150 видов мест Сочи): "
+                "проверенные варианты фильтра для poi_nearby",
+                args=WordQuery,
+                call=vocabulary,
+            ),
+        ]
 
     async def _stats(self, tag_filter: TagFilter, tracer: Tracer) -> None:
         found = await self._env.reader.matching(tag_filter)
