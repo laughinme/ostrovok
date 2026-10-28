@@ -64,6 +64,7 @@ export function HotelCardFacts({ hotel }: { hotel: Hotel }) {
         >
           {selected ? (
             <>
+              <b>{selected.label}</b>
               <p>{selected.value}</p>
               <small>
                 {selected.status === "confirmed"
