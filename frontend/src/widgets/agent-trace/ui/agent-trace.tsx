@@ -51,6 +51,7 @@ export function AgentTrace({
   const finished = isFinished(run);
   const steps = run?.steps ?? [];
   const usage = run ? usageLine(run) : null;
+  const usedLlm = run?.planner === "llm" || steps.some(isLlmStep);
   return (
     <section
       aria-live="polite"
@@ -78,10 +79,10 @@ export function AgentTrace({
           <span
             className={cn(
               "rounded-full px-2.5 py-1 text-[11px] font-semibold",
-              run.planner === "llm" ? "bg-sun text-night" : "bg-night-foreground/10",
+              usedLlm ? "bg-sun text-night" : "bg-night-foreground/10",
             )}
           >
-            {run.planner === "llm" ? "LLM" : "правила"}
+            {usedLlm ? "LLM" : "правила"}
           </span>
         )}
       </header>
