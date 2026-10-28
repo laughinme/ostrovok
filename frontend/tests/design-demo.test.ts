@@ -78,6 +78,74 @@ describe("design demo transport", () => {
     expect(result.hotelReply).toContain("не отправляется");
     expect(fetch).not.toHaveBeenCalled();
   });
+  it.each(demoHotels)("loads the beach route and both noise periods for $name", async (hotel) => {
+    const route = await api<components["schemas"]["RouteOut"]>(
+      `/hotels/${hotel.id}/routes/beach?profile=walk`,
+    );
+    const beach = hotel.nearby.find((place) => place.kind === "beach")!;
+    expect(route.hotelId).toBe(hotel.id);
+    expect(route.geometry.coordinates[0]).toEqual(hotel.location);
+    expect(route.geometry.coordinates.at(-1)).toEqual(beach.location);
+    expect(route.targetName).toBe(beach.name);
+    expect(route.there.lengthM).toBe(beach.distanceM);
+    expect(route.there.minutes).toBe(
+      (
+        hotel.facts.find((fact) => fact.characteristic === "beach_walk")!.value as {
+          minutes: number;
+        }
+      ).minutes,
+    );
+    expect(route.elevationProfile.at(-1)?.[0]).toBe(route.there.lengthM);
+    expect(route.elevationProfile.every(([, height]) => height != null)).toBe(true);
+    expect(route.back.climbM).toBe(route.there.descentM);
+    expect(route.caveats.join(" ")).toContain("Демонстрационный");
+    const noise = await api<components["schemas"]["NoiseOut"]>(`/hotels/${hotel.id}/noise`);
+    expect(noise.facades.map((side) => side.facade)).toEqual(hotel.facades);
+    for (const side of noise.facades) {
+      expect(side.day.indexDb).toBeGreaterThan(side.night.indexDb!);
+      expect(side.night.sources.length).toBeGreaterThan(0);
+      expect(side.day.sources.length).toBeGreaterThan(0);
+    }
+    expect(fetch).not.toHaveBeenCalled();
+  });
+  it("supports accessible demo routes and rejects missing hotels and invalid profiles", () => {
+    const hotel = demoHotels.find((hotel) => hotel.id.endsWith("dom-na-holme"))!;
+    const route = demoResponse(
+      `/hotels/${hotel.id}/routes/beach?profile=stroller`,
+    ) as components["schemas"]["RouteOut"];
+    expect(route.profile).toBe("stroller");
+    expect(route.there.steps).toBe(0);
+    expect(() => demoResponse(`/hotels/${hotel.id}/routes/beach?profile=invalid`)).toThrow();
+    expect(() => demoResponse("/hotels/missing/routes/beach?profile=walk")).toThrow();
+    expect(() => demoResponse("/hotels/missing/noise")).toThrow();
+  });
+  it("records a question and returns the completed demo agent trace without fetching", async () => {
+    const storage = new Map<string, string>();
+    vi.stubGlobal("window", {});
+    vi.stubGlobal("localStorage", {
+      getItem: (key: string) => storage.get(key) ?? null,
+      setItem: (key: string, value: string) => storage.set(key, value),
+    });
+    const hotel = demoHotels[0]!;
+    const search = demoSearch({ text: "тихий отель", useProfile: false });
+    for (const question of hotel.unknowns) {
+      const started = await api<components["schemas"]["RunStarted"]>(
+        `/searches/${search.searchId}/research`,
+        {
+          method: "POST",
+          body: { characteristic: question.characteristic, hotelIds: [hotel.id] },
+        },
+      );
+      const run = await api<components["schemas"]["AgentRunOut"]>(`/runs/${started.runId}`);
+      expect(run.status).toBe("done");
+      expect(run.subject?.["hotelIds"]).toEqual([hotel.id]);
+      expect(run.steps.at(-1)?.kind).toBe("result");
+      expect(
+        run.steps.some((step) => step.summary.includes("Реальное сообщение не отправлялось")),
+      ).toBe(true);
+    }
+    expect(fetch).not.toHaveBeenCalled();
+  });
   it("blocks unknown demo requests and missing adapters instead of using live API", async () => {
     await expect(api("/new-expensive-agent", { method: "POST" })).rejects.toMatchObject({
       status: 501,

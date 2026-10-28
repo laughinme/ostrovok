@@ -9,14 +9,13 @@ import { useAskHotel } from "@/features/live-research";
 import { AgentTrace } from "@/widgets/agent-trace";
 import { CoastMap } from "@/widgets/hotel-map";
 import { Drawer, Lightbox, WhyPanel, type GalleryItem } from "./overlays";
-import { Conf, Icon, Mark, SrcTag, Toast } from "./detail-ui";
+import { Icon, Mark, Toast } from "./detail-ui";
 import { useToast } from "../lib/use-toast";
 import { Panorama, Photo } from "./visuals";
 import { createHotelDetails } from "../model/hotel-details";
 import type { Fact, RoomType, RatePlan } from "../model/types";
 import { FACADE_NAME } from "../lib/building";
 import { rub } from "../lib/format";
-import { verdict } from "../lib/score";
 import { BookingRequest } from "./booking-request";
 import { BeachSection } from "./beach-section";
 import { NoiseSection } from "./noise-section";
@@ -27,6 +26,7 @@ import "./hotel-detail.css";
 import "./hotel-refresh.css";
 import { HotelAbout, HotelOverview } from "./hotel-overview";
 import { HotelNearby } from "./hotel-nearby";
+import { HotelFacts } from "./hotel-facts";
 import { getApiMode } from "@/shared/api";
 const DAYS = [
   ["пн", 10, 17, "16:58", 18, 10],
@@ -250,34 +250,7 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
           <ClimateSection hotel={hotel} />
         )}
 
-        <section className="sec-h2" id="hotel-facts">
-          <h2>За каждым фактом — источник</h2>
-          <p>Нажмите на факт, чтобы увидеть доказательство</p>
-        </section>
-        <div className="tiles">
-          {h.facts.map((f) => {
-            const v = verdict(f.confidence);
-            return (
-              <button
-                key={f.id}
-                className={`tile${why?.id === f.id ? " sel" : ""}`}
-                onClick={() => setWhy(f)}
-              >
-                <span className="t-top">
-                  <Mark v={v} />
-                  {f.group}
-                  <SrcTag kind={f.source}>{f.sourceLabel}</SrcTag>
-                </span>
-                <b>{f.statement}</b>
-                <span className="scope">{f.scopeText}</span>
-                <span className="t-foot">
-                  <Conf p={f.confidence} />
-                  <span className="go">почему →</span>
-                </span>
-              </button>
-            );
-          })}
-        </div>
+        <HotelFacts facts={h.facts} selectedId={why?.id} onFact={setWhy} demo={designDemo} />
 
         {h.unknowns.length > 0 && (
           <section className="sec-h2">

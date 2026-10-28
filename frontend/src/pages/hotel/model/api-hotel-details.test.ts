@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { hotelFromApi, type ApiHotel } from "@/entities/hotel";
-import { apiHotelDetails } from "./api-hotel-details";
+import { hotelFromApi, type ApiFact, type ApiHotel } from "@/entities/hotel";
+import { apiHotelDetails, detailFactFromApi } from "./api-hotel-details";
 
 const hotel: ApiHotel = {
   id: "hotel",
@@ -27,6 +27,35 @@ const hotel: ApiHotel = {
   ],
 };
 describe("API hotel detail", () => {
+  it("preserves evidence status and demo attribution independently of confidence", () => {
+    const fact: ApiFact = {
+      id: "fact",
+      hotelId: "hotel",
+      characteristic: "sea_view",
+      statement: "Моря из окна не видно",
+      scopeText: "Северная сторона · этаж 1",
+      value: false,
+      scope: {},
+      confidence: 0.98,
+      confidenceLabel: "точно",
+      source: "computed",
+      sourceLabel: "Расчёт горизонта",
+      method: "Расчёт",
+      observedAt: "2026-10-28",
+      status: "conflict",
+      evidence: [],
+      caveats: ["Вид зависит от этажа"],
+      isDemo: true,
+    };
+    expect(detailFactFromApi(fact)).toMatchObject({
+      statement: fact.statement,
+      scopeText: fact.scopeText,
+      confidence: 0.98,
+      status: "conflict",
+      isDemo: true,
+      sourceLabel: fact.sourceLabel,
+    });
+  });
   it("keeps cardinal facades without borrowing diagonal noise", () => {
     const detail = apiHotelDetails(hotelFromApi(hotel));
     expect(detail.bestFacade).toBe("N");

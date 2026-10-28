@@ -1,4 +1,6 @@
 import { ClientOnly, LoadingSignal } from "@/shared/ui";
+import { getApiMode } from "@/shared/api";
+import { DemoMap } from "./demo-map";
 import { lazy, Suspense } from "react";
 import type { CoastMapProps } from "../model/types";
 
@@ -11,11 +13,15 @@ export function CoastMap(props: CoastMapProps) {
       role="region"
       aria-label="Карта отелей"
     >
-      <ClientOnly>
-        <Suspense fallback={<LoadingSignal />}>
-          <MapCanvas {...props} />
-        </Suspense>
-      </ClientOnly>
+      {getApiMode() === "demo" ? (
+        <DemoMap {...props} />
+      ) : (
+        <ClientOnly>
+          <Suspense fallback={<LoadingSignal />}>
+            <MapCanvas {...props} />
+          </Suspense>
+        </ClientOnly>
+      )}
     </div>
   );
 }
