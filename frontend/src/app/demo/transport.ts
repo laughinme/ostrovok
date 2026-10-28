@@ -161,32 +161,6 @@ export function demoResponse(path: string, options: ApiOptions = {}): unknown {
     if (pieces[2] === "routes" && pieces[3] === "beach" && pieces.length === 4)
       return demoBeachRoute(hotel, params.get("profile") ?? "walk");
   }
-  if (pieces[0] === "hotels" && pieces[2] === "similar" && method === "POST") {
-    const request = data as components["schemas"]["SimilarIn"];
-    const search = demoSearch(
-      {
-        chips:
-          request.chips ??
-          demoIntent(
-            request.change === "quieter"
-              ? "тихий номер"
-              : request.change === "closer_to_beach"
-                ? "у моря"
-                : "отель",
-          ).chips,
-        trip: request.trip ?? {},
-        useProfile: false,
-      },
-      hotels,
-    );
-    return {
-      sourceId: pieces[1]!,
-      change: request.change,
-      intent: search.intent,
-      matches: search.matches.filter((match) => match.hotelId !== pieces[1]),
-      caveats: ["Демонстрационный список похожих отелей. Все данные синтетические."],
-    } satisfies components["schemas"]["SimilarOut"];
-  }
   if (path === "/compare" && method === "POST") {
     const request = data as components["schemas"]["CompareIn"];
     const intent = {
