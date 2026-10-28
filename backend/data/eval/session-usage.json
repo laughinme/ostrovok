@@ -1,0 +1,91 @@
+{
+  "since": "2026-10-28T10:00:00Z",
+  "generatedAt": "2026-10-28T10:51:42.279157+00:00",
+  "note": "Estimated cost of completed requests only. Provider may bill timed-out requests without returned usage. Excludes standalone auth probes.",
+  "rows": [
+    {
+      "model": "gpt-5.6-luna",
+      "status": "cached",
+      "calls": 182,
+      "costUsd": 0.0
+    },
+    {
+      "model": "google/gemini-3.5-flash",
+      "status": "failed",
+      "calls": 6,
+      "costUsd": 0.0
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "status": "ok",
+      "calls": 93,
+      "costUsd": 0.12525224999999995
+    },
+    {
+      "model": "google/gemini-3.5-flash-lite",
+      "status": "failed",
+      "calls": 2,
+      "costUsd": 0.0
+    },
+    {
+      "model": "google/gemini-3.5-flash-lite",
+      "status": "ok",
+      "calls": 179,
+      "costUsd": 0.12564339999999993
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "status": "cached",
+      "calls": 93,
+      "costUsd": 0.0
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "status": "failed",
+      "calls": 81,
+      "costUsd": 0.0
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "status": "ok",
+      "calls": 98,
+      "costUsd": 0.44719019999999987
+    },
+    {
+      "model": "google/gemini-4-argon",
+      "status": "cached",
+      "calls": 98,
+      "costUsd": 0.0
+    },
+    {
+      "model": "google/gemini-3.5-flash",
+      "status": "ok",
+      "calls": 86,
+      "costUsd": 0.30917700000000004
+    },
+    {
+      "model": "google/gemini-3.5-flash-lite",
+      "status": "cached",
+      "calls": 354,
+      "costUsd": 0.0
+    },
+    {
+      "model": "gpt-5.6-luna",
+      "status": "ok",
+      "calls": 180,
+      "costUsd": 0.06831817000000001
+    },
+    {
+      "model": "google/gemini-3.5-flash",
+      "status": "cached",
+      "calls": 86,
+      "costUsd": 0.0
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "status": "failed",
+      "calls": 32,
+      "costUsd": 0.0
+    }
+  ]
+}
