@@ -330,11 +330,6 @@
 .hotel-detail .directions-route-details > p {
   color: var(--muted);
 }
-.hotel-detail .directions-empty {
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.7;
-}
 .hotel-detail .directions-external {
   display: inline-flex;
   align-items: center;
