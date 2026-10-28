@@ -7,7 +7,6 @@ import { Empty, LoadState, RunTrace } from "./common";
 
 export function Learn() {
   const [description, setDescription] = useState("");
-  const [submitted, setSubmitted] = useState("");
   const [runId, setRunId] = useState<string | null>(null);
   const [publishRunId, setPublishRunId] = useState<string | null>(null);
   const run = useAgentRun(runId);
@@ -36,7 +35,7 @@ export function Learn() {
       ),
     (result) => setPublishRunId(result.runId),
   );
-  const key = characteristicKey(run.data, registry.data ?? [], submitted);
+  const key = characteristicKey(run.data);
   const entry = registry.data?.find((item) => item.key === key);
   const busy =
     learn.isPending ||
@@ -57,7 +56,6 @@ export function Learn() {
           event.preventDefault();
           const text = description.trim();
           if (text.length < 3 || busy) return;
-          setSubmitted(text);
           publish.reset();
           learn.mutate(text);
         }}
@@ -95,7 +93,7 @@ export function Learn() {
               </div>
               <button
                 className="console-button"
-                disabled={publish.isPending || entry?.status === "published"}
+                disabled={busy || entry?.status === "published"}
                 onClick={() => publish.mutate(key)}
               >
                 {entry?.status === "published"

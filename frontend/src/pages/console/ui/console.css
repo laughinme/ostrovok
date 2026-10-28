@@ -182,3 +182,14 @@
     transition: none !important;
   }
 }
+
+.console-run-list {
+  max-height: 640px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+@media (max-width: 1279px) {
+  .console-run-list {
+    max-height: 340px;
+  }
+}

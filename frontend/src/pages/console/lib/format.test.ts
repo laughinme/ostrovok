@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import type { ApiRun } from "@/entities/agent-run";
-import type { RegistryEntry } from "../api/console";
 import { characteristicKey, dateTime, money, nearbyBuilding, percent, record } from "./format";
 
 const run: ApiRun = {
@@ -35,17 +34,16 @@ describe("console formatting", () => {
       summary: key,
       output: { key },
     }));
-    expect(characteristicKey({ ...run, steps }, [], "")).toBe("new");
-    expect(characteristicKey({ ...run, steps, status: "running" }, [], "")).toBeNull();
-    expect(characteristicKey({ ...run, steps, status: "failed" }, [], "")).toBeNull();
-    expect(characteristicKey({ ...run, subject: { key: "subject" } }, [], "")).toBe("subject");
-    expect(characteristicKey(undefined, [], "")).toBeNull();
+    expect(characteristicKey({ ...run, steps })).toBe("new");
+    expect(characteristicKey({ ...run, steps, status: "running" })).toBeNull();
+    expect(characteristicKey({ ...run, steps, status: "failed" })).toBeNull();
+    expect(characteristicKey({ ...run, subject: { key: "subject" } })).toBe("subject");
+    expect(characteristicKey(undefined)).toBeNull();
   });
-  it("uses only an unambiguous matching registry entry", () => {
-    const entry = { key: "pharmacy", learnedFrom: "Аптека", status: "draft" } as RegistryEntry;
-    expect(characteristicKey(run, [entry], "Аптека")).toBe("pharmacy");
-    expect(characteristicKey(run, [entry, { ...entry, key: "other" }], "Аптека")).toBeNull();
-    expect(characteristicKey(run, [entry], "Бассейн")).toBeNull();
+  it("does not invent a key when the Curator cannot create a characteristic", () => {
+    expect(characteristicKey(run)).toBeNull();
+    expect(characteristicKey({ ...run, subject: { key: "" } })).toBeNull();
+    expect(characteristicKey({ ...run, subject: { characteristic: "pharmacy" } })).toBe("pharmacy");
   });
   it("places a ten-floor building sixty metres south of the selected hotel", () => {
     const building = nearbyBuilding([39.72, 43.6], "Маяк");
