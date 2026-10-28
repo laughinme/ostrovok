@@ -14,6 +14,7 @@ export function useVoiceInput(query: string, onQuery: (value: string) => void) {
     session.current?.dispose();
     session.current = null;
     setListening(false);
+    setError(undefined);
   };
   return {
     supported,

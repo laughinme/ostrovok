@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useVoiceInput } from "@/features/query-input";
+import { useEffect, useRef, useState } from "react";
+import { usePhotoInput, useVoiceInput } from "@/features/query-input";
 import { EXAMPLES, QUICK_TAGS } from "../model/catalog";
 import type { IntentChip } from "../model/types";
 import { Icon } from "./landing-ui";
@@ -52,13 +52,17 @@ export function LandingSearch({
   onChips(value: IntentChip[]): void;
   onSubmit(placeholder: string): void;
 }) {
+  const fileInput = useRef<HTMLInputElement>(null);
+  const photo = usePhotoInput(onQuery);
   const voice = useVoiceInput(query, onQuery);
+  const busy = photo.status === "loading";
   const placeholder = useTypingPlaceholder(!query && !voice.listening);
   return (
     <form
       className="wish"
       onSubmit={(event) => {
         event.preventDefault();
+        if (busy) return;
         voice.cancel();
         onSubmit(placeholder);
       }}
@@ -68,12 +72,29 @@ export function LandingSearch({
         <span className="wish-surface__bottom" />
         <span className="wish-surface__join" />
       </div>
+      <input
+        ref={fileInput}
+        type="file"
+        accept="image/jpeg,image/png,image/webp"
+        hidden
+        aria-label="Фото желаемого отдыха"
+        onChange={(event) => {
+          const file = event.target.files?.[0];
+          event.target.value = "";
+          if (!file) return;
+          voice.cancel();
+          void photo.select(file);
+        }}
+      />
       <div className="wish-row">
         <button
           type="button"
           className="icon-btn wish-attachment"
-          aria-label="Прикрепить файл"
-          title="Прикрепить файл"
+          aria-label="Хочу как на этом фото"
+          title="Хочу как на этом фото · JPG, PNG или WebP до 5 МБ"
+          aria-busy={busy}
+          disabled={busy}
+          onClick={() => fileInput.current?.click()}
         >
           <Icon name="paperclip" size={20} />
         </button>
@@ -82,13 +103,16 @@ export function LandingSearch({
           rows={2}
           placeholder={placeholder}
           aria-label="Опишите поездку своими словами"
+          aria-describedby="wish-input-status"
           onChange={(event) => {
             voice.cancel();
+            photo.clear();
             onQuery(event.target.value);
           }}
           onKeyDown={(event) => {
             if (event.key === "Enter" && !event.shiftKey) {
               event.preventDefault();
+              if (busy) return;
               voice.cancel();
               onSubmit(placeholder);
             }
@@ -99,23 +123,40 @@ export function LandingSearch({
             type="button"
             className="icon-btn wish-mic"
             aria-pressed={voice.listening}
-            onClick={voice.toggle}
+            disabled={busy}
+            onClick={() => {
+              photo.clear();
+              voice.toggle();
+            }}
             aria-label={voice.listening ? "Остановить голосовой ввод" : "Сказать голосом"}
             title={voice.listening ? "Остановить голосовой ввод" : "Голосовой ввод"}
           >
             <Icon name="mic" size={20} />
           </button>
         )}
-        <button className="btn btn-primary go" type="submit">
+        <button className="btn btn-primary go" type="submit" disabled={busy}>
           <span>Подобрать</span>
           <Icon name="arrow" size={17} />
         </button>
       </div>
-      {(voice.listening || voice.error) && (
-        <p className="wish-status" role={voice.error ? "alert" : "status"}>
-          {voice.listening ? "Слушаю… Нажмите на микрофон, чтобы закончить." : voice.error}
-        </p>
-      )}
+      <div id="wish-input-status" className="wish-input-status">
+        {(voice.listening || voice.error) && (
+          <p className="wish-status" role={voice.error ? "alert" : "status"}>
+            {voice.listening ? "Слушаю… Нажмите на микрофон, чтобы закончить." : voice.error}
+          </p>
+        )}
+        {photo.status !== "idle" && (
+          <div className="wish-photo">
+            {photo.preview && (
+              <img src={photo.preview} width={48} height={48} alt="Прикреплённое фото" />
+            )}
+            <p role={photo.status === "error" ? "alert" : "status"}>{photo.message}</p>
+            <button type="button" className="wish-photo-clear" onClick={photo.clear}>
+              {busy ? "Отменить" : "Убрать фото"}
+            </button>
+          </div>
+        )}
+      </div>
       <div className="wish-tools">
         {QUICK_TAGS.map((tag) => {
           const selected = chips.some((chip) => chip.key === tag.key);
