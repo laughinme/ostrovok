@@ -1,6 +1,6 @@
 import { useId } from "react";
 import type { WindowView } from "../model/window-view";
-import { BuildingObject, MountainObject, SeaObject, TreeObject } from "./window-view-objects";
+import { BuildingRow, MountainObject, SeaObject, TreeObject } from "./window-view-objects";
 
 export function WindowPanorama({ scene, floor }: { scene: WindowView; floor: number }) {
   const id = useId();
@@ -29,14 +29,6 @@ export function WindowPanorama({ scene, floor }: { scene: WindowView; floor: num
           <stop stopColor="var(--view-sun-glow)" stopOpacity=".85" />
           <stop offset="1" stopColor="var(--view-sun-glow)" stopOpacity="0" />
         </radialGradient>
-        <pattern id={`${id}-unknown`} width="18" height="18" patternUnits="userSpaceOnUse">
-          <path
-            d="M-4 4 4-4M0 18 18 0M14 22 22 14"
-            stroke="var(--muted)"
-            strokeWidth="1"
-            opacity=".35"
-          />
-        </pattern>
       </defs>
       <rect width="960" height="560" fill={`url(#${id}-sky)`} />
       <g fill="var(--surface)" opacity=".75" aria-hidden="true">
@@ -44,12 +36,8 @@ export function WindowPanorama({ scene, floor }: { scene: WindowView; floor: num
         <path d="M628 61c38-12 58-10 79-5s48-8 69-1l38 8c-63 7-114 7-186-2Z" />
       </g>
       <rect y="270" width="960" height="290" fill="var(--view-land)" />
-      {scene.mountains.map((span, index) => (
-        <MountainObject key={index} span={span} fill={`url(#${id}-ridge)`} />
-      ))}
-      {scene.sea.map((span, index) => (
-        <SeaObject key={index} span={span} fill={`url(#${id}-water)`} />
-      ))}
+      {scene.mountains.length > 0 && <MountainObject fill={`url(#${id}-ridge)`} />}
+      {scene.sea.length > 0 && <SeaObject fill={`url(#${id}-water)`} />}
       {scene.sun !== null && (
         <g data-window-object="sunset">
           <circle cx={scene.sun * 960} cy="244" r="90" fill={`url(#${id}-glow)`} />
@@ -65,30 +53,11 @@ export function WindowPanorama({ scene, floor }: { scene: WindowView; floor: num
           d="M-40 466Q140 438 322 458T680 452T1000 466V760H-40Z"
           fill="var(--view-foreground)"
         />
-        {scene.buildings.map((building, index) => (
-          <BuildingObject key={index} building={building} index={index} />
-        ))}
+        {scene.buildings.length > 0 && <BuildingRow />}
         {scene.trees.map((tree, index) => (
           <TreeObject key={index} {...tree} />
         ))}
       </g>
-      {scene.unknown.map((span, index) => (
-        <g key={index} data-window-object="unknown">
-          <rect
-            x={span.from * 960}
-            width={(span.to - span.from) * 960}
-            height="560"
-            fill="var(--raised)"
-            opacity=".85"
-          />
-          <rect
-            x={span.from * 960}
-            width={(span.to - span.from) * 960}
-            height="560"
-            fill={`url(#${id}-unknown)`}
-          />
-        </g>
-      ))}
     </svg>
   );
 }
