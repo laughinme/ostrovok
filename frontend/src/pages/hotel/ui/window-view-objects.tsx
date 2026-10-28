@@ -1,57 +1,32 @@
-import { useId } from "react";
-import type { ViewBuilding, ViewSpan } from "../model/window-view";
+import type { ViewBuilding } from "../model/window-view";
 
-export function SeaObject({ span, fill }: { span: ViewSpan; fill: string }) {
-  const id = useId();
-  const left = span.from * 960;
-  const width = (span.to - span.from) * 960;
-  const right = left + width;
-  const coast = `M${left} 270H${right}C${right - width * 0.035} 370 ${right - width * 0.06} 480 ${right} 560H${left}C${left + width * 0.08} 480 ${left + width * 0.035} 370 ${left} 270Z`;
+export function SeaObject({ fill }: { fill: string }) {
   return (
-    <g data-window-object="sea">
-      <defs>
-        <clipPath id={id}>
-          <path d={coast} />
-        </clipPath>
-      </defs>
-      <g clipPath={`url(#${id})`}>
-        <rect x={left} y="270" width={width} height="290" fill={fill} />
-        <path d={`M${left} 270h${width}`} stroke="var(--view-water-line)" strokeWidth="2" />
-        {[296, 325, 370, 430, 500].map((y, index) => (
-          <path
-            key={y}
-            d={`M${left + width * 0.08} ${y}h${width * 0.24}m${width * 0.14} 0h${width * 0.36}`}
-            stroke="var(--view-water-line)"
-            strokeWidth={1 + index * 0.3}
-            opacity=".35"
-          />
-        ))}
-      </g>
-      <path
-        d={`M${left} 270C${left + width * 0.035} 370 ${left + width * 0.08} 480 ${left} 560M${right} 270C${right - width * 0.035} 370 ${right - width * 0.06} 480 ${right} 560`}
-        stroke="var(--view-water-line)"
-        strokeWidth="2"
-        fill="none"
-        opacity=".6"
-      />
+    <g data-window-object="sea" data-window-layer="sea">
+      <rect x="0" y="270" width="960" height="290" fill={fill} />
+      <path d="M0 270H960" stroke="var(--view-water-line)" strokeWidth="2" />
+      {[296, 325, 370, 430, 500].map((y, index) => (
+        <path
+          key={y}
+          d={`M${index % 2 ? 20 : 70} ${y}h110m65 0h170m80 0h150m55 0h200`}
+          stroke="var(--view-water-line)"
+          strokeWidth={1 + index * 0.3}
+          opacity=".35"
+        />
+      ))}
     </g>
   );
 }
 
-export function MountainObject({
-  span,
-  fill,
-}: {
-  span: ViewSpan & { height: number };
-  fill: string;
-}) {
+export function MountainObject({ fill }: { fill: string }) {
   return (
     <g
       data-window-object="mountain"
-      transform={`translate(${span.from * 960} ${270 - span.height}) scale(${span.to - span.from} ${span.height / 160})`}
+      data-window-layer="mountains"
+      transform="translate(-24 110) scale(1.05 1)"
     >
       <path
-        d="M0 170 60 133 105 142 180 80 222 96 300 22 342 49 390 0 435 44 495 73 548 31 590 61 660 110 711 89 783 131 836 123 910 157 960 170V300H0Z"
+        d="M0 170 60 133 105 142 180 80 222 96 300 22 342 49 390 0 435 44 495 73 548 31 590 61 660 110 711 89 783 131 836 123 910 157 960 170V450H0Z"
         fill={fill}
       />
       <path d="m300 22 42 27 48-49-24 61-23-9-29 19-17-22-42 36Z" fill="var(--view-snow)" />
@@ -60,8 +35,29 @@ export function MountainObject({
         fill="var(--view-snow)"
         opacity=".7"
       />
-      <path d="M0 203q120-53 237-23t220-1 219 8 284 16v140H0Z" fill="var(--view-hill-far)" />
-      <path d="M0 247q130-35 248-8t248-3 240 15 224-6v100H0Z" fill="var(--view-foreground)" />
+      <path d="M0 203q120-53 237-23t220-1 219 8 284 16v247H0Z" fill="var(--view-hill-far)" />
+      <path d="M0 247q130-35 248-8t248-3 240 15 224-6v205H0Z" fill="var(--view-foreground)" />
+    </g>
+  );
+}
+
+const rowHeights = [204, 250, 180, 234, 196, 242, 212, 226];
+export function BuildingRow() {
+  return (
+    <g data-window-layer="buildings">
+      {rowHeights.map((height, index) => (
+        <BuildingObject
+          key={index}
+          index={index}
+          building={{
+            from: index === 0 ? -0.02 : index / rowHeights.length,
+            to: index === rowHeights.length - 1 ? 1.02 : (index + 1) / rowHeights.length,
+            roof: 462 - height,
+            base: 462,
+            floors: Math.round(height / 28),
+          }}
+        />
+      ))}
     </g>
   );
 }
