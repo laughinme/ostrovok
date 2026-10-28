@@ -12,6 +12,37 @@
 
 ---
 
+### 28.10 03:18 МСК · codex-ground2 · B5.6 завершена, линия ground2
+- Сделано: GET /api/v1/hotels/{UUID}/day?date=2026-11-12, без LLM. Код DayPlan/REST — 62b296a;
+  часы/геометрия заката — 541f8d2; area_stat — f521d6c; шум/маршруты/климат — 2aff2a0, ed3c0f6.
+- **Публичный API:** `service.geo.day.build_day(hotel: HotelGeo, env: Environment, day: date)
+  -> DayPlan(hotel_id,day,slots: tuple[DaySlot,...],sunset: DaySunset,caveats)`;
+  `GroundQueries(db,env).day(hotel_id: UUID,day: date) -> DayPlan` — async, как noise/route/climate.
+  DaySlot: at (aware datetime МСК),title,place/osm_ref (optional),route: RouteView|None,
+  unavailable_reason,opening_hours. Маршруты всегда от отеля и обратно; время слота — прибытие.
+- **REST DayPlan (08 §9):** hotelId,date,slots[{time HH:MM,title,place,osmRef,route}],sunset
+  {time,fromWindow,spot,windowScope}; дополнительно attribution/caveats/unavailableReason/openingHours.
+  slot.route: minutes/backMinutes (мин),climbM/backClimbM (м),steps/backSteps,crossings/backCrossings,
+  geometry (GeoJSON LineString WGS84 туда),elevationProfile [(м пути,м DEM|null)],estimated,
+  uncertainShare (0…1),osmRefs. Unknown не превращается в 0. Открытие подтверждено на всё посещение
+  нужного дня недели; ужин дополнительно открыт в 23:30; аптека — полная неделя 24/7.
+- Закат из окна только по действующему True/OK факту нужного месяца и confidence≥0,65; scope возвращён.
+  Иначе ближайшая по времени пешком морская точка ≤40 минут с открытым лучом к закату в эту дату;
+  здания, DEM и море проверяет прежнее ядро. Без подтверждения — причина отсутствия, не выдуманная точка.
+- Как проверить: **make check на изолированном HEAD + файлы линии: 366 passed**,
+  ruff check/format, mypy strict и 7 import-контрактов зелёные. Общий снимок нестабилен во время
+  записи соседними сессиями; их незавершённые файлы не исправлялись и не коммитились.
+  Тест `tests/unit/geo/test_day_region.py` — реальные OSM/DEM/граф, три отеля, без сети/БД/LLM.
+  Через реальный ASGI/PostGIS все три /day → 200, по 6 слотов; ответы в .cache/day-ground2/api-plans.json.
+- Визуальная проверка: `uv run --group pipeline python -m tests.benchmarks.day_plan` рисует
+  .cache/day-ground2/plans.png и JSON. Карты и профили просмотрены: Камелия → пляж 8,5/9,8 мин,
+  Дом Ливерпуль → Робинзон 21,4/23,9, Островок → пляж 4,9/5,3. Закат 12 ноября — 16:58 МСК.
+  Пути следуют OSM-улицам; у склонов обратный путь дольше, ступени/переходы в ответе сохранены.
+- Грабли: у Ливерпуля доступная аптека 24/7 не подтверждена — это явно показано. Не все POI имеют
+  имена/часы. DSM содержит крыши/деревья, ступени частично оценены пайплайном; uncertainShare
+  не даёт обещать подтверждённую доступность. Это модель географии, не натурная проверка и не прогноз.
+- Дальше: фронт может подключать /noise, /routes, /climate и /day. Задачи ground2 закрыты.
+
 ### 28.10 03:14 МСК · codex-partner · B4.3
 - Сделано: связной и разбор ответов, коммиты `822a319`, `a96434d`, `cebdae5`. Вопросы из реестра,
   спрос за сегодня + 6 дней (район + all), неопределённость 1−|2p−1|, дедупликация с advisory lock
