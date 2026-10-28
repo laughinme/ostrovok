@@ -1,5 +1,5 @@
 import { chromium } from 'playwright';
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 
@@ -141,8 +141,10 @@ export async function createCapture({ base, out }) {
 
   const scene = async (id, chapter, title, description, action) => {
     clip = { id, chapter, title, description, url: page.url(), src: `footage/${id}.mp4`, focus: [] };
+    const errorOffset = errors.length;
+    const pending = path.join(out, `${id}.recording.webm`);
     const raw = path.join(out, `${id}.webm`);
-    await page.screencast.start({ path: raw, fps: 60, size: viewport, quality: 95 });
+    await page.screencast.start({ path: pending, fps: 60, size: viewport, quality: 95 });
     started = Date.now();
     try {
       await sleep(350);
@@ -152,6 +154,9 @@ export async function createCapture({ base, out }) {
     } finally {
       await page.screencast.stop();
     }
+    clip.errors = errors.slice(errorOffset);
+    if (clip.errors.length) throw new Error(`Scene ${id} has runtime errors: ${clip.errors.join(', ')}`);
+    await rename(pending, raw);
     const meta = JSON.parse(execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'json', raw]));
     clip.duration = Number(meta.format.duration);
     manifest.clips = manifest.clips.filter((item) => item.id !== id).concat(clip).sort((a, b) => a.id.localeCompare(b.id));
