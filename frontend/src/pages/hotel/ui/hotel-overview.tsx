@@ -1,21 +1,6 @@
-import {
-  CRITERIA,
-  PhotoCredit,
-  photoInfo,
-  type Criterion,
-  type Hotel,
-} from "@/entities/hotel";
+import { CRITERIA, PhotoCredit, photoInfo, type Criterion, type Hotel } from "@/entities/hotel";
 import { MatchRing, Reveal } from "@/shared/ui";
-import {
-  ArrowRight,
-  Check,
-  Heart,
-  Images,
-  MapPin,
-  Plus,
-  ShieldCheck,
-  Waves,
-} from "lucide-react";
+import { ArrowRight, Check, Heart, Images, MapPin, Plus, ShieldCheck, Waves } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Photo } from "./visuals";
 import type { HotelDetails } from "../model/types";
@@ -46,9 +31,7 @@ export function HotelOverview({
   onSection: (id: string) => void;
 }) {
   const photos = h.photos.slice(0, 3);
-  const sources = Array.from(
-    new Map(photos.map((src) => [photoInfo(src)?.author, src])).values(),
-  );
+  const sources = Array.from(new Map(photos.map((src) => [photoInfo(src)?.author, src])).values());
   return (
     <>
       <Reveal className="hotel-intro">
@@ -67,9 +50,7 @@ export function HotelOverview({
         <div className="hotel-intro-actions">
           <div className="hotel-intro-tools">
             <div className="hotel-guest-rating">
-              <span
-                aria-label={`Оценка ${h.rating.toLocaleString("ru")} из 10`}
-              >
+              <span aria-label={`Оценка ${h.rating.toLocaleString("ru")} из 10`}>
                 {h.rating.toLocaleString("ru", { minimumFractionDigits: 1 })}
               </span>
               <small>Демо-оценка</small>
@@ -78,9 +59,7 @@ export function HotelOverview({
               className={`hotel-square-button${favorite ? " is-selected" : ""}`}
               onClick={onFavorite}
               aria-pressed={favorite}
-              aria-label={
-                favorite ? "Убрать из избранного" : "Добавить в избранное"
-              }
+              aria-label={favorite ? "Убрать из избранного" : "Добавить в избранное"}
             >
               <Heart size={21} fill={favorite ? "currentColor" : "none"} />
             </button>
@@ -92,9 +71,7 @@ export function HotelOverview({
               onClick={onCompare}
             >
               {inComparison ? <Check size={18} /> : <Plus size={18} />}
-              <span>
-                {inComparison ? "В сравнении" : "Добавить в сравнение"}
-              </span>
+              <span>{inComparison ? "В сравнении" : "Добавить в сравнение"}</span>
             </button>
             <Link className="hotel-compare-link" to="/compare">
               Сравнить с другими
@@ -103,9 +80,7 @@ export function HotelOverview({
         </div>
       </Reveal>
       <Reveal className="hotel-showcase" delay={0.06}>
-        <div
-          className={`hotel-gallery${photos.length === 1 ? " hotel-gallery--single" : ""}`}
-        >
+        <div className={`hotel-gallery${photos.length === 1 ? " hotel-gallery--single" : ""}`}>
           {photos.map((photo, index) => (
             <button
               key={`${photo}-${index}`}
@@ -128,10 +103,7 @@ export function HotelOverview({
             </span>
           )}
         </div>
-        <aside
-          className="hotel-booking-card"
-          aria-label="Ваше совпадение и выбор номера"
-        >
+        <aside className="hotel-booking-card" aria-label="Ваше совпадение и выбор номера">
           <div className="hotel-booking-top">
             <span>
               <ShieldCheck size={16} />
@@ -187,16 +159,12 @@ export function HotelOverview({
       </Reveal>
       <div className="hotel-photo-sources">
         {sources.map((src) => (
-          <PhotoCredit
-            key={src}
-            src={src}
-            compact={photoInfo(src)?.kind === "ai"}
-          />
+          <PhotoCredit key={src} src={src} compact={photoInfo(src)?.kind === "ai"} />
         ))}
         {photos.some((src) => photoInfo(src)?.kind === "ai") && (
           <p>
-            AI-кадры — вымышленные иллюстрации, не фотографии этого отеля.
-            Интерьер и вид из номера нужно уточнить.
+            AI-кадры — вымышленные иллюстрации, не фотографии этого отеля. Интерьер и вид из номера
+            нужно уточнить.
           </p>
         )}
       </div>
