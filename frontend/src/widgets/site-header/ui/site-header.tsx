@@ -1,15 +1,17 @@
 import { useCompare } from "@/features/compare-hotels";
+import { useSearchSession } from "@/features/hotel-search";
 import { cn } from "@/shared/lib";
+import { getApiMode, setApiMode, type ApiMode } from "@/shared/api";
+import { useQueryClient } from "@tanstack/react-query";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
-import { useId, useRef, useState } from "react";
+import { useId, useRef, useState, type MouseEvent } from "react";
 import "./site-header.css";
 
 const ITEMS = [
   { to: "/results", label: "Подбор" },
   { to: "/compare", label: "Сравнение" },
   { to: "/trips", label: "Мои поездки" },
-  { to: "/partner", label: "Отельерам" },
 ] as const;
 
 export function Logo({ className, onClick }: { className?: string; onClick?: () => void }) {
@@ -29,16 +31,29 @@ export function Header({
   tone = "lime",
   embedded = false,
 }: {
-  tone?: "lime" | "clear" | "white";
+  tone?: "lime" | "clear" | "white" | "blue";
   embedded?: boolean;
 }) {
   const ids = useCompare((state) => state.ids);
+  const lastQuery = useSearchSession((state) => state.lastQuery);
   const path = useRouterState({ select: (state) => state.location.pathname });
   const [menuOpen, setMenuOpen] = useState(false);
   const menuButton = useRef<HTMLButtonElement>(null);
   const navigationId = useId();
   const partner = path.startsWith("/partner");
+  const demo = getApiMode() === "demo";
+  const client = useQueryClient();
   const closeMenu = () => setMenuOpen(false);
+  const selectRole = (event: MouseEvent<HTMLAnchorElement>, mode: ApiMode, destination: string) => {
+    closeMenu();
+    if (getApiMode() === mode) return;
+    event.preventDefault();
+    setApiMode(mode);
+    void client.cancelQueries().finally(() => {
+      client.clear();
+      window.location.assign(destination);
+    });
+  };
 
   return (
     <header
@@ -77,6 +92,7 @@ export function Header({
               <Link
                 key={item.to}
                 to={item.to}
+                search={item.to === "/results" && lastQuery ? { q: lastQuery } : {}}
                 data-active={active}
                 aria-current={active ? "page" : undefined}
                 onClick={closeMenu}
@@ -90,14 +106,41 @@ export function Header({
           })}
         </nav>
         <div className="site-header__roles" role="group" aria-label="Роль">
-          <Link to="/" data-active={!partner} onClick={closeMenu}>
+          <Link
+            to="/"
+            data-active={!partner && !demo}
+            onClick={(event) => selectRole(event, "live", "/")}
+          >
             Гость
           </Link>
-          <Link to="/partner" data-active={partner} onClick={closeMenu}>
+          <Link
+            to="/partner"
+            data-active={partner}
+            onClick={(event) => selectRole(event, demo ? "demo" : "live", "/partner")}
+          >
             Отельер
+          </Link>
+          <Link
+            to="/"
+            data-active={demo && !partner}
+            aria-current={demo && !partner ? "true" : undefined}
+            title="Тестовый режим: локальные ответы, без API и расходов LLM"
+            onClick={(event) => selectRole(event, "demo", "/")}
+          >
+            Демо
           </Link>
         </div>
       </div>
+      {tone === "blue" && (
+        <svg
+          className="site-header__wave"
+          viewBox="0 0 1440 32"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <path d="M0 0H1440V14C1210 36 1050 30 820 15S320 1 0 26Z" />
+        </svg>
+      )}
     </header>
   );
 }
