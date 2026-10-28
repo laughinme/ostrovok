@@ -64,12 +64,13 @@ export function HotelCardFacts({ hotel }: { hotel: Hotel }) {
         >
           {selected ? (
             <>
+              <b>{selected.label}</b>
               <p>{selected.value}</p>
               <small>
                 {selected.status === "confirmed"
                   ? "Подтверждено"
                   : selected.status === "computed"
-                    ? "Расчёт по открытым данным"
+                    ? "Рассчет"
                     : "Предположение"}
                 {selected.source && ` · ${selected.source}`}
                 {selected.checkedAt && ` · ${selected.checkedAt}`}
