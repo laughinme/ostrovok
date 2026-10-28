@@ -1867,16 +1867,33 @@
           "Search"
         ],
         "summary": "Text → chips, trip and hints (called while the guest types)",
+        "description": "`planner=rules` answers in milliseconds: call it on every keystroke and the default (LLM when configured, 1–3 s) when the guest pauses or submits.",
         "operationId": "parse_intent_api_v1_intents_post",
+        "parameters": [
+          {
+            "name": "planner",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "auto",
+                "rules"
+              ],
+              "type": "string",
+              "default": "auto",
+              "title": "Planner"
+            }
+          }
+        ],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/IntentRequest"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -2755,6 +2772,104 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/console/llm/calls": {
+      "get": {
+        "tags": [
+          "Console"
+        ],
+        "summary": "LLM journal: prompt, answer, tool calls, tokens, price",
+        "operationId": "llm_calls_api_v1_console_llm_calls_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "task",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "intent, answer, curator, explain",
+              "title": "Task"
+            },
+            "description": "intent, answer, curator, explain"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LlmCallOut"
+                  },
+                  "title": "Response Llm Calls Api V1 Console Llm Calls Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/console/llm/usage": {
+      "get": {
+        "tags": [
+          "Console"
+        ],
+        "summary": "LLM spend today and in total, by task and model",
+        "operationId": "llm_usage_api_v1_console_llm_usage_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LlmUsageOut"
                 }
               }
             }
@@ -5448,6 +5563,171 @@
         ],
         "title": "LineStringOut"
       },
+      "LlmCallOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Createdat"
+          },
+          "task": {
+            "type": "string",
+            "title": "Task"
+          },
+          "model": {
+            "type": "string",
+            "title": "Model"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "cached",
+              "failed",
+              "limit"
+            ],
+            "title": "Status"
+          },
+          "prompt": {
+            "type": "string",
+            "title": "Prompt"
+          },
+          "output": {
+            "title": "Output"
+          },
+          "toolCalls": {
+            "items": {},
+            "type": "array",
+            "title": "Toolcalls"
+          },
+          "usage": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Usage"
+          },
+          "costUsd": {
+            "type": "number",
+            "title": "Costusd"
+          },
+          "latencyMs": {
+            "type": "integer",
+            "title": "Latencyms"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "createdAt",
+          "task",
+          "model",
+          "status",
+          "prompt",
+          "toolCalls",
+          "usage",
+          "costUsd",
+          "latencyMs"
+        ],
+        "title": "LlmCallOut"
+      },
+      "LlmSpendOut": {
+        "properties": {
+          "task": {
+            "type": "string",
+            "title": "Task"
+          },
+          "model": {
+            "type": "string",
+            "title": "Model"
+          },
+          "calls": {
+            "type": "integer",
+            "title": "Calls"
+          },
+          "cached": {
+            "type": "integer",
+            "title": "Cached"
+          },
+          "failed": {
+            "type": "integer",
+            "title": "Failed"
+          },
+          "costUsd": {
+            "type": "number",
+            "title": "Costusd"
+          },
+          "p50Ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "P50Ms"
+          }
+        },
+        "type": "object",
+        "required": [
+          "task",
+          "model",
+          "calls",
+          "cached",
+          "failed",
+          "costUsd"
+        ],
+        "title": "LlmSpendOut"
+      },
+      "LlmUsageOut": {
+        "properties": {
+          "today": {
+            "items": {
+              "$ref": "#/components/schemas/LlmSpendOut"
+            },
+            "type": "array",
+            "title": "Today"
+          },
+          "total": {
+            "items": {
+              "$ref": "#/components/schemas/LlmSpendOut"
+            },
+            "type": "array",
+            "title": "Total"
+          },
+          "todayCostUsd": {
+            "type": "number",
+            "title": "Todaycostusd"
+          },
+          "totalCostUsd": {
+            "type": "number",
+            "title": "Totalcostusd"
+          }
+        },
+        "type": "object",
+        "required": [
+          "today",
+          "total",
+          "todayCostUsd",
+          "totalCostUsd"
+        ],
+        "title": "LlmUsageOut"
+      },
       "LoginRequest": {
         "properties": {
           "email": {
@@ -5986,6 +6266,18 @@
           "llmStatus": {
             "type": "string",
             "title": "Llmstatus"
+          },
+          "llm": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Llm"
           }
         },
         "type": "object",
@@ -7022,6 +7314,30 @@
             "type": "boolean",
             "title": "Llmavailable",
             "default": false
+          },
+          "llmModel": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Llmmodel",
+            "description": "Read-only: model for parsing text"
+          },
+          "llmModelStrong": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Llmmodelstrong",
+            "description": "Read-only: the Curator's model"
           }
         },
         "type": "object",
@@ -7538,6 +7854,16 @@
             "type": "integer",
             "title": "Outputtokens",
             "default": 0
+          },
+          "cachedTokens": {
+            "type": "integer",
+            "title": "Cachedtokens",
+            "default": 0
+          },
+          "costUsd": {
+            "type": "number",
+            "title": "Costusd",
+            "default": 0.0
           }
         },
         "type": "object",
