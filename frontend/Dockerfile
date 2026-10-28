@@ -1,25 +1,16 @@
-# Build stage: install with the lockfile and build the standalone Next.js server.
-# It runs on the build machine's own platform: the standalone server is plain JavaScript, so the
-# output runs on linux/amd64 as is, and Apple Silicon does not have to emulate the Next.js build.
-FROM --platform=$BUILDPLATFORM node:22.12-alpine3.20 AS builder
+FROM --platform=$BUILDPLATFORM node:22.22.2-alpine3.22 AS builder
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --no-audit --no-fund
 COPY . .
-# Behind the gateway the API lives on the same origin.
-ARG NEXT_PUBLIC_API_BASE_URL=/api/v1
-ENV NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL \
-    NEXT_TELEMETRY_DISABLED=1 \
-    NEXT_OUTPUT=standalone
+ARG BACKEND_URL=http://backend:8000
+ENV BACKEND_URL=$BACKEND_URL
 RUN npm run build
 
-# Runtime stage: only the standalone server, static assets and public files; non-root.
-FROM node:22.12-alpine3.20
+FROM node:22.22.2-alpine3.22
 WORKDIR /app
-ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 HOSTNAME=0.0.0.0 PORT=3000
-COPY --from=builder --chown=node:node /app/.next/standalone ./
-COPY --from=builder --chown=node:node /app/.next/static ./.next/static
-COPY --from=builder --chown=node:node /app/public ./public
+ENV NODE_ENV=production HOST=0.0.0.0 PORT=3000 BACKEND_URL=http://backend:8000
+COPY --from=builder --chown=node:node /app/.output ./.output
 USER node
 EXPOSE 3000
-CMD ["node", "server.js"]
+CMD ["node", ".output/server/index.mjs"]
