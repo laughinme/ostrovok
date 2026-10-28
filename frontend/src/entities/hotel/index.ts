@@ -17,3 +17,4 @@ export { BestOfferRibbon } from "./ui/best-offer-ribbon";
 export { Price } from "./ui/price";
 export { RatingBadge } from "./ui/rating-badge";
 export { StatusPill } from "./ui/status-pill";
+export { formatReviewCount } from "./model/format-review-count";
