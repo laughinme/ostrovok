@@ -22,6 +22,8 @@ class JobKind(StrEnum):
     HOTEL_ONBOARD = "hotel.onboard"
     WORLD_CHANGED = "world.changed"
     HOTELIER_SIMULATE = "hotelier.simulate"
+    BOOKING_FACT_CHANGED = "booking.fact_changed"
+    BOOKING_SIMULATE = "booking.simulate"
     NOTIFY = "notify"
     FRESHNESS_SCAN = "freshness.scan"
 
