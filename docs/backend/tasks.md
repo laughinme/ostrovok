@@ -12,7 +12,7 @@
 
 | Файл | Кто | С какого времени |
 |---|---|---|
-| `backend/pyproject.toml`, `backend/uv.lock` | codex-guest | 28.10 09:13 |
+| `backend/pyproject.toml`, `backend/uv.lock` | — | |
 | `backend/migrations/` | — | |
 | `docker-compose.yml`, `compose.dev.yml`, `.env.example` | — | |
 | `Makefile` | — | |
@@ -515,7 +515,8 @@ Affine/rasterio (`lon=a*col+b*row+c`, `lat=d*col+e*row+f`, угол пиксел
 Готово, когда: отчёт виден в консоли, цифры есть в README.
 
 ### B5.8 · MCP
-Статус: в работе · codex-guest · 28.10 09:13 МСК
+Статус: done · codex-guest · 28.10 09:34 МСК
+Итог: MCP SDK 2.3.0, пять инструментов, curl tools/list и tools/call, сравнение и похожие по фактам (коммиты a7ea8f4, f8b200e; MCP в этом блоке).
 Зависит от: B3.4, B2.13
 Что: MCP-сервер на `/mcp` (MCP SDK 2.x), инструменты из 09 §9, `transport_security` за шлюзом.
 Готово, когда: внешний клиент (Claude или MCP Inspector) находит номер с закатом в ноябре.

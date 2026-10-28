@@ -12,6 +12,49 @@
 
 ---
 
+### 28.10 09:29 МСК · codex-guest · B5.8, доработка B5.4
+- Сделано: MCP SDK 2.3.0 (`mcp>=2,<3`, uv.lock), пять инструментов только чтения, точный ASGI endpoint
+  /mcp; streamable_http_app(json_response=True,stateless_http=True), транспорт разрешает localhost:8080.
+  Manager входит в lifespan FastAPI и завершается в той же задаче AnyIO (отдельная управляемая task,
+  без ошибки при тестовых хостах, которые начинают и завершают lifespan в разных asyncio tasks).
+- **Публичный API MCP:** `api.mcp.build_mcp(database: Callable[[],Database], settings, clock) -> MCPServer[None]`.
+  `search_hotels(text="", chips: list[IntentChipModel]|None=None, trip: TripModel|None=None, limit=10)`
+  возвращает {intent,matches} в том же camelCase, что REST, без создания SearchRow и demand.
+  `get_hotel_knowledge(hotel_id: UUID)` → {hotel,facts}; `explain_fact(fact_id: UUID)` → FactDetailOut;
+  `compare_hotels(payload: CompareIn)` → CompareOut; `list_characteristics()` → {items}.
+  Аннотации readOnlyHint/idempotentHint=true, destructiveHint/openWorldHint=false. LLM не вызывается.
+- **Публичный API сравнения:** `domain.search.compare.Selection(hotel_id, room_type_id=None,
+  facade=None, floor=None)`; `service.search.compare.ComparisonService(uow).compare(intent,selections)`
+  → Comparison(intent,matches,summary). От 2 до 3 уникальных вариантов, включая разные номера одного
+  отеля; ограничивает область и применяет best_match из общего скоринга. POST /api/v1/compare:
+  {selections:[{hotelId,roomTypeId?,facade?,floor?}],chips:IntentChip[],trip?:Trip} →
+  {intent,matches,rows:[{chipId,label,results:ChipResult[]}],summary}; порядок столбцов сохранён.
+- `service.search.similar.Improvement`: quieter | cheaper | closer_to_beach;
+  `SimilarService(uow,clock).find(source_id,change,intent)` → SimilarHotels(source_id,change,intent,
+  matches,caveats). POST /hotels/{id}/similar принимает {change,chips?,trip?}. Сохраняет известные
+  положительные свойства исходного отеля как nice, улучшение имеет must; сначала общий скоринг,
+  затем проверяет реальное улучшение вероятности тишины/цены/числа минут. Неизвестные значения не
+  подменяются, исходный отель исключён, отсутствие улучшения явно объясняется.
+- Доработка брони: общий `service.search.candidates.with_room_variants(uow,hotel,room_type_id)`
+  позволяет сравнивать/бронировать существующую категорию без разметки фасадов, не обещая подтверждения.
+  Числовой отзыв хранит исходное значение, бета-обновляет уверенность в его точности и явно сообщает,
+  что нового замера нет; произвольное число не придумывается. Скоринг фильтрует факты по области
+  номера и датам, у записей предпочитает подходящую уточнённую область. Выезд исключён из месяцев поиска.
+  Симулятор не подтверждает произвольно изменённый текст запроса; предлагает уточнение.
+  KnowledgeStore ставит booking.fact_changed только при изменении уже существующих фактов.
+- Как проверить: JSON-RPC initialize, tools/list и tools/call для всех пяти инструментов в
+  tests/integration/test_mcp.py; синтетический закат в ноябре выбирает S и этаж ≥4 с источниками.
+  Отдельный запущенный uvicorn :18081 проверен настоящим curl (tools/list + tools/call) через Host
+  localhost:8080, без redirect; чужой Host получает 421. Сервер остановлен, ключи/LLM не использовались.
+- На реальном регионе (200 отелей, отдельная okno_guest_test): демо-вход Анны, профиль, бронь и поездка
+  Swissotel Resort Сочи Камелия; климат center, два заката 10–11 ноября, маршрут до пляжа 8,51 мин.
+  У Сочи Марриотт Красная Поляна честно нет маршрута до моря. Цены/номера — демо; факты core ещё
+  собирает, отсутствие предзаполнения не подменялось заявлениями о видимости.
+- Проверки: полный make check на свежем HEAD + свои файлы — **438 passed**, ruff/format, strict mypy,
+  7 import-контрактов. БД okno_guest_test / Redis 12. Коммиты расчёта a7ea8f4, REST f8b200e,
+  доработка брони 70f5ed6; MCP — в этом блоке. Общие файлы зависимостей освобождены.
+- Дальше: контрольный curl на опубликованном core сиде, затем push приватного main.
+
 ### 28.10 09:27 МСК · codex-quality · B5.7
 - Сделано: `make eval` / `python -m app.cli eval`, JSON в существующую `quality_reports`,
   `GET /api/v1/console/quality` (CONSOLE_READ, 404 до первого отчёта). Без миграций/новых библиотек.
@@ -340,8 +383,8 @@
 - Как проверить: собственные интеграционные сценарии на okno_guest_test / Redis 12;
   ruff, strict mypy, 7 import-контрактов, полный make check: 328 passed на снимке стабильного
   05f4dbd + свои файлы (общее дерево параллельно изменяют другие сессии).
-- Грабли: отзыв сейчас принимает булевы обещания; для числовой поправки нужен фактический замер,
-  её нельзя вывести из ответа «нет». Климат/маршрут отсутствуют, если соответствующих данных нет.
+- Грабли: числовой отзыв оценивает точность прежнего значения; новый замер нельзя вывести из «нет».
+  Поддержка числовых отзывов добавлена в B5.8. Климат/маршрут отсутствуют, если соответствующих данных нет.
 - Дальше: B5.5, затем B5.8. LLM API не вызывался.
 
 ### 28.10 03:14 МСК · codex-partner · B4.3
