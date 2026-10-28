@@ -57,7 +57,6 @@ export function WhyPanel({ fact: summary, hotel }: { fact: Fact; hotel: HotelDet
     queryFn: ({ signal }) =>
       api<components["schemas"]["FactDetailOut"]>(`/facts/${summary.id}`, { signal }),
     enabled: !!hotel.api,
-    staleTime: 30000,
   });
   const fact = detail.data ? detailFactFromApi(detail.data, detail.data) : summary;
   const p = Math.round(fact.confidence * 100);
@@ -65,7 +64,6 @@ export function WhyPanel({ fact: summary, hotel }: { fact: Fact; hotel: HotelDet
     <div className="why">
       {hotel.api && (
         <RequestState
-          pending={detail.isPending}
           error={detail.error}
           retry={() => {
             void detail.refetch();
@@ -114,6 +112,17 @@ export function WhyPanel({ fact: summary, hotel }: { fact: Fact; hotel: HotelDet
           />
         </div>
       )}
+      {fact.evidenceItems && fact.evidenceItems.length > 0 && (
+        <div className="hotel-source-materials">
+          <h3>Материалы проверки</h3>
+          {fact.evidenceItems.map((item, index) => (
+            <div key={index}>
+              <p>{item.summary}</p>
+              <small>{item.attribution}</small>
+            </div>
+          ))}
+        </div>
+      )}
       <dl>
         <div>
           <dt className="lbl">Метод</dt>
@@ -123,9 +132,15 @@ export function WhyPanel({ fact: summary, hotel }: { fact: Fact; hotel: HotelDet
           <dt className="lbl">Источники</dt>
           <dd>
             <ul>
-              {fact.sources.map(([a, b], index) => (
+              {fact.sources.map(([a, b, ref], index) => (
                 <li key={`${a}-${b}-${index}`}>
-                  {a}
+                  {ref && /^https?:\/\//.test(ref) ? (
+                    <a href={ref} target="_blank" rel="noreferrer">
+                      {a} ↗
+                    </a>
+                  ) : (
+                    a
+                  )}
                   <span>{b}</span>
                 </li>
               ))}
