@@ -31,12 +31,15 @@ async def run_events(run_id: UUID, stream: RunStreamDep) -> StreamingResponse:
 
 @router.get(
     path="/events",
-    summary="Server-sent events: fact.changed for the hotels on screen",
+    summary="Server-sent events: fact.changed for hotels on screen, search.updated for a search",
     response_class=StreamingResponse,
 )
 async def hotel_events(
     stream: RunStreamDep,
     hotels: Annotated[list[UUID] | None, Query(description="Hotel ids; empty = all")] = None,
+    search: Annotated[UUID | None, Query(description="Search id to watch")] = None,
 ) -> StreamingResponse:
     channels = [f"hotel:{h}" for h in hotels] if hotels else ["facts"]
+    if search is not None:
+        channels.append(f"search:{search}")
     return sse_response(stream.channel(channels))

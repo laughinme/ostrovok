@@ -30,8 +30,8 @@ class WalkToExecutor:
             targets = await route_targets(hotel, env, recipe.target)
             label = {"beach": "пляж", "station": "станция", "center": "центр"}[recipe.target]
         else:
-            targets = await env.reader.tagged(
-                recipe.target.tags, near=hotel.location, radius_m=_SEARCH_RADIUS_M
+            targets = await env.reader.matching(
+                recipe.target, near=hotel.location, radius_m=_SEARCH_RADIUS_M
             )
             label = "цель"
         await call.tracer.tool(

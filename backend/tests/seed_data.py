@@ -2,14 +2,35 @@
 
 import csv
 import gzip
+import json
 from pathlib import Path
 
-from shapely import Polygon
+from shapely import Point, Polygon
 
 HOTELS = [
     # osm_id, name, district, lon, lat, levels
     ("way/1", "Маяк", "center", 39.7200, 43.5800, 9),
     ("way/2", "Тихий двор", "khosta", 39.8500, 43.5150, 4),
+]
+
+FEATURES = [
+    # 300 m east of «Маяк»: a khinkali place found only by its name
+    (
+        "node/10",
+        "poi",
+        "Хинкальная «Мама Тина»",
+        {"amenity": "restaurant", "name": "Хинкальная «Мама Тина»"},
+        39.7237,
+        43.5800,
+    ),
+    (
+        "node/11",
+        "poi",
+        "Аптека 24",
+        {"amenity": "pharmacy", "opening_hours": "24/7"},
+        39.7210,
+        43.5805,
+    ),
 ]
 
 USERS = """
@@ -74,4 +95,13 @@ def write_region(data_dir: Path) -> Path:
                 ]
             )
     (data_dir / "demo" / "users.yaml").write_text(USERS, encoding="utf-8")
+    with gzip.open(
+        data_dir / "region" / "osm_features.csv.gz", "wt", encoding="utf-8", newline=""
+    ) as f:
+        writer = csv.writer(f)
+        writer.writerow(["osm_id", "kind", "name", "tags", "wkb"])
+        for osm_id, kind, name, tags, lon, lat in FEATURES:
+            writer.writerow(
+                [osm_id, kind, name, json.dumps(tags, ensure_ascii=False), Point(lon, lat).wkb_hex]
+            )
     return data_dir

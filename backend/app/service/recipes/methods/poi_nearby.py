@@ -26,13 +26,6 @@ def _open_as_needed(feature: MapFeature, open_: str) -> bool | None:
     return hours.in_window(start, end)
 
 
-def _matches_name(feature: MapFeature, parts: list[str]) -> bool:
-    if not parts:
-        return True
-    name = (feature.name or feature.tags.get("name", "")).lower()
-    return any(part.lower() in name for part in parts)
-
-
 class PoiNearbyExecutor:
     """`poi_nearby`: `osm.find → route.reachable → hours.check → threshold` (09 §5.2)."""
 
@@ -43,15 +36,11 @@ class PoiNearbyExecutor:
         hotel = call.hotel
         minutes = recipe.within_minutes or (recipe.within_m or 0) * DETOUR / WALK_M_PER_MIN
         radius = recipe.within_m or minutes * WALK_M_PER_MIN * 1.1
-        found = [
-            f
-            for f in await env.reader.tagged(recipe.poi.tags, near=hotel.location, radius_m=radius)
-            if _matches_name(f, recipe.poi.name_contains)
-        ]
+        found = await env.reader.matching(recipe.poi, near=hotel.location, radius_m=radius)
         await call.tracer.tool(
             "osm.find",
             summary=f"{len(found)} объектов OSM в {radius:.0f} м",
-            args={"tags": recipe.poi.tags, "radiusM": round(radius)},
+            args={"filter": recipe.poi.model_dump(exclude_defaults=True), "radiusM": round(radius)},
         )
         reached = within_minutes(env.router, hotel.location, found, minutes)
         estimated = any(est for _, _, est in reached)

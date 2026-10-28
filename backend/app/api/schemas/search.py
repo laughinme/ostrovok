@@ -222,3 +222,12 @@ class SearchResultOut(ApiModel):
                 for r in ranking.research
             ],
         )
+
+
+class WishStarted(ApiModel):
+    run_id: str | None = Field(None, description="Live research run, if the wish needs one")
+    search: SearchResultOut
+
+
+class ResearchRequest(ApiModel):
+    chip_id: str
