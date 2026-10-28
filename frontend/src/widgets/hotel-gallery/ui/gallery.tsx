@@ -1,5 +1,4 @@
 import { cn } from "@/shared/lib";
-import { DemoBadge } from "@/shared/ui";
 import { ArrowLeft, ArrowRight, Images, X } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 export function Gallery({ images, name }: { images: string[]; name: string }) {
@@ -41,9 +40,6 @@ export function Gallery({ images, name }: { images: string[]; name: string }) {
         height={768}
         className="h-full w-full object-cover"
       />
-      <div className="absolute left-3 top-3">
-        <DemoBadge className="bg-card/85 backdrop-blur" />
-      </div>
       <span className="absolute right-3 bottom-3 rounded-full bg-night/70 px-3 py-1 font-mono text-xs text-night-foreground backdrop-blur">
         {idx + 1} / {n}
       </span>
