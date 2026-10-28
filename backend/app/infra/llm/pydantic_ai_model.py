@@ -77,6 +77,7 @@ class PydanticAiLanguageModel:
         *,
         model_name: str,
         provider_url: str = "",
+        cache_only: bool = False,
         timeout_sec: float,
         limit: DailyLimit,
         thinking: Thinking = "default",
@@ -85,6 +86,7 @@ class PydanticAiLanguageModel:
         switch: ModeSwitch | None = None,
         journal: LlmJournal | None = None,
     ) -> None:
+        self._cache_only = cache_only
         self._switch = switch
         self._model = model
         self._name = model_name
@@ -152,7 +154,7 @@ class PydanticAiLanguageModel:
             ),
         )
         if self._cache is not None and (hit := await self._cache.get(key)):
-            cached = output.model_validate(hit["output"])
+            cached = output.model_validate(hit["output"], by_name=True)
             await self._log(task, "cached", prompt, output=hit["output"])
             # What the answer cost when it was computed: nothing is spent now (`cached`).
             first = hit["usage"]
@@ -169,6 +171,8 @@ class PydanticAiLanguageModel:
                 cached=True,
                 latency_ms=first.get("latencyMs", 0),
             )
+        if self._cache_only:
+            raise LlmUnavailableError("no cached answer; network disabled for this evaluation")
         if not await self._limit.take():
             await self._log(task, "limit", prompt, error="daily LLM call limit reached")
             raise LlmUnavailableError("daily LLM call limit reached")
@@ -220,7 +224,7 @@ class PydanticAiLanguageModel:
             usage.cached_tokens,
             run_cost(self._name, run_usage.cost, usage),
         )
-        dumped = result.output.model_dump(mode="json")
+        dumped = result.output.model_dump(mode="json", by_alias=True)
         if self._cache is not None:
             await self._cache.put(
                 key,

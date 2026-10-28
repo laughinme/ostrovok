@@ -135,7 +135,12 @@ def build_agents(
 
 
 def build_language_model(
-    settings: Settings, db: Database, redis: Redis | None, *, strong: bool = False
+    settings: Settings,
+    db: Database,
+    redis: Redis | None,
+    *,
+    strong: bool = False,
+    cache_only: bool = False,
 ) -> LanguageModel | None:
     """
     None when there is no key or LLM_MODE=off: every LLM port then runs on rules. `strong` is the
@@ -149,6 +154,7 @@ def build_language_model(
     return PydanticAiLanguageModel(
         model,
         model_name=name,
+        cache_only=cache_only,
         provider_url=settings.llm_base_url or "https://api.openai.com/v1",
         timeout_sec=settings.llm_timeout_sec * (2 if strong else 1),
         limit=DailyLimit(redis, settings.llm_daily_call_limit),

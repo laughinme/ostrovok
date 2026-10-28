@@ -103,6 +103,9 @@ def main() -> None:
     )
     for flag in ("model", "strong-model", "thinking", "thinking-strong", "base-url", "key-env"):
         evaluation.add_argument(f"--{flag}", help="override LLM_* for this run")
+    evaluation.add_argument(
+        "--cached-only", action="store_true", help="use saved responses only; no paid requests"
+    )
     commands.add_parser("eval-compare", help="table of saved LLM runs (data/eval/llm)")
     args = parser.parse_args()
 
@@ -129,7 +132,11 @@ def main() -> None:
             "llm_base_url": args.base_url,
             "key_env": args.key_env,
         }
-        result = asyncio.run(evaluate_quality(settings, use_llm=args.llm, overrides=overrides))
+        result = asyncio.run(
+            evaluate_quality(
+                settings, use_llm=args.llm, overrides=overrides, cache_only=args.cached_only
+            )
+        )
     elif args.command == "eval-compare":
         result = compare_runs(settings.data_dir)
     else:
