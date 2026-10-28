@@ -3,6 +3,7 @@ import {
   demoTravelOption,
   drivingOption,
   fetchDrivingOption,
+  fetchWalkingFallback,
   sortTravelOptions,
   travelTime,
   yandexDirections,
@@ -32,7 +33,10 @@ const payload = {
     },
   ],
 };
-afterEach(() => vi.unstubAllGlobals());
+afterEach(() => {
+  vi.unstubAllGlobals();
+  vi.useRealTimers();
+});
 
 describe("ways to reach the destination", () => {
   it("sorts known journey times first and unknown modes last without mutating the input", () => {
@@ -107,6 +111,24 @@ describe("ways to reach the destination", () => {
       fetchDrivingOption([39.7, 43.6], [39.71, 43.61], "Пляж", new AbortController().signal),
     ).rejects.toThrow();
   });
+  it("throttles fallback walking requests and identifies their foot routing source", async () => {
+    const times: number[] = [];
+    const request = vi.fn().mockImplementation(() => {
+      times.push(Date.now());
+      return Promise.resolve(new Response(JSON.stringify(payload)));
+    });
+    vi.stubGlobal("fetch", request);
+    const results = await Promise.all([
+      fetchWalkingFallback([39.7, 43.6], [39.71, 43.61], "Пляж", new AbortController().signal),
+      fetchWalkingFallback([39.7, 43.6], [39.72, 43.62], "Парк", new AbortController().signal),
+    ]);
+    expect(request).toHaveBeenCalledTimes(2);
+    expect(times[1]! - times[0]!).toBeGreaterThanOrEqual(1000);
+    expect(String(request.mock.calls[0]![0])).toContain("routing.openstreetmap.de/routed-foot/");
+    expect(
+      results.every((option) => option.mode === "walk" && option.note.includes("FOSSGIS")),
+    ).toBe(true);
+  });
   it("opens each mode with the original coordinates in Yandex Maps", () => {
     for (const [mode, rtt] of [
       ["walk", "pd"],
@@ -138,6 +160,9 @@ describe("ways to reach the destination", () => {
       expect(result.drawing?.geometry.coordinates.at(-1)).toEqual(
         walking.geometry.coordinates.at(-1),
       );
+      expect(
+        demoTravelOption(mode, { ...walking, there: { ...walking.there, minutes: 30 } }).minutes,
+      ).toBe(result.minutes);
     }
   });
 });
