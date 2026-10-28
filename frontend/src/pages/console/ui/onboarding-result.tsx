@@ -35,7 +35,7 @@ export function OnboardingResult({
           <Link
             className="console-button secondary"
             to="/results"
-            search={{ q: "Все отели Сочи" }}
+            search={{ q: hotel.name, hotelId: hotel.id }}
             hash={`hotel-${hotel.id}`}
           >
             Найти в подборе

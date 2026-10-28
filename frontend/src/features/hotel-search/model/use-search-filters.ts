@@ -9,7 +9,7 @@ import { useSearchSession } from "./search-session";
 type SearchResult = components["schemas"]["SearchResultOut"];
 type Importance = components["schemas"]["Importance"];
 
-export function useSearchFilters(query: string) {
+export function useSearchFilters(query: string, hotelId?: string) {
   const saved = useSearchSession.getState().filters[query];
   const account = useSession((state) => state.account);
   const [refine, setRefine] = useState("");
@@ -19,8 +19,11 @@ export function useSearchFilters(query: string) {
   const [useProfile, setUseProfile] = useState(true);
   const [adopted, setAdopted] = useState<{ search: SearchResult; intent: ApiIntent } | null>(null);
   const intent = useQuery({
-    queryKey: ["intent", text],
-    queryFn: ({ signal }) => api<ApiIntent>("/intents", { method: "POST", body: { text }, signal }),
+    queryKey: ["intent", text, ...(hotelId ? [hotelId] : [])],
+    queryFn: ({ signal }) =>
+      hotelId && text === query
+        ? Promise.resolve<ApiIntent>({ text, chips: [], trip: {}, planner: "rules" })
+        : api<ApiIntent>("/intents", { method: "POST", body: { text }, signal }),
     retry: false,
     retryOnMount: false,
     refetchOnWindowFocus: false,
@@ -51,7 +54,7 @@ export function useSearchFilters(query: string) {
       : null;
   const personalized = !!account && account.role === "guest" && useProfile;
   const search = useQuery({
-    queryKey: ["search", searchIntent, account?.id, personalized],
+    queryKey: ["search", searchIntent, account?.id, personalized, ...(hotelId ? [hotelId] : [])],
     queryFn: ({ signal }) =>
       (personalized ? sessionApi<SearchResult> : api<SearchResult>)("/searches", {
         method: "POST",
@@ -60,6 +63,7 @@ export function useSearchFilters(query: string) {
           chips: searchIntent?.chips,
           trip: searchIntent?.trip,
           useProfile: personalized,
+          ...(hotelId ? { hotelIds: [hotelId] } : {}),
         },
         signal,
       }),
