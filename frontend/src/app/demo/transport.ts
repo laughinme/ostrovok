@@ -2,6 +2,7 @@ import { ApiError, type ApiOptions, type components } from "@/shared/api";
 import { DEMO_DATE, demoHotels, demoQuestions } from "./fixtures";
 import { demoIntent, demoMatch, demoSearch, restoreDemoSearch } from "./search";
 import { demoBeachRoute, demoDirectionRoute, demoNoise } from "./geo";
+import { demoSimilar } from "./similar";
 
 type State = {
   facts: Record<string, components["schemas"]["FactOut"]>;
@@ -148,6 +149,12 @@ export function demoResponse(path: string, options: ApiOptions = {}): unknown {
   if (path === "/hotels" && method === "GET") return hotels;
   if (pieces[0] === "hotels" && pieces.length === 2 && method === "GET")
     return required(hotels.find((hotel) => hotel.id === pieces[1]));
+  if (pieces[0] === "hotels" && pieces[2] === "similar" && pieces.length === 3 && method === "POST")
+    return demoSimilar(
+      required(hotels.find((hotel) => hotel.id === pieces[1])),
+      hotels,
+      data as components["schemas"]["SimilarIn"],
+    );
   if (pieces[0] === "hotels" && method === "GET" && pieces.length > 2) {
     const hotel = required(hotels.find((item) => item.id === pieces[1]));
     if (pieces[2] === "places" && pieces.length === 3) {
@@ -185,32 +192,6 @@ export function demoResponse(path: string, options: ApiOptions = {}): unknown {
     if (pieces[2] === "noise" && pieces.length === 3) return demoNoise(hotel);
     if (pieces[2] === "routes" && pieces[3] === "beach" && pieces.length === 4)
       return demoBeachRoute(hotel, params.get("profile") ?? "walk");
-  }
-  if (pieces[0] === "hotels" && pieces[2] === "similar" && method === "POST") {
-    const request = data as components["schemas"]["SimilarIn"];
-    const search = demoSearch(
-      {
-        chips:
-          request.chips ??
-          demoIntent(
-            request.change === "quieter"
-              ? "тихий номер"
-              : request.change === "closer_to_beach"
-                ? "у моря"
-                : "отель",
-          ).chips,
-        trip: request.trip ?? {},
-        useProfile: false,
-      },
-      hotels,
-    );
-    return {
-      sourceId: pieces[1]!,
-      change: request.change,
-      intent: search.intent,
-      matches: search.matches.filter((match) => match.hotelId !== pieces[1]),
-      caveats: ["Демонстрационный список похожих отелей. Все данные синтетические."],
-    } satisfies components["schemas"]["SimilarOut"];
   }
   if (path === "/compare" && method === "POST") {
     const request = data as components["schemas"]["CompareIn"];

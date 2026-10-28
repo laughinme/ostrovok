@@ -1,8 +1,14 @@
 import { ResultsPage } from "@/pages/results";
 import { createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/results")({
-  validateSearch: (s: Record<string, unknown>): { q?: string | undefined } => ({
+  validateSearch: (
+    s: Record<string, unknown>,
+  ): {
+    q?: string | undefined;
+    hotelId?: string | undefined;
+  } => ({
     q: typeof s["q"] === "string" ? s["q"] : undefined,
+    hotelId: typeof s["hotelId"] === "string" ? s["hotelId"] : undefined,
   }),
   head: () => ({
     meta: [
@@ -19,6 +25,6 @@ export const Route = createFileRoute("/results")({
   component: PageRoute,
 });
 function PageRoute() {
-  const { q } = Route.useSearch();
-  return <ResultsPage key={q} query={q} />;
+  const { q, hotelId } = Route.useSearch();
+  return <ResultsPage key={`${q}:${hotelId ?? ""}`} query={q} hotelId={hotelId} />;
 }

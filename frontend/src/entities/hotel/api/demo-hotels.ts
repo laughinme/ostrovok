@@ -1,22 +1,5 @@
 import type { Hotel } from "../model/types";
-import h1 from "./assets/h1.jpg";
-import h1a from "./assets/h1a.jpg";
-import h1b from "./assets/h1b.jpg";
-import h2 from "./assets/h2.jpg";
-import h2a from "./assets/h2a.jpg";
-import h2b from "./assets/h2b.jpg";
-import h3 from "./assets/h3.jpg";
-import h3a from "./assets/h3a.jpg";
-import h3b from "./assets/h3b.jpg";
-import h4 from "./assets/h4.jpg";
-import h4a from "./assets/h4a.jpg";
-import h4b from "./assets/h4b.jpg";
-import h5 from "./assets/h5.jpg";
-import h5a from "./assets/h5a.jpg";
-import h5b from "./assets/h5b.jpg";
-import h6 from "./assets/h6.jpg";
-import h6a from "./assets/h6a.jpg";
-import h6b from "./assets/h6b.jpg";
+import { demoPhotos } from "../model/photos";
 
 export const hotels: Hotel[] = [
   {
@@ -24,8 +7,8 @@ export const hotels: Hotel[] = [
     name: "Закатный берег",
     district: "Центральный район, Приморская набережная",
     address: "улица Приморская, д. 12, Сочи",
-    image: h1,
-    gallery: [h1, h1a, h1b],
+    image: demoPhotos("zakatny-bereg")[0]!,
+    gallery: demoPhotos("zakatny-bereg"),
     price: 14200,
     rating: 9.1,
     reviewCount: 1248,
@@ -102,9 +85,9 @@ export const hotels: Hotel[] = [
         value: "Двойной стеклопакет",
         confidence: 0.48,
         status: "conflict",
-        source: "Отзывы расходятся",
+        source: "Демо: ответы отельера расходятся",
         checkedAt: "8 окт 2026",
-        note: "3 отзыва упоминают шум, 11 — тишину. Вопрос отправлен отельеру.",
+        note: "В демо-ответах указаны разные условия шумоизоляции. Нужен ответ отельера.",
       },
       {
         label: "Музыка на набережной",
@@ -123,8 +106,8 @@ export const hotels: Hotel[] = [
     name: "Горный приют",
     district: "Красная Поляна, Эсто-Садок",
     address: "улица Эстонская, д. 37, Сочи",
-    image: h2,
-    gallery: [h2, h2a, h2b],
+    image: demoPhotos("gornyi-priyut")[0]!,
+    gallery: demoPhotos("gornyi-priyut"),
     price: 11800,
     rating: 9.3,
     reviewCount: 486,
@@ -211,8 +194,8 @@ export const hotels: Hotel[] = [
     name: "Пальмовый сад",
     district: "Адлер, Имеретинская низменность",
     address: "улица Нижнеимеретинская, д. 48, Сириус",
-    image: h3,
-    gallery: [h3, h3a, h3b],
+    image: demoPhotos("palmovyi-sad")[0]!,
+    gallery: demoPhotos("palmovyi-sad"),
     price: 16500,
     rating: 8.9,
     reviewCount: 2316,
@@ -246,7 +229,7 @@ export const hotels: Hotel[] = [
     audiences: {
       kids: "Две площадки, лягушатник, детское меню, аниматоры с 3 лет.",
       pets: "Животные не допускаются в основной корпус, есть 4 коттеджа.",
-      work: "Стол только в люксах, Wi‑Fi на территории нестабилен (по отзывам).",
+      work: "Стол только в люксах, Wi‑Fi на территории нестабилен (по демо-ответу отельера).",
     },
     floors: [
       { range: "Корпус А", note: "Ближе к детскому клубу, шумнее днём", good: false },
@@ -271,9 +254,9 @@ export const hotels: Hotel[] = [
         value: "Иногда днём",
         confidence: 0.55,
         status: "conflict",
-        source: "Глиссада аэропорта vs отзывы",
+        source: "Расчёт глиссады и демо-ответ отельера",
         checkedAt: "10 окт 2026",
-        note: "Расчёт показывает пролёты, но гости почти не жалуются.",
+        note: "Расчёт показывает пролёты, а демо-ответ отельера — редкий шум.",
       },
       {
         label: "Детская площадка",
@@ -300,8 +283,8 @@ export const hotels: Hotel[] = [
     name: "Ателье 17",
     district: "Центр, ул. Навагинская",
     address: "улица Навагинская, д. 17, Сочи",
-    image: h4,
-    gallery: [h4, h4a, h4b],
+    image: demoPhotos("atelier-sochi")[0]!,
+    gallery: demoPhotos("atelier-sochi"),
     price: 9400,
     rating: 8.7,
     reviewCount: 327,
@@ -389,8 +372,8 @@ export const hotels: Hotel[] = [
     name: "Кипарисовая аллея",
     district: "Хоста, Мацеста",
     address: "улица Самшитовая, д. 7, Сочи",
-    image: h5,
-    gallery: [h5, h5a, h5b],
+    image: demoPhotos("kiparisovaya-alleya")[0]!,
+    gallery: demoPhotos("kiparisovaya-alleya"),
     price: 12600,
     rating: 8.8,
     reviewCount: 864,
@@ -457,9 +440,9 @@ export const hotels: Hotel[] = [
         value: "Не работает?",
         confidence: 0.35,
         status: "conflict",
-        source: "Сайт vs свежие отзывы",
+        source: "Противоречие в демо-ответах отельера",
         checkedAt: "7 окт 2026",
-        note: "Сайт заявляет лифт, 4 отзыва за сентябрь — что он закрыт.",
+        note: "В одном демо-ответе лифт работает, в другом — закрыт. Нужна проверка.",
       },
     ],
     pros: ["Тишина и парк", "Красивый закат", "Атмосфера"],
@@ -470,8 +453,8 @@ export const hotels: Hotel[] = [
     name: "Дом на холме",
     district: "Хоста, Кудепста",
     address: "улица Дарвина, д. 24, Сочи",
-    image: h6,
-    gallery: [h6, h6a, h6b],
+    image: demoPhotos("dom-na-holme")[0]!,
+    gallery: demoPhotos("dom-na-holme"),
     price: 7200,
     rating: 9.4,
     reviewCount: 219,

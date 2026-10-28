@@ -1,13 +1,18 @@
+import asyncio
 import json
+from typing import Any
 
+import httpx
 import pytest
+from openai import AsyncOpenAI
 from pydantic import BaseModel
 from pydantic_ai import ModelMessage, ModelResponse, TextPart, ToolCallPart, models
 from pydantic_ai.exceptions import UnexpectedModelBehavior
 from pydantic_ai.models.function import AgentInfo, FunctionModel
 
+from app.infra.llm import pydantic_ai_model
 from app.infra.llm.guards import DailyLimit
-from app.infra.llm.pydantic_ai_model import PydanticAiLanguageModel
+from app.infra.llm.pydantic_ai_model import PydanticAiLanguageModel, openai_compatible
 from app.service.ports import Budget, LlmUnavailableError, ToolSpec
 
 models.ALLOW_MODEL_REQUESTS = False
@@ -21,11 +26,11 @@ class Probe(BaseModel):
     tag: str
 
 
-def _llm(function: object, *, limit: int = 10) -> PydanticAiLanguageModel:
+def _llm(function: object, *, limit: int = 10, timeout_sec: float = 5) -> PydanticAiLanguageModel:
     return PydanticAiLanguageModel(
         FunctionModel(function),  # type: ignore[arg-type]
         model_name="fake",
-        timeout_sec=5,
+        timeout_sec=timeout_sec,
         limit=DailyLimit(None, limit),
     )
 
@@ -88,6 +93,24 @@ async def test_daily_limit_stops_paid_calls() -> None:
         await llm.structured(task="t", system="s", prompt="b", output=Answer)
 
 
+async def test_timeout_cancels_the_call_without_disabling_other_tasks() -> None:
+    cancelled = asyncio.Event()
+
+    async def model(messages: list[ModelMessage], info: AgentInfo) -> ModelResponse:
+        try:
+            await asyncio.sleep(60)
+        finally:
+            cancelled.set()
+        return _final(info, {"value": 42})
+
+    llm = _llm(model, timeout_sec=0.5)
+    with pytest.raises(LlmUnavailableError, match="TimeoutError"):
+        await llm.structured(task="t", system="s", prompt="p", output=Answer)
+
+    assert cancelled.is_set()
+    assert llm.available
+
+
 async def test_no_key_means_unavailable() -> None:
     llm = PydanticAiLanguageModel(None, model_name="", timeout_sec=1, limit=DailyLimit(None, 1))
 
@@ -98,6 +121,65 @@ async def test_no_key_means_unavailable() -> None:
 
 def test_text_part_is_importable() -> None:
     assert TextPart(content="ok").content == "ok"
+
+
+@pytest.mark.parametrize("thinking", ["low", "medium"])
+async def test_polza_keeps_model_id_and_sends_reasoning_effort(
+    thinking: str, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    payloads: list[dict[str, Any]] = []
+
+    def respond(request: httpx.Request) -> httpx.Response:
+        body = json.loads(request.content)
+        payloads.append(body)
+        name = body["tools"][0]["function"]["name"]
+        return httpx.Response(
+            200,
+            json={
+                "id": "mock",
+                "object": "chat.completion",
+                "created": 0,
+                "model": body["model"],
+                "choices": [
+                    {
+                        "index": 0,
+                        "finish_reason": "tool_calls",
+                        "message": {
+                            "role": "assistant",
+                            "tool_calls": [
+                                {
+                                    "id": "call_1",
+                                    "type": "function",
+                                    "function": {"name": name, "arguments": '{"value":42}'},
+                                }
+                            ],
+                        },
+                    }
+                ],
+                "usage": {"prompt_tokens": 10, "completion_tokens": 5, "total_tokens": 15},
+            },
+        )
+
+    def client(**kwargs: Any) -> AsyncOpenAI:
+        return AsyncOpenAI(
+            **kwargs, http_client=httpx.AsyncClient(transport=httpx.MockTransport(respond))
+        )
+
+    monkeypatch.setattr(pydantic_ai_model, "AsyncOpenAI", client)
+    monkeypatch.setattr(models, "ALLOW_MODEL_REQUESTS", True)  # MockTransport only, no network
+    model = openai_compatible("https://polza.ai/api/v1", "mock-key", "openai/gpt-5.6-luna")
+    llm = PydanticAiLanguageModel(
+        model,
+        model_name="openai/gpt-5.6-luna",
+        thinking=thinking,  # type: ignore[arg-type]
+        timeout_sec=5,
+        limit=DailyLimit(None, 1),
+    )
+    result = await llm.structured(task="t", system="s", prompt="p", output=Answer)
+
+    assert result.output.value == 42
+    assert payloads[0]["model"] == "openai/gpt-5.6-luna"
+    assert payloads[0]["reasoning_effort"] == thinking
 
 
 async def test_bad_output_does_not_disable_other_tasks() -> None:

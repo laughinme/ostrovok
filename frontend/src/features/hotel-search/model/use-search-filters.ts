@@ -1,21 +1,15 @@
-import {
-  catalogQuery,
-  criterionKeys,
-  hotelFromApi,
-  type ApiIntent,
-  type Criterion,
-} from "@/entities/hotel";
+import { catalogQuery, hotelFromApi, type ApiIntent, type Criterion } from "@/entities/hotel";
 import { sessionApi, useSession } from "@/entities/session";
 import { api, type components } from "@/shared/api";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { intentForCriteria } from "./api-search";
+import { criteriaFromIntent, intentForCriteria } from "./api-search";
 import { useSearchSession } from "./search-session";
 
 type SearchResult = components["schemas"]["SearchResultOut"];
 type Importance = components["schemas"]["Importance"];
 
-export function useSearchFilters(query: string) {
+export function useSearchFilters(query: string, hotelId?: string) {
   const saved = useSearchSession.getState().filters[query];
   const account = useSession((state) => state.account);
   const [refine, setRefine] = useState("");
@@ -25,8 +19,11 @@ export function useSearchFilters(query: string) {
   const [useProfile, setUseProfile] = useState(true);
   const [adopted, setAdopted] = useState<{ search: SearchResult; intent: ApiIntent } | null>(null);
   const intent = useQuery({
-    queryKey: ["intent", text],
-    queryFn: ({ signal }) => api<ApiIntent>("/intents", { method: "POST", body: { text }, signal }),
+    queryKey: ["intent", text, ...(hotelId ? [hotelId] : [])],
+    queryFn: ({ signal }) =>
+      hotelId && text === query
+        ? Promise.resolve<ApiIntent>({ text, chips: [], trip: {}, planner: "rules" })
+        : api<ApiIntent>("/intents", { method: "POST", body: { text }, signal }),
     retry: false,
     retryOnMount: false,
     refetchOnWindowFocus: false,
@@ -45,13 +42,7 @@ export function useSearchFilters(query: string) {
         : null,
     [base, maxPrice],
   );
-  const criteria = useMemo(
-    () =>
-      (Object.keys(criterionKeys) as Criterion[]).filter((criterion) =>
-        base?.chips.some((chip) => chip.characteristic === criterionKeys[criterion]),
-      ),
-    [base],
-  );
+  const criteria = useMemo(() => criteriaFromIntent(base), [base]);
   useEffect(() => {
     useSearchSession
       .getState()
@@ -63,7 +54,7 @@ export function useSearchFilters(query: string) {
       : null;
   const personalized = !!account && account.role === "guest" && useProfile;
   const search = useQuery({
-    queryKey: ["search", searchIntent, account?.id, personalized],
+    queryKey: ["search", searchIntent, account?.id, personalized, ...(hotelId ? [hotelId] : [])],
     queryFn: ({ signal }) =>
       (personalized ? sessionApi<SearchResult> : api<SearchResult>)("/searches", {
         method: "POST",
@@ -72,6 +63,7 @@ export function useSearchFilters(query: string) {
           chips: searchIntent?.chips,
           trip: searchIntent?.trip,
           useProfile: personalized,
+          ...(hotelId ? { hotelIds: [hotelId] } : {}),
         },
         signal,
       }),
@@ -140,6 +132,7 @@ export function useSearchFilters(query: string) {
     },
     ranked,
     search: current,
+    hints: current?.intent.hints ?? base?.hints ?? [],
     chips: visibleChips,
     useProfile,
     setUseProfile: (value: boolean) => {

@@ -5,8 +5,14 @@ from dataclasses import dataclass, replace
 from uuid import UUID
 
 from app.domain.knowledge.fact import Fact
-from app.domain.search.intent import Chip, Importance
+from app.domain.search.intent import Chip, Importance, Intent
+from app.domain.search.region import outside_region
 from app.domain.search.score import Match, SearchHotel, TripWindow, Verdict, best_match
+
+NO_MATCHES_HINT = (
+    "По этим условиям вариантов пока нет. Попробуйте увеличить бюджет, "
+    "уменьшить число гостей или выбрать другой район Большого Сочи."
+)
 
 GOOD_SCORE = 0.6
 ENOUGH_GOOD = 5
@@ -31,6 +37,18 @@ class Ranking:
     matches: tuple[Match, ...]
     relaxations: tuple[Relaxation, ...]
     research: tuple[ResearchOffer, ...]
+
+
+def result_hints(intent: Intent, ranking: Ranking) -> tuple[str, ...]:
+    hints = list(intent.hints)
+    if not ranking.matches and not outside_region(intent.text):
+        hints.append(NO_MATCHES_HINT)
+    if intent.trip.budget_per_night and any(m.hotel.price_from is None for m in ranking.matches):
+        hints.append(
+            "У части вариантов цена уточняется. Соответствие бюджету не подтверждено — "
+            "уточните цену у отеля."
+        )
+    return tuple(dict.fromkeys(hints))
 
 
 @dataclass(frozen=True, slots=True)

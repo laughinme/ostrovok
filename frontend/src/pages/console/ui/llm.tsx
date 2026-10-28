@@ -75,6 +75,7 @@ export function LlmJournal() {
           Задача
           <select value={task} onChange={(event) => setTask(event.target.value)}>
             <option value="">Все задачи</option>
+            <option value="photo_intent">Фото → желание</option>
             {["intent", "answer", "curator", "explain"].map((value) => (
               <option key={value}>{value}</option>
             ))}

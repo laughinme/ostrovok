@@ -2,6 +2,7 @@
 re-ranked on every read, so a result reread after live research shows the new facts."""
 
 import asyncio
+from collections.abc import Sequence
 from dataclasses import dataclass, replace
 from datetime import date, timedelta
 from typing import Any
@@ -15,6 +16,7 @@ from app.db.models import DemandDaily, SearchRow
 from app.db.uow import UnitOfWork
 from app.domain.search.intent import Intent
 from app.domain.search.rank import Filters, Ranking, rank
+from app.domain.search.region import outside_region
 from app.domain.search.score import TripWindow
 from app.service.ports import Clock, LanguageModel
 from app.service.search.candidates import load_candidates, load_facts
@@ -67,6 +69,11 @@ def _remember_top(row: SearchRow, ranking: Ranking) -> None:
     row.result = {**row.result, "top": top}
 
 
+def _hotel_ids(row: SearchRow) -> list[UUID] | None:
+    ids = row.result.get("hotelIds")
+    return [UUID(value) for value in ids] if isinstance(ids, list) else None
+
+
 class SearchService:
     def __init__(self, uow: UnitOfWork, clock: Clock, llm: LanguageModel | None = None) -> None:
         self._uow = uow
@@ -74,21 +81,29 @@ class SearchService:
         self._llm = llm
 
     async def search(
-        self, intent: Intent, *, user_id: UUID | None = None, use_profile: bool = True
+        self,
+        intent: Intent,
+        *,
+        user_id: UUID | None = None,
+        use_profile: bool = True,
+        hotel_ids: Sequence[UUID] | None = None,
     ) -> SearchView:
         search_id = uuid4()
         row = SearchRow(
             id=search_id,
             user_id=user_id,
             intent=intent_to_json(intent),
-            result={"useProfile": use_profile},
+            result={
+                "useProfile": use_profile,
+                **({"hotelIds": [str(hid) for hid in hotel_ids]} if hotel_ids is not None else {}),
+            },
             created_at=self._clock.now(),
             updated_at=self._clock.now(),
         )
         self._uow.session.add(row)
         intent = await self._personalize(intent, user_id, use_profile)
         await self._count_demand(intent)
-        ranking = await self.rank(intent)
+        ranking = await self.rank(intent, hotel_ids=hotel_ids)
         _remember_top(row, ranking)
         await self._uow.flush()
         return SearchView(search_id, intent, await explain(ranking, self._llm))
@@ -109,7 +124,7 @@ class SearchService:
         intent = await self._personalize(
             intent_from_json(row.intent), row.user_id, row.result.get("useProfile", True)
         )
-        return SearchView(search_id, intent, await self.rank(intent))
+        return SearchView(search_id, intent, await self.rank(intent, hotel_ids=_hotel_ids(row)))
 
     async def update_intent(self, search_id: UUID, intent: Intent) -> SearchView:
         row = await self._uow.session.get(SearchRow, search_id)
@@ -119,7 +134,7 @@ class SearchService:
         row.updated_at = self._clock.now()
         await self._uow.flush()
         intent = await self._personalize(intent, row.user_id, row.result.get("useProfile", True))
-        ranking = await self.rank(intent)
+        ranking = await self.rank(intent, hotel_ids=_hotel_ids(row))
         _remember_top(row, ranking)
         return SearchView(search_id, intent, ranking)
 
@@ -129,8 +144,10 @@ class SearchService:
             return await TasteService(self._uow, self._clock).apply(intent, user_id)
         return intent
 
-    async def rank(self, intent: Intent) -> Ranking:
-        hotels = await load_candidates(self._uow, intent.trip.area)
+    async def rank(self, intent: Intent, *, hotel_ids: Sequence[UUID] | None = None) -> Ranking:
+        if outside_region(intent.text):
+            return Ranking(matches=(), relaxations=(), research=())
+        hotels = await load_candidates(self._uow, intent.trip.area, hotel_ids=hotel_ids)
         keys = [c.characteristic for c in intent.chips if c.characteristic]
         facts = await load_facts(self._uow, [h.id for h in hotels], keys)
         guests = (intent.trip.adults or 0) + (intent.trip.children or 0) or None

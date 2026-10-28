@@ -1,4 +1,4 @@
-import { CRITERIA, formatReviewCount, type Criterion, type Hotel } from "@/entities/hotel";
+import { CRITERIA, PhotoCredit, photoInfo, type Criterion, type Hotel } from "@/entities/hotel";
 import { MatchRing, Reveal } from "@/shared/ui";
 import { ArrowRight, Heart, Images, MapPin, Scale, ShieldCheck, Waves } from "lucide-react";
 import { Photo } from "./visuals";
@@ -30,6 +30,7 @@ export function HotelOverview({
   onSection: (id: string) => void;
 }) {
   const photos = h.photos.slice(0, 3);
+  const sources = Array.from(new Map(photos.map((src) => [photoInfo(src)?.author, src])).values());
   return (
     <>
       <Reveal className="hotel-intro">
@@ -50,7 +51,7 @@ export function HotelOverview({
             <span aria-label={`Оценка ${h.rating.toLocaleString("ru")} из 10`}>
               {h.rating.toLocaleString("ru", { minimumFractionDigits: 1 })}
             </span>
-            <small>{h.reviewCount ? formatReviewCount(h.reviewCount) : "Демо-оценка"}</small>
+            <small>Демо-оценка</small>
           </div>
           <button
             className={`hotel-square-button${favorite ? " is-selected" : ""}`}
@@ -143,6 +144,17 @@ export function HotelOverview({
           </div>
         </aside>
       </Reveal>
+      <div className="hotel-photo-sources">
+        {sources.map((src) => (
+          <PhotoCredit key={src} src={src} compact={photoInfo(src)?.kind === "ai"} />
+        ))}
+        {photos.some((src) => photoInfo(src)?.kind === "ai") && (
+          <p>
+            AI-кадры — вымышленные иллюстрации, не фотографии этого отеля. Интерьер и вид из номера
+            нужно уточнить.
+          </p>
+        )}
+      </div>
       <nav className="hotel-section-nav" aria-label="Об отеле">
         <a href="#hotel-about">Об отеле</a>
         <a href="#rooms">
