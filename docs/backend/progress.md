@@ -12,6 +12,46 @@
 
 ---
 
+### 28.10 03:00 МСК · codex-terrain · B1.6, линия B1.3 → B1.4 → B1.6 завершена
+- Сделано: 200 демо-карточек, 694 категории, 1388 тарифов (`ef0350c`); 200 скрытых профилей,
+  981 привязка категорий к фасадам/этажам (`192cda0`); история Анны и CLI (`80b9b3a`).
+  Пять районов: центр 70, Хоста 25, Адлер 45, Сириус 30, Поляна 30. Исходные users.yaml не менялись.
+  Воспроизводимые шаблоны R6 вынесены в `pipeline/demo_reference.yaml`: пайплайн не зависит от приватных docs.
+- **Публичный API:** `pipeline.demo_cards.generate_cards(hotels: list[dict[str,str]], reference: dict, *, seed=20261028) -> dict`
+  возвращает `{"isDemo":true,"seed":...,"price_basis":...,"hotels":{osm_id:card}}`.
+  card: rating (демо 0…10), ratingLabel, tagline, amenities (строки), rooms (2–5).
+  room: уникальный строковый id, name, area (м² с санузлом), bed, capacity (человек), rates.
+  rate: уникальный id, meal, cancel, pay, price (демо ₽/номер/ночь, ноябрь 2026), tag, isDemo.
+  Seed независим для каждого osm_id; порядок и добавление других отелей не меняют существующую карточку.
+  Незвёздные отели используют шаблон 3★ только как диапазон генерации; звёзды им не назначаются.
+- **Стык симулятору:** `pipeline.demo_truth.generate_truth(hotels, cards, reference, coastal_ids: set[str], *, seed=20261028) -> dict`
+  возвращает `{"isDemo":true,"seed":...,"hotels":{osm_id:profile}}` → `data/demo/hidden_truth.yaml`.
+  profile: pets_policy {allowed, kinds (dog/cat), max_kg (кг или null), fee_rub (₽/сутки), fee_basis};
+  soundproofing/blackout/ac/elevator/step_free — bool; facade_rooms — {room_type_id, facade (N…NW),
+  floor_from, floor_to} (этажи включительно, 1…floors). Только реальные стороны building_facades из контура.
+  AC согласован с amenities; step_free до верхних этажей требует лифта. persona — краткий/многословный/расплывчатый.
+  `coastal_hotels(hotels) -> set[str]` выбирает ≤800 м от реального моря; у 39 из них маркетинговое
+  claims.sea_view_all_rooms=true. Это заявление симулятора, не вычисленный факт о видимости.
+- **Стык профилю вкуса:** `pipeline.demo_history.generate_history(hotels, cards) -> dict`
+  → `data/demo/history.yaml`: `guests.guest_anna` содержит bookings (2 завершённые брони с реальными
+  osm_id, room_type_id и rate_plan_id), saved_hotels (2 osm_id), rejected_hotels (2 записи с причиной),
+  chip_edits (aware ISO timestamps, characteristic, from/to = nice/must, operator/value, reason).
+  night_noise становится must/eq/true, sea_view — nice/eq/true, steep_streets — must/eq/false.
+  expected_taste — эталон «Тишина важнее вида», «Не любит подъёмы»; все события — вымышленные, помечены демо.
+- Как проверить: `uv run --group pipeline python -m pipeline hotels`; prerequisite — B1.2 (каталог и sea.wkb.gz).
+  Последний полный `make check`: **236 passed, 1 skipped** (B1.5 ещё не публиковала NPZ), ruff/format,
+  mypy strict и 7 import-контрактов зелёные. Все наши тесты в tests/unit/geo/.
+  `python -m app.init` в отдельной БД okno_terrain_seed загрузил 200 отелей, 694 room_types,
+  цены и isDemo у всех 200; второй запуск ничего не перезагрузил. Основная БД не затронута.
+  DEM, климат и все demo YAML повторно сгенерированы из кэша с совпадением SHA256 каждого файла.
+- Грабли: RoomTypesLoader читает только room_types.yaml; hidden_truth и history должны использовать
+  будущие симулятор и профиль, отдельных загрузчиков для них сейчас нет. `app.init` не вызывает LLM.
+  **Для claude-core / B2.10:** текущий ClimateExecutor жёстко пишет «за 10 лет» и confidence=0.9;
+  данные B1.4 содержат лишь 2–3 полных года воды. Следует учитывать station.normals[].years и
+  water_years_by_month, а в доказательстве явно отличать погоду 2016–2025 от воды 2023–2025.
+- Дальше: B1.5 использует DEM; B1.7 может сидировать карточки. Артефакты и источники — в MANIFEST;
+  текущий набор около 23 МБ без ещё готовящегося walk_graph.npz. LLM API не вызывался.
+
 ### 28.10 02:54 МСК · codex-osm · B1.2
 - Сделано: B1.2 завершена через Geofabrik за 26.10, MD5 проверен. Южный ФО дополнен соседней
   Грузией (D-39): иначе берег обрывался внутри bbox. Региональные GPKG в `.cache/osm/`, в git
