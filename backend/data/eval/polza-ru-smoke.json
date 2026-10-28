@@ -1,0 +1,82 @@
+{
+  "checkedAt": "2026-10-28T21:51:14.438072+00:00",
+  "method": "curl --interface en0 --noproxy *; no system network configuration changes",
+  "russiaWithoutVpnVerified": true,
+  "country": "RU",
+  "city": "Новосибирск",
+  "samePublicIpInIndependentEchoes": true,
+  "ipEchoServices": [
+    "https://yandex.ru/internet/",
+    "https://ip.mail.ru"
+  ],
+  "countryLookupService": "https://api.country.is/{observed-ip}",
+  "publicIpStored": false,
+  "provider": "Polza.ai",
+  "baseUrl": "https://polza.ai/api/v1",
+  "model": "openai/gpt-5.6-luna",
+  "httpStatuses": [
+    200,
+    200
+  ],
+  "toolCallValidated": true,
+  "finalResultValidated": true,
+  "latencyMs": 4854,
+  "usage": [
+    {
+      "prompt_tokens": 83,
+      "completion_tokens": 26,
+      "total_tokens": 109,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "audio_tokens": 0,
+        "image_tokens": null,
+        "accepted_prediction_tokens": null,
+        "rejected_prediction_tokens": null
+      },
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "server_tool_use": null,
+      "cost_rub": 0.00557599,
+      "cost": 0.00557599,
+      "plugins": null
+    },
+    {
+      "prompt_tokens": 140,
+      "completion_tokens": 58,
+      "total_tokens": 198,
+      "completion_tokens_details": {
+        "reasoning_tokens": 32,
+        "audio_tokens": 0,
+        "image_tokens": null,
+        "accepted_prediction_tokens": null,
+        "rejected_prediction_tokens": null
+      },
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "server_tool_use": null,
+      "cost_rub": 0.01138528,
+      "cost": 0.01138528,
+      "plugins": null
+    }
+  ],
+  "vpnIntegrity": {
+    "claudeRouteBefore": "utun7",
+    "claudeRouteAfter": "utun7",
+    "claudeDestinationUnchanged": true,
+    "polzaRouteBefore": "en0",
+    "polzaRouteAfter": "en0",
+    "vpnProcessesUnchanged": true,
+    "ipv4RoutingTableUnchanged": true,
+    "settingsModified": false
+  },
+  "countryLookupIpMatched": true,
+  "costRub": 0.01696127
+}

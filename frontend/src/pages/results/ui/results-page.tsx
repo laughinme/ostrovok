@@ -6,14 +6,16 @@ import { RequestState } from "@/shared/ui";
 import { CoastMap } from "@/widgets/hotel-map";
 import { AgentTrace } from "@/widgets/agent-trace";
 import { HotelResultCard } from "@/widgets/hotel-result-card";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { List, Map as MapIcon, Scale, Search, Sparkles } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 export function ResultsPage({
   query: q = "Тихий отель у моря с хорошей инфраструктурой",
+  hotelId,
 }: {
   query?: string | undefined;
+  hotelId?: string | undefined;
 }) {
   const navigate = useNavigate();
   const {
@@ -29,23 +31,40 @@ export function ResultsPage({
     error,
     retry,
     search: searchResult,
+    hints,
     removeChip,
     acceptSearch,
     updating,
     canUseProfile,
     useProfile,
     setUseProfile,
-  } = useSearchFilters(q);
+  } = useSearchFilters(q, hotelId);
   const live = useLiveResearch(searchResult?.searchId, acceptSearch);
   const [visibleCount, setVisibleCount] = useState(20);
   const [hover, setHover] = useState<string | null>(null);
   const [view, setView] = useState<"list" | "map">("list");
+  const hash = useLocation({ select: (location) => location.hash });
+  const linkedIndex = ranked.findIndex((result) => hash === `hotel-${result.hotel.id}`);
+  const renderedCount = Math.max(visibleCount, linkedIndex + 1);
+  useEffect(() => {
+    if (!pending && hash.startsWith("hotel-")) {
+      document.getElementById(hash)?.scrollIntoView({ block: "center" });
+    }
+  }, [hash, pending, ranked]);
   const ids = useCompare((state) => state.ids);
   return (
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <h1 className="max-w-3xl text-3xl [overflow-wrap:anywhere] sm:text-4xl">«{q}»</h1>
+          <h1 className="max-w-3xl text-3xl [overflow-wrap:anywhere] sm:text-4xl">
+            «{q.length > 240 ? `${q.slice(0, 220)}…` : q}»
+          </h1>
+          {q.length > 240 && (
+            <details className="mt-3 max-w-3xl text-sm [overflow-wrap:anywhere]">
+              <summary className="cursor-pointer text-primary">Полный запрос</summary>
+              <p className="mt-2 text-muted-foreground">{q}</p>
+            </details>
+          )}
         </div>
         <form
           onSubmit={(e) => {
@@ -75,6 +94,23 @@ export function ResultsPage({
         </form>
       </div>
 
+      <RequestState page={!searchResult} pending={pending} error={error} retry={retry} />
+      {hints.length > 0 && !error && (
+        <div className="mt-6 space-y-2 rounded-2xl border bg-card p-5 text-sm" role="status">
+          {hints.map((hint) => (
+            <p key={hint}>{hint}</p>
+          ))}
+        </div>
+      )}
+
+      {hotelId && (
+        <p className="mt-5 text-sm text-muted-foreground">
+          В подборе выбран отель из консоли.{" "}
+          <Link to="/results" search={{ q: "Все отели Сочи" }} className="text-primary underline">
+            Показать все отели
+          </Link>
+        </p>
+      )}
       <div className="mt-6 flex flex-wrap items-center gap-2">
         <CriteriaFilter
           value={criteria}
@@ -90,7 +126,7 @@ export function ResultsPage({
           <input
             type="range"
             min={1000}
-            max={50000}
+            max={Math.max(50000, maxPrice ?? 50000)}
             step={500}
             aria-label="Бюджет за ночь"
             value={maxPrice ?? 50000}
@@ -145,11 +181,6 @@ export function ResultsPage({
           Учитывать мой профиль вкуса
         </label>
       )}
-      {searchResult?.intent.hints?.map((hint) => (
-        <p key={hint} className="mt-3 text-sm text-muted-foreground">
-          {hint}
-        </p>
-      ))}
       {searchResult?.relaxations.map((relaxation) => (
         <button
           key={relaxation.chipId}
@@ -164,7 +195,6 @@ export function ResultsPage({
         </button>
       ))}
 
-      <RequestState page={!searchResult} pending={pending} error={error} retry={retry} />
       {updating && (
         <p role="status" className="mt-4 text-sm text-muted-foreground">
           Обновляем подбор под новые условия…
@@ -190,29 +220,29 @@ export function ResultsPage({
       )}
       <div className="mt-6 grid gap-6 lg:grid-cols-[1.35fr_1fr]">
         <div className={cn("space-y-4", view === "map" && "hidden lg:block")}>
-          {!pending && !error && ranked.length === 0 && (
+          {!pending && !error && ranked.length === 0 && hints.length === 0 && (
             <p className="rounded-3xl border p-10 text-center text-muted-foreground">
               Под эти условия вариантов пока нет. Измените бюджет или уточните пожелания.
             </p>
           )}
-          {ranked.slice(0, visibleCount).map((result, index) => (
+          {ranked.slice(0, renderedCount).map((result, index) => (
             <HotelResultCard
               key={result.hotel.id}
               result={result}
               index={index}
               criteria={criteria}
               query={q}
-              active={hover === result.hotel.id}
+              active={hover === result.hotel.id || hash === `hotel-${result.hotel.id}`}
               onHover={setHover}
             />
           ))}
-          {ranked.length > visibleCount && (
+          {ranked.length > renderedCount && (
             <button
               type="button"
               className="min-h-11 w-full rounded-2xl border px-5 py-3"
-              onClick={() => setVisibleCount((count) => count + 20)}
+              onClick={() => setVisibleCount(renderedCount + 20)}
             >
-              Показать ещё {Math.min(20, ranked.length - visibleCount)} из {ranked.length}
+              Показать ещё {Math.min(20, ranked.length - renderedCount)} из {ranked.length}
             </button>
           )}
         </div>

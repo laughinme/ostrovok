@@ -3,6 +3,7 @@ import type { RouteData } from "./geo";
 import {
   demoTravelOption,
   fetchDrivingOption,
+  fetchWalkingFallback,
   sortTravelOptions,
   type TravelOption,
 } from "./travel-options";
@@ -16,6 +17,7 @@ export function useTravelOptions({
   walkError,
   demo,
   enabled,
+  walkProfile = "walk",
 }: {
   origin: [number, number];
   destination: [number, number] | undefined;
@@ -25,6 +27,7 @@ export function useTravelOptions({
   walkError: boolean;
   demo: boolean;
   enabled: boolean;
+  walkProfile?: string;
 }) {
   const car = useQuery({
     queryKey: ["hotel-driving", origin, destination, name],
@@ -34,21 +37,32 @@ export function useTravelOptions({
     retry: false,
     refetchOnWindowFocus: false,
   });
-  const walk: TravelOption = {
-    mode: "walk",
-    minutes: walking?.there.minutes ?? null,
-    distanceM: walking?.there.lengthM ?? null,
-    ...(walking ? { drawing: walking } : {}),
-    pending,
-    error: walkError,
-    note: walkError
-      ? "Расчёт недоступен · открыть в Яндекс Картах"
-      : demo
-        ? "Демо · время и схема условные"
-        : walking?.estimated
-          ? "Оценка пешего пути"
-          : "По пешеходной сети",
-  };
+  const foot = useQuery({
+    queryKey: ["hotel-foot-fallback", origin, destination, name],
+    queryFn: ({ signal }) => fetchWalkingFallback(origin, destination!, name, signal),
+    enabled: enabled && !demo && !!destination && walkError && walkProfile === "walk",
+    staleTime: 300000,
+    retry: false,
+    refetchOnWindowFocus: false,
+  });
+  const walk: TravelOption =
+    !walking && walkError && walkProfile === "walk" && foot.data
+      ? foot.data
+      : {
+          mode: "walk",
+          minutes: walking?.there.minutes ?? null,
+          distanceM: walking?.there.lengthM ?? null,
+          ...(walking ? { drawing: walking } : {}),
+          pending: pending || foot.isFetching,
+          error: walkError && !foot.data,
+          note: walkError
+            ? "Расчёт недоступен · открыть в Яндекс Картах"
+            : demo
+              ? "Демо · время и схема условные"
+              : walking?.estimated
+                ? "Оценка пешего пути"
+                : "По пешеходной сети",
+        };
   const drive: TravelOption =
     demo && walking
       ? demoTravelOption("car", walking)
@@ -72,5 +86,5 @@ export function useTravelOptions({
           pending: demo && pending,
           note: "Время и рейсы — в Яндекс Картах",
         };
-  return { options: sortTravelOptions([walk, drive, transit]), car };
+  return { options: sortTravelOptions([walk, drive, transit]), car, foot };
 }

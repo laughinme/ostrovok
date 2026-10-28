@@ -20,7 +20,7 @@ from app.service.auth import AuthService, resolve_current_user
 from app.service.catalog.hotels import HotelQueries
 from app.service.knowledge.facts import FactQueries
 from app.service.knowledge.registry import Registry
-from app.service.ports import Clock, EventBus, LanguageModel
+from app.service.ports import Clock, EventBus, LanguageModel, VisionLanguageModel
 from app.service.search.intents import IntentParser
 from app.service.search.search import SearchService
 
@@ -94,7 +94,12 @@ def rate_limit(bucket: str) -> Callable[[Request, RedisDep, SettingsDep], Awaita
     async def dependency(request: Request, redis: RedisDep, settings: SettingsDep) -> None:
         if not settings.rate_limit_enabled:
             return
-        limiter = RateLimiter(redis, limit=settings.auth_rate_limit_per_minute, window_sec=60)
+        limit = (
+            settings.llm_rate_limit_per_minute
+            if bucket == "intents"
+            else settings.auth_rate_limit_per_minute
+        )
+        limiter = RateLimiter(redis, limit=limit, window_sec=60)
         client = request.client.host if request.client else "unknown"
         if not await limiter.hit(f"{bucket}:{client}"):
             raise RateLimitedError()
@@ -177,6 +182,14 @@ def _llm(request: Request) -> LanguageModel | None:
 
 
 LlmDep = Annotated[LanguageModel | None, Depends(_llm)]
+
+
+def _vision_llm(request: Request) -> VisionLanguageModel | None:
+    llm: VisionLanguageModel | None = request.app.state.llm
+    return llm
+
+
+VisionLlmDep = Annotated[VisionLanguageModel | None, Depends(_vision_llm)]
 
 
 def _intent_parser(uow: UowDep, settings: SettingsDep, llm: LlmDep) -> IntentParser:

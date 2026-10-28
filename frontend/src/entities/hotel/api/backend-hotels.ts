@@ -1,6 +1,7 @@
 import { api, getApiMode, type components } from "@/shared/api";
 import type { Criterion, Fact, Hotel } from "../model/types";
 import { hotels } from "./demo-hotels";
+import { hotelPhotos, hotelRoomPhoto } from "../model/photos";
 
 export type ApiHotel = components["schemas"]["HotelOut"];
 export type ApiFact = components["schemas"]["FactOut"];
@@ -59,6 +60,7 @@ export function hotelFromApi(raw: ApiHotel, match?: ApiMatch, intent?: ApiIntent
         .map((fact) => fact.statement)
         .join(". ") ||
       `${raw.area}. Сведения о расположении — из OpenStreetMap. Условия размещения уточняются.`;
+  const gallery = preview?.gallery ?? hotelPhotos(raw.osmId);
   const scores = {} as Record<Criterion, number>;
   const unknownCriteria: Criterion[] = [];
   for (const criterion of Object.keys(criterionKeys) as Criterion[]) {
@@ -94,8 +96,9 @@ export function hotelFromApi(raw: ApiHotel, match?: ApiMatch, intent?: ApiIntent
     name: raw.name,
     district: raw.area,
     address: raw.address || raw.area,
-    image: preview?.image ?? "/hotel-placeholder.svg",
-    gallery: preview?.gallery ?? ["/hotel-placeholder.svg"],
+    image: gallery[0] ?? "/hotel-placeholder.svg",
+    gallery: gallery.length ? gallery : ["/hotel-placeholder.svg"],
+    roomImage: preview?.gallery[1] ?? hotelRoomPhoto(raw.osmId),
     price: match?.recommendation?.priceDemo ?? raw.priceFromDemo ?? 0,
     rating: raw.demo.rating,
     reviewCount: preview?.reviewCount ?? 0,

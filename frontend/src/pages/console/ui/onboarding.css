@@ -1,0 +1,116 @@
+.console-onboarding-intro {
+  margin-bottom: 24px;
+  padding: 24px;
+  border-radius: 24px;
+  background: var(--color-night);
+  color: var(--color-night-foreground);
+}
+.console-onboarding-intro p {
+  max-width: 70ch;
+}
+.console-reserve-row,
+.console-onboarding-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.console-reserve-row {
+  padding: 20px;
+}
+.console-reserve-row h4,
+.console-onboarding-status h3 {
+  overflow-wrap: anywhere;
+}
+.console-reserve-row button {
+  flex-shrink: 0;
+}
+.console-onboarding-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  align-items: start;
+  gap: 20px;
+}
+.console-onboarding-trace {
+  height: 520px;
+}
+.console-onboarding-trace [aria-label="Ход агента"] {
+  box-shadow: none;
+}
+.console-onboarding-progress {
+  min-width: 0;
+  overflow: hidden;
+}
+.console-onboarding-progress progress {
+  height: 6px;
+  accent-color: var(--color-primary);
+}
+.console-onboarding-progress progress::-webkit-progress-bar {
+  border-radius: 3px;
+  background: var(--color-muted);
+}
+.console-onboarding-progress progress::-webkit-progress-value {
+  border-radius: 3px;
+  background: var(--color-primary);
+}
+.console-onboarding-progress progress::-moz-progress-bar {
+  border-radius: 3px;
+  background: var(--color-primary);
+}
+.console-onboarding-facts {
+  max-height: 380px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+.console-onboarding-characteristic {
+  border-top: 1px solid var(--color-border);
+  overflow-wrap: anywhere;
+}
+.console-onboarding-characteristic summary {
+  min-height: 48px;
+  padding: 14px 16px;
+  font-size: 13px;
+  list-style: none;
+}
+.console-onboarding-characteristic summary::-webkit-details-marker {
+  display: none;
+}
+.console-onboarding-characteristic[open] summary {
+  background: var(--color-muted);
+}
+.console-onboarding-result {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  padding: 24px;
+  border-radius: 24px;
+  background: var(--color-muted);
+}
+.console-onboarding-result h3:first-child {
+  text-wrap: balance;
+}
+@media (max-width: 1199px) {
+  .console-onboarding-workspace {
+    grid-template-columns: minmax(0, 1fr) 280px;
+    gap: 16px;
+  }
+}
+@media (max-width: 767px) {
+  .console-onboarding-result,
+  .console-onboarding-workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .console-onboarding-status {
+    align-items: start;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .console-onboarding-trace {
+    height: 400px;
+  }
+  .console-reserve-row {
+    gap: 12px;
+    padding: 16px;
+  }
+}

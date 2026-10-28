@@ -92,6 +92,12 @@ class Tracer:
     def add_usage(self, usage: Usage) -> None:
         self.usage += usage
 
+    async def set_planner(self, planner: Planner) -> None:
+        """A queued run starts with rules; record the planner actually selected at runtime."""
+        async with self._db.unit_of_work() as uow:
+            if row := await uow.agents.run_row(self.run_id):
+                row.planner = planner.value
+
     async def llm(self, task: str, result: LlmResult[Any]) -> None:
         """One LLM call as a trace step: model, tokens, time and price."""
         self.add_usage(result.spent)

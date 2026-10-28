@@ -57,3 +57,39 @@ async def test_typing_mode_never_calls_the_llm(db: Database) -> None:
 
     assert intent.planner == "rules"
     assert llm.calls == []
+
+
+async def test_invalid_llm_trip_falls_back_without_http_500(db: Database) -> None:
+    await _registry(db)
+    broken = {**LLM_ANSWER, "trip": {"adults": 100, "children": -1}}
+    async with db.unit_of_work() as uow:
+        intent = await IntentParser(uow, DATA, FakeLanguageModel({"intent": broken})).parse(
+            "тихий номер вдвоём", today=date(2026, 10, 29)
+        )
+    assert intent.planner == "rules"
+    assert intent.trip.adults == 2
+
+
+async def test_rules_fill_trip_fields_missed_by_llm(db: Database) -> None:
+    await _registry(db)
+    missed = {**LLM_ANSWER, "trip": {}, "hints": ["Укажите даты заезда и выезда на выходные."]}
+    async with db.unit_of_work() as uow:
+        intent = await IntentParser(uow, DATA, FakeLanguageModel({"intent": missed})).parse(
+            "на выходных вдвоём без детей", today=date(2026, 10, 29)
+        )
+    assert intent.planner == "llm"
+    assert intent.trip.check_in == date(2026, 10, 31)
+    assert intent.trip.check_out == date(2026, 11, 2)
+    assert intent.trip.adults == 2
+    assert intent.trip.children == 0
+    assert not any(h.startswith("Укажите даты") for h in intent.hints)
+
+
+async def test_explicit_llm_fields_win_over_rule_guesses(db: Database) -> None:
+    await _registry(db)
+    answer = {**LLM_ANSWER, "trip": {"adults": 2, "children": 3}}
+    async with db.unit_of_work() as uow:
+        intent = await IntentParser(uow, DATA, FakeLanguageModel({"intent": answer})).parse(
+            "семья с детьми", today=date(2026, 10, 29)
+        )
+    assert intent.trip.children == 3

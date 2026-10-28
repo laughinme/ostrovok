@@ -1,3 +1,4 @@
+import { apiErrorMessage } from "./error-message";
 export class ApiError extends Error {
   constructor(
     public status: number,
@@ -30,6 +31,9 @@ export async function api<T>(path: string, options: ApiOptions = {}): Promise<T>
     credentials: "include",
     signal,
     ...(options.body !== undefined ? { body: JSON.stringify(options.body) } : {}),
+  }).catch((error: unknown) => {
+    if (options.signal?.aborted) throw error;
+    throw new ApiError(0, "Нет связи с сервисом. Проверьте интернет и попробуйте снова.");
   });
   if (response.status === 204) return undefined as T;
   const body: unknown = await response.json().catch(() => null);
@@ -37,11 +41,9 @@ export async function api<T>(path: string, options: ApiOptions = {}): Promise<T>
     const problem = body as { detail?: unknown; error_code?: string } | null;
     throw new ApiError(
       response.status,
-      typeof problem?.detail === "string"
-        ? problem.detail
-        : response.status === 422
-          ? "Проверьте заполненные поля и выбранные условия."
-          : `Сервис вернул ошибку ${response.status}`,
+      response.status === 422 && !["/intents", "/searches"].includes(path.split("?")[0] ?? "")
+        ? "Проверьте заполненные поля и выбранные условия."
+        : apiErrorMessage(response.status, problem?.detail),
       problem?.error_code,
     );
   }

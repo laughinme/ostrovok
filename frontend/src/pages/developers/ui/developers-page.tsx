@@ -18,7 +18,10 @@ import "./developers-page.css";
 
 function useOrigin(): string {
   const [origin, setOrigin] = useState("https://okno-api.fly.dev");
-  useEffect(() => setOrigin(window.location.origin), []);
+  useEffect(() => {
+    const host = window.location.hostname;
+    if (host === "localhost" || host === "127.0.0.1") setOrigin(window.location.origin);
+  }, []);
   return origin;
 }
 
@@ -202,8 +205,27 @@ export function DevelopersPage() {
             <Plug className="h-5 w-5" /> Подключить агента по MCP
           </h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            Streamable HTTP, без ключа, только чтение. Добавьте сервер в конфиг клиента:
+            Streamable HTTP, без ключа, только чтение. Публичный URL для Claude и ChatGPT:
           </p>
+          <p className="mt-3 break-all font-mono text-sm">https://okno-api.fly.dev/mcp</p>
+          <div className="mt-5 space-y-4 text-sm leading-relaxed">
+            <p>
+              <strong>Claude.</strong> Customize → Connectors → + Add → Add custom connector.
+              Назовите «О!кно», вставьте URL, выберите No sign in и добавьте сервер. В чате включите
+              его через «+» → Connectors.
+            </p>
+            <p>
+              <strong>ChatGPT.</strong> Откройте Plugins → «+» → Add custom MCP server. Назовите
+              «О!кно», вставьте URL в Server URL, выберите No authentication, создайте и установите
+              плагин. В чате выберите @О!кно. В рабочем пространстве может понадобиться доступ
+              администратора.
+            </p>
+            <p>
+              Спросите: «Через О!кно найди тихий номер с закатом над морем в Сочи на 12–15 ноября
+              вдвоём. Покажи три варианта и доказательства».
+            </p>
+          </div>
+          <p className="mt-5 text-sm text-muted-foreground">Для клиентов с JSON-конфигурацией:</p>
           <div className="mt-4">
             <Code>{mcpConfig(origin)}</Code>
           </div>

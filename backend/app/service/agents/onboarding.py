@@ -16,7 +16,7 @@ class OnboardHotel:
 
     async def run(self, run_id: UUID, hotel_id: UUID) -> None:
         async def ask(tracer: Tracer) -> None:
-            await self._liaison.ask(hotel_id, tracer)
+            await self._liaison.ask(hotel_id, tracer, limit=3)
 
         await self._collect.study(hotel_id, run_id=run_id, after_study=ask)
         async with self._runner.db.unit_of_work() as uow:

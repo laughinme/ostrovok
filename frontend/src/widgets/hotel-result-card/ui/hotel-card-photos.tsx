@@ -1,4 +1,4 @@
-import { formatReviewCount, type Hotel } from "@/entities/hotel";
+import { PhotoCredit, photoInfo, type Hotel } from "@/entities/hotel";
 import { useHotelFavorite } from "@/features/favorite-hotels";
 import { cn } from "@/shared/lib";
 import { Link } from "@tanstack/react-router";
@@ -70,8 +70,12 @@ export function HotelCardPhotos({
         }}
       >
         <img
+          key={photos[current]}
           src={photos[current]}
-          alt={`${hotel.name} — фото ${current + 1} из ${photos.length}`}
+          alt={
+            photoInfo(photos[current])?.alt ??
+            `${hotel.name} — фото ${current + 1} из ${photos.length}`
+          }
           loading="lazy"
           width={1024}
           height={768}
@@ -79,6 +83,11 @@ export function HotelCardPhotos({
           className="h-full w-full object-cover"
         />
       </Link>
+      <PhotoCredit
+        src={photos[current]}
+        compact
+        className="absolute bottom-3 left-3 right-3 w-fit max-w-[calc(100%-1.5rem)] rounded-md bg-white/95 px-2.5 py-1.5 text-[11px] leading-snug text-night shadow-sm"
+      />
       <span className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-sun px-3 py-1.5 text-night shadow-soft">
         <Star className="h-3.5 w-3.5 fill-current opacity-90" aria-hidden="true" />
         <span
@@ -89,7 +98,7 @@ export function HotelCardPhotos({
         </span>
         <span className="h-3 w-px bg-night/25" />
         <span className="font-mono text-[9px] leading-none tracking-wider opacity-70">
-          {hotel.backend ? "демо-рейтинг" : formatReviewCount(hotel.reviewCount)}
+          демо-рейтинг
         </span>
       </span>
       <CardControl
@@ -108,7 +117,7 @@ export function HotelCardPhotos({
       </CardControl>
       {photos.length > 1 && (
         <>
-          <div className="pointer-events-none absolute inset-x-3 bottom-3 flex items-center justify-between gap-2 transition-opacity duration-200 [@media(hover:hover)]:invisible [@media(hover:hover)]:opacity-0 group-hover/photos:visible group-hover/photos:opacity-100 group-focus-within/photos:visible group-focus-within/photos:opacity-100">
+          <div className="pointer-events-none absolute inset-x-3 bottom-12 flex items-center justify-between gap-2 transition-opacity duration-200 [@media(hover:hover)]:invisible [@media(hover:hover)]:opacity-0 group-hover/photos:visible group-hover/photos:opacity-100 group-focus-within/photos:visible group-focus-within/photos:opacity-100">
             <span className="rounded-md bg-card/95 px-2 py-1 text-xs font-medium tabular-nums text-card-foreground">
               {current + 1} / {photos.length}
             </span>

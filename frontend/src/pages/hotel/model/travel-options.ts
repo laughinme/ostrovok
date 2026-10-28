@@ -121,6 +121,7 @@ export function demoTravelOption(mode: "car" | "transit", route: RouteData): Tra
   const first = route.geometry.coordinates[0]!,
     last = route.geometry.coordinates.at(-1)!;
   const split = mode === "car" ? 0.7 : 0.35;
+  const baseMinutes = route.there.lengthM == null ? route.there.minutes : route.there.lengthM / 75;
   const coordinates: [number, number][] = [
     first,
     [first[0] + (last[0] - first[0]) * split, first[1]],
@@ -131,8 +132,8 @@ export function demoTravelOption(mode: "car" | "transit", route: RouteData): Tra
     mode,
     minutes:
       mode === "car"
-        ? Math.max(2, Math.ceil(route.there.minutes / 3))
-        : Math.max(9, Math.ceil(route.there.minutes * 0.65) + 8),
+        ? Math.max(2, Math.ceil(baseMinutes / 3))
+        : Math.max(9, Math.ceil(baseMinutes * 0.65) + 8),
     distanceM: route.there.lengthM,
     drawing: {
       targetName: route.targetName,
@@ -141,4 +142,53 @@ export function demoTravelOption(mode: "car" | "transit", route: RouteData): Tra
     },
     note: "Демо · время и схема условные",
   };
+}
+
+let footQueue: Promise<unknown> = Promise.resolve();
+let lastFootRequest = 0;
+
+export function fetchWalkingFallback(
+  origin: [number, number],
+  destination: [number, number],
+  name: string,
+  signal: AbortSignal,
+): Promise<TravelOption> {
+  const pending = footQueue
+    .catch(() => undefined)
+    .then(async () => {
+      signal.throwIfAborted();
+      const delay = Math.max(0, lastFootRequest + 1100 - Date.now());
+      if (delay)
+        await new Promise<void>((resolve, reject) => {
+          const abort = () => {
+            clearTimeout(timer);
+            reject(signal.reason);
+          };
+          const timer = setTimeout(() => {
+            signal.removeEventListener("abort", abort);
+            resolve();
+          }, delay);
+          signal.addEventListener("abort", abort, { once: true });
+        });
+      signal.throwIfAborted();
+      lastFootRequest = Date.now();
+      const params = new URLSearchParams({
+        overview: "full",
+        geometries: "geojson",
+        steps: "false",
+        radiuses: "150;300",
+      });
+      const response = await fetch(
+        `https://routing.openstreetmap.de/routed-foot/route/v1/driving/${origin.join(",")};${destination.join(",")}?${params}`,
+        { signal: AbortSignal.any([signal, AbortSignal.timeout(10000)]), credentials: "omit" },
+      );
+      if (!response.ok) throw new Error("Пеший маршрут временно недоступен");
+      return {
+        ...drivingOption(await response.json(), name),
+        mode: "walk" as const,
+        note: "Пешеходный маршрут · OSM / FOSSGIS",
+      };
+    });
+  footQueue = pending;
+  return pending;
 }

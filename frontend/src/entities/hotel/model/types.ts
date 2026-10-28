@@ -18,7 +18,11 @@ export interface Fact {
 export interface Hotel {
   backend?: components["schemas"]["HotelOut"];
   searchMatch?: components["schemas"]["HotelMatchOut"];
-  searchContext?: { id: string; trip: components["schemas"]["TripModel"] };
+  searchContext?: {
+    id: string;
+    trip: components["schemas"]["TripModel"];
+    chips?: components["schemas"]["IntentChipModel"][];
+  };
   unknownCriteria?: Criterion[];
   id: string;
   name: string;
@@ -26,6 +30,7 @@ export interface Hotel {
   address: string;
   image: string;
   gallery: string[];
+  roomImage?: string | undefined;
   price: number;
   rating: number;
   reviewCount: number;

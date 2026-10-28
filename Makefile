@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 .PHONY: help install env keys run worker migrate migration openapi lint fmt typecheck arch test-unit \
-	test-deps test test-down check up up-native down dev logs data collect export-seed jury-secrets eval eval-llm eval-compare frontend-dev frontend-check
+	test-deps test test-down check up up-native down dev logs data collect export-seed jury-secrets eval eval-llm eval-compare frontend-dev frontend-check smoke-llm
 
 BACKEND := backend
 # Public age key of the hackathon organizers: secrets for the jury are encrypted to it.
@@ -64,14 +64,24 @@ export-seed: ## Dump collected knowledge and agent traces into backend/data/seed
 eval: ## Quality metrics on the gold set (needs `make dev`)
 	$(UV) python -m app.cli eval
 
-LLM_MODELS ?= gpt-5.6-luna gpt-6-luna gpt-5.4-mini gpt-6.1-terra
-LLM_EVAL_ARGS ?= --thinking low --thinking-strong medium
+LLM_MODELS ?=
+LLM_EVAL_ARGS ?=
 eval-llm: ## LLM vs rules per model, reports in backend/data/eval/llm (spends credits, cached): make eval-llm LLM_MODELS="a b"
-	cd $(BACKEND) && for m in $(LLM_MODELS); do echo "== $$m"; uv run python -m app.cli eval --llm --model $$m --strong-model $$m $(LLM_EVAL_ARGS); done
+	cd $(BACKEND) && if [ -z "$(strip $(LLM_MODELS))" ]; then \
+		uv run python -m app.cli eval --llm $(LLM_EVAL_ARGS); \
+	else \
+		for m in $(LLM_MODELS); do \
+			uv run python -m app.cli eval --llm --model $$m --strong-model $$m $(LLM_EVAL_ARGS) || exit $$?; \
+		done; \
+	fi
 	$(MAKE) eval-compare
 
 eval-compare: ## Table of the saved LLM runs: quality on dev and hold-out sets, latency, price
 	$(UV) python -m app.cli eval-compare
+
+SMOKE_URL ?= http://localhost:8080
+smoke-llm: ## Live LLM acceptance on a disposable running stack (spends credits, changes demo data)
+	$(UV) python -u tests/smoke_llm.py $(SMOKE_URL)
 
 jury-secrets: ## Encrypt .env.jury for the organizers into secrets.env.age (needs `age`)
 	@test -f .env.jury || (echo "create .env.jury with the jury LLM key first" && exit 1)
