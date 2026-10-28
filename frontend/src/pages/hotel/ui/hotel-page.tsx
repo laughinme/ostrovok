@@ -5,6 +5,8 @@ import { CRITERIA, formatReviewCount, type Hotel } from "@/entities/hotel";
 import { parseQuery, scoreHotel } from "@/features/hotel-search";
 import { useCompare } from "@/features/compare-hotels";
 import { useHotelFavorite } from "@/features/favorite-hotels";
+import { useAskHotel } from "@/features/live-research";
+import { AgentTrace } from "@/widgets/agent-trace";
 import { CoastMap } from "@/widgets/hotel-map";
 import { Drawer, Lightbox, WhyPanel, type GalleryItem } from "./overlays";
 import { Conf, Icon, Mark, Ring, SrcTag, Stars, Toast } from "./detail-ui";
@@ -62,6 +64,7 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
   const [why, setWhy] = useState<Fact | null>(null);
   const [lb, setLb] = useState<number | null>(null);
   const [asked, setAsked] = useState<Set<string>>(new Set());
+  const ask = useAskHotel(hotel.id, hotel.searchContext?.id);
   const [toast, showToast] = useToast();
   const [stuck, setStuck] = useState(false);
   useEffect(() => {
@@ -602,22 +605,39 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
           <p>Спросим отель — обычно отвечают за день</p>
         </section>
         <div className="asks">
-          {h.unknowns.map(([q, why]) => (
-            <div key={q} className={`ask-tile${asked.has(q) ? " sent" : ""}`}>
-              <b>{q}</b>
-              <span>{why}</span>
-              <button
-                disabled={asked.has(q)}
-                onClick={() => {
-                  setAsked((a) => new Set(a).add(q));
-                  showToast("Вопрос сохранён локально. Отправка в отель пока не подключена.");
-                }}
-              >
-                {asked.has(q) ? "✓ В локальном списке" : "Записать вопрос →"}
-              </button>
-            </div>
-          ))}
+          {h.unknowns.map(({ key, question, why }) => {
+            const sent = key ? ask.asked.has(key) : asked.has(question);
+            return (
+              <div key={question} className={`ask-tile${sent ? " sent" : ""}`}>
+                <b>{question}</b>
+                <span>{why}</span>
+                <button
+                  disabled={sent}
+                  onClick={() => {
+                    if (key && hotel.backend) {
+                      void ask.ask(key, question);
+                      showToast("Вопрос отправлен отелю. Агент следит за ответом.");
+                    } else {
+                      setAsked((a) => new Set(a).add(question));
+                      showToast("Вопрос записан. В демо-отеле его некому отправить.");
+                    }
+                  }}
+                >
+                  {sent ? "✓ Спросили отель" : "Спросить отель →"}
+                </button>
+              </div>
+            );
+          })}
         </div>
+        {(ask.run || ask.error) && (
+          <div className="mt-4">
+            {ask.error ? (
+              <p className="rounded-2xl border bg-card px-4 py-3 text-sm">{ask.error}</p>
+            ) : (
+              <AgentTrace run={ask.run} compact />
+            )}
+          </div>
+        )}
 
         <section className="sec-h2" id="where">
           <h2>Где находится</h2>

@@ -39,9 +39,7 @@ export function apiHotelDetails(hotel: Hotel): HotelDetails {
   const raw = hotel.backend!;
   const recommendation = hotel.searchMatch?.recommendation;
   const scope = recommendation?.scope;
-  const recommendedFacades = Array.isArray(scope?.["facades"])
-    ? scope["facades"].filter((value): value is string => typeof value === "string")
-    : [];
+  const recommendedFacades: string[] = scope?.facades ?? [];
   const bestFacade = recommendedFacades.find(isFacade) ?? raw.facades.find(isFacade) ?? "SW";
   const bestFloor = typeof scope?.["floorFrom"] === "number" ? scope["floorFrom"] : 1;
   const noiseFor = (time: "day" | "night") =>
@@ -141,6 +139,10 @@ export function apiHotelDetails(hotel: Hotel): HotelDetails {
       })),
     })),
     facts: raw.facts.map((fact) => detailFactFromApi(fact)),
-    unknowns: raw.unknowns.map((item) => [item.question, item.why]),
+    unknowns: raw.unknowns.map((item) => ({
+      key: item.characteristic,
+      question: item.question,
+      why: item.why,
+    })),
   };
 }

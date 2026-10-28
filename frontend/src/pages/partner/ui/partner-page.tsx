@@ -145,7 +145,7 @@ export function PartnerPage() {
                 <Bot className="h-4 w-4" />
               </span>
               <div>
-                <p className="text-sm font-medium">Агент Луча</p>
+                <p className="text-sm font-medium">Агент О!кна</p>
                 <p className="text-[11px] text-night-muted">Демо-отельер · Салют</p>
               </div>
             </div>
