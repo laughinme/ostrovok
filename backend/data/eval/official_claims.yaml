@@ -1,0 +1,1014 @@
+# Заявления отелей на их официальных сайтах (исследование R7, 28.10.2026): независимая сверка с расчётами.
+# Собрано ChatGPT по официальным страницам 40 отелей каталога; каждая запись — пересказ с URL, без копий
+# изображений и без OTA. Команда не размечала фасады и этажи: сайты их почти не называют.
+# Как используется (`make eval`, раздел «Заявления отелей»):
+#   sea_view / mountain_view со значением «да» — отель заявляет вид хотя бы для части номеров;
+#     проверяем, что расчёт находит хотя бы одно окно с этим видом (P(да) ≥ 0,5).
+#   beach со значением в метрах или минутах — сравниваем с рассчитанным пешим маршрутом до пляжа.
+#   pets, railway, view_photos — справочно, расчётом не проверяются.
+#
+# Проверено 2026-10-28.
+# official_url: null — официальный сайт именно указанного объекта установить не удалось.
+# not_found — подтверждение темы не найдено на проверенных официальных страницах; это не утверждение об отсутствии услуги.
+# sea_view и mountain_view отражают текстовые заявления сайта; наблюдения по фотографиям записаны в view_photos.
+
+"node/12958832506":
+  name: "Evopart by Benefit Sochi Center"
+  official_url: null
+  # Найден сайт девелоперского проекта, но официальный сайт действующего отеля не установлен.
+  claims: []
+  not_found: [sea_view, mountain_view, beach, railway, pets, view_photos]
+
+"node/1521215547":
+  name: "Санаторий Салют"
+  official_url: "https://салют.дт.мвд.рф/"
+  # Официальный сайт при проверке недоступен: HTTP 503.
+  claims: []
+  not_found: [sea_view, mountain_view, beach, railway, pets, view_photos]
+
+"node/11016638375":
+  name: "Veryhotel"
+  official_url: "https://veryhotel.ru/ru-ru/"
+  claims:
+    - topic: sea_view
+      claim: "В апартаментах есть закрытая лоджия и открытый балкон с панорамой моря и города."
+      room_category: "Апартаменты 240 м² с бассейном и сауной"
+      facade: null
+      floors: null
+      value: да
+      url: "https://veryhotel.ru/ru-ru/"
+      seen_at: 2026-10-28
+    - topic: mountain_view
+      claim: "С лоджии и балкона апартаментов заявлен панорамный вид на горы."
+      room_category: "Апартаменты 240 м² с бассейном и сауной"
+      facade: null
+      floors: null
+      value: да
+      url: "https://veryhotel.ru/ru-ru/"
+      seen_at: 2026-10-28
+    - topic: pets
+      claim: "Разрешены животные до 5 кг: 500 ₽ за сутки, возвращаемый при отсутствии ущерба депозит 5000 ₽."
+      room_category: null
+      facade: null
+      floors: null
+      value: да
+      url: "https://veryhotel.ru/ru-ru/about/"
+      seen_at: 2026-10-28
+    - topic: view_photos
+      claim: "В официальной галерее на снимке спальни через окно видны море и городские дома; категория и этаж фотографии не подписаны."
+      room_category: null
+      facade: null
+      floors: null
+      value: да
+      url: "https://veryhotel.ru/ru-ru/"
+      seen_at: 2026-10-28
+  not_found: [beach, railway]
+
+"node/4986725623":
+  name: "Апартаменты в Маяке"
+  official_url: null
+  # Официальный сайт именно этого объекта не установлен; сайты других апартаментов в том же доме не использованы.
+  claims: []
+  not_found: [sea_view, mountain_view, beach, railway, pets, view_photos]
+
+"node/1323204199":
+  name: "МИРИТ"
+  official_url: "https://sochi.rsvo-hotel.ru/"
+  # Бывший официальный http://sochimirit.ru/ перенаправляет на гостиницу «Радиоволна» по адресу Курортный проспект, 21.
+  claims:
+    - topic: beach
+      claim: "До городского галечного пляжа «Маяк» указано 100 м."
+      room_category: null
+      facade: null
+      floors: null
+      value: "100 м"
+      url: "https://sochi.rsvo-hotel.ru/"
+      seen_at: 2026-10-28
+  not_found: [sea_view, mountain_view, railway, pets, view_photos]
+
+"node/4393265790":
+  name: "Отель «Империя»"
+  official_url: "https://imperiasochi.ru/"
+  claims:
+    - topic: sea_view
+      claim: "Двухкомнатный полулюкс имеет балкон с морским видом."
+      room_category: "Полулюкс 2-х комн. с балконом"
+      facade: null
+      floors: null
+      value: да
+      url: "https://imperiasochi.ru/?page=room&id=422626"
+      seen_at: 2026-10-28
+    - topic: beach
+      claim: "Городской пляж «Санта-Барбара» указан в шаговой доступности."
+      room_category: null
+      facade: null
+      floors: null
+      value: null
+      url: "https://imperiasochi.ru/"
+      seen_at: 2026-10-28
+    - topic: pets
+      claim: "В правилах проживания размещение с животными запрещено."
+      room_category: null
+      facade: null
+      floors: null
+      value: нет
+      url: "https://imperiasochi.ru/?page=room&id=422626"
+      seen_at: 2026-10-28
+    - topic: view_photos
+      claim: "Фотография балкона полулюкса показывает море, деревья и железнодорожные пути перед берегом; этаж не подписан."
+      room_category: "Полулюкс 2-х комн. с балконом"
+      facade: null
+      floors: null
+      value: да
+      url: "https://imperiasochi.ru/?page=room&id=422626"
+      seen_at: 2026-10-28
+  not_found: [mountain_view, railway]
+
+"node/13301736501":
+  name: "Lavicon apart Sochi"
+  official_url: "https://lavicon.ru/sochi-hotel/"
+  # Официальный раздел установлен по контактам с адресом Учительская, 3; при проверке страницы отеля и услуг возвращают HTTP 404.
+  claims: []
+  not_found: [sea_view, mountain_view, beach, railway, pets, view_photos]
+
+"node/10118233110":
+  name: "Swissotel Resort Сочи Камелия"
+  official_url: "https://accor.ru/en/sochi/swissotel-resort-sochi-kamelia/"
+  claims:
+    - topic: sea_view
+      claim: "Морской вид заявлен в названиях и описаниях восьми категорий."
+      room_category: "Swiss Advantage sea view; Swiss Executive sea view; Swiss Executive with terrace and sea view; Signature Suite sea view; Terrace Suite sea view; Duplex Suite sea view; Grand Duplex Suite sea view; Presidential Suite with terrace and sea view"
+      facade: null
+      floors: null
+      value: да
+      url: "https://accor.ru/en/sochi/swissotel-resort-sochi-kamelia/"
+      seen_at: 2026-10-28
+    - topic: sea_view
+      claim: "Люкс с террасой расположен на верхнем этаже западного крыла; заявлены море, закаты и парк. Номер этажа и сторона окон не названы."
+      room_category: "Terrace Suite, sea view"
+      facade: null
+      floors: null
+      value: да
+      url: "https://accor.ru/en/sochi/swissotel-resort-sochi-kamelia/"
+      seen_at: 2026-10-28
+    - topic: sea_view
+      claim: "Люксы с видом на море расположены на верхних этажах западного и восточного крыльев; номера этажей и ориентация окон не указаны."
+      room_category: "Signature Suite, sea view"
+      facade: null
+      floors: null
+      value: да
+      url: "https://accor.ru/en/sochi/swissotel-resort-sochi-kamelia/"
+      seen_at: 2026-10-28
+    - topic: beach
+      claim: "Отель заявляет собственный песчано-галечный пляж и первую береговую линию; расстояние не указано."
+      room_category: null
+      facade: null
+      floors: null
+      value: да
+      url: "https://accor.ru/en/sochi/swissotel-resort-sochi-kamelia/"
+      seen_at: 2026-10-28
+    - topic: pets
+      claim: "На странице отеля разрешены собаки до 5 кг и 35 см в холке; плата 15000 ₽ за весь срок. В общественных зонах и на пляже нужна переноска."
+      room_category: null
+      facade: null
+      floors: null
+      value: да
+      url: "https://accor.ru/en/sochi/swissotel-resort-sochi-kamelia/"
+      seen_at: 2026-10-28
+    - topic: pets
+      claim: "PDF содержит противоречия: п. 7.2.6 запрещает животных, кроме поводырей; приложение 3 регулирует размещение животных до 5 кг и 35 см, не более одного на комнату номера, с ветпаспортом. Запрещены бойцовские породы и дикие животные. Для собак-поводырей допускается превышение размера по согласованию. Упомянут депозит без суммы. Пункт 8.5 запрещает посещение пляжа и общих зон с животным, тогда как HTML-страница допускает переноску."
+      room_category: null
+      facade: null
+      floors: null
+      value: null
+      url: "https://accor.ru/upload/iblock/ce1/5dxnfra9zjnhvx0ddea2pmicovagbe2s.pdf"
+      seen_at: 2026-10-28
+    - topic: view_photos
+      claim: "Фото спальни показывает море через балконную дверь."
+      room_category: "Swiss Advantage room, sea view"
+      facade: null
+      floors: null
+      value: да
+      url: "https://accor.ru/en/sochi/swissotel-resort-sochi-kamelia/"
+      seen_at: 2026-10-28
+    - topic: view_photos
+      claim: "Снимок террасы с джакузи показывает море, деревья и здания. Категория расположена на верхнем этаже западного крыла; номер этажа не указан."
+      room_category: "Terrace Suite, sea view"
+      facade: null
+      floors: null
+      value: да
+      url: "https://accor.ru/en/sochi/swissotel-resort-sochi-kamelia/"
+      seen_at: 2026-10-28
+    - topic: view_photos
+      claim: "На фотографии открытой террасы видны море и деревья."
+      room_category: "Presidential Suite, with terrace and sea view"
+      facade: null
+      floors: null
+      value: да
+      url: "https://accor.ru/en/sochi/swissotel-resort-sochi-kamelia/"
+      seen_at: 2026-10-28
+  not_found: [mountain_view, railway]
+
+"node/4426452241":
+  name: "VIP-корпус «Меркурий»"
+  official_url: "https://www.dagomys.ru/rooms/mercury/"
+  claims:
+    - topic: beach
+      claim: "У комплекса собственный оборудованный пляж; спуск обеспечивает панорамный лифт. Расстояние от корпуса не указано."
+      room_category: null
+      facade: null
+      floors: null
+      value: да
+      url: "https://www.dagomys.ru/services/plyazh/"
+      seen_at: 2026-10-28
+    - topic: pets
+      claim: "Пункт 3.14 правил комплекса запрещает заселяться с животными, включая птиц и рептилий."
+      room_category: null
+      facade: null
+      floors: null
+      value: нет
+      url: "https://www.dagomys.ru/upload/iblock/70d/nh3djoj989wrotv9r4kieffnd74dbhik.pdf"
+      seen_at: 2026-10-28
+    - topic: view_photos
+      claim: "В галерее виллы фотография открытого бассейна на террасе показывает море, зелёный склон и прибрежные здания. Этаж снимка не назван."
+      room_category: "President Apartment (SUDP)"
+      facade: null
+      floors: null
+      value: да
+      url: "https://www.dagomys.ru/rooms/mercury/president-apartment/"
+      seen_at: 2026-10-28
+  not_found: [sea_view, mountain_view, railway]
+
+"node/11843553851":
+  name: "inSochi"
+  official_url: "https://insochi.apartments/"
+  claims:
+    - topic: beach
+      claim: "В FAQ путь до моря и пляжей «Маяк» и «Ривьера» оценён в 15–20 минут пешком."
+      room_category: null
+      facade: null
+      floors: null
+      value: "15–20 минут пешком"
+      url: "https://insochi.apartments/faq/"
+      seen_at: 2026-10-28
+    - topic: pets
+      claim: "Общий FAQ допускает декоративную собаку до 5 кг по предварительному согласованию за 1000 ₽ в сутки; другие животные запрещены."
+      room_category: null
+      facade: null
+      floors: null
+      value: да
+      url: "https://insochi.apartments/faq/"
+      seen_at: 2026-10-28
+    - topic: pets
+      claim: "В правилах студии №432 указан иной предел: декоративная собака до 8 кг, индивидуальное согласование, 1000 ₽ в сутки."
+      room_category: "Студия №432"
+      facade: null
+      floors: null
+      value: да
+      url: "https://insochi.apartments/apartamenty/a432m/"
+      seen_at: 2026-10-28
+    - topic: pets
+      claim: "Правила студии №455 допускают декоративную собаку до 8 кг по индивидуальному согласованию за 1000 ₽ в сутки."
+      room_category: "Студия №455"
+      facade: null
+      floors: null
+      value: да
+      url: "https://insochi.apartments/apartamenty/a455m/"
+      seen_at: 2026-10-28
+    - topic: view_photos
+      claim: "На снимках из открытого окна видны пешеходная Навагинская улица, пальмы и соседние дома. На странице указан 4-й этаж."
+      room_category: "Студия №432"
+      facade: null
+      floors: "4"
+      value: да
+      url: "https://insochi.apartments/apartamenty/a432m/"
+      seen_at: 2026-10-28
+    - topic: view_photos
+      claim: "На фото интерьера через окно видны деревья и соседние высотные здания; страница обозначает вид во двор и 4-й этаж."
+      room_category: "Студия №455"
+      facade: null
+      floors: "4"
+      value: да
+      url: "https://insochi.apartments/apartamenty/a455m/"
+      seen_at: 2026-10-28
+  not_found: [sea_view, mountain_view, railway]
+
+"node/2514339346":
+  name: "Алая Роза"
+  official_url: "https://sochi-roza.ru/"
+  claims:
+    - topic: beach
+      claim: "Пеший путь до моря занимает около 7 минут; тип пляжа не уточнён."
+      room_category: null
+      facade: null
+      floors: null
+      value: "7 минут пешком"
+      url: "https://sochi-roza.ru/about/"
+      seen_at: 2026-10-28
+  not_found: [sea_view, mountain_view, railway, pets, view_photos]
+
+"node/10967527654":
+  name: "Антика"
+  official_url: null
+  # Домен antika-sochi.ru найден в сторонних контактах, но возвращает HTTP 503; официальность действующего сайта по первичному источнику не подтверждена.
+  claims: []
+  not_found: [sea_view, mountain_view, beach, railway, pets, view_photos]
+
+"node/1370976583":
+  name: "Коралл"
+  official_url: "https://adlerkurortsochi.ru/coral/"
+  claims:
+    - topic: sea_view
+      claim: "С балкона стандартного двухместного номера предлагается вид на море либо парк. Вариант 1К2м1кК находится на этажах 3–6."
+      room_category: "Стандартный двухместный номер 1-й категории, 1К2м1кК"
+      facade: null
+      floors: "3-6"
+      value: да
+      url: "https://adlerkurortsochi.ru/coral/"
+      seen_at: 2026-10-28
+    - topic: sea_view
+      claim: "С балкона стандартного двухместного номера предлагается вид на море либо парк. Вариант В1к2м1кК расположен на этажах 7–15."
+      room_category: "Стандартный двухместный номер 1-й категории, В1к2м1кК"
+      facade: null
+      floors: "7-15"
+      value: да
+      url: "https://adlerkurortsochi.ru/coral/"
+      seen_at: 2026-10-28
+    - topic: sea_view
+      claim: "Балкон люкса обращён к панораме Чёрного моря и парковой территории."
+      room_category: "Люкс двухместный двухкомнатный, Л2м2кК"
+      facade: null
+      floors: null
+      value: да
+      url: "https://adlerkurortsochi.ru/lyuks/"
+      seen_at: 2026-10-28
+    - topic: sea_view
+      claim: "В описании студии указан балкон, с которого видны море и парк."
+      room_category: "Студия двухместная, С2м1кК"
+      facade: null
+      floors: null
+      value: да
+      url: "https://adlerkurortsochi.ru/coral/"
+      seen_at: 2026-10-28
+    - topic: sea_view
+      claim: "Из апартаментов с балкона видны море и парковая территория."
+      room_category: "Апартаменты четырёхместные трёхкомнатные, А4м3кК"
+      facade: null
+      floors: null
+      value: да
+      url: "https://adlerkurortsochi.ru/apartamenty/"
+      seen_at: 2026-10-28
+    - topic: beach
+      claim: "Оборудованная галечная пляжная полоса санатория находится в пяти минутах пешком; на странице перечислены его пляжи «Коралл» и «Дельфин-2»."
+      room_category: null
+      facade: null
+      floors: null
+      value: "5 минут пешком"
+      url: "https://adlerkurortsochi.ru/beach/"
+      seen_at: 2026-10-28
+    - topic: railway
+      claim: "Пляжи находятся по другую сторону железной дороги; для прохода к ним предусмотрены подземные переходы."
+      room_category: null
+      facade: null
+      floors: null
+      value: да
+      url: "https://adlerkurortsochi.ru/beach/"
+      seen_at: 2026-10-28
+    - topic: pets
+      claim: "Размещение с животными и птицами запрещено. Исключение — собаки-поводыри с ветеринарными документами; о породе необходимо сообщить до бронирования. После выезда владелец оплачивает генеральную уборку по прейскуранту; сумма не приведена."
+      room_category: null
+      facade: null
+      floors: null
+      value: нет
+      url: "https://adlerkurortsochi.ru/pravila-prozhivaniya/"
+      seen_at: 2026-10-28
+    - topic: view_photos
+      claim: "В галерее апартаментов есть снимок через балконную дверь: видны море, горизонт и зелёная территория внизу; этаж и сторона света не подписаны."
+      room_category: "Апартаменты четырёхместные трёхкомнатные, А4м3кК"
+      facade: null
+      floors: null
+      value: да
+      url: "https://adlerkurortsochi.ru/apartamenty/"
+      seen_at: 2026-10-28
+  not_found: [mountain_view]
+
+"node/11331531334":
+  name: "Cosmos Adler Hotel"
+  official_url: "https://adler.cosmosgroup.ru/"
+  # Официальный адрес — ул. Просвещения, 118Б/2; улица в исходном списке отличается.
+  claims:
+    - topic: sea_view
+      claim: "Отдельная категория «Стандарт с видом на море» описана как номер с морским видом и балконом."
+      room_category: "Стандарт с видом на море"
+      facade: null
+      floors: null
+      value: да
+      url: "https://adler.cosmosgroup.ru/rooms/standart-s-vidom-na-more-2/standart-c-vidom-na-more"
+      seen_at: 2026-10-28
+    - topic: beach
+      claim: "Пляж находится в пешей доступности; конкретное расстояние или время на главной странице не приведены."
+      room_category: null
+      facade: null
+      floors: null
+      value: null
+      url: "https://adler.cosmosgroup.ru/"
+      seen_at: 2026-10-28
+    - topic: pets
+      claim: "В FAQ на главной указаны питомцы до 5 кг, доплата 1000 ₽ за сутки и возвратный депозит 5000 ₽. Эти условия расходятся с опубликованными правилами PDF и страницей акции."
+      room_category: null
+      facade: null
+      floors: null
+      value: да
+      url: "https://adler.cosmosgroup.ru/"
+      seen_at: 2026-10-28
+    - topic: pets
+      claim: "Правила PDF с изменениями от 16.12.2025 предусматривают собак до 5 кг, 5–10 кг и 10–20 кг с согласованием; собак-поводырей независимо от размера; иных питомцев по согласованию. Не более одного животного в номере, обязательны ветеринарные документы. Плата — 5000 ₽ за период до трёх суток, далее 1000 ₽/сутки; возвратный депозит — 5000 ₽."
+      room_category: null
+      facade: null
+      floors: null
+      value: да
+      url: "https://adler.cosmosgroup.ru/files/hotel_documents/134_RU_1765955573.pdf"
+      seen_at: 2026-10-28
+    - topic: pets
+      claim: "На странице акции, помеченной датой 16.03.2027, указаны только собаки до 10 кг и до 30 см в холке, одна на номер; от 5000 ₽ за первые три дня, затем 1000 ₽/сутки, депозит 5000 ₽. Дата страницы позднее даты просмотра; условия отличаются от FAQ и PDF."
+      room_category: null
+      facade: null
+      floors: null
+      value: да
+      url: "https://adler.cosmosgroup.ru/offers/prozivanie-s-pitomcami"
+      seen_at: 2026-10-28
+    - topic: view_photos
+      claim: "На первом снимке категории через стеклянную балконную дверь видны деревья, низкое соседнее здание и полоса моря за ними; этаж и сторона света не подписаны."
+      room_category: "Стандарт с видом на море"
+      facade: null
+      floors: null
+      value: да
+      url: "https://adler.cosmosgroup.ru/rooms/standart-s-vidom-na-more-2/standart-c-vidom-na-more"
+      seen_at: 2026-10-28
+  not_found: [mountain_view, railway]
+
+"node/13114325896":
+  name: "Les Amis"
+  official_url: null
+  # Домен mylesamis.com найден только в справочнике и не открылся; официальность не подтверждена.
+  claims: []
+  not_found: [sea_view, mountain_view, beach, railway, pets, view_photos]
+
+"node/11878294031":
+  name: "SM Royal"
+  official_url: "https://smroyal.stellarhotels.ru/"
+  claims:
+    - topic: beach
+      claim: "На сайте сети расстояние до черноморского пляжа составляет 300 метров."
+      room_category: null
+      facade: null
+      floors: null
+      value: "300 м"
+      url: "https://smroyal.stellarhotels.ru/"
+      seen_at: 2026-10-28
+    - topic: beach
+      claim: "До оборудованного пляжа «Чайка» указано пять минут пешком. Проход и бесплатное пользование лежаками — по браслету; собственность пляжа не уточняется."
+      room_category: null
+      facade: null
+      floors: null
+      value: "5 минут пешком"
+      url: "https://smroyal.stellarhotels.ru/services/oborudovannyy-plyazh/"
+      seen_at: 2026-10-28
+    - topic: beach
+      claim: "Другой официальный сайт отеля указывает оборудованный бесплатный пляж в десяти минутах от отеля с 1 июня по 30 сентября; это отличается от пяти минут на сайте сети."
+      room_category: null
+      facade: null
+      floors: null
+      value: "10 минут"
+      url: "https://www.smroyal.ru/"
+      seen_at: 2026-10-28
+    - topic: view_photos
+      claim: "На пятом фото категории показан вид с балкона на соседние дома, крыши и деревья; этаж и сторона света не подписаны."
+      room_category: "Делюкс с балконом"
+      facade: null
+      floors: null
+      value: да
+      url: "https://smroyal.stellarhotels.ru/rooms/delyuks-s-balkonom/"
+      seen_at: 2026-10-28
+  not_found: [sea_view, mountain_view, railway, pets]
+
+"node/12416060217":
+  name: "АК Шале Прибрежный"
+  official_url: null
+  claims: []
+  not_found: [sea_view, mountain_view, beach, railway, pets, view_photos]
+
+"node/11016631787":
+  name: "Аэростар"
+  official_url: "https://sochi-aerostar.ru/"
+  claims:
+    - topic: beach
+      claim: "Главная страница и раздел об отеле указывают 300 метров до моря."
+      room_category: null
+      facade: null
+      floors: null
+      value: "300 м"
+      url: "https://sochi-aerostar.ru/about/"
+      seen_at: 2026-10-28
+    - topic: beach
+      claim: "В разделе номеров расстояние до пляжа указано как 200 метров; принадлежность пляжа не уточняется."
+      room_category: null
+      facade: null
+      floors: null
+      value: "200 м"
+      url: "https://sochi-aerostar.ru/rooms/"
+      seen_at: 2026-10-28
+    - topic: view_photos
+      claim: "В фотогалерее четырёхместного стандарта есть снимок с балкона на близлежащие дома, их крыши и зелень; этаж и сторона света не подписаны."
+      room_category: "Четырехместный стандарт"
+      facade: null
+      floors: null
+      value: да
+      url: "https://sochi-aerostar.ru/photos/"
+      seen_at: 2026-10-28
+  not_found: [sea_view, mountain_view, railway, pets]
+
+"node/10058780093":
+  name: "Белый аист"
+  official_url: "https://aist-adler.ru/"
+  claims:
+    - topic: beach
+      claim: "От гостевого дома до моря заявлено приблизительно 250 метров; свой или городской пляж не уточняется."
+      room_category: null
+      facade: null
+      floors: null
+      value: "около 250 м"
+      url: "https://aist-adler.ru/"
+      seen_at: 2026-10-28
+    - topic: pets
+      claim: "Гостевой дом не разрешает проживание с животными."
+      room_category: null
+      facade: null
+      floors: null
+      value: нет
+      url: "https://aist-adler.ru/"
+      seen_at: 2026-10-28
+    - topic: view_photos
+      claim: "В разделе номеров есть фото через открытую балконную дверь: видны соседние дома, крыши, деревья и горный рельеф вдали. Снимок не привязан к отдельной категории; этаж и сторона света не подписаны."
+      room_category: null
+      facade: null
+      floors: null
+      value: да
+      url: "https://aist-adler.ru/"
+      seen_at: 2026-10-28
+  not_found: [sea_view, mountain_view, railway]
+
+"node/10858734694":
+  name: "Моне"
+  official_url: "https://monehotel.ru/"
+  claims:
+    - topic: sea_view
+      claim: "Балкон этой категории имеет боковой морской вид."
+      room_category: "Стандарт с боковым видом на море"
+      facade: null
+      floors: null
+      value: да
+      url: "https://monehotel.ru/rooms"
+      seen_at: 2026-10-28
+    - topic: sea_view
+      claim: "У двухкомнатного полулюкса заявлен меблированный балкон с морским видом."
+      room_category: "Полулюкс с видом на море"
+      facade: null
+      floors: null
+      value: да
+      url: "https://monehotel.ru/rooms"
+      seen_at: 2026-10-28
+    - topic: sea_view
+      claim: "В описании полулюкса с кухонной зоной указан балкон, с которого видно море."
+      room_category: "Полулюкс с кухней и видом на море"
+      facade: null
+      floors: null
+      value: да
+      url: "https://monehotel.ru/rooms"
+      seen_at: 2026-10-28
+    - topic: mountain_view
+      claim: "В общем описании номерного фонда названы виды на море, горы либо сад; категории с горным видом отдельно не определены."
+      room_category: null
+      facade: null
+      floors: null
+      value: да
+      url: "https://monehotel.ru/"
+      seen_at: 2026-10-28
+    - topic: beach
+      claim: "На главной странице пляжная зона обозначена в 100 метрах от отеля."
+      room_category: null
+      facade: null
+      floors: null
+      value: "100 м"
+      url: "https://monehotel.ru/"
+      seen_at: 2026-10-28
+    - topic: beach
+      claim: "Зона купания расположена в пяти минутах от отеля и открыта всем гостям и жителям города. Путь идёт по тенистой зелёной аллее; пляжное оборудование гостям отеля предоставляют бесплатно."
+      room_category: null
+      facade: null
+      floors: null
+      value: "5 минут"
+      url: "https://monehotel.ru/beach/"
+      seen_at: 2026-10-28
+    - topic: pets
+      claim: "Принимают одну кошку или собаку весом до 10 кг, только в категории «Стандарт» и с доплатой; размер платы на этой странице не указан. Требуются ветеринарный паспорт и актуальная справка с отметками о прививках; количество подходящих номеров ограничено."
+      room_category: "Стандарт"
+      facade: null
+      floors: null
+      value: да
+      url: "https://monehotel.ru/pet_friendly"
+      seen_at: 2026-10-28
+    - topic: view_photos
+      claim: "На фотографии балкона этой категории море видно сбоку за деревьями и соседним зданием; этаж и сторона света не подписаны."
+      room_category: "Стандарт с боковым видом на море"
+      facade: null
+      floors: null
+      value: да
+      url: "https://monehotel.ru/rooms"
+      seen_at: 2026-10-28
+    - topic: view_photos
+      claim: "В галереях обоих полулюксов с морским видом показаны море через окна и с балкона, зелень и крыши ближайших зданий; этаж и сторона света не подписаны."
+      room_category: "Полулюкс с видом на море; Полулюкс с кухней и видом на море"
+      facade: null
+      floors: null
+      value: да
+      url: "https://monehotel.ru/rooms"
+      seen_at: 2026-10-28
+  not_found: [railway]
+
+"node/10574256210":
+  name: "Монте-Кристо"
+  official_url: null
+  # Официальный сайт объекта по адресу Павлика Морозова, 24 не установлен.
+  claims: []
+  not_found: [sea_view, mountain_view, beach, railway, pets, view_photos]
+
+"node/2178886260":
+  name: "Имеретинский — Прибрежный квартал"
+  official_url: "https://siriushotels.ru/"
+  # Квартал идентифицирован в официальных материалах сети Sirius Hotels; ниже указаны даты самих материалов.
+  claims:
+    - topic: beach
+      claim: "В статье сети от 26.09.2024 для отеля «Альфа Сириус» и кварталов апартаментов указан общий оборудованный пляж «Сигма Сириус». Расстояние именно от Прибрежного квартала не приведено."
+      room_category: null
+      facade: null
+      floors: null
+      value: null
+      url: "https://siriushotels.ru/guide/podborka-oteley-4-v-siriuse-vsye-pro-edu-plyazh-i-uslugi/"
+      seen_at: 2026-10-28
+    - topic: pets
+      claim: "В презентации сети за 2024 год апарт-отель, объединяющий Прибрежный, Морской и Заповедный кварталы, обозначен как pet-friendly. Ограничения по весу и доплата здесь не приведены."
+      room_category: null
+      facade: null
+      floors: null
+      value: да
+      url: "https://siriushotels.ru/pr_img/1918100371/20240229/10283952/Презентация_Sirius_Hotels_2024.pdf"
+      seen_at: 2026-10-28
+  not_found: [sea_view, mountain_view, railway, view_photos]
+
+"node/11958163713":
+  name: "Mark inn"
+  official_url: "https://markinn-sochi.ru/"
+  # Официальный сайт указывает ул. Урицкого, 8а; в исходном списке — 8/1.
+  claims:
+    - topic: beach
+      claim: "До моря указано 300 м; принадлежность пляжа не уточняется."
+      room_category: null
+      facade: null
+      floors: null
+      value: "300 м"
+      url: "https://markinn-sochi.ru/about"
+      seen_at: 2026-10-28
+  not_found: [sea_view, mountain_view, railway, pets, view_photos]
+
+"node/13825076875":
+  name: "Альфа Сириус Заповедный квартал"
+  official_url: "https://siriushotels.ru/"
+  claims:
+    - topic: beach
+      claim: "В статье сети от 26.09.2024 Заповедный квартал отнесён ко второй береговой линии; для кварталов и отеля «Альфа Сириус» указан общий оборудованный пляж «Сигма Сириус». Расстояние от Заповедного квартала не приведено."
+      room_category: null
+      facade: null
+      floors: null
+      value: null
+      url: "https://siriushotels.ru/guide/podborka-oteley-4-v-siriuse-vsye-pro-edu-plyazh-i-uslugi/"
+      seen_at: 2026-10-28
+    - topic: pets
+      claim: "Статья сети от 26.09.2024 разрешает проживание с животными во всех объектах подборки, включая Заповедный квартал; вес и доплата в статье не указаны."
+      room_category: null
+      facade: null
+      floors: null
+      value: да
+      url: "https://siriushotels.ru/guide/podborka-oteley-4-v-siriuse-vsye-pro-edu-plyazh-i-uslugi/"
+      seen_at: 2026-10-28
+    - topic: view_photos
+      claim: "В статье размещено фото с подписью о виде из студии с выходом на кровлю: видны зелёный парк, соседние корпуса, олимпийские сооружения и горы вдали. Этаж и сторона света не подписаны."
+      room_category: "Студия с выходом на кровлю"
+      facade: null
+      floors: null
+      value: да
+      url: "https://siriushotels.ru/guide/podborka-oteley-4-v-siriuse-vsye-pro-edu-plyazh-i-uslugi/"
+      seen_at: 2026-10-28
+  not_found: [sea_view, mountain_view, railway]
+
+"node/4695569234":
+  name: "Грант"
+  official_url: "https://xn--80afhyiglsb6h.xn--p1ai/"
+  claims: []
+  not_found: [sea_view, mountain_view, beach, railway, pets, view_photos]
+
+"node/4325712906":
+  name: "Надежда"
+  official_url: null
+  claims: []
+  not_found: [sea_view, mountain_view, beach, railway, pets, view_photos]
+
+"node/12747932801":
+  name: "РоДеРо"
+  official_url: null
+  # Домен roderohotel.ru найден в стороннем справочнике, но не открылся; официальность не подтверждена.
+  claims: []
+  not_found: [sea_view, mountain_view, beach, railway, pets, view_photos]
+
+"node/12747840301":
+  name: "Розовый Фламинго"
+  official_url: null
+  claims: []
+  not_found: [sea_view, mountain_view, beach, railway, pets, view_photos]
+
+"way/113049896":
+  name: "Azimut Hotel Freestyle"
+  official_url: "https://vastahotels.com/hotels/freestyle-hotel-rosa-khutor"
+  # Текущая официальная страница Freestyle находится на сайте Vasta Hotels.
+  claims:
+    - topic: mountain_view
+      claim: "В этих категориях заявлен вид на горы или реку; в описании видового супериора указаны два балкона."
+      room_category: "Супериор с французским балконом; Супериор с балконом; Видовой супериор с двумя балконами и видом на горы и реку; Полулюкс; Супериор с двуспальной кроватью для маломобильных людей"
+      facade: null
+      floors: null
+      value: да
+      url: "https://vastahotels.com/hotels/freestyle-hotel-rosa-khutor/rooms"
+      seen_at: 2026-10-28
+    - topic: pets
+      claim: "Правила предоставления гостиничных услуг запрещают проживание с животными: пункт 4.3, страница 9."
+      room_category: null
+      facade: null
+      floors: null
+      value: нет
+      url: "https://b5fb196d-74aa-46b3-b0cb-f64e7e5d6f03.selstorage.ru/cms.attachment/b66a560efd22ae11ce615cee006042cc-original.pdf"
+      seen_at: 2026-10-28
+    - topic: view_photos
+      claim: "На фотографии интерьера через французский балкон видны зелёный горный склон и соседнее здание."
+      room_category: "Супериор с французским балконом"
+      facade: null
+      floors: null
+      value: да
+      url: "https://vastahotels.com/hotels/freestyle-hotel-rosa-khutor/rooms"
+      seen_at: 2026-10-28
+  not_found: [sea_view, beach, railway]
+
+"way/227214566":
+  name: "Сочи Марриотт Красная Поляна"
+  official_url: "https://krasnayapolyanaresort.ru/hotels/sochi-marriott-krasnaya-polyana"
+  claims:
+    - topic: mountain_view
+      claim: "Для этих категорий заявлен вид на горы с балкона; у двух вариантов «Делюкс» также указан вид на реку."
+      room_category: "Делюкс с видом на горы с одной двуспальной кроватью; Делюкс с видом на горы с двумя раздельными кроватями; Представительский люкс с видом на горы; Апартаменты с тремя спальнями; Апартаменты с четырьмя спальнями; Президентский люкс"
+      facade: null
+      floors: null
+      value: да
+      url: "https://krasnayapolyanaresort.ru/hotels/sochi-marriott-krasnaya-polyana"
+      seen_at: 2026-10-28
+    - topic: beach
+      claim: "С июня по октябрь организован трансфер к оборудованным морским пляжам курорта; заявлен путь в 40 минут. Гостей «Сочи Марриотт Красная Поляна» забирают у отеля; для гостей отелей 5 звёзд трансфер бесплатный."
+      room_category: null
+      facade: null
+      floors: null
+      value: "40 минут"
+      url: "https://ww3.krasnayapolyanaresort.ru/chem-zanyatsya/summer/beach/"
+      seen_at: 2026-10-28
+    - topic: pets
+      claim: "На странице отеля разрешено проживание с животными; ограничения по весу и доплата не приведены."
+      room_category: null
+      facade: null
+      floors: null
+      value: да
+      url: "https://krasnayapolyanaresort.ru/hotels/sochi-marriott-krasnaya-polyana"
+      seen_at: 2026-10-28
+    - topic: view_photos
+      claim: "На фото номера через балконную дверь видна густая зелень. Сайт предупреждает, что вид из конкретного номера может отличаться."
+      room_category: "Делюкс с видом на горы с одной двуспальной кроватью"
+      facade: null
+      floors: null
+      value: да
+      url: "https://krasnayapolyanaresort.ru/hotels/sochi-marriott-krasnaya-polyana/rooms/delyuks-s-vidom-na-goryi-s-odnoj-dvuspalnoj-krovatyu"
+      seen_at: 2026-10-28
+  not_found: [sea_view, railway]
+
+"way/1001106450":
+  name: "Country Hills Resort"
+  official_url: "https://polyanagroup.ru/country-hills/"
+  claims:
+    - topic: mountain_view
+      claim: "У части номеров есть балконы, обращённые к горам либо бассейну; категории не названы."
+      room_category: null
+      facade: null
+      floors: null
+      value: да
+      url: "https://polyanagroup.ru/rooms-countryhills/"
+      seen_at: 2026-10-28
+    - topic: view_photos
+      claim: "В галерее «Номера с красивыми видами» показан балкон со столиком: за ним видны заснеженные горы и соседние здания. Категория номера не подписана."
+      room_category: null
+      facade: null
+      floors: null
+      value: да
+      url: "https://polyanagroup.ru/rooms-countryhills/"
+      seen_at: 2026-10-28
+  not_found: [sea_view, beach, railway, pets]
+
+"way/113147777":
+  name: "Rosa Ski Inn SPA"
+  official_url: "https://vastahotels.com/hotels/ski-inn-spa-rosa-khutor-hotel"
+  claims:
+    - topic: mountain_view
+      claim: "Для всех перечисленных категорий заявлены горные панорамы; у «Стандарта с балконом», «Семейного Люкса» и «Супериора» вид открывается с собственного балкона."
+      room_category: "Стандарт; Стандарт с балконом; Семейный Люкс; Супериор; Коннект"
+      facade: null
+      floors: null
+      value: да
+      url: "https://vastahotels.com/hotels/ski-inn-spa-rosa-khutor-hotel/rooms"
+      seen_at: 2026-10-28
+    - topic: pets
+      claim: "Правила проживания запрещают размещаться в номере с домашними животными, птицами, рептилиями и насекомыми: пункт 5.2, страница 5."
+      room_category: null
+      facade: null
+      floors: null
+      value: нет
+      url: "https://b5fb196d-74aa-46b3-b0cb-f64e7e5d6f03.selstorage.ru/cms.attachment/b3396d3282688158e4e6d4742d661a3c-original.pdf"
+      seen_at: 2026-10-28
+  not_found: [sea_view, beach, railway, view_photos]
+
+"way/113049930":
+  name: "Valset apartments by AZIMUT Rosa Khutor (корпус 4)"
+  official_url: null
+  # Актуальная официальная страница именно корпуса 4 по адресу набережная Полянка, 2 не установлена; сведения других корпусов не перенесены.
+  claims: []
+  not_found: [sea_view, mountain_view, beach, railway, pets, view_photos]
+
+"way/221585445":
+  name: "Wellness СПА-отель Грейс Калипсо"
+  official_url: null
+  # Актуальный официальный сайт объекта по адресу Переселенческая, 35 не установлен.
+  # Найденный Calipso по адресу Переселенческая, 28А не отождествлён с указанным отелем без подтверждения преемственности.
+  claims: []
+  not_found: [sea_view, mountain_view, beach, railway, pets, view_photos]
+
+"way/53534006":
+  name: "Санаторий «Аврора»"
+  official_url: "https://skk-sochi.ru/filiali/avrora/"
+  claims:
+    - topic: beach
+      claim: "Санаторий расположен в 200 м от берега Чёрного моря; в его инфраструктуре указан лечебный пляж длиной 155 м."
+      room_category: null
+      facade: null
+      floors: null
+      value: "200 м"
+      url: "https://skk-sochi.ru/filiali/avrora/o-sanatorii-avrora/"
+      seen_at: 2026-10-28
+    - topic: pets
+      claim: "Правила санаторного комплекса запрещают привозить домашних животных."
+      room_category: null
+      facade: null
+      floors: null
+      value: нет
+      url: "https://skk-sochi.ru/info/rules/"
+      seen_at: 2026-10-28
+  not_found: [sea_view, mountain_view, railway, view_photos]
+
+"node/7659392485":
+  name: "Золотой лотос"
+  official_url: "https://lotos.bz/"
+  claims:
+    - topic: pets
+      claim: "В условиях проживания указано, что размещение животных не допускается."
+      room_category: null
+      facade: null
+      floors: null
+      value: нет
+      url: "https://lotos.bz/nomer-komfort/"
+      seen_at: 2026-10-28
+    - topic: view_photos
+      claim: "В фотогалерее номера на снимке с диваном перед широким окном за стеклом видны деревья."
+      room_category: "Комфорт"
+      facade: null
+      floors: null
+      value: да
+      url: "https://lotos.bz/nomer-komfort/"
+      seen_at: 2026-10-28
+  not_found: [sea_view, mountain_view, beach, railway]
+
+"way/53537049":
+  name: "Санаторий «Мыс Видный»"
+  official_url: "https://azimuthotels.com/ru/sochi/sanatorium-mv"
+  # Адресу Шоссейная, 26 соответствует корпус «Арена»; виды из других корпусов к нему не отнесены.
+  claims:
+    - topic: mountain_view
+      claim: "У стандартного двухместного номера корпуса «Арена» указан балкон с видом на горы или реку. Корпусу «Арена» соответствует адрес Шоссейная, 26."
+      room_category: "Стандарт 2-местный с раздельными кроватями (Арена)"
+      facade: null
+      floors: null
+      value: да
+      url: "https://azimuthotels.com/ru/sochi/sanatorium-mv"
+      seen_at: 2026-10-28
+    - topic: beach
+      claim: "У санатория есть собственный охраняемый пляж с набережной."
+      room_category: null
+      facade: null
+      floors: null
+      value: да
+      url: "https://azimuthotels.com/ru/facilities/vidniy-beach"
+      seen_at: 2026-10-28
+    - topic: beach
+      claim: "Корпус «Арена» находится в 2 км от основной территории; между ними регулярно ходит автобус. Гостям корпуса доступна вся инфраструктура основной территории. Эти 2 км указаны до территории, а не непосредственно до пляжа."
+      room_category: "Комфорт семейный 2-комнатный (Арена)"
+      facade: null
+      floors: null
+      value: null
+      url: "https://azimuthotels.com/ru/sochi/sanatorium-mv"
+      seen_at: 2026-10-28
+    - topic: pets
+      claim: "Санаторий не принимает гостей с собаками и кошками."
+      room_category: null
+      facade: null
+      floors: null
+      value: нет
+      url: "https://azimuthotels.com/ru/sochi/sanatorium-mv"
+      seen_at: 2026-10-28
+  not_found: [sea_view, railway, view_photos]
+
+"node/4369348389":
+  name: "Сочинский оздоровительный комплекс «Спутник»"
+  official_url: "https://sputnikresort.ru/"
+  claims:
+    - topic: sea_view
+      claim: "Трёхкомнатный семейный люкс включает три балкона, с которых заявлен морской вид."
+      room_category: "Семейный люкс с видом на море / Family Suite sea view"
+      facade: null
+      floors: null
+      value: да
+      url: "https://sputnikresort.ru/nomera-price/family-suite-sea-view/"
+      seen_at: 2026-10-28
+    - topic: beach
+      claim: "Собственный галечный пляж расположен в 100 м от курорта."
+      room_category: null
+      facade: null
+      floors: null
+      value: "100 м"
+      url: "https://sputnikresort.ru/meropriyatiya-sanatorno-kurortnoe-lechenie/"
+      seen_at: 2026-10-28
+    - topic: pets
+      claim: "Размещение с домашними животными не предусмотрено."
+      room_category: null
+      facade: null
+      floors: null
+      value: нет
+      url: "https://sputnikresort.ru/oteli-sochi-so-skidkoy/"
+      seen_at: 2026-10-28
+    - topic: view_photos
+      claim: "В галерее категории через балконные двери видны деревья. Сайт предупреждает, что фактический вид из номера может отличаться от фотографий."
+      room_category: "Семейный люкс с видом на море / Family Suite sea view"
+      facade: null
+      floors: null
+      value: да
+      url: "https://sputnikresort.ru/nomera-price/family-suite-sea-view/"
+      seen_at: 2026-10-28
+  not_found: [mountain_view, railway]
+
+"way/53498769":
+  name: "Green Hosta"
+  official_url: "https://www.greenhosta.ru/"
+  claims:
+    - topic: pets
+      claim: "Правила отеля запрещают размещение с животными."
+      room_category: null
+      facade: null
+      floors: null
+      value: нет
+      url: "https://www.greenhosta.ru/pravila/"
+      seen_at: 2026-10-28
+  not_found: [sea_view, mountain_view, beach, railway, view_photos]
+
+"way/53549358":
+  name: "Апартаменты «Морская звезда» Хоста"
+  official_url: "https://www.morskaya-zvezda-sochi.ru/hotel/hosta/"
+  claims:
+    - topic: view_photos
+      claim: "В фотогалерее Хосты на снимке спальни с большим окном (w_Hosta-70) видны море вдали, деревья и соседние здания; на снимках w_Hosta-83 и w_Hosta-53 окна спальни и кухни выходят на густую зелень. Категории, этажи и стороны света у фотографий не подписаны."
+      room_category: null
+      facade: null
+      floors: null
+      value: да
+      url: "https://www.morskaya-zvezda-sochi.ru/hotel/hosta/"
+      seen_at: 2026-10-28
+  not_found: [sea_view, mountain_view, beach, railway, pets]

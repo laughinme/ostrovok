@@ -38,6 +38,7 @@ class QualityReport(ApiModel):
     hotelier_answers: dict[str, Any]
     curator: dict[str, Any]
     search: dict[str, Any]
+    official_claims: dict[str, Any] | None = None
     evaluation_date: str
     llm_status: str
     llm: dict[str, Any] | None = None

@@ -38,7 +38,26 @@ def _summary_rows(report: Mapping[str, Any]) -> list[tuple[str, str]]:
         ),
         ("Доля фактов с участием отеля", _number(report["hotelierShare"])),
         ("Эталон", report["gold"]["status"]),
+        *_claims_rows(report.get("officialClaims") or {}),
         ("LLM", report["llmStatus"]),
+    ]
+
+
+def _claims_rows(claims: Mapping[str, Any]) -> list[tuple[str, str]]:
+    """R7: hotels' own sites against our facts."""
+    if "views" not in claims:
+        return []
+    views, beach = claims["views"], claims["beach"]
+    return [
+        (
+            "Сайты отелей: заявленный вид найден",
+            f"{views['agree']}/{views['checked']} = {_number(views['agreement'])}",
+        ),
+        (
+            "Сайты отелей: расстояние до пляжа",
+            f"{beach['agree']}/{beach['checked']} = {_number(beach['agreement'])}; "
+            f"по карте в {beach['medianStraightToClaimedMetres']} раза дальше заявленных метров",
+        ),
     ]
 
 

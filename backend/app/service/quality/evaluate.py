@@ -6,6 +6,7 @@ from app.db.database import Database
 from app.domain.knowledge.curation import place_terms
 from app.domain.partner.rules import RulesAnswerParser
 from app.service.ports import Clock
+from app.service.quality.claims import claims_metrics
 from app.service.quality.datasets import read_yaml
 from app.service.quality.knowledge import knowledge_metrics
 from app.service.quality.parsing import (
@@ -33,6 +34,7 @@ async def evaluate(
         rules = await intent_metrics(partial(parser.parse, today=EVAL_TODAY), cases)
         generated_at = clock.now()
         knowledge = await knowledge_metrics(uow, data_dir / "eval/gold.yaml", generated_at)
+        claims = await claims_metrics(uow, data_dir / "eval/official_claims.yaml", generated_at)
         search = await search_metrics(uow, data_dir)
     intents: dict[str, Any] = {"rules": rules}
     answer_report: dict[str, Any] = {"rules": answers}
@@ -51,6 +53,7 @@ async def evaluate(
         "hotelierAnswers": answer_report,
         "curator": curator_report,
         "search": search,
+        "officialClaims": claims,
         "evaluationDate": EVAL_TODAY.isoformat(),
         "llmStatus": f"{llm['model']} ({llm['thinking']})" if llm else "не запускался",
         "llm": llm,
