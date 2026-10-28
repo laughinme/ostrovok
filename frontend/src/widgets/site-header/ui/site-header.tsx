@@ -10,6 +10,7 @@ const ITEMS = [
   { to: "/compare", label: "Сравнение" },
   { to: "/trips", label: "Мои поездки" },
   { to: "/partner", label: "Отельерам" },
+  { to: "/console", label: "Консоль" },
 ] as const;
 
 export function Logo({ className, onClick }: { className?: string; onClick?: () => void }) {
@@ -90,7 +91,7 @@ export function Header({
           })}
         </nav>
         <div className="site-header__roles" role="group" aria-label="Роль">
-          <Link to="/" data-active={!partner} onClick={closeMenu}>
+          <Link to="/" data-active={!partner && path !== "/console"} onClick={closeMenu}>
             Гость
           </Link>
           <Link to="/partner" data-active={partner} onClick={closeMenu}>
