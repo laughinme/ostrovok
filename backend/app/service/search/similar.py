@@ -1,6 +1,8 @@
+import asyncio
 from collections.abc import Mapping
 from dataclasses import dataclass, replace
 from enum import StrEnum
+from functools import partial
 from uuid import UUID
 
 from app.db.uow import UnitOfWork
@@ -53,13 +55,16 @@ class SimilarService:
         )
         baseline = best_match(chips, source, facts.get(source_id, {}), trip_window(intent))
         guests = (intent.trip.adults or 0) + (intent.trip.children or 0) or None
-        ranking = rank(
-            chips,
-            hotels,
-            facts,
-            trip_window(intent),
-            Filters(intent.trip.budget_per_night, guests),
-            limit=len(hotels),
+        ranking = await asyncio.to_thread(
+            partial(
+                rank,
+                chips,
+                hotels,
+                facts,
+                trip_window(intent),
+                Filters(intent.trip.budget_per_night, guests),
+                limit=len(hotels),
+            )
         )
         by_id = {f.id: f for groups in facts.values() for values in groups.values() for f in values}
         matches = tuple(

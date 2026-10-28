@@ -1,5 +1,6 @@
 """One candidate load and one lean fact query for every saved mood, without traces/evidence."""
 
+import asyncio
 from collections import defaultdict
 from pathlib import Path
 from uuid import UUID
@@ -58,8 +59,12 @@ class MoodQueries:
         hotels = await load_candidates(self._uow)
         keys = {c.characteristic for m in moods for c in m.chips if c.characteristic}
         facts = await self._facts([h.id for h in hotels], keys)
-        return count_moods(
-            moods, hotels, facts, TripWindow(frozenset({month or self._clock.now().month}))
+        return await asyncio.to_thread(
+            count_moods,
+            moods,
+            hotels,
+            facts,
+            TripWindow(frozenset({month or self._clock.now().month})),
         )
 
     async def _facts(
