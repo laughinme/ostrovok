@@ -9,6 +9,7 @@ import {
 import { api, ApiError } from "@/shared/api";
 import { intentForCriteria } from "../src/features/hotel-search/model/api-search";
 import { createHotelDetails } from "../src/pages/hotel/model/hotel-details";
+import { detailFactFromApi } from "../src/pages/hotel/model/api-hotel-details";
 
 const fixture: ApiHotel = {
   id: "7327e328-ccdc-5b12-ab77-e6754dc560e7",
@@ -76,6 +77,61 @@ const match: ApiMatch = {
 afterEach(() => vi.unstubAllGlobals());
 
 describe("backend hotel contract", () => {
+  it("shows server-provided nearby places and preserves every room orientation", () => {
+    const details = createHotelDetails(
+      hotelFromApi({
+        ...fixture,
+        nearby: [{ kind: "park", name: "Парк у отеля", distanceText: "350 м" }],
+        rooms: [
+          {
+            id: "room-north",
+            name: "Номер с балконом",
+            area: 25,
+            bed: "Двуспальная",
+            capacity: 2,
+            facades: ["N", "SW"],
+            floors: [2, 3],
+            confirmedByHotel: true,
+            rates: [],
+          },
+        ],
+      }),
+    );
+    expect(details.nearby).toEqual([["park", "Парк у отеля", "350 м"]]);
+    expect(details.rooms[0]?.orientationLabel).toBe("Север + Юго-запад");
+    expect(details.rooms[0]?.rates).toEqual([]);
+    expect(details.bestRoom).toBe("Номер с балконом");
+    expect(details.bestFloor).toBe(2);
+  });
+  it("keeps evidence and source links available in the detail panel", () => {
+    const evidence = {
+      kind: "noise_facades" as const,
+      summary: "Расчёт по открытым данным",
+      attribution: "OpenStreetMap",
+    };
+    const mapped = detailFactFromApi(
+      { ...fact, evidence: [evidence] },
+      {
+        ...fact,
+        evidence: [evidence],
+        sources: [
+          {
+            kind: "open_data",
+            label: "Карта",
+            ref: "https://www.openstreetmap.org/",
+            observedAt: "2026-10-28T00:00:00Z",
+            confidence: 0.8,
+          },
+        ],
+        history: [],
+      },
+    );
+    expect(mapped.group).toBe("Тишина ночью");
+    expect(mapped.evidenceItems).toEqual([
+      { summary: evidence.summary, attribution: evidence.attribution },
+    ]);
+    expect(mapped.sources).toEqual([["Карта", "28.10.2026", "https://www.openstreetmap.org/"]]);
+  });
   it("preserves UUIDs, coordinates and unknown values instead of using demo properties", () => {
     const hotel = hotelFromApi(fixture);
     expect(hotel.id).toBe(fixture.id);
