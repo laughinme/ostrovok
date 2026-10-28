@@ -1,4 +1,4 @@
-import { formatReviewCount, PhotoCredit, photoInfo, type Hotel } from "@/entities/hotel";
+import { PhotoCredit, photoInfo, type Hotel } from "@/entities/hotel";
 import { useHotelFavorite } from "@/features/favorite-hotels";
 import { cn } from "@/shared/lib";
 import { Link } from "@tanstack/react-router";
@@ -98,7 +98,7 @@ export function HotelCardPhotos({
         </span>
         <span className="h-3 w-px bg-night/25" />
         <span className="font-mono text-[9px] leading-none tracking-wider opacity-70">
-          {hotel.backend ? "демо-рейтинг" : formatReviewCount(hotel.reviewCount)}
+          демо-рейтинг
         </span>
       </span>
       <CardControl

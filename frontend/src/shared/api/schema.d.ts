@@ -751,6 +751,22 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/v1/intents/photo": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations["photo_intent_api_v1_intents_photo_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/v1/moods": {
     parameters: {
       query?: never;
@@ -1583,6 +1599,13 @@ export interface components {
       title: string;
       hotels?: string[];
     };
+    PhotoIntentRequest: {
+      image: string;
+      mediaType: "image/jpeg" | "image/png" | "image/webp";
+    };
+    PhotoIntentResponse: {
+      text: string;
+    };
     PlaceOut: {
       ref: string;
       name: string;
@@ -1769,6 +1792,7 @@ export interface components {
       chips?: components["schemas"]["IntentChipModel"][] | null;
       trip?: components["schemas"]["TripModel"] | null;
       useProfile: boolean;
+      hotelIds?: string[] | null;
     };
     SearchResultOut: {
       searchId: string;
@@ -3397,6 +3421,49 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
         };
+      };
+    };
+  };
+  photo_intent_api_v1_intents_photo_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["PhotoIntentRequest"];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PhotoIntentResponse"];
+        };
+      };
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+      503: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
       };
     };
   };

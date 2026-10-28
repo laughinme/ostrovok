@@ -1,11 +1,4 @@
-import {
-  CRITERIA,
-  formatReviewCount,
-  PhotoCredit,
-  photoInfo,
-  type Criterion,
-  type Hotel,
-} from "@/entities/hotel";
+import { CRITERIA, PhotoCredit, photoInfo, type Criterion, type Hotel } from "@/entities/hotel";
 import { MatchRing, Reveal } from "@/shared/ui";
 import { ArrowRight, Heart, Images, MapPin, Scale, ShieldCheck, Waves } from "lucide-react";
 import { Photo } from "./visuals";
@@ -58,7 +51,7 @@ export function HotelOverview({
             <span aria-label={`Оценка ${h.rating.toLocaleString("ru")} из 10`}>
               {h.rating.toLocaleString("ru", { minimumFractionDigits: 1 })}
             </span>
-            <small>{h.reviewCount ? formatReviewCount(h.reviewCount) : "Демо-оценка"}</small>
+            <small>Демо-оценка</small>
           </div>
           <button
             className={`hotel-square-button${favorite ? " is-selected" : ""}`}
@@ -88,7 +81,8 @@ export function HotelOverview({
           ))}
           <button className="hotel-gallery-all" onClick={() => onPhoto(0)}>
             <Images size={17} />
-            Все фотографии{h.photos.length > 0 && <span>{h.photos.length}</span>}
+            Все фотографии
+            {h.photos.length > 0 && <span>{h.photos.length}</span>}
           </button>
           {hotel.walk.find((place) => place.kind === "beach") && (
             <span className="hotel-gallery-location">
