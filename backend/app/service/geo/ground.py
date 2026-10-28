@@ -7,6 +7,7 @@ from app.domain.catalog import HotelGeo
 from app.domain.geo.types import WalkProfile
 from app.service.catalog.hotels import HotelNotFoundError
 from app.service.geo.climate import TripClimate, hotel_climate
+from app.service.geo.day import DayPlan, build_day
 from app.service.geo.noise import HotelNoise, hotel_noise
 from app.service.geo.routes import RouteView, hotel_route
 from app.service.recipes.executor import Environment
@@ -31,3 +32,6 @@ class GroundQueries:
 
     async def climate(self, hotel_id: UUID, start: date, end: date) -> TripClimate:
         return hotel_climate(await self.hotel(hotel_id), self.env, start, end)
+
+    async def day(self, hotel_id: UUID, day: date) -> DayPlan:
+        return await build_day(await self.hotel(hotel_id), self.env, day)
