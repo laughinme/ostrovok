@@ -12,6 +12,34 @@
 
 ---
 
+### 28.10 09:10 МСК · codex-guest · B5.5
+- Сделано: загрузчик истории Анны в user_events (2 брони, 2 сохранения, 2 отказа, 3 правки чипов),
+  детерминированные id, повторная загрузка не дублирует события и не удаляет реальные действия.
+  Веса 0…3 с объяснениями из фактической истории; редактирование, выключение и сброс без потери истории.
+- **Публичный API:** `domain.search.taste.infer_taste(events: Sequence[TasteEvent]) -> dict[str,TasteWeight]`;
+  `TasteEvent(kind, payload)`; `TasteWeight(characteristic, weight, because, value=True)`;
+  `TasteProfile(enabled, summary, weights)`. value — предпочтительное булево значение факта
+  (для steep_streets False). Дробный вес сохраняется и используется в score_variant.
+  `apply_taste(intent, profile, titles: Mapping[key, (title, Checkable)]) -> Intent` удаляет старые
+  чипы профиля, подмешивает новые с from_profile=True; явный чип гостя всегда имеет приоритет.
+- `service.search.taste.TasteService(uow, clock)`: `.get(user_id) -> TasteProfile`,
+  `.patch(user_id, *, enabled: bool|None=None, weights: Mapping[str,float]|None=None) -> TasteProfile`,
+  `.reset(user_id) -> TasteProfile`, `.apply(intent,user_id) -> Intent`.
+  REST GET/PATCH/DELETE /me/taste с Permission.TRIPS; PATCH weights — список {characteristic,weight},
+  вес 0 убирает предпочтение; DELETE возвращает 204, следующий GET — выключенный пустой профиль.
+- Поиск: POST /searches принимает useProfile (по умолчанию true) и необязательный Bearer гостя;
+  `SearchService.search(intent, *, user_id=None, use_profile=True)`. Анонимный поиск прежний.
+  В БД хранится исходный запрос и флаг useProfile, GET поиска заново применяет актуальный профиль:
+  выключение/правка сразу отражаются в выдаче. В params чипа: profileWeight и value.
+  `score.evaluate` учитывает value=False; `score.chip_weight(chip)` применяет дробный вес профиля.
+- Как проверить: tests/unit/geo/test_taste.py; tests/integration/test_taste_api.py на
+  okno_guest_test / Redis 12. По одному запросу «Вид на море» профиль меняет первое место
+  с «Маяка» на «Тихий двор»; проверены выключение, повторное чтение, правка 2.7, сброс и повторный сид.
+- Проверки: полный make check на HEAD + свои файлы: 389 passed, ruff, mypy strict, 7 контрактов.
+- Грабли: чисел «3 из 4» в истории нет — объяснение честно говорит «2 из 2»; данные помечены демо.
+  Сброс сохраняет историю для аудита, но помечает профиль очищенным: самопроизвольно не восстановится.
+- Дальше: B5.8 (MCP, сравнение и похожие). LLM API не вызывался.
+
 ### 28.10 13:10 МСК+4 (09:10 МСК) · claude-core · каркас → ядро знаний → поиск → агенты → консоль
 - Сделано: B0.3, B0.7, B1.7, B2.1–B2.3, B2.11–B2.13, B3.1, B3.2, B3.4, B4.1, B4.2, B4.6, B4.7 (без сброса демо),
   B5.1 — итоги в tasks.md. Параллельно работают codex-osm, codex-view2, codex-ground2, codex-partner, codex-guest.
