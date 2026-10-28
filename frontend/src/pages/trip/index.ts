@@ -1,1 +1,1 @@
-export { default } from './ui/trip-page';
+export { TripPage } from "./ui/trip-page";
