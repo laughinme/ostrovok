@@ -1,6 +1,6 @@
 # Данные региона О!кно
 
-Отчёт: 2026-10-28T00:09:13+00:00. Все геометрии EPSG:4326.
+Отчёт: 2026-10-28T00:16:11+00:00. Все геометрии EPSG:4326.
 CSV: UTF-8, gzip, WKB hex. Синтетические свойства помечены «демо».
 
 Получение: `make data` или `cd backend && uv run --group pipeline python -m pipeline all`.
@@ -38,6 +38,7 @@ DEM и климат: точные URL, периоды и полнота — в d
 | demo/history.yaml | 2,541 |
 | demo/room_types.yaml | 626,542 |
 | demo/users.yaml | 1,083 |
+| eval/curator.yaml | 15,249 |
 | eval/hotelier_answers.yaml | 14,986 |
 | eval/intents.yaml | 41,022 |
 | region/buildings.csv.gz | 5,751,312 |
@@ -50,8 +51,9 @@ DEM и климат: точные URL, периоды и полнота — в d
 | region/sea.wkb.gz | 72,127 |
 | region/walk_graph.npz | 4,973,463 |
 | registry/characteristics.yaml | 13,167 |
+| registry/osm_vocabulary.yaml | 41,266 |
 | registry/synonyms.yaml | 43,971 |
-| **Всего без MANIFEST** | **28,110,919** |
+| **Всего без MANIFEST** | **28,167,434** |
 
 Бюджет: <60,000,000 байт вместе, <50,000,000 байт каждый файл (десятичные МБ).
-Всего 28.11 МБ, крупнейший файл 11.18 МБ; запас до общего лимита 31.89 МБ.
+Всего 28.17 МБ, крупнейший файл 11.18 МБ; запас до общего лимита 31.83 МБ.
