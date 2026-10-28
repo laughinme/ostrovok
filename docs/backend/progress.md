@@ -12,6 +12,33 @@
 
 ---
 
+### 28.10 03:14 МСК · codex-partner · B4.3
+- Сделано: связной и разбор ответов, коммиты `822a319`, `a96434d`, `cebdae5`. Вопросы из реестра,
+  спрос за сегодня + 6 дней (район + all), неопределённость 1−|2p−1|, дедупликация с advisory lock
+  и частичным уникальным индексом. waiting_hotel уточняет категории на вычисленной стороне.
+- **Публичный API:** `domain.partner.questions.question_value(demand: int, probability: float|None,
+  influence: float) -> float`; demand — число поисков, probability/influence — доли 0…1.
+  `RulesAnswerParser.parse(AnswerInput) -> ParsedAnswer` (async); вход: characteristic, text,
+  payload, room_names, options, value_type, unit; выход: fields, value, confidence (0…1), Scope,
+  parser="rules", needs_clarification (<0,6). `AnswerParser` — протокол для будущей LLM-стратегии.
+  `PartnerQuestions(uow, clock).generate(hotel_id, run_id=None, limit=5)` / `.of_hotel(hotel_id)`
+  возвращают QuestionView; `Liaison(db, clock).ask(hotel_id, tracer)` пишет трассу hotelier.ask.
+  `PartnerAnswers(uow, clock, parser=None).submit(question_id, text='', payload=None, is_demo=False)`
+  → AnswerResult(answer_id, hotel_id, parsed, changed: tuple[Fact,...], clarification).
+  `PartnerFacades(uow, clock).replace(hotel_id, Sequence[FacadeMapping], is_demo=False)` → Recorded;
+  FacadeMapping(room_type_id, Facade, floor_from, floor_to), этажи включительно, проверка реального
+  здания и категорий; заменяет разметку, confirmed_by_hotel=true и Observation facade_rooms.
+  Все сервисы только flush; транзакцией владеет вызывающий.
+- Как проверить: ruff/format, mypy strict, 7 import-контрактов и все 370 тестов зелёные,
+  БД `okno_partner_test`, Redis 11. `service.partner.evaluation.evaluate_answers(parser, path)`
+  → AnswerMetrics: 24/24 точных записей по 72/72 машинным полям R3, 6/6 расплывчатых ответов
+  запрашивают уточнение. conditions/window_type/notes — свободный текст, не входят в метрику.
+  Набор скопирован в data/eval/hotelier_answers.yaml; оценка LLM отсутствует, API не вызывался.
+- Грабли: SearchRow пока не хранит исторический топ-20. Influence пересчитывает сохранённые
+  намерения на текущих фактах; при отсутствии поисков приор 1.0. Это оценка нынешнего влияния,
+  не историческая статистика. «На море»/«во двор» не превращаются в компас без разметки отеля.
+- Дальше: B4.4, затем API кабинета B4.5. Общие файлы не заняты.
+
 ### 28.10 03:15 МСК · codex-guest · B5.4
 - Сделано: доменные статусы и пересечение областей (`05f4dbd`); бронь со снимком обещаний,
   отложенный ответ и уведомления об изменившихся обещаниях (`cb5873c`); гостевые REST, поездка,

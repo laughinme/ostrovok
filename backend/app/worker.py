@@ -18,7 +18,9 @@ from app.core.logging import configure_logging
 from app.db.database import Database
 from app.domain.jobs import ClaimedJob, JobKind, NewJob
 from app.infra.events import RedisEventBus
+from app.infra.partner_truth import YamlHiddenTruth
 from app.service.agents.collect import CollectService
+from app.service.agents.simulator import HotelierSimulator
 from app.service.booking.simulator import BookingSimulator
 from app.service.jobs import Handler, JobQueue, JobRunner
 from app.service.ports import Clock, SystemClock
@@ -107,7 +109,9 @@ class Worker:
 
 
 def build_handlers(
-    collect: CollectService, booking: BookingSimulator | None = None
+    collect: CollectService,
+    booking: BookingSimulator | None = None,
+    hotelier: HotelierSimulator | None = None,
 ) -> dict[JobKind, Handler]:
     """Kind → handler; each handler only unpacks the payload and calls one agent."""
 
@@ -129,7 +133,13 @@ def build_handlers(
             raise RuntimeError("Booking simulator is not configured")
         await booking.notify_changes(UUID(job.payload["hotel_id"]), job.payload["characteristic"])
 
+    async def hotelier_simulate(job: ClaimedJob) -> None:
+        if hotelier is None:
+            raise RuntimeError("Hotelier simulator is not configured")
+        await hotelier.respond(UUID(job.payload["question_id"]))
+
     return {
+        JobKind.HOTELIER_SIMULATE: hotelier_simulate,
         JobKind.RESEARCH_COLLECT: research_collect,
         JobKind.BOOKING_SIMULATE: booking_simulate,
         JobKind.BOOKING_FACT_CHANGED: booking_fact_changed,
@@ -149,7 +159,18 @@ async def run_worker(settings: Settings) -> None:
 
     runner = JobRunner(
         db,
-        build_handlers(collect, BookingSimulator(db, clock, RedisEventBus(redis))),
+        build_handlers(
+            collect,
+            BookingSimulator(db, clock, RedisEventBus(redis)),
+            hotelier=HotelierSimulator(
+                db,
+                clock,
+                RedisEventBus(redis),
+                YamlHiddenTruth(settings.data_dir / "demo/hidden_truth.yaml"),
+            )
+            if settings.hotelier_simulator == "on"
+            else None,
+        ),
         clock,
         worker_id=f"{socket.gethostname()}:{os.getpid()}",
         lease=timedelta(seconds=settings.jobs_lease_sec),

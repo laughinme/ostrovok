@@ -11,6 +11,7 @@ from app.db.uow import UnitOfWork
 from app.domain.knowledge.characteristic import Characteristic, MethodKind
 from app.domain.knowledge.fact import Fact
 from app.domain.knowledge.scope import Facade
+from app.domain.knowledge.sources import SourceKind
 from app.domain.partner.questions import QuestionDraft, question_value
 from app.service.catalog.hotels import HotelNotFoundError
 from app.service.knowledge.facts import yes_probability
@@ -79,7 +80,7 @@ def _draft(
     kind = str(c.recipe.get("answer_kind", "free_text"))
     return QuestionDraft(
         c.key,
-        c.question or str(c.recipe.get("question", c.title)),
+        (c.question or str(c.recipe.get("question", c.title))).replace("{facade}", "здания"),
         f"{demand} гостей за неделю искали: {c.title.lower()}",
         question_value(demand, probability, influence),
         "choice" if kind == "yes_no" else kind,
@@ -164,7 +165,11 @@ class PartnerQuestions:
             return drafts
         conflict = conflicts[0]
         positives = [
-            f for f in facts if f.characteristic == conflict.characteristic and f.value is True
+            f
+            for f in facts
+            if f.characteristic == conflict.characteristic
+            and f.value is True
+            and f.source is SourceKind.COMPUTED
         ]
         side = next(
             (f for f in Facade if any(p.scope.facades and f in p.scope.facades for p in positives)),

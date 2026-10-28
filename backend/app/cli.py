@@ -14,7 +14,9 @@ from app.db.database import Database
 from app.db.models import User
 from app.domain.catalog import hotel_id
 from app.domain.users import Role, normalize_email
+from app.infra.partner_truth import YamlHiddenTruth
 from app.service.agents.collect import CollectService
+from app.service.partner.claims import seed_demo_claims
 from app.service.ports import RecordingEventBus, SystemClock
 from app.service.seed_export import export_tables
 
@@ -61,6 +63,16 @@ async def export_seed(settings: Settings) -> str:
         await db.dispose()
 
 
+async def claims(settings: Settings) -> str:
+    db = Database(settings)
+    try:
+        truth = YamlHiddenTruth(settings.data_dir / "demo/hidden_truth.yaml")
+        count = await seed_demo_claims(db, SystemClock(), truth)
+        return f"demo hotelier claims recorded: {count}"
+    finally:
+        await db.dispose()
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(prog="python -m app.cli")
     commands = parser.add_subparsers(dest="command", required=True)
@@ -71,6 +83,7 @@ def main() -> None:
     run.add_argument("--hotel", action="append", default=[], help="OSM id, e.g. way/227214566")
     run.add_argument("--keys", help="comma-separated characteristics, default: all published")
     run.add_argument("--concurrency", type=int, default=4)
+    commands.add_parser("claims", help="seed demo sea-view claims from hidden truth")
     commands.add_parser("export-seed", help="dump knowledge and traces into data/seed")
     commands.add_parser("openapi", help="print the OpenAPI schema")
     args = parser.parse_args()
@@ -84,6 +97,8 @@ def main() -> None:
     elif args.command == "collect":
         keys = args.keys.split(",") if args.keys else None
         result = asyncio.run(collect(settings, args.hotel, keys, args.concurrency))
+    elif args.command == "claims":
+        result = asyncio.run(claims(settings))
     elif args.command == "export-seed":
         result = asyncio.run(export_seed(settings))
     else:
