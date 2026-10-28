@@ -113,7 +113,9 @@ class PartnerQuestions:
         hotel = await self._uow.catalog.hotel(hotel_id)
         if hotel is None:
             raise HotelNotFoundError()
-        await self._uow.knowledge.lock_pair(hotel_id, "partner_questions")
+        if not await self._uow.knowledge.try_lock_pair(hotel_id, "partner_questions"):
+            # Someone is generating right now: show what exists instead of queueing behind it.
+            return await self.of_hotel(hotel_id)
         facts = await self._uow.knowledge.facts([hotel_id])
         demand = PartnerDemand(self._uow, self._clock)
         counts = await demand.weekly(hotel.district)
