@@ -35,13 +35,14 @@ export function characteristicKey(
   if (run?.status !== "done") return null;
   const decision = [...run.steps]
     .reverse()
-    .find((step) => step.kind === "decision" && typeof record(step.output).key === "string");
-  const key = record(decision?.output).key ?? run.subject?.key ?? run.subject?.characteristic;
+    .find((step) => step.kind === "decision" && typeof record(step.output)["key"] === "string");
+  const key =
+    record(decision?.output)["key"] ?? run.subject?.["key"] ?? run.subject?.["characteristic"];
   if (typeof key === "string" && key.length > 0) return key;
   const matches = registry.filter(
     (entry) => entry.learnedFrom === description && entry.status !== "published",
   );
-  return matches.length === 1 ? matches[0].key : null;
+  return matches.length === 1 ? (matches[0]?.key ?? null) : null;
 }
 
 export function nearbyBuilding(
