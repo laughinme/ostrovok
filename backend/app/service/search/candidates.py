@@ -22,8 +22,10 @@ def _cheapest(rates: Sequence[dict[str, object]]) -> int | None:
     return min((p for p in prices if p > 0), default=None)
 
 
-async def load_candidates(uow: UnitOfWork, district: str | None = None) -> list[SearchHotel]:
-    hotels = await uow.catalog.hotels()
+async def load_candidates(
+    uow: UnitOfWork, district: str | None = None, *, hotel_ids: Sequence[UUID] | None = None
+) -> list[SearchHotel]:
+    hotels = await uow.catalog.hotels(hotel_ids)
     if district:
         hotels = [h for h in hotels if h.district == district]
     rooms = (await uow.session.scalars(select(RoomType))).all()
