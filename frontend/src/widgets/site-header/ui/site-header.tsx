@@ -11,6 +11,7 @@ const ITEMS = [
   { to: "/trips", label: "Мои поездки" },
   { to: "/partner", label: "Отельерам" },
   { to: "/console", label: "Консоль" },
+  { to: "/developers", label: "API и MCP" },
 ] as const;
 
 export function Logo({ className, onClick }: { className?: string; onClick?: () => void }) {
