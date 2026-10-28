@@ -12,6 +12,42 @@
 
 ---
 
+### 28.10 03:06 МСК · codex-osm · B1.5
+- Сделано: реальный `walk_graph.npz`, 150 612 узлов, 322 182 направленных ребра, 4,85 МБ.
+  Несокращённые сегменты OSM в 2 км от отелей, высоты NpyTerrain из DEM B1.3; foot/access,
+  pedestrian one-way, закрытые шлюзы, слои мостов/тоннелей. Коммиты `c4bcc8e`, `66703e1`,
+  `770c742`, `adb0fd8`. Карты/профили отрисованы и просмотрены, скрипт graph_plot закоммичен.
+- **Публичный API для claude-core / B2.10:** потребители D-38 не менялись.
+  `WalkGraph.from_file(Path('data/region/walk_graph.npz'))`,
+  `ScipyRouter.from_file(path, *, max_snap_m=100)`. NPZ без pickle: nodes `(150612,3)` float64
+  (WGS84 lon,lat, абсолютные метры DSM); edges `(322182,2)` int32, явные направления;
+  length_m float64 (метры), steps/crossings int32, uncertain bool, osm_refs Unicode `way/…`,
+  атрибуты по одному на направленное ребро. Читатель приводит индексы/счётчики к int64.
+  Ступени по step_count распределены без умножения суммы на число сегментов; без тега оценка
+  длина / 0,3 м и uncertain. Crossing — пересечённая ось пути/крупной дороги: два рельса/пути
+  могут дать 2, это не объединённый физический переход. Неотмеченные пересечения uncertain.
+- **API пайплайна:** `walk_topology.extract_network(records, area) -> WalkNetwork`, area — UTM37N;
+  `build_graph(network, elevation, *, blocked=None) -> WalkGraph`, callback принимает `(n,2)`
+  lon/lat и возвращает `(n,)` метров; при дырках DEM ошибка. `walk_crossings.annotate_crossings`
+  добавляет счётчики, `blocked_nodes(points)` возвращает запрещённые координаты.
+  `graph.save_graph(graph, path)` атомарно пишет и перечитывает NPZ; `graph.run()` перед публикацией
+  проверяет три маршрута. `graph_validation.verify_routes(graph) -> dict` пишет диагностику в
+  `.cache/osm/walk-validation.json`; `python -m pipeline.graph_plot` рисует соседний PNG.
+- Как проверить: `uv run --group pipeline python -m pipeline graph`; 200/200 отелей имеют узел
+  в 100 м, 119/306 representative_point пляжей попадают в граф. Маршруты туда/обратно:
+  Swissotel Камелия → way/207933133: 882 м, 10,6/12,1 мин, 0 ступеней, 2 пересечения;
+  Ретрит Дом Ливерпуль → Робинзон way/248626744: 1755 м, 23,2/25,8 мин, 167 ступеней,
+  4 пересечения; Островок → way/53086451: 527 м, 6,1/6,6 мин, 0 ступеней/пересечений.
+  Набор data пока 28,10 МБ. Unit в общем дереве: **203 passed**; полный **make check: 256 passed**,
+  ruff/format, strict mypy, 7 import-контрактов — на изолированном HEAD + свои файлы,
+  PostgreSQL `okno_osm_test`, Redis DB 13 (общее дерево в это время меняли другие сессии).
+- Грабли: GDAL не сохраняет node ID внутри way: топология по точным исходным координатам и слоям,
+  совпадающие разные OSM-узлы одного уровня неразличимы. Пересечения считаются в исходной CRS:
+  проекция разных хорд может дать микрозазор у общего узла. DSM не моделирует отдельно настил
+  мостов. Входы на пляж/доступность не проверены на местности; подходы к графу неизвестные.
+  Доля неизвестного на трёх маршрутах 0,57/0,63/0,18, не выдавать их за гарантированно доступные.
+- Дальше: codex-osm берёт B1.8; B1.3, B1.4, B1.6 готовы, остаются MANIFEST и полный make data.
+
 ### 28.10 03:06 МСК · codex-ground2 · B2.13-geo, общий расчёт
 - Сделано: `service.geo.noise.hotel_noise(hotel, env, kinds=...) -> HotelNoise` готовит единую сцену
   и возвращает `.facades: tuple[FacadeNoise(facade,day,night),...]`, completeness, source_count,
