@@ -20,7 +20,7 @@ function TicketPlane({ className = "" }: { className?: string }) {
 export function TripTicket({ booking, hotel }: { booking: Booking; hotel: Hotel | undefined }) {
   const confirmed = booking.status === "confirmed" || booking.status === "completed";
   const StatusIcon = confirmed ? Check : booking.status === "declined" ? X : CircleHelp;
-  const room = hotel?.backend?.roomTypes.find((item) => item.id === booking.roomTypeId);
+  const room = hotel?.backend?.rooms.find((item) => item.id === booking.roomTypeId);
   const nights = tripNights(booking);
   const status = bookingStatus[booking.status];
   const price = new Intl.NumberFormat("ru-RU", {

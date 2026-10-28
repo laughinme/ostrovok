@@ -43,6 +43,50 @@
   margin: 0 auto;
   padding: 16px 32px 80px;
 }
+.trip-back {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--primary);
+}
+.trip-sunsets > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 8px;
+}
+.trip-facts {
+  margin-top: 14px;
+  list-style: none;
+}
+.trip-facts li + li {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+.trips-screen summary {
+  cursor: pointer;
+  padding-block: 10px;
+}
+.trips-screen .feedback-options label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 7px 16px;
+  cursor: pointer;
+}
+.trips-screen .feedback-options label.on {
+  color: var(--on-primary);
+  background: var(--primary);
+}
+.trips-screen .feedback-options label:focus-within {
+  outline: 2px solid var(--ink);
+  outline-offset: -4px;
+}
+.trips-screen .feedback-options input {
+  accent-color: var(--primary);
+}
 .trips-screen .trip-notice {
   margin-block: 24px;
 }
@@ -142,7 +186,7 @@
 }
 .trips-screen .expect {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
 }
 .trips-screen .expect .card-w {

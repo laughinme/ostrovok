@@ -5,6 +5,8 @@ import { hotelQuery } from "@/entities/hotel";
 import { tripQuery, type Trip } from "@/features/manage-trips";
 import { ApiError } from "@/shared/api";
 import { TripTicket } from "./trip-ticket";
+import { TripExpectations } from "./trip-expectations";
+import { TripFeedback } from "./trip-feedback";
 import "./trip-page.css";
 
 export function TripPage({ id }: { id: string }) {
@@ -73,11 +75,12 @@ function TripDetails({ trip }: { trip: Trip }) {
           После поездки
         </button>
       </div>
-      <p className="trip-notice muted">
-        {post
-          ? "Ваши ответы помогут уточнить ожидания следующих гостей."
-          : "Данные о поездке сохранены. Ответ демо-отеля обновляется автоматически."}
-      </p>
+      <div hidden={post}>
+        <TripExpectations trip={trip} />
+      </div>
+      <div hidden={!post}>
+        <TripFeedback trip={trip} />
+      </div>
     </>
   );
 }
