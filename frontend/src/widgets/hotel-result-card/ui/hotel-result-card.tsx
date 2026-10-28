@@ -5,16 +5,12 @@ import { cn } from "@/shared/lib";
 import { Link } from "@tanstack/react-router";
 import { motion, useReducedMotion } from "framer-motion";
 import {
-  AlertCircle,
   ArrowUpRight,
-  Calculator,
   Check,
   ChevronDown,
   Footprints,
-  HelpCircle,
   MapPin,
   Scale,
-  ShieldCheck,
   Sparkles,
   Star,
 } from "lucide-react";
@@ -22,6 +18,7 @@ import { useState } from "react";
 import { CardControl } from "./card-control";
 import { cardControlStyles } from "./card-control-styles";
 import { HotelCardPhotos } from "./hotel-card-photos";
+import { HotelCardFacts } from "./hotel-card-facts";
 import "./hotel-result-card.css";
 
 interface HotelResultCardProps {
@@ -50,8 +47,6 @@ export function HotelResultCard({
   const reducedMotion = useReducedMotion();
 
   const nearby = r.hotel.walk.slice(0, 2);
-  const usefulFacts = r.hotel.facts.filter((fact) => fact.status !== "conflict").slice(0, 2);
-  const caveat = r.hotel.cons[0];
   const hiddenBeams = criteria.length - MAX_BEAMS;
   const shownBeams = showAllBeams ? criteria : criteria.slice(0, MAX_BEAMS);
 
@@ -182,43 +177,7 @@ export function HotelResultCard({
             </div>
           </div>
 
-          <div className="px-5 py-2.5">
-            <div className="flex items-center gap-1.5">
-              {usefulFacts.map((fact) => {
-                const Icon =
-                  fact.status === "confirmed"
-                    ? ShieldCheck
-                    : fact.status === "computed"
-                      ? Calculator
-                      : HelpCircle;
-                return (
-                  <span
-                    key={fact.id ?? fact.label}
-                    className="inline-flex min-w-0 items-center gap-1.5 rounded-full bg-muted px-2.5 py-1 text-[11px] leading-snug"
-                    title={`${fact.label}: ${fact.value} · ${fact.status === "confirmed" ? "Подтверждено" : fact.status === "computed" ? "Расчёт по открытым данным" : "Предположение"} · ${fact.source} · ${fact.checkedAt}`}
-                  >
-                    <Icon
-                      className={cn(
-                        "h-3 w-3 shrink-0",
-                        fact.status === "confirmed" ? "text-conf-high" : "text-primary",
-                      )}
-                    />
-                    <span className="truncate text-muted-foreground">{fact.label}: </span>
-                    <span className="shrink-0 font-medium">{fact.value}</span>
-                  </span>
-                );
-              })}
-              {caveat && (
-                <span
-                  className="inline-flex min-w-0 items-center gap-1.5 rounded-full bg-tint px-2.5 py-1 text-[11px] leading-snug"
-                  title={`Учтите: ${caveat}`}
-                >
-                  <AlertCircle className="h-3 w-3 shrink-0 text-primary" />
-                  <span className="truncate">{caveat}</span>
-                </span>
-              )}
-            </div>
-          </div>
+          <HotelCardFacts hotel={r.hotel} />
 
           <div className="hotel-card-footer mt-auto border-t">
             <div className="hotel-card-price">
