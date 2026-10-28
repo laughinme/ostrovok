@@ -1,16 +1,6 @@
 import { CRITERIA, formatReviewCount, type Criterion, type Hotel } from "@/entities/hotel";
 import { MatchRing, Reveal } from "@/shared/ui";
-import {
-  Check,
-  ArrowRight,
-  Heart,
-  Images,
-  Info,
-  MapPin,
-  Scale,
-  ShieldCheck,
-  Waves,
-} from "lucide-react";
+import { ArrowRight, Heart, Images, Info, MapPin, Scale, ShieldCheck, Waves } from "lucide-react";
 import { Photo } from "./visuals";
 import type { Fact, HotelDetails } from "../model/types";
 import { rub } from "../lib/format";
@@ -184,30 +174,24 @@ export function HotelAbout({
       <section id="hotel-about" className="hotel-about-copy">
         <h2 id="hotel-about-title">Об отеле</h2>
         <p>{hotel.description || h.tagline}</p>
-        {h.amenities.length > 0 && (
-          <section className="hotel-about-amenities" aria-label="Удобства отеля">
-            <h3>Удобства</h3>
-            <ul className="hotel-amenities">
-              {h.amenities.map((item, index) => (
-                <li key={`${item}-${index}`}>
-                  <Check size={15} aria-hidden="true" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
-        {hotel.searchMatch?.tradeoff && (
-          <div className="hotel-tradeoff">
-            <Info size={17} aria-hidden="true" />
-            <p>
-              <b>Стоит учесть</b>
-              {hotel.searchMatch.tradeoff}
-            </p>
-          </div>
-        )}
       </section>
-      <HotelFacts facts={h.facts} selectedId={selectedId} onFact={onFact} demo={demo} embedded />
+      <HotelFacts
+        facts={h.facts}
+        amenities={h.amenities}
+        selectedId={selectedId}
+        onFact={onFact}
+        demo={demo}
+        embedded
+      />
+      {hotel.searchMatch?.tradeoff && (
+        <div className="hotel-tradeoff">
+          <Info size={17} aria-hidden="true" />
+          <p>
+            <b>Стоит учесть</b>
+            {hotel.searchMatch.tradeoff}
+          </p>
+        </div>
+      )}
     </Reveal>
   );
 }
