@@ -190,6 +190,10 @@ class AgentRunner:
         self._events = events
         self._clock = clock
 
+    @property
+    def db(self) -> Database:
+        return self._db
+
     def tracer(self, run_id: UUID) -> Tracer:
         return Tracer(self._db, self._events, self._clock, run_id)
 

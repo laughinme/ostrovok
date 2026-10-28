@@ -16,7 +16,7 @@ from pydantic_ai.models.openai import OpenAIChatModel
 from pydantic_ai.providers.openai import OpenAIProvider
 
 from app.infra.llm.cache import LlmCache, cache_key, schema_fingerprint
-from app.infra.llm.guards import CircuitBreaker, DailyLimit
+from app.infra.llm.guards import CircuitBreaker, DailyLimit, ModeSwitch
 from app.service.ports import Budget, LlmResult, LlmUnavailableError, ToolSpec, Usage
 
 logger = logging.getLogger(__name__)
@@ -38,7 +38,9 @@ class PydanticAiLanguageModel:
         limit: DailyLimit,
         cache: LlmCache | None = None,
         breaker: CircuitBreaker | None = None,
+        switch: ModeSwitch | None = None,
     ) -> None:
+        self._switch = switch
         self._model = model
         self._name = model_name
         self._timeout = timeout_sec
@@ -83,6 +85,8 @@ class PydanticAiLanguageModel:
             raise LlmUnavailableError("no LLM key configured")
         if self._breaker.open:
             raise LlmUnavailableError("LLM provider failed recently")
+        if self._switch is not None and not await self._switch.on():
+            raise LlmUnavailableError("LLM выключена в консоли")
         key = cache_key(
             self._name,
             task,

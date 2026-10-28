@@ -20,12 +20,14 @@ from app.infra.geo.climate import ClimateCatalog
 from app.infra.geo.router import ScipyRouter
 from app.infra.geo.terrain import NpyTerrain
 from app.infra.llm.cache import LlmCache
-from app.infra.llm.guards import DailyLimit
+from app.infra.llm.guards import DailyLimit, ModeSwitch
 from app.infra.llm.pydantic_ai_model import PydanticAiLanguageModel, openai_compatible
 from app.service.agents.curator import Curator
 from app.service.agents.researcher import Researcher
 from app.service.agents.runtime import AgentRunner
+from app.service.agents.watcher import Watcher
 from app.service.agents.wishes import WishResearch
+from app.service.geo.scenes import scene_cache
 from app.service.ports import Clock, EventBus, LanguageModel
 from app.service.recipes.executor import Environment, GeoReader, MethodExecutor, executors_by_method
 from app.service.recipes.methods.area_stat import AreaStatExecutor
@@ -85,6 +87,7 @@ class Agents:
     researcher: Researcher
     curator: Curator
     wishes: WishResearch
+    watcher: Watcher
     env: Environment
 
 
@@ -105,6 +108,9 @@ def build_agents(
         researcher=researcher,
         curator=curator,
         wishes=WishResearch(db, runner, researcher, curator, events, clock=clock),
+        watcher=Watcher(
+            db, runner, researcher, events, invalidate=lambda: scene_cache(env).clear()
+        ),
         env=env,
     )
 
@@ -125,4 +131,5 @@ def build_language_model(
         timeout_sec=settings.llm_timeout_sec,
         limit=DailyLimit(redis, settings.llm_daily_call_limit),
         cache=LlmCache(db),
+        switch=ModeSwitch(db),
     )

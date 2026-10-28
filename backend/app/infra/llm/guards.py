@@ -7,6 +7,9 @@ from datetime import UTC, datetime
 from redis.asyncio import Redis
 from redis.exceptions import RedisError
 
+from app.db.database import Database
+from app.db.models import AppSetting
+
 logger = logging.getLogger(__name__)
 
 
@@ -50,3 +53,21 @@ class DailyLimit:
             self._local += 1
             return self._local <= self._limit
         return count <= self._limit
+
+
+class ModeSwitch:
+    """The console's LLM on/off switch, read from the database at most every few seconds."""
+
+    def __init__(self, db: Database, *, ttl_sec: float = 5.0) -> None:
+        self._db = db
+        self._ttl = ttl_sec
+        self._checked = -1e9
+        self._on = True
+
+    async def on(self) -> bool:
+        if time.monotonic() - self._checked > self._ttl:
+            async with self._db.unit_of_work() as uow:
+                row = await uow.session.get(AppSetting, "llm_mode")
+            self._on = not (row is not None and row.value == "off")
+            self._checked = time.monotonic()
+        return self._on
