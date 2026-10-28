@@ -299,15 +299,6 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
         )}
 
         <HotelDirections hotel={hotel} />
-
-        <div className="hp-actions">
-          <button className={`btn-ghost${inCmp ? " on" : ""}`} onClick={() => toggleCompare(h.id)}>
-            {inCmp ? "✓ В сравнении" : "+ Добавить в сравнение"}
-          </button>
-          <Link className="btn-ghost" to="/compare">
-            Сравнить с другими
-          </Link>
-        </div>
       </div>
 
       <motion.div
