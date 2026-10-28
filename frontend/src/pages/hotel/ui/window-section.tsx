@@ -29,6 +29,7 @@ import {
 } from "../model/geo";
 import type { HotelDetails } from "../model/types";
 import { WindowPanorama } from "./window-panorama";
+import { WindowMethodTooltip } from "./window-method-tooltip";
 import { DemoWindowScene } from "./demo-window-scene";
 import { GeoNotes, GeoStatus } from "./geo-status";
 import "./window-section.css";
@@ -116,7 +117,27 @@ export function WindowSection({ hotel, detail }: { hotel: Hotel; detail: HotelDe
     >
       <header className="window-explorer-heading">
         <div>
-          <h3 id="window-heading">Ваше окно</h3>
+          <div className="window-title-row">
+            <h3 id="window-heading">Ваше окно</h3>
+            <WindowMethodTooltip>
+              {demo ? (
+                <p>
+                  Демонстрационная сцена. Расположение объектов и геометрия условные. ©
+                  OpenStreetMap contributors · Copernicus DEM GLO-30.
+                </p>
+              ) : (
+                <>
+                  <p>
+                    {dates.fallback && !selectedDate
+                      ? "Даты поездки не заданы; расчёт на середину ноября. "
+                      : ""}
+                    {dateLabel(date)} · время в Сочи.
+                  </p>
+                  {data && <GeoNotes attribution={data.attribution} caveats={data.caveats} />}
+                </>
+              )}
+            </WindowMethodTooltip>
+          </div>
           <p>Посмотрите, что открывается с разных сторон и этажей.</p>
         </div>
         {demo ? (
@@ -328,30 +349,6 @@ export function WindowSection({ hotel, detail }: { hotel: Hotel; detail: HotelDe
           </div>
         </details>
       )}
-      <details className="window-method-details">
-        <summary>
-          <Info size={16} aria-hidden="true" />О расчёте и источниках
-          <ChevronDown size={16} aria-hidden="true" />
-        </summary>
-        <div>
-          {demo ? (
-            <p>
-              Демонстрационная сцена. Расположение объектов и геометрия условные. © OpenStreetMap
-              contributors · Copernicus DEM GLO-30.
-            </p>
-          ) : (
-            <>
-              <p>
-                {dates.fallback && !selectedDate
-                  ? "Даты поездки не заданы; расчёт на середину ноября. "
-                  : ""}
-                {dateLabel(date)} · время в Сочи.
-              </p>
-              {data && <GeoNotes attribution={data.attribution} caveats={data.caveats} />}
-            </>
-          )}
-        </div>
-      </details>
     </section>
   );
 }
