@@ -3,6 +3,13 @@ import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
 import { FACADE_ANGLE, type GeoFacade } from "../model/geo";
+import {
+  noiseBuilding,
+  noiseCameraFit,
+  noiseWindowHeight,
+  NOISE_BUILDING_BASE,
+  NOISE_FLOOR_HEIGHT,
+} from "../model/noise-building";
 import { NoiseScenePlaceholder } from "./noise-scene-placeholder";
 
 export interface NoiseSceneProps {
@@ -53,11 +60,11 @@ function Windows({ floors, night }: { floors: number; night: boolean }) {
           const across = (column - 1.5) * 0.3;
           object.position.set(
             Math.sin(angle) * 1.866 + Math.cos(angle) * across,
-            0.67 + (floor * 2.68) / floors,
+            noiseWindowHeight(floor),
             Math.cos(angle) * 1.866 - Math.sin(angle) * across,
           );
           object.rotation.set(0, angle, 0);
-          object.scale.set(1, 6 / floors, 1);
+          object.scale.set(1, 1, 1);
           object.updateMatrix();
           mesh.current.setMatrixAt(index, object.matrix);
           const lit = (side * 17 + floor * 7 + column * 3) % 5 !== 0;
@@ -108,6 +115,7 @@ function Architecture({ period, selected, floors, sides, onSelect }: NoiseSceneP
   const body = night ? "#b7c8d7" : "#f0eee4";
   const trim = night ? "#dce5e7" : "#ffffff";
   const roof = night ? "#526d83" : "#c4d5d3";
+  const building = noiseBuilding(floors);
   return (
     <>
       <Block
@@ -122,14 +130,19 @@ function Architecture({ period, selected, floors, sides, onSelect }: NoiseSceneP
         color={night ? "#526475" : "#e5ebe4"}
         radius={0.035}
       />
-      <mesh position={[0, 1.95, 0]} rotation={[0, Math.PI / 8, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[2, 2, 3.4, 8]} />
+      <mesh
+        position={[0, building.center, 0]}
+        rotation={[0, Math.PI / 8, 0]}
+        castShadow
+        receiveShadow
+      >
+        <cylinderGeometry args={[2, 2, building.height, 8]} />
         <meshStandardMaterial color={body} roughness={0.8} />
       </mesh>
       {Array.from({ length: floors + 1 }, (_, index) => (
         <mesh
           key={index}
-          position={[0, 0.45 + (index * 3.1) / floors, 0]}
+          position={[0, NOISE_BUILDING_BASE + index * NOISE_FLOOR_HEIGHT, 0]}
           rotation={[0, Math.PI / 8, 0]}
           castShadow
         >
@@ -138,32 +151,47 @@ function Architecture({ period, selected, floors, sides, onSelect }: NoiseSceneP
         </mesh>
       ))}
       <Windows floors={floors} night={night} />
-      <mesh position={[0, 3.71, 0]} rotation={[0, Math.PI / 8, 0]} castShadow receiveShadow>
+      <mesh
+        position={[0, building.top + 0.07, 0]}
+        rotation={[0, Math.PI / 8, 0]}
+        castShadow
+        receiveShadow
+      >
         <cylinderGeometry args={[2.12, 2.12, 0.14, 8]} />
         <meshStandardMaterial color={trim} roughness={0.6} />
       </mesh>
-      <mesh position={[0, 3.79, 0]} rotation={[0, Math.PI / 8, 0]}>
+      <mesh position={[0, building.top + 0.15, 0]} rotation={[0, Math.PI / 8, 0]}>
         <cylinderGeometry args={[1.94, 1.94, 0.045, 8]} />
         <meshStandardMaterial color={roof} roughness={0.8} />
       </mesh>
-      <Block at={[-0.42, 4.03, -0.32]} size={[1.3, 0.48, 0.9]} color={body} />
-      <Block at={[-0.42, 4.29, -0.32]} size={[1.4, 0.065, 1]} color={trim} radius={0.02} />
+      <Block at={[-0.42, building.top + 0.39, -0.32]} size={[1.3, 0.48, 0.9]} color={body} />
+      <Block
+        at={[-0.42, building.top + 0.65, -0.32]}
+        size={[1.4, 0.065, 1]}
+        color={trim}
+        radius={0.02}
+      />
       {[0, 1, 2].map((index) => (
         <Block
           key={index}
-          at={[0.75, 3.88, -0.6 + index * 0.43]}
+          at={[0.75, building.top + 0.24, -0.6 + index * 0.43]}
           size={[0.6, 0.12, 0.25]}
           color={night ? "#91a9b7" : "#7b96a6"}
           radius={0.02}
         />
       ))}
       <Block
-        at={[0, 0.62, 1.895]}
-        size={[0.55, 0.72, 0.045]}
+        at={[0, NOISE_BUILDING_BASE + 0.18, 1.895]}
+        size={[0.38, 0.36, 0.045]}
         color={night ? "#f9cc8d" : "#648597"}
         radius={0.01}
       />
-      <Block at={[0, 1.05, 2.08]} size={[0.95, 0.08, 0.6]} color={trim} radius={0.025} />
+      <Block
+        at={[0, NOISE_BUILDING_BASE + 0.42, 2.08]}
+        size={[0.75, 0.055, 0.45]}
+        color={trim}
+        radius={0.025}
+      />
       <Block at={[0, 0.14, 2.14]} size={[1.05, 0.12, 0.67]} color={trim} radius={0.025} />
       {sides.map((side) => {
         const angle = Math.PI - (FACADE_ANGLE[side.facade] * Math.PI) / 180;
@@ -172,13 +200,13 @@ function Architecture({ period, selected, floors, sides, onSelect }: NoiseSceneP
         return (
           <group key={side.facade} rotation={[0, angle, 0]}>
             <mesh
-              position={[0, 1.96, 1.899]}
+              position={[0, building.center, 1.899]}
               onClick={(event) => {
                 event.stopPropagation();
                 if (event.delta < 8) onSelect(side.facade);
               }}
             >
-              <planeGeometry args={[1.47, 3.2]} />
+              <planeGeometry args={[1.47, building.height - 0.04]} />
               <meshBasicMaterial
                 color={color}
                 transparent
@@ -190,12 +218,12 @@ function Architecture({ period, selected, floors, sides, onSelect }: NoiseSceneP
             {active && (
               <>
                 {[-0.73, 0.73].map((x) => (
-                  <mesh key={x} position={[x, 1.96, 1.91]}>
-                    <boxGeometry args={[0.035, 3.2, 0.035]} />
+                  <mesh key={x} position={[x, building.center, 1.91]}>
+                    <boxGeometry args={[0.035, building.height - 0.04, 0.035]} />
                     <meshBasicMaterial color="#7c99ff" />
                   </mesh>
                 ))}
-                {[0.36, 3.56].map((y) => (
+                {[NOISE_BUILDING_BASE + 0.02, building.top - 0.02].map((y) => (
                   <mesh key={y} position={[0, y, 1.91]}>
                     <boxGeometry args={[1.49, 0.035, 0.035]} />
                     <meshBasicMaterial color="#7c99ff" />
@@ -249,11 +277,14 @@ function Rig(props: NoiseSceneProps) {
   const { camera, size, invalidate } = useThree();
   useLayoutEffect(() => {
     const orthographic = camera as THREE.OrthographicCamera;
-    orthographic.zoom = Math.min(size.width / 9.2, size.height / 7.5);
-    orthographic.lookAt(0, 1.2, 0);
+    const fit = noiseCameraFit(props.floors, size.width, size.height);
+    orthographic.zoom = fit.zoom;
+    orthographic.far = fit.far;
+    orthographic.position.set(7, fit.targetY + 4.8, 8);
+    orthographic.lookAt(0, fit.targetY, 0);
     orthographic.updateProjectionMatrix();
     invalidate();
-  }, [camera, size.width, size.height, invalidate]);
+  }, [camera, size.width, size.height, props.floors, invalidate]);
   useEffect(() => {
     invalidate();
   }, [props.rotation, props.reducedMotion, invalidate]);
@@ -278,6 +309,8 @@ function Rig(props: NoiseSceneProps) {
 
 export default function NoiseScene(props: NoiseSceneProps) {
   const night = props.period === "night";
+  const building = noiseBuilding(props.floors);
+  const shadowSize = Math.max(7, building.roofTop * 0.65 + 3.5);
   return (
     <Canvas
       orthographic
@@ -286,31 +319,31 @@ export default function NoiseScene(props: NoiseSceneProps) {
       frameloop="demand"
       camera={{ position: [7, 6, 8], near: 0.1, far: 60, zoom: 65 }}
       gl={{ antialias: true, alpha: true, powerPreference: "low-power" }}
-      fallback={<NoiseScenePlaceholder />}
+      fallback={<NoiseScenePlaceholder floors={building.floors} />}
     >
       <ambientLight intensity={0.7} color={night ? "#b6cfff" : "#ffffff"} />
       <hemisphereLight
         args={[night ? "#bbd4ff" : "#d8ecff", night ? "#455d7f" : "#9bad98", night ? 1.1 : 1.0]}
       />
       <directionalLight
-        position={[-3, 8, 6]}
+        position={[-3, Math.max(8, building.roofTop + 6), 6]}
         intensity={night ? 2.7 : 2.3}
         color={night ? "#e2eaff" : "#fff5dc"}
         castShadow
         shadow-mapSize={[1024, 1024]}
-        shadow-camera-left={-6}
-        shadow-camera-right={6}
-        shadow-camera-top={7}
-        shadow-camera-bottom={-6}
+        shadow-camera-left={-shadowSize}
+        shadow-camera-right={shadowSize}
+        shadow-camera-top={shadowSize}
+        shadow-camera-bottom={-shadowSize}
         shadow-normalBias={0.025}
         shadow-bias={-0.00015}
       />
       <directionalLight
-        position={[4, 3, -5]}
+        position={[4, Math.max(3, building.roofTop * 0.6), -5]}
         intensity={night ? 1.6 : 1.0}
         color={night ? "#85a8e9" : "#d4e8ec"}
       />
-      <Rig {...props} floors={Math.min(8, Math.max(3, props.floors))} />
+      <Rig {...props} floors={building.floors} />
     </Canvas>
   );
 }
