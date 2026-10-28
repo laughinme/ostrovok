@@ -1,6 +1,5 @@
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useState } from "react";
 import {
-  ArrowUpRight,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
@@ -17,7 +16,6 @@ import type { Hotel } from "@/entities/hotel";
 import { useGeoQuery } from "../lib/use-geo-query";
 import {
   FACADE_ANGLE,
-  FACADE_LABEL,
   noiseFacades,
   numberLabel,
   type GeoFacade,
@@ -26,6 +24,7 @@ import {
 import { facadeRotation, noiseIndexLabel, NOISE_FACADE_NAMES } from "../model/noise-presentation";
 import { GeoNotes, GeoStatus } from "./geo-status";
 import { NoiseSceneView } from "./noise-scene-view";
+import { NoiseCompass } from "./noise-compass";
 import "./noise-section.css";
 
 const SOURCE_NAME: Record<string, string> = {
@@ -179,42 +178,16 @@ export function NoiseSection({ hotel }: { hotel: Hotel }) {
               <span>{noiseIndexLabel(selected?.level?.indexDb)}</span>
             </div>
           </div>
-          <div
-            className="noise-facades"
-            role="group"
-            aria-label="Выберите сторону здания для оценки шума"
-          >
-            {sides.map((side) => (
-              <button
-                type="button"
-                key={side.facade}
-                aria-pressed={selected?.facade === side.facade}
-                aria-label={`${NOISE_FACADE_NAMES[side.facade]}: ${side.text}`}
-                onClick={() => select(side.facade)}
-                style={
-                  {
-                    "--facade-color": side.level?.indexDb != null ? side.color : "#a4afc1",
-                  } as CSSProperties
-                }
-              >
-                <span className="noise-side-icon">
-                  <ArrowUpRight
-                    size={17}
-                    style={{ transform: `rotate(${FACADE_ANGLE[side.facade] - 45}deg)` }}
-                    aria-hidden="true"
-                  />
-                </span>
-                <span className="noise-side-name">
-                  <b>{FACADE_LABEL[side.facade]}</b>
-                  <small>{NOISE_FACADE_NAMES[side.facade]}</small>
-                </span>
-                <span className="noise-side-reading">
-                  {side.level?.indexDb != null ? side.text : "Нет данных"}
-                  <span className="noise-reading-dot" />
-                </span>
-              </button>
-            ))}
-          </div>
+          <NoiseCompass
+            sides={sides.map((side) => ({
+              facade: side.facade,
+              text: side.text,
+              color: side.color,
+              known: side.level?.indexDb != null,
+            }))}
+            selected={selected?.facade}
+            onSelect={select}
+          />
           <div className="noise-request-status">
             <GeoStatus
               pending={query.isLoading}
