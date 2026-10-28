@@ -1,6 +1,5 @@
 import { useCompare } from "@/features/compare-hotels";
 import { useSearchSession } from "@/features/hotel-search";
-import { SessionControls } from "@/features/authenticate";
 import { cn } from "@/shared/lib";
 import { getApiMode, setApiMode, type ApiMode } from "@/shared/api";
 import { useQueryClient } from "@tanstack/react-query";
@@ -111,7 +110,6 @@ export function Header({
               </Link>
             );
           })}
-          <SessionControls />
         </nav>
         <div className="site-header__roles" role="group" aria-label="Роль">
           <Link
