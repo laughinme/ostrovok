@@ -13,6 +13,8 @@ import {
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { EXAMPLES, MCP_TOOLS, curl, mcpConfig, preview, type Example } from "../model/examples";
+import { DevelopersIntroInfo } from "./developers-intro-info";
+import "./developers-page.css";
 
 function useOrigin(): string {
   const [origin, setOrigin] = useState("https://okno-api.fly.dev");
@@ -161,13 +163,12 @@ export function DevelopersPage() {
         Для разработчиков и партнёров
       </p>
       <h1 className="mt-3 max-w-3xl text-3xl sm:text-5xl">
-        Знания об отелях как строительный блок
+        Знания об отелях как строительный{" "}
+        <span className="whitespace-nowrap">
+          блок
+          <DevelopersIntroInfo />
+        </span>
       </h1>
-      <p className="mt-4 max-w-3xl text-muted-foreground">
-        Всё, что видит гость, доступно другим системам Островка и внешним AI-агентам: поиск словами,
-        факты по сторонам и этажам с доказательствами, сравнение. Один и тот же слой знаний — для
-        сайта, приложения, чат-бота и голосового ассистента.
-      </p>
 
       <div className="mt-8 grid gap-4 md:grid-cols-3">
         {[
