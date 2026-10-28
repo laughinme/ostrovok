@@ -1,6 +1,12 @@
 import { routePoints, type RouteData } from "../model/geo";
 
-export function RouteScheme({ route, demo = false }: { route: RouteData; demo?: boolean }) {
+export function RouteScheme({
+  route,
+  demo = false,
+}: {
+  route: Pick<RouteData, "geometry" | "targetName">;
+  demo?: boolean;
+}) {
   const points = routePoints(route.geometry.coordinates);
   if (!points.length) return <p className="geo-status">Нет данных линии маршрута</p>;
   return (

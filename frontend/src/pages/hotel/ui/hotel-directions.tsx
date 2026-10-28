@@ -27,6 +27,9 @@ import {
   type DirectionTarget,
 } from "../model/directions";
 import { elevationPath, numberLabel, type RouteData } from "../model/geo";
+import { useTravelOptions } from "../model/use-travel-options";
+import { travelTime, yandexDirections, type TravelMode } from "../model/travel-options";
+import { HotelTravelOptions } from "./hotel-travel-options";
 import { GeoNotes } from "./geo-status";
 import { RouteScheme } from "./route-scheme";
 import "./hotel-directions.css";
@@ -42,10 +45,21 @@ export function HotelDirections({ hotel }: { hotel: Hotel }) {
   const ref = useRef<HTMLElement>(null);
   const searchButton = useRef<HTMLButtonElement>(null);
   const [visible, setVisible] = useState(false);
-  const [text, setText] = useState("");
+  const defaultDestination = hotel.backend?.nearby.find((place) => place.kind === "beach");
+  const [text, setText] = useState(defaultDestination?.name ?? "");
   const [submitted, setSubmitted] = useState("");
   const [profile, setProfile] = useState<DirectionProfile>("walk");
-  const [target, setTarget] = useState<DirectionTarget | null>(null);
+  const [target, setTarget] = useState<DirectionTarget | null>(() =>
+    defaultDestination
+      ? {
+          key: defaultDestination.osmRef ?? `${defaultDestination.kind}:${defaultDestination.name}`,
+          name: defaultDestination.name || defaultDestination.title,
+          location: defaultDestination.location,
+        }
+      : null,
+  );
+  const [travelMode, setTravelMode] = useState<TravelMode>("walk");
+  const [pickedMode, setPickedMode] = useState(false);
   const [reset, setReset] = useState(0);
   const reducedMotion = !!useReducedMotion();
   const demo = getApiMode() === "demo";
@@ -91,6 +105,33 @@ export function HotelDirections({ hotel }: { hotel: Hotel }) {
   const route = target && !routeQuery.isPlaceholderData ? routeQuery.data : undefined;
   const heights =
     route?.elevationProfile.flatMap(([, height]) => (height == null ? [] : [height])) ?? [];
+  const externalPoint = target?.location ?? route?.geometry.coordinates.at(-1);
+  const travel = useTravelOptions({
+    origin: hotel.lngLat,
+    destination: externalPoint,
+    name: route?.targetName ?? target?.name ?? "Пункт назначения",
+    walking: route,
+    pending: routeQuery.isFetching,
+    walkError: !!routeQuery.error,
+    walkProfile: profile,
+    demo,
+    enabled: visible && !!target,
+  });
+  const selectedOption = travel.options.find((option) => option.mode === travelMode)!;
+  const mapRoute = target ? selectedOption.drawing : undefined;
+  useEffect(() => {
+    setPickedMode(false);
+    setTravelMode("walk");
+  }, [target?.key]);
+  useEffect(() => {
+    if (pickedMode || travel.options.some((option) => option.pending)) return;
+    const fastest = travel.options.find((option) => option.drawing);
+    if (fastest) setTravelMode(fastest.mode);
+  }, [pickedMode, travel.options]);
+  const selectMode = (mode: TravelMode) => {
+    setTravelMode(mode);
+    setPickedMode(true);
+  };
   const select = (place: DirectionPlace) => {
     if (submitted) searchButton.current?.focus({ preventScroll: true });
     setTarget({ key: place.ref, name: place.name, location: place.location });
@@ -102,11 +143,6 @@ export function HotelDirections({ hotel }: { hotel: Hotel }) {
     setText(name);
     setSubmitted("");
   };
-  const externalPoint = target?.location ?? route?.geometry.coordinates.at(-1);
-  const yandex = new URLSearchParams({
-    rtext: `${hotel.lngLat[1]},${hotel.lngLat[0]}~${externalPoint ? `${externalPoint[1]},${externalPoint[0]}` : ""}`,
-    rtt: "pd",
-  });
   return (
     <section
       className="hotel-directions"
@@ -208,30 +244,57 @@ export function HotelDirections({ hotel }: { hotel: Hotel }) {
               <Navigation size={15} />В центр
             </button>
           </div>
-          <div className="directions-profiles" aria-label="Способ прогулки">
-            {profiles.map(([key, label, Icon]) => (
-              <button
-                type="button"
-                key={key}
-                aria-pressed={profile === key}
-                onClick={() => setProfile(key)}
-              >
-                <Icon size={15} />
-                {label}
-              </button>
-            ))}
-          </div>
+          {nearby.length > 0 && (
+            <details className="directions-nearby-chooser">
+              <summary>
+                Выбрать место рядом <ChevronDown size={15} />
+              </summary>
+              {nearby.map((place) => (
+                <button type="button" key={place.ref} onClick={() => select(place)}>
+                  <MapPin size={15} />
+                  <span>{place.name}</span>
+                </button>
+              ))}
+            </details>
+          )}
+          <HotelTravelOptions
+            externalEnabled={!demo}
+            options={travel.options}
+            selected={travelMode}
+            onSelect={selectMode}
+            origin={hotel.lngLat}
+            destination={externalPoint}
+            name={target?.name ?? ""}
+          />
+          {travelMode === "walk" && (
+            <div className="directions-profiles" aria-label="Способ прогулки">
+              {profiles.map(([key, label, Icon]) => (
+                <button
+                  type="button"
+                  key={key}
+                  aria-pressed={profile === key}
+                  onClick={() => {
+                    setProfile(key);
+                    selectMode("walk");
+                  }}
+                >
+                  <Icon size={15} />
+                  {label}
+                </button>
+              ))}
+            </div>
+          )}
           <div className="directions-result" aria-live="polite">
-            {target && (
+            {target && travelMode === "walk" && !selectedOption.drawing && (
               <RequestState
-                pending={routeQuery.isFetching}
-                error={routeQuery.error}
+                pending={routeQuery.isFetching || travel.foot.isFetching}
+                error={travel.foot.isFetching ? null : routeQuery.error}
                 retry={() => {
                   void routeQuery.refetch();
                 }}
               />
             )}
-            {route && !routeQuery.error ? (
+            {route && !routeQuery.error && travelMode === "walk" ? (
               <>
                 <div className="directions-result-heading">
                   <h3>{route.targetName ?? target?.name}</h3>
@@ -323,10 +386,41 @@ export function HotelDirections({ hotel }: { hotel: Hotel }) {
                 </p>
               )
             )}
+            {target && (travelMode !== "walk" || !route) && selectedOption.drawing && (
+              <>
+                <div className="directions-result-heading">
+                  <h3>{selectedOption.drawing.targetName ?? target.name}</h3>
+                  <button
+                    type="button"
+                    aria-label="Убрать маршрут"
+                    onClick={() => {
+                      setTarget(null);
+                      setText("");
+                    }}
+                  >
+                    <X size={17} />
+                  </button>
+                </div>
+                <div className="directions-metrics directions-metrics--travel">
+                  <div>
+                    <b>{travelTime(selectedOption.minutes)}</b>
+                    <small>от отеля</small>
+                  </div>
+                  <div>
+                    <b>{numberLabel(selectedOption.distanceM, " м")}</b>
+                    <small>длина пути</small>
+                  </div>
+                </div>
+                <p className="directions-route-kind">{selectedOption.note}</p>
+                {!demo && (
+                  <p className="directions-route-kind">OSRM · © OpenStreetMap contributors</p>
+                )}
+              </>
+            )}
             {target && !demo && externalPoint && (
               <a
                 className="directions-external"
-                href={`https://yandex.ru/maps/?${yandex}`}
+                href={yandexDirections(hotel.lngLat, externalPoint, travelMode)}
                 target="_blank"
                 rel="noreferrer"
               >
@@ -334,30 +428,17 @@ export function HotelDirections({ hotel }: { hotel: Hotel }) {
               </a>
             )}
           </div>
-          {nearby.length > 0 && (
-            <div className="directions-nearby">
-              <h3>Рядом с отелем</h3>
-              {nearby.map((place) => (
-                <button
-                  type="button"
-                  key={place.ref}
-                  onClick={() => select(place)}
-                  aria-pressed={target?.key === place.ref}
-                >
-                  <MapPin size={15} />
-                  <span>
-                    <b>{place.name}</b>
-                    <small>{place.address}</small>
-                  </span>
-                  <ArrowUpRight size={15} />
-                </button>
-              ))}
-            </div>
-          )}
           <p className="directions-attribution">
-            {demo
-              ? "Демо-данные · схемы не подходят для навигации"
-              : "© OpenStreetMap contributors (ODbL). Поиск: Nominatim."}
+            {demo ? (
+              "Демо-данные · схемы не подходят для навигации"
+            ) : (
+              <>
+                © OpenStreetMap contributors (ODbL). Поиск: Nominatim.{" "}
+                <a href="https://www.openstreetmap.org/fixthemap" target="_blank" rel="noreferrer">
+                  Сообщить об ошибке на карте
+                </a>
+              </>
+            )}
           </p>
         </aside>
         <div
@@ -383,8 +464,8 @@ export function HotelDirections({ hotel }: { hotel: Hotel }) {
         >
           {visible &&
             (demo ? (
-              route ? (
-                <RouteScheme key={`${route.targetRef}-${reset}`} route={route} demo />
+              mapRoute ? (
+                <RouteScheme key={`${target?.key}-${travelMode}-${reset}`} route={mapRoute!} demo />
               ) : (
                 <div className="directions-demo-map">
                   <div className="directions-demo-roads" />
@@ -400,7 +481,7 @@ export function HotelDirections({ hotel }: { hotel: Hotel }) {
                 <Suspense fallback={<RequestState pending />}>
                   <DirectionsMap
                     hotel={hotel}
-                    route={route}
+                    route={mapRoute}
                     destination={target?.location}
                     reducedMotion={reducedMotion}
                     reset={reset}

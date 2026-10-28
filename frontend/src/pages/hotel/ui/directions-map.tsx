@@ -3,7 +3,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import workerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?url";
 import { useEffect, useRef, useState } from "react";
 import type { Hotel } from "@/entities/hotel";
-import type { RouteData } from "../model/geo";
+import type { RouteDrawing } from "../model/travel-options";
 import { routePrefix } from "../model/directions";
 import { RouteScheme } from "./route-scheme";
 
@@ -18,7 +18,7 @@ export default function DirectionsMap({
   onPick,
 }: {
   hotel: Hotel;
-  route?: RouteData | undefined;
+  route?: RouteDrawing | undefined;
   destination?: [number, number] | undefined;
   reducedMotion: boolean;
   reset: number;
