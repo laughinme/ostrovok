@@ -12,8 +12,10 @@ import { List, Map as MapIcon, Scale, Search, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
 export function ResultsPage({
   query: q = "Тихий отель у моря с хорошей инфраструктурой",
+  hotelId,
 }: {
   query?: string | undefined;
+  hotelId?: string | undefined;
 }) {
   const navigate = useNavigate();
   const {
@@ -40,7 +42,7 @@ export function ResultsPage({
     setUseProfile,
     trip,
     changeTrip,
-  } = useSearchFilters(q);
+  } = useSearchFilters(q, hotelId);
   const live = useLiveResearch(searchResult?.searchId, acceptSearch);
   const [visibleCount, setVisibleCount] = useState(20);
   const [hover, setHover] = useState<string | null>(null);
@@ -105,6 +107,14 @@ export function ResultsPage({
         </div>
       )}
 
+      {hotelId && (
+        <p className="mt-5 text-sm text-muted-foreground">
+          В подборе выбран отель из консоли.{" "}
+          <Link to="/results" search={{ q: "Все отели Сочи" }} className="text-primary underline">
+            Показать все отели
+          </Link>
+        </p>
+      )}
       <div className="mt-6 flex flex-wrap items-center gap-2">
         <CriteriaFilter
           value={criteria}
