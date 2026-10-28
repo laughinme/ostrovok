@@ -40,6 +40,23 @@ def event_visible(
     return bool(np.isfinite(angle) and angle < 0.5 and (sea or not over_sea))
 
 
+RISE_WINDOW_MIN = 90
+
+
+def rises_into_view(
+    location: LonLat, sunrise: SunPosition, scene: AzimuthSector, horizon: Horizon
+) -> bool:
+    """
+    Morning sun over any skyline: in Sochi the east is mountains, so the sun is never seen at
+    the astronomical sunrise but climbs over the ridge minutes later. Visible if it clears the
+    window's skyline within the first 90 minutes.
+    """
+    return any(
+        _above(location, sunrise.at + timedelta(minutes=m), scene, horizon)
+        for m in range(0, RISE_WINDOW_MIN + 1, 10)
+    )
+
+
 def solar_intersection(
     location: LonLat,
     day: date,
