@@ -42,7 +42,10 @@ export function ClimateSection({ hotel }: { hotel: Hotel }) {
             {METRICS.map(([key, label, unit]) => (
               <div className="day" key={key}>
                 <span className="d">{label}</span>
-                <b>{numberLabel(data.values[key], unit)}</b>
+                <b>
+                  {numberLabel(data.values[key])}
+                  {data.values[key] != null && <small>{unit}</small>}
+                </b>
                 <span>
                   Покрытие{" "}
                   {numberLabel(data.coverage[key] == null ? null : data.coverage[key] * 100, "%")}

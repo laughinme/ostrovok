@@ -2176,3 +2176,41 @@
   flex: 0 0 110px;
   text-align: right;
 }
+.hotel-detail .mosaic:has(> :only-child) {
+  grid-template-columns: 1fr;
+  grid-template-rows: 280px;
+}
+.hotel-detail .mosaic > :only-child {
+  grid-row: auto;
+}
+.hotel-detail .geo-climate .day b small {
+  font-size: 13px;
+  font-weight: 500;
+  margin-left: 3px;
+  white-space: nowrap;
+}
+.hotel-detail #dates .rp-h {
+  flex-wrap: wrap;
+}
+.hotel-detail #dates .rp-h h3 {
+  white-space: nowrap;
+}
+@media (max-width: 650px) {
+  .hotel-detail .geo-climate .day b small {
+    display: block;
+    margin: 0;
+  }
+}
+
+.hotel-detail .geo-panorama-stage {
+  height: 100%;
+  position: relative;
+}
+.hotel-detail .geo-axis {
+  position: absolute;
+  inset: auto 10px 12px;
+  display: flex;
+  justify-content: space-between;
+  color: var(--pano-tick);
+  font-size: 12px;
+}

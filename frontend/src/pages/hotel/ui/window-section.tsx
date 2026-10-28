@@ -86,7 +86,7 @@ export function WindowSection({ hotel, detail }: { hotel: Hotel; detail: HotelDe
           />
         </label>
         <span className="read">
-          Море в{" "}
+          Море:{" "}
           <b>
             {known
               ? numberLabel(
