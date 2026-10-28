@@ -107,6 +107,15 @@ export function HotelResultCard({
               {r.hotel.address}
             </p>
             <p className="mt-1.5 line-clamp-1 text-sm leading-relaxed">{r.hotel.tagline}</p>
+            <Link
+              to="/hotel/$id"
+              params={{ id: r.hotel.id }}
+              search={{ q: query, sid: r.searchId }}
+              hash="similar"
+              className="inline-flex min-h-11 items-center gap-1 text-xs text-primary hover:underline"
+            >
+              Найти похожий, но… <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
+            </Link>
             <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
               {nearby.map((place) => (
                 <span key={place.name} className="flex items-center gap-1.5 text-xs">
