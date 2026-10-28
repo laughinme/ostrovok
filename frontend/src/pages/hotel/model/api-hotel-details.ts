@@ -46,7 +46,7 @@ export function apiHotelDetails(hotel: Hotel): HotelDetails {
     "SW";
   const bestFloor = typeof scope?.["floorFrom"] === "number" ? scope["floorFrom"] : 1;
   const unknownNoise = Object.fromEntries(
-    raw.facades.map((facade) => [facade, ["#5B6580", "нет данных", "условный индекс по OSM"]]),
+    facades.map((facade) => [facade, ["#5B6580", "нет данных", "условный индекс по OSM"]]),
   ) as HotelDetails["noise"]["night"];
   const beach = hotel.walk.find((place) => place.kind === "beach");
   return {
