@@ -36,10 +36,13 @@ function flightFrames(scene: HTMLElement, departure: FlightDeparture | undefined
       transform: `translate(calc(-50% + ${point.x - target.x}px), calc(-50% + ${point.y - target.y}px)) rotate(${heading}deg) scale(${zoom})`,
     });
   };
-  add(first, 0, angle, scale);
-  add(exit, 0.07, angle, scale);
-  add(exit, 0.08, angle, scale, 0);
-  add(entry, 0.12, direction, 0.28, 0);
+  if (departure) {
+    add(first, 0, angle, scale);
+    add(exit, 0.07, angle, scale);
+    add(exit, 0.08, angle, scale, 0);
+  }
+  const entryOffset = departure ? 0.12 : 0;
+  add(entry, entryOffset, direction, 0.28, 0);
   for (let index = 1; index <= 36; index++) {
     const progress = index / 36;
     const t = progress * (1.5 - 0.5 * progress);
@@ -47,72 +50,147 @@ function flightFrames(scene: HTMLElement, departure: FlightDeparture | undefined
       x: entry.x + (target.x - entry.x) * t,
       y: entry.y + (target.y - entry.y) * t,
     };
-    add(point, 0.12 + progress * 0.38, direction, 0.28 + 0.72 * t, Math.min(1, progress * 8));
+    add(
+      point,
+      entryOffset + progress * (0.5 - entryOffset),
+      direction,
+      0.28 + 0.72 * t,
+      Math.min(1, progress * 8),
+    );
   }
   add(destination, 1, direction, 1);
   return frames;
 }
 
+export interface SearchFlightController {
+  finish: () => void;
+  resume: () => void;
+  stop: () => void;
+}
+
 export function startSearchFlight(
   scene: HTMLElement,
   departure: FlightDeparture | undefined,
-  complete: () => void,
-) {
+): SearchFlightController {
   const preference = matchMedia("(prefers-reduced-motion: reduce)");
-  const animations: Animation[] = [];
-  let finished = false;
-  let timer = 0;
-  const finish = () => {
-    if (finished) return;
-    finished = true;
-    complete();
-  };
+  const animations = new Set<Animation>();
+  const plane = scene.querySelector<HTMLElement>(".search-flight-plane")!;
+  const progress = scene.querySelector<HTMLElement>(".search-flight-progress span")!;
+  let planeAnimation: Animation | undefined;
+  let progressAnimation: Animation | undefined;
+  let finishing = false;
+  let stopped = false;
   const animate = (selector: string, frames: Keyframe[], options: KeyframeAnimationOptions) => {
     const element = scene.querySelector(selector);
-    if (element) animations.push(element.animate(frames, { fill: "both", ...options }));
+    if (!element) return undefined;
+    const animation = element.animate(frames, { fill: "both", ...options });
+    animations.add(animation);
+    return animation;
+  };
+  const fly = (first: boolean) => {
+    planeAnimation?.cancel();
+    planeAnimation = animate(
+      ".search-flight-plane",
+      flightFrames(scene, first ? departure : undefined),
+      {
+        id: "search-flight-plane",
+        duration: DURATION,
+        easing: "linear",
+        iterations: first && departure ? 1 : Infinity,
+      },
+    );
+    if (first && departure && planeAnimation) {
+      planeAnimation.onfinish = () => {
+        if (!stopped && !finishing) fly(false);
+      };
+    }
+  };
+  const scan = () => {
+    progressAnimation?.cancel();
+    progress.style.width = "45%";
+    progressAnimation = animate(
+      ".search-flight-progress span",
+      [{ transform: "translateX(-120%)" }, { transform: "translateX(300%)" }],
+      { id: "search-flight-progress", duration: 1100, iterations: Infinity, easing: "ease-in-out" },
+    );
   };
   if (!preference.matches) {
-    animate(".search-flight-plane", flightFrames(scene, departure), {
-      id: "search-flight-plane",
-      duration: DURATION,
-      easing: "linear",
-    });
-    animate(
-      ".search-flight-copy",
-      [{ opacity: 0 }, { opacity: 0, offset: 0.2 }, { opacity: 1, offset: 0.35 }, { opacity: 1 }],
-      { duration: DURATION },
-    );
+    fly(true);
+    scan();
     animate(
       ".search-flight-earth",
       [
-        { opacity: 0, transform: "translate(-50%, -50%) scale(.64) rotate(-10deg)" },
-        { opacity: 1, transform: "translate(-50%, -50%) scale(1) rotate(0deg)" },
+        { opacity: 0, transform: "translate(-50%, -50%) scale(.8)" },
+        { opacity: 1, transform: "translate(-50%, -50%) scale(1)" },
       ],
-      { duration: 430, delay: 70, easing: "cubic-bezier(.22,1,.36,1)" },
+      { duration: 280, easing: "cubic-bezier(.22,1,.36,1)" },
     );
     animate(
       ".search-flight-land",
-      [{ transform: "translateX(0)" }, { transform: "translateX(-170px)" }],
-      { duration: DURATION, easing: "linear" },
-    );
-    animate(
-      ".search-flight-progress span",
-      [{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }],
-      { duration: DURATION, easing: "cubic-bezier(.2,.5,.35,1)" },
+      [{ transform: "translateX(0)" }, { transform: "translateX(-440px)" }],
+      { id: "search-flight-earth", duration: 8000, iterations: Infinity, easing: "linear" },
     );
   }
-  timer = window.setTimeout(finish, preference.matches ? 350 : DURATION);
+  const finish = () => {
+    if (finishing || stopped) return;
+    finishing = true;
+    const style = getComputedStyle(plane);
+    const transform = style.transform;
+    const opacity = style.opacity;
+    const box = scene.getBoundingClientRect();
+    const bounds = plane.getBoundingClientRect();
+    const size = parseFloat(style.width);
+    const matrix = new DOMMatrixReadOnly(transform);
+    const direction = Math.atan2(matrix.b, matrix.a);
+    const zoom = Math.hypot(matrix.a, matrix.b);
+    const distance = box.width + size - (bounds.x + bounds.width / 2 - box.x);
+    const target = {
+      x: box.width + size,
+      y: bounds.y + bounds.height / 2 - box.y + Math.tan(direction) * distance,
+    };
+    planeAnimation?.cancel();
+    progressAnimation?.cancel();
+    progress.style.width = "100%";
+    if (preference.matches) return;
+    planeAnimation = animate(
+      ".search-flight-plane",
+      [
+        { transform, opacity },
+        {
+          transform: `translate(calc(-50% + ${target.x - parseFloat(style.left)}px), calc(-50% + ${target.y - parseFloat(style.top)}px)) rotate(${(direction * 180) / Math.PI}deg) scale(${zoom})`,
+          opacity,
+        },
+      ],
+      { id: "search-flight-exit", duration: 180, easing: "ease-in" },
+    );
+    progressAnimation = animate(
+      ".search-flight-progress span",
+      [
+        { opacity: 0.5, transform: "scaleX(.7)" },
+        { opacity: 1, transform: "scaleX(1)" },
+      ],
+      { duration: 120, easing: "ease-out" },
+    );
+  };
+  const resume = () => {
+    if (!finishing || stopped) return;
+    finishing = false;
+    if (!preference.matches) {
+      fly(false);
+      scan();
+    }
+  };
   const reduce = () => {
-    if (!preference.matches) return;
-    animations.forEach((animation) => animation.cancel());
-    clearTimeout(timer);
-    timer = window.setTimeout(finish, 150);
+    if (preference.matches) animations.forEach((animation) => animation.cancel());
   };
   preference.addEventListener("change", reduce);
-  return () => {
-    finished = true;
-    clearTimeout(timer);
-    animations.forEach((animation) => animation.cancel());
-    preference.removeEventListener("change", reduce);
+  return {
+    finish,
+    resume,
+    stop: () => {
+      stopped = true;
+      animations.forEach((animation) => animation.cancel());
+      preference.removeEventListener("change", reduce);
+    },
   };
 }
