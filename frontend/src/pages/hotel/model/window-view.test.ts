@@ -3,7 +3,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import type { ApiFact } from "@/entities/hotel";
 import type { WindowData } from "./geo";
-import { calculatedWindowView, demoWindowView } from "./window-view";
+import { calculatedWindowView, demoWindowView, windowViewSummary } from "./window-view";
 import { WindowPanorama } from "../ui/window-panorama";
 
 const selection = { facade: "N" as const, floor: 3, date: "2026-11-15" };
@@ -87,14 +87,16 @@ describe("window illustration from visibility data", () => {
         .mountains,
     ).toEqual([]);
   });
-  it("moves building roofs down with a lower calculated obstruction angle", () => {
+  it("keeps building dimensions stable and moves the foreground as one layer", () => {
     const low = data({
       horizon: data().horizon.map((ray) => ({ ...ray, kind: "building", angleDeg: 25 })),
     });
     const high = { ...low, floor: 8, horizon: low.horizon.map((ray) => ({ ...ray, angleDeg: 5 })) };
-    expect(
-      calculatedWindowView({ ...selection, floor: 8 }, high).buildings[0]!.roof,
-    ).toBeGreaterThan(calculatedWindowView(selection, low).buildings[0]!.roof);
+    const lowScene = calculatedWindowView(selection, low);
+    const highScene = calculatedWindowView({ ...selection, floor: 8 }, high);
+    expect(highScene.buildings).toEqual(lowScene.buildings);
+    expect(highScene.foregroundOffset).toBeGreaterThan(lowScene.foregroundOffset);
+    expect(highScene.foregroundOffset).toBeLessThanOrEqual(162);
     expect(calculatedWindowView({ ...selection, floor: 8 }, low).known).toBe(false);
   });
   it("adds trees only for a current positive fact matching side, floor and month", () => {
@@ -130,8 +132,58 @@ describe("window illustration from visibility data", () => {
     expect(demoWindowView("NE", 4).objects).toContain("Горы");
     expect(demoWindowView("SW", 4).objects).toContain("Море");
     expect(demoWindowView("NE", 4).objects).not.toContain("Море");
-    expect(demoWindowView("SW", 8).buildings[0]!.roof).toBeGreaterThan(
-      demoWindowView("SW", 1).buildings[0]!.roof,
+    expect(demoWindowView("SW", 8).buildings).toEqual(demoWindowView("SW", 1).buildings);
+  });
+});
+
+describe("predictable floor changes", () => {
+  it("preserves every building, tree, and mountain shape across all demo floors", () => {
+    for (const facade of ["NE", "SE", "SW", "NW"] as const) {
+      const first = demoWindowView(facade, 1);
+      for (let floor = 2; floor <= 20; floor++) {
+        const scene = demoWindowView(facade, floor);
+        expect(scene.buildings).toEqual(first.buildings);
+        expect(scene.trees).toEqual(first.trees);
+        expect(scene.mountains).toEqual(first.mountains);
+        expect(scene.foregroundOffset).toBeGreaterThanOrEqual(
+          demoWindowView(facade, floor - 1).foregroundOffset,
+        );
+        expect(scene.foregroundOffset).toBeLessThanOrEqual(162);
+      }
+    }
+  });
+  it("opens the marine horizon above the same roofs instead of resizing them", () => {
+    const obstructed = (scene: ReturnType<typeof demoWindowView>) =>
+      scene.buildings.some(
+        (building) =>
+          scene.sea.some((sea) => building.to > sea.from && building.from < sea.to) &&
+          building.roof + scene.foregroundOffset < 270,
+      );
+    expect(obstructed(demoWindowView("SW", 4))).toBe(true);
+    expect(obstructed(demoWindowView("SW", 8))).toBe(false);
+    const open = calculatedWindowView(
+      selection,
+      data({
+        seaFraction: 1,
+        horizon: data().horizon.map((ray) => ({
+          ...ray,
+          kind: "building",
+          angleDeg: -2,
+          seaLowDeg: -6,
+          seaHighDeg: 0,
+        })),
+      }),
     );
+    expect(obstructed(open)).toBe(false);
+  });
+  it("gives a different explanation for partial, open, and unknown views", () => {
+    const partial = demoWindowView("SW", 4);
+    const open = demoWindowView("SW", 8);
+    expect(windowViewSummary(partial, 0.37).title).toBe("Море видно частично");
+    expect(windowViewSummary(open, 1).title).toBe("Открытый вид на море");
+    expect(windowViewSummary(calculatedWindowView(selection), null).title).toBe(
+      "Вид пока неизвестен",
+    );
+    expect(windowViewSummary(demoWindowView("NE", 4), 0).title).toBe("Вид на горы");
   });
 });

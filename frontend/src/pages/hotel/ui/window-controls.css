@@ -266,3 +266,79 @@
     transition: none;
   }
 }
+
+.hotel-detail .window-foreground {
+  transition: transform 360ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.hotel-detail .window-view-verdict {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 22px;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+}
+.hotel-detail .window-verdict-floor {
+  flex-shrink: 0;
+  padding: 8px 11px;
+  border-radius: 10px;
+  background: var(--lime);
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.hotel-detail .window-view-verdict strong {
+  display: block;
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.hotel-detail .window-view-verdict p {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.6;
+}
+.hotel-detail .window-update-indicator {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 20px;
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
+  color: var(--ink);
+  font-size: 12px;
+  text-align: center;
+}
+@media (max-width: 760px) {
+  .hotel-detail .window-view-verdict {
+    gap: 10px;
+    margin-top: 18px;
+    padding: 12px;
+    align-items: flex-start;
+  }
+  .hotel-detail .window-verdict-floor {
+    padding: 6px 8px;
+    font-size: 10px;
+  }
+  .hotel-detail .window-view-verdict strong {
+    font-size: 13px;
+  }
+  .hotel-detail .window-view-verdict p {
+    font-size: 10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hotel-detail .window-foreground {
+    transition: none;
+  }
+}
+
+.hotel-detail .window-visible-objects.is-updating {
+  visibility: hidden;
+}

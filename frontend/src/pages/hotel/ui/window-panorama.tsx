@@ -56,18 +56,22 @@ export function WindowPanorama({ scene, floor }: { scene: WindowView; floor: num
           <circle cx={scene.sun * 960} cy="244" r="21" fill="var(--view-sun)" />
         </g>
       )}
-      {scene.buildings.length > 0 && (
+      <g
+        className="window-foreground"
+        data-window-layer="foreground"
+        style={{ transform: `translateY(${scene.foregroundOffset}px)` }}
+      >
         <path
-          d={`M0 ${scene.buildings[0]!.base + 18} ${scene.buildings.map((building) => `L${building.from * 960} ${building.base}H${building.to * 960}`).join(" ")}L960 ${scene.buildings.at(-1)!.base + 18}V560H0Z`}
+          d="M-40 466Q140 438 322 458T680 452T1000 466V760H-40Z"
           fill="var(--view-foreground)"
         />
-      )}
-      {scene.buildings.map((building, index) => (
-        <BuildingObject key={index} building={building} index={index} />
-      ))}
-      {scene.trees.map((tree, index) => (
-        <TreeObject key={index} {...tree} />
-      ))}
+        {scene.buildings.map((building, index) => (
+          <BuildingObject key={index} building={building} index={index} />
+        ))}
+        {scene.trees.map((tree, index) => (
+          <TreeObject key={index} {...tree} />
+        ))}
+      </g>
       {scene.unknown.map((span, index) => (
         <g key={index} data-window-object="unknown">
           <rect

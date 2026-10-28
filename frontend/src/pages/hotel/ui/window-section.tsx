@@ -32,7 +32,7 @@ import type { HotelDetails } from "../model/types";
 import { NoiseCompass } from "./noise-compass";
 import { WindowPanorama } from "./window-panorama";
 import { WindowMethodTooltip } from "./window-method-tooltip";
-import { calculatedWindowView, demoWindowView } from "../model/window-view";
+import { calculatedWindowView, demoWindowView, windowViewSummary } from "../model/window-view";
 import { GeoNotes, GeoStatus } from "./geo-status";
 import "./window-section.css";
 import "./window-controls.css";
@@ -64,14 +64,27 @@ export function WindowSection({ hotel, detail }: { hotel: Hotel; detail: HotelDe
     hotel.id,
     `window?${new URLSearchParams({ facade: facade ?? "", floor: String(floor), date })}`,
     !demo && !!hotel.backend && !!facade && !!date,
+    true,
   );
-  const data = demo ? undefined : query.data;
+  const updating = !demo && query.isPlaceholderData;
+  const data = demo || updating ? undefined : query.data;
+  const previewData = demo ? undefined : query.data;
   const scene = demo
     ? demoWindowView(facade ?? "SW", floor)
-    : calculatedWindowView({ facade: facade ?? "SW", floor, date }, data, hotel.backend?.facts);
+    : calculatedWindowView(
+        updating && previewData
+          ? { facade: previewData.facade, floor: previewData.floor, date: previewData.date }
+          : { facade: facade ?? "SW", floor, date },
+        previewData,
+        hotel.backend?.facts,
+      );
   const known = scene.known;
   const demoFacade = facade === "NE" || facade === "SE" || facade === "NW" ? facade : "SW";
   const reading = readPanorama(demoFacade, floor);
+  const summary = windowViewSummary(
+    scene,
+    demo ? reading.seaShare / 100 : (data?.seaFraction ?? null),
+  );
   const rooms = detail.rooms.filter((room) => facade && room.facades.includes(facade));
   const metrics = [
     {
@@ -247,9 +260,7 @@ export function WindowSection({ hotel, detail }: { hotel: Hotel; detail: HotelDe
           </div>
           <p className="window-control-note">
             <Info size={15} aria-hidden="true" />
-            {demo
-              ? "Иллюстрация помогает сравнить стороны. Это не фотография из номера."
-              : "Выберите сторону и этаж: в окне появятся объекты, видимость которых подтверждают данные."}
+            Сравните этажи: выше может открыться вид поверх соседних крыш.
           </p>
         </aside>
         <div className="window-preview">
@@ -264,14 +275,22 @@ export function WindowSection({ hotel, detail }: { hotel: Hotel; detail: HotelDe
                 {floor} этаж
               </span>
             </div>
-            <div className="window-frame window-frame-landscape">
+            <div className="window-frame window-frame-landscape" aria-busy={updating}>
               {known ? (
                 <>
                   <div className="window-scene" key={`${facade}-${date}`}>
-                    <WindowPanorama scene={scene} floor={floor} />
+                    <WindowPanorama
+                      scene={scene}
+                      floor={updating ? (previewData?.floor ?? floor) : floor}
+                    />
                   </div>
                   <span className="window-mullion" aria-hidden="true" />
                   <span className="window-handle" aria-hidden="true" />
+                  {updating && (
+                    <div className="window-update-indicator" role="status">
+                      Обновляем вид для выбранного этажа…
+                    </div>
+                  )}
                 </>
               ) : (
                 <div className="window-scene-state">
@@ -287,12 +306,21 @@ export function WindowSection({ hotel, detail }: { hotel: Hotel; detail: HotelDe
               )}
             </div>
             <div className="window-sill" aria-hidden="true" />
-            <span className="window-scene-label">
-              {demo ? "Демонстрационная иллюстрация" : "Условная иллюстрация по данным"}
-            </span>
+            <div className="window-view-verdict" aria-live="polite" aria-atomic="true">
+              <span className="window-verdict-floor">{floor} этаж</span>
+              <div>
+                <strong>{updating ? "Уточняем вид" : summary.title}</strong>
+                <p>
+                  {updating
+                    ? "На иллюстрации предыдущий вид; ждём новый расчёт."
+                    : summary.description}
+                </p>
+              </div>
+            </div>
             {known && (
               <ul
-                className="window-visible-objects"
+                className={`window-visible-objects${updating ? " is-updating" : ""}`}
+                aria-hidden={updating}
                 aria-label="Объекты в поле зрения"
                 aria-live="polite"
               >
@@ -308,6 +336,9 @@ export function WindowSection({ hotel, detail }: { hotel: Hotel; detail: HotelDe
                 {!scene.objects.length && <li>Подтверждённых объектов нет</li>}
               </ul>
             )}
+            <p className="window-scene-label">
+              {demo ? "Демо-сцена" : "Схематичный вид"} · объекты условные, видимость — по данным
+            </p>
           </div>
           <dl className="window-view-metrics" aria-live="polite" aria-atomic="true">
             {metrics.map(({ label, value, hint, Icon }) => (
@@ -316,8 +347,8 @@ export function WindowSection({ hotel, detail }: { hotel: Hotel; detail: HotelDe
                   <Icon size={15} aria-hidden="true" />
                   {label}
                 </dt>
-                <dd>{value}</dd>
-                <small>{hint}</small>
+                <dd>{updating ? "Считаем…" : value}</dd>
+                <small>{updating ? "Для выбранного этажа" : hint}</small>
               </div>
             ))}
           </dl>
