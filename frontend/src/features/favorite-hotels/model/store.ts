@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import { getApiMode } from "@/shared/api";
 
 interface FavoriteState {
   ids: string[];
@@ -18,7 +19,7 @@ export const useFavoriteHotels = create<FavoriteState>()(
         })),
     }),
     {
-      name: "luch-favorite-hotels",
+      name: getApiMode() === "demo" ? "luch-favorite-hotels-demo" : "luch-favorite-hotels",
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({ ids: state.ids }),
       skipHydration: true,
