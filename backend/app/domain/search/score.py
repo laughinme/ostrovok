@@ -8,7 +8,7 @@ single wish: a sunset room over the railway can lose to a quiet room facing the 
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
 from enum import StrEnum
-from math import exp, prod
+from math import exp, isfinite, prod
 from typing import Any
 from uuid import UUID
 
@@ -151,7 +151,10 @@ def _probability_over_cells(
     if counted == 0:
         return None, None
     main = max(coverage, key=lambda k: coverage[k])
-    return total / counted, next(f for f in facts if f.id == main)
+    p = total / counted
+    return (1 - p if chip.params.get("value") is False else p), next(
+        f for f in facts if f.id == main
+    )
 
 
 def _record(
@@ -179,6 +182,13 @@ def _month_overlap(fact: Fact, trip: TripWindow) -> int:
     return len(months & trip.month_set())
 
 
+def chip_weight(chip: Chip) -> float:
+    weight = chip.params.get("profileWeight")
+    if chip.from_profile and isinstance(weight, int | float) and isfinite(weight):
+        return min(3.0, max(0.0, weight))
+    return WEIGHTS[chip.importance]
+
+
 def score_variant(
     chips: Sequence[Chip],
     hotel: SearchHotel,
@@ -191,7 +201,7 @@ def score_variant(
     risk_terms = []
     for chip in chips:
         p, fact = evaluate(chip, facts.get(chip.characteristic or "", ()), variant, hotel, trip)
-        weight = WEIGHTS[chip.importance]
+        weight = chip_weight(chip)
         value = UNKNOWN_PRIOR if p is None else p
         weighted += weight * value
         weights += weight
@@ -233,7 +243,7 @@ def _result(chip: Chip, p: float | None, fact: Fact | None) -> ChipResult:
 
 
 def _tradeoff(chips: Sequence[Chip], results: Sequence[ChipResult]) -> str | None:
-    weights = {c.id: WEIGHTS[c.importance] for c in chips}
+    weights = {c.id: chip_weight(c) for c in chips}
     weak = [r for r in results if r.verdict in (Verdict.PARTIAL, Verdict.NO)]
     if not weak:
         return None
