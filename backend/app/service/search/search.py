@@ -52,6 +52,21 @@ def trip_window(intent: Intent) -> TripWindow:
     return TripWindow(frozenset({trip.month}) if trip.month else None)
 
 
+TOP_REMEMBERED = 20
+
+
+def top_hotels(row: SearchRow) -> list[str] | None:
+    """Hotels the guest saw at the top when the search was last ranked; None for old searches."""
+    top = row.result.get("top")
+    return list(top) if isinstance(top, list) else None
+
+
+def _remember_top(row: SearchRow, ranking: Ranking) -> None:
+    # Hotelier demand reads it later instead of re-ranking every search of the week.
+    top = [str(m.hotel.id) for m in ranking.matches[:TOP_REMEMBERED]]
+    row.result = {**row.result, "top": top}
+
+
 class SearchService:
     def __init__(self, uow: UnitOfWork, clock: Clock, llm: LanguageModel | None = None) -> None:
         self._uow = uow
@@ -62,18 +77,30 @@ class SearchService:
         self, intent: Intent, *, user_id: UUID | None = None, use_profile: bool = True
     ) -> SearchView:
         search_id = uuid4()
-        self._uow.session.add(
-            SearchRow(
-                id=search_id,
-                user_id=user_id,
-                intent=intent_to_json(intent),
-                result={"useProfile": use_profile},
-            )
+        row = SearchRow(
+            id=search_id,
+            user_id=user_id,
+            intent=intent_to_json(intent),
+            result={"useProfile": use_profile},
+            created_at=self._clock.now(),
+            updated_at=self._clock.now(),
         )
+        self._uow.session.add(row)
         intent = await self._personalize(intent, user_id, use_profile)
         await self._count_demand(intent)
+        ranking = await self.rank(intent)
+        _remember_top(row, ranking)
         await self._uow.flush()
-        return SearchView(search_id, intent, await explain(await self.rank(intent), self._llm))
+        return SearchView(search_id, intent, await explain(ranking, self._llm))
+
+    async def intent(self, search_id: UUID) -> Intent:
+        """The guest's wishes with their taste applied, without ranking every hotel."""
+        row = await self._uow.session.get(SearchRow, search_id)
+        if row is None:
+            raise SearchNotFoundError()
+        return await self._personalize(
+            intent_from_json(row.intent), row.user_id, row.result.get("useProfile", True)
+        )
 
     async def get(self, search_id: UUID) -> SearchView:
         row = await self._uow.session.get(SearchRow, search_id)
@@ -92,7 +119,9 @@ class SearchService:
         row.updated_at = self._clock.now()
         await self._uow.flush()
         intent = await self._personalize(intent, row.user_id, row.result.get("useProfile", True))
-        return SearchView(search_id, intent, await self.rank(intent))
+        ranking = await self.rank(intent)
+        _remember_top(row, ranking)
+        return SearchView(search_id, intent, ranking)
 
     async def _personalize(self, intent: Intent, user_id: UUID | None, enabled: bool) -> Intent:
         intent = replace(intent, chips=tuple(c for c in intent.chips if not c.from_profile))

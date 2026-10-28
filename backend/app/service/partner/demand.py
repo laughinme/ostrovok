@@ -7,7 +7,7 @@ from sqlalchemy import func, select
 from app.db.models import DemandDaily, SearchRow
 from app.db.uow import UnitOfWork
 from app.service.ports import Clock
-from app.service.search.search import SearchService
+from app.service.search.search import top_hotels
 from app.service.search.serialize import intent_from_json
 
 
@@ -43,7 +43,7 @@ class PartnerDemand:
                 continue
             keys = {c.characteristic for c in intent.chips if c.characteristic}
             total.update(keys)
-            ranking = await SearchService(self._uow, self._clock).rank(intent)
-            if any(m.hotel.id == hotel_id for m in ranking.matches[:20]):
+            # The top stored with the search: re-ranking each one took minutes on a busy week.
+            if str(hotel_id) in (top_hotels(row) or ()):
                 top.update(keys)
         return {key: top[key] / count for key, count in total.items()}
