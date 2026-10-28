@@ -1,11 +1,10 @@
 import { CRITERIA, formatReviewCount, type Criterion, type Hotel } from "@/entities/hotel";
 import { MatchRing, Reveal } from "@/shared/ui";
-import { ArrowRight, Heart, Images, Info, MapPin, Scale, ShieldCheck, Waves } from "lucide-react";
+import { ArrowRight, Heart, Images, MapPin, Scale, ShieldCheck, Waves } from "lucide-react";
 import { Photo } from "./visuals";
-import type { Fact, HotelDetails } from "../model/types";
+import type { HotelDetails } from "../model/types";
 import { rub } from "../lib/format";
-import { HotelFacts } from "./hotel-facts";
-import "./hotel-about.css";
+export { HotelAbout } from "./hotel-about";
 
 export function HotelOverview({
   hotel,
@@ -153,45 +152,5 @@ export function HotelOverview({
         <a href="#where">Расположение</a>
       </nav>
     </>
-  );
-}
-
-export function HotelAbout({
-  hotel,
-  details: h,
-  selectedId,
-  onFact,
-  demo = false,
-}: {
-  hotel: Hotel;
-  details: HotelDetails;
-  selectedId?: string | undefined;
-  onFact: (fact: Fact) => void;
-  demo?: boolean;
-}) {
-  return (
-    <Reveal className="hotel-about hotel-about--with-facts" delay={0.1}>
-      <section id="hotel-about" className="hotel-about-copy">
-        <h2 id="hotel-about-title">Об отеле</h2>
-        <p>{hotel.description || h.tagline}</p>
-      </section>
-      <HotelFacts
-        facts={h.facts}
-        amenities={h.amenities}
-        selectedId={selectedId}
-        onFact={onFact}
-        demo={demo}
-        embedded
-      />
-      {hotel.searchMatch?.tradeoff && (
-        <div className="hotel-tradeoff">
-          <Info size={17} aria-hidden="true" />
-          <p>
-            <b>Стоит учесть</b>
-            {hotel.searchMatch.tradeoff}
-          </p>
-        </div>
-      )}
-    </Reveal>
   );
 }

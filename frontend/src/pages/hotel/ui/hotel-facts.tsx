@@ -1,44 +1,13 @@
-import {
-  AirVent,
-  ArrowUpRight,
-  Baby,
-  Building2,
-  CookingPot,
-  CloudSun,
-  Footprints,
-  Car,
-  FileSearch,
-  Laptop,
-  MapPin,
-  Moon,
-  ShowerHead,
-  Sun,
-  Utensils,
-} from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
+import { hotelInfoIcons } from "./hotel-info-icons";
 import { useEffect, useId, useRef } from "react";
-import { groupHotelInfo, type HotelInfoGroupKey } from "../model/hotel-info-groups";
+import { groupHotelInfo } from "../model/hotel-info-groups";
 import { factConfidenceStars } from "../model/fact-confidence";
 import type { Fact } from "../model/types";
 import { FactConfidenceStars } from "./fact-confidence-stars";
 import "./hotel-facts.css";
 
-const icons = {
-  view: Sun,
-  quiet: Moon,
-  nearby: MapPin,
-  access: Footprints,
-  transport: Car,
-  weather: CloudSun,
-  work: Laptop,
-  family: Baby,
-  food: Utensils,
-  room: AirVent,
-  bathroom: ShowerHead,
-  kitchen: CookingPot,
-  general: Building2,
-  other: FileSearch,
-} satisfies Record<HotelInfoGroupKey, unknown>;
-function FactItem({
+export function HotelFactItem({
   fact,
   selected,
   onFact,
@@ -132,7 +101,7 @@ export function HotelFacts({
       {groups.length ? (
         <div ref={gridRef} className="hotel-info-groups">
           {groups.map((group) => {
-            const Icon = icons[group.key];
+            const Icon = hotelInfoIcons[group.key];
             const groupFacts = group.items.flatMap((item) =>
               item.kind === "fact" ? [item.fact] : [],
             );
@@ -153,7 +122,7 @@ export function HotelFacts({
                     {group.items.map((item) => (
                       <li key={item.id}>
                         {item.kind === "fact" ? (
-                          <FactItem
+                          <HotelFactItem
                             fact={item.fact}
                             selected={item.fact.id === selectedId}
                             onFact={onFact}
