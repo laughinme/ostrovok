@@ -1,10 +1,10 @@
 # Данные региона О!кно
 
-Отчёт: 2026-10-28T00:16:11+00:00. Все геометрии EPSG:4326.
+Отчёт: 2026-10-28T06:07:38+00:00. Все геометрии EPSG:4326.
 CSV: UTF-8, gzip, WKB hex. Синтетические свойства помечены «демо».
 
 Получение: `make data` или `cd backend && uv run --group pipeline python -m pipeline all`.
-Порядок: скачать и проверить PBF → обрезать в GPKG → OSM → DEM → климат → демо → граф.
+Порядок: скачать и проверить PBF → обрезать в GPKG → OSM → DEM → климат → демо → граф → профили окна.
 Повторный запуск использует `.cache/osm/`, `.cache/pipeline/` и `.cache/spike/`.
 Сырые PBF/GPKG/GeoTIFF в git и в бюджет runtime-данных не входят.
 
@@ -50,10 +50,11 @@ DEM и климат: точные URL, периоды и полнота — в d
 | region/osm_features.csv.gz | 5,160,796 |
 | region/sea.wkb.gz | 72,127 |
 | region/walk_graph.npz | 4,973,463 |
-| registry/characteristics.yaml | 13,167 |
+| region/window_profiles.zip | 3,888,928 |
+| registry/characteristics.yaml | 13,171 |
 | registry/osm_vocabulary.yaml | 41,266 |
 | registry/synonyms.yaml | 43,971 |
-| **Всего без MANIFEST** | **28,167,434** |
+| **Всего без MANIFEST** | **32,056,366** |
 
 Бюджет: <60,000,000 байт вместе, <50,000,000 байт каждый файл (десятичные МБ).
-Всего 28.17 МБ, крупнейший файл 11.18 МБ; запас до общего лимита 31.83 МБ.
+Всего 32.06 МБ, крупнейший файл 11.18 МБ; запас до общего лимита 27.94 МБ.
