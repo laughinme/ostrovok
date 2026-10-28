@@ -92,7 +92,7 @@ export function Rating({ value, label, count }: { value: number; label: string; 
     <div className="rating">
       <div className="rating-t">
         <b>{label}</b>
-        {count != null && <span>{count} отзывов</span>}
+        {count != null && <span>Демо-рейтинг</span>}
       </div>
       <span className="rating-v num">{String(value).replace(".", ",")}</span>
     </div>
