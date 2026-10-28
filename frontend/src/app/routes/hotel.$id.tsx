@@ -1,7 +1,41 @@
-import { hotelQuery, hotelFromApi } from "@/entities/hotel";
+import { hotelQuery, hotelFromApi, type Hotel } from "@/entities/hotel";
 import { api, ApiError, type components } from "@/shared/api";
 import { HotelPage } from "@/pages/hotel";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { useMemo } from "react";
+
+function storedSearchQuery(id: string | undefined) {
+  return {
+    queryKey: ["stored-search", id],
+    enabled: !!id,
+    queryFn: async ({ signal }: { signal: AbortSignal }) => {
+      if (!id) return null;
+      try {
+        return await api<components["schemas"]["SearchResultOut"]>(
+          `/searches/${encodeURIComponent(id)}`,
+          { signal },
+        );
+      } catch (error) {
+        if (error instanceof ApiError && [404, 422].includes(error.status)) return null;
+        throw error;
+      }
+    },
+  };
+}
+
+function withSearch(
+  hotel: Hotel,
+  search: components["schemas"]["SearchResultOut"] | null | undefined,
+) {
+  if (!search || !hotel.backend) return hotel;
+  const match = search.matches.find((item) => item.hotelId === hotel.id);
+  return {
+    ...hotelFromApi(hotel.backend, match, search.intent),
+    searchContext: { id: search.searchId, trip: search.intent.trip },
+  };
+}
+
 export const Route = createFileRoute("/hotel/$id")({
   validateSearch: (
     s: Record<string, unknown>,
@@ -12,30 +46,16 @@ export const Route = createFileRoute("/hotel/$id")({
   loaderDeps: ({ search }) => ({ sid: search.sid }),
   loader: async ({ params, context, deps }) => {
     try {
-      const hotel = await context.queryClient.ensureQueryData(hotelQuery(params.id));
+      const hotel = await context.queryClient.ensureQueryData({
+        ...hotelQuery(params.id),
+        revalidateIfStale: true,
+      });
       if (!deps.sid || !hotel.backend) return { hotel };
-      const search = await context.queryClient
-        .fetchQuery({
-          queryKey: ["stored-search", deps.sid],
-          queryFn: ({ signal }) =>
-            api<components["schemas"]["SearchResultOut"]>(
-              `/searches/${encodeURIComponent(deps.sid!)}`,
-              { signal },
-            ),
-          staleTime: 30000,
-        })
-        .catch((error: unknown) => {
-          if (error instanceof ApiError && [404, 422].includes(error.status)) return null;
-          throw error;
-        });
-      if (!search) return { hotel };
-      const match = search.matches.find((item) => item.hotelId === hotel.id);
-      return {
-        hotel: {
-          ...hotelFromApi(hotel.backend, match, search.intent),
-          searchContext: { id: search.searchId, trip: search.intent.trip },
-        },
-      };
+      const search = await context.queryClient.ensureQueryData({
+        ...storedSearchQuery(deps.sid),
+        revalidateIfStale: true,
+      });
+      return { hotel: withSearch(hotel, search) };
     } catch (error) {
       if (error instanceof ApiError && [404, 422].includes(error.status)) throw notFound();
       throw error;
@@ -65,7 +85,11 @@ export const Route = createFileRoute("/hotel/$id")({
   component: PageRoute,
 });
 function PageRoute() {
-  const { hotel } = Route.useLoaderData();
-  const { q } = Route.useSearch();
-  return <HotelPage key={hotel.id} hotel={hotel} query={q} />;
+  const loaded = Route.useLoaderData();
+  const { id } = Route.useParams();
+  const { q, sid } = Route.useSearch();
+  const hotel = useQuery(hotelQuery(id)).data ?? loaded.hotel;
+  const search = useQuery(storedSearchQuery(sid)).data;
+  const resolved = useMemo(() => withSearch(hotel, search), [hotel, search]);
+  return <HotelPage key={hotel.id} hotel={resolved} query={q} />;
 }
