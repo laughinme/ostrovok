@@ -1,0 +1,77 @@
+"""Sun/horizon intersections in a facade field of view, in Moscow civil time."""
+
+from dataclasses import dataclass
+from datetime import date, datetime, time, timedelta
+from typing import Literal
+
+import numpy as np
+
+from app.domain.geo.scene import Horizon, Obstacle, Scene
+from app.domain.geo.sun import (
+    MOSCOW,
+    SOLAR_RADIUS_DEG,
+    SunPosition,
+    horizon_at,
+    sun_events,
+    sun_position,
+)
+from app.domain.geo.types import LonLat
+
+
+@dataclass(frozen=True, slots=True)
+class SolarIntersection:
+    position: SunPosition
+    behind: str
+
+
+def event_visible(position: SunPosition, scene: Scene, horizon: Horizon, *, over_sea: bool) -> bool:
+    """Astronomical event visible at <0.5° obstruction, optionally with a sea skyline."""
+    angle = horizon_at(position.azimuth_deg, scene.azimuths_deg, horizon.angle_deg)
+    ray = int(np.argmin(np.abs((scene.azimuths_deg - position.azimuth_deg + 180) % 360 - 180)))
+    sea = horizon.sea_visible[ray] and horizon.kind[ray] == Obstacle.SEA
+    return bool(np.isfinite(angle) and angle < 0.5 and (sea or not over_sea))
+
+
+def solar_intersection(
+    location: LonLat,
+    day: date,
+    scene: Scene,
+    horizon: Horizon,
+    *,
+    event: Literal["sunset", "sunrise"],
+    eye_m: float = 0,
+) -> SolarIntersection | None:
+    """Last evening / first morning upper-limb visibility, refined to one second."""
+    events = sun_events(location, day, eye_elevation_m=max(0, eye_m))
+    noon = datetime.combine(day, time(12), MOSCOW)
+    start, end = (noon, events.sunset.at) if event == "sunset" else (events.sunrise.at, noon)
+    count = int((end - start).total_seconds() // 300)
+    times = [start + timedelta(minutes=i * 5) for i in range(count + 1)] + [end]
+    visible = [_above(location, at, scene, horizon) for at in times]
+    indices = [i for i, yes in enumerate(visible) if yes]
+    if not indices:
+        return None
+    index = indices[-1] if event == "sunset" else indices[0]
+    if (event == "sunset" and index == len(times) - 1) or (event == "sunrise" and index == 0):
+        return SolarIntersection(sun_position(location, times[index]), "море/открытый горизонт")
+    low, high = (
+        (times[index], times[index + 1]) if event == "sunset" else (times[index - 1], times[index])
+    )
+    while (high - low).total_seconds() > 1:
+        middle = low + (high - low) / 2
+        if _above(location, middle, scene, horizon) == (event == "sunset"):
+            low = middle
+        else:
+            high = middle
+    position = sun_position(location, high)
+    angle = horizon_at(position.azimuth_deg, scene.azimuths_deg, horizon.angle_deg)
+    ray = int(np.argmin(np.abs((scene.azimuths_deg - position.azimuth_deg + 180) % 360 - 180)))
+    labels = {Obstacle.BUILDING: "здание", Obstacle.TERRAIN: "гора", Obstacle.SEA: "море"}
+    behind = labels.get(Obstacle(int(horizon.kind[ray])), "неизвестно")
+    return SolarIntersection(position, behind if np.isfinite(angle) else "граница поля зрения")
+
+
+def _above(location: LonLat, at: datetime, scene: Scene, horizon: Horizon) -> bool:
+    position = sun_position(location, at)
+    angle = horizon_at(position.azimuth_deg, scene.azimuths_deg, horizon.angle_deg)
+    return bool(position.elevation_deg + SOLAR_RADIUS_DEG > angle)

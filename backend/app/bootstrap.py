@@ -26,6 +26,8 @@ from app.service.recipes.methods.climate import ClimateExecutor
 from app.service.recipes.methods.derived import DerivedExecutor
 from app.service.recipes.methods.noise import NoiseExecutor
 from app.service.recipes.methods.poi_nearby import PoiNearbyExecutor
+from app.service.recipes.methods.sun_event import SunEventExecutor
+from app.service.recipes.methods.view import ViewExecutor
 from app.service.recipes.methods.walk_to import WalkToExecutor
 
 logger = logging.getLogger(__name__)
@@ -33,17 +35,23 @@ logger = logging.getLogger(__name__)
 
 def build_environment(db: Database, clock: Clock, data_dir: Path) -> Environment:
     region = data_dir / "region"
-    env = Environment(reader=GeoReader(db), clock=clock)
+    env = build_view_environment(db, clock, data_dir)
     graph = region / "walk_graph.npz"
     if graph.exists():
         env.router = ScipyRouter.from_file(graph)
         env.extras["area_slopes"] = GraphAreaSlopes(env.router.graph)
     else:
         logger.warning("walk graph %s missing: routes fall back to straight lines", graph)
-    if (region / "dem_int16.npy").exists():
-        env.terrain = NpyTerrain(region)
     if (region / "climate.json").exists():
         env.climate = ClimateCatalog.from_file(region / "climate.json")
+    return env
+
+
+def build_view_environment(db: Database, clock: Clock, data_dir: Path) -> Environment:
+    region = data_dir / "region"
+    env = Environment(reader=GeoReader(db), clock=clock)
+    if (region / "dem_int16.npy").exists():
+        env.terrain = NpyTerrain(region)
     if (region / "sea.wkb.gz").exists():
         env.sea = shapely.prepared.prep(
             shapely.wkb.loads(gzip.decompress((region / "sea.wkb.gz").read_bytes()))
@@ -53,6 +61,8 @@ def build_environment(db: Database, clock: Clock, data_dir: Path) -> Environment
 
 def default_executors() -> list[MethodExecutor]:
     return [
+        ViewExecutor(),
+        SunEventExecutor(),
         AreaStatExecutor(),
         ClimateExecutor(),
         PoiNearbyExecutor(),
