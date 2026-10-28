@@ -5,37 +5,22 @@ import { MatchRing, RequestState } from "@/shared/ui";
 import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { ThumbsDown, ThumbsUp, X } from "lucide-react";
-import { useState } from "react";
 import { ComparePodium } from "./compare-podium";
+import "./compare-page.css";
 
 export function ComparePage() {
-  const { ids, toggle } = useCompare();
-  const [crit, setCrit] = useState<Criterion[]>(["quiet", "sunset", "sea", "work"]);
+  const { ids, toggle, criteria: crit, toggleCriterion } = useCompare();
   const { scored, pending, error, retry } = useComparison(ids, crit);
   const selected = scored.map(({ h }) => h);
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
-      <p className="font-mono text-xs uppercase tracking-widest text-coral">Сравнение</p>
-      <h1 className="mt-2 text-4xl sm:text-5xl">Что важно именно вам?</h1>
-      {ids.length < 2 && (
-        <p className="mt-2 text-sm text-muted-foreground">
-          Показан пример. Добавьте отели кнопкой «Сравнить» в{" "}
-          <Link to="/results" className="text-coral underline">
-            подборке
-          </Link>
-          .
-        </p>
-      )}
+      <h1 className="text-4xl sm:text-5xl">Что важно именно вам?</h1>
       <div className="mt-6 flex flex-wrap gap-2">
         {(Object.keys(CRITERIA) as Criterion[]).map((c) => (
           <button
             key={c}
-            onClick={() =>
-              setCrit((cs) =>
-                cs.includes(c) ? (cs.length > 1 ? cs.filter((x) => x !== c) : cs) : [...cs, c],
-              )
-            }
+            onClick={() => toggleCriterion(c)}
             className={cn(
               "rounded-full border px-3 py-1.5 text-xs",
               crit.includes(c) ? "border-foreground bg-foreground text-background" : "",
