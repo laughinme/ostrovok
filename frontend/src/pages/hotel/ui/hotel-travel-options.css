@@ -1,0 +1,169 @@
+.hotel-detail .hotel-travel-options {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.hotel-detail .hotel-travel-options header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+.hotel-detail .hotel-travel-options h3 {
+  font-size: 14px;
+  font-weight: 600;
+}
+.hotel-detail .hotel-travel-options header > span {
+  color: var(--muted);
+  font-size: 10px;
+}
+.hotel-detail .travel-options-destination {
+  margin: 7px 0 14px;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+.hotel-detail .hotel-travel-options ol {
+  display: grid;
+  gap: 8px;
+  list-style: none;
+}
+.hotel-detail .hotel-travel-options li > :is(button, a) {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  gap: 10px;
+  padding: 14px 12px;
+  min-height: 80px;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: var(--surface);
+  text-align: left;
+  color: var(--ink);
+  text-decoration: none;
+  cursor: pointer;
+}
+.hotel-detail .hotel-travel-options li > button[aria-pressed="true"] {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 1px var(--primary);
+  background: var(--raised);
+}
+.hotel-detail .hotel-travel-options li > :is(button, a):hover {
+  background: var(--raised);
+}
+.hotel-detail .hotel-travel-options li > button:disabled {
+  cursor: default;
+}
+.hotel-detail .hotel-travel-options li > :is(button, a) > svg {
+  margin-top: 2px;
+  flex-shrink: 0;
+  color: var(--primary);
+}
+.hotel-detail .travel-option-copy {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  gap: 6px;
+}
+.hotel-detail .travel-option-copy b {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.hotel-detail .travel-option-copy small {
+  font-size: 10px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.hotel-detail .travel-option-fastest {
+  width: fit-content;
+  padding: 3px 6px;
+  border-radius: 5px;
+  color: var(--on-verified);
+  background: var(--verified);
+  font-size: 9px;
+  font-weight: 500;
+}
+.hotel-detail .travel-option-time {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+  max-width: 95px;
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.hotel-detail .travel-option-time > span {
+  color: var(--primary);
+  font-size: 11px;
+  font-weight: 500;
+}
+.hotel-detail .travel-option-time > svg {
+  color: var(--primary);
+}
+.hotel-detail .travel-options-note {
+  margin-top: 11px;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.6;
+}
+.hotel-detail .directions-nearby-chooser {
+  margin-top: 14px;
+}
+.hotel-detail .directions-nearby-chooser > summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 44px;
+  gap: 8px;
+  color: var(--primary);
+  font-size: 11px;
+  cursor: pointer;
+  list-style: none;
+}
+.hotel-detail .directions-nearby-chooser > summary::-webkit-details-marker {
+  display: none;
+}
+.hotel-detail .directions-nearby-chooser button {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  gap: 9px;
+  padding: 10px 0;
+  min-height: 44px;
+  text-align: left;
+  font-size: 12px;
+}
+.hotel-detail .directions-nearby-chooser button > svg {
+  color: var(--primary);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.hotel-detail .directions-nearby-chooser button > span {
+  display: grid;
+  gap: 4px;
+}
+.hotel-detail .directions-nearby-chooser button small {
+  color: var(--muted);
+  font-size: 10px;
+}
+.hotel-detail .travel-option-spinner {
+  animation: travel-option-spin 1s linear infinite;
+}
+@keyframes travel-option-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hotel-detail .travel-option-spinner {
+    animation: none;
+  }
+}
+.hotel-detail .directions-metrics--travel {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
