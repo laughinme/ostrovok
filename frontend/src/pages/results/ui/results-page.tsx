@@ -1,5 +1,5 @@
 import { useCompare } from "@/features/compare-hotels";
-import { CriteriaFilter, TripPreferences, useSearchFilters } from "@/features/hotel-search";
+import { CriteriaFilter, useSearchFilters } from "@/features/hotel-search";
 import { ResearchOffers, useLiveResearch } from "@/features/live-research";
 import { cn } from "@/shared/lib";
 import { RequestState } from "@/shared/ui";
@@ -32,8 +32,6 @@ export function ResultsPage({
     retry,
     search: searchResult,
     hints,
-    chips,
-    changeImportance,
     removeChip,
     acceptSearch,
     updating,
@@ -41,7 +39,6 @@ export function ResultsPage({
     useProfile,
     setUseProfile,
     trip,
-    changeTrip,
   } = useSearchFilters(q, hotelId);
   const live = useLiveResearch(searchResult?.searchId, acceptSearch);
   const [visibleCount, setVisibleCount] = useState(20);
@@ -172,15 +169,6 @@ export function ResultsPage({
           </button>
         </div>
       </div>
-      <TripPreferences
-        key={JSON.stringify(trip)}
-        trip={trip}
-        onApply={(next) => {
-          live.reset();
-          changeTrip(next);
-        }}
-      />
-
       {trip.month && !trip.from && (
         <p className="mt-3 text-sm text-muted-foreground">
           Месяц поездки:{" "}
@@ -189,48 +177,6 @@ export function ResultsPage({
         </p>
       )}
 
-      {chips.length > 0 && (
-        <section aria-label="Ваши пожелания" className="mt-5 rounded-2xl border bg-card p-4">
-          <h2 className="text-base">Что учитываем при подборе</h2>
-          <div className="mt-3 flex flex-wrap gap-3">
-            {chips.map((chip) => (
-              <div
-                key={chip.id}
-                className="flex max-w-full flex-wrap items-center gap-2 rounded-xl bg-muted px-3 py-2 text-sm"
-              >
-                <span className="break-words">
-                  {chip.label}
-                  {chip.fromProfile ? " · из профиля" : ""}
-                </span>
-                <select
-                  className="min-h-11 max-w-full bg-transparent text-xs"
-                  aria-label={`Важность: ${chip.label}`}
-                  value={chip.importance}
-                  onChange={(event) => {
-                    live.reset();
-                    changeImportance(chip.id, event.target.value as typeof chip.importance);
-                  }}
-                >
-                  <option value="must">Обязательно</option>
-                  <option value="important">Важно</option>
-                  <option value="nice">Желательно</option>
-                </select>
-                <button
-                  type="button"
-                  className="min-h-11 min-w-11"
-                  aria-label={`Убрать: ${chip.label}`}
-                  onClick={() => {
-                    live.reset();
-                    removeChip(chip.id);
-                  }}
-                >
-                  ×
-                </button>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
       {canUseProfile && (
         <label className="mt-4 flex min-h-11 items-center gap-2 text-sm">
           <input
@@ -285,8 +231,8 @@ export function ResultsPage({
         <div className={cn("space-y-4", view === "map" && "hidden lg:block")}>
           {!pending && !error && ranked.length === 0 && hints.length === 0 && (
             <p className="rounded-3xl border p-10 text-center text-muted-foreground">
-              По этим условиям вариантов пока нет. Попробуйте увеличить бюджет, уменьшить число
-              гостей или выбрать другой район Большого Сочи.
+              По этим условиям вариантов пока нет. Попробуйте увеличить бюджет или уточнить
+              пожелания.
             </p>
           )}
           {ranked.slice(0, renderedCount).map((result, index) => (
