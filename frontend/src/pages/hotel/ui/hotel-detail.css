@@ -2080,3 +2080,137 @@
     padding: 18px 16px;
   }
 }
+
+.hotel-detail .geo-status {
+  padding: 20px;
+  color: var(--muted);
+}
+.hotel-detail .geo-notes p + p {
+  margin-top: 6px;
+}
+.hotel-detail .geo-noise > li > div {
+  flex: 1;
+  min-width: 0;
+}
+.hotel-detail .geo-noise summary {
+  color: var(--muted);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 8px 0;
+}
+.hotel-detail .geo-noise details ul {
+  max-height: 240px;
+  overflow-y: auto;
+}
+.hotel-detail .geo-noise details li {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 12px;
+}
+.hotel-detail .geo-noise small {
+  display: block;
+  color: var(--muted);
+}
+.hotel-detail .geo-noise > li > b {
+  white-space: nowrap;
+}
+.hotel-detail .geo-date input {
+  margin-left: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px;
+  color: var(--ink);
+  background: white;
+}
+.hotel-detail .geo-sun {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 40px;
+  padding: 0 20px 16px;
+  font-size: 13px;
+}
+.hotel-detail .geo-sun > div {
+  display: grid;
+  gap: 4px;
+}
+.hotel-detail .geo-sun span {
+  color: var(--muted);
+}
+.hotel-detail .fac button {
+  min-width: 44px;
+  min-height: 44px;
+}
+.hotel-detail .geo-route-scheme {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--map-land);
+}
+.hotel-detail .geo-route-stats {
+  font-size: 13px;
+  margin: 16px 0;
+}
+.hotel-detail .geo-route-stats > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 5px 0;
+}
+.hotel-detail .geo-route-stats dd {
+  text-align: right;
+}
+.hotel-detail .geo-climate .day b {
+  font-size: clamp(18px, 1.6vw, 26px);
+  overflow-wrap: anywhere;
+}
+.hotel-detail .geo-climate .day span {
+  white-space: normal;
+}
+.hotel-detail .near li > span:nth-child(2) {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.hotel-detail .near b {
+  white-space: normal;
+  flex: 0 0 110px;
+  text-align: right;
+}
+.hotel-detail .mosaic:has(> :only-child) {
+  grid-template-columns: 1fr;
+  grid-template-rows: 280px;
+}
+.hotel-detail .mosaic > :only-child {
+  grid-row: auto;
+}
+.hotel-detail .geo-climate .day b small {
+  font-size: 13px;
+  font-weight: 500;
+  margin-left: 3px;
+  white-space: nowrap;
+}
+.hotel-detail #dates .rp-h {
+  flex-wrap: wrap;
+}
+.hotel-detail #dates .rp-h h3 {
+  white-space: nowrap;
+}
+@media (max-width: 650px) {
+  .hotel-detail .geo-climate .day b small {
+    display: block;
+    margin: 0;
+  }
+}
+
+.hotel-detail .geo-panorama-stage {
+  height: 100%;
+  position: relative;
+}
+.hotel-detail .geo-axis {
+  position: absolute;
+  inset: auto 10px 12px;
+  display: flex;
+  justify-content: space-between;
+  color: var(--pano-tick);
+  font-size: 12px;
+}
