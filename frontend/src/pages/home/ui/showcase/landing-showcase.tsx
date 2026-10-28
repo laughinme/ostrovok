@@ -103,7 +103,7 @@ function HotelDemo() {
         start: "top top",
         end: "+=650",
         pin: true,
-        anticipatePin: 1,
+        anticipatePin: 0,
         onUpdate: (self) => {
           if (!manual.current) {
             scene.current?.setProgress(self.progress);
