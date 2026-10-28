@@ -95,3 +95,27 @@ class FakeClock:
 
     def advance(self, delta: timedelta) -> None:
         self._now += delta
+
+
+class FakeLanguageModel:
+    """Scripted LLM for tests: returns `outputs[task]` or raises when told the provider is down."""
+
+    def __init__(self, outputs: dict[str, Any] | None = None, *, down: bool = False) -> None:
+        self.outputs = outputs or {}
+        self.down = down
+        self.calls: list[str] = []
+
+    @property
+    def available(self) -> bool:
+        return True
+
+    async def structured(self, *, task: str, system: str, prompt: str, output: Any) -> Any:
+        from app.service.ports import LlmResult, LlmUnavailableError, Usage  # noqa: PLC0415
+
+        self.calls.append(task)
+        if self.down:
+            raise LlmUnavailableError("provider down")
+        return LlmResult(output.model_validate(self.outputs[task]), Usage(requests=1), "fake")
+
+    async def run_tools(self, *, task: str, output: Any, **_: Any) -> Any:
+        return await self.structured(task=task, system="", prompt="", output=output)

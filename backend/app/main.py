@@ -9,6 +9,7 @@ from app.api.middleware import RequestContextMiddleware
 from app.api.problems import register_exception_handlers
 from app.api.router import api_router
 from app.api.system import health_router
+from app.bootstrap import build_language_model
 from app.core.config import Settings, get_settings
 from app.core.logging import configure_logging
 from app.core.security.tokens import TokenCodec
@@ -30,6 +31,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         app.state.db = Database(settings)
         app.state.redis = Redis.from_url(settings.redis_url, decode_responses=True)
         app.state.events = RedisEventBus(app.state.redis)
+        app.state.llm = build_language_model(settings, app.state.db, app.state.redis)
         try:
             yield
         finally:
