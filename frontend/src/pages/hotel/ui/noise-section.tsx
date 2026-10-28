@@ -229,7 +229,7 @@ export function NoiseSection({ hotel }: { hotel: Hotel }) {
                 <span>
                   Что влияет на эту сторону
                   <small>
-                    {selected.level.sources.length} источников · уверенность{" "}
+                    Источников: {selected.level.sources.length} · уверенность{" "}
                     {numberLabel(selected.level.confidence * 100, "%")}
                   </small>
                 </span>

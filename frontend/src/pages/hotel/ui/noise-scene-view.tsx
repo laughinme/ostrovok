@@ -28,7 +28,7 @@ export function NoiseSceneView({
       onPointerDown={(event) => {
         if (!(event.target instanceof HTMLCanvasElement) || event.button !== 0) return;
         drag.current = { x: event.clientX, rotation: props.rotation, pointer: event.pointerId };
-        event.currentTarget.setPointerCapture(event.pointerId);
+        event.target.setPointerCapture(event.pointerId);
       }}
       onPointerMove={(event) => {
         if (!drag.current || drag.current.pointer !== event.pointerId) return;
