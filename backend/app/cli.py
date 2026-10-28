@@ -40,7 +40,11 @@ async def create_operator(email: str, password: str) -> str:
 
 
 async def collect(
-    settings: Settings, osm_ids: Sequence[str], keys: Sequence[str] | None, concurrency: int
+    settings: Settings,
+    osm_ids: Sequence[str],
+    keys: Sequence[str] | None,
+    concurrency: int,
+    shard: tuple[int, int] = (0, 1),
 ) -> str:
     db = Database(settings)
     clock = SystemClock()
@@ -48,6 +52,11 @@ async def collect(
         agents = build_agents(db, RecordingEventBus(), clock, settings.data_dir)
         service = CollectService(db, agents.researcher, agents.runner, clock)
         ids = [hotel_id(o) for o in osm_ids] or None
+        if ids is None and shard[1] > 1:
+            # Geo kernels are CPU-bound: parallelism comes from processes, one shard each.
+            async with db.unit_of_work() as uow:
+                every = await uow.catalog.hotel_ids()
+            ids = [h for i, h in enumerate(every) if i % shard[1] == shard[0]]
         changed = await service.collect(ids, keys, concurrency=concurrency)
         return f"collect finished: {changed} facts changed"
     finally:
@@ -82,7 +91,8 @@ def main() -> None:
     run.add_argument("--all", action="store_true", help="every hotel (default when no --hotel)")
     run.add_argument("--hotel", action="append", default=[], help="OSM id, e.g. way/227214566")
     run.add_argument("--keys", help="comma-separated characteristics, default: all published")
-    run.add_argument("--concurrency", type=int, default=4)
+    run.add_argument("--concurrency", type=int, default=1)
+    run.add_argument("--shard", default="0/1", help="i/n: this process takes every n-th hotel")
     commands.add_parser("claims", help="seed demo sea-view claims from hidden truth")
     commands.add_parser("export-seed", help="dump knowledge and traces into data/seed")
     commands.add_parser("openapi", help="print the OpenAPI schema")
@@ -96,7 +106,8 @@ def main() -> None:
         result = asyncio.run(create_operator(args.email, password))
     elif args.command == "collect":
         keys = args.keys.split(",") if args.keys else None
-        result = asyncio.run(collect(settings, args.hotel, keys, args.concurrency))
+        index, total = (int(x) for x in args.shard.split("/"))
+        result = asyncio.run(collect(settings, args.hotel, keys, args.concurrency, (index, total)))
     elif args.command == "claims":
         result = asyncio.run(claims(settings))
     elif args.command == "export-seed":
