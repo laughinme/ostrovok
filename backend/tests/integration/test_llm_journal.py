@@ -9,7 +9,7 @@ from app.db.database import Database
 from app.infra.llm.cache import LlmCache, cache_key, schema_fingerprint
 from app.infra.llm.guards import DailyLimit
 from app.infra.llm.journal import LlmJournal
-from app.infra.llm.pydantic_ai_model import PydanticAiLanguageModel
+from app.infra.llm.pydantic_ai_model import CACHE_VERSION, PydanticAiLanguageModel
 from app.service.ports import LlmUnavailableError
 from tests.factories import promote, register
 from tests.integration.conftest import AppFactory
@@ -88,12 +88,28 @@ async def test_cache_does_not_cross_provider_boundaries(db: Database) -> None:
         await second.structured(task="intent", system="s", prompt="same", output=Chips)
 
 
+async def test_cache_before_profile_fix_is_not_reused(db: Database) -> None:
+    key = cache_key("", "fake", "default", "intent", "s", "p", schema_fingerprint(Chips), "[]")
+    await LlmCache(db).put(
+        key, model="fake", task="intent", output={"keys": ["wrong_legacy_answer"]}, usage={}
+    )
+
+    result = await _llm(db, _answer, name="fake").structured(
+        task="intent", system="s", prompt="p", output=Chips
+    )
+
+    assert result.output.keys == ["sea_view"]
+    assert not result.cached
+
+
 class Dates(BaseModel):
     from_: str | None = Field(None, alias="from")
 
 
 async def test_legacy_cache_preserves_aliased_fields(db: Database) -> None:
-    key = cache_key("", "fake", "default", "intent", "s", "p", schema_fingerprint(Dates), "[]")
+    key = cache_key(
+        CACHE_VERSION, "", "fake", "default", "intent", "s", "p", schema_fingerprint(Dates), "[]"
+    )
     cache = LlmCache(db)
     await cache.put(key, model="fake", task="intent", output={"from_": "2026-11-12"}, usage={})
     llm = PydanticAiLanguageModel(

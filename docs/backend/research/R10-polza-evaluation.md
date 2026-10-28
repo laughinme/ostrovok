@@ -26,13 +26,17 @@
 
 ## Полный eval
 
+Исторический прогон до исправления профиля SDK для префикса `openai/` (R11):
+фактический reasoning тогда определял провайдер, а не подписанные low/medium.
+Свежие результаты с проверенными параметрами — в R11.
+
 ```sh
 make eval-llm LLM_MODELS=openai/gpt-5.6-luna \
   LLM_EVAL_ARGS='--thinking low --thinking-strong medium --base-url https://polza.ai/api/v1 --key-env POLZA_API_KEY'
 ```
 
 `POLZA_API_KEY` читается из локального `.env`, в командной строке ключа нет.
-[Исходный JSON](../../../backend/data/eval/llm/openai_gpt-5.6-luna.low+openai_gpt-5.6-luna.medium.5086a6e110.json)
+[Исходный JSON](../../../backend/data/eval/llm/history/before-polza-profile-fix.openai_gpt-5.6-luna.low+openai_gpt-5.6-luna.medium.5086a6e110.json)
 содержит метрики версии 2: откаты на правила исключены.
 
 | Проверка | Разработка | Hold-out | Ответы LLM |
