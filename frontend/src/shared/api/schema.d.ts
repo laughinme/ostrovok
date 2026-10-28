@@ -511,6 +511,38 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/v1/hotels/{hotel_id}/places": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations["hotel_places_api_v1_hotels__hotel_id__places_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/hotels/{hotel_id}/route": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations["hotel_route_to_api_v1_hotels__hotel_id__route_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/v1/hotels/{hotel_id}/noise": {
     parameters: {
       query?: never;
@@ -1550,6 +1582,13 @@ export interface components {
       name: string;
       title: string;
       hotels?: string[];
+    };
+    PlaceOut: {
+      ref: string;
+      name: string;
+      address: string;
+      location: [number, number];
+      attribution: string;
     };
     Planner: "llm" | "rules";
     QualityReport: {
@@ -2881,6 +2920,71 @@ export interface operations {
           [name: string]: unknown;
         };
         content?: never;
+      };
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  hotel_places_api_v1_hotels__hotel_id__places_get: {
+    parameters: {
+      query: {
+        q: string;
+      };
+      header?: never;
+      path: {
+        hotel_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PlaceOut"][];
+        };
+      };
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  hotel_route_to_api_v1_hotels__hotel_id__route_get: {
+    parameters: {
+      query: {
+        lon: number;
+        lat: number;
+        name?: string;
+        profile?: components["schemas"]["WalkProfile"];
+      };
+      header?: never;
+      path: {
+        hotel_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["RouteOut"];
+        };
       };
       422: {
         headers: {

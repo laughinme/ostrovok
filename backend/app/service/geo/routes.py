@@ -2,11 +2,12 @@ import asyncio
 from dataclasses import dataclass
 
 import numpy as np
+from shapely import Point
 
 from app.core.errors import NotFoundError
-from app.domain.catalog import HotelGeo
+from app.domain.catalog import HotelGeo, MapFeature
 from app.domain.geo.projection import LocalProjection
-from app.domain.geo.types import WalkProfile
+from app.domain.geo.types import LonLat, WalkProfile
 from app.service.geo.targets import route_targets
 from app.service.recipes.executor import Environment
 from app.service.recipes.methods.reach import Walk, anchor, nearest_walk
@@ -56,3 +57,28 @@ def route_view(hotel: HotelGeo, env: Environment, walk: Walk) -> RouteView:
             for d, h in zip(distances, heights, strict=True)
         ),
     )
+
+
+async def hotel_route_to(
+    hotel: HotelGeo, env: Environment, point: LonLat, name: str, profile: WalkProfile
+) -> RouteView:
+    if env.router is None:
+        raise NotFoundError("Пешеходная карта пока недоступна. Попробуйте построить маршрут позже.")
+    route = await asyncio.to_thread(env.router.route, hotel.location, point, profile)
+    if route is None:
+        raise NotFoundError(
+            "До этого адреса нет доступного пути в загруженной карте для выбранного профиля"
+        )
+    feature = MapFeature(
+        f"point:{point.lon},{point.lat}", "destination", name, {}, Point(point.lon, point.lat)
+    )
+    walk = Walk(
+        feature,
+        route.there.minutes,
+        route.back.minutes,
+        route,
+        False,
+        route.there.climb_m,
+        route.back.climb_m,
+    )
+    return route_view(hotel, env, walk)
