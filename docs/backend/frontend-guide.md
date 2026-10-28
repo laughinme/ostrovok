@@ -25,7 +25,7 @@
 
 | Экран | Ручки |
 |---|---|
-| 4.1 Вход, 4.2 холст намерений | `POST /intents {text}` → чипы, поездка, подсказки (вызывать с debounce при вводе); `GET /characteristics` — что умеем проверять; `GET /moods` — подборки со счётчиками |
+| 4.1 Вход, 4.2 холст намерений | `POST /intents?planner=rules {text}` на каждое изменение текста (правила, миллисекунды) и `POST /intents {text}` на паузе 700 мс или при отправке (LLM, 1–3 с; `planner` в ответе — кто разобрал) → чипы, поездка, подсказки; `GET /characteristics` — что умеем проверять; `GET /moods` — подборки со счётчиками |
 | 4.3 Выдача | `POST /searches {text}` или `{chips, trip}` (отредактированный холст) → `SearchResult`; `GET /searches/{id}` — перечитать (после ответов агентов выдача меняется) |
 | 4.4 Сравнение | `POST /compare` |
 | 4.5 Отель «Как это будет» | `GET /hotels/{id}`; окно — `GET /hotels/{id}/window?facade=SW&floor=5&date=2026-11-12`; шум — `/noise`; дорога — `/routes/beach?profile=walk`; погода — `/climate?from=&to=`; «Ваш день» — `/day?date=`; «как этот, но…» — `POST /hotels/{id}/similar` |
@@ -34,7 +34,7 @@
 | 4.8 Бронь, 4.9 поездка | `POST /bookings`, `GET /trips/{id}`, `POST /trips/{id}/feedback`, `GET /me/notifications` |
 | 4.10 Профиль вкуса | `GET/PATCH/DELETE /me/taste` |
 | 4.11 Кабинет отельера | `/partner/hotels/{id}` (+ `/questions`, `/facades`, `/requests`, `/demand`, `/notifications`), `/partner/questions/{id}/answers`, `/partner/facts/{id}/confirm|correct`, `/partner/requests/{id}/decision` |
-| 4.12 Консоль | `/console/registry`, `POST /console/characteristics {description}` → `runId`, `POST /console/characteristics/{key}/publish`, `/console/runs`, `/console/conflicts`, `/console/changes`, `POST|DELETE /console/world/buildings`, `GET|PUT /console/settings`, `/console/quality`, `POST /console/demo/reset` |
+| 4.12 Консоль | `/console/registry`, `POST /console/characteristics {description}` → `runId`, `POST /console/characteristics/{key}/publish`, `/console/runs`, `/console/conflicts`, `/console/changes`, `POST|DELETE /console/world/buildings`, `GET|PUT /console/settings` (`llmModel`, `llmModelStrong` — какая модель включена), `/console/quality` (`llm` — сравнение LLM с правилами), `POST /console/demo/reset`; журнал LLM — `GET /console/llm/calls?task=&limit=` (запрос, ответ, вызовы инструментов, токены, цена, время) и `GET /console/llm/usage` (расход за сегодня и всего по задачам и моделям) |
 | 4.13 Для разработчиков | MCP на `/mcp`, OpenAPI на `/api/docs` |
 
 ## Подборки и новый отель
@@ -52,6 +52,8 @@
 
 ## Живые события (SSE)
 
+- Шаг трассы `tool: "llm.<задача>"` — вызов LLM: в `output` модель, токены, `costUsd`, `cached`; в запуске
+  `usage` суммирует их (`costUsd`, `cachedTokens`).
 - `GET /runs/{runId}/events` — сначала все уже записанные шаги, потом новые; события `run.step`
   (`{runId, step: AgentStep}`), в конце `run.finished` (`{runId, status}`), поток закрывается. Комментарии
   `: ping` раз в 15 с — держат соединение.
