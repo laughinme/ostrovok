@@ -11,6 +11,8 @@ export { CRITERIA } from "./config/criteria";
 export type { Criterion, Fact, FactStatus, Hotel } from "./model/types";
 export { formatReviewCount } from "./model/format-review-count";
 export { characteristicLabel } from "./model/characteristic-label";
+export { photoInfo, hotelPhotos, demoPhotos } from "./model/photos";
+export { PhotoCredit } from "./ui/photo-credit";
 export { Beam } from "./ui/confidence-beam";
 export { BestOfferRibbon } from "./ui/best-offer-ribbon";
 export { Price } from "./ui/price";
