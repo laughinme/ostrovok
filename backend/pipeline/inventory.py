@@ -54,6 +54,7 @@ def object_counts(directory: Path) -> list[str]:
     lines = []
     for name, field in [
         ("hotels.csv.gz", "district"),
+        ("reserve_hotels.csv.gz", "district"),
         ("buildings.csv.gz", "height_source"),
         ("osm_features.csv.gz", "kind"),
     ]:

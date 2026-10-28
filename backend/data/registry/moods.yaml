@@ -1,0 +1,53 @@
+moods:
+  - id: sunset
+    title: Закат над морем из окна
+    description: Вечернее солнце садится в море прямо перед окном. Выберите месяц поездки.
+    count_suffix: с закатом над морем из окна
+    chips:
+      - {characteristic: sunset_over_sea, label: Закат над морем}
+  - id: sleep
+    title: Тишина и сон
+    description: Тихая сторона здания и плотные шторы для спокойного сна.
+    count_suffix: с тихой стороной и плотными шторами
+    chips:
+      - {characteristic: night_noise, label: Тихо ночью}
+      - {characteristic: blackout, label: Плотные шторы, checkable: ask_hotelier}
+  - id: beach
+    title: Море в двух шагах
+    description: До пляжа не больше десяти минут по пешеходному маршруту.
+    count_suffix: с пляжем в десяти минутах пешком
+    chips:
+      - {characteristic: beach_walk, label: До пляжа за 10 минут, params: {maxWalkMinutes: 10}}
+  - id: mountains
+    title: Горы из окна
+    description: Горный силуэт виден хотя бы с одной стороны здания.
+    count_suffix: с видом на горы из окна
+    chips:
+      - {characteristic: mountain_view, label: Горы из окна}
+  - id: family
+    title: С детьми
+    description: Площадка рядом и дорога к морю с коляской.
+    count_suffix: с площадкой рядом и дорогой к морю с коляской
+    chips:
+      - {characteristic: playground_walk, label: Детская площадка рядом}
+      - {characteristic: stroller_to_sea, label: К морю с коляской, params: {maxWalkMinutes: 15}}
+  - id: work
+    title: Поработать у моря
+    description: Тихая днём сторона с видом на море. Рабочее место уточните у отеля.
+    count_suffix: с тихой днём стороной и видом на море
+    chips:
+      - {characteristic: day_noise, label: Тихо днём}
+      - {characteristic: sea_view, label: Море из окна}
+  - id: sunrise
+    title: Утро с рассветом
+    description: Встретить первые лучи из своего окна. Видимость зависит от месяца.
+    count_suffix: с рассветом из окна
+    chips:
+      - {characteristic: sunrise, label: Рассвет из окна}
+  - id: evening
+    title: Вечер у моря
+    description: Дойти до пляжа пешком и поужинать в заведении поблизости допоздна.
+    count_suffix: с пляжем рядом и едой допоздна
+    chips:
+      - {characteristic: beach_walk, label: До пляжа пешком, params: {maxWalkMinutes: 15}}
+      - {characteristic: food_late, label: Еда допоздна}

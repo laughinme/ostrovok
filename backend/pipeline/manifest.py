@@ -31,8 +31,8 @@ def run() -> None:
         "",
         "Получение: `make data` или "
         "`cd backend && uv run --group pipeline python -m pipeline all`.",
-        "Порядок: скачать и проверить PBF → обрезать в GPKG → OSM → DEM → климат → демо → "
-        "граф → профили окна.",
+        "Порядок: скачать и проверить PBF → обрезать в GPKG → OSM → резерв отелей → "
+        "DEM → климат → демо → граф → профили окна.",
         "Повторный запуск использует `.cache/osm/`, `.cache/pipeline/` и `.cache/spike/`.",
         "Сырые PBF/GPKG/GeoTIFF в git и в бюджет runtime-данных не входят.",
         "",
