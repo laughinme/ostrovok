@@ -183,8 +183,8 @@ def _intent_parser(uow: UowDep, settings: SettingsDep, llm: LlmDep) -> IntentPar
     return IntentParser(uow, settings.data_dir, llm)
 
 
-def _search_service(uow: UowDep, clock: ClockDep) -> SearchService:
-    return SearchService(uow, clock)
+def _search_service(uow: UowDep, clock: ClockDep, llm: LlmDep) -> SearchService:
+    return SearchService(uow, clock, llm)
 
 
 IntentParserDep = Annotated[IntentParser, Depends(_intent_parser)]
