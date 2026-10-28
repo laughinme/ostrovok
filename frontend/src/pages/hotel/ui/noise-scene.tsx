@@ -205,7 +205,7 @@ function Architecture({ period, selected, floors, sides, onSelect }: NoiseSceneP
             )}
             <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.083, 0]}>
               <ringGeometry
-                args={[2.56, active ? 2.69 : 2.61, 16, 1, (Math.PI * 3) / 8, Math.PI / 4]}
+                args={[2.56, active ? 2.69 : 2.61, 16, 1, (-Math.PI * 5) / 8, Math.PI / 4]}
               />
               <meshBasicMaterial
                 color={color}
@@ -288,13 +288,13 @@ export default function NoiseScene(props: NoiseSceneProps) {
       gl={{ antialias: true, alpha: true, powerPreference: "low-power" }}
       fallback={<NoiseScenePlaceholder />}
     >
-      <ambientLight intensity={night ? 0.7 : 1.2} color={night ? "#b6cfff" : "#ffffff"} />
+      <ambientLight intensity={0.7} color={night ? "#b6cfff" : "#ffffff"} />
       <hemisphereLight
-        args={[night ? "#bbd4ff" : "#d8ecff", night ? "#455d7f" : "#9bad98", night ? 1.1 : 1.5]}
+        args={[night ? "#bbd4ff" : "#d8ecff", night ? "#455d7f" : "#9bad98", night ? 1.1 : 1.0]}
       />
       <directionalLight
         position={[-3, 8, 6]}
-        intensity={night ? 2.7 : 3.2}
+        intensity={night ? 2.7 : 2.3}
         color={night ? "#e2eaff" : "#fff5dc"}
         castShadow
         shadow-mapSize={[1024, 1024]}

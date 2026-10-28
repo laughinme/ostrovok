@@ -38,7 +38,7 @@
   align-items: center;
   justify-content: center;
   gap: 7px;
-  min-height: 42px;
+  min-height: 44px;
   padding: 0 17px;
   border: 0;
   border-radius: 10px;
@@ -504,7 +504,7 @@
   }
   .hotel-detail .noise-period button {
     gap: 5px;
-    min-height: 40px;
+    min-height: 44px;
     padding: 0 9px;
     font-size: 11px;
   }
