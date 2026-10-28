@@ -1,0 +1,572 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-10-28",
+  "source": {
+    "kind": "ai-generated",
+    "tool": "image_gen",
+    "mode": "built-in",
+    "synthetic": true,
+    "license": null,
+    "isCreativeCommons": false
+  },
+  "displayLabel": "Сгенерировано · демо",
+  "usageNote": "Вымышленные сцены для прототипа; не фотографии реальных объектов и не доказательства характеристик отеля.",
+  "pathsRelativeTo": "manifest.json",
+  "encoding": {
+    "format": "jpeg",
+    "quality": 82,
+    "resized": false
+  },
+  "assetCount": 18,
+  "totalBytes": 11478667,
+  "sets": [
+    {
+      "id": "zakatny-bereg",
+      "name": "Закатный берег",
+      "category": "seafront",
+      "tags": [
+        "море",
+        "современный",
+        "балконы"
+      ],
+      "synthetic": true,
+      "gallery": [
+        "zakatny-bereg/exterior.jpg",
+        "zakatny-bereg/room.jpg",
+        "zakatny-bereg/balcony.jpg"
+      ],
+      "cover": "zakatny-bereg/exterior.jpg"
+    },
+    {
+      "id": "gornyi-priyut",
+      "name": "Горный приют",
+      "category": "mountain-chalet",
+      "tags": [
+        "горы",
+        "шале",
+        "дерево"
+      ],
+      "synthetic": true,
+      "gallery": [
+        "gornyi-priyut/exterior.jpg",
+        "gornyi-priyut/room.jpg",
+        "gornyi-priyut/terrace.jpg"
+      ],
+      "cover": "gornyi-priyut/exterior.jpg"
+    },
+    {
+      "id": "palmovyi-sad",
+      "name": "Пальмовый сад",
+      "category": "family-resort",
+      "tags": [
+        "семейный",
+        "сад",
+        "бассейн"
+      ],
+      "synthetic": true,
+      "gallery": [
+        "palmovyi-sad/exterior.jpg",
+        "palmovyi-sad/room.jpg",
+        "palmovyi-sad/garden.jpg"
+      ],
+      "cover": "palmovyi-sad/exterior.jpg"
+    },
+    {
+      "id": "atelier-sochi",
+      "name": "Ателье 17",
+      "category": "city-boutique",
+      "tags": [
+        "город",
+        "работа",
+        "современный"
+      ],
+      "synthetic": true,
+      "gallery": [
+        "atelier-sochi/exterior.jpg",
+        "atelier-sochi/room.jpg",
+        "atelier-sochi/coworking.jpg"
+      ],
+      "cover": "atelier-sochi/exterior.jpg"
+    },
+    {
+      "id": "kiparisovaya-alleya",
+      "name": "Кипарисовая аллея",
+      "category": "historic-sanatorium",
+      "tags": [
+        "парк",
+        "исторический",
+        "кипарисы"
+      ],
+      "synthetic": true,
+      "gallery": [
+        "kiparisovaya-alleya/exterior.jpg",
+        "kiparisovaya-alleya/room.jpg",
+        "kiparisovaya-alleya/park.jpg"
+      ],
+      "cover": "kiparisovaya-alleya/exterior.jpg"
+    },
+    {
+      "id": "dom-na-holme",
+      "name": "Дом на холме",
+      "category": "guesthouse",
+      "tags": [
+        "гостевой дом",
+        "холм",
+        "уютный"
+      ],
+      "synthetic": true,
+      "gallery": [
+        "dom-na-holme/exterior.jpg",
+        "dom-na-holme/room.jpg",
+        "dom-na-holme/terrace.jpg"
+      ],
+      "cover": "dom-na-holme/exterior.jpg"
+    }
+  ],
+  "assets": [
+    {
+      "id": "zakatny-bereg-exterior",
+      "demoHotelId": "zakatny-bereg",
+      "demoHotelName": "Закатный берег",
+      "category": "seafront",
+      "tags": [
+        "море",
+        "современный",
+        "балконы"
+      ],
+      "role": "exterior",
+      "title": "Фасад у моря",
+      "alt": "Современный светлый отель с балконами у галечного побережья.",
+      "path": "zakatny-bereg/exterior.jpg",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 620888,
+      "sha256": "ca131d8b8a5a329814f0f7922c0dae5d62916adc12f3f7d463e392e27585f2b1",
+      "mimeType": "image/jpeg",
+      "synthetic": true,
+      "sourceType": "ai-generated",
+      "license": null,
+      "promptId": "zakatny-bereg-exterior"
+    },
+    {
+      "id": "zakatny-bereg-room",
+      "demoHotelId": "zakatny-bereg",
+      "demoHotelName": "Закатный берег",
+      "category": "seafront",
+      "tags": [
+        "море",
+        "современный",
+        "балконы"
+      ],
+      "role": "room",
+      "title": "Номер с балконом",
+      "alt": "Светлый номер с открытым выходом на балкон и морем вдали.",
+      "path": "zakatny-bereg/room.jpg",
+      "referenceAssetId": "zakatny-bereg-exterior",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 467045,
+      "sha256": "c4ac51920c44a4d688af393305aa6badfc263e9ebb3439de95b02f800fa32115",
+      "mimeType": "image/jpeg",
+      "synthetic": true,
+      "sourceType": "ai-generated",
+      "license": null,
+      "promptId": "zakatny-bereg-room"
+    },
+    {
+      "id": "zakatny-bereg-balcony",
+      "demoHotelId": "zakatny-bereg",
+      "demoHotelName": "Закатный берег",
+      "category": "seafront",
+      "tags": [
+        "море",
+        "современный",
+        "балконы"
+      ],
+      "role": "balcony",
+      "title": "Балкон на закате",
+      "alt": "Балкон с двумя креслами, столиком и спокойным морем на закате.",
+      "path": "zakatny-bereg/balcony.jpg",
+      "referenceAssetId": "zakatny-bereg-exterior",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 577887,
+      "sha256": "fe08478a41258e3931a55ed154b67a3362a6e2ec55d9bcac8a033e29ed5195dd",
+      "mimeType": "image/jpeg",
+      "synthetic": true,
+      "sourceType": "ai-generated",
+      "license": null,
+      "promptId": "zakatny-bereg-balcony"
+    },
+    {
+      "id": "gornyi-priyut-exterior",
+      "demoHotelId": "gornyi-priyut",
+      "demoHotelName": "Горный приют",
+      "category": "mountain-chalet",
+      "tags": [
+        "горы",
+        "шале",
+        "дерево"
+      ],
+      "role": "exterior",
+      "title": "Шале в горах",
+      "alt": "Деревянное шале с каменным основанием на фоне кавказских гор.",
+      "path": "gornyi-priyut/exterior.jpg",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 760272,
+      "sha256": "4a15b9e9c861bad04b6007a64c7dcd277b733ccb4ba8e4013fbbf2423f289d4f",
+      "mimeType": "image/jpeg",
+      "synthetic": true,
+      "sourceType": "ai-generated",
+      "license": null,
+      "promptId": "gornyi-priyut-exterior"
+    },
+    {
+      "id": "gornyi-priyut-room",
+      "demoHotelId": "gornyi-priyut",
+      "demoHotelName": "Горный приют",
+      "category": "mountain-chalet",
+      "tags": [
+        "горы",
+        "шале",
+        "дерево"
+      ],
+      "role": "room",
+      "title": "Номер в шале",
+      "alt": "Номер с деревянными деталями, белым бельём и видом на горный склон.",
+      "path": "gornyi-priyut/room.jpg",
+      "referenceAssetId": "gornyi-priyut-exterior",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 569883,
+      "sha256": "7abe0487792d37d46f77cb7e53405d8434e19416296939e0e41b378928219b78",
+      "mimeType": "image/jpeg",
+      "synthetic": true,
+      "sourceType": "ai-generated",
+      "license": null,
+      "promptId": "gornyi-priyut-room"
+    },
+    {
+      "id": "gornyi-priyut-terrace",
+      "demoHotelId": "gornyi-priyut",
+      "demoHotelName": "Горный приют",
+      "category": "mountain-chalet",
+      "tags": [
+        "горы",
+        "шале",
+        "дерево"
+      ],
+      "role": "terrace",
+      "title": "Терраса с видом на хребет",
+      "alt": "Деревянная терраса с креслами у лесистого горного склона.",
+      "path": "gornyi-priyut/terrace.jpg",
+      "referenceAssetId": "gornyi-priyut-exterior",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 641294,
+      "sha256": "17903eb379125e00981fa04b1962796db8cc3fe26ed47d3f28cc2c9a91c1020a",
+      "mimeType": "image/jpeg",
+      "synthetic": true,
+      "sourceType": "ai-generated",
+      "license": null,
+      "promptId": "gornyi-priyut-terrace"
+    },
+    {
+      "id": "palmovyi-sad-exterior",
+      "demoHotelId": "palmovyi-sad",
+      "demoHotelName": "Пальмовый сад",
+      "category": "family-resort",
+      "tags": [
+        "семейный",
+        "сад",
+        "бассейн"
+      ],
+      "role": "exterior",
+      "title": "Курорт и бассейн",
+      "alt": "Невысокий семейный курорт с бассейном и субтропическим садом.",
+      "path": "palmovyi-sad/exterior.jpg",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 697706,
+      "sha256": "387db1680c0c8230d212afcde958531e7a30ac88dc3440df4235109f517d1f26",
+      "mimeType": "image/jpeg",
+      "synthetic": true,
+      "sourceType": "ai-generated",
+      "license": null,
+      "promptId": "palmovyi-sad-exterior"
+    },
+    {
+      "id": "palmovyi-sad-room",
+      "demoHotelId": "palmovyi-sad",
+      "demoHotelName": "Пальмовый сад",
+      "category": "family-resort",
+      "tags": [
+        "семейный",
+        "сад",
+        "бассейн"
+      ],
+      "role": "room",
+      "title": "Семейный номер",
+      "alt": "Просторный семейный номер с двуспальной кроватью и диваном.",
+      "path": "palmovyi-sad/room.jpg",
+      "referenceAssetId": "palmovyi-sad-exterior",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 482522,
+      "sha256": "66e63e453e201512d2aaa09809cba9be04c468b0719537340aea5d440edca89b",
+      "mimeType": "image/jpeg",
+      "synthetic": true,
+      "sourceType": "ai-generated",
+      "license": null,
+      "promptId": "palmovyi-sad-room"
+    },
+    {
+      "id": "palmovyi-sad-garden",
+      "demoHotelId": "palmovyi-sad",
+      "demoHotelName": "Пальмовый сад",
+      "category": "family-resort",
+      "tags": [
+        "семейный",
+        "сад",
+        "бассейн"
+      ],
+      "role": "garden",
+      "title": "Дорожка в саду",
+      "alt": "Широкая дорожка среди магнолий и пальм рядом с корпусами курорта.",
+      "path": "palmovyi-sad/garden.jpg",
+      "referenceAssetId": "palmovyi-sad-exterior",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 855831,
+      "sha256": "98c5a769cf5d6e16c2a6f4820664f250bae30c7b8655c84396a1d137862049e4",
+      "mimeType": "image/jpeg",
+      "synthetic": true,
+      "sourceType": "ai-generated",
+      "license": null,
+      "promptId": "palmovyi-sad-garden"
+    },
+    {
+      "id": "atelier-sochi-exterior",
+      "demoHotelId": "atelier-sochi",
+      "demoHotelName": "Ателье 17",
+      "category": "city-boutique",
+      "tags": [
+        "город",
+        "работа",
+        "современный"
+      ],
+      "role": "exterior",
+      "title": "Городской отель",
+      "alt": "Современный городской отель со светлым каменным фасадом.",
+      "path": "atelier-sochi/exterior.jpg",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 754249,
+      "sha256": "5ef47068fc532e01ea97eda7f72ccdafaa1cecfbd2d67476c7c232fa0042beb1",
+      "mimeType": "image/jpeg",
+      "synthetic": true,
+      "sourceType": "ai-generated",
+      "license": null,
+      "promptId": "atelier-sochi-exterior"
+    },
+    {
+      "id": "atelier-sochi-room",
+      "demoHotelId": "atelier-sochi",
+      "demoHotelName": "Ателье 17",
+      "category": "city-boutique",
+      "tags": [
+        "город",
+        "работа",
+        "современный"
+      ],
+      "role": "room",
+      "title": "Номер с рабочим местом",
+      "alt": "Номер с кроватью и полноценным рабочим столом у окна.",
+      "path": "atelier-sochi/room.jpg",
+      "referenceAssetId": "atelier-sochi-exterior",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 485908,
+      "sha256": "55d58345154688ad1e6befcd731aa71243376f4476e52adb6140d3fb0215a0f6",
+      "mimeType": "image/jpeg",
+      "synthetic": true,
+      "sourceType": "ai-generated",
+      "license": null,
+      "promptId": "atelier-sochi-room"
+    },
+    {
+      "id": "atelier-sochi-coworking",
+      "demoHotelId": "atelier-sochi",
+      "demoHotelName": "Ателье 17",
+      "category": "city-boutique",
+      "tags": [
+        "город",
+        "работа",
+        "современный"
+      ],
+      "role": "coworking",
+      "title": "Рабочая гостиная",
+      "alt": "Общая гостиная с длинным столом у панорамных окон.",
+      "path": "atelier-sochi/coworking.jpg",
+      "referenceAssetId": "atelier-sochi-exterior",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 466539,
+      "sha256": "89fff7d646d34270cec1ef4e44eea227baa9504c1d4a60198cb583b08d64b6f4",
+      "mimeType": "image/jpeg",
+      "synthetic": true,
+      "sourceType": "ai-generated",
+      "license": null,
+      "promptId": "atelier-sochi-coworking"
+    },
+    {
+      "id": "kiparisovaya-alleya-exterior",
+      "demoHotelId": "kiparisovaya-alleya",
+      "demoHotelName": "Кипарисовая аллея",
+      "category": "historic-sanatorium",
+      "tags": [
+        "парк",
+        "исторический",
+        "кипарисы"
+      ],
+      "role": "exterior",
+      "title": "Исторический корпус",
+      "alt": "Светлый санаторный корпус с колоннами среди кипарисов.",
+      "path": "kiparisovaya-alleya/exterior.jpg",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 799967,
+      "sha256": "592c0ad51d4430c79bb7d00857bd8098c40c0ec4c14b6f13d9f16b9d6eae6a88",
+      "mimeType": "image/jpeg",
+      "synthetic": true,
+      "sourceType": "ai-generated",
+      "license": null,
+      "promptId": "kiparisovaya-alleya-exterior"
+    },
+    {
+      "id": "kiparisovaya-alleya-room",
+      "demoHotelId": "kiparisovaya-alleya",
+      "demoHotelName": "Кипарисовая аллея",
+      "category": "historic-sanatorium",
+      "tags": [
+        "парк",
+        "исторический",
+        "кипарисы"
+      ],
+      "role": "room",
+      "title": "Номер в историческом корпусе",
+      "alt": "Светлый номер с высокими потолками и окнами в парк.",
+      "path": "kiparisovaya-alleya/room.jpg",
+      "referenceAssetId": "kiparisovaya-alleya-exterior",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 447441,
+      "sha256": "21bfe836df7de73755bf584a8d87da1f94723af41603df32bfc2ed8eaaa2d0dc",
+      "mimeType": "image/jpeg",
+      "synthetic": true,
+      "sourceType": "ai-generated",
+      "license": null,
+      "promptId": "kiparisovaya-alleya-room"
+    },
+    {
+      "id": "kiparisovaya-alleya-park",
+      "demoHotelId": "kiparisovaya-alleya",
+      "demoHotelName": "Кипарисовая аллея",
+      "category": "historic-sanatorium",
+      "tags": [
+        "парк",
+        "исторический",
+        "кипарисы"
+      ],
+      "role": "park",
+      "title": "Кипарисовая аллея",
+      "alt": "Тихая аллея с кипарисами, скамейками и фрагментом корпуса вдали.",
+      "path": "kiparisovaya-alleya/park.jpg",
+      "referenceAssetId": "kiparisovaya-alleya-exterior",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 871301,
+      "sha256": "2453bccd4f5f0397bc4e0e8b08f3971aea36269514ceabf04de40661950982ac",
+      "mimeType": "image/jpeg",
+      "synthetic": true,
+      "sourceType": "ai-generated",
+      "license": null,
+      "promptId": "kiparisovaya-alleya-park"
+    },
+    {
+      "id": "dom-na-holme-exterior",
+      "demoHotelId": "dom-na-holme",
+      "demoHotelName": "Дом на холме",
+      "category": "guesthouse",
+      "tags": [
+        "гостевой дом",
+        "холм",
+        "уютный"
+      ],
+      "role": "exterior",
+      "title": "Гостевой дом на склоне",
+      "alt": "Небольшой гостевой дом с деревянными балконами и садом.",
+      "path": "dom-na-holme/exterior.jpg",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 743764,
+      "sha256": "f32b0601d3a258b668b2fbb2fa4c6d55267bf6081d4df4225ffaf961b3e1f70b",
+      "mimeType": "image/jpeg",
+      "synthetic": true,
+      "sourceType": "ai-generated",
+      "license": null,
+      "promptId": "dom-na-holme-exterior"
+    },
+    {
+      "id": "dom-na-holme-room",
+      "demoHotelId": "dom-na-holme",
+      "demoHotelName": "Дом на холме",
+      "category": "guesthouse",
+      "tags": [
+        "гостевой дом",
+        "холм",
+        "уютный"
+      ],
+      "role": "room",
+      "title": "Уютный номер",
+      "alt": "Небольшой номер с деревянной мебелью и окном в зелёный сад.",
+      "path": "dom-na-holme/room.jpg",
+      "referenceAssetId": "dom-na-holme-exterior",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 490737,
+      "sha256": "c4e2ac33f4ee017ec923f5d1cd70941c5241770370f83dfce5c357b7d3830727",
+      "mimeType": "image/jpeg",
+      "synthetic": true,
+      "sourceType": "ai-generated",
+      "license": null,
+      "promptId": "dom-na-holme-room"
+    },
+    {
+      "id": "dom-na-holme-terrace",
+      "demoHotelId": "dom-na-holme",
+      "demoHotelName": "Дом на холме",
+      "category": "guesthouse",
+      "tags": [
+        "гостевой дом",
+        "холм",
+        "уютный"
+      ],
+      "role": "terrace",
+      "title": "Терраса для завтраков",
+      "alt": "Домашняя терраса под виноградом с видом на море вдали.",
+      "path": "dom-na-holme/terrace.jpg",
+      "referenceAssetId": "dom-na-holme-exterior",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 745433,
+      "sha256": "1a92b0322949b4516035bdd3f49791121582385f5b80303da2125578412ee07c",
+      "mimeType": "image/jpeg",
+      "synthetic": true,
+      "sourceType": "ai-generated",
+      "license": null,
+      "promptId": "dom-na-holme-terrace"
+    }
+  ]
+}
