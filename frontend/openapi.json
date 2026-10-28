@@ -7277,7 +7277,17 @@
         "properties": {
           "facades": {
             "items": {
-              "$ref": "#/components/schemas/Facade"
+              "type": "string",
+              "enum": [
+                "N",
+                "NE",
+                "E",
+                "SE",
+                "S",
+                "SW",
+                "W",
+                "NW"
+              ]
             },
             "type": "array",
             "title": "Facades"
