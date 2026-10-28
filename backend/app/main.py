@@ -14,6 +14,7 @@ from app.core.logging import configure_logging
 from app.core.security.tokens import TokenCodec
 from app.db.database import Database
 from app.infra.events import RedisEventBus
+from app.service.ports import SystemClock
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -46,6 +47,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     )
     app.state.settings = settings
     app.state.token_codec = TokenCodec.from_settings(settings)
+    app.state.clock = SystemClock()
 
     if settings.cors_origins:
         app.add_middleware(

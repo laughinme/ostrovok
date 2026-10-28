@@ -20,7 +20,9 @@ from app.service.auth import AuthService, resolve_current_user
 from app.service.catalog.hotels import HotelQueries
 from app.service.knowledge.facts import FactQueries
 from app.service.knowledge.registry import Registry
-from app.service.ports import EventBus
+from app.service.ports import Clock, EventBus
+from app.service.search.intents import IntentParser
+from app.service.search.search import SearchService
 
 # Everything long-lived is created once in the app factory and read from app.state here,
 # so tests can build an app with their own settings and fakes.
@@ -159,3 +161,23 @@ def _run_stream(db: DatabaseDep, events: EventsDep) -> RunStream:
 
 RunQueriesDep = Annotated[RunQueries, Depends(_run_queries)]
 RunStreamDep = Annotated[RunStream, Depends(_run_stream)]
+
+
+def _clock(request: Request) -> Clock:
+    clock: Clock = request.app.state.clock
+    return clock
+
+
+ClockDep = Annotated[Clock, Depends(_clock)]
+
+
+def _intent_parser(uow: UowDep, settings: SettingsDep) -> IntentParser:
+    return IntentParser(uow, settings.data_dir)
+
+
+def _search_service(uow: UowDep, clock: ClockDep) -> SearchService:
+    return SearchService(uow, clock)
+
+
+IntentParserDep = Annotated[IntentParser, Depends(_intent_parser)]
+SearchServiceDep = Annotated[SearchService, Depends(_search_service)]
