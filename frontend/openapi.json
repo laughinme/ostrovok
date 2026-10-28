@@ -412,6 +412,878 @@
         ]
       }
     },
+    "/api/v1/partner/hotels/{hotel_id}": {
+      "get": {
+        "tags": [
+          "Partner"
+        ],
+        "summary": "Get Hotel",
+        "operationId": "get_hotel_api_v1_partner_hotels__hotel_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "hotel_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Hotel Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartnerOverviewOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/partner/hotels/{hotel_id}/questions": {
+      "get": {
+        "tags": [
+          "Partner"
+        ],
+        "summary": "Get Questions",
+        "operationId": "get_questions_api_v1_partner_hotels__hotel_id__questions_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "hotel_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Hotel Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/QuestionOut"
+                  },
+                  "title": "Response Get Questions Api V1 Partner Hotels  Hotel Id  Questions Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/partner/questions/{question_id}/answers": {
+      "post": {
+        "tags": [
+          "Partner"
+        ],
+        "summary": "Post Answer",
+        "operationId": "post_answer_api_v1_partner_questions__question_id__answers_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "question_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Question Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnswerIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnswerOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/partner/hotels/{hotel_id}/facades": {
+      "put": {
+        "tags": [
+          "Partner"
+        ],
+        "summary": "Put Facades",
+        "operationId": "put_facades_api_v1_partner_hotels__hotel_id__facades_put",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "hotel_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Hotel Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FacadesIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangedFactsOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/partner/facts/{fact_id}/confirm": {
+      "post": {
+        "tags": [
+          "Partner"
+        ],
+        "summary": "Confirm Fact",
+        "operationId": "confirm_fact_api_v1_partner_facts__fact_id__confirm_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "fact_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Fact Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangedFactsOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/partner/facts/{fact_id}/correct": {
+      "post": {
+        "tags": [
+          "Partner"
+        ],
+        "summary": "Correct Fact",
+        "operationId": "correct_fact_api_v1_partner_facts__fact_id__correct_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "fact_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Fact Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CorrectionIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangedFactsOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/partner/hotels/{hotel_id}/requests": {
+      "get": {
+        "tags": [
+          "Partner"
+        ],
+        "summary": "Get Requests",
+        "operationId": "get_requests_api_v1_partner_hotels__hotel_id__requests_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "hotel_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Hotel Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BookingOut"
+                  },
+                  "title": "Response Get Requests Api V1 Partner Hotels  Hotel Id  Requests Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/partner/requests/{booking_id}/decision": {
+      "post": {
+        "tags": [
+          "Partner"
+        ],
+        "summary": "Decide Request",
+        "operationId": "decide_request_api_v1_partner_requests__booking_id__decision_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "booking_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Booking Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecisionIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/partner/hotels/{hotel_id}/demand": {
+      "get": {
+        "tags": [
+          "Partner"
+        ],
+        "summary": "Get Demand",
+        "operationId": "get_demand_api_v1_partner_hotels__hotel_id__demand_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "hotel_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Hotel Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DemandOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/partner/hotels/{hotel_id}/notifications": {
+      "get": {
+        "tags": [
+          "Partner"
+        ],
+        "summary": "Get Notifications",
+        "operationId": "get_notifications_api_v1_partner_hotels__hotel_id__notifications_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "hotel_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Hotel Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/NotificationOut"
+                  },
+                  "title": "Response Get Notifications Api V1 Partner Hotels  Hotel Id  Notifications Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/bookings": {
+      "post": {
+        "tags": [
+          "Trips"
+        ],
+        "summary": "Create Booking",
+        "operationId": "create_booking_api_v1_bookings_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BookingIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/trips/{booking_id}": {
+      "get": {
+        "tags": [
+          "Trips"
+        ],
+        "summary": "Get Trip",
+        "operationId": "get_trip_api_v1_trips__booking_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "booking_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Booking Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TripOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/trips/{booking_id}/feedback": {
+      "post": {
+        "tags": [
+          "Trips"
+        ],
+        "summary": "Post Feedback",
+        "operationId": "post_feedback_api_v1_trips__booking_id__feedback_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "booking_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Booking Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeedbackIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/notifications": {
+      "get": {
+        "tags": [
+          "Trips"
+        ],
+        "summary": "Notifications",
+        "operationId": "notifications_api_v1_me_notifications_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/NotificationOut"
+                  },
+                  "type": "array",
+                  "title": "Response Notifications Api V1 Me Notifications Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/me/taste": {
+      "get": {
+        "tags": [
+          "Taste"
+        ],
+        "summary": "Get Taste",
+        "operationId": "get_taste_api_v1_me_taste_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TasteProfileOut"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Taste"
+        ],
+        "summary": "Reset Taste",
+        "operationId": "reset_taste_api_v1_me_taste_delete",
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Taste"
+        ],
+        "summary": "Patch Taste",
+        "operationId": "patch_taste_api_v1_me_taste_patch",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TastePatch"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TasteProfileOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/hotels/{hotel_id}/window": {
+      "get": {
+        "tags": [
+          "Hotels",
+          "Hotels"
+        ],
+        "summary": "Window horizon, peaks and the sun on a given date",
+        "operationId": "hotel_window_api_v1_hotels__hotel_id__window_get",
+        "parameters": [
+          {
+            "name": "hotel_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Hotel Id"
+            }
+          },
+          {
+            "name": "facade",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Facade"
+            }
+          },
+          {
+            "name": "floor",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "title": "Floor"
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "title": "Date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WindowOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unknown hotel"
+          },
+          "503": {
+            "description": "Region data unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/hotels": {
       "get": {
         "tags": [
@@ -594,6 +1466,227 @@
         }
       }
     },
+    "/api/v1/hotels/{hotel_id}/noise": {
+      "get": {
+        "tags": [
+          "Hotels"
+        ],
+        "summary": "Outdoor noise model by facade, day and night",
+        "operationId": "hotel_noise_api_v1_hotels__hotel_id__noise_get",
+        "parameters": [
+          {
+            "name": "hotel_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Hotel Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoiseOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/hotels/{hotel_id}/routes/{target}": {
+      "get": {
+        "tags": [
+          "Hotels"
+        ],
+        "summary": "Walk there and back with elevation",
+        "operationId": "hotel_route_api_v1_hotels__hotel_id__routes__target__get",
+        "parameters": [
+          {
+            "name": "hotel_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Hotel Id"
+            }
+          },
+          {
+            "name": "target",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^(beach|center|station|osm:(node|way|relation)/[1-9][0-9]*)$",
+              "title": "Target"
+            }
+          },
+          {
+            "name": "profile",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/WalkProfile",
+              "default": "walk"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RouteOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/hotels/{hotel_id}/climate": {
+      "get": {
+        "tags": [
+          "Hotels"
+        ],
+        "summary": "Climate normals weighted by trip dates",
+        "operationId": "hotel_climate_api_v1_hotels__hotel_id__climate_get",
+        "parameters": [
+          {
+            "name": "hotel_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Hotel Id"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "title": "From"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "title": "To"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClimateOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/hotels/{hotel_id}/day": {
+      "get": {
+        "tags": [
+          "Hotels"
+        ],
+        "summary": "A day around the hotel, without an LLM",
+        "operationId": "hotel_day_api_v1_hotels__hotel_id__day_get",
+        "parameters": [
+          {
+            "name": "hotel_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Hotel Id"
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "title": "Date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DayPlanOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/characteristics": {
       "get": {
         "tags": [
@@ -706,7 +1799,7 @@
         "tags": [
           "Agents"
         ],
-        "summary": "Server-sent events: fact.changed for the hotels on screen",
+        "summary": "Server-sent events: fact.changed for hotels on screen, search.updated for a search",
         "operationId": "hotel_events_api_v1_events_get",
         "parameters": [
           {
@@ -730,6 +1823,25 @@
               "title": "Hotels"
             },
             "description": "Hotel ids; empty = all"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Search id to watch",
+              "title": "Search"
+            },
+            "description": "Search id to watch"
           }
         ],
         "responses": {
@@ -747,6 +1859,1040 @@
             }
           }
         }
+      }
+    },
+    "/api/v1/intents": {
+      "post": {
+        "tags": [
+          "Search"
+        ],
+        "summary": "Text → chips, trip and hints (called while the guest types)",
+        "operationId": "parse_intent_api_v1_intents_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IntentRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IntentModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/searches": {
+      "post": {
+        "tags": [
+          "Search"
+        ],
+        "summary": "Run a search: matches with verdicts, the room to ask for, relaxations",
+        "operationId": "create_search_api_v1_searches_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchResultOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/searches/{search_id}": {
+      "get": {
+        "tags": [
+          "Search"
+        ],
+        "summary": "Re-rank a stored search: shows facts learned since it was created",
+        "operationId": "get_search_api_v1_searches__search_id__get",
+        "parameters": [
+          {
+            "name": "search_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Search Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchResultOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unknown search"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/searches/{search_id}/wishes": {
+      "post": {
+        "tags": [
+          "Search"
+        ],
+        "summary": "Add a wish in words; unknown ones start live research (run id in the answer)",
+        "operationId": "add_wish_api_v1_searches__search_id__wishes_post",
+        "parameters": [
+          {
+            "name": "search_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Search Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IntentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WishStarted"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unknown search"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/searches/{search_id}/research": {
+      "post": {
+        "tags": [
+          "Search"
+        ],
+        "summary": "Research an unknown chip for the top hotels now («узнать вживую»)",
+        "operationId": "research_chip_api_v1_searches__search_id__research_post",
+        "parameters": [
+          {
+            "name": "search_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Search Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResearchRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunStarted"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/moods": {
+      "get": {
+        "tags": [
+          "Search"
+        ],
+        "summary": "Saved wishes with live hotel counts for a month (current month by default)",
+        "description": "Counts require every chip to have probability ≥0.7 in one compatible room variant. Unknown, expired, stale and conflicting facts do not count. Pass chips and trip.month to POST /searches to open a collection.",
+        "operationId": "moods_api_v1_moods_get",
+        "parameters": [
+          {
+            "name": "month",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "maximum": 12,
+                  "minimum": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Month"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MoodOut"
+                  },
+                  "title": "Response Moods Api V1 Moods Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/compare": {
+      "post": {
+        "tags": [
+          "Search"
+        ],
+        "summary": "Compare Hotels",
+        "operationId": "compare_hotels_api_v1_compare_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompareIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompareOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/hotels/{hotel_id}/similar": {
+      "post": {
+        "tags": [
+          "Search"
+        ],
+        "summary": "Similar Hotels",
+        "operationId": "similar_hotels_api_v1_hotels__hotel_id__similar_post",
+        "parameters": [
+          {
+            "name": "hotel_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Hotel Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SimilarIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimilarOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/console/registry": {
+      "get": {
+        "tags": [
+          "Console"
+        ],
+        "summary": "Characteristics with coverage, confidence and freshness",
+        "operationId": "registry_api_v1_console_registry_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/RegistryLineOut"
+                  },
+                  "type": "array",
+                  "title": "Response Registry Api V1 Console Registry Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/console/characteristics": {
+      "post": {
+        "tags": [
+          "Console"
+        ],
+        "summary": "Describe a new characteristic in words: the Curator drafts and dry-runs a recipe",
+        "operationId": "learn_api_v1_console_characteristics_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LearnRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunStarted"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/console/characteristics/{key}/publish": {
+      "post": {
+        "tags": [
+          "Console"
+        ],
+        "summary": "Publish a characteristic and compute it for every hotel",
+        "operationId": "publish_api_v1_console_characteristics__key__publish_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "key",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Key"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunStarted"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/console/runs": {
+      "get": {
+        "tags": [
+          "Console"
+        ],
+        "summary": "Agent traces with filters",
+        "operationId": "runs_api_v1_console_runs_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "agent",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/AgentKind"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Agent"
+            }
+          },
+          {
+            "name": "hotel",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Hotel"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AgentRunOut"
+                  },
+                  "title": "Response Runs Api V1 Console Runs Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/console/conflicts": {
+      "get": {
+        "tags": [
+          "Console"
+        ],
+        "summary": "Where sources disagree and how it was resolved",
+        "operationId": "conflicts_api_v1_console_conflicts_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "open",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Open"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/app__api__schemas__console__ConflictOut"
+                  },
+                  "title": "Response Conflicts Api V1 Console Conflicts Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/console/conflicts/{conflict_id}/resolve": {
+      "post": {
+        "tags": [
+          "Console"
+        ],
+        "summary": "Resolve by hand",
+        "operationId": "resolve_api_v1_console_conflicts__conflict_id__resolve_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "conflict_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Conflict Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResolveRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__api__schemas__console__ConflictOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/console/changes": {
+      "get": {
+        "tags": [
+          "Console"
+        ],
+        "summary": "Feed of world changes and what they affected",
+        "operationId": "changes_api_v1_console_changes_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/WorldChangeOut"
+                  },
+                  "type": "array",
+                  "title": "Response Changes Api V1 Console Changes Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/console/world/buildings": {
+      "post": {
+        "tags": [
+          "Console"
+        ],
+        "summary": "«Построили дом»: add a building; the Watcher recomputes nearby hotels",
+        "operationId": "add_building_api_v1_console_world_buildings_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BuildingRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorldChangeStarted"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/console/world/buildings/{change_id}": {
+      "delete": {
+        "tags": [
+          "Console"
+        ],
+        "summary": "Undo a world change; the Watcher recomputes again",
+        "operationId": "revert_building_api_v1_console_world_buildings__change_id__delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "change_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Change Id"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunStarted"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/console/settings": {
+      "get": {
+        "tags": [
+          "Console"
+        ],
+        "summary": "Runtime switches",
+        "operationId": "get_settings_api_v1_console_settings_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SettingsModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Console"
+        ],
+        "summary": "LLM mode: auto or off (rules only)",
+        "operationId": "put_settings_api_v1_console_settings_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SettingsModel"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SettingsModel"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/console/demo/reset": {
+      "post": {
+        "tags": [
+          "Console"
+        ],
+        "summary": "Back to the seeded demo: knowledge from the seed, no bookings, questions or changes",
+        "operationId": "demo_reset_api_v1_console_demo_reset_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DemoResetOut"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/console/hotels/reserve": {
+      "get": {
+        "tags": [
+          "Console"
+        ],
+        "summary": "Real OSM hotels available for live research",
+        "operationId": "reserve_api_v1_console_hotels_reserve_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ReserveHotelOut"
+                  },
+                  "type": "array",
+                  "title": "Response Reserve Api V1 Console Hotels Reserve Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/console/hotels": {
+      "post": {
+        "tags": [
+          "Console"
+        ],
+        "summary": "Add and study a reserve OSM hotel",
+        "operationId": "onboard_api_v1_console_hotels_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OnboardRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OnboardStarted"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/console/quality": {
+      "get": {
+        "tags": [
+          "Console"
+        ],
+        "summary": "Latest saved quality report; make eval generates one",
+        "operationId": "quality_api_v1_console_quality_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QualityReport"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
       }
     }
   },
@@ -967,6 +3113,322 @@
         ],
         "title": "AgentStepOut"
       },
+      "AnswerIn": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "maxLength": 4000,
+            "title": "Text",
+            "default": ""
+          },
+          "choice": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 300
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Choice"
+          },
+          "value": {
+            "title": "Value"
+          },
+          "mappings": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/FacadeMappingIn"
+                },
+                "type": "array",
+                "maxItems": 300,
+                "minItems": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mappings"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "AnswerIn"
+      },
+      "AnswerOut": {
+        "properties": {
+          "answerId": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Answerid"
+          },
+          "parsed": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Parsed"
+          },
+          "parseConfidence": {
+            "type": "number",
+            "title": "Parseconfidence"
+          },
+          "parser": {
+            "type": "string",
+            "title": "Parser"
+          },
+          "changedFacts": {
+            "items": {
+              "$ref": "#/components/schemas/FactOut"
+            },
+            "type": "array",
+            "title": "Changedfacts"
+          },
+          "clarification": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Clarification"
+          }
+        },
+        "type": "object",
+        "required": [
+          "answerId",
+          "parsed",
+          "parseConfidence",
+          "parser",
+          "changedFacts",
+          "clarification"
+        ],
+        "title": "AnswerOut"
+      },
+      "BookingIn": {
+        "properties": {
+          "hotelId": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Hotelid"
+          },
+          "roomTypeId": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Roomtypeid"
+          },
+          "ratePlanId": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Rateplanid"
+          },
+          "checkIn": {
+            "type": "string",
+            "format": "date",
+            "title": "Checkin"
+          },
+          "checkOut": {
+            "type": "string",
+            "format": "date",
+            "title": "Checkout"
+          },
+          "guests": {
+            "$ref": "#/components/schemas/Guests"
+          },
+          "request": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 4000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Request"
+          },
+          "searchId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Searchid"
+          }
+        },
+        "type": "object",
+        "required": [
+          "hotelId",
+          "roomTypeId",
+          "ratePlanId",
+          "checkIn",
+          "checkOut",
+          "guests"
+        ],
+        "title": "BookingIn"
+      },
+      "BookingOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "hotelId": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Hotelid"
+          },
+          "roomTypeId": {
+            "type": "string",
+            "title": "Roomtypeid"
+          },
+          "ratePlanId": {
+            "type": "string",
+            "title": "Rateplanid"
+          },
+          "checkIn": {
+            "type": "string",
+            "format": "date",
+            "title": "Checkin"
+          },
+          "checkOut": {
+            "type": "string",
+            "format": "date",
+            "title": "Checkout"
+          },
+          "guests": {
+            "$ref": "#/components/schemas/Guests"
+          },
+          "request": {
+            "type": "string",
+            "title": "Request"
+          },
+          "status": {
+            "$ref": "#/components/schemas/BookingStatus"
+          },
+          "hotelReply": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hotelreply"
+          },
+          "priceDemo": {
+            "type": "integer",
+            "title": "Pricedemo"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "hotelId",
+          "roomTypeId",
+          "ratePlanId",
+          "checkIn",
+          "checkOut",
+          "guests",
+          "request",
+          "status",
+          "hotelReply",
+          "priceDemo"
+        ],
+        "title": "BookingOut"
+      },
+      "BookingStatus": {
+        "type": "string",
+        "enum": [
+          "requested",
+          "confirmed",
+          "alternative_offered",
+          "declined",
+          "completed"
+        ],
+        "title": "BookingStatus"
+      },
+      "BuildingRequest": {
+        "properties": {
+          "lon": {
+            "type": "number",
+            "maximum": 41.0,
+            "minimum": 39.0,
+            "title": "Lon"
+          },
+          "lat": {
+            "type": "number",
+            "maximum": 44.5,
+            "minimum": 43.0,
+            "title": "Lat"
+          },
+          "floors": {
+            "type": "integer",
+            "maximum": 40.0,
+            "minimum": 1.0,
+            "title": "Floors",
+            "default": 9
+          },
+          "widthM": {
+            "type": "number",
+            "maximum": 200.0,
+            "exclusiveMinimum": 3.0,
+            "title": "Widthm",
+            "default": 30
+          },
+          "depthM": {
+            "type": "number",
+            "maximum": 200.0,
+            "exclusiveMinimum": 3.0,
+            "title": "Depthm",
+            "default": 15
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          }
+        },
+        "type": "object",
+        "required": [
+          "lon",
+          "lat"
+        ],
+        "title": "BuildingRequest"
+      },
+      "ChangedFactsOut": {
+        "properties": {
+          "changedFacts": {
+            "items": {
+              "$ref": "#/components/schemas/FactOut"
+            },
+            "type": "array",
+            "title": "Changedfacts"
+          }
+        },
+        "type": "object",
+        "required": [
+          "changedFacts"
+        ],
+        "title": "ChangedFactsOut"
+      },
       "CharacteristicOut": {
         "properties": {
           "key": {
@@ -1049,6 +3511,97 @@
         ],
         "title": "CharacteristicOut"
       },
+      "CharacteristicQuality": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "n": {
+            "type": "integer",
+            "title": "N"
+          },
+          "accuracy": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Accuracy"
+          },
+          "ece": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ece"
+          },
+          "coverage": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Coverage"
+          },
+          "currentCoverage": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Currentcoverage"
+          },
+          "confidentCoverage": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confidentcoverage"
+          },
+          "factCount": {
+            "type": "integer",
+            "title": "Factcount"
+          },
+          "reliability": {
+            "items": {
+              "$ref": "#/components/schemas/ReliabilityBin"
+            },
+            "type": "array",
+            "title": "Reliability"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "n",
+          "accuracy",
+          "ece",
+          "coverage",
+          "currentCoverage",
+          "confidentCoverage",
+          "factCount",
+          "reliability"
+        ],
+        "title": "CharacteristicQuality"
+      },
       "Checkable": {
         "type": "string",
         "enum": [
@@ -1057,6 +3610,757 @@
           "cannot"
         ],
         "title": "Checkable"
+      },
+      "ChipResultOut": {
+        "properties": {
+          "chipId": {
+            "type": "string",
+            "title": "Chipid"
+          },
+          "verdict": {
+            "type": "string",
+            "enum": [
+              "yes",
+              "partial",
+              "no",
+              "unknown"
+            ],
+            "title": "Verdict"
+          },
+          "probability": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Probability"
+          },
+          "factId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Factid"
+          },
+          "line": {
+            "type": "string",
+            "title": "Line"
+          }
+        },
+        "type": "object",
+        "required": [
+          "chipId",
+          "verdict",
+          "probability",
+          "line"
+        ],
+        "title": "ChipResultOut"
+      },
+      "ClimateOut": {
+        "properties": {
+          "hotelId": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Hotelid"
+          },
+          "checkIn": {
+            "type": "string",
+            "format": "date",
+            "title": "Checkin"
+          },
+          "checkOut": {
+            "type": "string",
+            "format": "date",
+            "title": "Checkout"
+          },
+          "days": {
+            "type": "integer",
+            "title": "Days"
+          },
+          "station": {
+            "type": "string",
+            "title": "Station"
+          },
+          "period": {
+            "type": "string",
+            "title": "Period"
+          },
+          "values": {
+            "$ref": "#/components/schemas/ClimateValuesOut"
+          },
+          "coverage": {
+            "$ref": "#/components/schemas/ClimateValuesOut"
+          },
+          "confidence": {
+            "$ref": "#/components/schemas/ClimateValuesOut"
+          },
+          "monthDays": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Monthdays"
+          },
+          "attribution": {
+            "type": "string",
+            "title": "Attribution",
+            "default": "Open-Meteo.com (CC BY 4.0)"
+          },
+          "caveats": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Caveats",
+            "default": [
+              "Климатические нормы, не прогноз погоды; to — дата выезда",
+              "Воздух: 2016–2025; вода: полные месяцы 2023–2025, 2–3 года",
+              "Солнце и световой день: ч/день; дождливые дни: норма за месяц; температура: °C"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "hotelId",
+          "checkIn",
+          "checkOut",
+          "days",
+          "station",
+          "period",
+          "values",
+          "coverage",
+          "confidence",
+          "monthDays"
+        ],
+        "title": "ClimateOut"
+      },
+      "ClimateValuesOut": {
+        "properties": {
+          "airMaxC": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Airmaxc"
+          },
+          "airMinC": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Airminc"
+          },
+          "waterC": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Waterc"
+          },
+          "sunHours": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sunhours"
+          },
+          "rainDays": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Raindays"
+          },
+          "daylightH": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Daylighth"
+          }
+        },
+        "type": "object",
+        "title": "ClimateValuesOut"
+      },
+      "CompareIn": {
+        "properties": {
+          "selections": {
+            "items": {
+              "$ref": "#/components/schemas/SelectionIn"
+            },
+            "type": "array",
+            "maxItems": 3,
+            "minItems": 2,
+            "title": "Selections"
+          },
+          "chips": {
+            "items": {
+              "$ref": "#/components/schemas/IntentChipModel"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "title": "Chips"
+          },
+          "trip": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TripModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "selections"
+        ],
+        "title": "CompareIn"
+      },
+      "CompareOut": {
+        "properties": {
+          "intent": {
+            "$ref": "#/components/schemas/IntentModel"
+          },
+          "matches": {
+            "items": {
+              "$ref": "#/components/schemas/HotelMatchOut"
+            },
+            "type": "array",
+            "title": "Matches"
+          },
+          "rows": {
+            "items": {
+              "$ref": "#/components/schemas/ComparisonRow"
+            },
+            "type": "array",
+            "title": "Rows"
+          },
+          "summary": {
+            "type": "string",
+            "title": "Summary"
+          }
+        },
+        "type": "object",
+        "required": [
+          "intent",
+          "matches",
+          "rows",
+          "summary"
+        ],
+        "title": "CompareOut"
+      },
+      "ComparisonRow": {
+        "properties": {
+          "chipId": {
+            "type": "string",
+            "title": "Chipid"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "results": {
+            "items": {
+              "$ref": "#/components/schemas/ChipResultOut"
+            },
+            "type": "array",
+            "title": "Results"
+          }
+        },
+        "type": "object",
+        "required": [
+          "chipId",
+          "label",
+          "results"
+        ],
+        "title": "ComparisonRow"
+      },
+      "CorrectionIn": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "maxLength": 4000,
+            "title": "Text",
+            "default": ""
+          },
+          "choice": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 300
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Choice"
+          },
+          "value": {
+            "title": "Value"
+          },
+          "mappings": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/FacadeMappingIn"
+                },
+                "type": "array",
+                "maxItems": 300,
+                "minItems": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mappings"
+          },
+          "scope": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ScopeIn"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "CorrectionIn"
+      },
+      "CoverageOut": {
+        "properties": {
+          "known": {
+            "type": "integer",
+            "title": "Known"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "share": {
+            "type": "number",
+            "title": "Share"
+          }
+        },
+        "type": "object",
+        "required": [
+          "known",
+          "total",
+          "share"
+        ],
+        "title": "CoverageOut"
+      },
+      "DayPlanOut": {
+        "properties": {
+          "hotelId": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Hotelid"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date"
+          },
+          "slots": {
+            "items": {
+              "$ref": "#/components/schemas/DaySlotOut"
+            },
+            "type": "array",
+            "title": "Slots"
+          },
+          "sunset": {
+            "$ref": "#/components/schemas/DaySunsetOut"
+          },
+          "attribution": {
+            "type": "string",
+            "title": "Attribution",
+            "default": "© OpenStreetMap contributors (ODbL); Copernicus DEM GLO-30 © DLR, ESA"
+          },
+          "caveats": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Caveats"
+          }
+        },
+        "type": "object",
+        "required": [
+          "hotelId",
+          "date",
+          "slots",
+          "sunset",
+          "caveats"
+        ],
+        "title": "DayPlanOut"
+      },
+      "DayRouteOut": {
+        "properties": {
+          "minutes": {
+            "type": "number",
+            "title": "Minutes"
+          },
+          "backMinutes": {
+            "type": "number",
+            "title": "Backminutes"
+          },
+          "climbM": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Climbm"
+          },
+          "backClimbM": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Backclimbm"
+          },
+          "steps": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Steps"
+          },
+          "backSteps": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Backsteps"
+          },
+          "crossings": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Crossings"
+          },
+          "backCrossings": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Backcrossings"
+          },
+          "geometry": {
+            "$ref": "#/components/schemas/LineStringOut"
+          },
+          "elevationProfile": {
+            "items": {
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              ],
+              "type": "array",
+              "maxItems": 2,
+              "minItems": 2
+            },
+            "type": "array",
+            "title": "Elevationprofile"
+          },
+          "estimated": {
+            "type": "boolean",
+            "title": "Estimated"
+          },
+          "uncertainShare": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Uncertainshare"
+          },
+          "osmRefs": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Osmrefs"
+          }
+        },
+        "type": "object",
+        "required": [
+          "minutes",
+          "backMinutes",
+          "climbM",
+          "backClimbM",
+          "steps",
+          "backSteps",
+          "crossings",
+          "backCrossings",
+          "geometry",
+          "elevationProfile",
+          "estimated",
+          "uncertainShare",
+          "osmRefs"
+        ],
+        "title": "DayRouteOut"
+      },
+      "DaySlotOut": {
+        "properties": {
+          "time": {
+            "type": "string",
+            "title": "Time"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "place": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Place"
+          },
+          "osmRef": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Osmref"
+          },
+          "route": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DayRouteOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "unavailableReason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unavailablereason"
+          },
+          "openingHours": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Openinghours"
+          }
+        },
+        "type": "object",
+        "required": [
+          "time",
+          "title"
+        ],
+        "title": "DaySlotOut"
+      },
+      "DaySunsetOut": {
+        "properties": {
+          "time": {
+            "type": "string",
+            "title": "Time"
+          },
+          "fromWindow": {
+            "type": "boolean",
+            "title": "Fromwindow"
+          },
+          "spot": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spot"
+          },
+          "windowScope": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ScopeOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "time",
+          "fromWindow"
+        ],
+        "title": "DaySunsetOut"
+      },
+      "DecisionIn": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "confirmed",
+              "alternative_offered",
+              "declined"
+            ],
+            "title": "Status"
+          },
+          "reply": {
+            "type": "string",
+            "maxLength": 4000,
+            "minLength": 1,
+            "title": "Reply"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "status",
+          "reply"
+        ],
+        "title": "DecisionIn"
+      },
+      "DemandItemOut": {
+        "properties": {
+          "characteristic": {
+            "type": "string",
+            "title": "Characteristic"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "characteristic",
+          "count"
+        ],
+        "title": "DemandItemOut"
+      },
+      "DemandOut": {
+        "properties": {
+          "hotelId": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Hotelid"
+          },
+          "district": {
+            "type": "string",
+            "title": "District"
+          },
+          "days": {
+            "type": "integer",
+            "const": 7,
+            "title": "Days",
+            "default": 7
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/DemandItemOut"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "hotelId",
+          "district",
+          "items"
+        ],
+        "title": "DemandOut"
       },
       "DemoLoginRequest": {
         "properties": {
@@ -1076,6 +4380,19 @@
           "persona"
         ],
         "title": "DemoLoginRequest"
+      },
+      "DemoResetOut": {
+        "properties": {
+          "summary": {
+            "type": "string",
+            "title": "Summary"
+          }
+        },
+        "type": "object",
+        "required": [
+          "summary"
+        ],
+        "title": "DemoResetOut"
       },
       "EvidenceOut": {
         "properties": {
@@ -1143,6 +4460,77 @@
         ],
         "title": "Facade",
         "description": "Compass direction of a wall's outward normal, 8 points (09 §5.3)."
+      },
+      "FacadeMappingIn": {
+        "properties": {
+          "roomTypeId": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Roomtypeid"
+          },
+          "facade": {
+            "$ref": "#/components/schemas/Facade"
+          },
+          "floorFrom": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Floorfrom"
+          },
+          "floorTo": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Floorto"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "roomTypeId",
+          "facade",
+          "floorFrom",
+          "floorTo"
+        ],
+        "title": "FacadeMappingIn"
+      },
+      "FacadeNoiseOut": {
+        "properties": {
+          "facade": {
+            "$ref": "#/components/schemas/Facade"
+          },
+          "day": {
+            "$ref": "#/components/schemas/NoiseLevelOut"
+          },
+          "night": {
+            "$ref": "#/components/schemas/NoiseLevelOut"
+          }
+        },
+        "type": "object",
+        "required": [
+          "facade",
+          "day",
+          "night"
+        ],
+        "title": "FacadeNoiseOut"
+      },
+      "FacadesIn": {
+        "properties": {
+          "mappings": {
+            "items": {
+              "$ref": "#/components/schemas/FacadeMappingIn"
+            },
+            "type": "array",
+            "maxItems": 300,
+            "minItems": 1,
+            "title": "Mappings"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "mappings"
+        ],
+        "title": "FacadesIn"
       },
       "FactDetailOut": {
         "properties": {
@@ -1505,6 +4893,65 @@
         ],
         "title": "FactSourceOut"
       },
+      "FeedbackIn": {
+        "properties": {
+          "answers": {
+            "items": {
+              "$ref": "#/components/schemas/FeedbackItem"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Answers"
+          }
+        },
+        "type": "object",
+        "required": [
+          "answers"
+        ],
+        "title": "FeedbackIn"
+      },
+      "FeedbackItem": {
+        "properties": {
+          "factId": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Factid"
+          },
+          "answer": {
+            "type": "boolean",
+            "title": "Answer"
+          }
+        },
+        "type": "object",
+        "required": [
+          "factId",
+          "answer"
+        ],
+        "title": "FeedbackItem"
+      },
+      "Guests": {
+        "properties": {
+          "adults": {
+            "type": "integer",
+            "maximum": 20.0,
+            "minimum": 1.0,
+            "title": "Adults"
+          },
+          "children": {
+            "type": "integer",
+            "maximum": 20.0,
+            "minimum": 0.0,
+            "title": "Children",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "required": [
+          "adults"
+        ],
+        "title": "Guests"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -1517,6 +4964,67 @@
         },
         "type": "object",
         "title": "HTTPValidationError"
+      },
+      "HorizonRayOut": {
+        "properties": {
+          "azimuthDeg": {
+            "type": "number",
+            "title": "Azimuthdeg"
+          },
+          "angleDeg": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Angledeg"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "building",
+              "terrain",
+              "sea",
+              "sky",
+              "unknown"
+            ],
+            "title": "Kind"
+          },
+          "seaLowDeg": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sealowdeg"
+          },
+          "seaHighDeg": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seahighdeg"
+          }
+        },
+        "type": "object",
+        "required": [
+          "azimuthDeg",
+          "angleDeg",
+          "kind",
+          "seaLowDeg",
+          "seaHighDeg"
+        ],
+        "title": "HorizonRayOut"
       },
       "HotelDemoOut": {
         "properties": {
@@ -1548,6 +5056,98 @@
           "amenities"
         ],
         "title": "HotelDemoOut"
+      },
+      "HotelMatchOut": {
+        "properties": {
+          "hotelId": {
+            "type": "string",
+            "title": "Hotelid"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "area": {
+            "type": "string",
+            "title": "Area"
+          },
+          "location": {
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Location"
+          },
+          "score": {
+            "type": "number",
+            "title": "Score"
+          },
+          "disappointmentRisk": {
+            "type": "number",
+            "title": "Disappointmentrisk"
+          },
+          "perChip": {
+            "items": {
+              "$ref": "#/components/schemas/ChipResultOut"
+            },
+            "type": "array",
+            "title": "Perchip"
+          },
+          "tradeoff": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tradeoff"
+          },
+          "recommendation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RecommendationOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "thumbnail": {
+            "$ref": "#/components/schemas/ThumbnailOut"
+          },
+          "priceFromDemo": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pricefromdemo"
+          }
+        },
+        "type": "object",
+        "required": [
+          "hotelId",
+          "name",
+          "area",
+          "location",
+          "score",
+          "disappointmentRisk",
+          "perChip",
+          "thumbnail"
+        ],
+        "title": "HotelMatchOut"
       },
       "HotelOut": {
         "properties": {
@@ -1669,6 +5269,185 @@
         ],
         "title": "HotelOut"
       },
+      "Importance": {
+        "type": "string",
+        "enum": [
+          "must",
+          "important",
+          "nice"
+        ],
+        "title": "Importance"
+      },
+      "Improvement": {
+        "type": "string",
+        "enum": [
+          "quieter",
+          "cheaper",
+          "closer_to_beach"
+        ],
+        "title": "Improvement"
+      },
+      "IntentChipModel": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "characteristic": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Characteristic"
+          },
+          "label": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Label"
+          },
+          "importance": {
+            "$ref": "#/components/schemas/Importance",
+            "default": "important"
+          },
+          "checkable": {
+            "$ref": "#/components/schemas/Checkable",
+            "default": "compute"
+          },
+          "params": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Params"
+          },
+          "fromProfile": {
+            "type": "boolean",
+            "title": "Fromprofile",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "label"
+        ],
+        "title": "IntentChipModel"
+      },
+      "IntentModel": {
+        "properties": {
+          "text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text"
+          },
+          "chips": {
+            "items": {
+              "$ref": "#/components/schemas/IntentChipModel"
+            },
+            "type": "array",
+            "title": "Chips"
+          },
+          "trip": {
+            "$ref": "#/components/schemas/TripModel"
+          },
+          "hints": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Hints"
+          },
+          "planner": {
+            "type": "string",
+            "enum": [
+              "llm",
+              "rules"
+            ],
+            "title": "Planner",
+            "default": "rules"
+          }
+        },
+        "type": "object",
+        "required": [
+          "chips",
+          "trip"
+        ],
+        "title": "IntentModel"
+      },
+      "IntentRequest": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Text"
+          }
+        },
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "title": "IntentRequest"
+      },
+      "LearnRequest": {
+        "properties": {
+          "description": {
+            "type": "string",
+            "maxLength": 300,
+            "minLength": 3,
+            "title": "Description",
+            "examples": [
+              "Хинкальная в 10 минутах"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "description"
+        ],
+        "title": "LearnRequest"
+      },
+      "LineStringOut": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "LineString",
+            "title": "Type",
+            "default": "LineString"
+          },
+          "coordinates": {
+            "items": {
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "type": "array",
+              "maxItems": 2,
+              "minItems": 2
+            },
+            "type": "array",
+            "title": "Coordinates"
+          }
+        },
+        "type": "object",
+        "required": [
+          "coordinates"
+        ],
+        "title": "LineStringOut"
+      },
       "LoginRequest": {
         "properties": {
           "email": {
@@ -1692,6 +5471,52 @@
         ],
         "title": "LoginRequest",
         "description": "Credentials used for login."
+      },
+      "MoodOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          },
+          "countLabel": {
+            "type": "string",
+            "title": "Countlabel"
+          },
+          "month": {
+            "type": "integer",
+            "title": "Month"
+          },
+          "chips": {
+            "items": {
+              "$ref": "#/components/schemas/IntentChipModel"
+            },
+            "type": "array",
+            "title": "Chips"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "description",
+          "count",
+          "countLabel",
+          "month",
+          "chips"
+        ],
+        "title": "MoodOut"
       },
       "NearbyOut": {
         "properties": {
@@ -1726,6 +5551,310 @@
           "distanceText"
         ],
         "title": "NearbyOut"
+      },
+      "NoiseLevelOut": {
+        "properties": {
+          "indexDb": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Indexdb"
+          },
+          "category": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Category"
+          },
+          "confidence": {
+            "type": "number",
+            "title": "Confidence"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/NoiseSourceOut"
+            },
+            "type": "array",
+            "title": "Sources"
+          }
+        },
+        "type": "object",
+        "required": [
+          "indexDb",
+          "category",
+          "confidence",
+          "sources"
+        ],
+        "title": "NoiseLevelOut"
+      },
+      "NoiseOut": {
+        "properties": {
+          "hotelId": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Hotelid"
+          },
+          "facades": {
+            "items": {
+              "$ref": "#/components/schemas/FacadeNoiseOut"
+            },
+            "type": "array",
+            "title": "Facades"
+          },
+          "unmodelledRefs": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Unmodelledrefs"
+          },
+          "completeness": {
+            "type": "number",
+            "title": "Completeness"
+          },
+          "attribution": {
+            "type": "string",
+            "title": "Attribution",
+            "default": "© OpenStreetMap contributors (ODbL)"
+          },
+          "caveats": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Caveats",
+            "default": [
+              "Условный индекс по карте, не измеренный уровень шума"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "hotelId",
+          "facades",
+          "unmodelledRefs",
+          "completeness"
+        ],
+        "title": "NoiseOut"
+      },
+      "NoiseSourceOut": {
+        "properties": {
+          "osmRef": {
+            "type": "string",
+            "title": "Osmref"
+          },
+          "kind": {
+            "type": "string",
+            "title": "Kind"
+          },
+          "indexDb": {
+            "type": "number",
+            "title": "Indexdb"
+          },
+          "distanceM": {
+            "type": "number",
+            "title": "Distancem"
+          },
+          "screened": {
+            "type": "boolean",
+            "title": "Screened"
+          },
+          "orientationLossDb": {
+            "type": "number",
+            "title": "Orientationlossdb"
+          }
+        },
+        "type": "object",
+        "required": [
+          "osmRef",
+          "kind",
+          "indexDb",
+          "distanceM",
+          "screened",
+          "orientationLossDb"
+        ],
+        "title": "NoiseSourceOut"
+      },
+      "NotificationOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "audience": {
+            "type": "string",
+            "title": "Audience"
+          },
+          "kind": {
+            "type": "string",
+            "title": "Kind"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "body": {
+            "type": "string",
+            "title": "Body"
+          },
+          "at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "At"
+          },
+          "read": {
+            "type": "boolean",
+            "title": "Read"
+          },
+          "link": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Link"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "audience",
+          "kind",
+          "title",
+          "body",
+          "at",
+          "read",
+          "link"
+        ],
+        "title": "NotificationOut"
+      },
+      "OnboardRequest": {
+        "properties": {
+          "osmId": {
+            "type": "string",
+            "maxLength": 32,
+            "pattern": "^(node|way|relation)/[1-9][0-9]*$",
+            "title": "Osmid"
+          }
+        },
+        "type": "object",
+        "required": [
+          "osmId"
+        ],
+        "title": "OnboardRequest"
+      },
+      "OnboardStarted": {
+        "properties": {
+          "runId": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Runid"
+          },
+          "hotelId": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Hotelid"
+          }
+        },
+        "type": "object",
+        "required": [
+          "runId",
+          "hotelId"
+        ],
+        "title": "OnboardStarted"
+      },
+      "PartnerOverviewOut": {
+        "properties": {
+          "hotelId": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Hotelid"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "facts": {
+            "items": {
+              "$ref": "#/components/schemas/FactOut"
+            },
+            "type": "array",
+            "title": "Facts"
+          },
+          "conflicts": {
+            "items": {
+              "$ref": "#/components/schemas/app__api__schemas__partner__ConflictOut"
+            },
+            "type": "array",
+            "title": "Conflicts"
+          },
+          "coverage": {
+            "$ref": "#/components/schemas/CoverageOut"
+          }
+        },
+        "type": "object",
+        "required": [
+          "hotelId",
+          "name",
+          "facts",
+          "conflicts",
+          "coverage"
+        ],
+        "title": "PartnerOverviewOut"
+      },
+      "PeakOut": {
+        "properties": {
+          "ref": {
+            "type": "string",
+            "title": "Ref"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "distanceM": {
+            "type": "number",
+            "title": "Distancem"
+          },
+          "azimuthDeg": {
+            "type": "number",
+            "title": "Azimuthdeg"
+          },
+          "elevationDeg": {
+            "type": "number",
+            "title": "Elevationdeg"
+          }
+        },
+        "type": "object",
+        "required": [
+          "ref",
+          "name",
+          "distanceM",
+          "azimuthDeg",
+          "elevationDeg"
+        ],
+        "title": "PeakOut"
       },
       "PersonaOut": {
         "properties": {
@@ -1769,6 +5898,181 @@
           "rules"
         ],
         "title": "Planner"
+      },
+      "QualityReport": {
+        "properties": {
+          "generatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Generatedat"
+          },
+          "perCharacteristic": {
+            "items": {
+              "$ref": "#/components/schemas/CharacteristicQuality"
+            },
+            "type": "array",
+            "title": "Percharacteristic"
+          },
+          "hotelierShare": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hoteliershare"
+          },
+          "parseAccuracy": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "object",
+            "title": "Parseaccuracy"
+          },
+          "ndcg10": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ndcg10"
+          },
+          "gold": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Gold"
+          },
+          "knowledge": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Knowledge"
+          },
+          "intents": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Intents"
+          },
+          "hotelierAnswers": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Hotelieranswers"
+          },
+          "curator": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Curator"
+          },
+          "search": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Search"
+          },
+          "evaluationDate": {
+            "type": "string",
+            "title": "Evaluationdate"
+          },
+          "llmStatus": {
+            "type": "string",
+            "title": "Llmstatus"
+          }
+        },
+        "type": "object",
+        "required": [
+          "generatedAt",
+          "perCharacteristic",
+          "hotelierShare",
+          "parseAccuracy",
+          "ndcg10",
+          "gold",
+          "knowledge",
+          "intents",
+          "hotelierAnswers",
+          "curator",
+          "search",
+          "evaluationDate",
+          "llmStatus"
+        ],
+        "title": "QualityReport"
+      },
+      "QuestionOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "hotelId": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Hotelid"
+          },
+          "characteristic": {
+            "type": "string",
+            "title": "Characteristic"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "why": {
+            "type": "string",
+            "title": "Why"
+          },
+          "value": {
+            "type": "number",
+            "title": "Value"
+          },
+          "answerKind": {
+            "type": "string",
+            "enum": [
+              "facade_mapping",
+              "choice",
+              "number",
+              "free_text"
+            ],
+            "title": "Answerkind"
+          },
+          "options": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Options"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "open",
+              "answered"
+            ],
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "hotelId",
+          "characteristic",
+          "text",
+          "why",
+          "value",
+          "answerKind",
+          "options",
+          "status"
+        ],
+        "title": "QuestionOut"
       },
       "RatePlanOut": {
         "properties": {
@@ -1814,6 +6118,66 @@
         ],
         "title": "RatePlanOut"
       },
+      "RecommendationOut": {
+        "properties": {
+          "roomTypeId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Roomtypeid"
+          },
+          "roomName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Roomname"
+          },
+          "scope": {
+            "$ref": "#/components/schemas/ScopeOut"
+          },
+          "scopeText": {
+            "type": "string",
+            "title": "Scopetext"
+          },
+          "request": {
+            "type": "string",
+            "title": "Request"
+          },
+          "confirmedByHotel": {
+            "type": "boolean",
+            "title": "Confirmedbyhotel"
+          },
+          "priceDemo": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pricedemo"
+          }
+        },
+        "type": "object",
+        "required": [
+          "scope",
+          "scopeText",
+          "request",
+          "confirmedByHotel"
+        ],
+        "title": "RecommendationOut"
+      },
       "RegisterRequest": {
         "properties": {
           "email": {
@@ -1855,6 +6219,288 @@
         ],
         "title": "RegisterRequest",
         "description": "Data required for registration."
+      },
+      "RegistryLineOut": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "how": {
+            "type": "string",
+            "title": "How"
+          },
+          "checkable": {
+            "$ref": "#/components/schemas/Checkable"
+          },
+          "level": {
+            "type": "string",
+            "title": "Level"
+          },
+          "method": {
+            "type": "string",
+            "title": "Method"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "published",
+              "provisional",
+              "draft"
+            ],
+            "title": "Status"
+          },
+          "synonyms": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Synonyms"
+          },
+          "ttlDays": {
+            "type": "integer",
+            "title": "Ttldays"
+          },
+          "coverage": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Coverage"
+          },
+          "avgConfidence": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avgconfidence"
+          },
+          "staleShare": {
+            "type": "number",
+            "title": "Staleshare"
+          },
+          "conflicts": {
+            "type": "integer",
+            "title": "Conflicts"
+          },
+          "learnedFrom": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Learnedfrom"
+          },
+          "recipe": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Recipe"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "title",
+          "how",
+          "checkable",
+          "level",
+          "method",
+          "status",
+          "synonyms",
+          "ttlDays",
+          "staleShare",
+          "conflicts",
+          "recipe"
+        ],
+        "title": "RegistryLineOut"
+      },
+      "RelaxationOut": {
+        "properties": {
+          "chipId": {
+            "type": "string",
+            "title": "Chipid"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "wouldMatch": {
+            "type": "integer",
+            "title": "Wouldmatch"
+          }
+        },
+        "type": "object",
+        "required": [
+          "chipId",
+          "label",
+          "wouldMatch"
+        ],
+        "title": "RelaxationOut"
+      },
+      "ReliabilityBin": {
+        "properties": {
+          "from": {
+            "type": "number",
+            "title": "From"
+          },
+          "to": {
+            "type": "number",
+            "title": "To"
+          },
+          "n": {
+            "type": "integer",
+            "title": "N"
+          },
+          "meanProbability": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Meanprobability"
+          },
+          "positiveRate": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Positiverate"
+          }
+        },
+        "type": "object",
+        "required": [
+          "from",
+          "to",
+          "n",
+          "meanProbability",
+          "positiveRate"
+        ],
+        "title": "ReliabilityBin"
+      },
+      "ResearchOut": {
+        "properties": {
+          "chipId": {
+            "type": "string",
+            "title": "Chipid"
+          },
+          "hotelIds": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Hotelids"
+          },
+          "runId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Runid"
+          }
+        },
+        "type": "object",
+        "required": [
+          "chipId",
+          "hotelIds"
+        ],
+        "title": "ResearchOut"
+      },
+      "ResearchRequest": {
+        "properties": {
+          "chipId": {
+            "type": "string",
+            "title": "Chipid"
+          }
+        },
+        "type": "object",
+        "required": [
+          "chipId"
+        ],
+        "title": "ResearchRequest"
+      },
+      "ReserveHotelOut": {
+        "properties": {
+          "osmId": {
+            "type": "string",
+            "title": "Osmid"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "district": {
+            "type": "string",
+            "title": "District"
+          },
+          "location": {
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Location"
+          },
+          "floors": {
+            "type": "integer",
+            "title": "Floors"
+          }
+        },
+        "type": "object",
+        "required": [
+          "osmId",
+          "name",
+          "district",
+          "location",
+          "floors"
+        ],
+        "title": "ReserveHotelOut"
+      },
+      "ResolveRequest": {
+        "properties": {
+          "resolution": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 2,
+            "title": "Resolution"
+          }
+        },
+        "type": "object",
+        "required": [
+          "resolution"
+        ],
+        "title": "ResolveRequest"
       },
       "Role": {
         "type": "string",
@@ -1940,6 +6586,202 @@
         ],
         "title": "RoomTypeOut"
       },
+      "RouteLegOut": {
+        "properties": {
+          "minutes": {
+            "type": "number",
+            "title": "Minutes"
+          },
+          "lengthM": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lengthm"
+          },
+          "climbM": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Climbm"
+          },
+          "descentM": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Descentm"
+          },
+          "steps": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Steps"
+          },
+          "crossings": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Crossings"
+          }
+        },
+        "type": "object",
+        "required": [
+          "minutes",
+          "lengthM",
+          "climbM",
+          "descentM",
+          "steps",
+          "crossings"
+        ],
+        "title": "RouteLegOut"
+      },
+      "RouteOut": {
+        "properties": {
+          "hotelId": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Hotelid"
+          },
+          "targetRef": {
+            "type": "string",
+            "title": "Targetref"
+          },
+          "targetName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Targetname"
+          },
+          "profile": {
+            "$ref": "#/components/schemas/WalkProfile"
+          },
+          "there": {
+            "$ref": "#/components/schemas/RouteLegOut"
+          },
+          "back": {
+            "$ref": "#/components/schemas/RouteLegOut"
+          },
+          "geometry": {
+            "$ref": "#/components/schemas/LineStringOut"
+          },
+          "elevationProfile": {
+            "items": {
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              ],
+              "type": "array",
+              "maxItems": 2,
+              "minItems": 2
+            },
+            "type": "array",
+            "title": "Elevationprofile"
+          },
+          "estimated": {
+            "type": "boolean",
+            "title": "Estimated"
+          },
+          "uncertainShare": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Uncertainshare"
+          },
+          "osmRefs": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Osmrefs"
+          },
+          "attribution": {
+            "type": "string",
+            "title": "Attribution",
+            "default": "© OpenStreetMap contributors (ODbL); Copernicus DEM GLO-30 © DLR, ESA"
+          },
+          "caveats": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Caveats"
+          }
+        },
+        "type": "object",
+        "required": [
+          "hotelId",
+          "targetRef",
+          "targetName",
+          "profile",
+          "there",
+          "back",
+          "geometry",
+          "elevationProfile",
+          "estimated",
+          "uncertainShare",
+          "osmRefs",
+          "caveats"
+        ],
+        "title": "RouteOut"
+      },
+      "RunStarted": {
+        "properties": {
+          "runId": {
+            "type": "string",
+            "title": "Runid"
+          }
+        },
+        "type": "object",
+        "required": [
+          "runId"
+        ],
+        "title": "RunStarted"
+      },
       "RunStatus": {
         "type": "string",
         "enum": [
@@ -1950,9 +6792,330 @@
         ],
         "title": "RunStatus"
       },
+      "ScopeIn": {
+        "properties": {
+          "facades": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/Facade"
+                },
+                "type": "array",
+                "minItems": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Facades"
+          },
+          "floorFrom": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Floorfrom"
+          },
+          "floorTo": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Floorto"
+          },
+          "months": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "integer"
+                },
+                "type": "array",
+                "minItems": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Months"
+          },
+          "roomTypeIds": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array",
+                "minItems": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Roomtypeids"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "ScopeIn"
+      },
       "ScopeOut": {
         "additionalProperties": true,
         "type": "object"
+      },
+      "SearchRequest": {
+        "properties": {
+          "text": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text"
+          },
+          "chips": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/IntentChipModel"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Chips"
+          },
+          "trip": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TripModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "useProfile": {
+            "type": "boolean",
+            "title": "Useprofile",
+            "default": true
+          }
+        },
+        "type": "object",
+        "title": "SearchRequest",
+        "description": "Either text (parsed here) or the chips and trip of an edited intent canvas."
+      },
+      "SearchResultOut": {
+        "properties": {
+          "searchId": {
+            "type": "string",
+            "title": "Searchid"
+          },
+          "intent": {
+            "$ref": "#/components/schemas/IntentModel"
+          },
+          "matches": {
+            "items": {
+              "$ref": "#/components/schemas/HotelMatchOut"
+            },
+            "type": "array",
+            "title": "Matches"
+          },
+          "relaxations": {
+            "items": {
+              "$ref": "#/components/schemas/RelaxationOut"
+            },
+            "type": "array",
+            "title": "Relaxations"
+          },
+          "research": {
+            "items": {
+              "$ref": "#/components/schemas/ResearchOut"
+            },
+            "type": "array",
+            "title": "Research"
+          }
+        },
+        "type": "object",
+        "required": [
+          "searchId",
+          "intent",
+          "matches",
+          "relaxations",
+          "research"
+        ],
+        "title": "SearchResultOut"
+      },
+      "SelectionIn": {
+        "properties": {
+          "hotelId": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Hotelid"
+          },
+          "roomTypeId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Roomtypeid"
+          },
+          "facade": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Facade"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "floor": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Floor"
+          }
+        },
+        "type": "object",
+        "required": [
+          "hotelId"
+        ],
+        "title": "SelectionIn"
+      },
+      "SettingsModel": {
+        "properties": {
+          "llmMode": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "off"
+            ],
+            "title": "Llmmode"
+          },
+          "llmAvailable": {
+            "type": "boolean",
+            "title": "Llmavailable",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "llmMode"
+        ],
+        "title": "SettingsModel"
+      },
+      "SimilarIn": {
+        "properties": {
+          "change": {
+            "$ref": "#/components/schemas/Improvement"
+          },
+          "chips": {
+            "items": {
+              "$ref": "#/components/schemas/IntentChipModel"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "title": "Chips"
+          },
+          "trip": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TripModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "change"
+        ],
+        "title": "SimilarIn"
+      },
+      "SimilarOut": {
+        "properties": {
+          "sourceId": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Sourceid"
+          },
+          "change": {
+            "$ref": "#/components/schemas/Improvement"
+          },
+          "intent": {
+            "$ref": "#/components/schemas/IntentModel"
+          },
+          "matches": {
+            "items": {
+              "$ref": "#/components/schemas/HotelMatchOut"
+            },
+            "type": "array",
+            "title": "Matches"
+          },
+          "caveats": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Caveats"
+          }
+        },
+        "type": "object",
+        "required": [
+          "sourceId",
+          "change",
+          "intent",
+          "matches",
+          "caveats"
+        ],
+        "title": "SimilarOut"
+      },
+      "SolarIntersectionOut": {
+        "properties": {
+          "at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "At"
+          },
+          "behind": {
+            "type": "string",
+            "title": "Behind"
+          }
+        },
+        "type": "object",
+        "required": [
+          "at",
+          "behind"
+        ],
+        "title": "SolarIntersectionOut"
       },
       "SourceKind": {
         "type": "string",
@@ -1964,6 +7127,180 @@
           "demo_card"
         ],
         "title": "SourceKind"
+      },
+      "SunPositionOut": {
+        "properties": {
+          "at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "At"
+          },
+          "azimuthDeg": {
+            "type": "number",
+            "title": "Azimuthdeg"
+          },
+          "elevationDeg": {
+            "type": "number",
+            "title": "Elevationdeg"
+          }
+        },
+        "type": "object",
+        "required": [
+          "at",
+          "azimuthDeg",
+          "elevationDeg"
+        ],
+        "title": "SunPositionOut"
+      },
+      "SunsetOut": {
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date"
+          },
+          "at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "date",
+          "at"
+        ],
+        "title": "SunsetOut"
+      },
+      "TastePatch": {
+        "properties": {
+          "enabled": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Enabled"
+          },
+          "weights": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/TasteWeightIn"
+                },
+                "type": "array",
+                "maxItems": 100
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Weights"
+          }
+        },
+        "type": "object",
+        "title": "TastePatch"
+      },
+      "TasteProfileOut": {
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "summary": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Summary"
+          },
+          "weights": {
+            "items": {
+              "$ref": "#/components/schemas/TasteWeightOut"
+            },
+            "type": "array",
+            "title": "Weights"
+          }
+        },
+        "type": "object",
+        "required": [
+          "enabled",
+          "summary",
+          "weights"
+        ],
+        "title": "TasteProfileOut"
+      },
+      "TasteWeightIn": {
+        "properties": {
+          "characteristic": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Characteristic"
+          },
+          "weight": {
+            "type": "number",
+            "maximum": 3.0,
+            "minimum": 0.0,
+            "title": "Weight"
+          }
+        },
+        "type": "object",
+        "required": [
+          "characteristic",
+          "weight"
+        ],
+        "title": "TasteWeightIn"
+      },
+      "TasteWeightOut": {
+        "properties": {
+          "characteristic": {
+            "type": "string",
+            "title": "Characteristic"
+          },
+          "weight": {
+            "type": "number",
+            "title": "Weight"
+          },
+          "because": {
+            "type": "string",
+            "title": "Because"
+          }
+        },
+        "type": "object",
+        "required": [
+          "characteristic",
+          "weight",
+          "because"
+        ],
+        "title": "TasteWeightOut"
+      },
+      "ThumbnailOut": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "horizon",
+              "facades",
+              "map"
+            ],
+            "title": "Kind"
+          },
+          "params": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Params"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "params"
+        ],
+        "title": "ThumbnailOut"
       },
       "TokenPair": {
         "properties": {
@@ -2001,6 +7338,166 @@
         ],
         "title": "TokenPair",
         "description": "`refresh_token` is null for web clients: they get it as an httpOnly cookie\ntogether with a readable `csrf_token` cookie to echo in `X-CSRF-Token`."
+      },
+      "TripModel": {
+        "properties": {
+          "from": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "From"
+          },
+          "to": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "To"
+          },
+          "month": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 12.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Month"
+          },
+          "adults": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 10.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Adults"
+          },
+          "children": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 10.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Children"
+          },
+          "budgetPerNight": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Budgetpernight"
+          },
+          "area": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Area",
+            "description": "center | khosta | adler | sirius | krasnaya_polyana"
+          }
+        },
+        "type": "object",
+        "title": "TripModel"
+      },
+      "TripOut": {
+        "properties": {
+          "booking": {
+            "$ref": "#/components/schemas/BookingOut"
+          },
+          "promised": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Promised"
+          },
+          "facts": {
+            "items": {
+              "$ref": "#/components/schemas/FactOut"
+            },
+            "type": "array",
+            "title": "Facts"
+          },
+          "climate": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ClimateOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "sunsets": {
+            "items": {
+              "$ref": "#/components/schemas/SunsetOut"
+            },
+            "type": "array",
+            "title": "Sunsets"
+          },
+          "beachRoute": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RouteOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "caveats": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Caveats"
+          }
+        },
+        "type": "object",
+        "required": [
+          "booking",
+          "promised",
+          "facts",
+          "climate",
+          "sunsets",
+          "beachRoute",
+          "caveats"
+        ],
+        "title": "TripOut"
       },
       "UnknownOut": {
         "properties": {
@@ -2085,6 +7582,378 @@
           "type"
         ],
         "title": "ValidationError"
+      },
+      "WalkProfile": {
+        "type": "string",
+        "enum": [
+          "walk",
+          "stroller",
+          "wheelchair"
+        ],
+        "title": "WalkProfile",
+        "description": "Who walks (09 §6.2): a stroller cannot take steps, a wheelchair also avoids steep slopes."
+      },
+      "WindowOut": {
+        "properties": {
+          "hotelId": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Hotelid"
+          },
+          "facade": {
+            "$ref": "#/components/schemas/Facade"
+          },
+          "floor": {
+            "type": "integer",
+            "title": "Floor"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date"
+          },
+          "horizon": {
+            "items": {
+              "$ref": "#/components/schemas/HorizonRayOut"
+            },
+            "type": "array",
+            "title": "Horizon"
+          },
+          "peaks": {
+            "items": {
+              "$ref": "#/components/schemas/PeakOut"
+            },
+            "type": "array",
+            "title": "Peaks"
+          },
+          "sunPath": {
+            "items": {
+              "$ref": "#/components/schemas/SunPositionOut"
+            },
+            "type": "array",
+            "title": "Sunpath"
+          },
+          "sunrise": {
+            "$ref": "#/components/schemas/SunPositionOut"
+          },
+          "sunset": {
+            "$ref": "#/components/schemas/SunPositionOut"
+          },
+          "disappearance": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SolarIntersectionOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "appearance": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SolarIntersectionOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "seaFraction": {
+            "type": "number",
+            "title": "Seafraction"
+          },
+          "minimumSeaFloor": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Minimumseafloor"
+          },
+          "timezone": {
+            "type": "string",
+            "title": "Timezone",
+            "default": "Europe/Moscow"
+          },
+          "attribution": {
+            "type": "string",
+            "title": "Attribution"
+          },
+          "caveats": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Caveats"
+          }
+        },
+        "type": "object",
+        "required": [
+          "hotelId",
+          "facade",
+          "floor",
+          "date",
+          "horizon",
+          "peaks",
+          "sunPath",
+          "sunrise",
+          "sunset",
+          "disappearance",
+          "appearance",
+          "seaFraction",
+          "minimumSeaFloor",
+          "attribution",
+          "caveats"
+        ],
+        "title": "WindowOut"
+      },
+      "WishStarted": {
+        "properties": {
+          "runId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Runid",
+            "description": "Live research run, if the wish needs one"
+          },
+          "search": {
+            "$ref": "#/components/schemas/SearchResultOut"
+          }
+        },
+        "type": "object",
+        "required": [
+          "search"
+        ],
+        "title": "WishStarted"
+      },
+      "WorldChangeOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "building_added",
+              "building_removed",
+              "construction",
+              "poi_opened",
+              "osm_diff"
+            ],
+            "title": "Kind"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "At"
+          },
+          "affectedHotels": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Affectedhotels"
+          },
+          "runId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Runid"
+          },
+          "reverted": {
+            "type": "boolean",
+            "title": "Reverted",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "title",
+          "at",
+          "affectedHotels"
+        ],
+        "title": "WorldChangeOut"
+      },
+      "WorldChangeStarted": {
+        "properties": {
+          "changeId": {
+            "type": "string",
+            "title": "Changeid"
+          },
+          "runId": {
+            "type": "string",
+            "title": "Runid"
+          }
+        },
+        "type": "object",
+        "required": [
+          "changeId",
+          "runId"
+        ],
+        "title": "WorldChangeStarted"
+      },
+      "app__api__schemas__console__ConflictOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "hotelId": {
+            "type": "string",
+            "title": "Hotelid"
+          },
+          "characteristic": {
+            "type": "string",
+            "title": "Characteristic"
+          },
+          "claims": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Claims"
+          },
+          "rule": {
+            "type": "string",
+            "enum": [
+              "physics",
+              "hotelier",
+              "freshest",
+              "guests"
+            ],
+            "title": "Rule"
+          },
+          "resolution": {
+            "type": "string",
+            "title": "Resolution"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "open",
+              "resolved",
+              "waiting_hotel"
+            ],
+            "title": "Status"
+          },
+          "cells": {
+            "type": "integer",
+            "title": "Cells"
+          },
+          "questionId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Questionid"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Createdat"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "hotelId",
+          "characteristic",
+          "claims",
+          "rule",
+          "resolution",
+          "status",
+          "cells",
+          "createdAt"
+        ],
+        "title": "ConflictOut"
+      },
+      "app__api__schemas__partner__ConflictOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "hotelId": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Hotelid"
+          },
+          "characteristic": {
+            "type": "string",
+            "title": "Characteristic"
+          },
+          "claims": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Claims"
+          },
+          "rule": {
+            "type": "string",
+            "title": "Rule"
+          },
+          "resolution": {
+            "type": "string",
+            "title": "Resolution"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "questionId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Questionid"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "hotelId",
+          "characteristic",
+          "claims",
+          "rule",
+          "resolution",
+          "status",
+          "questionId"
+        ],
+        "title": "ConflictOut"
       }
     },
     "securitySchemes": {
