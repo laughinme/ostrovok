@@ -16,6 +16,7 @@ import pydantic_ai
 from openai import AsyncOpenAI
 from pydantic import BaseModel
 from pydantic_ai import Agent, Tool, UsageLimits
+from pydantic_ai.exceptions import UnexpectedModelBehavior, UsageLimitExceeded
 from pydantic_ai.models import Model
 from pydantic_ai.models.openai import OpenAIChatModel, OpenAIResponsesModel
 from pydantic_ai.providers.openai import OpenAIProvider
@@ -191,7 +192,9 @@ class PydanticAiLanguageModel:
             )
         except Exception as exc:  # any provider, schema or limit failure means "use the rules"
             logger.warning("LLM task %s failed: %r", task, exc)
-            if not isinstance(exc, TimeoutError | ValueError):
+            if not isinstance(
+                exc, TimeoutError | ValueError | UnexpectedModelBehavior | UsageLimitExceeded
+            ):
                 self._breaker.trip()
             await self._log(
                 task,
