@@ -1,6 +1,8 @@
 from collections.abc import Mapping
 from typing import Any
 
+EVALUATION_VERSION = 2
+
 
 def _number(value: Any) -> str:
     return "нет данных" if value is None else f"{value:.4f}"
@@ -137,6 +139,8 @@ def comparison_table(runs: list[Mapping[str, Any]]) -> str:
         strong = run["usage"]["strong"]["tasks"].get("curator", {})
         per_call = fast.get("costPerCallUsd")
         name = f"{run['model']} ({run['thinking']})"
+        if run.get("evaluationVersion") != EVALUATION_VERSION:
+            name += " [архив v1]"
         if run["strongModel"] != run["model"] or run["thinkingStrong"] != run["thinking"]:
             name += f" + {run['strongModel']} ({run['thinkingStrong']})"
         lines.append(

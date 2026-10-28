@@ -50,6 +50,13 @@ def main() -> None:
         fact = hotel["facts"][0]
         check("why we think so", http.get(f"/api/v1/facts/{fact['id']}"))
         check("characteristics", http.get("/api/v1/characteristics"))
+        check("moods", http.get("/api/v1/moods?month=11"))
+        base = f"/api/v1/hotels/{top['hotelId']}"
+        check("window", http.get(base + "/window?facade=W&floor=3&date=2026-11-12"))
+        check("noise", http.get(base + "/noise"))
+        check("beach route", http.get(base + "/routes/beach"))
+        check("climate", http.get(base + "/climate?from=2026-11-12&to=2026-11-15"))
+        check("day", http.get(base + "/day?date=2026-11-12"))
         token = check(
             "demo operator",
             http.post(
@@ -59,6 +66,23 @@ def main() -> None:
         auth = {"Authorization": f"Bearer {token}"}
         check("console registry", http.get("/api/v1/console/registry", headers=auth))
         check("console runs", http.get("/api/v1/console/runs?limit=5", headers=auth))
+        check("LLM journal", http.get("/api/v1/console/llm/calls?limit=1", headers=auth))
+        check("LLM usage", http.get("/api/v1/console/llm/usage", headers=auth))
+        mcp = http.post(
+            "/mcp",
+            headers={"Accept": "application/json, text/event-stream", "Host": "localhost:8080"},
+            json={
+                "jsonrpc": "2.0",
+                "id": 1,
+                "method": "initialize",
+                "params": {
+                    "protocolVersion": "2025-03-26",
+                    "capabilities": {},
+                    "clientInfo": {"name": "smoke", "version": "1"},
+                },
+            },
+        )
+        assert "result" in check("MCP", mcp)
     print(f"smoke passed in {time.perf_counter() - started:.1f} s")
 
 

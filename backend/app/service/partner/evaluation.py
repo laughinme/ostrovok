@@ -4,7 +4,7 @@ from pathlib import Path
 
 import yaml
 
-from app.domain.partner.answers import AnswerInput, AnswerParser
+from app.domain.partner.answers import AnswerInput, AnswerParser, ParsedAnswer
 
 _DESCRIPTIVE = frozenset({"conditions", "window_type", "notes"})
 
@@ -29,8 +29,14 @@ async def evaluate_answers(
     raw = await asyncio.to_thread(path.read_text, encoding="utf-8")
     cases = yaml.safe_load(raw)
     evaluated = fallbacks = 0
-    for case in cases:
-        parsed = await parser.parse(AnswerInput(case["question_key"], case["answer_text"]))
+    gate = asyncio.Semaphore(4 if require_llm else 1)
+
+    async def parse(key: str, text: str) -> ParsedAnswer:
+        async with gate:
+            return await parser.parse(AnswerInput(key, text))
+
+    results = await asyncio.gather(*(parse(c["question_key"], c["answer_text"]) for c in cases))
+    for case, parsed in zip(cases, results, strict=True):
         fallbacks += parsed.parser != "llm"
         if require_llm and parsed.parser != "llm":
             continue
