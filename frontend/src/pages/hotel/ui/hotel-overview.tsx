@@ -155,45 +155,50 @@ export function HotelOverview({
         </aside>
       </Reveal>
       <nav className="hotel-section-nav" aria-label="Об отеле">
-        <a href="#hotel-about">Об отеле</a>
-        <a href="#window">Ваше окно</a>
         <a href="#rooms">
           Номера <span>{h.rooms.length}</span>
         </a>
+        <a href="#hotel-about">Об отеле</a>
+        <a href="#window">Ваше окно</a>
         <a href="#hotel-facts">Факты и источники</a>
         <a href="#where">Расположение</a>
       </nav>
-      <Reveal
-        className={`hotel-about${h.amenities.length ? "" : " hotel-about--simple"}`}
-        delay={0.1}
-      >
-        <section id="hotel-about" className="hotel-about-copy">
-          <h2>Об отеле</h2>
-          <p>{hotel.description || h.tagline}</p>
-        </section>
-        {h.amenities.length > 0 && (
-          <section className="hotel-about-amenities" aria-label="Удобства отеля">
-            <h3>Удобства</h3>
-            <ul className="hotel-amenities">
-              {h.amenities.map((item, index) => (
-                <li key={`${item}-${index}`}>
-                  <Check size={15} aria-hidden="true" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
-        {hotel.searchMatch?.tradeoff && (
-          <div className="hotel-tradeoff">
-            <Info size={17} aria-hidden="true" />
-            <p>
-              <b>Стоит учесть</b>
-              {hotel.searchMatch.tradeoff}
-            </p>
-          </div>
-        )}
-      </Reveal>
     </>
+  );
+}
+
+export function HotelAbout({ hotel, details: h }: { hotel: Hotel; details: HotelDetails }) {
+  return (
+    <Reveal
+      className={`hotel-about${h.amenities.length ? "" : " hotel-about--simple"}`}
+      delay={0.1}
+    >
+      <section id="hotel-about" className="hotel-about-copy">
+        <h2>Об отеле</h2>
+        <p>{hotel.description || h.tagline}</p>
+      </section>
+      {h.amenities.length > 0 && (
+        <section className="hotel-about-amenities" aria-label="Удобства отеля">
+          <h3>Удобства</h3>
+          <ul className="hotel-amenities">
+            {h.amenities.map((item, index) => (
+              <li key={`${item}-${index}`}>
+                <Check size={15} aria-hidden="true" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+      {hotel.searchMatch?.tradeoff && (
+        <div className="hotel-tradeoff">
+          <Info size={17} aria-hidden="true" />
+          <p>
+            <b>Стоит учесть</b>
+            {hotel.searchMatch.tradeoff}
+          </p>
+        </div>
+      )}
+    </Reveal>
   );
 }
