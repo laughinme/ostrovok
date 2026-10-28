@@ -1,6 +1,6 @@
 import { catalogQuery, factFromApi, hotelFromApi } from "@/entities/hotel";
 import { demoApi } from "@/entities/session";
-import type { components } from "@/shared/api";
+import { type components } from "@/shared/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -27,7 +27,7 @@ export function useHotelProfile() {
   const [msgs, setMsgs] = useState<{ from: "bot" | "me"; text: string }[]>([
     {
       from: "bot",
-      text: "Выберите вопрос агента или характеристику, которую хотите уточнить. Ответ сохранится в сервисе.",
+      text: "Здравствуйте! Помогу уточнить детали об отеле. Выберите вопрос гостя или характеристику и ответьте своими словами.",
     },
   ]);
   const [input, setInput] = useState("");
@@ -116,11 +116,15 @@ export function useHotelProfile() {
     correct,
     confirmed: facts.filter((fact) => fact.status === "confirmed").length,
     coverage: Math.round((overview.data?.coverage.share ?? 0) * 100),
+    coverageKnown: overview.data?.coverage.known ?? 0,
+    coverageTotal: overview.data?.coverage.total ?? 0,
+    conflicts: overview.data?.conflicts ?? [],
+    selectedId: target?.id,
     pending: catalog.isPending || (!!raw && (overview.isPending || questions.isPending)),
     error:
-      catalog.error ??
-      overview.error ??
-      questions.error ??
+      (!catalog.data ? catalog.error : null) ??
+      (!overview.data ? overview.error : null) ??
+      (!questions.data ? questions.error : null) ??
       (!catalog.isPending && !raw ? new Error("Демо-отель Салют отсутствует в каталоге") : null),
     retry: () => {
       void catalog.refetch();
