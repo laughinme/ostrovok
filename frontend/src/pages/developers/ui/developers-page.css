@@ -1,0 +1,44 @@
+.developers-intro-info {
+  position: relative;
+  display: inline-flex;
+  vertical-align: middle;
+  margin-left: 4px;
+  font-family: Onest, system-ui, sans-serif;
+  letter-spacing: normal;
+}
+.developers-intro-info > button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  color: var(--muted-foreground);
+  cursor: pointer;
+}
+.developers-intro-info > button:hover,
+.developers-intro-info > button[aria-expanded="true"] {
+  background: var(--muted);
+  color: var(--primary);
+}
+.developers-intro-info > button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+.developers-intro-tooltip {
+  position: fixed;
+  z-index: 50;
+  display: block;
+  width: min(420px, calc(100vw - 32px));
+  padding: 18px 20px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--card);
+  color: var(--foreground);
+  box-shadow: 0 12px 32px #0b15331a;
+  white-space: normal;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.65;
+  text-align: left;
+}
