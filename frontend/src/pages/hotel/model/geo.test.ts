@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { elevationPath, noiseFacades, relativeAzimuth, tripDates, type NoiseData } from "./geo";
+import {
+  elevationPath,
+  noiseFacades,
+  solarVisibility,
+  relativeAzimuth,
+  tripDates,
+  type NoiseData,
+} from "./geo";
 
 describe("hotel geo mappings", () => {
   it("preserves trip dates across a month boundary", () => {
@@ -40,5 +47,50 @@ describe("hotel geo mappings", () => {
       ]),
     ).toBe("M10,90  M390,20");
     expect(elevationPath([[0, null]])).toBe("");
+  });
+});
+
+describe("window visibility", () => {
+  const data: import("./geo").WindowData = {
+    hotelId: "hotel",
+    facade: "N",
+    floor: 3,
+    date: "2026-11-15",
+    horizon: [],
+    peaks: [],
+    sunPath: [],
+    sunrise: { at: "2026-11-15T07:00:00+03:00", azimuthDeg: 0, elevationDeg: -0.5 },
+    sunset: { at: "2026-11-15T17:00:00+03:00", azimuthDeg: 245, elevationDeg: -0.5 },
+    appearance: null,
+    disappearance: null,
+    seaFraction: 0,
+    minimumSeaFloor: null,
+    timezone: "Europe/Moscow",
+    attribution: "OSM",
+    caveats: [],
+  };
+  it("distinguishes missing horizon, blocked events and events outside the window", () => {
+    expect(solarVisibility(data, "sunrise")).toBe("нет данных");
+    const horizon = [350, 0, 10].map((azimuthDeg) => ({
+      azimuthDeg,
+      angleDeg: 0,
+      kind: "sea" as const,
+      seaLowDeg: -5,
+      seaHighDeg: 0,
+    }));
+    expect(solarVisibility({ ...data, horizon }, "sunrise")).toBe("виден");
+    expect(solarVisibility({ ...data, horizon }, "sunset")).toBe("вне окна");
+    expect(
+      solarVisibility(
+        { ...data, horizon: horizon.map((ray) => ({ ...ray, angleDeg: 10, kind: "terrain" })) },
+        "sunrise",
+      ),
+    ).toBe("закрыт горизонтом");
+    expect(
+      solarVisibility(
+        { ...data, horizon: horizon.map((ray) => ({ ...ray, angleDeg: null, kind: "unknown" })) },
+        "sunrise",
+      ),
+    ).toBe("нет данных");
   });
 });
