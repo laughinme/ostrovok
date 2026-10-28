@@ -504,7 +504,7 @@ Affine/rasterio (`lon=a*col+b*row+c`, `lat=d*col+e*row+f`, угол пиксел
 Готово, когда: день для трёх отелей выглядит правдоподобно, у маршрутов есть подъёмы и время обратно.
 
 ### B5.7 · Качество
-Статус: todo
+Статус: в работе · codex-quality · 28.10 09:07 МСК
 Зависит от: B2.12, B3.4 (R7)
 Что: эталон, метрики из 09 §14, `make eval`, `quality_reports`, `/console/quality`.
 Готово, когда: отчёт виден в консоли, цифры есть в README.
@@ -530,7 +530,8 @@ Affine/rasterio (`lon=a*col+b*row+c`, `lat=d*col+e*row+f`, угол пиксел
 ## Этап 6. Сдача
 
 ### B6.1 · README и ARCHITECTURE.md бэкенда
-Статус: todo
+Статус: в работе · codex-docs · 28.10 09:07 МСК
+Область codex-docs: `backend/README.md` и `backend/ARCHITECTURE.md`; корневой README — claude-core.
 Зависит от: B4.7
 Что: README по шаблону правил (01 §4): режимы с ключом и без, провайдер и модель, учётки, атрибуции;
 `backend/ARCHITECTURE.md` из 09 §2–§14 без внутренних частей.
