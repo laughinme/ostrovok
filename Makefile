@@ -64,8 +64,9 @@ export-seed: ## Dump collected knowledge and agent traces into backend/data/seed
 eval: ## Quality metrics on the gold set (needs `make dev`)
 	$(UV) python -m app.cli eval
 
-eval-llm: ## Compare LLM models on the R2/R3/R8 sets (spends API credits, cached)
-	$(UV) python -m app.cli eval-llm
+LLM_MODELS ?= gpt-5.4-mini gpt-5-nano gpt-4.1-mini
+eval-llm: ## Compare LLM models on the eval sets (spends API credits, cached): make eval-llm LLM_MODELS="a b"
+	cd $(BACKEND) && for m in $(LLM_MODELS); do echo "== $$m"; LLM_MODEL=$$m uv run python -m app.cli eval --llm; done
 
 jury-secrets: ## Encrypt .env.jury for the organizers into secrets.env.age (needs `age`)
 	@test -f .env.jury || (echo "create .env.jury with the jury LLM key first" && exit 1)
