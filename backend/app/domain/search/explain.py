@@ -3,12 +3,13 @@ numbers of the facts it was given; anything else falls back to the template."""
 
 import re
 from collections.abc import Iterable
+from decimal import Decimal
 
 _NUMBER = re.compile(r"\d+(?:[.,]\d+)?")
 
 
 def numbers(text: str) -> set[str]:
-    return {n.replace(",", ".").rstrip("0").rstrip(".") or "0" for n in _NUMBER.findall(text)}
+    return {str(Decimal(n.replace(",", ".")).normalize()) for n in _NUMBER.findall(text)}
 
 
 def faithful(rewritten: str, sources: Iterable[str], *, max_len: int = 220) -> bool:
