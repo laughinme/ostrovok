@@ -3,7 +3,7 @@ from uuid import UUID
 
 from fastapi import APIRouter, BackgroundTasks
 
-from app.api.deps import ClockDep, EventsDep, SettingsDep, UowDep
+from app.api.deps import ClockDep, EventsDep, LlmDep, SettingsDep, UowDep
 from app.api.partner_deps import PartnerAccessDep, PartnerUserDep
 from app.api.schemas.booking import BookingOut, NotificationOut
 from app.api.schemas.knowledge import FactOut
@@ -26,6 +26,7 @@ from app.service.partner.demand import PartnerDemand
 from app.service.partner.events import publish_booking_decision, publish_partner_facts
 from app.service.partner.facades import PartnerFacades
 from app.service.partner.facts import PartnerFacts
+from app.service.partner.llm_answers import answer_parser
 from app.service.partner.questions import PartnerQuestions
 from app.service.partner.requests import PartnerRequests, hotel_notifications
 from app.service.partner.simulation import schedule_simulation
@@ -66,10 +67,11 @@ async def post_answer(
     uow: UowDep,
     clock: ClockDep,
     events: EventsDep,
+    llm: LlmDep,
     background: BackgroundTasks,
 ) -> AnswerOut:
     await access.question(user.id, question_id)
-    result = await PartnerAnswers(uow, clock).submit(
+    result = await PartnerAnswers(uow, clock, answer_parser(llm)).submit(
         question_id, text=payload.text, payload=payload.to_payload()
     )
     background.add_task(publish_partner_facts, events, result.changed)

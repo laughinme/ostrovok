@@ -25,6 +25,7 @@ dependencies = [
     "rapidfuzz>=3.14",
     "pydantic-ai-slim[openai]>=2.0",
     "mcp>=2.0.0,<3",
+    "genai-prices>=0.1.13",
 ]
 
 [dependency-groups]

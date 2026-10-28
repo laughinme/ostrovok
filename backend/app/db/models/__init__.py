@@ -1,4 +1,4 @@
-from app.db.models.agents import AgentRunRow, AgentStepRow, AppSetting, LlmCacheRow
+from app.db.models.agents import AgentRunRow, AgentStepRow, AppSetting, LlmCacheRow, LlmCallRow
 from app.db.models.catalog import Building, FacadeRoom, Hotel, OsmFeature, RoomType, WorldChange
 from app.db.models.guest import (
     BookingRow,
@@ -46,6 +46,7 @@ __all__ = [
     "HotelierQuestion",
     "Job",
     "LlmCacheRow",
+    "LlmCallRow",
     "NotificationRow",
     "ObservationRow",
     "OsmFeature",

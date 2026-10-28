@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import Any, Literal, Self
+from uuid import UUID
 
 from pydantic import Field
 
@@ -107,6 +108,40 @@ class WorldChangeStarted(ApiModel):
 class SettingsModel(ApiModel):
     llm_mode: Literal["auto", "off"]
     llm_available: bool = False
+    llm_model: str | None = Field(None, description="Read-only: model for parsing text")
+    llm_model_strong: str | None = Field(None, description="Read-only: the Curator's model")
+
+
+class LlmCallOut(ApiModel):
+    id: UUID
+    created_at: datetime
+    task: str
+    model: str
+    status: Literal["ok", "cached", "failed", "limit"]
+    prompt: str
+    output: Any = None
+    tool_calls: list[Any]
+    usage: dict[str, Any]
+    cost_usd: float
+    latency_ms: int
+    error: str | None = None
+
+
+class LlmSpendOut(ApiModel):
+    task: str
+    model: str
+    calls: int
+    cached: int
+    failed: int
+    cost_usd: float
+    p50_ms: int | None = None
+
+
+class LlmUsageOut(ApiModel):
+    today: list[LlmSpendOut]
+    total: list[LlmSpendOut]
+    today_cost_usd: float
+    total_cost_usd: float
 
 
 class DemoResetOut(ApiModel):

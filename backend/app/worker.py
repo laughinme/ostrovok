@@ -207,6 +207,7 @@ async def run_worker(settings: Settings) -> None:
         clock,
         settings.data_dir,
         llm,
+        llm_strong=build_language_model(settings, db, redis, strong=True),
         simulator_delay=settings.simulator_delay_range
         if settings.hotelier_simulator == "on"
         else None,
@@ -227,6 +228,7 @@ async def run_worker(settings: Settings) -> None:
                 clock,
                 RedisEventBus(redis),
                 YamlHiddenTruth(settings.data_dir / "demo/hidden_truth.yaml"),
+                llm,
             )
             if settings.hotelier_simulator == "on"
             else None,

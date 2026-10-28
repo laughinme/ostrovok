@@ -63,7 +63,7 @@ class AgentRun:
     started_at: datetime | None = None
     finished_at: datetime | None = None
     steps: tuple[Step, ...] = ()
-    usage: dict[str, int] | None = None
+    usage: dict[str, float] | None = None
     subject: dict[str, Any] | None = None
     error: str | None = None
 

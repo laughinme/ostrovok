@@ -12,6 +12,10 @@ ENV_FILES = (BASE_DIR.parent / ".env", BASE_DIR / ".env")
 DEV_CSRF_KEY = "change-me"
 
 
+# Reasoning effort; "default" leaves it to the model, "off" asks for none.
+LlmThinking = Literal["default", "off", "minimal", "low", "medium", "high"]
+
+
 class Settings(BaseSettings):
     """
     Application settings. Read once at startup from the environment and `.env`,
@@ -60,6 +64,8 @@ class Settings(BaseSettings):
     llm_api_key: SecretStr = SecretStr("")
     llm_model: str = ""
     llm_model_strong: str = ""
+    llm_thinking: LlmThinking = "low"
+    llm_thinking_strong: LlmThinking = "medium"
     llm_timeout_sec: float = 15.0
     llm_mode: Literal["auto", "off"] = "auto"
     llm_daily_call_limit: int = 300

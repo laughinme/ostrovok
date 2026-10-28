@@ -75,7 +75,7 @@ def _fields(answer: AnswerInput, text: str) -> dict[str, Any]:
     return {**scoped, field: value}
 
 
-def _value(answer: AnswerInput, fields: dict[str, Any]) -> Any:
+def answer_value(answer: AnswerInput, fields: dict[str, Any]) -> Any:
     key = answer.characteristic
     if key == "pets_policy":
         allowed = fields.get("allowed")
@@ -104,7 +104,7 @@ class RulesAnswerParser:
         if answer.value_type in {"number", "category"}:
             return self._scalar(answer, text)
         fields = _fields(answer, text)
-        value = _value(answer, fields)
+        value = answer_value(answer, fields)
         certain = value is not None and not ambiguous(text)
         if answer.characteristic == "facade_rooms":
             certain = certain and all(

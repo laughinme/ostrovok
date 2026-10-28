@@ -6,26 +6,51 @@ failure — no key, provider error, timeout, schema mismatch, daily limit — be
 
 import asyncio
 import logging
+import time
 from collections.abc import Sequence
 from typing import Any
 
+import pydantic_ai
 from pydantic import BaseModel
 from pydantic_ai import Agent, Tool, UsageLimits
 from pydantic_ai.models import Model
-from pydantic_ai.models.openai import OpenAIChatModel
+from pydantic_ai.models.openai import OpenAIChatModel, OpenAIResponsesModel
 from pydantic_ai.providers.openai import OpenAIProvider
+from pydantic_ai.settings import ModelSettings
 
+from app.core.config import LlmThinking
 from app.infra.llm.cache import LlmCache, cache_key, schema_fingerprint
 from app.infra.llm.guards import CircuitBreaker, DailyLimit, ModeSwitch
+from app.infra.llm.journal import LlmJournal, run_cost, tool_calls
 from app.service.ports import Budget, LlmResult, LlmUnavailableError, ToolSpec, Usage
 
 logger = logging.getLogger(__name__)
 
+Thinking = LlmThinking
+
+
+def model_settings(thinking: Thinking) -> ModelSettings:
+    """Reasoning effort via PydanticAI's unified `thinking` setting; "default" keeps the model's."""
+    if thinking == "default":
+        return ModelSettings()
+    return ModelSettings(thinking=False if thinking == "off" else thinking)
+
+
+pydantic_ai.BANNER_ENABLED = False  # logs are ours: no first-run banner in stdout
+
+OPENAI_API = "api.openai.com"
+
 
 def openai_compatible(base_url: str, api_key: str, model: str) -> Model:
-    return OpenAIChatModel(
-        model, provider=OpenAIProvider(base_url=base_url or None, api_key=api_key)
-    )
+    """
+    OpenAI itself through the Responses API: there reasoning effort and function tools work
+    together (Chat Completions rejects the pair for gpt-5.4+). Every other OpenAI-compatible
+    endpoint (Gemini, OpenRouter, Yandex, Ollama) through Chat Completions.
+    """
+    provider = OpenAIProvider(base_url=base_url or None, api_key=api_key)
+    if not base_url or OPENAI_API in base_url:
+        return OpenAIResponsesModel(model, provider=provider)
+    return OpenAIChatModel(model, provider=provider)
 
 
 class PydanticAiLanguageModel:
@@ -36,17 +61,25 @@ class PydanticAiLanguageModel:
         model_name: str,
         timeout_sec: float,
         limit: DailyLimit,
+        thinking: Thinking = "default",
         cache: LlmCache | None = None,
         breaker: CircuitBreaker | None = None,
         switch: ModeSwitch | None = None,
+        journal: LlmJournal | None = None,
     ) -> None:
         self._switch = switch
         self._model = model
         self._name = model_name
         self._timeout = timeout_sec
         self._limit = limit
+        self._thinking = thinking
         self._cache = cache
         self._breaker = breaker or CircuitBreaker()
+        self._journal = journal
+
+    @property
+    def name(self) -> str:
+        return self._name
 
     @property
     def available(self) -> bool:
@@ -89,6 +122,7 @@ class PydanticAiLanguageModel:
             raise LlmUnavailableError("LLM выключена в консоли")
         key = cache_key(
             self._name,
+            self._thinking,
             task,
             system,
             prompt,
@@ -96,20 +130,25 @@ class PydanticAiLanguageModel:
             ",".join(t.name for t in tools),
         )
         if self._cache is not None and (hit := await self._cache.get(key)):
-            return LlmResult(output.model_validate(hit["output"]), Usage(), self._name, cached=True)
+            cached = output.model_validate(hit["output"])
+            await self._log(task, "cached", prompt, output=hit["output"])
+            return LlmResult(cached, Usage(), self._name, cached=True)
         if not await self._limit.take():
+            await self._log(task, "limit", prompt, error="daily LLM call limit reached")
             raise LlmUnavailableError("daily LLM call limit reached")
         agent = Agent(
             self._model,
             output_type=output,
             instructions=system,
             tools=[_tool(t) for t in tools],
+            model_settings=model_settings(self._thinking),
         )
         limits = UsageLimits(
             request_limit=budget.max_requests,
             tool_calls_limit=budget.max_tool_calls,
             output_tokens_limit=budget.max_output_tokens,
         )
+        started = time.perf_counter()
         try:
             result = await asyncio.wait_for(
                 agent.run(prompt, usage_limits=limits),
@@ -119,27 +158,63 @@ class PydanticAiLanguageModel:
             logger.warning("LLM task %s failed: %r", task, exc)
             if not isinstance(exc, TimeoutError | ValueError):
                 self._breaker.trip()
+            await self._log(
+                task,
+                "failed",
+                prompt,
+                latency_ms=_since(started),
+                error=f"{type(exc).__name__}: {exc}",
+            )
             raise LlmUnavailableError(f"{type(exc).__name__}: {exc}") from exc
+        latency = _since(started)
         self._breaker.reset()
         run_usage = result.usage
         usage = Usage(
             requests=run_usage.requests,
             input_tokens=run_usage.input_tokens,
             output_tokens=run_usage.output_tokens,
+            cached_tokens=run_usage.cache_read_tokens,
         )
+        usage = Usage(
+            usage.requests,
+            usage.input_tokens,
+            usage.output_tokens,
+            usage.cached_tokens,
+            run_cost(self._name, run_usage.cost, usage),
+        )
+        dumped = result.output.model_dump(mode="json")
         if self._cache is not None:
             await self._cache.put(
                 key,
                 model=self._name,
                 task=task,
-                output=result.output.model_dump(mode="json"),
+                output=dumped,
                 usage={
                     "requests": usage.requests,
                     "inputTokens": usage.input_tokens,
                     "outputTokens": usage.output_tokens,
                 },
             )
-        return LlmResult(result.output, usage, self._name)
+        await self._log(
+            task,
+            "ok",
+            prompt,
+            output=dumped,
+            calls=tool_calls(result.all_messages(), {t.name for t in tools}),
+            usage=usage,
+            latency_ms=latency,
+        )
+        return LlmResult(result.output, usage, self._name, latency_ms=latency)
+
+    async def _log(self, task: str, status: str, prompt: str, **fields: Any) -> None:
+        if self._journal is not None:
+            await self._journal.write(
+                task=task, model=self._name, status=status, prompt=prompt, **fields
+            )
+
+
+def _since(started: float) -> int:
+    return round((time.perf_counter() - started) * 1000)
 
 
 def _tool(spec: ToolSpec) -> Tool[Any]:
