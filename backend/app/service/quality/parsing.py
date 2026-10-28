@@ -5,7 +5,7 @@ from datetime import date
 from pathlib import Path
 from typing import Any
 
-from app.domain.knowledge.curation import Decision, PlaceTerm, propose
+from app.domain.knowledge.curation import Decision, PlaceTerm, RecipeDraft, propose
 from app.domain.partner.answers import AnswerParser
 from app.domain.quality.metrics import KeyCounts, key_counts, ratio
 from app.domain.search.intent import Intent
@@ -98,6 +98,8 @@ def _params(recipe: Mapping[str, Any]) -> dict[str, Any]:
         "walk_minutes": recipe.get("within_minutes"),
         "meters": recipe.get("within_m"),
     }
+    if recipe.get("kind") == "derived":
+        result["expr"] = {recipe.get("op"): recipe.get("keys")}
     return result
 
 
@@ -108,17 +110,28 @@ def _parameter_matches(recipe: Mapping[str, Any], key: str, expected: Any) -> bo
     return key in recipe and _subset(recipe[key], expected)
 
 
-async def curator_metrics(path: Path, places: Sequence[PlaceTerm]) -> dict[str, Any]:
+def rules_plan(places: Sequence[PlaceTerm]) -> Callable[[str], Awaitable[RecipeDraft]]:
+    async def plan(description: str) -> RecipeDraft:
+        return propose(description, places)
+
+    return plan
+
+
+async def curator_metrics(
+    path: Path, plan: Callable[[str], Awaitable[RecipeDraft]]
+) -> dict[str, Any]:
     cases = await read_yaml(path)
     methods = correct = total = 0
     details = []
     for case in cases:
-        draft = propose(case["description"], places)
+        draft = await plan(case["description"])
         method = "cannot_check" if draft.decision is Decision.CANNOT else draft.recipe.get("kind")
         matched = method == case["expected_method"]
         methods += matched
         params = {
-            k: v for k, v in case["expected_params"].items() if k not in {"question", "reason"}
+            k: v
+            for k, v in case["expected_params"].items()
+            if k not in {"question", "reason", "value_schema"}
         }
         normalized = _params(draft.recipe)
         hits = sum(matched and _parameter_matches(normalized, k, v) for k, v in params.items())
@@ -140,5 +153,6 @@ async def curator_metrics(path: Path, places: Sequence[PlaceTerm]) -> dict[str, 
         "correctParams": correct,
         "totalParams": total,
         "cases": details,
-        "note": "Схемы ответов включены; свободные формулировки question/reason исключены",
+        "note": "Свободные формулировки question/reason и value_schema (у нас answer_kind) "
+        "исключены",
     }

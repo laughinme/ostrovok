@@ -8,7 +8,7 @@ from app.domain.knowledge.curation import PlaceTerm
 from app.domain.partner.rules import RulesAnswerParser
 from app.domain.search.intent import Chip, Importance, Intent
 from app.domain.search.trip import TripDraft
-from app.service.quality.parsing import answer_metrics, curator_metrics, intent_metrics
+from app.service.quality.parsing import answer_metrics, curator_metrics, intent_metrics, rules_plan
 
 DATA = Path(__file__).resolve().parents[3] / "data"
 
@@ -60,6 +60,8 @@ async def test_curator_metrics_compare_semantics_and_count_missing_params(tmp_pa
     open: any
     min_count: 2
 """)
-    report = await curator_metrics(path, [PlaceTerm("аптека", ({"amenity": ["pharmacy"]},))])
+    report = await curator_metrics(
+        path, rules_plan([PlaceTerm("аптека", ({"amenity": ["pharmacy"]},))])
+    )
     assert report["methodAccuracy"] == 1
     assert report["parameterAccuracy"] == pytest.approx(3 / 4)

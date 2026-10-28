@@ -15,7 +15,7 @@ from app.db.models import User
 from app.domain.catalog import hotel_id
 from app.domain.users import Role, normalize_email
 from app.infra.partner_truth import YamlHiddenTruth
-from app.quality_cli import evaluate_quality
+from app.quality_cli import compare_runs, evaluate_quality
 from app.service.agents.collect import CollectService
 from app.service.partner.claims import seed_demo_claims
 from app.service.ports import RecordingEventBus, SystemClock
@@ -99,8 +99,11 @@ def main() -> None:
     commands.add_parser("openapi", help="print the OpenAPI schema")
     evaluation = commands.add_parser("eval", help="evaluate quality and save the report")
     evaluation.add_argument(
-        "--llm", action="store_true", help="also evaluate LLM intents (uses credits)"
+        "--llm", action="store_true", help="LLM against rules on all sets (uses credits)"
     )
+    for flag in ("model", "strong-model", "thinking", "thinking-strong", "base-url", "key-env"):
+        evaluation.add_argument(f"--{flag}", help="override LLM_* for this run")
+    commands.add_parser("eval-compare", help="table of saved LLM runs (data/eval/llm)")
     args = parser.parse_args()
 
     settings = get_settings()
@@ -118,7 +121,17 @@ def main() -> None:
     elif args.command == "export-seed":
         result = asyncio.run(export_seed(settings))
     elif args.command == "eval":
-        result = asyncio.run(evaluate_quality(settings, use_llm=args.llm))
+        overrides = {
+            "llm_model": args.model,
+            "llm_model_strong": args.strong_model,
+            "llm_thinking": args.thinking,
+            "llm_thinking_strong": args.thinking_strong,
+            "llm_base_url": args.base_url,
+            "key_env": args.key_env,
+        }
+        result = asyncio.run(evaluate_quality(settings, use_llm=args.llm, overrides=overrides))
+    elif args.command == "eval-compare":
+        result = compare_runs(settings.data_dir)
     else:
         from app.main import create_app  # noqa: PLC0415 - only this command needs the API
 
