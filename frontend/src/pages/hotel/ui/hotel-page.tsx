@@ -107,7 +107,6 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
 
         <section className="sec-h2" id="rooms">
           <h2>Доступные номера</h2>
-          <p>Сравните категории и условия. Пожелания по стороне здания и этажу добавим к брони.</p>
         </section>
         {h.rooms.length === 0 && (
           <div className="hotel-empty-state">
