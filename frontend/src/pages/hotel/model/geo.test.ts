@@ -4,6 +4,7 @@ import {
   noiseFacades,
   solarVisibility,
   relativeAzimuth,
+  routePoints,
   tripDates,
   type NoiseData,
 } from "./geo";
@@ -93,4 +94,19 @@ describe("window visibility", () => {
       ),
     ).toBe("нет данных");
   });
+});
+
+it("fits every route vertex, preserves turns and rejects missing geometry", () => {
+  const points = routePoints([
+    [39, 43],
+    [39.01, 43.01],
+    [39, 43.005],
+  ]);
+  expect(points).toHaveLength(3);
+  expect(points.every(([x, y]) => x! >= 59.99 && x! <= 580.01 && y! >= 59.99 && y! <= 300.01)).toBe(
+    true,
+  );
+  expect(points[1]![0]).toBeGreaterThan(points[0]![0]!);
+  expect(points[1]![1]).toBeLessThan(points[0]![1]!);
+  expect(routePoints([])).toEqual([]);
 });
