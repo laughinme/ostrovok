@@ -16,6 +16,7 @@ def test_all_runs_download_and_clip_before_export_and_manifest(monkeypatch):
     assert called == [
         "pipeline.pbf",
         "pipeline.osm",
+        "pipeline.reserve_hotels",
         "pipeline.dem",
         "pipeline.climate",
         "pipeline.hotels",
