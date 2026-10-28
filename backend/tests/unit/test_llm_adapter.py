@@ -1,3 +1,4 @@
+import asyncio
 import json
 
 import pytest
@@ -21,11 +22,11 @@ class Probe(BaseModel):
     tag: str
 
 
-def _llm(function: object, *, limit: int = 10) -> PydanticAiLanguageModel:
+def _llm(function: object, *, limit: int = 10, timeout_sec: float = 5) -> PydanticAiLanguageModel:
     return PydanticAiLanguageModel(
         FunctionModel(function),  # type: ignore[arg-type]
         model_name="fake",
-        timeout_sec=5,
+        timeout_sec=timeout_sec,
         limit=DailyLimit(None, limit),
     )
 
@@ -86,6 +87,24 @@ async def test_daily_limit_stops_paid_calls() -> None:
     await llm.structured(task="t", system="s", prompt="a", output=Answer)
     with pytest.raises(LlmUnavailableError, match="daily"):
         await llm.structured(task="t", system="s", prompt="b", output=Answer)
+
+
+async def test_timeout_cancels_the_call_without_disabling_other_tasks() -> None:
+    cancelled = asyncio.Event()
+
+    async def model(messages: list[ModelMessage], info: AgentInfo) -> ModelResponse:
+        try:
+            await asyncio.sleep(60)
+        finally:
+            cancelled.set()
+        return _final(info, {"value": 42})
+
+    llm = _llm(model, timeout_sec=0.02)
+    with pytest.raises(LlmUnavailableError, match="TimeoutError"):
+        await llm.structured(task="t", system="s", prompt="p", output=Answer)
+
+    assert cancelled.is_set()
+    assert llm.available
 
 
 async def test_no_key_means_unavailable() -> None:
