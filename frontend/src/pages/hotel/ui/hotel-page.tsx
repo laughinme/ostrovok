@@ -8,7 +8,8 @@ import { useHotelFavorite } from "@/features/favorite-hotels";
 import { useAskHotel } from "@/features/live-research";
 import { AgentTrace } from "@/widgets/agent-trace";
 import { CoastMap } from "@/widgets/hotel-map";
-import { Drawer, Lightbox, WhyPanel, type GalleryItem } from "./overlays";
+import { Lightbox, type GalleryItem } from "./overlays";
+import { FactSourcesModal } from "./fact-sources-modal";
 import { Icon, Mark, Toast } from "./detail-ui";
 import { useToast } from "../lib/use-toast";
 import { Panorama, Photo } from "./visuals";
@@ -335,9 +336,7 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
         </button>
       </motion.div>
 
-      <Drawer open={!!why} onClose={() => setWhy(null)} label="Почему мы так думаем">
-        {why && <WhyPanel fact={why} hotel={h} />}
-      </Drawer>
+      {why && <FactSourcesModal fact={why} hotel={h} onClose={() => setWhy(null)} />}
       <Lightbox items={gallery} index={lb} hotel={h} onClose={() => setLb(null)} onIndex={setLb} />
       <Toast text={toast} />
       {booking && (

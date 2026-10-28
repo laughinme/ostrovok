@@ -6,7 +6,9 @@ import { detailFactFromApi } from "../model/api-hotel-details";
 import { useEffect, type ReactNode } from "react";
 import type { Fact, HotelDetails } from "../model/types";
 import { useDialog } from "../lib/use-dialog";
-import { Conf, Icon, SrcTag } from "./detail-ui";
+import { Icon, SrcTag } from "./detail-ui";
+import { FactConfidenceStars } from "./fact-confidence-stars";
+import { factConfidenceStars } from "../model/fact-confidence";
 import { Building, Panorama, Photo } from "./visuals";
 export function Drawer({
   open,
@@ -59,7 +61,7 @@ export function WhyPanel({ fact: summary, hotel }: { fact: Fact; hotel: HotelDet
     enabled: !!hotel.api,
   });
   const fact = detail.data ? detailFactFromApi(detail.data, detail.data) : summary;
-  const p = Math.round(fact.confidence * 100);
+  const p = factConfidenceStars(fact).percentage;
   return (
     <div className="why">
       {hotel.api && (
@@ -76,21 +78,18 @@ export function WhyPanel({ fact: summary, hotel }: { fact: Fact; hotel: HotelDet
         {fact.statement}: {fact.scopeText}
       </div>
       <div className="why-conf">
-        <Conf p={fact.confidence} />
+        <FactConfidenceStars fact={fact} focusable />
         <SrcTag kind={fact.source}>{fact.sourceLabel}</SrcTag>
       </div>
       <div className="bar">
-        <span style={{ width: `${p}%` }} />
+        <span style={{ width: `${p ?? 0}%` }} />
       </div>
       <p className="meter-t">
-        {fact.source === "computed" ? (
-          <>
-            <b className="num">{p}</b> из 100 — уверенность оценки.
-          </>
+        {p === null ? (
+          "Уверенность не указана"
         ) : (
           <>
-            Уверенность <b className="num">{String(fact.confidence).replace(".", ",")}</b>: оценка
-            из карточки отеля.
+            <b className="num">{p}</b> из 100 — уверенность в факте.
           </>
         )}
       </p>
