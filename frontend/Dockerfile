@@ -1,5 +1,7 @@
 # Build stage: install with the lockfile and build the standalone Next.js server.
-FROM node:22.12-alpine3.20 AS builder
+# It runs on the build machine's own platform: the standalone server is plain JavaScript, so the
+# output runs on linux/amd64 as is, and Apple Silicon does not have to emulate the Next.js build.
+FROM --platform=$BUILDPLATFORM node:22.12-alpine3.20 AS builder
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --no-audit --no-fund
