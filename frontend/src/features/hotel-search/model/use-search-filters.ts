@@ -4,7 +4,10 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { parseQuery } from "./matching";
 import { intentForCriteria } from "./api-search";
-export function useSearchFilters(query: string) {
+export function useSearchFilters(
+  query: string,
+  live: components["schemas"]["SearchResultOut"] | null = null,
+) {
   const [refine, setRefine] = useState("");
   const [criteria, setCriteria] = useState<Criterion[]>(() => parseQuery(query));
   const [budget, setMaxPrice] = useState<number | null>(null);
@@ -40,16 +43,17 @@ export function useSearchFilters(query: string) {
     retry: false,
     refetchOnWindowFocus: false,
   });
+  const current = live ?? search.data;
   const ranked = useMemo(() => {
     const hotels = new Map(catalog.data?.map((hotel) => [hotel.id, hotel]));
-    return (search.data?.matches ?? []).flatMap((match) => {
+    return (current?.matches ?? []).flatMap((match) => {
       const raw = hotels.get(match.hotelId);
       if (!raw) return [];
-      const hotel = hotelFromApi(raw, match, search.data?.intent);
+      const hotel = hotelFromApi(raw, match, current?.intent);
       return [
         {
           hotel,
-          ...(search.data ? { searchId: search.data.searchId } : {}),
+          ...(current ? { searchId: current.searchId } : {}),
           score: Math.round(match.score * 100),
           best: criteria.filter((criterion) => hotel.scores[criterion] >= 80),
           weak: criteria.filter(
@@ -59,7 +63,7 @@ export function useSearchFilters(query: string) {
         },
       ];
     });
-  }, [catalog.data, search.data, criteria]);
+  }, [catalog.data, current, criteria]);
   const toggleCriterion = (criterion: Criterion) =>
     setCriteria((current) =>
       current.includes(criterion)
@@ -82,7 +86,7 @@ export function useSearchFilters(query: string) {
     maxPrice,
     setMaxPrice,
     ranked,
-    search: search.data,
+    search: current,
     pending: intent.isPending || catalog.isPending || search.isPending,
     error: intent.error ?? catalog.error ?? search.error,
     retry: () => {
