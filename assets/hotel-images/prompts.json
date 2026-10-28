@@ -1,0 +1,319 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-10-28",
+  "method": "built-in image_gen",
+  "assets": [
+    {
+      "id": "zakatny-bereg-exterior",
+      "demoHotelId": "zakatny-bereg",
+      "demoHotelName": "Закатный берег",
+      "category": "seafront",
+      "tags": [
+        "море",
+        "современный",
+        "балконы"
+      ],
+      "role": "exterior",
+      "title": "Фасад у моря",
+      "alt": "Современный светлый отель с балконами у галечного побережья.",
+      "path": "zakatny-bereg/exterior.jpg",
+      "prompt": "Use case: photorealistic-natural.\nAsset type: standalone landscape hotel photograph for a travel prototype.\nPrimary request: generate ONE realistic horizontal 3:2 photograph, around 1536 by 1024 pixels, of a fictional hotel in the Greater Sochi / Russian Black Sea region. This is synthetic demo imagery, not documentation of any real property.\nStyle/medium: convincing editorial architectural photography; natural exposure, realistic scale, restrained color, tactile materials, small natural imperfections; no illustration or CGI appearance.\nComposition/framing: one continuous photograph, no collage or split screen. Straight verticals and physically plausible architecture. Keep the main subject comfortably inside the central 75 percent so the image can be cropped to square for cards. Sharp and useful at small sizes.\nConstraints: no people, no lettering, no names, no signs, no logos, no watermarks, no graphics, no image border. No recognizable real hotel, landmark or copyrighted artwork. Do not depict impossible structural details.\n\nFictional property identity: A fictional modern twelve-storey Black Sea seafront hotel: warm off-white facade, long stacked balconies with clear glass railings and pale vertical dividers, dark slim window frames, a modest landscaped promenade with palms and a pebble beach. Contemporary upper-midrange hotel, not an exotic tropical resort.\nScene to photograph: Exterior establishing view from the promenade, looking diagonally toward the full hotel and the calm blue sea on the left. Soft late-afternoon light, not dramatic orange. The entire building is legible, with repeated balconies and believable landscaping."
+    },
+    {
+      "id": "zakatny-bereg-room",
+      "demoHotelId": "zakatny-bereg",
+      "demoHotelName": "Закатный берег",
+      "category": "seafront",
+      "tags": [
+        "море",
+        "современный",
+        "балконы"
+      ],
+      "role": "room",
+      "title": "Номер с балконом",
+      "alt": "Светлый номер с открытым выходом на балкон и морем вдали.",
+      "path": "zakatny-bereg/room.jpg",
+      "prompt": "Use case: photorealistic-natural.\nAsset type: standalone landscape hotel photograph for a travel prototype.\nPrimary request: generate ONE realistic horizontal 3:2 photograph, around 1536 by 1024 pixels, of a fictional hotel in the Greater Sochi / Russian Black Sea region. This is synthetic demo imagery, not documentation of any real property.\nStyle/medium: convincing editorial architectural photography; natural exposure, realistic scale, restrained color, tactile materials, small natural imperfections; no illustration or CGI appearance.\nComposition/framing: one continuous photograph, no collage or split screen. Straight verticals and physically plausible architecture. Keep the main subject comfortably inside the central 75 percent so the image can be cropped to square for cards. Sharp and useful at small sizes.\nConstraints: no people, no lettering, no names, no signs, no logos, no watermarks, no graphics, no image border. No recognizable real hotel, landmark or copyrighted artwork. Do not depict impossible structural details.\n\nFictional property identity: A fictional modern twelve-storey Black Sea seafront hotel: warm off-white facade, long stacked balconies with clear glass railings and pale vertical dividers, dark slim window frames, a modest landscaped promenade with palms and a pebble beach. Contemporary upper-midrange hotel, not an exotic tropical resort.\nScene to photograph: A spacious but realistic double guest room with white cotton bedding, pale oak furniture, a muted blue upholstered headboard, a small writing desk, sheer linen curtains and sliding balcony doors. Camera from the room corner includes the bed and an open door to a clear-glass balcony with blue Black Sea water beyond. Gentle afternoon daylight.\nInput image 1: reference for this fictional property's architectural identity, materials and overall character. Generate a completely new photograph of the requested scene, not a collage and not a re-use of the exterior composition. Preserve the property's material palette and setting.",
+      "referenceAssetId": "zakatny-bereg-exterior"
+    },
+    {
+      "id": "zakatny-bereg-balcony",
+      "demoHotelId": "zakatny-bereg",
+      "demoHotelName": "Закатный берег",
+      "category": "seafront",
+      "tags": [
+        "море",
+        "современный",
+        "балконы"
+      ],
+      "role": "balcony",
+      "title": "Балкон на закате",
+      "alt": "Балкон с двумя креслами, столиком и спокойным морем на закате.",
+      "path": "zakatny-bereg/balcony.jpg",
+      "prompt": "Use case: photorealistic-natural.\nAsset type: standalone landscape hotel photograph for a travel prototype.\nPrimary request: generate ONE realistic horizontal 3:2 photograph, around 1536 by 1024 pixels, of a fictional hotel in the Greater Sochi / Russian Black Sea region. This is synthetic demo imagery, not documentation of any real property.\nStyle/medium: convincing editorial architectural photography; natural exposure, realistic scale, restrained color, tactile materials, small natural imperfections; no illustration or CGI appearance.\nComposition/framing: one continuous photograph, no collage or split screen. Straight verticals and physically plausible architecture. Keep the main subject comfortably inside the central 75 percent so the image can be cropped to square for cards. Sharp and useful at small sizes.\nConstraints: no people, no lettering, no names, no signs, no logos, no watermarks, no graphics, no image border. No recognizable real hotel, landmark or copyrighted artwork. Do not depict impossible structural details.\n\nFictional property identity: A fictional modern twelve-storey Black Sea seafront hotel: warm off-white facade, long stacked balconies with clear glass railings and pale vertical dividers, dark slim window frames, a modest landscaped promenade with palms and a pebble beach. Contemporary upper-midrange hotel, not an exotic tropical resort.\nScene to photograph: View outward from a private mid-floor balcony: two simple woven chairs and a round pale table in the foreground, clear glass railing with dark slim posts, calm Black Sea to the horizon, a narrow pebble beach and the promenade below. A believable soft sunset reflected on the sea, natural warm light without extreme saturation. A strip of the off-white adjacent balcony facade at the edge.\nInput image 1: reference for this fictional property's architectural identity, materials and overall character. Generate a completely new photograph of the requested scene, not a collage and not a re-use of the exterior composition. Preserve the property's material palette and setting.",
+      "referenceAssetId": "zakatny-bereg-exterior"
+    },
+    {
+      "id": "gornyi-priyut-exterior",
+      "demoHotelId": "gornyi-priyut",
+      "demoHotelName": "Горный приют",
+      "category": "mountain-chalet",
+      "tags": [
+        "горы",
+        "шале",
+        "дерево"
+      ],
+      "role": "exterior",
+      "title": "Шале в горах",
+      "alt": "Деревянное шале с каменным основанием на фоне кавказских гор.",
+      "path": "gornyi-priyut/exterior.jpg",
+      "prompt": "Use case: photorealistic-natural.\nAsset type: standalone landscape hotel photograph for a travel prototype.\nPrimary request: generate ONE realistic horizontal 3:2 photograph, around 1536 by 1024 pixels, of a fictional hotel in the Greater Sochi / Russian Black Sea region. This is synthetic demo imagery, not documentation of any real property.\nStyle/medium: convincing editorial architectural photography; natural exposure, realistic scale, restrained color, tactile materials, small natural imperfections; no illustration or CGI appearance.\nComposition/framing: one continuous photograph, no collage or split screen. Straight verticals and physically plausible architecture. Keep the main subject comfortably inside the central 75 percent so the image can be cropped to square for cards. Sharp and useful at small sizes.\nConstraints: no people, no lettering, no names, no signs, no logos, no watermarks, no graphics, no image border. No recognizable real hotel, landmark or copyrighted artwork. Do not depict impossible structural details.\n\nFictional property identity: A fictional intimate three-storey mountain chalet hotel near Krasnaya Polyana in the Caucasus: dark brown timber balconies, a pale natural-stone base, dark pitched metal roof, evergreen forest and rugged Caucasus mountain ridges. Early autumn, green lower slopes and a little distant snow only at high peaks. No Alps-specific landmark.\nScene to photograph: Exterior establishing photograph of the entire three-storey chalet on a gentle wooded slope, with a mountain ridge behind and a real stone walkway in the foreground. Mild clear morning light, wood texture and realistic windows visible."
+    },
+    {
+      "id": "gornyi-priyut-room",
+      "demoHotelId": "gornyi-priyut",
+      "demoHotelName": "Горный приют",
+      "category": "mountain-chalet",
+      "tags": [
+        "горы",
+        "шале",
+        "дерево"
+      ],
+      "role": "room",
+      "title": "Номер в шале",
+      "alt": "Номер с деревянными деталями, белым бельём и видом на горный склон.",
+      "path": "gornyi-priyut/room.jpg",
+      "prompt": "Use case: photorealistic-natural.\nAsset type: standalone landscape hotel photograph for a travel prototype.\nPrimary request: generate ONE realistic horizontal 3:2 photograph, around 1536 by 1024 pixels, of a fictional hotel in the Greater Sochi / Russian Black Sea region. This is synthetic demo imagery, not documentation of any real property.\nStyle/medium: convincing editorial architectural photography; natural exposure, realistic scale, restrained color, tactile materials, small natural imperfections; no illustration or CGI appearance.\nComposition/framing: one continuous photograph, no collage or split screen. Straight verticals and physically plausible architecture. Keep the main subject comfortably inside the central 75 percent so the image can be cropped to square for cards. Sharp and useful at small sizes.\nConstraints: no people, no lettering, no names, no signs, no logos, no watermarks, no graphics, no image border. No recognizable real hotel, landmark or copyrighted artwork. Do not depict impossible structural details.\n\nFictional property identity: A fictional intimate three-storey mountain chalet hotel near Krasnaya Polyana in the Caucasus: dark brown timber balconies, a pale natural-stone base, dark pitched metal roof, evergreen forest and rugged Caucasus mountain ridges. Early autumn, green lower slopes and a little distant snow only at high peaks. No Alps-specific landmark.\nScene to photograph: A comfortable chalet double room with exposed timber ceiling beams, white bedding, wool blanket in muted forest green, oak floor, two bedside lights and a large window looking toward wooded mountain slopes. Natural morning light. Moderately sized real hotel room, no theatrical luxury.\nInput image 1: reference for this fictional property's architectural identity, materials and overall character. Generate a completely new photograph of the requested scene, not a collage and not a re-use of the exterior composition. Preserve the property's material palette and setting.",
+      "referenceAssetId": "gornyi-priyut-exterior"
+    },
+    {
+      "id": "gornyi-priyut-terrace",
+      "demoHotelId": "gornyi-priyut",
+      "demoHotelName": "Горный приют",
+      "category": "mountain-chalet",
+      "tags": [
+        "горы",
+        "шале",
+        "дерево"
+      ],
+      "role": "terrace",
+      "title": "Терраса с видом на хребет",
+      "alt": "Деревянная терраса с креслами у лесистого горного склона.",
+      "path": "gornyi-priyut/terrace.jpg",
+      "prompt": "Use case: photorealistic-natural.\nAsset type: standalone landscape hotel photograph for a travel prototype.\nPrimary request: generate ONE realistic horizontal 3:2 photograph, around 1536 by 1024 pixels, of a fictional hotel in the Greater Sochi / Russian Black Sea region. This is synthetic demo imagery, not documentation of any real property.\nStyle/medium: convincing editorial architectural photography; natural exposure, realistic scale, restrained color, tactile materials, small natural imperfections; no illustration or CGI appearance.\nComposition/framing: one continuous photograph, no collage or split screen. Straight verticals and physically plausible architecture. Keep the main subject comfortably inside the central 75 percent so the image can be cropped to square for cards. Sharp and useful at small sizes.\nConstraints: no people, no lettering, no names, no signs, no logos, no watermarks, no graphics, no image border. No recognizable real hotel, landmark or copyrighted artwork. Do not depict impossible structural details.\n\nFictional property identity: A fictional intimate three-storey mountain chalet hotel near Krasnaya Polyana in the Caucasus: dark brown timber balconies, a pale natural-stone base, dark pitched metal roof, evergreen forest and rugged Caucasus mountain ridges. Early autumn, green lower slopes and a little distant snow only at high peaks. No Alps-specific landmark.\nScene to photograph: A sheltered timber terrace beside the chalet, dark timber posts and matching railing, two comfortable outdoor chairs and a low table, mountain ridges layered in the distance and evergreen trees below. Three-quarter side view, airy daytime light. The seating remains central and architectural joins are coherent.\nInput image 1: reference for this fictional property's architectural identity, materials and overall character. Generate a completely new photograph of the requested scene, not a collage and not a re-use of the exterior composition. Preserve the property's material palette and setting.",
+      "referenceAssetId": "gornyi-priyut-exterior"
+    },
+    {
+      "id": "palmovyi-sad-exterior",
+      "demoHotelId": "palmovyi-sad",
+      "demoHotelName": "Пальмовый сад",
+      "category": "family-resort",
+      "tags": [
+        "семейный",
+        "сад",
+        "бассейн"
+      ],
+      "role": "exterior",
+      "title": "Курорт и бассейн",
+      "alt": "Невысокий семейный курорт с бассейном и субтропическим садом.",
+      "path": "palmovyi-sad/exterior.jpg",
+      "prompt": "Use case: photorealistic-natural.\nAsset type: standalone landscape hotel photograph for a travel prototype.\nPrimary request: generate ONE realistic horizontal 3:2 photograph, around 1536 by 1024 pixels, of a fictional hotel in the Greater Sochi / Russian Black Sea region. This is synthetic demo imagery, not documentation of any real property.\nStyle/medium: convincing editorial architectural photography; natural exposure, realistic scale, restrained color, tactile materials, small natural imperfections; no illustration or CGI appearance.\nComposition/framing: one continuous photograph, no collage or split screen. Straight verticals and physically plausible architecture. Keep the main subject comfortably inside the central 75 percent so the image can be cropped to square for cards. Sharp and useful at small sizes.\nConstraints: no people, no lettering, no names, no signs, no logos, no watermarks, no graphics, no image border. No recognizable real hotel, landmark or copyrighted artwork. Do not depict impossible structural details.\n\nFictional property identity: A fictional low-rise family resort in the Adler / Sirius Black Sea region: four-storey warm-white buildings, simple terracotta hipped roofs, white balcony railings, landscaped lawns, magnolias and a few mature palms. Wide paths, a real outdoor rectangular swimming pool. Black Sea climate, not Bali or the Caribbean.\nScene to photograph: Wide exterior from the pool terrace: a modest rectangular turquoise swimming pool in the foreground, the four-storey resort behind, a few white loungers, palms and magnolias. Pool depth and edges physically consistent. Clear late-morning light, no people or toys."
+    },
+    {
+      "id": "palmovyi-sad-room",
+      "demoHotelId": "palmovyi-sad",
+      "demoHotelName": "Пальмовый сад",
+      "category": "family-resort",
+      "tags": [
+        "семейный",
+        "сад",
+        "бассейн"
+      ],
+      "role": "room",
+      "title": "Семейный номер",
+      "alt": "Просторный семейный номер с двуспальной кроватью и диваном.",
+      "path": "palmovyi-sad/room.jpg",
+      "prompt": "Use case: photorealistic-natural.\nAsset type: standalone landscape hotel photograph for a travel prototype.\nPrimary request: generate ONE realistic horizontal 3:2 photograph, around 1536 by 1024 pixels, of a fictional hotel in the Greater Sochi / Russian Black Sea region. This is synthetic demo imagery, not documentation of any real property.\nStyle/medium: convincing editorial architectural photography; natural exposure, realistic scale, restrained color, tactile materials, small natural imperfections; no illustration or CGI appearance.\nComposition/framing: one continuous photograph, no collage or split screen. Straight verticals and physically plausible architecture. Keep the main subject comfortably inside the central 75 percent so the image can be cropped to square for cards. Sharp and useful at small sizes.\nConstraints: no people, no lettering, no names, no signs, no logos, no watermarks, no graphics, no image border. No recognizable real hotel, landmark or copyrighted artwork. Do not depict impossible structural details.\n\nFictional property identity: A fictional low-rise family resort in the Adler / Sirius Black Sea region: four-storey warm-white buildings, simple terracotta hipped roofs, white balcony railings, landscaped lawns, magnolias and a few mature palms. Wide paths, a real outdoor rectangular swimming pool. Black Sea climate, not Bali or the Caribbean.\nScene to photograph: A bright family suite with a double bed and a separate compact sofa bed, white linens, pale natural wood, a sage-green cushion, simple functional storage and large balcony doors opening toward the garden. Contemporary comfortable resort, realistic 30-square-metre proportions, soft daylight.\nInput image 1: reference for this fictional property's architectural identity, materials and overall character. Generate a completely new photograph of the requested scene, not a collage and not a re-use of the exterior composition. Preserve the property's material palette and setting.",
+      "referenceAssetId": "palmovyi-sad-exterior"
+    },
+    {
+      "id": "palmovyi-sad-garden",
+      "demoHotelId": "palmovyi-sad",
+      "demoHotelName": "Пальмовый сад",
+      "category": "family-resort",
+      "tags": [
+        "семейный",
+        "сад",
+        "бассейн"
+      ],
+      "role": "garden",
+      "title": "Дорожка в саду",
+      "alt": "Широкая дорожка среди магнолий и пальм рядом с корпусами курорта.",
+      "path": "palmovyi-sad/garden.jpg",
+      "prompt": "Use case: photorealistic-natural.\nAsset type: standalone landscape hotel photograph for a travel prototype.\nPrimary request: generate ONE realistic horizontal 3:2 photograph, around 1536 by 1024 pixels, of a fictional hotel in the Greater Sochi / Russian Black Sea region. This is synthetic demo imagery, not documentation of any real property.\nStyle/medium: convincing editorial architectural photography; natural exposure, realistic scale, restrained color, tactile materials, small natural imperfections; no illustration or CGI appearance.\nComposition/framing: one continuous photograph, no collage or split screen. Straight verticals and physically plausible architecture. Keep the main subject comfortably inside the central 75 percent so the image can be cropped to square for cards. Sharp and useful at small sizes.\nConstraints: no people, no lettering, no names, no signs, no logos, no watermarks, no graphics, no image border. No recognizable real hotel, landmark or copyrighted artwork. Do not depict impossible structural details.\n\nFictional property identity: A fictional low-rise family resort in the Adler / Sirius Black Sea region: four-storey warm-white buildings, simple terracotta hipped roofs, white balcony railings, landscaped lawns, magnolias and a few mature palms. Wide paths, a real outdoor rectangular swimming pool. Black Sea climate, not Bali or the Caribbean.\nScene to photograph: Eye-level view along a broad gently curved garden path, with magnolia trees and a few palms, lawn and flowering low borders. The resort's warm-white four-storey facade and terracotta roof appear quietly in the background. A shaded bench near the path. Calm afternoon daylight.\nInput image 1: reference for this fictional property's architectural identity, materials and overall character. Generate a completely new photograph of the requested scene, not a collage and not a re-use of the exterior composition. Preserve the property's material palette and setting.",
+      "referenceAssetId": "palmovyi-sad-exterior"
+    },
+    {
+      "id": "atelier-sochi-exterior",
+      "demoHotelId": "atelier-sochi",
+      "demoHotelName": "Ателье 17",
+      "category": "city-boutique",
+      "tags": [
+        "город",
+        "работа",
+        "современный"
+      ],
+      "role": "exterior",
+      "title": "Городской отель",
+      "alt": "Современный городской отель со светлым каменным фасадом.",
+      "path": "atelier-sochi/exterior.jpg",
+      "prompt": "Use case: photorealistic-natural.\nAsset type: standalone landscape hotel photograph for a travel prototype.\nPrimary request: generate ONE realistic horizontal 3:2 photograph, around 1536 by 1024 pixels, of a fictional hotel in the Greater Sochi / Russian Black Sea region. This is synthetic demo imagery, not documentation of any real property.\nStyle/medium: convincing editorial architectural photography; natural exposure, realistic scale, restrained color, tactile materials, small natural imperfections; no illustration or CGI appearance.\nComposition/framing: one continuous photograph, no collage or split screen. Straight verticals and physically plausible architecture. Keep the main subject comfortably inside the central 75 percent so the image can be cropped to square for cards. Sharp and useful at small sizes.\nConstraints: no people, no lettering, no names, no signs, no logos, no watermarks, no graphics, no image border. No recognizable real hotel, landmark or copyrighted artwork. Do not depict impossible structural details.\n\nFictional property identity: A fictional contemporary six-storey boutique city hotel in central Sochi: pale limestone panels, charcoal slim window frames, restrained deep-blue metal details, a modest glazed ground-floor entrance and subtropical street trees. Modern urban hospitality, human-scale street, no lettering or commercial logos.\nScene to photograph: Street-level three-quarter exterior photograph of the boutique hotel on a quiet clean city street with plane trees, distant foothills and a small segment of sidewalk. Soft side daylight. The six-storey facade is the main subject, coherent windows and entry, no signs and no parked cars blocking the building."
+    },
+    {
+      "id": "atelier-sochi-room",
+      "demoHotelId": "atelier-sochi",
+      "demoHotelName": "Ателье 17",
+      "category": "city-boutique",
+      "tags": [
+        "город",
+        "работа",
+        "современный"
+      ],
+      "role": "room",
+      "title": "Номер с рабочим местом",
+      "alt": "Номер с кроватью и полноценным рабочим столом у окна.",
+      "path": "atelier-sochi/room.jpg",
+      "prompt": "Use case: photorealistic-natural.\nAsset type: standalone landscape hotel photograph for a travel prototype.\nPrimary request: generate ONE realistic horizontal 3:2 photograph, around 1536 by 1024 pixels, of a fictional hotel in the Greater Sochi / Russian Black Sea region. This is synthetic demo imagery, not documentation of any real property.\nStyle/medium: convincing editorial architectural photography; natural exposure, realistic scale, restrained color, tactile materials, small natural imperfections; no illustration or CGI appearance.\nComposition/framing: one continuous photograph, no collage or split screen. Straight verticals and physically plausible architecture. Keep the main subject comfortably inside the central 75 percent so the image can be cropped to square for cards. Sharp and useful at small sizes.\nConstraints: no people, no lettering, no names, no signs, no logos, no watermarks, no graphics, no image border. No recognizable real hotel, landmark or copyrighted artwork. Do not depict impossible structural details.\n\nFictional property identity: A fictional contemporary six-storey boutique city hotel in central Sochi: pale limestone panels, charcoal slim window frames, restrained deep-blue metal details, a modest glazed ground-floor entrance and subtropical street trees. Modern urban hospitality, human-scale street, no lettering or commercial logos.\nScene to photograph: A contemporary compact boutique-hotel room with a double bed, white cotton bedding, pale oak joinery, a restrained deep-blue upholstered headboard and a full-size writing desk by the window with an ergonomic office chair. No laptop brand, no screens or lettering. View of nearby city rooftops. Bright natural daylight, believable room proportions.\nInput image 1: reference for this fictional property's architectural identity, materials and overall character. Generate a completely new photograph of the requested scene, not a collage and not a re-use of the exterior composition. Preserve the property's material palette and setting.",
+      "referenceAssetId": "atelier-sochi-exterior"
+    },
+    {
+      "id": "atelier-sochi-coworking",
+      "demoHotelId": "atelier-sochi",
+      "demoHotelName": "Ателье 17",
+      "category": "city-boutique",
+      "tags": [
+        "город",
+        "работа",
+        "современный"
+      ],
+      "role": "coworking",
+      "title": "Рабочая гостиная",
+      "alt": "Общая гостиная с длинным столом у панорамных окон.",
+      "path": "atelier-sochi/coworking.jpg",
+      "prompt": "Use case: photorealistic-natural.\nAsset type: standalone landscape hotel photograph for a travel prototype.\nPrimary request: generate ONE realistic horizontal 3:2 photograph, around 1536 by 1024 pixels, of a fictional hotel in the Greater Sochi / Russian Black Sea region. This is synthetic demo imagery, not documentation of any real property.\nStyle/medium: convincing editorial architectural photography; natural exposure, realistic scale, restrained color, tactile materials, small natural imperfections; no illustration or CGI appearance.\nComposition/framing: one continuous photograph, no collage or split screen. Straight verticals and physically plausible architecture. Keep the main subject comfortably inside the central 75 percent so the image can be cropped to square for cards. Sharp and useful at small sizes.\nConstraints: no people, no lettering, no names, no signs, no logos, no watermarks, no graphics, no image border. No recognizable real hotel, landmark or copyrighted artwork. Do not depict impossible structural details.\n\nFictional property identity: A fictional contemporary six-storey boutique city hotel in central Sochi: pale limestone panels, charcoal slim window frames, restrained deep-blue metal details, a modest glazed ground-floor entrance and subtropical street trees. Modern urban hospitality, human-scale street, no lettering or commercial logos.\nScene to photograph: A calm hotel coworking lounge: a long pale-oak communal desk, four comfortable ergonomic chairs spaced naturally, a bookcase without legible book titles, one planted tree in a pot, large windows overlooking subtropical city rooftops and a distant strip of sea. Soft daylight. Functional realistic interior, not a corporate showroom.\nInput image 1: reference for this fictional property's architectural identity, materials and overall character. Generate a completely new photograph of the requested scene, not a collage and not a re-use of the exterior composition. Preserve the property's material palette and setting.",
+      "referenceAssetId": "atelier-sochi-exterior",
+      "revisions": [
+        {
+          "prompt": "Use case: precise-object-edit.\nAsset type: fictional hotel coworking lounge demo photograph.\nPrimary request: remove every manufacturer logo / apple-shaped emblem from BOTH visible laptop lids: the large upright silver laptop near the middle-right and the flat closed laptop on the table nearer the left. Make both lids completely plain unbranded matte silver or grey surfaces, matching their existing illumination and reflections.\nConstraints: change only the tiny brand/emblem areas on the two laptops. Keep the entire room, table, chairs, books, plants, windows, view, composition, exposure, natural colors and all other details unchanged. Do not add words, marks, shapes or replacement logos. Output one continuous landscape photo, preserve image dimensions.",
+          "reason": "Removed unwanted brand emblems from the two generated laptops",
+          "method": "built-in image_gen edit"
+        },
+        {
+          "prompt": "Use case: precise-object-edit.\nPrimary request: remove BOTH laptops/computers completely from this table: remove the upright open silver laptop near the middle-right window, and remove the flat closed dark/silver laptop near the front-left of the table. Reconstruct the plain uninterrupted pale-oak tabletop beneath them. Leave the table empty in those two exact spots. There must be NO laptop and NO computer anywhere in the final picture.\nConstraints: preserve the existing cups, small notebooks, pencil holder, chairs, plants, shelving, architecture, view through the windows, lighting and framing. Change only the two laptops and their shadows/reflections. No text, no logos, no added objects. Keep one natural realistic landscape hotel coworking lounge photograph.",
+          "reason": "Removed both laptops to eliminate residual brand marks",
+          "method": "built-in image_gen edit"
+        }
+      ]
+    },
+    {
+      "id": "kiparisovaya-alleya-exterior",
+      "demoHotelId": "kiparisovaya-alleya",
+      "demoHotelName": "Кипарисовая аллея",
+      "category": "historic-sanatorium",
+      "tags": [
+        "парк",
+        "исторический",
+        "кипарисы"
+      ],
+      "role": "exterior",
+      "title": "Исторический корпус",
+      "alt": "Светлый санаторный корпус с колоннами среди кипарисов.",
+      "path": "kiparisovaya-alleya/exterior.jpg",
+      "prompt": "Use case: photorealistic-natural.\nAsset type: standalone landscape hotel photograph for a travel prototype.\nPrimary request: generate ONE realistic horizontal 3:2 photograph, around 1536 by 1024 pixels, of a fictional hotel in the Greater Sochi / Russian Black Sea region. This is synthetic demo imagery, not documentation of any real property.\nStyle/medium: convincing editorial architectural photography; natural exposure, realistic scale, restrained color, tactile materials, small natural imperfections; no illustration or CGI appearance.\nComposition/framing: one continuous photograph, no collage or split screen. Straight verticals and physically plausible architecture. Keep the main subject comfortably inside the central 75 percent so the image can be cropped to square for cards. Sharp and useful at small sizes.\nConstraints: no people, no lettering, no names, no signs, no logos, no watermarks, no graphics, no image border. No recognizable real hotel, landmark or copyrighted artwork. Do not depict impossible structural details.\n\nFictional property identity: A fictional restored 1950s Black Sea sanatorium in the Khosta area: symmetrical four-storey pale ivory plaster building, restrained neoclassical proportions, a central shallow colonnaded loggia, simple arched ground-floor openings and mature cypress trees with magnolias. Carefully maintained, not a recognizable real sanatorium and no monumental political symbols.\nScene to photograph: A balanced eye-level exterior photograph along a cypress-lined gravel garden path facing the full restored historic sanatorium. The facade and central loggia are visible through the trees, soft early-morning light, aged natural stone and plaster textures, calm maintained park."
+    },
+    {
+      "id": "kiparisovaya-alleya-room",
+      "demoHotelId": "kiparisovaya-alleya",
+      "demoHotelName": "Кипарисовая аллея",
+      "category": "historic-sanatorium",
+      "tags": [
+        "парк",
+        "исторический",
+        "кипарисы"
+      ],
+      "role": "room",
+      "title": "Номер в историческом корпусе",
+      "alt": "Светлый номер с высокими потолками и окнами в парк.",
+      "path": "kiparisovaya-alleya/room.jpg",
+      "prompt": "Use case: photorealistic-natural.\nAsset type: standalone landscape hotel photograph for a travel prototype.\nPrimary request: generate ONE realistic horizontal 3:2 photograph, around 1536 by 1024 pixels, of a fictional hotel in the Greater Sochi / Russian Black Sea region. This is synthetic demo imagery, not documentation of any real property.\nStyle/medium: convincing editorial architectural photography; natural exposure, realistic scale, restrained color, tactile materials, small natural imperfections; no illustration or CGI appearance.\nComposition/framing: one continuous photograph, no collage or split screen. Straight verticals and physically plausible architecture. Keep the main subject comfortably inside the central 75 percent so the image can be cropped to square for cards. Sharp and useful at small sizes.\nConstraints: no people, no lettering, no names, no signs, no logos, no watermarks, no graphics, no image border. No recognizable real hotel, landmark or copyrighted artwork. Do not depict impossible structural details.\n\nFictional property identity: A fictional restored 1950s Black Sea sanatorium in the Khosta area: symmetrical four-storey pale ivory plaster building, restrained neoclassical proportions, a central shallow colonnaded loggia, simple arched ground-floor openings and mature cypress trees with magnolias. Carefully maintained, not a recognizable real sanatorium and no monumental political symbols.\nScene to photograph: A restored sanatorium guest room with high ceilings, restrained classical wall mouldings, warm-white walls, two large windows facing a mature green park, a double bed with white linens, a muted sage upholstered chair and simple walnut side tables. Authentic comfortable hospitality interior, not an ornate palace. Soft filtered daylight.\nInput image 1: reference for this fictional property's architectural identity, materials and overall character. Generate a completely new photograph of the requested scene, not a collage and not a re-use of the exterior composition. Preserve the property's material palette and setting.",
+      "referenceAssetId": "kiparisovaya-alleya-exterior"
+    },
+    {
+      "id": "kiparisovaya-alleya-park",
+      "demoHotelId": "kiparisovaya-alleya",
+      "demoHotelName": "Кипарисовая аллея",
+      "category": "historic-sanatorium",
+      "tags": [
+        "парк",
+        "исторический",
+        "кипарисы"
+      ],
+      "role": "park",
+      "title": "Кипарисовая аллея",
+      "alt": "Тихая аллея с кипарисами, скамейками и фрагментом корпуса вдали.",
+      "path": "kiparisovaya-alleya/park.jpg",
+      "prompt": "Use case: photorealistic-natural.\nAsset type: standalone landscape hotel photograph for a travel prototype.\nPrimary request: generate ONE realistic horizontal 3:2 photograph, around 1536 by 1024 pixels, of a fictional hotel in the Greater Sochi / Russian Black Sea region. This is synthetic demo imagery, not documentation of any real property.\nStyle/medium: convincing editorial architectural photography; natural exposure, realistic scale, restrained color, tactile materials, small natural imperfections; no illustration or CGI appearance.\nComposition/framing: one continuous photograph, no collage or split screen. Straight verticals and physically plausible architecture. Keep the main subject comfortably inside the central 75 percent so the image can be cropped to square for cards. Sharp and useful at small sizes.\nConstraints: no people, no lettering, no names, no signs, no logos, no watermarks, no graphics, no image border. No recognizable real hotel, landmark or copyrighted artwork. Do not depict impossible structural details.\n\nFictional property identity: A fictional restored 1950s Black Sea sanatorium in the Khosta area: symmetrical four-storey pale ivory plaster building, restrained neoclassical proportions, a central shallow colonnaded loggia, simple arched ground-floor openings and mature cypress trees with magnolias. Carefully maintained, not a recognizable real sanatorium and no monumental political symbols.\nScene to photograph: A peaceful garden path lined with tall slender cypress trees and magnolias, one simple stone bench, dappled morning light, and a small glimpse of the ivory sanatorium loggia at the end. Eye-level composition with natural texture in leaves, bark and gravel. Real subtropical park, not a monumental fantasy garden.\nInput image 1: reference for this fictional property's architectural identity, materials and overall character. Generate a completely new photograph of the requested scene, not a collage and not a re-use of the exterior composition. Preserve the property's material palette and setting.",
+      "referenceAssetId": "kiparisovaya-alleya-exterior"
+    },
+    {
+      "id": "dom-na-holme-exterior",
+      "demoHotelId": "dom-na-holme",
+      "demoHotelName": "Дом на холме",
+      "category": "guesthouse",
+      "tags": [
+        "гостевой дом",
+        "холм",
+        "уютный"
+      ],
+      "role": "exterior",
+      "title": "Гостевой дом на склоне",
+      "alt": "Небольшой гостевой дом с деревянными балконами и садом.",
+      "path": "dom-na-holme/exterior.jpg",
+      "prompt": "Use case: photorealistic-natural.\nAsset type: standalone landscape hotel photograph for a travel prototype.\nPrimary request: generate ONE realistic horizontal 3:2 photograph, around 1536 by 1024 pixels, of a fictional hotel in the Greater Sochi / Russian Black Sea region. This is synthetic demo imagery, not documentation of any real property.\nStyle/medium: convincing editorial architectural photography; natural exposure, realistic scale, restrained color, tactile materials, small natural imperfections; no illustration or CGI appearance.\nComposition/framing: one continuous photograph, no collage or split screen. Straight verticals and physically plausible architecture. Keep the main subject comfortably inside the central 75 percent so the image can be cropped to square for cards. Sharp and useful at small sizes.\nConstraints: no people, no lettering, no names, no signs, no logos, no watermarks, no graphics, no image border. No recognizable real hotel, landmark or copyrighted artwork. Do not depict impossible structural details.\n\nFictional property identity: A fictional small three-storey nine-room guesthouse on a wooded hillside near Kudepsta: pale cream plaster, honey-coloured wooden balcony rails, a simple terracotta tile roof, climbing grape vines, a sloping planted garden and a distant Black Sea horizon. Modest family-run guesthouse, welcoming and well kept, not a luxury villa.\nScene to photograph: Exterior three-quarter photograph of the entire modest three-storey guesthouse on its sloping hillside garden. Wooden balconies, cream plaster, terracotta roof and grapevine trellis visible. Distant Black Sea behind the hillside, soft afternoon light. Honest family-run accommodation without luxury exaggeration."
+    },
+    {
+      "id": "dom-na-holme-room",
+      "demoHotelId": "dom-na-holme",
+      "demoHotelName": "Дом на холме",
+      "category": "guesthouse",
+      "tags": [
+        "гостевой дом",
+        "холм",
+        "уютный"
+      ],
+      "role": "room",
+      "title": "Уютный номер",
+      "alt": "Небольшой номер с деревянной мебелью и окном в зелёный сад.",
+      "path": "dom-na-holme/room.jpg",
+      "prompt": "Use case: photorealistic-natural.\nAsset type: standalone landscape hotel photograph for a travel prototype.\nPrimary request: generate ONE realistic horizontal 3:2 photograph, around 1536 by 1024 pixels, of a fictional hotel in the Greater Sochi / Russian Black Sea region. This is synthetic demo imagery, not documentation of any real property.\nStyle/medium: convincing editorial architectural photography; natural exposure, realistic scale, restrained color, tactile materials, small natural imperfections; no illustration or CGI appearance.\nComposition/framing: one continuous photograph, no collage or split screen. Straight verticals and physically plausible architecture. Keep the main subject comfortably inside the central 75 percent so the image can be cropped to square for cards. Sharp and useful at small sizes.\nConstraints: no people, no lettering, no names, no signs, no logos, no watermarks, no graphics, no image border. No recognizable real hotel, landmark or copyrighted artwork. Do not depict impossible structural details.\n\nFictional property identity: A fictional small three-storey nine-room guesthouse on a wooded hillside near Kudepsta: pale cream plaster, honey-coloured wooden balcony rails, a simple terracotta tile roof, climbing grape vines, a sloping planted garden and a distant Black Sea horizon. Modest family-run guesthouse, welcoming and well kept, not a luxury villa.\nScene to photograph: A small clean welcoming guesthouse double room, about 18 square metres, simple pine furniture, white cotton bedding, a soft blue throw, plain warm-white walls, a practical wardrobe and French doors with honey-coloured wood framing opening toward a small planted balcony. Natural daylight; comfortable and modest, not a five-star suite.\nInput image 1: reference for this fictional property's architectural identity, materials and overall character. Generate a completely new photograph of the requested scene, not a collage and not a re-use of the exterior composition. Preserve the property's material palette and setting.",
+      "referenceAssetId": "dom-na-holme-exterior"
+    },
+    {
+      "id": "dom-na-holme-terrace",
+      "demoHotelId": "dom-na-holme",
+      "demoHotelName": "Дом на холме",
+      "category": "guesthouse",
+      "tags": [
+        "гостевой дом",
+        "холм",
+        "уютный"
+      ],
+      "role": "terrace",
+      "title": "Терраса для завтраков",
+      "alt": "Домашняя терраса под виноградом с видом на море вдали.",
+      "path": "dom-na-holme/terrace.jpg",
+      "prompt": "Use case: photorealistic-natural.\nAsset type: standalone landscape hotel photograph for a travel prototype.\nPrimary request: generate ONE realistic horizontal 3:2 photograph, around 1536 by 1024 pixels, of a fictional hotel in the Greater Sochi / Russian Black Sea region. This is synthetic demo imagery, not documentation of any real property.\nStyle/medium: convincing editorial architectural photography; natural exposure, realistic scale, restrained color, tactile materials, small natural imperfections; no illustration or CGI appearance.\nComposition/framing: one continuous photograph, no collage or split screen. Straight verticals and physically plausible architecture. Keep the main subject comfortably inside the central 75 percent so the image can be cropped to square for cards. Sharp and useful at small sizes.\nConstraints: no people, no lettering, no names, no signs, no logos, no watermarks, no graphics, no image border. No recognizable real hotel, landmark or copyrighted artwork. Do not depict impossible structural details.\n\nFictional property identity: A fictional small three-storey nine-room guesthouse on a wooded hillside near Kudepsta: pale cream plaster, honey-coloured wooden balcony rails, a simple terracotta tile roof, climbing grape vines, a sloping planted garden and a distant Black Sea horizon. Modest family-run guesthouse, welcoming and well kept, not a luxury villa.\nScene to photograph: An intimate shared guesthouse breakfast terrace under a real grapevine pergola, simple wooden tables and woven chairs, two ceramic cups and a small basket of bread, plants around a honey-coloured wooden railing, green hillside descending toward the distant Black Sea. Mild morning sunlight, quiet family atmosphere. No people, no text.\nInput image 1: reference for this fictional property's architectural identity, materials and overall character. Generate a completely new photograph of the requested scene, not a collage and not a re-use of the exterior composition. Preserve the property's material palette and setting.",
+      "referenceAssetId": "dom-na-holme-exterior"
+    }
+  ]
+}
