@@ -28,10 +28,10 @@
     "dev": "remotion studio",
     "build": "remotion bundle",
     "upgrade": "remotion upgrade",
-    "lint": "eslint src && tsc"
-    ,"capture": "node capture.mjs"
-    ,"prepare": "node prepare.mjs"
-    ,"render": "remotion render Okno ../../.private/video-production/okno-presentation.mp4 --concurrency=3 --crf=18"
+    "lint": "eslint src && tsc",
+    "capture": "node capture.mjs",
+    "prepare": "node prepare.mjs",
+    "render": "remotion render Okno ../../.private/video-production/okno-presentation.mp4 --concurrency=3 --crf=18"
   },
   "allowScripts": {
     "esbuild": false
