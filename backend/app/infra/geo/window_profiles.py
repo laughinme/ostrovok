@@ -19,6 +19,7 @@ from app.domain.knowledge.scope import Facade
 
 _CACHE_HOTELS = 4
 PROFILE_FILE = "window_profiles.zip"
+PROFILE_VERSION = 1
 _SOURCES = (
     "hotels.csv.gz",
     "buildings.csv.gz",
@@ -82,7 +83,7 @@ class WindowProfiles:
     def __init__(self, directory: Path) -> None:
         self._archive = ZipFile(BytesIO((directory / PROFILE_FILE).read_bytes()))
         raw = json.loads(self._archive.read("manifest.json"))
-        if raw["version"] != 1 or raw["sources"] != source_hashes(directory):
+        if raw["version"] != PROFILE_VERSION or raw["sources"] != source_hashes(directory):
             self._archive.close()
             raise ValueError("Window profiles do not match the region files; regenerate them")
         self._hotels: OrderedDict[str, dict[str, Any]] = OrderedDict()

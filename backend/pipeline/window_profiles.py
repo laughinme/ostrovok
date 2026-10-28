@@ -6,7 +6,7 @@ import hashlib
 import json
 from pathlib import Path
 from time import perf_counter
-from zipfile import ZIP_DEFLATED, ZipFile
+from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 
 from shapely import from_wkb
 from shapely.prepared import prep
@@ -19,6 +19,7 @@ from app.domain.geo.sea import minimum_floor
 from app.infra.geo.terrain import NpyTerrain
 from app.infra.geo.window_profiles import (
     PROFILE_FILE,
+    PROFILE_VERSION,
     encode_profile,
     hotel_signature,
     source_hashes,
@@ -40,13 +41,14 @@ async def generate(directory: Path = REGION) -> None:
     )
     output = directory / PROFILE_FILE
     sources = source_hashes(directory)
-    key = hashlib.sha256(json.dumps(sources, sort_keys=True).encode()).hexdigest()[:16]
+    revision = {"version": PROFILE_VERSION, "sources": sources}
+    key = hashlib.sha256(json.dumps(revision, sort_keys=True).encode()).hexdigest()[:16]
     checkpoint = directory.parents[1] / ".cache" / "window_profiles" / key
     checkpoint.mkdir(parents=True, exist_ok=True)
     temporary = checkpoint / "output.tmp"
     start = perf_counter()
     with ZipFile(temporary, "w", compression=ZIP_DEFLATED, compresslevel=6) as archive:
-        archive.writestr("manifest.json", json.dumps({"version": 1, "sources": sources}))
+        _write(archive, "manifest.json", json.dumps(revision))
         for index, hotel in enumerate(hotels(directory), start=1):
             cached = checkpoint / f"{hotel.osm_id.replace('/', '_')}.json.gz"
             if cached.exists():
@@ -54,7 +56,7 @@ async def generate(directory: Path = REGION) -> None:
             else:
                 raw = await _hotel_profiles(hotel, env)
                 cached.write_bytes(gzip.compress(raw.encode(), mtime=0))
-            archive.writestr(f"{hotel.osm_id}.json", raw)
+            _write(archive, f"{hotel.osm_id}.json", raw)
             count = len(json.loads(raw)["profiles"])
             print(
                 f"{index}/200 {hotel.name}: {count} profiles · {perf_counter() - start:.1f}s",
@@ -85,6 +87,12 @@ async def _hotel_profiles(hotel: HotelGeo, env: Environment) -> str:
     return json.dumps(
         {"signature": hotel_signature(hotel), "profiles": profiles}, ensure_ascii=False
     )
+
+
+def _write(archive: ZipFile, name: str, text: str) -> None:
+    member = ZipInfo(name, date_time=(1980, 1, 1, 0, 0, 0))
+    member.compress_type = ZIP_DEFLATED
+    archive.writestr(member, text, compresslevel=6)
 
 
 def run() -> None:

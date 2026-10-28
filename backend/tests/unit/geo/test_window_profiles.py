@@ -1,5 +1,9 @@
 import json
+from contextlib import asynccontextmanager
 from dataclasses import replace
+from datetime import date
+from types import SimpleNamespace
+from unittest.mock import AsyncMock
 from zipfile import ZipFile
 
 import numpy as np
@@ -17,6 +21,7 @@ from app.infra.geo.window_profiles import (
     source_hashes,
 )
 from app.service.geo.scenes import scene_cache
+from app.service.geo.window import WindowQueries, WindowUnavailableError
 from tests.unit.geo.view_factory import view_environment
 
 
@@ -69,3 +74,49 @@ async def test_snapshot_checks_sources_and_hotel_shape(tmp_path) -> None:
     (tmp_path / "dem.json").write_bytes(b"changed")
     with pytest.raises(ValueError, match="regenerate"):
         WindowProfiles(tmp_path)
+
+
+async def test_snapshot_service_does_not_sample_terrain_and_can_be_invalidated(
+    tmp_path, monkeypatch
+) -> None:
+    hotel, env = view_environment()
+    scene = await scene_cache(env).get(hotel, env)
+    window = scene.prepare(Facade.S)[1]
+    profile = WindowProfile(
+        window.azimuths_deg, evaluate_horizon(window, scene.eye(5)), (), 1, 13.5
+    )
+    for name in (
+        "hotels.csv.gz",
+        "buildings.csv.gz",
+        "dem.json",
+        "dem_int16.npy",
+        "sea.wkb.gz",
+        "osm_features.csv.gz",
+    ):
+        (tmp_path / name).write_bytes(b"source")
+    with ZipFile(tmp_path / PROFILE_FILE, "w") as archive:
+        archive.writestr(
+            "manifest.json", json.dumps({"version": 1, "sources": source_hashes(tmp_path)})
+        )
+        archive.writestr(
+            f"{hotel.osm_id}.json",
+            json.dumps(
+                {
+                    "signature": hotel_signature(hotel),
+                    "profiles": {"S/5": encode_profile(profile)},
+                }
+            ),
+        )
+
+    @asynccontextmanager
+    async def uow():
+        yield SimpleNamespace(catalog=SimpleNamespace(hotel=AsyncMock(return_value=hotel)))
+
+    monkeypatch.setattr("app.service.geo.window.hotel_geo", lambda row: row)
+    queries = WindowQueries(SimpleNamespace(unit_of_work=uow), env, WindowProfiles(tmp_path))
+    env.terrain = None
+    result = await queries.get(hotel.id, Facade.S, 5, date(2026, 11, 12))
+    assert result.sea_fraction > 0.9
+    queries.invalidate()
+    with pytest.raises(WindowUnavailableError):
+        await queries.get(hotel.id, Facade.S, 5, date(2026, 11, 12))
