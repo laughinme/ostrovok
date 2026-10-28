@@ -1,23 +1,26 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { CRITERIA, formatReviewCount, type Hotel } from "@/entities/hotel";
+import { type Hotel } from "@/entities/hotel";
 import { parseQuery, scoreHotel } from "@/features/hotel-search";
 import { useCompare } from "@/features/compare-hotels";
 import { useHotelFavorite } from "@/features/favorite-hotels";
 import { CoastMap } from "@/widgets/hotel-map";
 import { Drawer, Lightbox, WhyPanel, type GalleryItem } from "./overlays";
-import { Conf, Icon, Mark, Ring, SrcTag, Stars, Toast } from "./detail-ui";
+import { Conf, Icon, Mark, SrcTag, Toast } from "./detail-ui";
 import { useToast } from "../lib/use-toast";
 import { Building, Panorama, Photo } from "./visuals";
 import { createHotelDetails, nearbyRoute } from "../model/hotel-details";
 import type { Facade, Fact, RoomType, RatePlan } from "../model/types";
 import { FACADE_NAME } from "../lib/building";
-import { decimal, rub } from "../lib/format";
+import { rub } from "../lib/format";
 import { verdict } from "../lib/score";
 import { BookingRequest } from "./booking-request";
 import { DetailMap } from "./detail-map";
 import "./hotel-detail.css";
+import "./hotel-refresh.css";
+import { HotelOverview } from "./hotel-overview";
+import { getApiMode } from "@/shared/api";
 const FACADE_TEXT: Record<Facade, string> = {
   NE: "горы",
   SE: "море частично",
@@ -40,8 +43,9 @@ const DAYS = [
 ] as const;
 export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | undefined }) {
   const h = useMemo(() => createHotelDetails(hotel), [hotel]);
+  const reduceMotion = useReducedMotion();
+  const designDemo = getApiMode() === "demo";
   const criteria = useMemo(() => parseQuery(q ?? ""), [q]);
-  const chips = criteria.map((key) => ({ key }));
   const match = hotel.searchMatch
     ? Math.round(hotel.searchMatch.score * 100)
     : scoreHotel(hotel, criteria);
@@ -81,7 +85,9 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
   const noiseSides = h.noise[noise];
   const roomsForFacade = h.rooms.filter((r) => r.facades.includes(facade));
   const scrollTo = (id: string) =>
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    document
+      .getElementById(id)
+      ?.scrollIntoView({ behavior: reduceMotion ? "instant" : "smooth", block: "start" });
   const inCmp = compare.includes(h.id);
   return (
     <main className="hotel-detail hotel-page">
@@ -97,145 +103,18 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
           </Link>
         </div>
 
-        <section className="hp-head card-w">
-          <div>
-            <h1>
-              {h.name} <Stars n={h.stars} />
-            </h1>
-            <div className="hp-addr">
-              <b>{h.address}</b> ·{" "}
-              <button className="link" onClick={() => scrollTo("where")}>
-                Показать на карте
-              </button>
-            </div>
-            <div className="hp-dist">
-              {h.toCenter} · {h.toSea}
-            </div>
-          </div>
-          <div className="hp-cta">
-            <div className="hp-price">
-              от <b className="num">{rub(h.priceFrom)}</b>
-            </div>
-            <button
-              className={`fav-btn${fav ? " on" : ""}`}
-              aria-pressed={fav}
-              aria-label={fav ? "Убрать из избранного" : "Добавить в избранное"}
-              onClick={toggleFavorite}
-            >
-              <Icon name="heart" size={20} />
-            </button>
-            <button className="btn btn-primary" onClick={() => scrollTo("rooms")}>
-              Выбрать номер
-            </button>
-          </div>
-        </section>
-
-        <section className={`mosaic${gallery.length <= 5 ? " compact" : ""}`}>
-          {gallery.slice(0, 7).map((g, i) => (
-            <button
-              key={i}
-              className={`mz mz-${i}`}
-              onClick={() => setLb(i)}
-              aria-label={`Открыть фото ${i + 1}`}
-            >
-              {g.kind === "photo" && (
-                <Photo
-                  k={g.key}
-                  alt={`${h.name}, фото ${i + 1}`}
-                  credit={i === 0}
-                  facade={h.bestFacade}
-                  floor={h.bestFloor}
-                />
-              )}
-              {g.kind === "view" && (
-                <div className="mz-scene">
-                  <Panorama facade={h.bestFacade} floor={h.bestFloor} labels={false} />
-                  <span>Вид из окна · расчёт</span>
-                </div>
-              )}
-              {g.kind === "noise" && (
-                <div className="mz-light">
-                  <Building
-                    floors={h.totalFloors}
-                    name={h.name}
-                    sides={Object.fromEntries(
-                      Object.entries(h.noise.night).map(([key, [color, text]]) => [
-                        key,
-                        { color, text },
-                      ]),
-                    )}
-                  />
-                </div>
-              )}
-              {i === 6 && gallery.length > 7 && (
-                <span className="more">+{gallery.length - 7} фото</span>
-              )}
-            </button>
-          ))}
-        </section>
-
-        <section className="trio">
-          <div className="card-w t-match">
-            <div className="t-h">
-              <Ring value={m.score} size={74} label="" />
-              <div>
-                <b>Совпадение с вашим запросом</b>
-                <span>риск разочарования {m.risk}%</span>
-              </div>
-            </div>
-            <ul className="vlist">
-              {chips.map((c) => {
-                const p = h.wish[c.key]?.[0] ?? null;
-                return (
-                  <li key={c.key}>
-                    <Mark v={verdict(p)} />
-                    {p == null
-                      ? `${CRITERIA[c.key].label}: выясняем`
-                      : (h.wish[c.key]?.[1] ?? CRITERIA[c.key].label)}
-                  </li>
-                );
-              })}
-            </ul>
-            <p className="trade">{h.tradeoff}</p>
-          </div>
-          <div className="card-w">
-            <div className="t-rating">
-              <span className="rating-v num">{decimal(h.rating)}</span>
-              <div>
-                <b>{h.ratingLabel}</b>
-                <span>
-                  {hotel.backend ? "Рейтинг демонстрационный" : formatReviewCount(h.reviewCount)}
-                </span>
-              </div>
-            </div>
-            <h3 className="t-title">Популярные удобства</h3>
-            <ul className="amen">
-              {h.amenities.map((a) => (
-                <li key={a}>
-                  <Icon name="check" size={16} />
-                  {a}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="card-w">
-            <h3 className="t-title">Что есть рядом</h3>
-            <ul className="near">
-              {h.nearby.map(([ic, n, d]) => (
-                <li key={n}>
-                  <span className="near-ic">
-                    <Icon name={ic} size={17} />
-                  </span>
-                  <span>{n}</span>
-                  <b className="num">{d}</b>
-                </li>
-              ))}
-            </ul>
-            <button className="btn-ghost wide" onClick={() => scrollTo("morning")}>
-              Как дойти до моря
-            </button>
-          </div>
-        </section>
+        <HotelOverview
+          hotel={hotel}
+          details={h}
+          criteria={criteria}
+          score={m.score}
+          favorite={fav}
+          inComparison={inCmp}
+          onFavorite={toggleFavorite}
+          onCompare={() => toggleCompare(h.id)}
+          onPhoto={setLb}
+          onSection={scrollTo}
+        />
 
         <section className="sec-h2">
           <h2>Как это будет</h2>
@@ -282,7 +161,9 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
               ))}
             </div>
             <span className="read">
-              10–15 ноября · закат <b>16:53–16:58</b>
+              {designDemo
+                ? "10–15 ноября · пример расчёта"
+                : "Иллюстрация · расположение уточняется"}
             </span>
           </div>
           <div className="w-stage">
@@ -454,42 +335,46 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
           </div>
         </section>
 
-        <section className="dates card-w">
-          <div className="rp-h">
-            <h3>Ваши даты</h3>
-            <span className="sub">Демонстрационная сводка, не прогноз</span>
-          </div>
-          <div className="days num">
-            {DAYS.map(([wd, d, t, s, w, r]) => (
-              <div className="day" key={d}>
-                <span className="d">
-                  {wd}, {d} ноября
-                </span>
-                <b>{t}°</b>
-                <span className="row">
-                  <Icon name="sun" size={14} />
-                  закат {s}
-                </span>
-                <span className="row">
-                  <Icon name="wave" size={14} />
-                  вода {w}°
-                </span>
-                <span className="row">
-                  <Icon name="question" size={14} />
-                  дождь {r}%
-                </span>
-              </div>
-            ))}
-          </div>
-        </section>
+        {designDemo && (
+          <section className="dates card-w">
+            <div className="rp-h">
+              <h3>Ваши даты</h3>
+              <span className="sub">Демонстрационная сводка, не прогноз</span>
+            </div>
+            <div className="days num">
+              {DAYS.map(([wd, d, t, s, w, r]) => (
+                <div className="day" key={d}>
+                  <span className="d">
+                    {wd}, {d} ноября
+                  </span>
+                  <b>{t}°</b>
+                  <span className="row">
+                    <Icon name="sun" size={14} />
+                    закат {s}
+                  </span>
+                  <span className="row">
+                    <Icon name="wave" size={14} />
+                    вода {w}°
+                  </span>
+                  <span className="row">
+                    <Icon name="question" size={14} />
+                    дождь {r}%
+                  </span>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
         <section className="sec-h2" id="rooms">
           <h2>Доступные номера</h2>
-          <p>
-            10–15 ноября · 5 ночей · 2 взрослых · стороны и этажи — по ответу отеля, вид — по
-            расчёту
-          </p>
+          <p>Сравните категории и условия. Пожелания по стороне здания и этажу добавим к брони.</p>
         </section>
+        {h.rooms.length === 0 && (
+          <div className="hotel-empty-state">
+            Категории номеров пока не добавлены. Условия размещения можно уточнить у отеля.
+          </div>
+        )}
         {h.rooms.map((r) => (
           <section key={r.id} className={`room card-w${r.recommended ? " rec" : ""}`}>
             <div className="room-l">
@@ -512,13 +397,19 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
                 </li>
                 <li>
                   <Icon name="pin" size={16} />
-                  {r.facades.map((f) => FACADE_NAME[f]).join(" + ")} · этажи {r.floors.join("–")}
+                  {r.orientationLabel ||
+                    r.facades.map((f) => FACADE_NAME[f]).join(" + ") ||
+                    "Сторона уточняется"}{" "}
+                  · этажи {r.floors.join("–")}
                 </li>
                 <li>
                   <Icon name="sun" size={16} />
                   Вид: {r.view}
                 </li>
               </ul>
+              {r.capacity && (
+                <p className="hotel-room-capacity">Размещение: до {r.capacity} гостей</p>
+              )}
               <ul className="foryou">
                 {r.forYou.map(([v, t]) => (
                   <li key={t}>
@@ -535,6 +426,11 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
               )}
             </div>
             <div className="rates">
+              {r.rates.length === 0 && (
+                <div className="hotel-empty-state">
+                  Тарифы по этой категории пока не опубликованы.
+                </div>
+              )}
               {r.rates.map((rt, i) => (
                 <div className="rate" key={i}>
                   <ul>
@@ -568,8 +464,8 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
           </section>
         ))}
 
-        <section className="sec-h2">
-          <h2>Что ещё мы знаем</h2>
+        <section className="sec-h2" id="hotel-facts">
+          <h2>За каждым фактом — источник</h2>
           <p>Нажмите на факт, чтобы увидеть доказательство</p>
         </section>
         <div className="tiles">
@@ -597,10 +493,12 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
           })}
         </div>
 
-        <section className="sec-h2">
-          <h2>Чего мы не знаем</h2>
-          <p>Спросим отель — обычно отвечают за день</p>
-        </section>
+        {h.unknowns.length > 0 && (
+          <section className="sec-h2">
+            <h2>Осталось уточнить</h2>
+            <p>Спросим отель — обычно отвечают за день</p>
+          </section>
+        )}
         <div className="asks">
           {h.unknowns.map(([q, why]) => (
             <div key={q} className={`ask-tile${asked.has(q) ? " sent" : ""}`}>
@@ -624,7 +522,7 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
           <p>{h.address}</p>
         </section>
         <div className="where card-w">
-          <CoastMap items={[{ hotel }]} />
+          <CoastMap items={[{ hotel }]} scrollZoom={false} />
         </div>
 
         <div className="hp-actions">
@@ -643,12 +541,14 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
         inert={!stuck}
         initial={false}
         animate={{ y: stuck ? 0 : 120, opacity: stuck ? 1 : 0 }}
-        transition={{ type: "spring", stiffness: 300, damping: 32 }}
+        transition={
+          reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 300, damping: 32 }
+        }
       >
         <span>
           <b>{h.name}</b> · {h.bestRoom}
         </span>
-        <b className="num">от {rub(h.priceFrom)}</b>
+        <b className="num">{h.priceFrom > 0 ? `от ${rub(h.priceFrom)}` : "Цена уточняется"}</b>
         <button className="btn btn-primary btn-sm" onClick={() => scrollTo("rooms")}>
           Выбрать номер
         </button>
