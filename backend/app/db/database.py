@@ -13,6 +13,15 @@ from app.core.config import Settings
 from app.core.errors import DomainError
 from app.db.uow import UnitOfWork
 
+# A process killed mid-transaction (a deploy, an OOM) must not keep its locks: keepalives let
+# Postgres notice the dead client within a minute; long idle transactions are a last resort.
+SESSION_SETTINGS = {
+    "tcp_keepalives_idle": "30",
+    "tcp_keepalives_interval": "10",
+    "tcp_keepalives_count": "3",
+    "idle_in_transaction_session_timeout": "600000",
+}
+
 
 class Database:
     def __init__(self, settings: Settings) -> None:
@@ -22,6 +31,7 @@ class Database:
             pool_size=settings.db_pool_size,
             max_overflow=settings.db_max_overflow,
             pool_pre_ping=True,
+            connect_args={"server_settings": SESSION_SETTINGS},
         )
         self._sessions = async_sessionmaker(self.engine, expire_on_commit=False, autoflush=False)
 
