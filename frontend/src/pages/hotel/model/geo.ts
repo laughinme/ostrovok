@@ -103,3 +103,21 @@ export function elevationPath(profile: RouteData["elevationProfile"]) {
     })
     .join(" ");
 }
+
+export function routePoints(coordinates: RouteData["geometry"]["coordinates"]) {
+  if (coordinates.length < 2) return [];
+  const latitude = (coordinates[0]![1] * Math.PI) / 180;
+  const points = coordinates.map(([lon, lat]) => [lon * Math.cos(latitude), -lat] as const);
+  const minX = Math.min(...points.map(([x]) => x)),
+    maxX = Math.max(...points.map(([x]) => x));
+  const minY = Math.min(...points.map(([, y]) => y)),
+    maxY = Math.max(...points.map(([, y]) => y));
+  const scale = Math.min(
+    520 / Math.max(maxX - minX, 0.000001),
+    240 / Math.max(maxY - minY, 0.000001),
+  );
+  return points.map(([x, y]) => [
+    320 + (x - (minX + maxX) / 2) * scale,
+    180 + (y - (minY + maxY) / 2) * scale,
+  ]);
+}

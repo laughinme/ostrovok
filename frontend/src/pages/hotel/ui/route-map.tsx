@@ -1,23 +1,18 @@
 import type { Hotel } from "@/entities/hotel";
-import type { NearbyRoute } from "../model/types";
+import type { RouteData } from "../model/geo";
+import { RouteScheme } from "./route-scheme";
 import * as maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import workerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?url";
 import { useEffect, useRef, useState } from "react";
 maplibregl.setWorkerUrl(workerUrl);
-export default function RouteMap({ hotel, route }: { hotel: Hotel; route: NearbyRoute }) {
+export default function RouteMap({ hotel, route }: { hotel: Hotel; route: RouteData }) {
   const container = useRef<HTMLDivElement>(null);
   const [failed, setFailed] = useState(false);
   useEffect(() => {
     if (!container.current) return;
-    const [lng, lat] = hotel.lngLat;
-    const coords: [number, number][] = [
-      [lng, lat],
-      [lng - 0.0004, lat - 0.00015],
-      [lng - 0.0007, lat - 0.0005],
-      [lng - 0.001, lat - 0.0008],
-      [lng - 0.0013, lat - 0.0011],
-    ];
+    const coords = route.geometry.coordinates;
+    if (coords.length < 2) return;
     let map: maplibregl.Map;
     try {
       map = new maplibregl.Map({
@@ -62,7 +57,7 @@ export default function RouteMap({ hotel, route }: { hotel: Hotel; route: Nearby
     });
     const markers = [
       [coords[0]!, hotel.name],
-      [coords[4]!, route.destination],
+      [coords.at(-1)!, route.targetName ?? "Пляж"],
     ] as const;
     for (const [point, name] of markers) {
       const element = document.createElement("div");
@@ -75,7 +70,12 @@ export default function RouteMap({ hotel, route }: { hotel: Hotel; route: Nearby
     }
     const resize = () => {
       map.resize();
-      map.fitBounds([coords[4]!, coords[0]!], { padding: 55, duration: 0 });
+      const bounds = coords.reduce(
+        (bounds, point) => bounds.extend(point),
+        new maplibregl.LngLatBounds(),
+      );
+      bounds.extend(hotel.lngLat);
+      map.fitBounds(bounds, { padding: 55, maxZoom: 17, duration: 0 });
     };
     const observer = new ResizeObserver(resize);
     observer.observe(container.current);
@@ -84,12 +84,14 @@ export default function RouteMap({ hotel, route }: { hotel: Hotel; route: Nearby
       observer.disconnect();
       map.remove();
     };
-  }, [hotel.lngLat, hotel.name, route.destination]);
+  }, [hotel.lngLat, hotel.name, route.geometry.coordinates, route.targetName]);
   return (
     <>
       <div ref={container} style={{ position: "absolute", inset: 0 }} />
-      {failed && <div className="map-fallback">Карта не загрузилась</div>}
-      <span className="route-note">Условная схема пути</span>
+      {failed && <RouteScheme route={route} />}
+      <span className="route-note">
+        {route.estimated ? "Оценочный маршрут · см. оговорки" : "Пеший маршрут по OSM"}
+      </span>
     </>
   );
 }

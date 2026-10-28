@@ -12,13 +12,13 @@ import { Drawer, Lightbox, WhyPanel, type GalleryItem } from "./overlays";
 import { Conf, Icon, Mark, Ring, SrcTag, Stars, Toast } from "./detail-ui";
 import { useToast } from "../lib/use-toast";
 import { Building, Panorama, Photo } from "./visuals";
-import { createHotelDetails, nearbyRoute } from "../model/hotel-details";
+import { createHotelDetails } from "../model/hotel-details";
 import type { Fact, RoomType, RatePlan } from "../model/types";
 import { FACADE_NAME } from "../lib/building";
 import { decimal, rub } from "../lib/format";
 import { verdict } from "../lib/score";
 import { BookingRequest } from "./booking-request";
-import { DetailMap } from "./detail-map";
+import { BeachSection } from "./beach-section";
 import { NoiseSection } from "./noise-section";
 import { WindowSection } from "./window-section";
 import "./hotel-detail.css";
@@ -65,7 +65,6 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
     ],
     [h],
   );
-  const route = useMemo(() => nearbyRoute(hotel), [hotel]);
   const scrollTo = (id: string) =>
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   const inCmp = compare.includes(h.id);
@@ -232,82 +231,7 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
 
         <NoiseSection hotel={hotel} />
 
-        <section className="row-panel card-w morning" id="morning">
-          <div className="rp-media">
-            <DetailMap hotel={hotel} route={route} />
-          </div>
-          <div className="rp-side">
-            <div className="rp-h">
-              <h3>Ваше утро</h3>
-            </div>
-            <p className="sub">{route.destination} и что есть поблизости</p>
-            <svg className="elev" viewBox="0 0 400 110" aria-label="Профиль высот">
-              <defs>
-                <linearGradient id="elevg" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0" stopColor="var(--primary)" stopOpacity=".22" />
-                  <stop offset="1" stopColor="var(--primary)" stopOpacity="0" />
-                </linearGradient>
-              </defs>
-              <rect
-                x="120"
-                y="8"
-                width="70"
-                height="70"
-                fill="var(--verified)"
-                opacity=".5"
-                rx="4"
-              />
-              <path
-                d="M10 14 C 60 15, 90 20, 120 26 L 190 70 C 230 86, 290 92, 390 96 L 390 100 L 10 100 Z"
-                fill="url(#elevg)"
-              />
-              <path
-                d="M10 14 C 60 15, 90 20, 120 26 L 190 70 C 230 86, 290 92, 390 96"
-                fill="none"
-                stroke="var(--primary)"
-                strokeWidth="3"
-              />
-              <text
-                x="155"
-                y="20"
-                fontSize="11"
-                textAnchor="middle"
-                fill="var(--ink)"
-                fontWeight="600"
-              >
-                Схема пути
-              </text>
-              <text x="10" y="108" fontSize="11" fill="var(--muted)">
-                отель
-              </text>
-              <text x="390" y="108" fontSize="11" fill="var(--muted)" textAnchor="end">
-                {route.destination}
-              </text>
-            </svg>
-            <ol className="route">
-              {route.stops.map(([name, description]) => (
-                <li key={name}>
-                  <b>{name}</b>
-                  <span>{description}</span>
-                </li>
-              ))}
-            </ol>
-            <div className="times num">
-              <div>
-                <b>{route.minutes} мин</b>
-                <span>до места</span>
-              </div>
-              <div>
-                <b>{hotel.walk.length}</b>
-                <span>мест рядом</span>
-              </div>
-              <div>
-                <b>уточним</b>
-                <span>перепад высот</span>
-              </div>
-            </div>
-          </div>
-        </section>
+        <BeachSection hotel={hotel} />
 
         <section className="dates card-w">
           <div className="rp-h">
