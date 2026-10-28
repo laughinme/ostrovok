@@ -16,6 +16,7 @@ import { LlmJournal } from "./llm";
 import { Settings } from "./settings";
 import { World } from "./world";
 import { Conflicts } from "./conflicts";
+import { Quality } from "./quality";
 import "./console.css";
 
 const sections = [
@@ -78,6 +79,7 @@ export function ConsolePage() {
             <World />
           </div>
           {section === "conflicts" && <Conflicts />}
+          {section === "quality" && <Quality />}
         </section>
       </div>
     </main>

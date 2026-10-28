@@ -7,7 +7,7 @@ export function Settings() {
   const save = useConsoleAction((llmMode: "auto" | "off") =>
     demoApi<Schema["SettingsModel"]>("operator", "/console/settings", "PUT", {
       llmMode,
-    } satisfies Schema["SettingsModel"]),
+    } satisfies Pick<Schema["SettingsModel"], "llmMode">),
   );
   return (
     <>
