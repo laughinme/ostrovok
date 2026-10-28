@@ -16,7 +16,7 @@ from uuid import UUID
 from app.domain.knowledge.characteristic import Characteristic
 from app.domain.knowledge.confidence import Vote, beta_update, decay, pool
 from app.domain.knowledge.observation import Observation
-from app.domain.knowledge.scope import Cell, Facade, Grid, Scope, compress
+from app.domain.knowledge.scope import Cell, Facade, Grid, Scope, compress, encloses
 from app.domain.knowledge.sources import RELIABILITY, Authority, SourceKind
 from app.domain.knowledge.values import ValueType, probability_of_yes
 
@@ -226,7 +226,19 @@ def _reconcile_groups(
     facts: list[FactDraft] = []
     claims: dict[UUID, Observation] = {}
     for group in groups.values():
-        draft, disputes = decide(characteristic.authority, group, now)
+        scoped = group
+        if characteristic.value_type is ValueType.PROBABILITY and any(
+            o.method == "guest.feedback" for o in group
+        ):
+            inherited = [
+                o
+                for o in observations
+                if o not in group
+                and o.method != "guest.feedback"
+                and encloses(o.scope, group[0].scope)
+            ]
+            scoped = [*group, *inherited]
+        draft, disputes = decide(characteristic.authority, scoped, now)
         facts.append(draft)
         claims.update((o.id, o) for o in disputes)
     conflict = None
