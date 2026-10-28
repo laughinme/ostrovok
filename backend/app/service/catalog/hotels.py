@@ -66,7 +66,7 @@ class HotelQueries:
 
     async def many(self, ids: Sequence[UUID] | None = None) -> list[HotelView]:
         rows = await self._uow.catalog.hotels(ids)
-        facts = await FactQueries(self._uow).of_hotels([r.id for r in rows])
+        facts = await self._uow.knowledge.headlines([r.id for r in rows])
         by_hotel: dict[UUID, list[Fact]] = defaultdict(list)
         for fact in facts:
             by_hotel[fact.hotel_id].append(fact)

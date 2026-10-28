@@ -2,7 +2,8 @@ from collections.abc import Sequence
 from datetime import datetime
 from uuid import UUID
 
-from sqlalchemy import func, select, text, update
+from sqlalchemy import cast, func, select, text, update
+from sqlalchemy.dialects.postgresql import JSONB, distinct_on
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.models import ConflictRow, FactRow, FactVersionRow, Hotel, ObservationRow
@@ -171,6 +172,22 @@ class KnowledgeRepository:
             stmt = stmt.where(FactRow.characteristic == characteristic)
         rows = await self._session.scalars(stmt.order_by(FactRow.characteristic, FactRow.scope_key))
         return [fact_from_row(r) for r in rows]
+
+    async def headlines(self, hotel_ids: Sequence[UUID]) -> list[Fact]:
+        """One fact per (hotel, characteristic): the surest «yes», else the surest answer."""
+        is_yes = FactRow.value == cast(True, JSONB)
+        stmt = (
+            select(FactRow)
+            .where(FactRow.hotel_id.in_(hotel_ids))
+            .ext(distinct_on(FactRow.hotel_id, FactRow.characteristic))
+            .order_by(
+                FactRow.hotel_id,
+                FactRow.characteristic,
+                is_yes.desc(),
+                FactRow.confidence.desc(),
+            )
+        )
+        return [fact_from_row(r) for r in await self._session.scalars(stmt)]
 
     async def fact(self, fact_id: UUID) -> Fact | None:
         row = await self._session.get(FactRow, fact_id)
