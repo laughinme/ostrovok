@@ -29,6 +29,7 @@ export default defineConfig(({ mode }) => {
         routeRules: {
           "/api/**": { proxy: `${backendUrl}/api/**` },
           "/health": { proxy: `${backendUrl}/health` },
+          "/mcp": { proxy: `${backendUrl}/mcp` },
         },
       }),
       react(),

@@ -351,6 +351,22 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/v1/me/trips": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations["my_trips_api_v1_me_trips_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/v1/trips/{booking_id}": {
     parameters: {
       query?: never;
@@ -911,6 +927,38 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/v1/console/llm/calls": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations["llm_calls_api_v1_console_llm_calls_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/console/llm/usage": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations["llm_usage_api_v1_console_llm_usage_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/v1/console/demo/reset": {
     parameters: {
       query?: never;
@@ -1390,6 +1438,37 @@ export interface components {
       type: "LineString";
       coordinates: [number, number][];
     };
+    LlmCallOut: {
+      id: string;
+      createdAt: string;
+      task: string;
+      model: string;
+      status: "ok" | "cached" | "failed" | "limit";
+      prompt: string;
+      output?: unknown;
+      toolCalls: unknown[];
+      usage: {
+        [key: string]: unknown;
+      };
+      costUsd: number;
+      latencyMs: number;
+      error?: string | null;
+    };
+    LlmSpendOut: {
+      task: string;
+      model: string;
+      calls: number;
+      cached: number;
+      failed: number;
+      costUsd: number;
+      p50Ms?: number | null;
+    };
+    LlmUsageOut: {
+      today: components["schemas"]["LlmSpendOut"][];
+      total: components["schemas"]["LlmSpendOut"][];
+      todayCostUsd: number;
+      totalCostUsd: number;
+    };
     LoginRequest: {
       email: string;
       password: string;
@@ -1405,9 +1484,12 @@ export interface components {
     };
     NearbyOut: {
       kind: string;
+      title: string;
       name: string;
+      distanceM: number;
       distanceText: string;
       osmRef?: string | null;
+      location: [number, number];
     };
     NoiseLevelOut: {
       indexDb: number | null;
@@ -1496,8 +1578,14 @@ export interface components {
       search: {
         [key: string]: unknown;
       };
+      officialClaims?: {
+        [key: string]: unknown;
+      } | null;
       evaluationDate: string;
       llmStatus: string;
+      llm?: {
+        [key: string]: unknown;
+      } | null;
     };
     QuestionOut: {
       id: string;
@@ -1569,7 +1657,9 @@ export interface components {
       runId?: string | null;
     };
     ResearchRequest: {
-      chipId: string;
+      chipId?: string | null;
+      characteristic?: string | null;
+      hotelIds?: string[];
     };
     ReserveHotelOut: {
       osmId: string;
@@ -1627,9 +1717,14 @@ export interface components {
       months?: number[] | null;
       roomTypeIds?: string[] | null;
     };
-    ScopeOut: {
-      [key: string]: unknown;
+    ScopeJson: {
+      facades?: ("N" | "NE" | "E" | "SE" | "S" | "SW" | "W" | "NW")[];
+      floorFrom?: number;
+      floorTo?: number;
+      months?: number[];
+      roomTypeIds?: string[];
     };
+    ScopeOut: components["schemas"]["ScopeJson"];
     SearchRequest: {
       text?: string | null;
       chips?: components["schemas"]["IntentChipModel"][] | null;
@@ -1652,6 +1747,8 @@ export interface components {
     SettingsModel: {
       llmMode: "auto" | "off";
       llmAvailable: boolean;
+      llmModel?: string | null;
+      llmModelStrong?: string | null;
     };
     SimilarIn: {
       change: components["schemas"]["Improvement"];
@@ -1729,6 +1826,12 @@ export interface components {
       beachRoute: components["schemas"]["RouteOut"] | null;
       caveats: string[];
     };
+    TripSummaryOut: {
+      booking: components["schemas"]["BookingOut"];
+      hotelName: string;
+      hotelArea: string;
+      createdAt: string;
+    };
     UnknownOut: {
       characteristic: string;
       question: string;
@@ -1738,6 +1841,8 @@ export interface components {
       requests: number;
       inputTokens: number;
       outputTokens: number;
+      cachedTokens: number;
+      costUsd: number;
     };
     ValidationError: {
       loc: (string | number)[];
@@ -2447,6 +2552,35 @@ export interface operations {
       };
     };
   };
+  my_trips_api_v1_me_trips_get: {
+    parameters: {
+      query?: {
+        limit?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["TripSummaryOut"][];
+        };
+      };
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
   get_trip_api_v1_trips__booking_id__get: {
     parameters: {
       query?: never;
@@ -2993,7 +3127,9 @@ export interface operations {
   };
   parse_intent_api_v1_intents_post: {
     parameters: {
-      query?: never;
+      query?: {
+        planner?: "auto" | "rules";
+      };
       header?: never;
       path?: never;
       cookie?: never;
@@ -3550,6 +3686,55 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  llm_calls_api_v1_console_llm_calls_get: {
+    parameters: {
+      query?: {
+        task?: string | null;
+        limit?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["LlmCallOut"][];
+        };
+      };
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  llm_usage_api_v1_console_llm_usage_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["LlmUsageOut"];
         };
       };
     };

@@ -99,7 +99,7 @@ export function TripPage({ initialBookingId }: { initialBookingId?: string } = {
                 expanded={expanded === item.id}
                 onToggle={() => {
                   setExpanded(expanded === item.id ? null : item.id);
-                  setPost(!item.bookingId && item.status === "completed");
+                  setPost(item.status === "completed");
                 }}
               />
               <AnimatePresence initial={false}>
@@ -116,7 +116,7 @@ export function TripPage({ initialBookingId }: { initialBookingId?: string } = {
                     <div className="trip-expanded-inner">
                       <div className="trip-expanded-heading">
                         <h3>Всё важное перед отъездом</h3>
-                        {!item.bookingId && (
+                        {
                           <div className="trip-detail-tabs">
                             <button aria-pressed={!post} onClick={() => setPost(false)}>
                               До поездки
@@ -125,9 +125,11 @@ export function TripPage({ initialBookingId }: { initialBookingId?: string } = {
                               После поездки
                             </button>
                           </div>
-                        )}
+                        }
                       </div>
-                      {!post ? (
+                      {item.bookingId ? (
+                        <TripBookingDetails id={item.bookingId} post={post} />
+                      ) : !post ? (
                         <>
                           {item.highlights.length > 0 && (
                             <div className="trip-highlights">
@@ -153,11 +155,7 @@ export function TripPage({ initialBookingId }: { initialBookingId?: string } = {
                               </Link>
                             )}
                           </div>
-                          {item.bookingId ? (
-                            <TripBookingDetails id={item.bookingId} />
-                          ) : (
-                            <TripExpectations data={demoExpectations(item)} />
-                          )}
+                          <TripExpectations data={demoExpectations(item)} />
                         </>
                       ) : (
                         <div className="trip-feedback">

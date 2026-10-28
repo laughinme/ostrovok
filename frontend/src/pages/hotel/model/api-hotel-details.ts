@@ -2,7 +2,7 @@ import { characteristicLabel, type ApiFact, type Hotel } from "@/entities/hotel"
 import type { components } from "@/shared/api";
 import type { Facade, Fact, HotelDetails } from "./types";
 
-const facades: Facade[] = ["NE", "SE", "SW", "NW"];
+const facades: Facade[] = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
 const isFacade = (value: string): value is Facade => facades.includes(value as Facade);
 const observed = (value: string) =>
   Number.isNaN(Date.parse(value))
@@ -50,9 +50,7 @@ export function apiHotelDetails(hotel: Hotel): HotelDetails {
   const raw = hotel.backend!;
   const recommendation = hotel.searchMatch?.recommendation;
   const scope = recommendation?.scope;
-  const recommendedFacades = Array.isArray(scope?.["facades"])
-    ? scope["facades"].filter((value): value is string => typeof value === "string")
-    : [];
+  const recommendedFacades = Array.isArray(scope?.["facades"]) ? scope["facades"] : [];
   const primaryRoom = raw.rooms.find((room) => room.confirmedByHotel) ?? raw.rooms[0];
   const bestFacade =
     recommendedFacades.find(isFacade) ??
@@ -61,34 +59,14 @@ export function apiHotelDetails(hotel: Hotel): HotelDetails {
     "SW";
   const bestFloor =
     typeof scope?.["floorFrom"] === "number" ? scope["floorFrom"] : (primaryRoom?.floors?.[0] ?? 1);
-  const noiseFor = (time: "day" | "night") =>
-    Object.fromEntries(
-      facades.map((facade) => {
-        const evidence = raw.facts
-          .flatMap((fact) => fact.evidence)
-          .find(
-            (e) =>
-              e.kind === "noise_facades" &&
-              e.params?.["facade"] === facade &&
-              e.params?.["period"] === time,
-          );
-        const value = evidence?.params?.["indexDb"];
-        const db = typeof value === "number" ? value : null;
-        return [
-          facade,
-          [
-            db === null ? "#5B6580" : db >= 55 ? "#D2463B" : db >= 43 ? "#B7860B" : "#1E8F4E",
-            db === null ? "нет данных" : `≈${Math.round(db)} дБ`,
-            "условный индекс по OSM",
-          ],
-        ];
-      }),
-    ) as HotelDetails["noise"]["night"];
+  const unknownNoise = Object.fromEntries(
+    facades.map((facade) => [facade, ["#5B6580", "нет данных", "условный индекс по OSM"]]),
+  ) as HotelDetails["noise"]["night"];
   const beach = hotel.walk.find((place) => place.kind === "beach");
   return {
     api: true,
     totalFloors: raw.floors,
-    noise: { day: noiseFor("day"), night: noiseFor("night") },
+    noise: { day: unknownNoise, night: unknownNoise },
     id: raw.id,
     name: raw.name,
     stars: raw.stars ?? 0,
@@ -132,7 +110,21 @@ export function apiHotelDetails(hotel: Hotel): HotelDetails {
     ),
     amenities: raw.demo.amenities,
     nearby: raw.nearby.length
-      ? raw.nearby.map((place) => [place.kind, place.name, place.distanceText])
+      ? raw.nearby.map((place) => [
+          (
+            {
+              beach: "beach",
+              food: "food",
+              grocery: "food",
+              pharmacy: "pin",
+              park: "park",
+              playground: "kid",
+              station: "bus",
+            } as Record<string, string>
+          )[place.kind] ?? "pin",
+          place.title && place.title !== place.name ? `${place.title} · ${place.name}` : place.name,
+          place.distanceText,
+        ])
       : hotel.walk.map((place) => ["beach", place.name, `${place.minutes} мин`]),
     rooms: raw.rooms.map((room) => ({
       id: room.id,
@@ -175,6 +167,10 @@ export function apiHotelDetails(hotel: Hotel): HotelDetails {
       })),
     })),
     facts: raw.facts.map((fact) => detailFactFromApi(fact)),
-    unknowns: raw.unknowns.map((item) => [item.question, item.why]),
+    unknowns: raw.unknowns.map((item) => ({
+      key: item.characteristic,
+      question: item.question,
+      why: item.why,
+    })),
   };
 }

@@ -11,7 +11,7 @@ export const STATUS: Record<
     bar: "bg-conf-high",
   },
   computed: {
-    label: "Вычислено AI",
+    label: "Расчёт по открытым данным",
     icon: Calculator,
     pill: "bg-status-computed text-status-computed-foreground",
     bar: "bg-coral",

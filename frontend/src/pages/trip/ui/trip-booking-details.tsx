@@ -2,9 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 import { MessageSquare } from "lucide-react";
 import { RequestState } from "@/shared/ui";
 import { bookingTripQuery } from "../model/booking-trips";
+import { TripFeedback } from "./trip-feedback";
+import { TripConditions } from "./trip-conditions";
 import { TripExpectations } from "./trip-expectations";
 
-export function TripBookingDetails({ id }: { id: string }) {
+export function TripBookingDetails({ id, post = false }: { id: string; post?: boolean }) {
   const query = useQuery(bookingTripQuery(id));
   return (
     <>
@@ -13,23 +15,36 @@ export function TripBookingDetails({ id }: { id: string }) {
         error={query.error}
         retry={() => void query.refetch()}
       />
-      {query.data && (
-        <>
-          {query.data.booking.hotelReply && (
-            <div className="trip-request">
-              <MessageSquare size={19} />
-              <div>
-                <b>Ответ отеля</b>
-                <p>{query.data.booking.hotelReply}</p>
+      {query.data &&
+        (post ? (
+          <TripFeedback trip={query.data} />
+        ) : (
+          <>
+            {query.data.booking.hotelReply && (
+              <div className="trip-request">
+                <MessageSquare size={19} />
+                <div>
+                  <b>Ответ отеля</b>
+                  <p>{query.data.booking.hotelReply}</p>
+                </div>
               </div>
-            </div>
-          )}
-          <TripExpectations
-            data={query.data}
-            roomNames={{ [query.data.booking.roomTypeId]: "ваша категория номера" }}
-          />
-        </>
-      )}
+            )}
+            <TripConditions trip={query.data} />
+            <TripExpectations
+              data={{
+                ...query.data,
+                caveats: [
+                  ...new Set([
+                    ...query.data.caveats,
+                    ...(query.data.climate?.caveats ?? []),
+                    ...(query.data.beachRoute?.caveats ?? []),
+                  ]),
+                ],
+              }}
+              roomNames={{ [query.data.booking.roomTypeId]: "ваша категория номера" }}
+            />
+          </>
+        ))}
     </>
   );
 }

@@ -1,20 +1,59 @@
+import asyncio
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Query, Request, Response
+from pydantic import TypeAdapter
 
 from app.api.deps import FactQueriesDep, HotelQueriesDep
 from app.api.schemas.hotels import HotelOut
 from app.api.schemas.knowledge import FactDetailOut, FactOut
 from app.api.v1.window import router as window_router
+from app.service.catalog.hotels import HotelQueries, HotelView
 
 router = APIRouter(tags=["Hotels"])
 router.include_router(window_router)
 
 
-@router.get(path="/hotels", summary="Hotels of the region with a summary of what we know")
-async def list_hotels(svc: HotelQueriesDep) -> list[HotelOut]:
-    return [HotelOut.from_view(h, compact=True) for h in await svc.many()]
+_HOTELS = TypeAdapter(list[HotelOut])
+
+
+class HotelListCache:
+    """
+    The list is a few MB of JSON: building it on every request blocked the event loop for seconds
+    on a small machine. It is built once per change of the facts, off the loop, and served as bytes.
+    """
+
+    def __init__(self) -> None:
+        self._version: tuple[object, ...] | None = None
+        self._body = b""
+        self._lock = asyncio.Lock()
+
+    async def body(self, svc: HotelQueries) -> bytes:
+        version = await svc.version()
+        if version != self._version:
+            async with self._lock:
+                if version != self._version:
+                    views = await svc.many()
+                    self._body = await asyncio.to_thread(_dump, views)
+                    self._version = version
+        return self._body
+
+
+def _dump(views: list[HotelView]) -> bytes:
+    return _HOTELS.dump_json([HotelOut.from_view(h, compact=True) for h in views], by_alias=True)
+
+
+@router.get(
+    path="/hotels",
+    summary="Hotels of the region with a summary of what we know",
+    response_model=list[HotelOut],
+)
+async def list_hotels(request: Request, svc: HotelQueriesDep) -> Response:
+    cache: HotelListCache | None = getattr(request.app.state, "hotel_list", None)
+    if cache is None:
+        cache = request.app.state.hotel_list = HotelListCache()
+    return Response(await cache.body(svc), media_type="application/json")
 
 
 @router.get(
