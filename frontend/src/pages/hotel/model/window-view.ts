@@ -20,6 +20,7 @@ export interface WindowView {
   unknown: ViewSpan[];
   objects: string[];
   known: boolean;
+  foregroundOffset: number;
 }
 interface Selection {
   facade: GeoFacade;
@@ -28,6 +29,13 @@ interface Selection {
 }
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 const rounded = (value: number) => Number(value.toFixed(4));
+const foregroundOffset = (floor: number) => clamp((floor - 1) * 18, 0, 162);
+const buildingShape = (span: ViewSpan, floors: number): ViewBuilding => ({
+  ...span,
+  roof: 462 - clamp(floors * 28, 120, 250),
+  base: 462,
+  floors,
+});
 
 function assertion(facts: ApiFact[], key: string, selection: Selection) {
   const month = Number(selection.date.slice(5, 7));
@@ -65,7 +73,7 @@ function finish(scene: Omit<WindowView, "objects">): WindowView {
 
 export function demoWindowView(facade: GeoFacade, floor: number): WindowView {
   const side = facade === "NE" || facade === "SE" || facade === "NW" ? facade : "SW";
-  const layout = readPanoramaLayout(side, floor);
+  const layout = readPanoramaLayout(side, 1);
   const reading = readPanorama(side, floor);
   return finish({
     sea: layout.sea && reading.seaShare > 0 ? [layout.sea] : [],
@@ -73,22 +81,20 @@ export function demoWindowView(facade: GeoFacade, floor: number): WindowView {
       ? [{ from: side === "SE" ? -0.1 : 0, to: side === "SE" ? 0.65 : 1, height: 140 }]
       : [],
     buildings: layout.buildings.map((building) => ({
-      from: building.from,
-      to: building.to,
-      roof: rounded(270 - building.elevation * 6.4),
-      base: rounded(270 - building.baseElevation * 6.4),
-      floors: building.floors,
+      ...buildingShape({ from: building.from, to: building.to }, building.floors),
+      roof: rounded(clamp(270 - building.elevation * 6.4, 110, 310)),
     })),
     trees: [0.04, 0.08, 0.9, 0.96]
       .filter((x) => !layout.sea || x < layout.sea.from || x > layout.sea.to)
       .map((x, index) => ({
         x,
-        base: 490 + floor * 5 + (index % 2) * 12,
+        base: 506 + (index % 2) * 12,
         scale: index % 2 ? 0.85 : 1,
       })),
     sun: reading.sunVisible ? layout.sun : null,
     unknown: [],
     known: true,
+    foregroundOffset: foregroundOffset(floor),
   });
 }
 
@@ -141,19 +147,13 @@ export function calculatedWindowView(
       ray.seaHighDeg > ray.seaLowDeg,
   );
   if (!known && assertion(facts, "sea_view", selection) === true) sea.push({ from: 0.2, to: 0.8 });
-  const buildings = spans((ray) => ray.known && ray.kind === "building").flatMap((span) => {
-    const count = Math.max(1, Math.ceil((span.to - span.from) / 0.17));
-    return Array.from({ length: count }, (_, index) => {
-      const left = span.from + ((span.to - span.from) * index) / count;
-      const right = span.from + ((span.to - span.from) * (index + 1)) / count;
-      const angles = samples
-        .filter((ray) => ray.known && ray.kind === "building" && ray.to > left && ray.from < right)
-        .map((ray) => ray.angleDeg!);
-      const roof = rounded(clamp(270 - Math.max(...angles) * 6.4, 25, 530));
-      const base = Math.max(roof + 30, 440 + selection.floor * 7);
-      return { from: rounded(left), to: rounded(right), roof, base, floors: 5 };
-    });
-  });
+  const buildings = samples.some((ray) => ray.known && ray.kind === "building")
+    ? [
+        buildingShape({ from: 0.02, to: 0.19 }, 8),
+        buildingShape({ from: 0.36, to: 0.5 }, 6),
+        buildingShape({ from: 0.76, to: 0.95 }, 9),
+      ]
+    : [];
   const mountains = (current?.peaks ?? [])
     .filter((peak) => {
       const offset = relativeAzimuth(peak.azimuthDeg, selection.facade);
@@ -169,7 +169,7 @@ export function calculatedWindowView(
       return {
         from: center - 0.22,
         to: center + 0.22,
-        height: clamp(peak.elevationDeg * 6.4, 45, 180),
+        height: 130,
       };
     });
   if (!known && assertion(facts, "mountain_view", selection) === true)
@@ -178,7 +178,7 @@ export function calculatedWindowView(
     assertion(facts, "tree_view", selection) === true
       ? [0.09, 0.18, 0.89].map((position) => ({
           x: position,
-          base: 475 + selection.floor * 5,
+          base: 506,
           scale: 1,
         }))
       : [];
@@ -195,5 +195,55 @@ export function calculatedWindowView(
         : null,
     unknown: hasObjects && !known ? [] : spans((ray) => !ray.known),
     known: known || hasObjects,
+    foregroundOffset: Math.max(
+      foregroundOffset(selection.floor),
+      current && current.seaFraction >= 0.95 && buildings.length
+        ? 284 - Math.min(...buildings.map((building) => building.roof))
+        : 0,
+    ),
   });
+}
+
+export function windowViewSummary(scene: WindowView, seaShare: number | null) {
+  if (!scene.known)
+    return {
+      title: "Вид пока неизвестен",
+      description: "Для выбранного окна ещё нет достаточно данных.",
+    };
+  if (seaShare !== null && seaShare >= 0.95)
+    return {
+      title: "Открытый вид на море",
+      description: "Морской горизонт почти полностью открыт на этом этаже.",
+    };
+  if (scene.sea.length)
+    return {
+      title: "Море видно частично",
+      description: scene.buildings.length
+        ? "Море видно за соседними домами. Доля открытого горизонта — ниже."
+        : "Море занимает часть вида с выбранной стороны.",
+    };
+  if (scene.mountains.length)
+    return {
+      title: "Вид на горы",
+      description: scene.buildings.length
+        ? "Горы видны за соседними зданиями."
+        : "В поле зрения — горный горизонт.",
+    };
+  if (scene.buildings.length)
+    return {
+      title: "Вид на соседние здания",
+      description:
+        seaShare === 0
+          ? "Открытого моря на этом этаже не видно."
+          : "Наличие моря из этого окна пока не подтверждено.",
+    };
+  if (scene.trees.length)
+    return {
+      title: "Зелень за окном",
+      description: "Для выбранной стороны подтверждён вид на деревья.",
+    };
+  return {
+    title: "Открытый горизонт",
+    description: "Другие объекты в этом виде пока не подтверждены.",
+  };
 }

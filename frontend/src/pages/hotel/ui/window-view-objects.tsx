@@ -1,21 +1,39 @@
+import { useId } from "react";
 import type { ViewBuilding, ViewSpan } from "../model/window-view";
 
 export function SeaObject({ span, fill }: { span: ViewSpan; fill: string }) {
+  const id = useId();
   const left = span.from * 960;
   const width = (span.to - span.from) * 960;
+  const right = left + width;
+  const coast = `M${left} 270H${right}C${right - width * 0.035} 370 ${right - width * 0.06} 480 ${right} 560H${left}C${left + width * 0.08} 480 ${left + width * 0.035} 370 ${left} 270Z`;
   return (
     <g data-window-object="sea">
-      <rect x={left} y="270" width={width} height="290" fill={fill} />
-      <path d={`M${left} 270h${width}`} stroke="var(--view-water-line)" strokeWidth="2" />
-      {[296, 325, 370, 430, 500].map((y, index) => (
-        <path
-          key={y}
-          d={`M${left + width * 0.08} ${y}h${width * 0.24}m${width * 0.14} 0h${width * 0.36}`}
-          stroke="var(--view-water-line)"
-          strokeWidth={1 + index * 0.3}
-          opacity=".35"
-        />
-      ))}
+      <defs>
+        <clipPath id={id}>
+          <path d={coast} />
+        </clipPath>
+      </defs>
+      <g clipPath={`url(#${id})`}>
+        <rect x={left} y="270" width={width} height="290" fill={fill} />
+        <path d={`M${left} 270h${width}`} stroke="var(--view-water-line)" strokeWidth="2" />
+        {[296, 325, 370, 430, 500].map((y, index) => (
+          <path
+            key={y}
+            d={`M${left + width * 0.08} ${y}h${width * 0.24}m${width * 0.14} 0h${width * 0.36}`}
+            stroke="var(--view-water-line)"
+            strokeWidth={1 + index * 0.3}
+            opacity=".35"
+          />
+        ))}
+      </g>
+      <path
+        d={`M${left} 270C${left + width * 0.035} 370 ${left + width * 0.08} 480 ${left} 560M${right} 270C${right - width * 0.035} 370 ${right - width * 0.06} 480 ${right} 560`}
+        stroke="var(--view-water-line)"
+        strokeWidth="2"
+        fill="none"
+        opacity=".6"
+      />
     </g>
   );
 }
