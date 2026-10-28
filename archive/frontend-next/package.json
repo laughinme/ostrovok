@@ -1,0 +1,35 @@
+{
+  "name": "frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "next dev --port 5175",
+    "build": "next build",
+    "start": "next start --port 5175",
+    "typecheck": "next typegen && tsc --noEmit",
+    "lint": "oxlint && npm run lint:architecture",
+    "check": "npm run typecheck && npm run lint && npm run build",
+    "lint:architecture": "node scripts/check-architecture.mjs",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.105.0",
+    "maplibre-gl": "6.16.0",
+    "motion": "14.6.0",
+    "next": "16.4.3",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.1",
+    "@types/node": "^24.19.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "oxlint": "^1.89.0",
+    "typescript": "~7.0.2"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}
