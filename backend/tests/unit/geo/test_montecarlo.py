@@ -41,3 +41,10 @@ def test_height_errors_follow_provenance() -> None:
     assert np.max(np.abs(offsets[:, 0])) <= 1.5
     assert set(offsets[:, 1]) == {-3, 0, 3}
     assert set(offsets[:, 2]) == {-6, -3, 0, 3, 6}
+
+
+def test_floor_band_samples_eye_heights_per_run() -> None:
+    scene = analytic_scene(building=True)
+    eyes = np.tile([10.0, 50.0], 8)
+    result = monte_carlo([scene], eyes)
+    np.testing.assert_array_equal(result.fractions > 0, eyes == 50)
