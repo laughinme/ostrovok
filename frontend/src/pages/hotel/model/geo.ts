@@ -82,7 +82,7 @@ export function solarVisibility(data: WindowData, event: "sunrise" | "sunset") {
     Math.abs(a.offset - offset) < Math.abs(b.offset - offset) ? a : b,
   );
   if (ray.angleDeg == null || ray.kind === "unknown") return "нет данных";
-  return sun.elevationDeg + 0.2667 > ray.angleDeg ? "виден" : "закрыт горизонтом";
+  return ray.angleDeg < 0.5 ? "виден" : "закрыт горизонтом";
 }
 export function elevationPath(profile: RouteData["elevationProfile"]) {
   const heights = profile.flatMap(([, height]) => (height == null ? [] : [height]));

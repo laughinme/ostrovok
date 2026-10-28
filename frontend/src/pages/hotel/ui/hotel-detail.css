@@ -2114,3 +2114,29 @@
 .hotel-detail .geo-noise > li > b {
   white-space: nowrap;
 }
+.hotel-detail .geo-date input {
+  margin-left: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px;
+  color: var(--ink);
+  background: white;
+}
+.hotel-detail .geo-sun {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 40px;
+  padding: 0 20px 16px;
+  font-size: 13px;
+}
+.hotel-detail .geo-sun > div {
+  display: grid;
+  gap: 4px;
+}
+.hotel-detail .geo-sun span {
+  color: var(--muted);
+}
+.hotel-detail .fac button {
+  min-width: 44px;
+  min-height: 44px;
+}
