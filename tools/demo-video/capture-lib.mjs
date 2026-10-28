@@ -56,10 +56,31 @@ export async function createCapture({ base, out }) {
   };
 
   const frame = async (locator, top = 125, duration = 1800) => {
-    const box = await locator.boundingBox();
-    if (!box) throw new Error(`Invisible recording target: ${locator}`);
-    const current = await page.evaluate(() => scrollY);
-    await glide(current + box.y - top, duration);
+    await locator.evaluate((element, { top, duration }) => new Promise((resolve) => {
+      let parent = element.parentElement;
+      while (parent && parent !== document.documentElement) {
+        const overflow = getComputedStyle(parent).overflowY;
+        if (/(auto|scroll)/.test(overflow) && parent.scrollHeight > parent.clientHeight + 2) break;
+        parent = parent.parentElement;
+      }
+      const nested = parent && parent !== document.documentElement;
+      const from = nested ? parent.scrollTop : scrollY;
+      const bounds = element.getBoundingClientRect();
+      const limit = nested ? parent.scrollHeight - parent.clientHeight : document.documentElement.scrollHeight - innerHeight;
+      const origin = nested ? parent.getBoundingClientRect().top : 0;
+      const to = Math.max(0, Math.min(limit, from + bounds.top - origin - top));
+      const start = performance.now();
+      const tick = (now) => {
+        const p = Math.min(1, (now - start) / duration);
+        const eased = p * p * p * (p * (p * 6 - 15) + 10);
+        if (nested) parent.scrollTop = from + (to - from) * eased;
+        else window.scrollTo({ top: from + (to - from) * eased, behavior: 'instant' });
+        if (p < 1) requestAnimationFrame(tick);
+        else resolve();
+      };
+      requestAnimationFrame(tick);
+    }), { top, duration });
+    await sleep(450);
   };
 
   const move = async (x, y, duration = 800) => {
@@ -84,7 +105,7 @@ export async function createCapture({ base, out }) {
   const tap = async (locator) => {
     let box = await locator.boundingBox();
     if (!box) throw new Error('Click target is missing');
-    if (box.y < 90 || box.y + box.height > viewport.height - 30) {
+    if (box.y < 0 || box.y + box.height > viewport.height - 20) {
       await frame(locator, 320);
       box = await locator.boundingBox();
     }
