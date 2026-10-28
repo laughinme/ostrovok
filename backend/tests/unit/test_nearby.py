@@ -43,6 +43,7 @@ def test_far_places_and_private_grounds_are_left_out() -> None:
         _poi("node/1", 1500, {"shop": "supermarket", "name": "Пятёрочка"}),
         _poi("way/2", 200, {"leisure": "park", "name": "Санаторий «Русь»"}, kind="park"),
         _poi("way/3", 300, {"leisure": "park", "tourism": "hotel", "name": "Радуга"}, kind="park"),
+        _poi("node/4", 60, {"leisure": "playground", "name": "Детский сад № 115"}),
     ]
 
     assert nearby_places(HOTEL, features) == ()

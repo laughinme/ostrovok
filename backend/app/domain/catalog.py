@@ -129,13 +129,14 @@ _PRIVATE_GROUNDS = ("санатори", "пансионат", "детский с
 def nearby_kind(feature: MapFeature) -> str | None:
     if feature.kind in {"beach", "station"}:
         return feature.kind
+    tags, name = feature.tags, (feature.name or "").lower()
+    # Sanatorium, kindergarten or school grounds mapped as parks or playgrounds are not public.
+    if any(word in name for word in _PRIVATE_GROUNDS):
+        return None
     if feature.kind == "park":
-        # A sanatorium or kindergarten grounds mapped as leisure=park are not open to guests.
-        tags, name = feature.tags, (feature.name or "").lower()
         grounds = bool({"tourism", "amenity"} & tags.keys()) and tags.get("tourism") != "attraction"
-        grounds |= any(word in name for word in _PRIVATE_GROUNDS)
         return "park" if tags.get("leisure") == "park" and not grounds else None
-    return next((k for (tag, v), k in _KIND_BY_TAG.items() if feature.tags.get(tag) == v), None)
+    return next((k for (tag, v), k in _KIND_BY_TAG.items() if tags.get(tag) == v), None)
 
 
 def nearby_places(origin: LonLat, features: Sequence[MapFeature]) -> tuple[Nearby, ...]:
