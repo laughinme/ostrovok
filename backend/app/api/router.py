@@ -10,6 +10,7 @@ from app.api.v1 import (
     ground,
     hotels,
     me,
+    moods,
     onboarding,
     partner,
     quality,
@@ -29,6 +30,7 @@ v1_router.include_router(ground.router)
 v1_router.include_router(characteristics.router)
 v1_router.include_router(runs.router)
 v1_router.include_router(search.router)
+v1_router.include_router(moods.router)
 v1_router.include_router(compare.router)
 v1_router.include_router(console.router)
 v1_router.include_router(onboarding.router)
