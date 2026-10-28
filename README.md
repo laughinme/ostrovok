@@ -103,7 +103,7 @@ LLM_MODEL=gpt-5.4-mini
 Подробно — [backend/ARCHITECTURE.md](backend/ARCHITECTURE.md).
 
 ```text
-gateway (nginx, :8080) ─┬─ /            → frontend (Next.js)
+gateway (nginx, :8080) ─┬─ /            → frontend (TanStack Start / Nitro)
                         ├─ /api, /mcp   → backend (FastAPI)
                         └─ /health      → backend
 backend, worker         один образ: API и воркер агентов (очередь задач в PostgreSQL)
@@ -154,9 +154,42 @@ db                      PostgreSQL 17 + PostGIS          redis   события 
 
 Ресурсы: 4 ГБ свободной памяти и ~5 ГБ диска под образы. Все образы собираются под `linux/amd64`.
 
+## Основной фронтенд
+
+Основной фронтенд — [`frontend`](frontend/README.md): React, TypeScript,
+TanStack Start, Tailwind CSS, Zustand и MapLibre. Восстановлен прежний интерфейс
+с пользовательскими карточками, картой, детальной страницей и сравнением.
+Главная страница взята из версии Next.js: по умолчанию салатовый лендинг,
+дополнительные варианты A/B/C включаются через `/?variants=1`.
+
+```sh
+cd frontend
+npm ci
+npm run dev    # http://127.0.0.1:5173
+npm run check  # линтер, FSD, комментарии, типы, тесты, сборка
+npm run start # production server, порт 3000 или переменная PORT
+```
+
+Весь поиск с лендинга использует прежние маршруты `/search?q=…` → `/results`.
+Архитектура: [`frontend/ARCHITECTURE.md`](frontend/ARCHITECTURE.md).
+Приложение подключено к FastAPI: поиск, карточки, сравнение, демо-заявка и кабинет.
+По умолчанию используется размещённый API друга; ключи для запуска фронта не нужны.
+Список оставшихся задач отдельно для фронта и бэка: [`DIFF.md`](DIFF.md).
+Нужны Node.js 22.12+ и npm.
+
+Исходная версия друга на Next.js сохранена в [`archive/frontend-next`](archive/frontend-next/README.md)
+и запускается на порту 5175. Там также сохранён билет поездки.
+Другой вариант интерфейса — [`archive/frontend-2`](archive/frontend-2/README.md), порт 5174.
+
+Workflow `.github/workflows/deploy-frontend.yml` продолжает использовать `frontend/`.
+Для Vercel настроен Nitro preset `vercel` при `VERCEL=1`; локально используется
+`node-server`. Настройки окружения Vercel остаются в секретах GitHub.
+
+Исследование, дизайн-система и прототип: `docs/research/`, `DESIGN.md`, `design/prototype/`.
+
 ## Разработка
 
 - Бэкенд: [backend/README.md](backend/README.md) — `make dev`, `make test`, `make check` (ruff, mypy strict,
   import-linter, тесты), `make openapi`.
-- Фронтенд: [frontend/README.md](frontend/README.md) — Next.js, FSD; `npm run dev`, `npm run check`.
+- Фронтенд: [frontend/README.md](frontend/README.md) — React, TanStack Start, FSD; `npm run dev`, `npm run check`.
 - На Apple Silicon весь стек нативно: `make up-native`.
