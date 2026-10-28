@@ -8,7 +8,7 @@ from redis.asyncio import Redis
 from starlette.routing import Route
 
 from app.api.ground_deps import warm_ground
-from app.api.mcp import TRANSPORT_SECURITY, build_mcp
+from app.api.mcp import build_mcp, transport_security
 from app.api.mcp_lifespan import mcp_lifespan
 from app.api.middleware import RequestContextMiddleware
 from app.api.problems import register_exception_handlers
@@ -80,7 +80,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     transport = mcp_server.streamable_http_app(
         json_response=True,
         stateless_http=True,
-        transport_security=TRANSPORT_SECURITY,
+        transport_security=transport_security(settings),
     )
     # An exact ASGI route keeps the endpoint at /mcp without intercepting unrelated 404s.
     app.router.routes.append(Route("/mcp", transport, methods=["GET", "POST", "DELETE"]))

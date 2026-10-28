@@ -22,6 +22,8 @@ primary_region = "arn"
   # The frontend on Vercel is a different site from okno-api.fly.dev.
   COOKIE_SAMESITE = "none"
   HOTELIER_SIMULATOR = "on"
+  # External agents reach MCP by these names; the DNS-rebinding guard refuses any other host.
+  MCP_PUBLIC_HOSTS = "okno-api.fly.dev,ostrovok-okno.vercel.app"
   # DATABASE_URL, REDIS_URL (Upstash), CSRF_HMAC_KEY, JWT_PRIVATE_KEY, JWT_PUBLIC_KEY, CORS_ALLOW_ORIGINS and the
   # optional LLM_* keys are Fly secrets.
 
