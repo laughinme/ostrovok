@@ -9,6 +9,7 @@ from app.db.models import DemandDaily, SearchRow
 from app.domain.knowledge.scope import Facade, Scope
 from app.service.knowledge.recorder import KnowledgeStore
 from tests.factories import FakeClock
+from tests.integration.conftest import AppFactory
 from tests.integration.test_search_api import MAYAK, YARD, _obs, _world
 
 HEADERS = {"Host": "localhost:8080", "Accept": "application/json, text/event-stream"}
@@ -119,3 +120,15 @@ async def test_mcp_rejects_untrusted_host_but_health_stays_available(client: Asy
     )
     assert response.status_code == 421
     assert (await client.get("/health")).status_code == 200
+
+
+async def test_public_host_is_accepted_when_configured(app_factory: AppFactory) -> None:
+    body = {"jsonrpc": "2.0", "id": 1, "method": "tools/list", "params": {}}
+    headers = {"accept": "application/json, text/event-stream", "host": "okno-api.fly.dev"}
+    async with app_factory(mcp_public_hosts="okno-api.fly.dev") as (_, client):
+        allowed = await client.post("/mcp", json=body, headers=headers)
+    async with app_factory() as (_, client):
+        refused = await client.post("/mcp", json=body, headers=headers)
+
+    assert allowed.status_code == 200, allowed.text
+    assert refused.status_code == 421

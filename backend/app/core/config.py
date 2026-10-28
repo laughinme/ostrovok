@@ -34,6 +34,8 @@ class Settings(BaseSettings):
 
     # HTTP
     cors_allow_origins: str = ""
+    # Public hosts of a deployed API, comma-separated: MCP's DNS-rebinding guard accepts them
+    mcp_public_hosts: str = ""
     rate_limit_enabled: bool = True
     auth_rate_limit_per_minute: int = 10
     llm_rate_limit_per_minute: int = 30
@@ -91,6 +93,10 @@ class Settings(BaseSettings):
     @property
     def cors_origins(self) -> list[str]:
         return [origin.strip() for origin in self.cors_allow_origins.split(",") if origin.strip()]
+
+    @property
+    def mcp_hosts(self) -> list[str]:
+        return [host.strip() for host in self.mcp_public_hosts.split(",") if host.strip()]
 
     @property
     def llm_enabled(self) -> bool:
