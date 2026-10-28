@@ -6,8 +6,10 @@ from fastapi import APIRouter, Query
 from app.api.deps import FactQueriesDep, HotelQueriesDep
 from app.api.schemas.hotels import HotelOut
 from app.api.schemas.knowledge import FactDetailOut, FactOut
+from app.api.v1.window import router as window_router
 
 router = APIRouter(tags=["Hotels"])
+router.include_router(window_router)
 
 
 @router.get(path="/hotels", summary="Hotels of the region with a summary of what we know")
