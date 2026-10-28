@@ -20,7 +20,7 @@ from app.service.auth import AuthService, resolve_current_user
 from app.service.catalog.hotels import HotelQueries
 from app.service.knowledge.facts import FactQueries
 from app.service.knowledge.registry import Registry
-from app.service.ports import Clock, EventBus
+from app.service.ports import Clock, EventBus, LanguageModel
 from app.service.search.intents import IntentParser
 from app.service.search.search import SearchService
 
@@ -171,8 +171,16 @@ def _clock(request: Request) -> Clock:
 ClockDep = Annotated[Clock, Depends(_clock)]
 
 
-def _intent_parser(uow: UowDep, settings: SettingsDep) -> IntentParser:
-    return IntentParser(uow, settings.data_dir)
+def _llm(request: Request) -> LanguageModel | None:
+    llm: LanguageModel | None = request.app.state.llm
+    return llm
+
+
+LlmDep = Annotated[LanguageModel | None, Depends(_llm)]
+
+
+def _intent_parser(uow: UowDep, settings: SettingsDep, llm: LlmDep) -> IntentParser:
+    return IntentParser(uow, settings.data_dir, llm)
 
 
 def _search_service(uow: UowDep, clock: ClockDep) -> SearchService:

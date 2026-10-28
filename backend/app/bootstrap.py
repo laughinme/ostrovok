@@ -11,15 +11,20 @@ from pathlib import Path
 
 import shapely.prepared
 import shapely.wkb
+from redis.asyncio import Redis
 
+from app.core.config import Settings
 from app.db.database import Database
 from app.infra.geo.area import GraphAreaSlopes
 from app.infra.geo.climate import ClimateCatalog
 from app.infra.geo.router import ScipyRouter
 from app.infra.geo.terrain import NpyTerrain
+from app.infra.llm.cache import LlmCache
+from app.infra.llm.guards import DailyLimit
+from app.infra.llm.pydantic_ai_model import PydanticAiLanguageModel, openai_compatible
 from app.service.agents.researcher import Researcher
 from app.service.agents.runtime import AgentRunner
-from app.service.ports import Clock, EventBus
+from app.service.ports import Clock, EventBus, LanguageModel
 from app.service.recipes.executor import Environment, GeoReader, MethodExecutor, executors_by_method
 from app.service.recipes.methods.area_stat import AreaStatExecutor
 from app.service.recipes.methods.climate import ClimateExecutor
@@ -85,4 +90,23 @@ def build_agents(db: Database, events: EventBus, clock: Clock, data_dir: Path) -
         runner=AgentRunner(db, events, clock),
         researcher=Researcher(db, env, executors_by_method(default_executors()), events),
         env=env,
+    )
+
+
+def build_language_model(
+    settings: Settings, db: Database, redis: Redis | None
+) -> LanguageModel | None:
+    """None when there is no key or LLM_MODE=off: every LLM port then runs on rules."""
+    if not settings.llm_enabled:
+        logger.info("LLM is off (no key or LLM_MODE=off): rule-based planners only")
+        return None
+    model = openai_compatible(
+        settings.llm_base_url, settings.llm_api_key.get_secret_value(), settings.llm_model
+    )
+    return PydanticAiLanguageModel(
+        model,
+        model_name=settings.llm_model,
+        timeout_sec=settings.llm_timeout_sec,
+        limit=DailyLimit(redis, settings.llm_daily_call_limit),
+        cache=LlmCache(db),
     )

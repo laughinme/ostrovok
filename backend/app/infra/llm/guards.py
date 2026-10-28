@@ -1,0 +1,52 @@
+"""Cost and failure guards around the LLM (D-26): a daily call limit and a circuit breaker."""
+
+import logging
+import time
+from datetime import UTC, datetime
+
+from redis.asyncio import Redis
+from redis.exceptions import RedisError
+
+logger = logging.getLogger(__name__)
+
+
+class CircuitBreaker:
+    """After a provider failure, skip the LLM for a while instead of waiting for a timeout."""
+
+    def __init__(self, cooldown_sec: float = 60.0) -> None:
+        self._cooldown = cooldown_sec
+        self._open_until = 0.0
+
+    @property
+    def open(self) -> bool:
+        return time.monotonic() < self._open_until
+
+    def trip(self) -> None:
+        self._open_until = time.monotonic() + self._cooldown
+        logger.warning("LLM circuit open for %.0f s", self._cooldown)
+
+    def reset(self) -> None:
+        self._open_until = 0.0
+
+
+class DailyLimit:
+    """At most `limit` paid calls per UTC day across all processes (Redis counter)."""
+
+    def __init__(self, redis: Redis | None, limit: int) -> None:
+        self._redis = redis
+        self._limit = limit
+        self._local = 0
+
+    async def take(self) -> bool:
+        key = f"llm:calls:{datetime.now(UTC):%Y-%m-%d}"
+        if self._redis is None:
+            self._local += 1
+            return self._local <= self._limit
+        try:
+            count = int(await self._redis.incr(key))
+            await self._redis.expire(key, 2 * 24 * 3600)
+        except RedisError:
+            logger.warning("LLM limit counter unavailable, counting locally", exc_info=True)
+            self._local += 1
+            return self._local <= self._limit
+        return count <= self._limit
