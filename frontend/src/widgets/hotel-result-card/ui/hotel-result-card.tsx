@@ -13,7 +13,7 @@ import {
   Footprints,
   HelpCircle,
   MapPin,
-  Plus,
+  Scale,
   ShieldCheck,
   Sparkles,
   Star,
@@ -22,6 +22,7 @@ import { useState } from "react";
 import { CardControl } from "./card-control";
 import { cardControlStyles } from "./card-control-styles";
 import { HotelCardPhotos } from "./hotel-card-photos";
+import "./hotel-result-card.css";
 
 interface HotelResultCardProps {
   result: Ranked;
@@ -64,14 +65,42 @@ export function HotelResultCard({
       onMouseLeave={() => onHover(null)}
       aria-label={r.hotel.name}
       className={cn(
-        "@container overflow-hidden rounded-lg border bg-card transition-shadow",
-        highlighted && "border-primary/40 shadow-soft",
+        "hotel-result-card @container/hotel-card group relative",
+        index === 0 && "pt-3",
       )}
     >
-      <div className="grid @min-[580px]:grid-cols-[38%_minmax(0,1fr)]">
+      {index === 0 && (
+        <div className="absolute left-6 top-0 z-10 flex h-6 w-fit items-center whitespace-nowrap px-2.5 text-xs font-semibold leading-4 text-primary-foreground">
+          <span className="pointer-events-none absolute inset-y-0 left-2 right-0 rounded-tr-[3px] bg-primary" />
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            className="pointer-events-none absolute -left-4 top-0 size-6 fill-primary"
+          >
+            <path d="M16 0C16 5 19 8 17 11L0 24H24V0Z" />
+          </svg>
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 4 4"
+            className="pointer-events-none absolute -right-1 top-2 size-1 -scale-x-100 fill-primary"
+          >
+            <path d="M0 4A4 4 0 0 0 4 0V4Z" />
+          </svg>
+          <span className="relative">Лучшее предложение</span>
+        </div>
+      )}
+      <div
+        className={cn(
+          "grid overflow-hidden rounded-lg border bg-card transition-shadow @min-[580px]:grid-cols-[38%_minmax(0,1fr)]",
+          index === 0 &&
+            "rounded-3xl border-x-[3px] border-b-[3px] border-primary bg-primary pt-3 ring-1 ring-primary",
+          highlighted && "shadow-soft",
+          highlighted && index !== 0 && "border-primary/40",
+        )}
+      >
         <HotelCardPhotos hotel={r.hotel} query={query} searchId={r.searchId} />
 
-        <div className="flex min-w-0 flex-col">
+        <div className="hotel-card-body flex min-w-0 flex-col bg-card">
           <div className="px-5 pb-2.5 pt-4">
             <div className="mb-1.5 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
               <div className="flex items-center gap-2">
@@ -80,9 +109,6 @@ export function HotelResultCard({
                     <Star key={i} className="h-3 w-3 fill-current" />
                   ))}
                 </div>
-                {index === 0 && (
-                  <span className="text-[11px] font-semibold text-primary">Лучшее совпадение</span>
-                )}
               </div>
               <span
                 className="text-[11px] text-muted-foreground"
@@ -141,7 +167,9 @@ export function HotelResultCard({
             <div
               className={cn(
                 "mt-2 grid gap-x-4 gap-y-1.5",
-                shownBeams.length <= 2 ? "grid-cols-2" : "grid-cols-2 @min-[700px]:grid-cols-4",
+                shownBeams.length <= 2
+                  ? "grid-cols-2"
+                  : "grid-cols-2 @min-[700px]/hotel-card:grid-cols-4",
               )}
             >
               {shownBeams.map((criterion) => (
@@ -211,32 +239,35 @@ export function HotelResultCard({
             </div>
           </div>
 
-          <div className="mt-auto flex flex-wrap items-center justify-between gap-3 border-t px-5 py-3">
-            <div>
+          <div className="hotel-card-footer mt-auto border-t">
+            <div className="hotel-card-price">
               <p className="mb-1 text-[11px] text-muted-foreground">Цена за ночь</p>
               <Price value={r.hotel.price} suffix="" />
             </div>
-            <div className="flex items-center gap-2">
-              <CardControl
-                variant={selected ? "secondary" : "outline"}
-                size="icon"
-                onClick={onCompare}
-                aria-pressed={selected}
-                aria-label={`${selected ? "Убрать из сравнения" : "Сравнить"} — ${r.hotel.name}`}
-                title={selected ? "Убрать из сравнения" : "Добавить в сравнение"}
-                className={cn("h-9 w-9", selected && "bg-accent text-accent-foreground")}
-              >
-                {selected ? <Check /> : <Plus />}
-              </CardControl>
-              <Link
-                to="/hotel/$id"
-                params={{ id: r.hotel.id }}
-                search={{ q: query, sid: r.searchId }}
-                className={cardControlStyles({ className: "h-9 px-4" })}
-              >
-                Подробнее <ArrowUpRight />
-              </Link>
-            </div>
+            <CardControl
+              variant={selected ? "secondary" : "outline"}
+              onClick={onCompare}
+              aria-pressed={selected}
+              aria-label={`${selected ? "Убрать из сравнения" : "Сравнить"} — ${r.hotel.name}`}
+              title={selected ? "Убрать из сравнения" : "Добавить в сравнение"}
+              className={cn(
+                "hotel-card-footer-control",
+                selected && "bg-accent text-accent-foreground",
+              )}
+            >
+              {selected ? <Check /> : <Scale />}
+              {selected ? "В сравнении" : "Сравнить"}
+            </CardControl>
+            <Link
+              to="/hotel/$id"
+              params={{ id: r.hotel.id }}
+              search={{ q: query, sid: r.searchId }}
+              className={cardControlStyles({
+                className: "hotel-card-footer-control",
+              })}
+            >
+              Подробнее <ArrowUpRight />
+            </Link>
           </div>
         </div>
       </div>
