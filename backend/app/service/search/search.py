@@ -1,6 +1,7 @@
 """Search (09 §7): intent → candidates → ranking. Searches are stored as intents and
 re-ranked on every read, so a result reread after live research shows the new facts."""
 
+import asyncio
 from dataclasses import dataclass, replace
 from datetime import date, timedelta
 from typing import Any
@@ -105,7 +106,10 @@ class SearchService:
         facts = await load_facts(self._uow, [h.id for h in hotels], keys)
         guests = (intent.trip.adults or 0) + (intent.trip.children or 0) or None
         filters = Filters(budget_per_night=intent.trip.budget_per_night, guests=guests)
-        return rank(intent.chips, hotels, facts, trip_window(intent), filters)
+        # Scoring every hotel is CPU work: off the event loop so other requests keep flowing.
+        return await asyncio.to_thread(
+            rank, intent.chips, hotels, facts, trip_window(intent), filters
+        )
 
     async def _count_demand(self, intent: Intent) -> None:
         """What guests look for, per district and day: the Liaison's «спрос» (09 §4.4)."""
