@@ -2,7 +2,7 @@ import type { ApiFact, Hotel } from "@/entities/hotel";
 import type { components } from "@/shared/api";
 import type { Facade, Fact, HotelDetails } from "./types";
 
-const facades: Facade[] = ["NE", "SE", "SW", "NW"];
+const facades: Facade[] = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
 const isFacade = (value: string): value is Facade => facades.includes(value as Facade);
 
 export function detailFactFromApi(
@@ -40,36 +40,19 @@ export function apiHotelDetails(hotel: Hotel): HotelDetails {
   const recommendation = hotel.searchMatch?.recommendation;
   const scope = recommendation?.scope;
   const recommendedFacades: string[] = scope?.facades ?? [];
-  const bestFacade = recommendedFacades.find(isFacade) ?? raw.facades.find(isFacade) ?? "SW";
+  const bestFacade =
+    recommendedFacades.find((facade) => isFacade(facade) && raw.facades.includes(facade)) ??
+    raw.facades.find(isFacade) ??
+    "SW";
   const bestFloor = typeof scope?.["floorFrom"] === "number" ? scope["floorFrom"] : 1;
-  const noiseFor = (time: "day" | "night") =>
-    Object.fromEntries(
-      facades.map((facade) => {
-        const evidence = raw.facts
-          .flatMap((fact) => fact.evidence)
-          .find(
-            (e) =>
-              e.kind === "noise_facades" &&
-              e.params?.["facade"] === facade &&
-              e.params?.["period"] === time,
-          );
-        const value = evidence?.params?.["indexDb"];
-        const db = typeof value === "number" ? value : null;
-        return [
-          facade,
-          [
-            db === null ? "#5B6580" : db >= 55 ? "#D2463B" : db >= 43 ? "#B7860B" : "#1E8F4E",
-            db === null ? "нет данных" : `≈${Math.round(db)} дБ`,
-            "условный индекс по OSM",
-          ],
-        ];
-      }),
-    ) as HotelDetails["noise"]["night"];
+  const unknownNoise = Object.fromEntries(
+    raw.facades.map((facade) => [facade, ["#5B6580", "нет данных", "условный индекс по OSM"]]),
+  ) as HotelDetails["noise"]["night"];
   const beach = hotel.walk.find((place) => place.kind === "beach");
   return {
     api: true,
     totalFloors: raw.floors,
-    noise: { day: noiseFor("day"), night: noiseFor("night") },
+    noise: { day: unknownNoise, night: unknownNoise },
     id: raw.id,
     name: raw.name,
     stars: raw.stars ?? 0,
@@ -84,7 +67,7 @@ export function apiHotelDetails(hotel: Hotel): HotelDetails {
     tagline: raw.demo.tagline,
     photos: hotel.gallery,
     bestFloor,
-    bestFacade,
+    bestFacade: bestFacade as Facade,
     priceFrom: raw.priceFromDemo ?? 0,
     bestRoom: recommendation?.roomName ?? "Выберите категорию номера",
     tradeoff:
@@ -112,7 +95,23 @@ export function apiHotelDetails(hotel: Hotel): HotelDetails {
       ]),
     ),
     amenities: raw.demo.amenities,
-    nearby: hotel.walk.map((place) => ["beach", place.name, `${place.minutes} мин`]),
+    nearby: raw.nearby.length
+      ? raw.nearby.map((place) => [
+          (
+            {
+              beach: "beach",
+              food: "food",
+              grocery: "food",
+              pharmacy: "pin",
+              park: "park",
+              playground: "kid",
+              station: "bus",
+            } as Record<string, string>
+          )[place.kind] ?? "pin",
+          place.name === place.title ? place.title : `${place.title} · ${place.name}`,
+          place.distanceText,
+        ])
+      : hotel.walk.map((place) => ["beach", place.name, `${place.minutes} мин`]),
     rooms: raw.rooms.map((room) => ({
       id: room.id,
       capacity: room.capacity,

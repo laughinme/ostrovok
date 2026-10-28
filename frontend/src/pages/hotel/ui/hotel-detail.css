@@ -2080,3 +2080,37 @@
     padding: 18px 16px;
   }
 }
+
+.hotel-detail .geo-status {
+  padding: 20px;
+  color: var(--muted);
+}
+.hotel-detail .geo-notes p + p {
+  margin-top: 6px;
+}
+.hotel-detail .geo-noise > li > div {
+  flex: 1;
+  min-width: 0;
+}
+.hotel-detail .geo-noise summary {
+  color: var(--muted);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 8px 0;
+}
+.hotel-detail .geo-noise details ul {
+  max-height: 240px;
+  overflow-y: auto;
+}
+.hotel-detail .geo-noise details li {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 12px;
+}
+.hotel-detail .geo-noise small {
+  display: block;
+  color: var(--muted);
+}
+.hotel-detail .geo-noise > li > b {
+  white-space: nowrap;
+}
