@@ -990,6 +990,61 @@
         ]
       }
     },
+    "/api/v1/me/trips": {
+      "get": {
+        "tags": [
+          "Trips"
+        ],
+        "summary": "My Trips",
+        "description": "The guest's booking requests, newest first, with the hotel name for the list.",
+        "operationId": "my_trips_api_v1_me_trips_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TripSummaryOut"
+                  },
+                  "title": "Response My Trips Api V1 Me Trips Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/trips/{booking_id}": {
       "get": {
         "tags": [
@@ -7845,6 +7900,34 @@
           "caveats"
         ],
         "title": "TripOut"
+      },
+      "TripSummaryOut": {
+        "properties": {
+          "booking": {
+            "$ref": "#/components/schemas/BookingOut"
+          },
+          "hotelName": {
+            "type": "string",
+            "title": "Hotelname"
+          },
+          "hotelArea": {
+            "type": "string",
+            "title": "Hotelarea"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Createdat"
+          }
+        },
+        "type": "object",
+        "required": [
+          "booking",
+          "hotelName",
+          "hotelArea",
+          "createdAt"
+        ],
+        "title": "TripSummaryOut"
       },
       "UnknownOut": {
         "properties": {

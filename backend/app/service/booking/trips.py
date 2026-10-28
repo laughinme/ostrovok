@@ -5,9 +5,10 @@ from uuid import UUID
 from sqlalchemy import select
 
 from app.core.errors import NotFoundError
-from app.db.models import UserEventRow
+from app.db.models import BookingRow, Hotel, UserEventRow
 from app.db.uow import UnitOfWork
 from app.domain.booking.scope import intersection
+from app.domain.catalog import DISTRICT_TITLES
 from app.domain.geo.sun import sun_events
 from app.domain.geo.types import WalkProfile
 from app.domain.knowledge.fact import Fact
@@ -35,6 +36,31 @@ class Trip:
     sunsets: tuple[Sunset, ...]
     beach_route: RouteView | None
     caveats: tuple[str, ...]
+
+
+@dataclass(frozen=True, slots=True)
+class TripSummary:
+    booking: Booking
+    hotel_name: str
+    hotel_area: str
+    created_at: datetime
+
+
+async def guest_trips(uow: UnitOfWork, user_id: UUID, limit: int) -> list[TripSummary]:
+    """The guest's requests, newest first: the list behind «Мои поездки»."""
+    rows = await uow.session.execute(
+        select(BookingRow, Hotel.name, Hotel.district)
+        .join(Hotel, Hotel.id == BookingRow.hotel_id)
+        .where(BookingRow.user_id == user_id)
+        .order_by(BookingRow.created_at.desc())
+        .limit(limit)
+    )
+    return [
+        TripSummary(
+            booking_view(row), name, DISTRICT_TITLES.get(district, district), row.created_at
+        )
+        for row, name, district in rows
+    ]
 
 
 class TripQueries:
