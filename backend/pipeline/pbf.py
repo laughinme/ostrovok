@@ -20,6 +20,7 @@ COAST_SOURCE = "https://download.geofabrik.de/europe/georgia-261026.osm.pbf"
 CONFIG = Path(__file__).with_name("osmconf.ini")
 LAYERS = ("points", "lines", "multipolygons")
 KEYS = (
+    "barrier",
     "building",
     "highway",
     "railway",

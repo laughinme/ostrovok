@@ -26,6 +26,8 @@ class WalkSegment:
     uncertain: bool
     directions: tuple[bool, bool]
     crossings: int = 0
+    start_crossings: int = 0
+    end_crossings: int = 0
 
 
 @dataclass(frozen=True, slots=True)
@@ -77,7 +79,7 @@ def build_graph(
     """Keep directed arcs explicit; fail on DEM gaps rather than inventing zero elevations."""
     blocked = blocked or set()
     indices: dict[tuple[Coordinate, str], int] = {}
-    edges, arcs = [], []
+    edges, arcs, crossings = [], [], []
     for segment in network.segments:
         if segment.start in blocked or segment.end in blocked:
             continue
@@ -91,6 +93,9 @@ def build_graph(
                 continue
             edges.append(pair if forward else pair[::-1])
             arcs.append(segment)
+            crossings.append(
+                segment.crossings + (segment.end_crossings if forward else segment.start_crossings)
+            )
     if not edges:
         raise ValueError("No walkable edges in hotel buffers")
     coordinates = np.array([key[0] for key in indices], dtype=np.float64)
@@ -102,7 +107,7 @@ def build_graph(
         np.asarray(edges, dtype=np.int64),
         np.array([s.length_m for s in arcs], dtype=np.float64),
         np.array([s.steps for s in arcs], dtype=np.int64),
-        np.array([s.crossings for s in arcs], dtype=np.int64),
+        np.asarray(crossings, dtype=np.int64),
         np.array([s.uncertain for s in arcs], dtype=np.bool_),
         tuple(s.ref for s in arcs),
     )
