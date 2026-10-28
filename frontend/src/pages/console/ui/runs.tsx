@@ -19,27 +19,31 @@ export function Runs() {
           <h2>Агенты</h2>
           <p>Последние 30 запусков · обновляются автоматически</p>
         </div>
-        <label className="console-field">
-          Агент
-          <select
-            value={agent}
-            onChange={(event) => {
-              setAgent(event.target.value);
-              setSelected(null);
-            }}
-          >
-            <option value="">Все агенты</option>
-            {Object.entries(AGENT_TITLES).map(([key, title]) => (
-              <option key={key} value={key}>
-                {title}
-              </option>
-            ))}
-          </select>
-        </label>
       </div>
       <LoadState pending={query.isPending} error={query.error} retry={() => void query.refetch()} />
-      <div className="grid items-start gap-5 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-        <div className="console-panel overflow-hidden">
+      <div className="console-workspace">
+        <RunTrace key={runId} runId={runId} className="console-workspace-trace" />
+        <aside className="console-panel console-agent-panel" aria-label="Выбор агента и запуска">
+          <div className="console-agent-filter">
+            <label className="console-field">
+              Агент
+              <select
+                value={agent}
+                onChange={(event) => {
+                  setAgent(event.target.value);
+                  setSelected(null);
+                }}
+              >
+                <option value="">Все агенты</option>
+                {Object.entries(AGENT_TITLES).map(([key, title]) => (
+                  <option key={key} value={key}>
+                    {title}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+          <h3 className="console-run-list-heading">Последние запуски</h3>
           {query.data?.length === 0 && (
             <Empty>Запусков пока нет. Добавьте характеристику в разделе «Научить новому».</Empty>
           )}
@@ -65,8 +69,7 @@ export function Runs() {
               </li>
             ))}
           </ul>
-        </div>
-        <RunTrace runId={runId} />
+        </aside>
       </div>
     </>
   );

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { useAgentRun } from "@/entities/agent-run";
 import { AgentTrace } from "@/widgets/agent-trace";
+import { cn } from "@/shared/lib";
 
 export function LoadState({
   pending,
@@ -37,11 +38,11 @@ export function JsonDetails({ title, value }: { title: string; value: unknown })
   );
 }
 
-export function RunTrace({ runId }: { runId: string | null }) {
+export function RunTrace({ runId, className }: { runId: string | null; className?: string }) {
   const query = useAgentRun(runId);
   if (!runId)
     return (
-      <div className="rounded-3xl bg-night p-6 text-night-foreground">
+      <div className={cn("rounded-3xl bg-night p-6 text-night-foreground", className)}>
         <h3 className="text-lg text-sun">Как агент получает знание</h3>
         <p className="mt-3 text-sm text-night-muted">
           Выберите запуск. Здесь появятся мысли, инструменты, источники и решение агента.
@@ -49,7 +50,7 @@ export function RunTrace({ runId }: { runId: string | null }) {
       </div>
     );
   return (
-    <div className="min-w-0 space-y-3">
+    <div className={cn("flex min-w-0 flex-col gap-3", className)}>
       <LoadState pending={query.isPending} error={query.error} retry={() => void query.refetch()} />
       {query.data && (
         <>

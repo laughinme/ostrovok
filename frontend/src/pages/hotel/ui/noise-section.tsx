@@ -1,4 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
+import {
+  ArrowUpRight,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  Info,
+  Moon,
+  MoveHorizontal,
+  RotateCcw,
+  ShieldCheck,
+  Sun,
+  Volume2,
+} from "lucide-react";
+import { useReducedMotion } from "framer-motion";
 import type { Hotel } from "@/entities/hotel";
 import { useGeoQuery } from "../lib/use-geo-query";
 import {
@@ -6,10 +20,13 @@ import {
   FACADE_LABEL,
   noiseFacades,
   numberLabel,
+  type GeoFacade,
   type NoiseData,
 } from "../model/geo";
+import { facadeRotation, noiseIndexLabel, NOISE_FACADE_NAMES } from "../model/noise-presentation";
 import { GeoNotes, GeoStatus } from "./geo-status";
-import { Icon } from "./detail-ui";
+import { NoiseSceneView } from "./noise-scene-view";
+import "./noise-section.css";
 
 const SOURCE_NAME: Record<string, string> = {
   road: "Дорога",
@@ -20,132 +37,246 @@ const SOURCE_NAME: Record<string, string> = {
   airport: "Аэропорт",
   industrial: "Промышленность",
 };
+
 export function NoiseSection({ hotel }: { hotel: Hotel }) {
   const [period, setPeriod] = useState<"day" | "night">("night");
   const query = useGeoQuery<NoiseData>(hotel.id, "noise", !!hotel.backend);
   const sides = noiseFacades(hotel.backend?.facades ?? [], query.data, period);
+  const [selectedFacade, setSelected] = useState<GeoFacade | undefined>(sides[0]?.facade);
+  const selected = sides.find((side) => side.facade === selectedFacade) ?? sides[0];
+  const [rotation, setRotation] = useState(() =>
+    facadeRotation(FACADE_ANGLE[sides[0]?.facade ?? "NE"]),
+  );
+  const [ready, setReady] = useState(false);
+  const reducedMotion = useReducedMotion() ?? false;
+  useEffect(() => {
+    const element = query.ref.current;
+    if (!element) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          setReady(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "300px" },
+    );
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [query.ref]);
+  const select = (facade: GeoFacade) => {
+    setSelected(facade);
+    setRotation(facadeRotation(FACADE_ANGLE[facade]));
+  };
+  const step = (offset: number) => {
+    if (!sides.length) return;
+    const current = sides.findIndex((side) => side.facade === selected?.facade);
+    select(sides[(current + offset + sides.length) % sides.length]!.facade);
+  };
+  const known = selected?.level?.indexDb != null;
   return (
-    <section className="row-panel card-w" id="night" ref={query.ref}>
-      <div className="rp-media light">
-        <svg
-          viewBox="0 0 640 420"
-          role="img"
-          aria-label={`Условный индекс шума по фасадам: ${period === "night" ? "ночь" : "день"}`}
-        >
-          <rect width="640" height="420" fill="var(--map-land)" />
-          <path d="M244 182 L320 146 L396 182 L320 218 Z" fill="#fff" stroke="var(--line)" />
-          <path d="M244 182 L320 218 L320 278 L244 242 Z" fill="#E6ECFA" stroke="var(--line)" />
-          <path d="M320 218 L396 182 L396 242 L320 278 Z" fill="#D5DEF5" stroke="var(--line)" />
-          {[0, 1, 2].map((row) => (
-            <path
-              key={row}
-              d={`M255 ${203 + row * 15} l54 25 M331 ${228 + row * 15} l54 -25`}
-              stroke="#A7B9E5"
-              strokeWidth="5"
-              strokeDasharray="8 5"
-            />
+    <section
+      className="noise-explorer"
+      id="night"
+      ref={query.ref}
+      aria-labelledby="noise-heading"
+      data-period={period}
+    >
+      <header className="noise-heading">
+        <div>
+          <h3 id="noise-heading">Ваша ночь</h3>
+          <p>Тишина с разных сторон отеля</p>
+        </div>
+        <div className="noise-period" role="group" aria-label="Время суток для расчёта шума">
+          {(["day", "night"] as const).map((value) => (
+            <button
+              type="button"
+              key={value}
+              aria-pressed={period === value}
+              onClick={() => setPeriod(value)}
+            >
+              {value === "day" ? (
+                <Sun size={17} aria-hidden="true" />
+              ) : (
+                <Moon size={17} aria-hidden="true" />
+              )}
+              {value === "day" ? "День" : "Ночь"}
+            </button>
           ))}
-          {sides.map((side) => {
-            const angle = (FACADE_ANGLE[side.facade] * Math.PI) / 180;
-            const x = 320 + Math.sin(angle) * 218,
-              y = 210 - Math.cos(angle) * 160;
-            return (
-              <g key={side.facade}>
-                <line
-                  x1={320 + Math.sin(angle) * 100}
-                  y1={210 - Math.cos(angle) * 82}
-                  x2={x}
-                  y2={y}
-                  stroke={side.color}
-                  strokeWidth="2"
-                  opacity=".5"
-                />
-                <rect
-                  x={x - 82}
-                  y={y - 17}
-                  width="164"
-                  height="34"
-                  rx="17"
-                  fill="white"
-                  stroke="var(--line)"
-                />
-                <circle cx={x - 65} cy={y} r="5" fill={side.color} />
-                <text x={x + 4} y={y + 5} textAnchor="middle" fontSize="14" fill="var(--ink)">
-                  {FACADE_LABEL[side.facade]} · {side.text}
-                </text>
-              </g>
-            );
-          })}
-          <text x="320" y="400" textAnchor="middle" fontSize="12" fill="var(--muted)">
-            Схема ориентации фасадов · север сверху
-          </text>
-        </svg>
-      </div>
-      <div className="rp-side">
-        <div className="rp-h">
-          <h3>Ваша ночь</h3>
-          <div className="seg">
-            {(["day", "night"] as const).map((value) => (
+        </div>
+      </header>
+      <div className="noise-layout">
+        <div className="noise-stage">
+          <div className="noise-stage-top">
+            <span>
+              <span className="noise-stage-dot" />
+              Схема отеля
+            </span>
+            <button
+              type="button"
+              aria-label="Вернуть модель к выбранной стороне"
+              disabled={!selected}
+              onClick={() => {
+                if (selected) select(selected.facade);
+              }}
+            >
+              <RotateCcw size={17} aria-hidden="true" />
+            </button>
+          </div>
+          <NoiseSceneView
+            ready={ready}
+            period={period}
+            floors={hotel.backend?.floors ?? 6}
+            selected={selected?.facade}
+            rotation={rotation}
+            onRotate={setRotation}
+            reducedMotion={reducedMotion}
+            sides={sides.map((side) => ({
+              facade: side.facade,
+              color: side.color,
+              known: side.level?.indexDb != null,
+            }))}
+            onSelect={select}
+          />
+          <div className="noise-stage-bottom">
+            <span className="noise-drag-hint">
+              <MoveHorizontal size={16} aria-hidden="true" />
+              Поверните модель
+            </span>
+            <div className="noise-orbit-controls">
               <button
-                key={value}
-                className={period === value ? "on" : ""}
-                aria-pressed={period === value}
-                onClick={() => setPeriod(value)}
+                type="button"
+                aria-label="Предыдущая сторона здания"
+                onClick={() => step(-1)}
+                disabled={sides.length < 2}
               >
-                <Icon name={value === "day" ? "sun" : "moon"} size={14} />
-                {value === "day" ? "День" : "Ночь"}
+                <ChevronLeft size={19} aria-hidden="true" />
+              </button>
+              <span>{selected ? NOISE_FACADE_NAMES[selected.facade] : "Стороны не размечены"}</span>
+              <button
+                type="button"
+                aria-label="Следующая сторона здания"
+                onClick={() => step(1)}
+                disabled={sides.length < 2}
+              >
+                <ChevronRight size={19} aria-hidden="true" />
+              </button>
+            </div>
+            <small>Геометрия условная</small>
+          </div>
+        </div>
+        <div className="noise-inspector">
+          <div className="noise-inspector-label">
+            <Volume2 size={16} aria-hidden="true" />
+            Индекс по фасадам
+          </div>
+          <div className="noise-selected-reading" aria-live="polite" aria-atomic="true">
+            <span>{selected ? NOISE_FACADE_NAMES[selected.facade] : "Нет размеченных сторон"}</span>
+            <div>
+              <strong style={{ color: known ? selected?.color : undefined }}>
+                {known ? selected?.text : "—"}
+              </strong>
+              <span>{noiseIndexLabel(selected?.level?.indexDb)}</span>
+            </div>
+          </div>
+          <div
+            className="noise-facades"
+            role="group"
+            aria-label="Выберите сторону здания для оценки шума"
+          >
+            {sides.map((side) => (
+              <button
+                type="button"
+                key={side.facade}
+                aria-pressed={selected?.facade === side.facade}
+                aria-label={`${NOISE_FACADE_NAMES[side.facade]}: ${side.text}`}
+                onClick={() => select(side.facade)}
+                style={
+                  {
+                    "--facade-color": side.level?.indexDb != null ? side.color : "#a4afc1",
+                  } as CSSProperties
+                }
+              >
+                <span className="noise-side-icon">
+                  <ArrowUpRight
+                    size={17}
+                    style={{ transform: `rotate(${FACADE_ANGLE[side.facade] - 45}deg)` }}
+                    aria-hidden="true"
+                  />
+                </span>
+                <span className="noise-side-name">
+                  <b>{FACADE_LABEL[side.facade]}</b>
+                  <small>{NOISE_FACADE_NAMES[side.facade]}</small>
+                </span>
+                <span className="noise-side-reading">
+                  {side.level?.indexDb != null ? side.text : "Нет данных"}
+                  <span className="noise-reading-dot" />
+                </span>
               </button>
             ))}
           </div>
+          <div className="noise-request-status">
+            <GeoStatus
+              pending={query.isLoading}
+              error={query.error}
+              retry={query.refetch}
+              available={!!hotel.backend}
+            />
+          </div>
+          {selected?.level && (
+            <details className="noise-sources" key={`${selected.facade}-${period}`}>
+              <summary>
+                <span>
+                  Что влияет на эту сторону
+                  <small>
+                    Источников: {selected.level.sources.length} · уверенность{" "}
+                    {numberLabel(selected.level.confidence * 100, "%")}
+                  </small>
+                </span>
+                <ChevronDown size={17} aria-hidden="true" />
+              </summary>
+              {selected.level.sources.length ? (
+                <ul>
+                  {selected.level.sources.map((source, index) => (
+                    <li key={`${source.osmRef}-${index}`}>
+                      <div>
+                        <b>{SOURCE_NAME[source.kind] ?? source.kind}</b>
+                        <span>{numberLabel(source.distanceM, " м")}</span>
+                      </div>
+                      <p>
+                        {source.screened ? "Экранирован зданием" : "Без экранирования"} · индекс{" "}
+                        {numberLabel(source.indexDb)} · ослабление по направлению{" "}
+                        {numberLabel(source.orientationLossDb)}
+                      </p>
+                      <small>{source.osmRef}</small>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="noise-no-sources">Источники для этой стороны не указаны.</p>
+              )}
+            </details>
+          )}
+          <p className="noise-model-note">
+            <Info size={15} aria-hidden="true" />
+            Условный индекс по OpenStreetMap. Это модель окружения, а не измерение шума.
+          </p>
         </div>
-        <p className="sub">Условный индекс по OSM · не измерение шума</p>
-        <GeoStatus
-          pending={query.isLoading}
-          error={query.error}
-          retry={query.refetch}
-          available={!!hotel.backend}
-        />
-        <ul className="legend geo-noise">
-          {sides.map(({ facade, color, text, level }) => (
-            <li key={facade}>
-              <span className="sw" style={{ background: color }} />
-              <div>
-                <strong>{FACADE_LABEL[facade]}</strong>
-                {level && (
-                  <details>
-                    <summary>
-                      Источники · {level.sources.length} · уверенность{" "}
-                      {numberLabel(level.confidence * 100, "%")}
-                    </summary>
-                    <ul>
-                      {level.sources.map((source, index) => (
-                        <li key={`${source.osmRef}-${index}`}>
-                          {SOURCE_NAME[source.kind] ?? source.kind} ·{" "}
-                          {numberLabel(source.distanceM, " м")} ·{" "}
-                          {source.screened ? "экранирован зданием" : "без экранирования"} · индекс{" "}
-                          {numberLabel(source.indexDb)} · ослабление по направлению{" "}
-                          {numberLabel(source.orientationLossDb)}
-                          <small>{source.osmRef}</small>
-                        </li>
-                      ))}
-                    </ul>
-                  </details>
-                )}
-              </div>
-              <b className="num">{text}</b>
-            </li>
-          ))}
-        </ul>
-        {query.data && (
-          <>
-            <p className="sub">
-              Полнота модели {numberLabel(query.data.completeness * 100, "%")} · не учтено
-              источников: {query.data.unmodelledRefs.length}
-            </p>
-            <GeoNotes caveats={query.data.caveats} attribution={query.data.attribution} />
-          </>
-        )}
       </div>
+      {query.data && (
+        <details className="noise-method">
+          <summary>
+            <ShieldCheck size={17} aria-hidden="true" />
+            <span>О расчёте и источниках</span>
+            <small>Полнота {numberLabel(query.data.completeness * 100, "%")}</small>
+            <ChevronDown size={17} aria-hidden="true" />
+          </summary>
+          <div>
+            <p>Не учтено источников: {query.data.unmodelledRefs.length}</p>
+            <GeoNotes caveats={query.data.caveats} attribution={query.data.attribution} />
+          </div>
+        </details>
+      )}
     </section>
   );
 }

@@ -13,8 +13,10 @@ import {
   Waves,
 } from "lucide-react";
 import { Photo } from "./visuals";
-import type { HotelDetails } from "../model/types";
+import type { Fact, HotelDetails } from "../model/types";
 import { rub } from "../lib/format";
+import { HotelFacts } from "./hotel-facts";
+import "./hotel-about.css";
 
 export function HotelOverview({
   hotel,
@@ -156,21 +158,34 @@ export function HotelOverview({
       </Reveal>
       <nav className="hotel-section-nav" aria-label="Об отеле">
         <a href="#hotel-about">Об отеле</a>
-        <a href="#window">Ваше окно</a>
         <a href="#rooms">
           Номера <span>{h.rooms.length}</span>
         </a>
-        <a href="#hotel-facts">Факты и источники</a>
+        <a href="#window">Ваше окно</a>
         <a href="#where">Расположение</a>
       </nav>
-      <Reveal
-        className={`hotel-about${h.amenities.length ? "" : " hotel-about--simple"}`}
-        delay={0.1}
-      >
-        <section id="hotel-about" className="hotel-about-copy">
-          <h2>Об отеле</h2>
-          <p>{hotel.description || h.tagline}</p>
-        </section>
+    </>
+  );
+}
+
+export function HotelAbout({
+  hotel,
+  details: h,
+  selectedId,
+  onFact,
+  demo = false,
+}: {
+  hotel: Hotel;
+  details: HotelDetails;
+  selectedId?: string | undefined;
+  onFact: (fact: Fact) => void;
+  demo?: boolean;
+}) {
+  return (
+    <Reveal className="hotel-about hotel-about--with-facts" delay={0.1}>
+      <section id="hotel-about" className="hotel-about-copy">
+        <h2 id="hotel-about-title">Об отеле</h2>
+        <p>{hotel.description || h.tagline}</p>
         {h.amenities.length > 0 && (
           <section className="hotel-about-amenities" aria-label="Удобства отеля">
             <h3>Удобства</h3>
@@ -193,7 +208,8 @@ export function HotelOverview({
             </p>
           </div>
         )}
-      </Reveal>
-    </>
+      </section>
+      <HotelFacts facts={h.facts} selectedId={selectedId} onFact={onFact} demo={demo} embedded />
+    </Reveal>
   );
 }

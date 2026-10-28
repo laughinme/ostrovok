@@ -1,137 +1,183 @@
 import { useId } from "react";
 import { relativeAzimuth, type WindowData } from "../model/geo";
+import { LANDSCAPE, landscapeY, windowLandscape } from "../model/window-landscape";
 
 export function WindowPanorama({ data }: { data: WindowData }) {
   const id = useId();
-  const rays = data.horizon
-    .map((ray) => ({ ...ray, offset: relativeAzimuth(ray.azimuthDeg, data.facade) }))
-    .sort((a, b) => a.offset - b.offset);
-  const from = rays[0]?.offset ?? -70,
-    to = rays.at(-1)?.offset ?? 70;
-  const x = (angle: number) => ((angle - from) / Math.max(1, to - from)) * 1200;
-  const y = (angle: number) => Math.max(0, Math.min(320, 176 - angle * 11.3));
+  const scene = windowLandscape(data);
+  const buildingPaths = scene.obstacles.filter((item) => item.kind === "building");
+  const sunsetOffset = relativeAzimuth(data.sunset.azimuthDeg, data.facade);
+  const sunsetInView = sunsetOffset >= scene.from && sunsetOffset <= scene.to;
+  const sky = sunsetInView ? ["#b8d8e9", "#f9e2be"] : ["#c5dfe9", "#edf3ee"];
   let connected = false;
   const sunPath = data.sunPath
     .map((sun) => {
       const offset = relativeAzimuth(sun.azimuthDeg, data.facade);
-      if (offset < from || offset > to || sun.elevationDeg < -2) {
+      if (offset < scene.from || offset > scene.to || sun.elevationDeg < -2) {
         connected = false;
         return "";
       }
       const command = connected ? "L" : "M";
       connected = true;
-      return `${command}${x(offset)},${176 - sun.elevationDeg * 11.3}`;
+      return `${command}${scene.x(offset)},${landscapeY(sun.elevationDeg)}`;
     })
     .join(" ");
   return (
-    <div className="geo-panorama-stage">
-      <svg
-        className="pano geo-panorama"
-        viewBox="0 0 1200 320"
-        preserveAspectRatio="none"
-        role="img"
-        aria-label={`Расчётный горизонт: ${data.facade}, этаж ${data.floor}, ${data.date}`}
-      >
-        <defs>
-          <linearGradient
-            id={`${id}-sky`}
-            x1="0"
-            y1="0"
-            x2="0"
-            y2="176"
-            gradientUnits="userSpaceOnUse"
-          >
-            <stop offset="0" stopColor="var(--pano-sky-top)" />
-            <stop offset="1" stopColor="var(--pano-sky-low)" />
-          </linearGradient>
-          <linearGradient
-            id={`${id}-sea`}
-            x1="0"
-            y1="176"
-            x2="0"
-            y2="320"
-            gradientUnits="userSpaceOnUse"
-          >
-            <stop offset="0" stopColor="var(--pano-sea-top)" />
-            <stop offset="1" stopColor="var(--pano-sea-low)" />
-          </linearGradient>
-          <pattern id={`${id}-windows`} width="14" height="13" patternUnits="userSpaceOnUse">
-            <rect x="4" y="4" width="6" height="5" fill="var(--pano-build-edge)" opacity=".55" />
-          </pattern>
-          <pattern id={id} width="12" height="12" patternUnits="userSpaceOnUse">
-            <path d="M0 12 L12 0" stroke="var(--pano-tick)" opacity=".25" />
-          </pattern>
-        </defs>
-        <rect width="1200" height="320" fill={`url(#${id}-sky)`} />
-        <path
-          d={sunPath}
-          fill="none"
-          stroke="var(--pano-sun)"
-          strokeWidth="2"
-          strokeDasharray="6 6"
-        />
-        {(["sunrise", "sunset"] as const).map((event) => {
-          const sun = data[event],
-            offset = relativeAzimuth(sun.azimuthDeg, data.facade);
-          return offset >= from && offset <= to ? (
-            <circle
-              key={event}
-              cx={x(offset)}
-              cy={y(sun.elevationDeg)}
-              r="10"
-              fill="var(--pano-sun)"
-            />
-          ) : null;
-        })}
-        {rays.map((ray, index) => {
-          const left = index ? (rays[index - 1]!.offset + ray.offset) / 2 : from;
-          const right = index < rays.length - 1 ? (ray.offset + rays[index + 1]!.offset) / 2 : to;
-          const width = Math.max(0, x(right) - x(left)) + 0.5;
-          const unknown = ray.kind === "unknown" || ray.angleDeg == null;
-          return (
-            <g key={ray.azimuthDeg} shapeRendering="crispEdges">
-              <rect
-                x={x(left)}
-                y={unknown ? 0 : y(ray.angleDeg!)}
-                width={width}
-                height={unknown ? 320 : 320 - y(ray.angleDeg!)}
-                fill={
-                  unknown
-                    ? `url(#${id})`
-                    : ray.kind === "building"
-                      ? "var(--pano-build)"
-                      : "var(--pano-land)"
-                }
-              />
-              {ray.kind === "building" && !unknown && (
-                <rect
-                  x={x(left)}
-                  y={y(ray.angleDeg!)}
-                  width={width}
-                  height={320 - y(ray.angleDeg!)}
-                  fill={`url(#${id}-windows)`}
-                />
-              )}
-              {ray.seaLowDeg != null && ray.seaHighDeg != null && (
-                <rect
-                  x={x(left)}
-                  y={y(ray.seaHighDeg)}
-                  width={width}
-                  height={Math.max(0, y(ray.seaLowDeg) - y(ray.seaHighDeg))}
-                  fill={`url(#${id}-sea)`}
-                />
-              )}
-            </g>
-          );
-        })}
-      </svg>
-      <div className="geo-axis" aria-hidden="true">
-        {rays
-          .filter((_, index) => index % 20 === 0)
-          .map((ray) => (
-            <span key={ray.azimuthDeg}>{Math.round(ray.azimuthDeg)}°</span>
+    <svg
+      className="window-calculated-landscape"
+      viewBox={`0 0 ${LANDSCAPE.width} ${LANDSCAPE.height}`}
+      preserveAspectRatio="xMidYMid meet"
+      role="img"
+      aria-label={`Иллюстрация по расчётному горизонту: ${data.facade}, этаж ${data.floor}, ${data.date}. Форма объектов условная.`}
+    >
+      <defs>
+        <linearGradient id={`${id}-sky`} x2="0" y2="1">
+          <stop stopColor={sky[0]} />
+          <stop offset="1" stopColor={sky[1]} />
+        </linearGradient>
+        <linearGradient id={`${id}-water`} x2="0" y2="1">
+          <stop stopColor="#82b9c9" />
+          <stop offset="1" stopColor="#397e9c" />
+        </linearGradient>
+        <linearGradient id={`${id}-land`} x2="0" y2="1">
+          <stop stopColor="#a8bfac" />
+          <stop offset="1" stopColor="#638b79" />
+        </linearGradient>
+        <radialGradient id={`${id}-glow`}>
+          <stop stopColor="#fff0cc" stopOpacity=".85" />
+          <stop offset="1" stopColor="#fff0cc" stopOpacity="0" />
+        </radialGradient>
+        <pattern id={`${id}-unknown`} width="18" height="18" patternUnits="userSpaceOnUse">
+          <path
+            d="M-4 4 4-4M0 18 18 0M14 22 22 14"
+            stroke="#74889a"
+            strokeWidth="1"
+            opacity=".35"
+          />
+        </pattern>
+        <clipPath id={`${id}-buildings`}>
+          {buildingPaths.map((item, index) => (
+            <path key={index} d={item.path} />
           ))}
-      </div>
-    </div>
+        </clipPath>
+        <mask id={`${id}-foreground`}>
+          <rect width="960" height="560" fill="white" />
+          {scene.sea.map((path, index) => (
+            <path key={index} d={path} fill="black" />
+          ))}
+        </mask>
+        <clipPath id={`${id}-sea`}>
+          {scene.sea.map((path, index) => (
+            <path key={index} d={path} />
+          ))}
+        </clipPath>
+      </defs>
+      <rect width="960" height="560" fill={`url(#${id}-sky)`} />
+      <g fill="white" opacity=".4">
+        <path d="M40 92c42-13 59-7 84-9s47-15 77-8c17 4 23 10 43 11-50 8-130 9-204 6Z" />
+        <path d="M628 61c38-12 58-10 79-5s48-8 69-1l38 8c-63 7-114 7-186-2Z" />
+      </g>
+      <path
+        d={sunPath}
+        fill="none"
+        stroke="#e9b968"
+        strokeWidth="2"
+        strokeDasharray="5 8"
+        opacity=".65"
+      />
+      {(["sunrise", "sunset"] as const).map((event) => {
+        const sun = data[event],
+          offset = relativeAzimuth(sun.azimuthDeg, data.facade);
+        if (offset < scene.from || offset > scene.to) return null;
+        return (
+          <g key={event}>
+            <circle
+              cx={scene.x(offset)}
+              cy={landscapeY(sun.elevationDeg)}
+              r="82"
+              fill={`url(#${id}-glow)`}
+            />
+            <circle cx={scene.x(offset)} cy={landscapeY(sun.elevationDeg)} r="20" fill="#fff1c8" />
+          </g>
+        );
+      })}
+      <rect y="270" width="960" height="290" fill="#b5c7b5" />
+      {scene.obstacles
+        .filter((item) => item.kind === "terrain")
+        .map((item, index) => (
+          <path
+            key={index}
+            d={item.path}
+            fill={`url(#${id}-land)`}
+            stroke="#8eaaa0"
+            strokeWidth="2"
+          />
+        ))}
+      <g clipPath={`url(#${id}-buildings)`}>
+        {scene.buildings.map(({ left, roof }, index) => (
+          <g key={left}>
+            <rect
+              x={left}
+              y="0"
+              width="120"
+              height="560"
+              fill={index % 2 ? "#e4e4d7" : "#edf0e7"}
+            />
+            <rect x={left + 106} y="0" width="14" height="560" fill="#b3c4bf" />
+            <path d={`M${left + 2} ${roof + 4}h102`} stroke="#ccd8cf" strokeWidth="5" />
+            {Array.from({ length: 6 }, (_, row) =>
+              Array.from({ length: 3 }, (_, column) => (
+                <rect
+                  key={`${row}-${column}`}
+                  x={left + 17 + column * 30}
+                  y={roof + 20 + row * 34}
+                  width="10"
+                  height="13"
+                  rx="1"
+                  fill="#7f9ca6"
+                  opacity=".85"
+                />
+              )),
+            )}
+            <path d={`M${left + 1} 0V560`} stroke="#f5f6eb" strokeWidth="2" />
+          </g>
+        ))}
+      </g>
+      <g clipPath={`url(#${id}-sea)`}>
+        <rect width="960" height="560" fill={`url(#${id}-water)`} />
+        {[283, 305, 340, 380, 425].map((y, index) => (
+          <path
+            key={y}
+            d={`M${index % 2 ? 20 : 80} ${y}h100m70 0h180m80 0h160m60 0h200`}
+            stroke="#e7f3ef"
+            strokeWidth="2"
+            opacity=".35"
+          />
+        ))}
+      </g>
+      <g mask={`url(#${id}-foreground)`}>
+        <path d="M0 388c145-28 248 13 380 6s223-35 358-12 153 9 222 0v178H0Z" fill="#7c9f89" />
+        <path d="M0 510Q255 390 490 420T960 500" fill="none" stroke="#d9d8bf" strokeWidth="9" />
+        <path d="M0 551q100-22 205 2t214-1 202-7 180 0 159-15v70H0Z" fill="#577d6b" />
+        {[35, 84, 788, 845, 912].map((x, index) => (
+          <g key={x} transform={`translate(${x} ${496 + (index % 2) * 10})`}>
+            <path d="M0 47V8" stroke="#587567" strokeWidth="3" />
+            <ellipse
+              cy="10"
+              rx={index % 2 ? 15 : 20}
+              ry="26"
+              fill={index % 2 ? "#6a9179" : "#7a9d83"}
+            />
+            <path d="M0 31V-9" stroke="#668874" strokeWidth="1.5" />
+          </g>
+        ))}
+      </g>
+      {scene.unknown.map(({ left, width }) => (
+        <g key={left}>
+          <rect x={left} width={width} height="560" fill="#e9eef2" opacity=".82" />
+          <rect x={left} width={width} height="560" fill={`url(#${id}-unknown)`} />
+        </g>
+      ))}
+    </svg>
   );
 }

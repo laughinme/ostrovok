@@ -32,6 +32,11 @@ export function useHotelProfile() {
   ]);
   const [input, setInput] = useState("");
   const [target, setTarget] = useState<{ kind: "question" | "fact"; id: string } | null>(null);
+  const [feedback, setFeedback] = useState<{
+    id: string;
+    kind: "question" | "fact";
+    text: string;
+  } | null>(null);
   const [history, setHistory] = useState<{ t: string; text: string }[]>([]);
   const facts = overview.data?.facts.map(factFromApi) ?? [];
   const refresh = () => {
@@ -44,15 +49,36 @@ export function useHotelProfile() {
   const action = useMutation({
     mutationFn: async ({ path, body }: { path: string; body?: unknown }) =>
       demoApi<Answer | components["schemas"]["ChangedFactsOut"]>(persona, path, "POST", body),
-    onSuccess: (result) => {
+    onSuccess: (result, variables) => {
       refresh();
       const line =
         "clarification" in result && result.clarification
           ? result.clarification
-          : `Ответ сохранён. Обновлено фактов: ${result.changedFacts.length}.`;
+          : "Сохранено. Информация в профиле отеля обновлена.";
       setMsgs((current) => [...current, { from: "bot", text: line }]);
-      setHistory((current) => [{ t: "сейчас", text: line }, ...current]);
-      setInput("");
+      const parts = variables.path.split("/");
+      const id = parts[3]!;
+      const question = questions.data?.find((item) => item.id === id);
+      const fact = facts.find((item) => item.id === id);
+      const text = (variables.body as { text?: string } | undefined)?.text;
+      const description = question
+        ? `Ответ на «${question.text}»: ${text}`
+        : text
+          ? `Уточнение «${fact?.label}»: ${text}`
+          : `Подтверждено: ${fact?.label}`;
+      setHistory((current) => [
+        { t: "сейчас", text: result.changedFacts.length ? description : line },
+        ...current,
+      ]);
+      setFeedback({
+        id: parts[3]!,
+        kind: parts[2] === "questions" ? "question" : "fact",
+        text: line,
+      });
+      if (result.changedFacts.length > 0 && target?.id === id) {
+        setTarget(null);
+        setInput("");
+      }
     },
     onError: (error) => toast.error(error.message),
   });
@@ -84,12 +110,16 @@ export function useHotelProfile() {
     if (fact?.id && !action.isPending) action.mutate({ path: `/partner/facts/${fact.id}/confirm` });
   };
   const selectQuestion = (id: string) => {
+    if (action.isPending) return;
+    setFeedback(null);
     setTarget({ kind: "question", id });
     setInput("");
     const question = questions.data?.find((item) => item.id === id);
     if (question) setMsgs((current) => [...current, { from: "bot", text: question.text }]);
   };
   const correct = (id: string) => {
+    if (action.isPending) return;
+    setFeedback(null);
     const fact = facts.find((item) => item.id === id);
     if (fact?.id) {
       setTarget({ kind: "fact", id: fact.id });
@@ -120,6 +150,13 @@ export function useHotelProfile() {
     coverageTotal: overview.data?.coverage.total ?? 0,
     conflicts: overview.data?.conflicts ?? [],
     selectedId: target?.id,
+    selectedKind: target?.kind,
+    feedback,
+    cancelSelection: () => {
+      if (action.isPending) return;
+      setTarget(null);
+      setInput("");
+    },
     pending: catalog.isPending || (!!raw && (overview.isPending || questions.isPending)),
     error:
       (!catalog.data ? catalog.error : null) ??

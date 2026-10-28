@@ -6,20 +6,19 @@ import {
   type Criterion,
 } from "@/entities/hotel";
 import { api, type components } from "@/shared/api";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { comparisonCopy } from "../lib/comparison-copy";
 
 export function useComparison(ids: string[], criteria: Criterion[]) {
-  const catalog = useQuery(catalogQuery);
-  const selectedIds =
-    ids.length >= 2 ? ids : (catalog.data?.slice(0, 3).map((hotel) => hotel.id) ?? []);
+  const canCompare = ids.length >= 2;
+  const catalog = useQuery({ ...catalogQuery, enabled: canCompare });
   const comparison = useQuery({
-    queryKey: ["comparison", selectedIds, criteria],
+    queryKey: ["comparison", ids, criteria],
     queryFn: ({ signal }) =>
       api<components["schemas"]["CompareOut"]>("/compare", {
         method: "POST",
         body: {
-          selections: selectedIds.map((hotelId) => ({ hotelId })),
+          selections: ids.map((hotelId) => ({ hotelId })),
           chips: criteria.map((criterion) => ({
             id: criterion,
             characteristic: criterionKeys[criterion],
@@ -31,12 +30,14 @@ export function useComparison(ids: string[], criteria: Criterion[]) {
         },
         signal,
       }),
-    enabled: selectedIds.length >= 2,
-    placeholderData: keepPreviousData,
+    enabled: canCompare,
+    placeholderData: (previousData, previousQuery) =>
+      JSON.stringify(previousQuery?.queryKey[1]) === JSON.stringify(ids) ? previousData : undefined,
     retry: false,
   });
   const selected =
-    comparison.data?.matches
+    (canCompare ? comparison.data?.matches : undefined)
+      ?.filter((match) => ids.includes(match.hotelId))
       .flatMap((match) => {
         const raw = catalog.data?.find((hotel) => hotel.id === match.hotelId);
         if (!raw) return [];
@@ -56,9 +57,10 @@ export function useComparison(ids: string[], criteria: Criterion[]) {
       .sort((a, b) => b.s - a.s) ?? [];
   return {
     scored: selected,
-    pending: catalog.isPending || comparison.isPending,
-    error: catalog.error ?? comparison.error,
+    pending: canCompare && (catalog.isPending || comparison.isPending),
+    error: canCompare ? (catalog.error ?? comparison.error) : null,
     retry: () => {
+      if (!canCompare) return;
       void catalog.refetch();
       void comparison.refetch();
     },

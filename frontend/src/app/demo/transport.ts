@@ -1,8 +1,13 @@
 import { ApiError, type ApiOptions, type components } from "@/shared/api";
 import { DEMO_DATE, demoHotels, demoQuestions } from "./fixtures";
 import { demoIntent, demoMatch, demoSearch, restoreDemoSearch } from "./search";
+import { demoBeachRoute, demoNoise } from "./geo";
 
-type State = { facts: Record<string, components["schemas"]["FactOut"]>; answered: string[] };
+type State = {
+  facts: Record<string, components["schemas"]["FactOut"]>;
+  answered: string[];
+  runs?: Record<string, components["schemas"]["AgentRunOut"]>;
+};
 let memory: State = { facts: {}, answered: [] };
 const STORAGE = "okno.design-demo.state";
 
@@ -40,15 +45,78 @@ export function demoResponse(path: string, options: ApiOptions = {}): unknown {
   const method = options.method ?? "GET";
   const data = (options.body ?? {}) as Record<string, unknown>;
   const hotels = catalog();
-  const pieces = path.split("/").filter(Boolean).map(decodeURIComponent);
+  const [pathname, query] = path.split("?");
+  const params = new URLSearchParams(query);
+  const pieces = pathname!.split("/").filter(Boolean).map(decodeURIComponent);
   if (path === "/intents" && method === "POST") return demoIntent(String(data["text"] ?? ""));
   if (path === "/searches" && method === "POST")
     return demoSearch(data as components["schemas"]["SearchRequest"], hotels);
   if (pieces[0] === "searches" && pieces.length === 2 && method === "GET")
     return restoreDemoSearch(pieces[1]!, hotels);
+  if (pieces[0] === "searches" && pieces[2] === "research" && method === "POST") {
+    const search = restoreDemoSearch(pieces[1]!, hotels);
+    const characteristic = String(
+      data["characteristic"] ??
+        required(search.intent.chips.find((chip) => chip.id === data["chipId"])).characteristic,
+    );
+    const requestedIds = data["hotelIds"] as string[] | undefined;
+    const selected = requestedIds?.length
+      ? requestedIds.map((id) => required(hotels.find((hotel) => hotel.id === id)))
+      : hotels;
+    const runId = `demo-run-${crypto.randomUUID()}`;
+    const at = new Date().toISOString();
+    const saved = state();
+    saved.runs = {
+      ...saved.runs,
+      [runId]: {
+        id: runId,
+        agent: "liaison",
+        goal: `Уточнить ${characteristic}: ${selected.map((hotel) => hotel.name).join(", ")}`,
+        planner: "rules",
+        status: "done",
+        createdAt: at,
+        startedAt: at,
+        finishedAt: at,
+        steps: [
+          {
+            seq: 1,
+            at,
+            kind: "reason",
+            summary: "Проверили сведения и выбрали вопрос по вашему пожеланию.",
+          },
+          {
+            seq: 2,
+            at,
+            kind: "tool",
+            tool: "demo_hotel_question",
+            summary:
+              "Имитировали передачу вопроса демо-отельеру. Реальное сообщение не отправлялось.",
+          },
+          {
+            seq: 3,
+            at,
+            kind: "result",
+            summary:
+              "Демо-вопрос записан. В реальном сценарии здесь появится ответ отеля; текущие факты пока не меняются.",
+          },
+        ],
+        subject: { hotelIds: selected.map((hotel) => hotel.id), characteristic, isDemo: true },
+      },
+    };
+    save(saved);
+    return { runId } satisfies components["schemas"]["RunStarted"];
+  }
+  if (pieces[0] === "runs" && pieces.length === 2 && method === "GET")
+    return required(state().runs?.[pieces[1]!]);
   if (path === "/hotels" && method === "GET") return hotels;
   if (pieces[0] === "hotels" && pieces.length === 2 && method === "GET")
     return required(hotels.find((hotel) => hotel.id === pieces[1]));
+  if (pieces[0] === "hotels" && method === "GET" && pieces.length > 2) {
+    const hotel = required(hotels.find((item) => item.id === pieces[1]));
+    if (pieces[2] === "noise" && pieces.length === 3) return demoNoise(hotel);
+    if (pieces[2] === "routes" && pieces[3] === "beach" && pieces.length === 4)
+      return demoBeachRoute(hotel, params.get("profile") ?? "walk");
+  }
   if (path === "/compare" && method === "POST") {
     const request = data as components["schemas"]["CompareIn"];
     const intent = {
