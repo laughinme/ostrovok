@@ -103,7 +103,7 @@ async def test_timeout_cancels_the_call_without_disabling_other_tasks() -> None:
             cancelled.set()
         return _final(info, {"value": 42})
 
-    llm = _llm(model, timeout_sec=0.02)
+    llm = _llm(model, timeout_sec=0.5)
     with pytest.raises(LlmUnavailableError, match="TimeoutError"):
         await llm.structured(task="t", system="s", prompt="p", output=Answer)
 
