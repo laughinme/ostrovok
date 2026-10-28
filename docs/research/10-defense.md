@@ -111,6 +111,206 @@
 подтверждённую доступность пути с коляской, реальные цены и оплату, готовый запуск на миллионах отелей.
 Цифры и опоры для речи — §5; ответы на технические вопросы — §3.
 
+## 3. 25 вопросов жюри: короткий ответ и место в коде
+
+**1. Чем вы полезнее обычного фильтра «вид на море»?**
+Мы ищем подходящий вариант по стороне здания, этажам и месяцам, показываем компромисс и источник.
+Без разметки категорий рекомендация означает «попросите такую сторону и этаж», а не гарантированный номер.
+Опора: [backend/app/domain/search/score.py:110](../../backend/app/domain/search/score.py#L110),
+[backend/app/service/search/candidates.py:25](../../backend/app/service/search/candidates.py#L25).
+
+**2. Как вы считаете вид из окна?**
+Из контура получаем фасады, берём длиннейшую стену каждого румба и три положения окна.
+В секторе ±70° с шагом 1° проверяем перекрытие моря зданиями до 2 км и поверхностью до 40 км,
+с учётом кривизны Земли и рефракции; результат — углы и доля направлений с морем, не площадь фотографии.
+Опора: [backend/app/service/geo/scenes.py:41](../../backend/app/service/geo/scenes.py#L41),
+[backend/app/infra/geo/view_scene.py:39](../../backend/app/infra/geo/view_scene.py#L39),
+[backend/app/domain/geo/horizon.py:52](../../backend/app/domain/geo/horizon.py#L52),
+[backend/app/domain/geo/earth.py:14](../../backend/app/domain/geo/earth.py#L14).
+
+**3. Разве DEM 30 м достаточно для окна?**
+Для точного окна недостаточно: Copernicus — DSM поверхности, где есть здания и растительность.
+Мы оцениваем основание по низкому квантилю вокруг здания, корректируем ближний DSM и отдельно добавляем здания OSM.
+Это приближение: неполные высоты, деревья, остекление и ошибочная привязка корпуса остаются слабым местом.
+Опора: [backend/app/domain/geo/ground.py:11](../../backend/app/domain/geo/ground.py#L11),
+[backend/app/domain/geo/montecarlo.py:20](../../backend/app/domain/geo/montecarlo.py#L20),
+[backend/app/service/recipes/methods/view.py:24](../../backend/app/service/recipes/methods/view.py#L24).
+
+**4. Как учитываются дата и закат?**
+Astral даёт азимут, высоту солнца и время события для координат и даты; затем мы сравниваем солнце с горизонтом окна.
+Отдельно находим, когда диск уйдёт за препятствие; панорама использует конкретный день, сохранённые факты — месяцы.
+Это геометрическая видимость, облака и фактическую погоду она не предсказывает.
+Опора: [backend/app/domain/geo/sun.py:32](../../backend/app/domain/geo/sun.py#L32),
+[backend/app/domain/geo/solar_visibility.py:33](../../backend/app/domain/geo/solar_visibility.py#L33),
+[backend/app/service/recipes/methods/sun_event.py:38](../../backend/app/service/recipes/methods/sun_event.py#L38).
+
+**5. Откуда шум, если микрофонов нет?**
+Это условный индекс: источники OSM, заданные мощности, расстояние, ориентация фасада и экранирование домами.
+Энергии складываются отдельно для дня и ночи; уверенность модели ограничена 0,75, отсутствие источников означает неизвестность.
+LAeq, шум в закрытом номере и соответствие санитарным нормам мы не измеряли.
+Опора: [backend/app/domain/geo/noise.py:50](../../backend/app/domain/geo/noise.py#L50),
+[backend/app/domain/geo/noise.py:75](../../backend/app/domain/geo/noise.py#L75),
+[backend/app/domain/geo/noise.py:106](../../backend/app/domain/geo/noise.py#L106).
+
+**6. Почему дорога до пляжа не равна расстоянию на карте? А с коляской?**
+Ищем путь по направленному графу OSM, время ребра зависит от уклона по функции Тоблера; обратный путь считаем отдельно.
+Для коляски и кресла известные ступени запрещены, крутые уклоны штрафуются, неизвестные участки понижают доверие.
+Неполный граф, покрытия и входы на пляж не позволяют обещать подтверждённую доступность.
+Опора: [backend/app/infra/geo/router.py:48](../../backend/app/infra/geo/router.py#L48),
+[backend/app/domain/geo/walking.py:25](../../backend/app/domain/geo/walking.py#L25),
+[backend/app/infra/geo/router.py:143](../../backend/app/infra/geo/router.py#L143).
+
+**7. Что означает ваша уверенность?**
+Для вида это устойчивость ответа при возмущении высот, окна и этажа внутри полосы: обычно 16 сценариев, 50 — опция.
+Исследователь ограничивает уверенность расчётного наблюдения сверху 0,95; после слияния факт может иметь другое значение.
+Уверенность относится к сохранённому утверждению: `false` с 0,95 означает P(да)=0,05, а не 95% шанса на море.
+Опора: [backend/app/service/recipes/methods/view.py:50](../../backend/app/service/recipes/methods/view.py#L50),
+[backend/app/service/agents/researcher.py:34](../../backend/app/service/agents/researcher.py#L34),
+[backend/app/domain/knowledge/values.py:23](../../backend/app/domain/knowledge/values.py#L23).
+
+**8. Вы откалибровали вероятности? Что доказывает R7?**
+Нет: независимый gold по фасадам и этажам пуст, поэтому accuracy и ECE не измерены.
+В R7 совпали 12 из 14 положительных заявлений о виде с наличием подходящего окна в расчёте.
+Отрицательных меток нет: это сверка заявлений, она не проверяет ложноположительные ответы и калибровку.
+Опора: [backend/data/eval/gold.yaml:18](../../backend/data/eval/gold.yaml#L18),
+[backend/app/service/quality/claims.py:115](../../backend/app/service/quality/claims.py#L115),
+[backend/app/service/quality/knowledge.py:35](../../backend/app/service/quality/knowledge.py#L35).
+
+**9. Как соединяете разные источники?**
+Наблюдения вероятностных пространственных характеристик сравниваются на сетке фасадов, этажей и месяцев, потом сжимаются в области.
+Вероятности сливаются в логарифмах шансов с фиксированными весами надёжности источников; это модельное допущение, не обученное доверие к каждому отелю.
+Запись и сверка защищены блокировкой пары «отель — характеристика», изменения сохраняются версиями.
+Опора: [backend/app/domain/knowledge/reconcile.py:107](../../backend/app/domain/knowledge/reconcile.py#L107),
+[backend/app/domain/knowledge/confidence.py:51](../../backend/app/domain/knowledge/confidence.py#L51),
+[backend/app/service/knowledge/recorder.py:77](../../backend/app/service/knowledge/recorder.py#L77).
+
+**10. Отельер обещает море, а расчёт говорит «нет». Кто победит?**
+При уверенном противоречии действует правило характеристики: для физики выбираем расчёт или открытые данные, для правил проживания — ответ отеля.
+Сохраняем конфликт и задаём уточняющий вопрос; это не утверждение, что физическая модель всегда права.
+Автоматического обучения персональной репутации отельера здесь нет.
+Опора: [backend/app/domain/knowledge/reconcile.py:164](../../backend/app/domain/knowledge/reconcile.py#L164),
+[backend/app/domain/knowledge/reconcile.py:184](../../backend/app/domain/knowledge/reconcile.py#L184),
+[backend/app/service/partner/questions.py:164](../../backend/app/service/partner/questions.py#L164).
+
+**11. Как знания устаревают? Что, если построили дом?**
+После 80% срока вероятность при сверке тянется к 0,5; воркер регулярно отбирает факты для повторной проверки.
+Добавление или откат здания запускает пересчёт зависимых характеристик соседних отелей и уведомления по изменившимся обещаниям.
+Автоматического потока изменений OSM нет, а чтение само не пересчитывает сохранённую уверенность.
+Опора: [backend/app/domain/knowledge/confidence.py:60](../../backend/app/domain/knowledge/confidence.py#L60),
+[backend/app/service/agents/freshness.py:28](../../backend/app/service/agents/freshness.py#L28),
+[backend/app/service/agents/watcher.py:44](../../backend/app/service/agents/watcher.py#L44).
+
+**12. Где агенты, а где обычные функции?**
+Исследователь выполняет рецепт, Куратор выбирает способ проверить новое желание, Связной выбирает вопросы; у запусков есть цель, статус и трасса.
+LLM нужна Куратору и разбору языка; Сверщик — чистая функция, Наблюдатель — обработчик событий по правилам.
+Шаги трассы — журнал решений и инструментов, не внутренняя цепочка мыслей модели.
+Опора: [backend/app/service/agents/researcher.py:61](../../backend/app/service/agents/researcher.py#L61),
+[backend/app/service/agents/curator.py:145](../../backend/app/service/agents/curator.py#L145),
+[backend/app/service/agents/runtime.py:48](../../backend/app/service/agents/runtime.py#L48).
+
+**13. Новая характеристика действительно добавляется без кода?**
+Да, если она выражается существующими типами рецептов: Куратор выдаёт структуру, код проверяет схему и делает пробный прогон.
+Из поиска сохраняется предварительная характеристика, из консоли — черновик для публикации оператором.
+Новый способ измерения потребует исполнителя и тестов: LLM не пишет произвольную программу.
+Опора: [backend/app/service/recipes/models.py:127](../../backend/app/service/recipes/models.py#L127),
+[backend/app/service/agents/curator.py:101](../../backend/app/service/agents/curator.py#L101).
+
+**14. Почему не поручить всё LLM? Как защищаетесь от выдумок?**
+LLM не наблюдает окно; факты должны получать инструменты или отельер с указанием источника.
+Модель возвращает проверяемую структуру и использует разрешённые инструменты, но это не устраняет все смысловые ошибки.
+Даже проверка объяснения ограничена длиной и новыми числами: неверное утверждение без новых чисел она может пропустить.
+Опора: [backend/app/service/agents/curator.py:187](../../backend/app/service/agents/curator.py#L187),
+[backend/app/service/recipes/models.py:20](../../backend/app/service/recipes/models.py#L20),
+[backend/app/domain/search/explain.py:15](../../backend/app/domain/search/explain.py#L15).
+
+**15. Что работает без ключа? Как холодный старт?**
+Георасчёты, факты, поиск, шаблонные объяснения и агенты на правилах работают; свободный язык и новые рецепты понимаются хуже.
+Данные и сид входят в поставку, миграции и загрузка выполняются автоматически, тяжёлая геоподготовка не нужна при старте.
+В журнале последнего чистого x86-прогона — 106 секунд до health; это не гарантия времени на любой машине.
+Опора: [backend/app/service/agents/fallback.py:10](../../backend/app/service/agents/fallback.py#L10),
+[.github/workflows/cold-start.yml:15](../../.github/workflows/cold-start.yml#L15),
+[docs/backend/progress.md:60](../backend/progress.md#L60).
+
+**16. Сколько стоит запрос и что ограничивает расходы?**
+В сохранённом прогоне разбор — около $0,00045, с тремя формулировками выдачи — около $0,00095; новые исследования считаются отдельно.
+Это оценка токенов, не полная себестоимость: есть тариф провайдера и инфраструктура; условия выборки — §5.
+Работают кэш, лимиты на задачи и сутки, тайм-аут и предохранитель; при недоступности LLM включаются правила.
+Опора: [backend/data/eval/llm/openai_gpt-5.6-luna.low+openai_gpt-5.6-luna.medium.5086a6e110.json:1727](../../backend/data/eval/llm/openai_gpt-5.6-luna.low+openai_gpt-5.6-luna.medium.5086a6e110.json#L1727),
+[backend/app/infra/llm/pydantic_ai_model.py:138](../../backend/app/infra/llm/pydantic_ai_model.py#L138),
+[backend/app/infra/llm/guards.py:35](../../backend/app/infra/llm/guards.py#L35).
+
+**17. Как ранжируете? «Риск разочарования» — настоящая вероятность?**
+Для варианта берём средневзвешенное выполнение пожеланий и штраф за невыполненные обязательные, выбираем лучший вариант отеля.
+Неизвестное получает 0,5; текущий расчёт усредняет известные ячейки и отдельно не штрафует непокрытые.
+Риск `1 − произведение P` по важным пожеланиям — эвристика с допущением независимости, не откалиброванный прогноз поведения гостя.
+Опора: [backend/app/domain/search/score.py:142](../../backend/app/domain/search/score.py#L142),
+[backend/app/domain/search/score.py:196](../../backend/app/domain/search/score.py#L196),
+[backend/app/domain/search/rank.py:58](../../backend/app/domain/search/rank.py#L58).
+
+**18. Как дойдёте до трёх миллионов отелей?**
+Путь — региональные пакеты геоданных, общий предрасчёт, очередь пересчётов и приоритет по спросу; рецепт не требует LLM-вызова на каждый отель.
+Уже есть сбор по шардам и несколько воркеров на очереди с арендой, но текущая загрузка кандидатов читает каталог целиком.
+Для миллионов нужны геофильтрация в БД, предварительный отбор кандидатов, разделение данных и нагрузочные замеры; такой масштаб пока не проверен.
+Опора: [backend/app/cli.py:43](../../backend/app/cli.py#L43),
+[backend/app/db/repositories/jobs.py:36](../../backend/app/db/repositories/jobs.py#L36),
+[backend/app/service/search/candidates.py:25](../../backend/app/service/search/candidates.py#L25).
+
+**19. Как связать фасад с настоящим номером Островка?**
+Нужна проверенная связь «ID отеля и корпуса → категория поставщика → стороны и диапазоны этажей» от отельера или PMS.
+В прототипе отельер уже размечает категории по фасадам и этажам; без разметки выдаём только запрос к отелю.
+Категория может охватывать разные стороны, поэтому конкретное размещение требует подтверждения отеля; данных реального Островка у нас нет.
+Опора: [backend/app/service/partner/facades.py:42](../../backend/app/service/partner/facades.py#L42),
+[backend/app/service/search/candidates.py:41](../../backend/app/service/search/candidates.py#L41).
+
+**20. Это можно забрать как API или MCP?**
+Да: REST отдаёт факты, доказательства, поиск и георасчёты; MCP предоставляет инструменты чтения поверх тех же сервисов.
+MCP сейчас разбирает текст правилами и не создаёт сохранённый поиск или задачи исследования.
+Это работающий интерфейс прототипа; интеграции с внутренними системами Островка ещё нет.
+Опора: [backend/app/api/mcp.py:29](../../backend/app/api/mcp.py#L29),
+[backend/app/api/mcp_tools.py:29](../../backend/app/api/mcp_tools.py#L29),
+[backend/app/api/mcp_tools.py:66](../../backend/app/api/mcp_tools.py#L66).
+
+**21. Как встроить в карточку, ранжирование и голосового бота?**
+Карточка может читать факт с областью и источником, ранжирование — признаки выполнения пожеланий и неизвестности.
+Голосовой бот мог бы задавать вопросы с наибольшей ценностью: спрос × неопределённость × влияние на выдачу, затем передавать расшифровку в разбор ответа.
+Выбор вопросов и разбор уже есть; телефония, договорённость о контракте и эксперимент в Островке — следующие шаги.
+Опора: [backend/app/domain/partner/questions.py:16](../../backend/app/domain/partner/questions.py#L16),
+[backend/app/service/partner/questions.py:110](../../backend/app/service/partner/questions.py#L110),
+[backend/app/service/partner/answers.py:74](../../backend/app/service/partner/answers.py#L74).
+
+**22. Что происходит после поездки? Можно накрутить ответы?**
+Бронь хранит снимок обещания; после выезда владелец подтверждённой поездки отвечает по её фактам, повтор по тому же факту запрещён.
+Для булева признака ответы обновляют вероятность бета-априором с весом 10 в области обещания; один ответ не меняет весь отель.
+Это базовая защита, не полноценная борьба с накруткой: нужны реальные брони и мониторинг злоупотреблений.
+Опора: [backend/app/service/booking/bookings.py:135](../../backend/app/service/booking/bookings.py#L135),
+[backend/app/service/booking/feedback.py:31](../../backend/app/service/booking/feedback.py#L31),
+[backend/app/domain/knowledge/reconcile.py:148](../../backend/app/domain/knowledge/reconcile.py#L148).
+
+**23. Данные законные? Что настоящее, а что демо?**
+Геоданные — OSM/ODbL, Copernicus по его лицензии, Open-Meteo/CC BY 4.0, с происхождением и атрибуцией в манифесте.
+Реальные фото из Wikimedia имеют отдельные CC-лицензии, сгенерированные галереи помечены демо и не доказывают свойства номера.
+Цены, категории, история гостя и профили симулятора синтетические; R7 хранит пересказы заявлений с URL, без скрапинга OTA и копий отзывов.
+Опора: [backend/data/MANIFEST.md:14](../../backend/data/MANIFEST.md#L14),
+[frontend/public/hotel-photos/manifest.json:4](../../frontend/public/hotel-photos/manifest.json#L4),
+[assets/hotel-images/README.md:29](../../assets/hotel-images/README.md#L29),
+[backend/data/eval/official_claims.yaml:1](../../backend/data/eval/official_claims.yaml#L1).
+
+**24. Какие тесты и метрики подтверждают качество?**
+В журнале полного прогона — 509 backend-тестов и 7 архитектурных контрактов; в этой документальной сессии отдельно прошли 65 профильных unit-тестов без LLM.
+На синтетическом hold-out Polza: F1 ключей пожеланий 1,00 на 40 фразах, точность полей ответов 0,94 на 30 ответах, метод Куратора 0,93 на 15 описаниях.
+nDCG@10 последнего отчёта прода — 0,9201 на 20 запросах внутри фиксированных пулов; эти метрики не доказывают точность вида в реальности.
+Опора: [backend/pyproject.toml:118](../../backend/pyproject.toml#L118),
+[backend/data/eval/README.md:133](../../backend/data/eval/README.md#L133),
+[backend/app/service/quality/search.py:34](../../backend/app/service/quality/search.py#L34).
+
+**25. Вы вдвоём, код писали с ИИ. Что именно понимаете и за что отвечаете?**
+Да, ИИ помогал писать код; ответственность за решения, проверку и ограничения у нас.
+Первый участник показывает путь «данные → горизонт → факт», второй — «наблюдение → сверка → поиск»; это распределение на защиту, не выдуманная история авторства.
+Можем открыть функцию, объяснить входы, допущения, тест и разобрать ошибку; прежде всего ещё нужны независимые метки окон и проверенная привязка корпусов.
+Опора: [backend/app/domain/geo/horizon.py:26](../../backend/app/domain/geo/horizon.py#L26),
+[backend/app/service/knowledge/recorder.py:39](../../backend/app/service/knowledge/recorder.py#L39),
+[backend/app/domain/search/score.py:196](../../backend/app/domain/search/score.py#L196).
+
 ## 5. Проверенные цифры и оговорки для ведущего
 
 Сверено 29.10 по данным ветки и последнему доступному отчёту прода:
@@ -166,7 +366,7 @@ USD — оценка по токенам, наценки провайдера и
 
 Источник: [backend/data/eval/llm/openai_gpt-5.6-luna.low+openai_gpt-5.6-luna.medium.5086a6e110.json:1727](../../backend/data/eval/llm/openai_gpt-5.6-luna.low+openai_gpt-5.6-luna.medium.5086a6e110.json#L1727).
 Биллинг **8,65 ₽** относится ко всему первому eval и коротким проверкам, не к одному запросу:
-[backend/data/eval/polza-smoke.json:102](../../backend/data/eval/polza-smoke.json#L102).
+[backend/data/eval/polza-smoke.json:97](../../backend/data/eval/polza-smoke.json#L97).
 
 **Запуск и качество.** Последняя запись о чистом x86: `/health` за **106 с**, затем smoke **6 с**,
 коммит `cf0ec09`; это исторический замер, не повторённый в этой сессии и не SLA.
