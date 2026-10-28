@@ -63,7 +63,12 @@ async def create_search(
     if payload.trip is not None:
         intent = replace(intent, trip=payload.trip.to_domain())
     return SearchResultOut.from_view(
-        await svc.search(intent, user_id=user.id if user else None, use_profile=payload.use_profile)
+        await svc.search(
+            intent,
+            user_id=user.id if user else None,
+            use_profile=payload.use_profile,
+            hotel_ids=payload.hotel_ids,
+        )
     )
 
 

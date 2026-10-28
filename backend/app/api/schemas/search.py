@@ -119,6 +119,7 @@ class SearchRequest(ApiModel):
     chips: list[IntentChipModel] | None = None
     trip: TripModel | None = None
     use_profile: bool = True
+    hotel_ids: list[UUID] | None = Field(None, min_length=1, max_length=20)
 
 
 class ChipResultOut(ApiModel):
