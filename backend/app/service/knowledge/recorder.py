@@ -109,6 +109,7 @@ class KnowledgeStore:
             row.scope_key: row
             for row in await self._uow.knowledge.fact_rows(hotel_id, characteristic.key)
         }
+        had_facts = bool(existing)
         changed = []
         for draft in drafts:
             row = existing.pop(draft.scope.key, None)
@@ -123,7 +124,7 @@ class KnowledgeStore:
         for gone in existing.values():
             await self._uow.session.delete(gone)
         await self._uow.flush()
-        if changed or existing:
+        if had_facts and (changed or existing):
             await self._uow.jobs.enqueue(
                 NewJob(
                     JobKind.BOOKING_FACT_CHANGED,

@@ -6,6 +6,7 @@ from app.db.database import Database
 from app.db.models import BookingRow, FacadeRoom
 from app.domain.booking.status import BookingStatus
 from app.domain.knowledge.scope import scope_from_json
+from app.domain.search.score import Variant, request_text
 from app.service.booking.bookings import BookingService
 from app.service.booking.promise_changes import notify_changed_promises
 from app.service.ports import Clock, EventBus
@@ -41,6 +42,8 @@ class BookingSimulator:
                     for m in marks
                 )
             )
+            if scope is not None and row.request != request_text(Variant(scope)):
+                confirmed = False
             status = BookingStatus.CONFIRMED if confirmed else BookingStatus.ALTERNATIVE_OFFERED
             reply = (
                 "Демо: категория и запрошенная область подтверждены по разметке отеля."
