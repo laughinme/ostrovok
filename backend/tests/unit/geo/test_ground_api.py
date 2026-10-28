@@ -15,6 +15,7 @@ from app.domain.catalog import MapFeature
 from app.domain.geo.types import WalkProfile
 from app.infra.geo.climate import ClimateCatalog
 from app.service.geo.climate import hotel_climate
+from app.service.geo.day import build_day
 from app.service.geo.noise import hotel_noise
 from app.service.geo.routes import hotel_route
 from tests.unit.geo.ground_factory import ground_env, ground_hotel
@@ -29,6 +30,7 @@ async def api():
     svc.noise.return_value = await hotel_noise(hotel, env)
     svc.route.return_value = await hotel_route(hotel, env, "osm:way/42", WalkProfile.WALK)
     svc.climate.return_value = hotel_climate(hotel, env, date(2026, 11, 10), date(2026, 11, 15))
+    svc.day.return_value = await build_day(hotel, env, date(2026, 11, 12))
     app = FastAPI()
     register_exception_handlers(app, debug=False)
     app.include_router(router, prefix="/api/v1")
@@ -80,3 +82,16 @@ async def test_missing_route_is_a_problem_response(api) -> None:
     response = await client.get(f"{root}/routes/beach?profile=wheelchair")
     assert response.status_code == 404
     assert response.json()["detail"] == "Нет доступного маршрута"
+
+
+async def test_day_contract_and_required_date(api) -> None:
+    client, svc, root = api
+    response = await client.get(f"{root}/day?date=2026-11-12")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["date"] == "2026-11-12"
+    assert len(data["slots"]) == 6
+    assert data["sunset"]["fromWindow"] is False
+    assert data["slots"][0]["unavailableReason"]
+    assert svc.day.await_args.args[1] == date(2026, 11, 12)
+    assert (await client.get(f"{root}/day")).status_code == 422

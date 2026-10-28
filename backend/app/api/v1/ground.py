@@ -1,10 +1,11 @@
-from datetime import date
+import datetime as dt
 from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Path, Query
 
 from app.api.ground_deps import GroundQueriesDep
+from app.api.schemas.day import DayPlanOut
 from app.api.schemas.ground import ClimateOut, NoiseOut, RouteOut
 from app.domain.geo.types import WalkProfile
 
@@ -31,7 +32,12 @@ async def hotel_route(
 async def hotel_climate(
     hotel_id: UUID,
     svc: GroundQueriesDep,
-    start: Annotated[date, Query(alias="from")],
-    end: Annotated[date, Query(alias="to")],
+    start: Annotated[dt.date, Query(alias="from")],
+    end: Annotated[dt.date, Query(alias="to")],
 ) -> ClimateOut:
     return ClimateOut.from_climate(hotel_id, await svc.climate(hotel_id, start, end))
+
+
+@router.get("/hotels/{hotel_id}/day", summary="A day around the hotel, without an LLM")
+async def hotel_day(hotel_id: UUID, svc: GroundQueriesDep, date: dt.date) -> DayPlanOut:
+    return DayPlanOut.from_plan(await svc.day(hotel_id, date))
