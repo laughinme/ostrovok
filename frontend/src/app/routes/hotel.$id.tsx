@@ -1,6 +1,6 @@
 import { hotelQuery, hotelFromApi, type Hotel } from "@/entities/hotel";
 import { api, ApiError, type components } from "@/shared/api";
-import { HotelPage, HotelAlternatives } from "@/pages/hotel";
+import { HotelPage } from "@/pages/hotel";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
@@ -91,10 +91,5 @@ function PageRoute() {
   const hotel = useQuery(hotelQuery(id)).data ?? loaded.hotel;
   const search = useQuery(storedSearchQuery(sid)).data;
   const resolved = useMemo(() => withSearch(hotel, search), [hotel, search]);
-  return (
-    <>
-      <HotelPage key={hotel.id} hotel={resolved} query={q} />
-      <HotelAlternatives key={`similar-${hotel.id}`} hotel={resolved} intent={search?.intent} />
-    </>
-  );
+  return <HotelPage key={hotel.id} hotel={resolved} query={q} />;
 }
