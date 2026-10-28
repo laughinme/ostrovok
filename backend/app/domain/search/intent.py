@@ -376,6 +376,13 @@ def _hints(text: str, chips: Sequence[Chip], trip: TripDraft) -> tuple[str, ...]
         hints.insert(0, REGION_HINT)
     norm = normalize(text)
     subjective = [cue for cue in _SUBJECTIVE if cue in norm]
+    if norm == "море":
+        hints.append("Море из окна или пляж в пешей доступности? Уточните, что важнее.")
+    if re.search(r"\bбассейн", norm):
+        hints.append(
+            "Данных о бассейнах пока нет. Уточните наличие у отеля; "
+            "можем проверить вид, тишину и путь до пляжа."
+        )
     if subjective:
         hints.append(
             "«Уютно» и «красиво» проверить не можем, но можем найти тишину, вид и зелень рядом"
