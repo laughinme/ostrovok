@@ -46,6 +46,23 @@ export function useLandingMotion(root: RefObject<HTMLDivElement | null>) {
         },
       );
     });
-    return () => mm.revert();
+    let frame = 0;
+    const refresh = () => {
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        ScrollTrigger.refresh();
+      });
+    };
+    const observer = new ResizeObserver(refresh);
+    const page = root.current.closest(".landing-page");
+    page?.querySelectorAll(".band,.photo-collections,.intro").forEach((el) => {
+      observer.observe(el);
+    });
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      mm.revert();
+    };
   }, [root]);
 }
