@@ -46,6 +46,10 @@ export function HotelResultCard({
   const [showAllBeams, setShowAllBeams] = useState(false);
   const reducedMotion = useReducedMotion();
 
+  const hasWishes = r.hotel.searchMatch
+    ? r.hotel.searchMatch.perChip.length > 0
+    : criteria.length > 0;
+  const recommended = index === 0 && hasWishes;
   const nearby = r.hotel.walk.slice(0, 2);
   const hiddenBeams = criteria.length - MAX_BEAMS;
   const shownBeams = showAllBeams ? criteria : criteria.slice(0, MAX_BEAMS);
@@ -62,14 +66,14 @@ export function HotelResultCard({
       aria-label={r.hotel.name}
       className={cn(
         "hotel-result-card @container/hotel-card group relative",
-        index === 0 && "pt-3",
+        recommended && "pt-3",
       )}
     >
-      {index === 0 && <BestOfferRibbon />}
+      {recommended && <BestOfferRibbon />}
       <div
         className={cn(
           "grid overflow-hidden rounded-lg border bg-card transition-shadow @min-[580px]:grid-cols-[38%_minmax(0,1fr)]",
-          index === 0 &&
+          recommended &&
             "rounded-3xl border-x-[3px] border-b-[3px] border-primary bg-primary pt-3 ring-1 ring-primary",
           highlighted && "shadow-soft",
           highlighted && index !== 0 && "border-primary/40",
@@ -87,13 +91,17 @@ export function HotelResultCard({
                   ))}
                 </div>
               </div>
-              <span
-                className="text-[11px] text-muted-foreground"
-                title="Насколько отель совпадает с вашим запросом по выбранным критериям"
-              >
-                <strong className="text-sm font-bold tabular-nums text-primary">{r.score}%</strong>{" "}
-                совпадение
-              </span>
+              {hasWishes && (
+                <span
+                  className="text-[11px] text-muted-foreground"
+                  title="Насколько отель совпадает с вашим запросом по выбранным критериям"
+                >
+                  <strong className="text-sm font-bold tabular-nums text-primary">
+                    {r.score}%
+                  </strong>{" "}
+                  совпадение
+                </span>
+              )}
             </div>
             <Link
               to="/hotel/$id"
@@ -134,7 +142,7 @@ export function HotelResultCard({
             <div className="flex items-center justify-between gap-2">
               <span className="flex items-center gap-1.5 text-[11px] font-semibold text-primary">
                 <Sparkles className="h-3.5 w-3.5" />
-                Под ваш запрос
+                {hasWishes ? "Под ваш запрос" : "Что известно об отеле"}
               </span>
               {hiddenBeams > 0 && (
                 <button
