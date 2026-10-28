@@ -13,19 +13,19 @@ export const STATUS: Record<
   computed: {
     label: "Вычислено AI",
     icon: Calculator,
-    pill: "bg-tint text-coral",
+    pill: "bg-status-computed text-status-computed-foreground",
     bar: "bg-coral",
   },
   assumed: {
     label: "Предположение",
     icon: HelpCircle,
-    pill: "bg-muted text-muted-foreground",
+    pill: "bg-status-assumed text-status-assumed-foreground",
     bar: "bg-conf-mid",
   },
   conflict: {
     label: "Противоречие",
     icon: AlertTriangle,
-    pill: "bg-destructive/10 text-destructive",
+    pill: "bg-status-conflict text-status-conflict-foreground",
     bar: "bg-conf-conflict",
   },
 };
