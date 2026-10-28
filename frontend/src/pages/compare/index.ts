@@ -1,1 +1,1 @@
-export { default } from './ui/compare-page';
+export { ComparePage } from "./ui/compare-page";
