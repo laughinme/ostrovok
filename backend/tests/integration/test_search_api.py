@@ -2,10 +2,12 @@ from datetime import timedelta
 from pathlib import Path
 from uuid import UUID, uuid4
 
+import pytest
 from httpx import AsyncClient
+from sqlalchemy import insert
 
 from app.db.database import Database
-from app.db.models import AgentRunRow
+from app.db.models import AgentRunRow, Hotel
 from app.domain.catalog import hotel_id
 from app.domain.knowledge.observation import Observation
 from app.domain.knowledge.scope import Facade, Scope
@@ -75,6 +77,58 @@ async def test_intent_is_parsed_without_llm(
     assert by_key["sea_view"]["importance"] == "nice"
     assert intent["trip"]["adults"] == 2
     assert intent["trip"]["from"].endswith("-11-10")
+
+
+async def test_selected_hotels_survive_search_cap_and_rereads(
+    client: AsyncClient, db: Database, tmp_path: Path
+) -> None:
+    await _world(db, tmp_path)
+    async with db.unit_of_work() as uow:
+        source = await uow.catalog.hotel(MAYAK)
+        assert source is not None
+        values = {
+            column.name: getattr(source, column.name)
+            for column in Hotel.__table__.columns
+            if column.name not in {"id", "osm_id", "name"}
+        }
+        await uow.session.execute(
+            insert(Hotel),
+            [
+                {**values, "id": uuid4(), "osm_id": f"way/{100 + i}", "name": f"А отель {i:02}"}
+                for i in range(31)
+            ],
+        )
+    normal = (await client.post("/api/v1/searches", json={"chips": []})).json()
+    assert len(normal["matches"]) == 30
+    assert str(YARD) not in [m["hotelId"] for m in normal["matches"]]
+    scoped = (
+        await client.post("/api/v1/searches", json={"chips": [], "hotelIds": [str(YARD)]})
+    ).json()
+    assert [m["hotelId"] for m in scoped["matches"]] == [str(YARD)]
+    url = f"/api/v1/searches/{scoped['searchId']}"
+    assert [m["hotelId"] for m in (await client.get(url)).json()["matches"]] == [str(YARD)]
+    changed = await client.post(f"{url}/wishes", json={"text": "вид на море"})
+    assert changed.status_code == 202, changed.text
+    assert [m["hotelId"] for m in changed.json()["search"]["matches"]] == [str(YARD)]
+
+
+async def test_selected_search_does_not_fall_back_to_other_hotels(
+    client: AsyncClient, db: Database, tmp_path: Path
+) -> None:
+    await _world(db, tmp_path)
+    for payload in (
+        {"chips": [], "hotelIds": [str(uuid4())]},
+        {"chips": [], "hotelIds": [str(YARD)], "trip": {"area": "sirius"}},
+    ):
+        response = await client.post("/api/v1/searches", json=payload)
+        assert response.status_code == 201, response.text
+        assert response.json()["matches"] == []
+
+
+@pytest.mark.parametrize("ids", [[], ["bad"], [str(YARD)] * 21])
+async def test_selected_hotel_ids_are_validated(client: AsyncClient, ids: list[str]) -> None:
+    response = await client.post("/api/v1/searches", json={"chips": [], "hotelIds": ids})
+    assert response.status_code == 422
 
 
 async def test_quiet_courtyard_beats_sea_view_over_the_railway(
