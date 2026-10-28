@@ -11,6 +11,9 @@ _DESCRIPTIVE = frozenset({"conditions", "window_type", "notes"})
 
 @dataclass(frozen=True, slots=True)
 class AnswerMetrics:
+    requested: int
+    evaluated: int
+    rules_results: int
     accepted: int
     exact_records: int
     exact_fields: int
@@ -19,11 +22,19 @@ class AnswerMetrics:
     total_ambiguous: int
 
 
-async def evaluate_answers(parser: AnswerParser, path: Path) -> AnswerMetrics:
+async def evaluate_answers(
+    parser: AnswerParser, path: Path, *, require_llm: bool = False
+) -> AnswerMetrics:
     accepted = records = fields = total = clarifications = ambiguous = 0
     raw = await asyncio.to_thread(path.read_text, encoding="utf-8")
-    for case in yaml.safe_load(raw):
+    cases = yaml.safe_load(raw)
+    evaluated = fallbacks = 0
+    for case in cases:
         parsed = await parser.parse(AnswerInput(case["question_key"], case["answer_text"]))
+        fallbacks += parsed.parser != "llm"
+        if require_llm and parsed.parser != "llm":
+            continue
+        evaluated += 1
         if case["clarity"] == "low":
             ambiguous += 1
             clarifications += parsed.needs_clarification
@@ -39,4 +50,14 @@ async def evaluate_answers(parser: AnswerParser, path: Path) -> AnswerMetrics:
         records += correct == len(machine) and not parsed.needs_clarification
         fields += correct
         total += len(machine)
-    return AnswerMetrics(accepted, records, fields, total, clarifications, ambiguous)
+    return AnswerMetrics(
+        len(cases),
+        evaluated,
+        fallbacks,
+        accepted,
+        records,
+        fields,
+        total,
+        clarifications,
+        ambiguous,
+    )

@@ -65,3 +65,24 @@ async def test_curator_metrics_compare_semantics_and_count_missing_params(tmp_pa
     )
     assert report["methodAccuracy"] == 1
     assert report["parameterAccuracy"] == pytest.approx(3 / 4)
+
+
+async def test_llm_answer_metrics_exclude_rules_fallback() -> None:
+    result = await answer_metrics(
+        RulesAnswerParser(), DATA / "eval/hotelier_answers.yaml", require_llm=True
+    )
+    assert result["evaluated"] == 0
+    assert result["rules_results"] == result["requested"]
+    assert result["fieldAccuracy"] is None
+    assert result["clarificationAccuracy"] is None
+
+
+async def test_curator_metrics_exclude_unavailable_llm() -> None:
+    async def unavailable(text: str) -> None:
+        return None
+
+    result = await curator_metrics(DATA / "eval/curator.yaml", unavailable)
+    assert result["n"] == 0
+    assert result["rulesResults"] == result["requested"]
+    assert result["methodAccuracy"] is None
+    assert result["parameterAccuracy"] is None

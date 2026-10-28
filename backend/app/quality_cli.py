@@ -1,12 +1,14 @@
+import hashlib
 import json
 import os
 from pathlib import Path
 from typing import Any
 
+from dotenv import dotenv_values
 from pydantic import SecretStr
 
 from app.bootstrap import build_environment, build_language_model, default_executors
-from app.core.config import Settings
+from app.core.config import ENV_FILES, Settings
 from app.db.database import Database
 from app.service.agents.curator import Curator
 from app.service.ports import LanguageModel, SystemClock
@@ -22,9 +24,13 @@ def eval_settings(settings: Settings, overrides: dict[str, Any]) -> Settings:
     """Model, endpoint and key for one comparison run; the key comes from a named env variable."""
     update = {k: v for k, v in overrides.items() if v and k != "key_env"}
     if key_env := overrides.get("key_env"):
-        update["llm_api_key"] = SecretStr(os.environ.get(key_env, ""))
+        values = {k: v for path in ENV_FILES for k, v in dotenv_values(path).items()}
+        key = os.environ.get(key_env, values.get(key_env))
+        if not key:
+            raise ValueError(f"{key_env} не задана в окружении или .env")
+        update["llm_api_key"] = SecretStr(key)
     update["llm_daily_call_limit"] = EVAL_CALL_LIMIT
-    return settings.model_copy(update=update)
+    return Settings.model_validate({**settings.model_dump(), **update})
 
 
 def run_label(settings: Settings) -> str:
@@ -32,7 +38,9 @@ def run_label(settings: Settings) -> str:
     label = f"{settings.llm_model}.{settings.llm_thinking}"
     if (strong, settings.llm_thinking_strong) != (settings.llm_model, settings.llm_thinking):
         label += f"+{strong}.{settings.llm_thinking_strong}"
-    return label.replace("/", "_")
+    endpoint = settings.llm_base_url.rstrip("/") or "https://api.openai.com/v1"
+    provider = hashlib.sha256(endpoint.encode()).hexdigest()[:10]
+    return f"{label.replace(chr(47), chr(95))}.{provider}"
 
 
 async def evaluate_quality(
@@ -60,6 +68,8 @@ async def evaluate_quality(
             llm_report = await evaluate_llm(
                 db, settings.data_dir, clock, fast, strong, make_curator=make_curator
             )
+            llm_report["generatedAt"] = clock.now().isoformat()
+            llm_report["evaluationVersion"] = 2
             llm_report["model"] = settings.llm_model
             llm_report["strongModel"] = settings.llm_model_strong or settings.llm_model
             llm_report["thinking"] = settings.llm_thinking

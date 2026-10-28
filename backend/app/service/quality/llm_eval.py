@@ -139,6 +139,10 @@ class SilentTracer(Tracer):
 
     def __init__(self, db: Database, clock: Clock) -> None:
         super().__init__(db, RecordingEventBus(), clock, uuid4())
+        self.used_llm = False
+
+    async def llm(self, _task: str, _result: LlmResult[Any]) -> None:
+        self.used_llm = True
 
     async def _write(self, *_: Any, **__: Any) -> None:
         return None
@@ -179,8 +183,10 @@ async def evaluate_llm(
         async with db.unit_of_work() as uow:
             return await IntentParser(uow, data_dir, model).parse(text, today=EVAL_TODAY)
 
-    async def llm_plan(description: str) -> RecipeDraft:
-        return await curator.plan(description, SilentTracer(db, clock))
+    async def llm_plan(description: str) -> RecipeDraft | None:
+        tracer = SilentTracer(db, clock)
+        draft = await curator.plan(description, tracer)
+        return draft if tracer.used_llm else None
 
     sets: dict[str, Any] = {}
     for name, folder in (("main", data_dir / "eval"), ("holdout", data_dir / "eval/holdout")):
@@ -201,7 +207,7 @@ async def evaluate_llm(
                     RulesAnswerParser(), folder / "hotelier_answers.yaml"
                 ),
                 "llm": await answer_metrics(
-                    LlmAnswerParser(fast), folder / "hotelier_answers.yaml"
+                    LlmAnswerParser(fast), folder / "hotelier_answers.yaml", require_llm=True
                 ),
             },
             "curator": {
