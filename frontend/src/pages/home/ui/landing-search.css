@@ -106,3 +106,19 @@
     padding-inline: 18px;
   }
 }
+
+.landing-page .wish .wish-mic[aria-pressed="true"] {
+  background: var(--primary, #1b4de4);
+  color: #fff;
+}
+.landing-page .wish-status {
+  position: relative;
+  margin: 8px 0 12px;
+  max-width: calc(100% - var(--wish-cutout-width));
+  color: #0b1533;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.landing-page .wish-status[role="alert"] {
+  color: #a12f27;
+}
