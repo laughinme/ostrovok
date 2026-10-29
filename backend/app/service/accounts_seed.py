@@ -9,6 +9,7 @@ from app.db.uow import UnitOfWork
 from app.domain.catalog import hotel_id
 from app.domain.users import Role
 
+# Persona accounts never log in with a password; argon2 rejects this value as a hash.
 NO_PASSWORD = "!persona"  # noqa: S105
 
 

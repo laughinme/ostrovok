@@ -104,6 +104,7 @@ class ProfileGraph:
 
     @classmethod
     def build(cls, graph: WalkGraph, profile: WalkProfile) -> Self:
+        # A CSR matrix sums duplicate arcs, so pick the cheapest parallel arc first.
         best: dict[tuple[int, int], tuple[float, int]] = {}
         for index, (start, end) in enumerate(graph.edges):
             edge = graph.edge(index)

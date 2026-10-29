@@ -35,6 +35,8 @@ def warm_ground(app: FastAPI, db: Database, settings: Settings) -> None:
 
 
 def ground_queries(request: Request, db: DatabaseDep, settings: SettingsDep) -> GroundQueries:
+    # Sync on purpose: FastAPI runs it in the thread pool, so waiting for the warm-up
+    # doesn't block the event loop.
     return load_ground(request.app, db, settings)
 
 

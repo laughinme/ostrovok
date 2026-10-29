@@ -146,6 +146,8 @@ class SearchService:
         facts = await load_facts(self._uow, [h.id for h in hotels], keys)
         guests = (intent.trip.adults or 0) + (intent.trip.children or 0) or None
         filters = Filters(budget_per_night=intent.trip.budget_per_night, guests=guests)
+        # Scoring every hotel is CPU work, so it runs off the event loop to keep other
+        # requests moving.
         return await asyncio.to_thread(
             rank, intent.chips, hotels, facts, trip_window(intent), filters
         )

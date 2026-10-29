@@ -22,6 +22,7 @@ class RateLimiter:
                 pipe.expire(bucket, self._window)
                 count, _ = await pipe.execute()
         except RedisError:
+            # Fail open: a Redis outage shouldn't lock everyone out of login.
             logger.warning("rate limiter unavailable, request allowed", exc_info=True)
             return True
         return int(count) <= self._limit

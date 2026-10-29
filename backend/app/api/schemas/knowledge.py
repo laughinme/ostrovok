@@ -38,6 +38,7 @@ class ScopeOut(ApiModel):
     months: list[int] | None = None
     room_type_ids: list[str] | None = None
 
+    # The explicit return type keeps the fields in OpenAPI; a bare dict exported `object`.
     @model_serializer(mode="wrap", return_type=ScopeJson)
     def _omit_all(self, handler: SerializerFunctionWrapHandler) -> dict[str, Any]:
         return {k: v for k, v in handler(self).items() if v is not None}

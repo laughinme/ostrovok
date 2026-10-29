@@ -31,6 +31,7 @@ async def seed_demo_claims(db: Database, clock: Clock, truth: HiddenTruth) -> in
             )
             await KnowledgeStore(uow, clock).record([observation], reason="Демо-заявление отельера")
             written += 1
+    # Questions take a different lock, so keep their order independent of fact writes.
     async with db.unit_of_work() as uow:
         for hotel in await uow.catalog.hotels():
             if hotel.osm_id in claimed:

@@ -41,6 +41,7 @@ def month_day_weights(check_in: date, check_out: date) -> dict[int, int]:
         available = monthrange(current.year, current.month)[1] - current.day + 1
         days = min(available, (check_out - current).days)
         counts[current.month] = counts.get(current.month, 0) + days
+        # Don't step past date.max on a final December interval.
         if days == (check_out - current).days:
             break
         current = date(current.year + current.month // MONTHS_PER_YEAR, current.month % 12 + 1, 1)

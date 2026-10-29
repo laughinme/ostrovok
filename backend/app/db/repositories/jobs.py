@@ -35,6 +35,8 @@ class JobRepository:
     async def claim(
         self, *, limit: int, now: datetime, lease: timedelta, worker: str
     ) -> Sequence[Job]:
+        # SKIP LOCKED lets several workers share the queue without grabbing the same job.
+        # A running job whose lease ran out belongs to a dead worker, so it gets taken over.
         stmt = (
             select(Job)
             .where(
