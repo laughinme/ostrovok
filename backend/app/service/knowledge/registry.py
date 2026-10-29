@@ -43,6 +43,7 @@ def validate_recipe(raw: Mapping[str, Any]) -> Recipe:
 def parse_characteristic(raw: Mapping[str, Any]) -> Characteristic:
     recipe = validate_recipe(raw["recipe"])
     statement = raw.get("statement", "")
+    # YAML 1.1 parses the keys `yes:` and `no:` as booleans, hence both spellings.
     template = (
         StatementTemplate(
             yes=statement.get("yes", statement.get(True)),

@@ -58,6 +58,8 @@ def openai_compatible(base_url: str, api_key: str, model: str) -> Model:
     provider = OpenAIProvider(openai_client=client)
     if host == OPENAI_API:
         return OpenAIResponsesModel(model, provider=provider)
+    # Polza keeps the vendor prefix in model IDs, but the SDK's OpenAI profile lookup wants
+    # the bare name. Otherwise `thinking` is silently ignored.
     profile = (
         openai_model_profile(model.removeprefix("openai/"))
         if host == "polza.ai" and model.startswith("openai/")

@@ -27,6 +27,7 @@ def set_auth_cookies(response: Response, tokens: IssuedTokens, settings: Setting
         path=REFRESH_COOKIE_PATH,
         **_common(settings),
     )
+    # Readable by JS on purpose: the SPA echoes it back in X-CSRF-Token (double-submit cookie).
     response.set_cookie(
         CSRF_COOKIE,
         tokens.csrf_token,

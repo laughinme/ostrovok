@@ -16,6 +16,8 @@ class SessionRepository:
         self._session.add(auth_session)
 
     async def get_for_update(self, session_id: UUID) -> AuthSession | None:
+        # The row lock serializes parallel refreshes with one token: the second one sees
+        # the rotated hash and counts as reuse.
         stmt = (
             select(AuthSession)
             .where(AuthSession.id == session_id)

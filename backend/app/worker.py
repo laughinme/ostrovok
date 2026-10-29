@@ -32,6 +32,7 @@ from app.service.ports import Clock, SystemClock
 logger = logging.getLogger("app.worker")
 
 _KEEP_DEAD_SESSIONS = timedelta(days=7)
+# The Compose healthcheck looks at this file's age; a stuck event loop stops touching it.
 HEARTBEAT = Path(tempfile.gettempdir()) / "okno-worker-alive"
 
 

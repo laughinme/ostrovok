@@ -19,4 +19,5 @@ class User(UuidPkMixin, TimestampMixin, Base):
     )
     persona: Mapped[str | None] = mapped_column(String(64), unique=True)
     banned_at: Mapped[datetime | None]
+    # Bumped on ban and "log out everywhere"; access tokens carry it and stop working on mismatch.
     auth_version: Mapped[int] = mapped_column(default=1, server_default="1")

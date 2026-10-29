@@ -84,6 +84,7 @@ def contribution(
     distance = float(receiver.distance(source.geometry))
     bearing = degrees(atan2(x - receiver.x, y - receiver.y)) % 360
     loss = orientation_loss(facade_azimuth, bearing) if distance > 0 else 0.0
+    # A ray that only touches a building isn't screened by it.
     screened = any(
         ray.intersection(building).length > 0 and not ray.touches(building)
         for building in buildings

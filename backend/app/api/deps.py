@@ -56,6 +56,8 @@ async def _unit_of_work(db: DatabaseDep) -> AsyncIterator[UnitOfWork]:
         yield uow
 
 
+# scope="function" makes the commit run before the response goes out, so a failed
+# commit turns into a 500 instead of a 200 for data that was never saved.
 UowDep = Annotated[UnitOfWork, Depends(_unit_of_work, scope="function")]
 
 _bearer = HTTPBearer(auto_error=False, description="Access token from /auth/login or /auth/refresh")

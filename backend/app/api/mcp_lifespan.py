@@ -20,6 +20,7 @@ async def mcp_lifespan(server: MCPServer[None]) -> AsyncIterator[None]:
                 ready.set_exception(exc)
             raise
 
+    # AnyIO cancel scopes have to enter and exit in the same task, test hosts included.
     task = asyncio.create_task(serve(), name="mcp-session-manager")
     try:
         await ready

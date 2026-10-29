@@ -32,6 +32,8 @@ class UuidPkMixin:
 
 
 class TimestampMixin:
+    # Python-side defaults, so the values are known right after a flush. Without them a
+    # read triggers a lazy refresh, which fails with MissingGreenlet in async code.
     created_at: Mapped[datetime] = mapped_column(default=utcnow, server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         default=utcnow, onupdate=utcnow, server_default=func.now()

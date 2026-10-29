@@ -67,6 +67,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             allow_methods=["*"],
             allow_headers=["*"],
         )
+    # Added last means outermost, so every response (CORS preflights and errors
+    # included) gets a request id.
     app.add_middleware(RequestContextMiddleware)
     register_exception_handlers(app, debug=settings.debug)
     app.include_router(health_router)

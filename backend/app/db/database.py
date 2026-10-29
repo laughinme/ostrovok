@@ -13,6 +13,8 @@ from app.core.config import Settings
 from app.core.errors import DomainError
 from app.db.uow import UnitOfWork
 
+# A process killed mid-transaction (deploy, OOM) must not keep its locks. Keepalives let
+# Postgres notice the dead client within a minute.
 SESSION_SETTINGS = {
     "tcp_keepalives_idle": "30",
     "tcp_keepalives_interval": "10",

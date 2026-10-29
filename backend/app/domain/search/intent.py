@@ -188,6 +188,8 @@ def covers(present: frozenset[str], phrase: frozenset[str]) -> bool:
 
 
 def _same(word: str, stem: str) -> bool:
+    # Snowball keeps some suffixes and fleeting vowels, so a long stem can differ from
+    # the word in its last two letters.
     if word == stem:
         return True
     common = next(
@@ -201,6 +203,7 @@ def _same(word: str, stem: str) -> bool:
 
 @lru_cache(maxsize=8192)
 def _stem(word: str) -> str:
+    # New stemmer per word: the Snowball object keeps state between calls.
     stem: str = snowballstemmer.stemmer("russian").stemWord(word)
     return stem
 
