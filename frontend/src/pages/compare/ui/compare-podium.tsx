@@ -38,7 +38,7 @@ export function ComparePodium({ entries }: { entries: { h: Hotel; s: number }[] 
                 to="/hotel/$id"
                 params={{ id: h.id }}
                 aria-label={`${index + 1} место: ${h.name}, совпадение ${s}%`}
-                className="compare-podium-hotel group/podium block rounded-xl outline-offset-4 focus-visible:outline-2 focus-visible:outline-primary"
+                className="compare-podium-hotel block rounded-xl outline-offset-4 focus-visible:outline-2 focus-visible:outline-primary"
               >
                 <p
                   className={cn(
@@ -61,7 +61,7 @@ export function ComparePodium({ entries }: { entries: { h: Hotel; s: number }[] 
                       alt={photoInfo(h.image)?.alt ?? h.name}
                       width={1024}
                       height={768}
-                      className="size-full object-cover transition-transform duration-500 group-hover/podium:scale-105 motion-reduce:transition-none"
+                      className="size-full object-cover"
                     />
                   </div>
                   {photoInfo(h.image) && (
