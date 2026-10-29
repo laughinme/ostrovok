@@ -6,7 +6,6 @@ from app.domain.geo.hours import parse_hours
 
 
 def at(day: int, hour: int, minute: int = 0) -> datetime:
-    # 26 October 2026 is Monday; input helper uses UTC, checks explicitly request UTC.
     return datetime(2026, 10, day, hour, minute, tzinfo=UTC)
 
 
@@ -52,7 +51,7 @@ def test_unsupported_hours_stay_unknown(value: str | None) -> None:
 
 def test_timezone_and_split_intervals() -> None:
     hours = parse_hours("Mo 09:00-12:00,13:00-18:00")
-    assert hours.is_open(at(26, 6)) is True  # 09:00 in Sochi.
+    assert hours.is_open(at(26, 6)) is True
     assert hours.is_open(at(26, 9, 30)) is False
     assert parse_hours("Mo-Su 00:00-24:00").always_open is True
     with pytest.raises(ValueError, match="timezone-aware"):

@@ -19,7 +19,7 @@ def test_garbage_cursor_is_rejected(raw: str) -> None:
 
 
 def test_cursor_without_timezone_is_rejected() -> None:
-    naive = Cursor(created_at=datetime(2026, 1, 1), id=uuid4())  # noqa: DTZ001 - on purpose
+    naive = Cursor(created_at=datetime(2026, 1, 1), id=uuid4())  # noqa: DTZ001
 
     with pytest.raises(InvalidCursorError):
         Cursor.decode(naive.encode())

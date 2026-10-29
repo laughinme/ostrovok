@@ -1,4 +1,3 @@
-"""Network/cache adapters and OSM geometry for the standalone horizon experiment."""
 
 from __future__ import annotations
 
@@ -126,7 +125,6 @@ def sea_polygon(projection: Transformer) -> Any:
         for e in data["elements"]
     ]
     faces = list(polygonize(union_all([bounds.boundary, *lines], grid_size=0.01)))
-    # OSM coastlines run with land on the left and water on the right.
     water_probes: list[Any] = []
     for element in data["elements"]:
         coords = np.array(project_geometry(projection, way_line(element["geometry"])).coords)
@@ -213,7 +211,6 @@ def load_railways(lat: float, lon: float, key: str, projection: Transformer) -> 
 
 
 class Dem:
-    """Load full COG tiles once; sample arrays without one GDAL call per point."""
 
     def __init__(self) -> None:
         self.tiles: dict[tuple[int, int], tuple[Any, np.ndarray]] = {}
@@ -241,7 +238,6 @@ class Dem:
         return heights
 
     def ground(self, polygons: list[Any], inverse: Transformer) -> np.ndarray:
-        """Low perimeter quantile is a DSM ground proxy, never a true bare-earth DTM."""
         samples = []
         for polygon in polygons:
             ring = polygon.buffer(35).boundary

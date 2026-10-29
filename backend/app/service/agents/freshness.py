@@ -1,8 +1,3 @@
-"""
-Scheduled re-checks (09 §3.3, §5.6): facts close to their shelf life are recomputed, the most
-wanted first; what only a hotel can tell is reconciled so it shows as stale until answered.
-"""
-
 from datetime import timedelta
 
 from sqlalchemy import func, select
@@ -15,7 +10,6 @@ from app.service.knowledge.recorder import KnowledgeStore
 from app.service.knowledge.registry import Registry
 from app.service.ports import Clock
 
-# Facts expiring within this window are rechecked now, before they turn stale.
 AHEAD = timedelta(days=14)
 BATCH = 30
 

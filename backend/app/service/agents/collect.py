@@ -1,5 +1,3 @@
-"""Batch contour (09 §3.1): the Researcher over every hotel, one traced run per hotel."""
-
 import asyncio
 import logging
 from collections.abc import Sequence

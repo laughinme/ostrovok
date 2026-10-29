@@ -31,7 +31,6 @@ class VisiblePeak:
 
 
 def visible_peaks(scene: Scene, eye_m: float, peaks: Sequence[Peak]) -> tuple[VisiblePeak, ...]:
-    """Named OSM peaks with ele, visible above prior obstructions in the closest 1° ray."""
     land_angles = elevation_angle(scene.terrain_m, scene.distances_m, eye_m)
     land_angles = np.where(scene.sea, -np.inf, land_angles)
     rows, roof_distances, roof_angles = roof_events(
@@ -73,7 +72,6 @@ def mountain_visibility(
     *,
     terrain_bias_m: FloatArray | None = None,
 ) -> BoolArray:
-    """(runs,rays) mountain silhouette: terrain wins and its absolute elevation is ≥500 m."""
     bias = np.zeros(len(eyes_m)) if terrain_bias_m is None else terrain_bias_m
     heights = scene.terrain_m[None] + bias[:, None, None]
     angles = elevation_angle(heights, scene.distances_m, eyes_m[:, None, None])

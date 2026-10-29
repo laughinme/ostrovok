@@ -1,5 +1,3 @@
-"""Reproducible real-data routing smoke check; diagnostic output stays outside runtime data."""
-
 from collections import Counter
 from dataclasses import asdict
 from typing import Any
@@ -15,7 +13,6 @@ DIAGNOSTICS = ROOT / ".cache" / "osm"
 
 
 def verify_routes(graph: WalkGraph) -> dict[str, Any]:
-    """Require one walk to an OSM beach from each of center/Khosta/Adler, in both directions."""
     router = ScipyRouter(graph)
     hotels = read_csv("hotels.csv.gz")
     beaches = [r for r in read_csv("osm_features.csv.gz") if r["kind"] == "beach"]

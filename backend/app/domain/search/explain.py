@@ -1,6 +1,3 @@
-"""The check that keeps the LLM honest (09 §2): a rephrased explanation may use only the
-numbers of the facts it was given; anything else falls back to the template."""
-
 import re
 from collections.abc import Iterable
 from decimal import Decimal

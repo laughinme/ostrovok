@@ -11,7 +11,6 @@ from app.api.deps import DatabaseDep, RedisDep
 logger = logging.getLogger(__name__)
 
 router = APIRouter(tags=["System"])
-# `/health` also lives at the root: the organizers' checker and Compose healthchecks call it.
 health_router = APIRouter(tags=["System"])
 
 _CHECK_TIMEOUT_SEC = 2.0
@@ -27,7 +26,7 @@ async def health() -> dict[str, str]:
 async def _check(name: str, probe: Awaitable[Any]) -> tuple[str, bool]:
     try:
         await asyncio.wait_for(probe, timeout=_CHECK_TIMEOUT_SEC)
-    except Exception:  # a readiness probe reports any failure instead of raising it
+    except Exception:
         logger.warning("readiness check %s failed", name, exc_info=True)
         return name, False
     return name, True

@@ -18,7 +18,6 @@ def _diff(connection: Connection) -> list[object]:
 
 
 async def test_models_match_migrations() -> None:
-    """Fails when a model changed but nobody wrote the migration for it."""
     engine = create_async_engine(TEST_DATABASE_URL)
     try:
         async with engine.connect() as connection:

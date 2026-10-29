@@ -17,8 +17,6 @@ _FIELDS = {
 
 
 class ClimateExecutor:
-    """`climate`: monthly norms of the nearest sample point (Open-Meteo, 10 years)."""
-
     method: ClassVar[MethodKind] = MethodKind.CLIMATE
 
     async def collect(self, call: MethodCall, env: Environment) -> list[Finding]:

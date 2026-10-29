@@ -1,5 +1,3 @@
-"""Calendar aggregation, units and missing SST must stay honest."""
-
 import json
 from datetime import date, timedelta
 from pathlib import Path
@@ -42,12 +40,11 @@ def test_climate_calendar_and_units() -> None:
 def test_water_uses_complete_months_with_equal_year_weight() -> None:
     times = _times(2023, 2025, hourly=True)
     values = [10.0 if t[:4] == "2023" else 20.0 for t in times]
-    # The incomplete January 2023 must not contribute a biased partial-month mean.
     values[0] = None
     normals, years = water_normals({"time": times, "sea_surface_temperature": values})
     assert normals["1"] == 20
     assert years["1"] == 2
-    assert normals["2"] == 16.67  # Leap year has equal weight, not extra hourly weight.
+    assert normals["2"] == 16.67
     assert years["2"] == 3
     with pytest.raises(ValueError, match="every requested"):
         water_normals({"time": times[1:], "sea_surface_temperature": values[1:]})

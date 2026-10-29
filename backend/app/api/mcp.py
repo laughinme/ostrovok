@@ -18,7 +18,6 @@ CONNECTOR_ORIGINS = ["https://claude.ai", "https://chatgpt.com"]
 
 
 def transport_security(settings: Settings) -> TransportSecuritySettings:
-    """Local hosts always; a deployment adds its public hosts (MCP_PUBLIC_HOSTS)."""
     public = settings.mcp_hosts
     return TransportSecuritySettings(
         enable_dns_rebinding_protection=True,

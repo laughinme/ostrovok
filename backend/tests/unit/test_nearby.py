@@ -1,12 +1,9 @@
-"""What is around a hotel: the nearest place of each everyday kind, named places first."""
-
 from shapely import Point
 
 from app.domain.catalog import MapFeature, nearby_places
 from app.domain.geo.types import LonLat
 
 HOTEL = LonLat(39.72, 43.58)
-# 0.00124° of longitude is about 100 m at this latitude
 EAST_100M = 0.00124
 
 

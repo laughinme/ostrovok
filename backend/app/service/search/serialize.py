@@ -1,5 +1,3 @@
-"""Intent ↔ JSON for storing searches (camelCase, the contract's `Intent` shape)."""
-
 from datetime import date
 from typing import Any
 

@@ -9,11 +9,6 @@ from app.db.repositories.users import UserRepository
 
 
 class UnitOfWork:
-    """
-    One session = one transaction, plus the repositories bound to it.
-    Services only `flush()`; the owner of the UoW (request dependency, worker, CLI) commits.
-    """
-
     def __init__(self, session: AsyncSession) -> None:
         self.session = session
         self.users = UserRepository(session)

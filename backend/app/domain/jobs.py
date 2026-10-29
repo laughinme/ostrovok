@@ -13,8 +13,6 @@ class JobStatus(StrEnum):
 
 
 class JobKind(StrEnum):
-    """Every background job type; the worker maps each one to exactly one handler (09 §4.5)."""
-
     RESEARCH_COLLECT = "research.collect"
     RESEARCH_WISH = "research.wish"
     CURATOR_LEARN = "curator.learn"
@@ -28,14 +26,12 @@ class JobKind(StrEnum):
     FRESHNESS_SCAN = "freshness.scan"
 
 
-# A dedupe key is unique among unfinished jobs: ten identical searches start one computation.
 ACTIVE_STATUSES = (JobStatus.PENDING, JobStatus.RUNNING)
 
 _MAX_RETRY_DELAY = timedelta(minutes=10)
 
 
 def retry_delay(attempt: int) -> timedelta:
-    """Exponential backoff: 2 s, 4 s, 8 s ... capped at ten minutes."""
     return min(timedelta(seconds=2**attempt), _MAX_RETRY_DELAY)
 
 
@@ -50,8 +46,6 @@ class NewJob:
 
 @dataclass(frozen=True, slots=True)
 class ClaimedJob:
-    """A job leased to one worker. The lease is extended while the handler runs."""
-
     id: UUID
     kind: JobKind
     payload: dict[str, Any]

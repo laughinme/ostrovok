@@ -1,5 +1,3 @@
-"""Read-only window panorama, using the same cached scenes as the view executor."""
-
 import asyncio
 from collections import OrderedDict
 from dataclasses import dataclass
@@ -123,7 +121,6 @@ class WindowQueries:
         return self._cache[key]
 
     def invalidate(self) -> None:
-        """Call after changes to nearby buildings; persisted profiles describe the seeded region."""
         self._cache.clear()
         self._profiles = None
         scene_cache(self._env).clear()

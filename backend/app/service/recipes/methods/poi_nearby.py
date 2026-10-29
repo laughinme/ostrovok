@@ -10,7 +10,6 @@ from app.service.recipes.executor import Environment, Finding, MethodCall
 from app.service.recipes.methods.reach import DETOUR, WALK_M_PER_MIN, within_minutes
 from app.service.recipes.models import PoiNearbyRecipe
 
-# OSM is fairly complete for shops and cafes in Sochi, but an empty search is weak evidence.
 FOUND_CONFIDENCE = 0.85
 ABSENT_CONFIDENCE = 0.65
 _WINDOWS = {"night": (23 * 60, 24 * 60), "morning": (7 * 60, 10 * 60)}
@@ -27,8 +26,6 @@ def _open_as_needed(feature: MapFeature, open_: str) -> bool | None:
 
 
 class PoiNearbyExecutor:
-    """`poi_nearby`: `osm.find → route.reachable → hours.check → threshold` (09 §5.2)."""
-
     method: ClassVar[MethodKind] = MethodKind.POI_NEARBY
 
     async def collect(self, call: MethodCall, env: Environment) -> list[Finding]:

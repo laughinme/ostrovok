@@ -31,7 +31,6 @@ def key_counts(expected: set[str], predicted: set[str]) -> KeyCounts:
 
 
 def ndcg_at_k(ranked: Sequence[str], relevance: Mapping[str, int], k: int = 10) -> float | None:
-    """Graded gain 2**grade-1. Unjudged results gain zero; no positive labels means no score."""
     if k < 1 or len(set(ranked)) != len(ranked):
         raise ValueError("k must be positive and ranked ids must be unique")
     if any(grade < 0 for grade in relevance.values()):
@@ -45,7 +44,6 @@ def ndcg_at_k(ranked: Sequence[str], relevance: Mapping[str, int], k: int = 10) 
 
 
 def calibration(samples: Sequence[tuple[float, bool]], bins: int = 10) -> dict[str, object]:
-    """Probability of a positive label versus observed positive frequency, in equal-width bins."""
     if bins < 1 or any(not isfinite(p) or not 0 <= p <= 1 for p, _ in samples):
         raise ValueError("bins must be positive and probabilities finite within [0,1]")
     groups: list[list[tuple[float, bool]]] = [[] for _ in range(bins)]

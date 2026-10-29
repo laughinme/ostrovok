@@ -1,9 +1,3 @@
-"""
-Long-lived objects for the API, the worker and the CLI, built once from settings.
-Data files are optional: an adapter whose file is missing is simply not wired, and the
-executors fall back (and say so in the trace).
-"""
-
 import gzip
 import logging
 from dataclasses import dataclass
@@ -142,10 +136,6 @@ def build_language_model(
     strong: bool = False,
     cache_only: bool = False,
 ) -> LanguageModel | None:
-    """
-    None when there is no key or LLM_MODE=off: every LLM port then runs on rules. `strong` is the
-    Curator's model (LLM_MODEL_STRONG, else LLM_MODEL) with its own reasoning effort.
-    """
     if not settings.llm_enabled:
         logger.info("LLM is off (no key or LLM_MODE=off): rule-based planners only")
         return None

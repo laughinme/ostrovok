@@ -10,7 +10,6 @@ from app.core.logging import request_id_var
 
 logger = logging.getLogger("app.access")
 
-# Incoming ids end up in logs and response headers: accept only short, boring values.
 _SAFE_REQUEST_ID = re.compile(r"^[A-Za-z0-9._-]{1,128}$")
 
 
@@ -20,8 +19,6 @@ def _request_id(headers: Headers) -> str:
 
 
 class RequestContextMiddleware:
-    """Pure ASGI (no BaseHTTPMiddleware): request id, timing headers and one access log line."""
-
     def __init__(self, app: ASGIApp) -> None:
         self.app = app
 

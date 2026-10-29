@@ -34,7 +34,6 @@ def pets(text: str) -> dict[str, Any]:
 
 
 def _positive_clause(text: str) -> str:
-    # A negative clause about Standard must not exclude blackout in Deluxe.
     return (
         re.split(r"а вот|в остальных|\. в номерах|\. в .{0,20}отдельных", text)[-1]
         if "а вот" in text

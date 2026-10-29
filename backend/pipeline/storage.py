@@ -1,5 +1,3 @@
-"""Atomic raw downloads and deterministic, loader-friendly exports."""
-
 import csv
 import gzip
 import hashlib
@@ -22,7 +20,6 @@ MIRROR = {"endpoint": OVERPASS}
 
 
 def download(url: str, *, query: str | None = None) -> Path:
-    """Cache by request identity; failed/partial responses never enter the cache."""
     CACHE.mkdir(parents=True, exist_ok=True)
     key = hashlib.sha256((url + (query or "")).encode()).hexdigest()
     path = CACHE / key

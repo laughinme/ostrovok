@@ -5,11 +5,6 @@ from app.core.errors import ErrorCode, ForbiddenError, NotFoundError, Unauthoriz
 
 
 class ClientKind(StrEnum):
-    """
-    `web` keeps the refresh token in an httpOnly cookie guarded by CSRF;
-    `mobile` receives it in the response body.
-    """
-
     WEB = "web"
     MOBILE = "mobile"
 
@@ -33,8 +28,6 @@ class SessionRevokedError(UnauthorizedError):
 
 
 class RefreshTokenReusedError(SessionRevokedError):
-    """An already rotated refresh token came back: it was probably stolen, so the session dies."""
-
     error_code = ErrorCode.REFRESH_TOKEN_REUSED
     keep_changes = True
 

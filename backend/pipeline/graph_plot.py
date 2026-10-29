@@ -1,5 +1,3 @@
-"""Draw the three routing smoke checks without map tiles or network access."""
-
 import json
 from typing import Any
 

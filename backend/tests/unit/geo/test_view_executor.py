@@ -13,7 +13,6 @@ from tests.unit.geo.view_factory import view_environment
 
 def method_call(hotel, recipe):
     tracer = SimpleNamespace(tool=AsyncMock())
-    # Real timed context, with only persistence replaced.
 
     tracer.timed = lambda name, args=None: Tracer.timed(tracer, name, args)
     return MethodCall(hotel, SimpleNamespace(version=1), recipe, tracer)

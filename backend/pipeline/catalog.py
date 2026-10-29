@@ -1,5 +1,3 @@
-"""Deterministic hotel sampling with explicit OSM building associations."""
-
 from typing import Any
 
 from shapely import STRtree
@@ -33,7 +31,6 @@ def fetch_candidates(district: str, bounds: tuple[float, ...]) -> list[dict[str,
         'way["building"]' + bbox + ';rel["building"]' + bbox + ";)"
     )
     if district == "krasnaya_polyana":
-        # Wide mountain area: named hotel ways already carry building footprints.
         body = 'nw["tourism"~"^(hotel|guest_house|apartment)$"]["name"]' + bbox
     return (
         overpass(body, seconds=30)["elements"]
@@ -76,7 +73,7 @@ def select_hotels() -> list[dict[str, Any]]:
             point = shape.representative_point()
             indices = tree.query(metric(point), predicate="intersects")
             if not len(indices):
-                continue  # No guessing by nearest building across the street.
+                continue
             building, footprint, _ = min((buildings[i] for i in indices), key=lambda b: b[2].area)
             building_id = identifier(building)
             if building_id in used:

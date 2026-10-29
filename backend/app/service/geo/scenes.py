@@ -1,5 +1,3 @@
-"""Bounded process cache of prepared windows, shared by evidence and method executors."""
-
 import asyncio
 from collections import OrderedDict
 from collections.abc import Sequence

@@ -13,7 +13,7 @@ class InvalidScopeError(DomainError):
 
 
 class Facade(StrEnum):
-    """Compass direction of a wall's outward normal, 8 points (09 §5.3)."""
+    """Compass direction of a wall's outward normal, 8 points."""
 
     N = "N"
     NE = "NE"
@@ -41,8 +41,6 @@ MONTHS = tuple(range(1, 13))
 
 @dataclass(frozen=True, slots=True)
 class Cell:
-    """One point of a hotel's grid: a window side, a floor, a month."""
-
     facade: Facade
     floor: int
     month: int
@@ -50,8 +48,6 @@ class Cell:
 
 @dataclass(frozen=True, slots=True)
 class Grid:
-    """Every cell a hotel can be asked about: its real facades × floors 1..N × 12 months."""
-
     facades: tuple[Facade, ...]
     floors: int
 
@@ -62,11 +58,6 @@ class Grid:
 
 @dataclass(frozen=True, slots=True)
 class Scope:
-    """
-    Where a statement holds. `None` in a field means "all". Room types are not part of the grid:
-    they are mapped to facades and floors by the hotel's facade markup (`facade_rooms`).
-    """
-
     facades: frozenset[Facade] | None = None
     floor_from: int | None = None
     floor_to: int | None = None
@@ -95,7 +86,6 @@ class Scope:
 
     @property
     def key(self) -> str:
-        """Canonical key, unique per scope: `f=SW,W|fl=4-*|m=*|rt=*`."""
         facades = ",".join(f.value for f in _ORDER if self.facades and f in self.facades)
         months = ",".join(str(m) for m in sorted(self.months or ()))
         rooms = ",".join(sorted(self.room_types or ()))
@@ -131,11 +121,6 @@ def encloses(outer: Scope, inner: Scope) -> bool:
 
 
 def compress[V](values: Mapping[Cell, V], grid: Grid) -> list[tuple[Scope, V]]:
-    """
-    Fold per-cell answers back into a few scopes. Greedy and exact: every returned scope covers
-    only cells with the same value. Order of attempts: whole grid, then per month block, then
-    per facade with a floor range — the shapes our statements can say in words.
-    """
     if not values:
         return []
     by_value: dict[V, list[Cell]] = {}
@@ -181,7 +166,6 @@ def _covering_scope(cells: Iterable[Cell], grid: Grid) -> Scope:
 
 
 def _month_blocks[V](values: Mapping[Cell, V]) -> list[tuple[frozenset[int], list[Cell]]]:
-    """Group months whose (facade, floor) → value pattern is identical."""
     patterns: dict[tuple[tuple[Facade, int, V], ...], set[int]] = {}
     for month in MONTHS:
         pattern = tuple(
@@ -214,7 +198,6 @@ def _floor_runs[V](
 
 
 def _merge_facades[V](items: list[tuple[Scope, V]]) -> list[tuple[Scope, V]]:
-    """Facades with the same floors, months and value become one scope (`ЮЗ и З, этаж ≥ 4`)."""
     merged: dict[tuple[int | None, int | None, frozenset[int] | None, V], set[Facade]] = {}
     for scope, value in items:
         key = (scope.floor_from, scope.floor_to, scope.months, value)
@@ -234,7 +217,6 @@ def _merge_facades[V](items: list[tuple[Scope, V]]) -> list[tuple[Scope, V]]:
 
 
 def scope_to_json(scope: Scope) -> dict[str, object]:
-    """Contract shape (08 §9 `Scope`): omitted fields mean "all"."""
     data: dict[str, object] = {}
     if scope.facades:
         data["facades"] = [f.value for f in _ORDER if f in scope.facades]

@@ -1,8 +1,3 @@
-"""
-The Researcher (09 §4.2): for a hotel, take each characteristic's recipe, run its method,
-fall back when data is missing, and record observations. No LLM: the plan is the recipe.
-"""
-
 from collections.abc import Mapping, Sequence
 from datetime import timedelta
 from uuid import UUID
@@ -24,10 +19,8 @@ from app.service.recipes.executor import (
 )
 
 HOTEL_CHANNEL = "hotel:{}"
-# A computation is a model of the world, not a measurement: it never claims certainty.
 MODEL_CONFIDENCE_CAP = 0.95
 FACTS_CHANNEL = "facts"
-# Facts that read other facts go last, after what they depend on is known.
 _LAST = (MethodKind.DERIVED,)
 
 
@@ -85,7 +78,6 @@ class Researcher:
     async def study(
         self, hotel: HotelGeo, characteristics: Sequence[Characteristic], tracer: Tracer
     ) -> int:
-        """Research one hotel; returns how many facts changed."""
         await tracer.reason(
             f"Изучаю «{hotel.name}» ({hotel.floors} эт., стороны: "
             f"{', '.join(f.value for f in hotel.facades)}): {len(characteristics)} характеристик"
@@ -98,7 +90,7 @@ class Researcher:
 
     async def _one(self, hotel: HotelGeo, characteristic: Characteristic, tracer: Tracer) -> int:
         if characteristic.method is MethodKind.ASK_HOTELIER:
-            return 0  # the Liaison asks hotels; the Researcher only computes
+            return 0
         executor = self._executors.get(characteristic.method)
         if executor is None:
             await tracer.decide(

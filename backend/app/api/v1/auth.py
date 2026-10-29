@@ -160,7 +160,6 @@ async def logout(
 ) -> None:
     raw_token = refresh_cookie or (bearer.credentials if bearer else None)
     if raw_token:
-        # Not a refresh token (e.g. a web client's access token): nothing to revoke.
         with suppress(InvalidTokenError):
             await svc.logout(raw_token)
     clear_auth_cookies(response, settings)

@@ -1,5 +1,3 @@
-"""A hotel's surroundings in local metres: the frame every facade calculation works in."""
-
 from collections.abc import Sequence
 from dataclasses import dataclass
 from math import cos, radians, sin
@@ -28,7 +26,6 @@ class LocalFrame:
         self.footprint = transform(hotel.footprint, self.projection.forward)
         local, _ = footprint_in_metres(hotel.footprint)
         self._walls = extract_facades(local if local.is_valid else local.buffer(0))
-        # Walls come in the footprint's own centroid frame; shift them into the hotel frame.
         centroid = hotel.footprint.centroid
         self._offset = self.projection.forward(np.array([centroid.x, centroid.y]))
 
@@ -39,7 +36,6 @@ class LocalFrame:
         return [self.to_local(g) for g in geometries]
 
     def receivers(self, *, outward_m: float = 1.0) -> list[FacadeReceiver]:
-        """One receiver per compass side: the middle of its longest wall, just outside it."""
         best: dict[Facade, Wall] = {}
         for wall in self._walls:
             if wall.facade not in best or wall.length_m > best[wall.facade].length_m:

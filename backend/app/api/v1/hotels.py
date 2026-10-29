@@ -19,11 +19,6 @@ _HOTELS = TypeAdapter(list[HotelOut])
 
 
 class HotelListCache:
-    """
-    The list is a few MB of JSON: building it on every request blocked the event loop for seconds
-    on a small machine. It is built once per change of the facts, off the loop, and served as bytes.
-    """
-
     def __init__(self) -> None:
         self._version: tuple[object, ...] | None = None
         self._body = b""

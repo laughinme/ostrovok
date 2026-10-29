@@ -1,5 +1,3 @@
-"""What the LLM was asked and what it cost: the console's view of the `llm_calls` journal."""
-
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from typing import Any
@@ -66,7 +64,6 @@ class LlmJournalView:
         ]
 
     async def spend(self, since: datetime) -> list[LlmSpend]:
-        """Calls, cache hits, failures, price and median latency per task and model."""
         live = LlmCallRow.status == "ok"
         rows = await self._uow.session.execute(
             select(

@@ -1,5 +1,3 @@
-"""One candidate load and one lean fact query for every saved mood, without traces/evidence."""
-
 import asyncio
 from collections import defaultdict
 from pathlib import Path

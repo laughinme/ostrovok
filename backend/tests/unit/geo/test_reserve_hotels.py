@@ -1,5 +1,3 @@
-"""The reserve is real catalog data with buildings already available to the live researcher."""
-
 from pathlib import Path
 
 from shapely import from_wkb

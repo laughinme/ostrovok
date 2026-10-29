@@ -1,5 +1,3 @@
-"""Generate small nominal window profiles: uv run python -m pipeline.window_profiles."""
-
 import asyncio
 import gzip
 import hashlib

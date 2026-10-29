@@ -1,5 +1,3 @@
-"""Artifact inventory and provenance for the offline dataset manifest."""
-
 import json
 from collections import Counter
 from datetime import UTC, datetime

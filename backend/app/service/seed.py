@@ -1,8 +1,3 @@
-"""
-Idempotent seed (D-17). Each loader owns some tables, reloads them fully and is versioned by a
-hash of its source files: a second `docker compose up` with the same data loads nothing.
-"""
-
 import hashlib
 import logging
 from collections.abc import Sequence
@@ -21,13 +16,9 @@ logger = logging.getLogger(__name__)
 class SeedLoader(Protocol):
     name: str
 
-    def sources(self, data_dir: Path) -> Sequence[Path]:
-        """Files whose content defines the version; a missing file means "nothing to load yet"."""
-        ...
+    def sources(self, data_dir: Path) -> Sequence[Path]: ...
 
-    async def load(self, uow: UnitOfWork, data_dir: Path) -> str:
-        """Replace the owned tables with the data; return a one-line summary for the log."""
-        ...
+    async def load(self, uow: UnitOfWork, data_dir: Path) -> str: ...
 
 
 def data_version(paths: Sequence[Path], upstream: str = "") -> str | None:

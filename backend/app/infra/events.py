@@ -10,8 +10,6 @@ logger = logging.getLogger(__name__)
 
 
 class RedisEventBus:
-    """Redis pub/sub: wakes SSE listeners; losing a message is fine, the DB has the truth."""
-
     def __init__(self, redis: Redis) -> None:
         self._redis = redis
 

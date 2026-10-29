@@ -61,7 +61,6 @@ def test_tangent_does_not_screen_but_hotel_footprint_does() -> None:
     through_hotel = facade_noise(
         Point(0, 0), 0, [railway(-20)], "day", buildings=[box(-5, -5, 5, 0)]
     )
-    # A ray along a wall is a tangent, not a crossing of the building interior.
     assert tangent.index_db == baseline.index_db
     assert through_hotel.sources[0].screened
 

@@ -1,5 +1,3 @@
-"""Conditional outdoor noise index (04 §4.2), never a measured LAeq."""
-
 from collections.abc import Sequence
 from dataclasses import dataclass
 from math import atan2, degrees, isfinite, log10
@@ -17,8 +15,6 @@ FRONT_HALF_ANGLE = 90.0
 
 @dataclass(frozen=True, slots=True)
 class NoiseSource:
-    """Geometry in local metres; conditional powers at 1 m, not acoustic measurements."""
-
     osm_ref: str
     kind: str
     geometry: BaseGeometry
@@ -48,7 +44,6 @@ class NoiseEstimate:
 
 
 def energy_sum(levels_db: Sequence[float]) -> float | None:
-    """Sum independent conditional sound energies; no sources means unknown."""
     if not levels_db:
         return None
     if not all(isfinite(level) for level in levels_db):
@@ -58,7 +53,6 @@ def energy_sum(levels_db: Sequence[float]) -> float | None:
 
 
 def noise_class(index_db: float) -> NoiseClass:
-    """Uncalibrated thresholds on the conditional index, not sanitary limits."""
     if index_db < CLASS_BOUNDARIES_DB[0]:
         return "тихо"
     if index_db < CLASS_BOUNDARIES_DB[1]:
@@ -67,7 +61,6 @@ def noise_class(index_db: float) -> NoiseClass:
 
 
 def orientation_loss(facade_azimuth: float, source_bearing: float) -> float:
-    """0 dB in front; the rear half loses 5–15 dB (north=0°, east=90°)."""
     angle = abs((source_bearing - facade_azimuth + 180) % 360 - 180)
     return 0.0 if angle <= FRONT_HALF_ANGLE else 5 + 10 * (angle - 90) / 90
 
@@ -79,7 +72,6 @@ def contribution(
     period: Period,
     buildings: Sequence[BaseGeometry] = (),
 ) -> NoiseContribution | None:
-    """Attenuate along the shortest source-to-window line, all coordinates in metres."""
     power = source.day_db if period == "day" else source.night_db
     if power is None or source.activity_share == 0:
         return None
@@ -92,7 +84,6 @@ def contribution(
     distance = float(receiver.distance(source.geometry))
     bearing = degrees(atan2(x - receiver.x, y - receiver.y)) % 360
     loss = orientation_loss(facade_azimuth, bearing) if distance > 0 else 0.0
-    # Tangencies do not block sound; a ray through the hotel itself does.
     screened = any(
         ray.intersection(building).length > 0 and not ray.touches(building)
         for building in buildings
@@ -114,7 +105,6 @@ def facade_noise(
     source_completeness: float = 1.0,
     top_n: int = 5,
 ) -> NoiseEstimate:
-    """Return index, class, confidence and strongest OSM refs for one facade/period."""
     if not 0 <= road_completeness <= 1 or not 0 <= source_completeness <= 1 or top_n < 0:
         raise ValueError("Completeness must be in [0, 1] and top_n nonnegative")
     items = [

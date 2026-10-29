@@ -75,7 +75,6 @@ async def day_sunset(
 def sunset_site_visible(
     location: LonLat, day: date, env: Environment, shapes: Sequence[BuildingShape]
 ) -> bool:
-    """A standing observer: buildings + DEM, with open sea along the sunset ray to 40 km."""
     if env.terrain is None or env.sea is None:
         return False
     projection = LocalProjection(location)

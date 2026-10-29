@@ -24,7 +24,6 @@ _HOTEL_NAMESPACE = uuid5(NAMESPACE_URL, "https://okno.example/hotels")
 
 
 def hotel_id(osm_id: str) -> UUID:
-    """Stable id from the OSM id: seed files, URLs and the frontend survive a reload."""
     return uuid5(_HOTEL_NAMESPACE, osm_id)
 
 
@@ -35,7 +34,6 @@ def floors_of(levels: float | None, height_m: float) -> int:
 
 
 def footprint_in_metres(footprint: BaseGeometry) -> tuple[Polygon, LonLat]:
-    """The largest polygon of a footprint in local metres around its centroid."""
     polygon = max(getattr(footprint, "geoms", [footprint]), key=lambda g: g.area)
     origin = LonLat(polygon.centroid.x, polygon.centroid.y)
     projection = LocalProjection(origin)
@@ -44,7 +42,6 @@ def footprint_in_metres(footprint: BaseGeometry) -> tuple[Polygon, LonLat]:
 
 
 def building_facades(footprint: BaseGeometry) -> tuple[Facade, ...]:
-    """Real sides of the building with walls long enough to have windows, in compass order."""
     local, _ = footprint_in_metres(footprint)
     if not local.is_valid:
         local = local.buffer(0)
@@ -55,8 +52,6 @@ def building_facades(footprint: BaseGeometry) -> tuple[Facade, ...]:
 
 @dataclass(frozen=True, slots=True)
 class HotelGeo:
-    """Everything the research tools need about one hotel; geometry in WGS84."""
-
     id: UUID
     osm_id: str
     name: str
@@ -90,8 +85,6 @@ class BuildingShape:
 
 @dataclass(frozen=True, slots=True)
 class Nearby:
-    """The closest place of one everyday kind, straight-line distance from the hotel."""
-
     kind: str
     title: str
     name: str | None
@@ -100,7 +93,6 @@ class Nearby:
     location: LonLat
 
 
-# kind, title, search radius: what a guest asks about first, in the order the card shows them
 NEARBY_KINDS: tuple[tuple[str, str, float], ...] = (
     ("beach", "Пляж", 2500),
     ("food", "Кафе", 1200),
@@ -130,7 +122,6 @@ def nearby_kind(feature: MapFeature) -> str | None:
     if feature.kind in {"beach", "station"}:
         return feature.kind
     tags, name = feature.tags, (feature.name or "").lower()
-    # Sanatorium, kindergarten or school grounds mapped as parks or playgrounds are not public.
     if any(word in name for word in _PRIVATE_GROUNDS):
         return None
     if feature.kind == "park":
@@ -140,10 +131,6 @@ def nearby_kind(feature: MapFeature) -> str | None:
 
 
 def nearby_places(origin: LonLat, features: Sequence[MapFeature]) -> tuple[Nearby, ...]:
-    """
-    The nearest place of each kind within its radius. Named places win over unnamed ones of the
-    same kind: «Кафе "Магнолия"» helps the guest more than a nameless dot 30 m closer.
-    """
     projection = LocalProjection(origin)
     here = Point(0, 0)
     best: dict[str, tuple[bool, float, MapFeature]] = {}

@@ -1,9 +1,3 @@
-"""
-The Curator (09 §4.3): teaches the system a new characteristic from a description.
-Plan (LLM with tools, or rules) → validate the recipe → check the data → dry run on five
-dissimilar hotels → save as provisional (from a guest's search) or draft (from the console).
-"""
-
 from collections.abc import Sequence
 from dataclasses import dataclass
 from functools import cache
@@ -37,7 +31,7 @@ from app.service.recipes.models import AskHotelierRecipe, Recipe, TagFilter
 PROMPTS = Path(__file__).resolve().parent / "prompts"
 SAMPLE_DISTRICTS = ("center", "khosta", "adler", "sirius", "krasnaya_polyana")
 _TTL = {MethodKind.POI_NEARBY: 90, MethodKind.ASK_HOTELIER: 180}
-VOCABULARY_MATCH = 70  # rapidfuzz WRatio: «аптеки» finds «аптека», «бар» does not find «барбершоп»
+VOCABULARY_MATCH = 70
 
 
 @cache
@@ -80,7 +74,6 @@ class Lesson:
     characteristic: Characteristic | None
     draft: RecipeDraft
     trial: tuple[tuple[str, str], ...]
-    """(hotel name, outcome) of the dry run."""
 
 
 class Curator:
@@ -185,10 +178,9 @@ class Curator:
         return draft
 
     def _tools(self, tracer: Tracer, places: Sequence[Any]) -> list[ToolSpec]:
-        """The LLM's tools; every call is a step in the trace, like the rules planner's."""
 
         async def tag_stats(args: BaseModel) -> dict[str, Any]:
-            assert isinstance(args, TagQuery)  # noqa: S101 - the adapter validated it
+            assert isinstance(args, TagQuery)  # noqa: S101
             found = await self._env.reader.matching(args.filter)
             named = [f.name for f in found if f.name]
             await tracer.tool(
@@ -199,7 +191,7 @@ class Curator:
             return {"count": len(found), "named": len(named), "examples": named[:5]}
 
         async def vocabulary(args: BaseModel) -> list[dict[str, Any]]:
-            assert isinstance(args, WordQuery)  # noqa: S101 - the adapter validated it
+            assert isinstance(args, WordQuery)  # noqa: S101
             names = {t.name: t for t in places}
             hits = process.extract(args.word.lower(), list(names), scorer=fuzz.WRatio, limit=3)
             terms = [names[name] for name, score, _ in hits if score >= VOCABULARY_MATCH]

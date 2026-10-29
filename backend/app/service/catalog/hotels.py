@@ -1,5 +1,3 @@
-"""Hotel read models for the guest app: card, rooms, facts summary, what we do not know."""
-
 from collections import defaultdict
 from collections.abc import Sequence
 from dataclasses import dataclass
@@ -18,7 +16,6 @@ from app.domain.knowledge.fact import Fact
 from app.service.knowledge.facts import FactQueries, headline
 from app.service.knowledge.registry import Registry
 
-# Everything but beaches is looked up this close: the card lists walking-distance places.
 _AROUND_M = 1200
 
 
@@ -69,7 +66,6 @@ class HotelQueries:
         self._uow = uow
 
     async def version(self) -> tuple[object, ...]:
-        """Changes whenever the list would: a fact or a hotel is added, updated or removed."""
         row = (
             await self._uow.session.execute(
                 select(

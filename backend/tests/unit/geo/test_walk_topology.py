@@ -26,7 +26,7 @@ def test_intermediate_nodes_connect_and_preserve_steps_and_direction():
     graph = topology.build_graph(network, lambda xy: xy[:, 0] * 10)
     assert graph.nodes.shape == (4, 3)
     assert len(graph.edges) == 5
-    assert graph.steps.sum() == 200  # The two explicit directions each conserve 100.
+    assert graph.steps.sum() == 200
     assert np.allclose(graph.nodes[:, 2], graph.nodes[:, 0] * 10)
     assert graph.osm_refs == ("way/1",) * 4 + ("way/2",)
     assert not graph.uncertain.any()
@@ -43,7 +43,7 @@ def test_coincident_interiors_do_not_join_bridge_to_road():
         geography.metric(box(39.69, 43.59, 39.71, 43.61)),
     )
     graph = topology.build_graph(network, lambda xy: np.zeros(len(xy)))
-    assert graph.nodes.shape == (7, 3)  # Two separate copies of b; the approach shares a.
+    assert graph.nodes.shape == (7, 3)
 
 
 def test_blocked_node_splits_network_and_archive_loads(tmp_path):

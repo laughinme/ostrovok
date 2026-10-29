@@ -14,7 +14,6 @@ _MIN_INTERVAL_M = 1e-6
 def building_intersections(
     origin_xy: XY, azimuths: FloatArray, buildings: Sequence[Building], *, max_m: float = 2000
 ) -> RoofHits:
-    """Exact roof intervals in local metres; tangencies ignored, own building retained."""
     endpoints = ray_coordinates(np.array(origin_xy), azimuths, np.array([max_m]))[:, 0]
     tree = STRtree([b.footprint for b in buildings])
     observer = Point(origin_xy)

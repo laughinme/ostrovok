@@ -32,14 +32,11 @@ from app.service.ports import Clock, SystemClock
 logger = logging.getLogger("app.worker")
 
 _KEEP_DEAD_SESSIONS = timedelta(days=7)
-# The Compose healthcheck reads this file's age: a stuck event loop stops touching it.
 HEARTBEAT = Path(tempfile.gettempdir()) / "okno-worker-alive"
 
 
 @dataclass(frozen=True, slots=True)
 class Periodic:
-    """A job the worker enqueues on a timer; the dedupe key keeps one copy in flight."""
-
     kind: JobKind
     every: timedelta
 
@@ -53,11 +50,6 @@ async def cleanup_sessions(db: Database, clock: Clock) -> int:
 
 
 class Worker:
-    """
-    Separate process (`python -m app.worker`), same image as the API.
-    Runs up to `slots` jobs at once; several worker processes can share one queue.
-    """
-
     def __init__(
         self, runner: JobRunner, queue: JobQueue, clock: Clock, *, slots: int, poll_sec: float
     ) -> None:
@@ -76,7 +68,7 @@ class Worker:
             try:
                 await self._tick_periodic()
                 claimed = await self._fill_slots()
-            except Exception:  # a DB blip must not kill the worker; log and keep polling
+            except Exception:
                 logger.exception("worker iteration failed")
             if claimed == 0:
                 with suppress(TimeoutError):
@@ -119,7 +111,6 @@ def build_handlers(
     wishes: WishResearch | None = None,
     agents: Agents | None = None,
 ) -> dict[JobKind, Handler]:
-    """Kind → handler; each handler only unpacks the payload and calls one agent."""
 
     async def research_collect(job: ClaimedJob) -> None:
         keys = job.payload.get("keys")

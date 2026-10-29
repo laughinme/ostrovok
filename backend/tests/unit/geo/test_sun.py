@@ -17,7 +17,6 @@ from app.domain.geo.types import LonLat
 SOCHI = LonLat(39.7231, 43.5855)
 
 
-# Independent NREL SPA reference, pvlib 0.16.1, 43.5855 N / 39.7231 E, sea level.
 @pytest.mark.parametrize(
     ("day", "rise", "setting", "azimuth"),
     [

@@ -1,5 +1,3 @@
-"""The whole result list (09 §7.5–7.10): filter, rank, relax, and say what can be researched."""
-
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, replace
 from uuid import UUID

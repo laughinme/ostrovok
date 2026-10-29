@@ -1,8 +1,3 @@
-"""
-Recipes: typed parameters of the closed set of methods (09 §5.2). A characteristic is data;
-its recipe is validated against this discriminated union before anything runs it.
-"""
-
 from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator

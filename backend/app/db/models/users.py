@@ -17,8 +17,6 @@ class User(UuidPkMixin, TimestampMixin, Base):
     role: Mapped[Role] = mapped_column(
         pg_enum(Role, "user_role"), default=Role.GUEST, server_default=Role.GUEST.value
     )
-    # Demo persona key from data/demo/users.yaml; null for accounts created through /register.
     persona: Mapped[str | None] = mapped_column(String(64), unique=True)
     banned_at: Mapped[datetime | None]
-    # Bumped on ban and "log out everywhere": access tokens carry it and die on mismatch.
     auth_version: Mapped[int] = mapped_column(default=1, server_default="1")

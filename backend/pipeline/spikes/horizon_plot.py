@@ -1,4 +1,3 @@
-"""Diagnostic scientific plots; the images and map are local cache artifacts."""
 
 from __future__ import annotations
 

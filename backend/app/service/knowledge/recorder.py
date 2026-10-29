@@ -1,9 +1,3 @@
-"""
-Write path of the knowledge layer (09 §5.3): observations → Reconciler → facts, versions,
-conflicts. One call is one transaction; each (hotel, characteristic) pair is locked while
-it is reconciled, so concurrent agents never interleave their updates of the same pair.
-"""
-
 from collections import defaultdict
 from collections.abc import Sequence
 from dataclasses import replace
@@ -25,7 +19,6 @@ from app.service.knowledge.registry import Registry
 from app.service.knowledge.store import Recorded
 from app.service.ports import Clock
 
-# A version is written when the belief really moved, not on every recomputation.
 _CONFIDENCE_STEP = 0.05
 _FALLBACK_GRID = Grid(facades=(), floors=1)
 
@@ -57,7 +50,6 @@ class KnowledgeStore:
         return Recorded(changed_facts=tuple(changed), opened_conflicts=tuple(opened))
 
     async def reconcile_pair(self, hotel_id: UUID, key: str, *, reason: str) -> Recorded:
-        """Recompute facts without new observations: after decay, a world change or a publish."""
         facts, conflict_id = await self._record_pair(
             hotel_id, key, [], reason=reason, run_id=None, now=self._clock.now()
         )

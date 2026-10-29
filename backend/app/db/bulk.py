@@ -1,8 +1,3 @@
-"""
-Fast bulk loading for the seed (D-17): COPY into a text staging table, then one INSERT … SELECT
-that casts columns and builds geometries from hex WKB. Tens of thousands of rows in seconds.
-"""
-
 from collections.abc import Iterable, Mapping, Sequence
 from typing import Any
 
@@ -20,11 +15,6 @@ async def copy_into(
     columns: Sequence[str],
     casts: Mapping[str, str],
 ) -> int:
-    """
-    `casts` maps a target column to an SQL expression over the staging column `s.<name>`,
-    e.g. {"geom": WKB_4326.format("s.geom"), "height_m": "s.height_m::float8"}.
-    Table and column names come from our code, never from input, hence the f-strings.
-    """
     stage = f"stage_{table}"
     connection = await session.connection()
     await connection.execute(

@@ -1,5 +1,3 @@
-"""Russian text normalization shared by the rule-based parsers."""
-
 import re
 
 _PUNCT = re.compile(r"[^\w\s₽%°\-–—/.]+", re.UNICODE)

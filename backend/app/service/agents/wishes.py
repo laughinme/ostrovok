@@ -1,9 +1,3 @@
-"""
-Live research (09 §3.2): a guest adds a wish to a search; for the hotels at the top of the
-result the system either computes it (learning the characteristic first if it is new) or asks
-the hotels, and the result list updates while the guest watches the trace.
-"""
-
 from collections.abc import Awaitable, Callable, Sequence
 from dataclasses import replace
 from uuid import UUID
@@ -28,7 +22,6 @@ from app.service.search.serialize import intent_from_json, intent_to_json
 RESEARCH_TOP = 8
 
 AskHotels = Callable[[Sequence[UUID], str, Tracer], Awaitable[int]]
-"""Ask these hotels about this characteristic; returns how many questions were sent."""
 
 
 def search_channel(search_id: UUID) -> str:
@@ -36,7 +29,6 @@ def search_channel(search_id: UUID) -> str:
 
 
 def describe(chip: Chip) -> str:
-    """What the Curator reads: «хинкальная в 10 минутах пешком»."""
     what = str(chip.params.get("what") or chip.label)
     minutes = chip.params.get("maxWalkMinutes")
     return f"{what} в {minutes} минутах пешком" if minutes else what
@@ -72,11 +64,6 @@ async def research_on_request(
     characteristic: str | None = None,
     hotel_ids: Sequence[UUID] = (),
 ) -> UUID:
-    """
-    «Узнать вживую» for a chip of the search, or «Спросить отель» from a hotel card about one of
-    its unknowns: a characteristic the search lacks joins it as a nice-to-have wish first.
-    Without `hotel_ids` the top of the result is researched.
-    """
     view = await svc.get(search_id)
     if characteristic is not None:
         chip = next((c for c in view.intent.chips if c.characteristic == characteristic), None)
@@ -168,7 +155,6 @@ class WishResearch:
             return intent_from_json(row.intent)
 
     async def _attach(self, search_id: UUID, chip: Chip, key: str) -> None:
-        """The learned characteristic becomes the chip's key: the search can now check it."""
         async with self._db.unit_of_work() as uow:
             row = await uow.session.get(SearchRow, search_id)
             if row is None:
@@ -183,7 +169,6 @@ class WishResearch:
 async def add_wishes(
     svc: SearchService, uow: UnitOfWork, clock: Clock, search_id: UUID, new: Intent
 ) -> tuple[UUID | None, Intent]:
-    """Append the parsed chips to the search and start research for those we cannot answer."""
     view = await svc.get(search_id)
     start = len(view.intent.chips) + 1
     added = tuple(replace(c, id=f"c{start + i}") for i, c in enumerate(new.chips))

@@ -23,7 +23,6 @@ from app.service.seed_export import export_tables
 
 
 async def create_operator(email: str, password: str) -> str:
-    """Create an operator or promote an existing account. Returns what happened."""
     db = Database(get_settings())
     try:
         async with db.unit_of_work() as uow:
@@ -54,7 +53,6 @@ async def collect(
         service = CollectService(db, agents.researcher, agents.runner, clock)
         ids = [hotel_id(o) for o in osm_ids] or None
         if ids is None and shard[1] > 1:
-            # Geo kernels are CPU-bound: parallelism comes from processes, one shard each.
             async with db.unit_of_work() as uow:
                 every = await uow.catalog.hotel_ids()
             ids = [h for i, h in enumerate(every) if i % shard[1] == shard[0]]
@@ -140,10 +138,10 @@ def main() -> None:
     elif args.command == "eval-compare":
         result = compare_runs(settings.data_dir)
     else:
-        from app.main import create_app  # noqa: PLC0415 - only this command needs the API
+        from app.main import create_app  # noqa: PLC0415
 
         result = json.dumps(create_app(settings).openapi(), indent=2, ensure_ascii=False)
-    print(result)  # noqa: T201 - CLI output
+    print(result)  # noqa: T201
 
 
 if __name__ == "__main__":

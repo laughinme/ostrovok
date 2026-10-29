@@ -107,7 +107,6 @@ class HotelierSimulator:
         question: str,
         tracer: Tracer,
     ) -> SimulatedAnswer:
-        """The persona says the template answer in its own words; the facts stay the same."""
         if self._llm is None:
             return answer
         truth = {

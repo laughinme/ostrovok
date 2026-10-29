@@ -1,5 +1,3 @@
-"""The characteristic registry: YAML at start, then the `characteristics` table (09 §5.1)."""
-
 from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
@@ -45,7 +43,6 @@ def validate_recipe(raw: Mapping[str, Any]) -> Recipe:
 def parse_characteristic(raw: Mapping[str, Any]) -> Characteristic:
     recipe = validate_recipe(raw["recipe"])
     statement = raw.get("statement", "")
-    # YAML 1.1 reads the keys `yes:` and `no:` as booleans, so both spellings are accepted.
     template = (
         StatementTemplate(
             yes=statement.get("yes", statement.get(True)),
@@ -105,8 +102,6 @@ def load_yaml(path: Path) -> list[Characteristic]:
 
 
 class Registry:
-    """Read side of the registry for one unit of work."""
-
     def __init__(self, uow: UnitOfWork) -> None:
         self._uow = uow
 
@@ -142,8 +137,6 @@ class Registry:
 
 
 class RegistryLoader:
-    """Seed: the starter registry from YAML; characteristics learned at runtime are kept."""
-
     name = "registry"
 
     def sources(self, data_dir: Path) -> Sequence[Path]:

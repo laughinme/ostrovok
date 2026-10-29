@@ -43,7 +43,6 @@ class PartnerDemand:
                 continue
             keys = {c.characteristic for c in intent.chips if c.characteristic}
             total.update(keys)
-            # The top stored with the search: re-ranking each one took minutes on a busy week.
             if str(hotel_id) in (top_hotels(row) or ()):
                 top.update(keys)
         return {key: top[key] / count for key, count in total.items()}

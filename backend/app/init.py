@@ -1,8 +1,3 @@
-"""
-One-shot `init` service (`python -m app.init`): migrations → JWT keys in a volume → idempotent seed.
-Runs before the API and the worker start, so the jury needs no manual step (09 §12).
-"""
-
 import asyncio
 import logging
 import os
@@ -23,7 +18,6 @@ logger = logging.getLogger("app.init")
 
 
 def ensure_jwt_keys(private_path: Path, public_path: Path) -> bool:
-    """Generate an RS256 key pair once; later starts reuse it so sessions survive restarts."""
     if private_path.exists() and public_path.exists():
         return False
     private_path.parent.mkdir(parents=True, exist_ok=True)

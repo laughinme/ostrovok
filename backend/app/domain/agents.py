@@ -31,8 +31,6 @@ class RunStatus(StrEnum):
 
 
 class StepKind(StrEnum):
-    """`reason → tool → result → decision` (09 §4.1); both planners write the same shape."""
-
     REASON = "reason"
     TOOL = "tool"
     RESULT = "result"

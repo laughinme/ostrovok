@@ -27,8 +27,6 @@ CLIMATE_ATTRIBUTION = "Open-Meteo.com (CC BY 4.0)"
 
 @dataclass(frozen=True, slots=True)
 class Evidence:
-    """How to check a claim yourself: a summary plus the parameters to rebuild the picture."""
-
     kind: EvidenceKind
     summary: str
     attribution: str
@@ -38,11 +36,6 @@ class Evidence:
 
 @dataclass(frozen=True, slots=True)
 class Observation:
-    """
-    Who claimed what (append-only). A newer observation from the same source and scope
-    supersedes the older one but never deletes it.
-    """
-
     hotel_id: UUID
     characteristic: str
     characteristic_version: int
@@ -62,7 +55,6 @@ class Observation:
 
     @property
     def source_key(self) -> tuple[SourceKind, str, str]:
-        """Same source key + same scope → the newer observation supersedes the older one."""
         return self.source, self.source_ref.split("@")[0], self.scope.key
 
 

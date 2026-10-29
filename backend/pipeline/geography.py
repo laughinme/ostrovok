@@ -1,5 +1,3 @@
-"""Metric geometry, named sampling districts and OSM geometry assembly."""
-
 import re
 from typing import Any
 
@@ -7,7 +5,6 @@ from pyproj import Transformer
 from shapely import LineString, MultiPolygon, Point, Polygon, make_valid, transform
 from shapely.ops import polygonize, unary_union
 
-# Sampling areas, not administrative boundaries. Bounds are west/south/east/north.
 DISTRICTS = {
     "center": ((39.64, 43.53, 39.80, 43.75), 70),
     "khosta": ((39.80, 43.49, 39.90, 43.62), 25),

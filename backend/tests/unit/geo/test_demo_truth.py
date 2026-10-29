@@ -1,5 +1,3 @@
-"""The simulator cannot invent facades, floors, room ids or inconsistent facilities."""
-
 from pathlib import Path
 
 import yaml

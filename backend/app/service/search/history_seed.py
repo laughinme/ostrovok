@@ -34,7 +34,6 @@ class DemoHistoryLoader:
         return [data_dir / "demo" / "history.yaml"]
 
     async def load(self, uow: UnitOfWork, data_dir: Path) -> str:
-        # Seed loaders run once at startup, before requests are served.
         profiles = yaml.safe_load(self.sources(data_dir)[0].read_text(encoding="utf-8"))["guests"]
         await uow.session.execute(
             delete(UserEventRow).where(

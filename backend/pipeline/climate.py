@@ -1,5 +1,3 @@
-"""Open-Meteo ERA5 weather normals and observed Marine SST coverage."""
-
 import calendar
 import json
 from collections import defaultdict
@@ -75,7 +73,6 @@ def _values(raw: dict[str, Any], key: str) -> list[float]:
 
 
 def monthly_normals(weather: dict[str, Any], marine: dict[str, Any] | None) -> dict[str, Any]:
-    """Equal-year monthly means: Celsius, hours/day, days with >=1 mm rain/month."""
     groups = _groups(weather, hourly=False)
     result: dict[str, Any] = {str(month): {"water_c": None} for month in range(1, 13)}
     for metric, key in DAILY.items():
@@ -99,7 +96,6 @@ def monthly_normals(weather: dict[str, Any], marine: dict[str, Any] | None) -> d
 
 
 def water_normals(marine: dict[str, Any]) -> tuple[dict[str, float], dict[str, int]]:
-    """Use only complete calendar months; never fill missing SST with invented data."""
     groups = _groups(marine, hourly=True)
     values = marine["sea_surface_temperature"]
     if len(values) != len(marine["time"]):

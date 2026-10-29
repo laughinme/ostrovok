@@ -1,5 +1,3 @@
-"""Monthly sun-event findings from the same uncertain horizons as the window panorama."""
-
 import asyncio
 from calendar import monthrange
 from datetime import date

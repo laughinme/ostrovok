@@ -1,5 +1,3 @@
-"""Compact precomputed nominal profiles; uncertain agent calculations still use full scenes."""
-
 import hashlib
 import json
 from collections import OrderedDict

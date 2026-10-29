@@ -1,5 +1,3 @@
-"""Unsimplified OSM way segments → a directed graph with sampled DEM elevations."""
-
 from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any
@@ -76,7 +74,6 @@ def build_graph(
     *,
     blocked: set[Coordinate] | None = None,
 ) -> WalkGraph:
-    """Keep directed arcs explicit; fail on DEM gaps rather than inventing zero elevations."""
     blocked = blocked or set()
     indices: dict[tuple[Coordinate, str], int] = {}
     edges, arcs, crossings = [], [], []

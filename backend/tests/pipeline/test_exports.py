@@ -1,5 +1,3 @@
-"""Loader contracts: deterministic CSV and directed coastline land exclusion."""
-
 import gzip
 
 from shapely import Point, from_wkb

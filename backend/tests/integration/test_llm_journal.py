@@ -1,5 +1,3 @@
-"""Every LLM call lands in the journal (answers, cache hits, failures); the console reads it."""
-
 import pytest
 from pydantic import BaseModel, Field
 from pydantic_ai import ModelMessage, ModelResponse, ToolCallPart

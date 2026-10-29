@@ -10,12 +10,10 @@ from app.service.geo.noise import RADIUS_M, hotel_noise
 from app.service.recipes.executor import Environment, Finding, MethodCall
 from app.service.recipes.models import NoiseRecipe
 
-_SPREAD_DB = 4.0  # how sharply "quiet" becomes "not quiet" around the threshold
+_SPREAD_DB = 4.0
 
 
 class NoiseExecutor:
-    """`noise`: `osm.sources → noise.facades`; a model on the map, not a measurement."""
-
     method: ClassVar[MethodKind] = MethodKind.NOISE
 
     async def collect(self, call: MethodCall, env: Environment) -> list[Finding]:
@@ -75,7 +73,6 @@ class NoiseExecutor:
             "noise.facades", summary="; ".join(lines), args={"period": recipe.period}
         )
         if call.characteristic.level is Level.HOTEL:
-            # A hotel-level answer must hold for every room: the loudest side decides.
             loudest = min(findings, key=lambda f: f.confidence if f.value else 1 - f.confidence)
             return [replace(loudest, scope=Scope.everywhere())]
         return findings

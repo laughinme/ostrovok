@@ -16,7 +16,6 @@ class UserRepository:
     async def get(self, user_id: UUID, *, for_update: bool = False) -> User | None:
         if not for_update:
             return await self._session.get(User, user_id)
-        # Row lock for read-modify-write (auth_version bump).
         stmt = (
             select(User)
             .where(User.id == user_id)

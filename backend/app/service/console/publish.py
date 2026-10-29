@@ -1,5 +1,3 @@
-"""Console commands that start agents: learn a characteristic, publish it to the whole region."""
-
 from dataclasses import replace
 from uuid import UUID
 

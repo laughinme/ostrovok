@@ -15,7 +15,7 @@ def post(base: str, path: str, body: dict[str, Any]) -> dict[str, Any]:
     if not base.startswith(("https://", "http://")):
         raise ValueError("Use an HTTP(S) API URL")
     started = time.monotonic()
-    request = urllib.request.Request(  # noqa: S310 - scheme checked above
+    request = urllib.request.Request(  # noqa: S310
         base + path,
         data=json.dumps(body).encode(),
         headers={"Content-Type": "application/json"},

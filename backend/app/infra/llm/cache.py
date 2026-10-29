@@ -13,8 +13,6 @@ def cache_key(*parts: str) -> str:
 
 
 class LlmCache:
-    """Responses by hash of (model, task, prompt, schema): repeated demos are free and stable."""
-
     def __init__(self, db: Database) -> None:
         self._db = db
 

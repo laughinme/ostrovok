@@ -1,5 +1,3 @@
-"""How far on foot: the walk graph when it is there, a straight-line estimate when it is not."""
-
 from collections.abc import Sequence
 from dataclasses import dataclass
 from math import asin, cos, radians, sin, sqrt
@@ -13,7 +11,7 @@ from app.domain.geo.walking import tobler_speed_kmh
 from app.service.ports import Router, TerrainModel
 
 WALK_M_PER_MIN = 80.0
-DETOUR = 1.35  # streets are longer than the straight line
+DETOUR = 1.35
 EARTH_RADIUS_M = 6_371_000.0
 
 
@@ -24,7 +22,6 @@ def haversine_m(a: LonLat, b: LonLat) -> float:
 
 
 def anchor(geometry: BaseGeometry, toward: LonLat) -> LonLat:
-    """The point of a feature to walk to: the nearest point of its outline, or the point itself."""
     if geometry.geom_type == "Point":
         return LonLat(geometry.x, geometry.y)
     from shapely import Point  # noqa: PLC0415
@@ -83,7 +80,6 @@ def nearest_walk(
 def _estimate(
     feature: MapFeature, origin: LonLat, target: LonLat, terrain: TerrainModel | None
 ) -> Walk:
-    """Straight line ×1.35 with Tobler's speed on the average slope from the DEM, if we have it."""
     length = haversine_m(origin, target) * DETOUR
     if terrain is None or length == 0:
         minutes = length / WALK_M_PER_MIN
@@ -101,7 +97,6 @@ def within_minutes(
     features: Sequence[MapFeature],
     minutes: float,
 ) -> list[tuple[MapFeature, float, bool]]:
-    """Features reachable on foot in the budget, nearest first, with an "estimated" flag."""
     anchors = {f.osm_id: anchor(f.geometry, origin) for f in features}
     if router is not None:
         reached = router.reachable(

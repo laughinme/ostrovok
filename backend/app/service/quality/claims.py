@@ -1,10 +1,3 @@
-"""
-What hotels say on their own sites (R7, `data/eval/official_claims.yaml`) against our facts.
-Sites rarely name a facade or floor, so the check is per hotel: a hotel that advertises a sea view
-should have at least one window where we find one; a stated distance to the beach should be close
-to our walking route. An independent check, not a calibration: there are no negative view labels.
-"""
-
 import re
 from collections.abc import Mapping, Sequence
 from datetime import datetime
@@ -26,7 +19,6 @@ VIEWS = ("sea_view", "mountain_view")
 YES = "да"
 _METRES = re.compile(r"(\d+)\s*м\b")
 _MINUTES = re.compile(r"(\d+)(?:\s*[–-]\s*(\d+))?\s*мин")
-# Sites round generously: «100 м» may be 50 or 200 by the map
 _SPREAD = (0.5, 2.0)
 _CLOSE_M = 150
 _CLOSE_MIN = 5
@@ -34,7 +26,6 @@ _BEACH_SEARCH_M = 3000
 
 
 def claimed_distance(claim: Mapping[str, Any]) -> tuple[str, float] | None:
-    """«300 м» → ("metres", 300); «15–20 минут пешком» → ("minutes", 17.5); a transfer → None."""
     value = claim.get("value")
     if not isinstance(value, str) or "трансфер" in str(claim.get("claim", "")).lower():
         return None
@@ -47,7 +38,6 @@ def claimed_distance(claim: Mapping[str, Any]) -> tuple[str, float] | None:
 
 
 def distance_agrees(kind: str, claimed: float, minutes: float, straight_m: float | None) -> bool:
-    """Minutes against our walking route; metres («до моря 100 м») against the straight line."""
     if kind == "minutes":
         return abs(minutes - claimed) <= max(_CLOSE_MIN, claimed / 2)
     if straight_m is None:
@@ -123,7 +113,7 @@ def _view(
         "claim": claim["claim"],
         "url": claim["url"],
         "bestProbability": None if best is None else round(best, 3),
-        "agrees": None if best is None else best >= 0.5,  # noqa: PLR2004 - P(да) above a coin
+        "agrees": None if best is None else best >= 0.5,  # noqa: PLR2004
     }
 
 
@@ -137,7 +127,7 @@ async def _straight_to_beach(uow: UnitOfWork, osm: str) -> float | None:
     return None if nearest is None else round(nearest.distance_m)
 
 
-def _beach(  # noqa: PLR0917 - one claim with both of our measurements
+def _beach(  # noqa: PLR0917
     osm: str,
     name: str,
     claim: Mapping[str, Any],
@@ -179,7 +169,6 @@ def _summary(items: list[dict[str, Any]]) -> dict[str, Any]:
 
 
 def _median_ratio(items: list[dict[str, Any]]) -> float | None:
-    """How many times farther the nearest mapped beach is than the metres a site quotes."""
     ratios = [
         i["straightM"] / i["claimed"]["metres"]
         for i in items

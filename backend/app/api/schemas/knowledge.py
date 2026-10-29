@@ -22,7 +22,7 @@ FacadeName = Literal["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
 
 
 class ScopeJson(TypedDict, total=False):
-    """ScopeOut on the wire: an absent field means «all» (08 §9)."""
+    """ScopeOut on the wire: an absent field means «all»."""
 
     facades: list[FacadeName]
     floorFrom: int
@@ -38,10 +38,8 @@ class ScopeOut(ApiModel):
     months: list[int] | None = None
     room_type_ids: list[str] | None = None
 
-    # The explicit return type keeps the fields in OpenAPI; a bare dict exported `object`.
     @model_serializer(mode="wrap", return_type=ScopeJson)
     def _omit_all(self, handler: SerializerFunctionWrapHandler) -> dict[str, Any]:
-        """An omitted field means "all" (08 §9), so nulls are not sent."""
         return {k: v for k, v in handler(self).items() if v is not None}
 
     @classmethod
@@ -64,7 +62,6 @@ class EvidenceOut(ApiModel):
 
     @classmethod
     def from_domain(cls, e: Evidence, *, compact: bool = False) -> Self:
-        # A map layer carries street geometry (~50 KB a hotel): lists leave it to GET /facts/{id}.
         heavy = compact and e.kind.value == "map_layer"
         return cls(
             kind=e.kind.value,

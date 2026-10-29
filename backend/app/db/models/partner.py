@@ -11,8 +11,6 @@ from app.db.base import Base, UuidPkMixin, utcnow
 
 
 class HotelStaff(Base):
-    """Membership that lets a hotelier act for a hotel (`ensure_staff_of`)."""
-
     __tablename__ = "hotel_staff"
 
     user_id: Mapped[UUID] = mapped_column(
@@ -85,8 +83,6 @@ class NotificationRow(UuidPkMixin, Base):
 
 
 class DemandDaily(Base):
-    """How many searches per day and district wanted a characteristic: input for question value."""
-
     __tablename__ = "demand_daily"
 
     day: Mapped[date] = mapped_column(primary_key=True)

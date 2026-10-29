@@ -28,8 +28,6 @@ class AgentRunRow(UuidPkMixin, Base):
 
 
 class AgentStepRow(Base):
-    """A trace step; `(run_id, seq)` makes step writes idempotent when a job is retried."""
-
     __tablename__ = "agent_steps"
 
     run_id: Mapped[UUID] = mapped_column(
@@ -46,8 +44,6 @@ class AgentStepRow(Base):
 
 
 class LlmCacheRow(Base):
-    """Responses by hash of (model, prompt, schema): repeated demos are deterministic and free."""
-
     __tablename__ = "llm_cache"
 
     key: Mapped[str] = mapped_column(String(64), primary_key=True)
@@ -59,8 +55,6 @@ class LlmCacheRow(Base):
 
 
 class LlmCallRow(UuidPkMixin, Base):
-    """Journal of LLM calls: what was asked, what came back, tokens, price and latency."""
-
     __tablename__ = "llm_calls"
 
     created_at: Mapped[datetime] = mapped_column(

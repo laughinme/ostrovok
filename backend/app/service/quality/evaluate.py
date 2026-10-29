@@ -24,7 +24,6 @@ from app.service.search.intents import IntentParser
 async def evaluate(
     db: Database, data_dir: Path, clock: Clock, *, llm: dict[str, Any] | None = None
 ) -> dict[str, Any]:
-    """Rules metrics on the development sets; `llm` is a finished `evaluate_llm` report."""
     cases = await read_yaml(data_dir / "eval/intents.yaml")
     places = place_terms(await read_yaml(data_dir / "registry/osm_vocabulary.yaml"))
     answers = await answer_metrics(RulesAnswerParser(), data_dir / "eval/hotelier_answers.yaml")

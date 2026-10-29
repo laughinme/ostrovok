@@ -1,5 +1,3 @@
-"""Back to the seeded demo between takes of the video (09 §9 `/console/demo/reset`)."""
-
 from pathlib import Path
 
 from sqlalchemy import delete, text
@@ -9,7 +7,6 @@ from app.db.uow import UnitOfWork
 from app.service.knowledge.registry import RegistryLoader
 from app.service.seed_export import KnowledgeSeedLoader
 
-# Everything guests, hotels and the operator create while the demo runs.
 RUNTIME_TABLES = (
     "trip_feedback",
     "bookings",
@@ -31,7 +28,7 @@ class DemoReset:
     async def reset(self) -> str:
         session = self._uow.session
         for table in RUNTIME_TABLES:
-            await session.execute(text(f"DELETE FROM {table}"))  # noqa: S608 - fixed names
+            await session.execute(text(f"DELETE FROM {table}"))  # noqa: S608
         await session.execute(delete(Hotel).where(Hotel.demo["onboarded"].as_boolean().is_(True)))
         await session.execute(delete(Building).where(Building.added_by != "osm"))
         await session.execute(
@@ -49,5 +46,5 @@ class DemoReset:
             "agent_steps",
             "agent_runs",
         ):
-            await session.execute(text(f"DELETE FROM {table}"))  # noqa: S608 - fixed names
+            await session.execute(text(f"DELETE FROM {table}"))  # noqa: S608
         return "seed has no knowledge yet: knowledge cleared"

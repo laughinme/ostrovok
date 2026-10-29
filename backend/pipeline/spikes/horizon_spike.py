@@ -61,7 +61,6 @@ def prepare_scene(
     lon, lat = inverse.transform(xy[..., 0], xy[..., 1])
     terrain = dem.sample(lon, lat)
     water = contains_xy(sea, xy[..., 0], xy[..., 1])
-    # DSM roofs are replaced by perimeter ground proxies before explicit OSM extrusion.
     near = distances <= 2050
     grid = xy[:, near].reshape(-1, 2)
     tree = STRtree([b.polygon.buffer(20) for b in buildings])

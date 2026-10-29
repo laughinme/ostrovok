@@ -1,5 +1,3 @@
-"""Small conservative subset of OSM opening_hours; unsupported rules stay unknown."""
-
 import re
 from dataclasses import dataclass
 from datetime import datetime
@@ -19,7 +17,6 @@ class WeeklyInterval:
     weekday: int
     start_minute: int
     end_minute: int
-    """End may exceed 1440 for an overnight interval belonging to its starting day."""
 
     def overlaps(self, start: int, end: int) -> bool:
         left = self.weekday * DAY_MINUTES + self.start_minute
@@ -37,7 +34,6 @@ class OpeningHours:
     confidence: float
 
     def is_open(self, moment: datetime, *, timezone: str = "Europe/Moscow") -> bool | None:
-        """Check a timezone-aware instant in the hotel's timezone; closing time is exclusive."""
         if moment.utcoffset() is None:
             raise ValueError("Opening hours require a timezone-aware instant")
         local = moment.astimezone(ZoneInfo(timezone))
@@ -47,7 +43,6 @@ class OpeningHours:
         return False if self.complete else None
 
     def in_window(self, start_minute: int, end_minute: int) -> bool | None:
-        """Whether any day has opening in this daily window; minutes since local midnight."""
         if not 0 <= start_minute < end_minute <= DAY_MINUTES:
             raise ValueError("Invalid daily time window")
         for day in range(7):
@@ -58,7 +53,6 @@ class OpeningHours:
 
     @property
     def at_night(self) -> bool | None:
-        """Any opening between 23:00 and 06:00 during a typical week."""
         windows = (self.in_window(23 * 60, DAY_MINUTES), self.in_window(0, 6 * 60))
         return True if True in windows else (False if self.complete else None)
 
@@ -125,11 +119,6 @@ def _intervals(rule: str) -> tuple[WeeklyInterval, ...]:
 
 
 def parse_hours(value: str | None) -> OpeningHours:
-    """Parse common weekly forms; confidence describes parsing, not OSM freshness.
-
-    Conflicting overrides, holidays, seasons, solar times and free text are unknown.
-    We discard partial schedules because unsupported clauses can override known hours.
-    """
     if not value or not value.strip():
         return OpeningHours((), False, 0.0)
     if value.strip() == "24/7":

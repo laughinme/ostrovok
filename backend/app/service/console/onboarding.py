@@ -1,5 +1,3 @@
-"""A reserve OSM object becomes a hotel and a durable research job in one transaction."""
-
 from dataclasses import dataclass
 from pathlib import Path
 from uuid import UUID

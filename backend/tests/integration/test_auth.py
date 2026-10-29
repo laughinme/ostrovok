@@ -64,7 +64,6 @@ async def test_reused_refresh_token_kills_the_session(user: Account, client: Asy
     assert replay.status_code == 401
     assert replay.json()["error_code"] == "REFRESH_TOKEN_REUSED"
 
-    # The legitimate holder is logged out too: we can't tell who the thief was.
     legit = await client.post(REFRESH, headers=bearer(rotated))
     assert legit.status_code == 401
 

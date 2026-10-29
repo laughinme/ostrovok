@@ -1,5 +1,3 @@
-"""The Explainer (09 §7.7): optional LLM wording of a trade-off, checked by code."""
-
 import asyncio
 from dataclasses import replace
 

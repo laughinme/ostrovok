@@ -1,8 +1,3 @@
-"""
-The Liaison's LLM parser (09 §4.4): a hotelier's free-text answer → the same fields the rules
-produce, plus "is it clear enough to record". Forms and any LLM failure go to the rules.
-"""
-
 from pathlib import Path
 from typing import Any, Literal
 
@@ -104,7 +99,6 @@ def _certain(key: str, out: LlmAnswer, fields: dict[str, Any], value: Any) -> bo
 
 
 def answer_parser(llm: LanguageModel | None) -> "LlmAnswerParser | None":
-    """The Liaison's parser: LLM with the rules as fallback, or None (= rules) without a key."""
     return LlmAnswerParser(llm) if llm is not None else None
 
 

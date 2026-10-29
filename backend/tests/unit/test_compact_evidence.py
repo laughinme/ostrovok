@@ -1,5 +1,3 @@
-"""Hotel lists drop heavy map geometry; the fact page keeps every parameter."""
-
 from app.api.schemas.knowledge import EvidenceOut
 from app.domain.knowledge.observation import Evidence, EvidenceKind
 

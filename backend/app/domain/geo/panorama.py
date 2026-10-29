@@ -7,8 +7,6 @@ from app.domain.geo.scene import Horizon
 
 @dataclass(frozen=True, slots=True)
 class WindowProfile:
-    """Date-independent nominal window; angles in degrees, eye elevation in absolute metres."""
-
     azimuths_deg: FloatArray
     horizon: Horizon
     peaks: tuple[VisiblePeak, ...]

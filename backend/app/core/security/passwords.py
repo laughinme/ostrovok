@@ -5,7 +5,6 @@ from functools import cache
 from argon2 import PasswordHasher
 from argon2.exceptions import InvalidHashError, VerificationError
 
-# argon2id with the RFC 9106 "low memory" profile (the library defaults): ~50 ms per hash.
 _hasher = PasswordHasher()
 
 
@@ -19,10 +18,6 @@ async def hash_password(password: str) -> str:
 
 
 async def verify_password(password: str, password_hash: str | None) -> bool:
-    """
-    Verify off the event loop. With no hash (unknown email) we still burn one verification
-    against a dummy hash, so response time does not reveal which emails are registered.
-    """
     target = password_hash if password_hash is not None else await asyncio.to_thread(_dummy_hash)
     try:
         await asyncio.to_thread(_hasher.verify, target, password)

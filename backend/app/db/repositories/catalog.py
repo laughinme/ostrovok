@@ -71,7 +71,6 @@ class CatalogRepository:
     async def features_tagged(
         self, tags: dict[str, list[str]], *, near: LonLat | None = None, radius_m: float = 0
     ) -> list[MapFeature]:
-        """Features matching any `key=value` pair, optionally within a radius."""
         conditions = [OsmFeature.tags[key].astext.in_(values) for key, values in tags.items()]
         stmt = select(OsmFeature).where(or_(*conditions))
         if near is not None:
@@ -84,7 +83,6 @@ class CatalogRepository:
     async def features_with_keys(
         self, keys: Sequence[str], *, near: LonLat | None = None, radius_m: float = 0
     ) -> list[MapFeature]:
-        """Features having any of the tag keys; the exact filter runs in Python afterwards."""
         stmt = select(OsmFeature).where(OsmFeature.tags.has_any(array(list(keys))))
         if near is not None:
             stmt = stmt.where(_near(OsmFeature.geom, near, radius_m))  # type: ignore[arg-type]
@@ -94,7 +92,6 @@ class CatalogRepository:
         ]
 
     async def tag_stats(self, tags: dict[str, list[str]]) -> tuple[int, int]:
-        """How many features match in the whole region, and how many of them have a name."""
         conditions = [OsmFeature.tags[key].astext.in_(values) for key, values in tags.items()]
         row = (
             await self._session.execute(

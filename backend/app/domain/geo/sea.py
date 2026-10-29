@@ -14,7 +14,6 @@ def minimum_floor(
     *,
     min_fraction: float = 0.01,
 ) -> int | None:
-    """First available floor meeting horizontal sea fraction in any prepared window."""
     if floors < 1 or not 0 < min_fraction <= 1 or not scenes:
         raise ValueError("Expected scenes, positive floor count and fraction within (0,1]")
     eyes = base_elevation_m + (np.arange(1, floors + 1) - 0.5) * FLOOR_HEIGHT_M

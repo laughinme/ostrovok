@@ -1,5 +1,3 @@
-"""Hidden synthetic hotelier answers, consistent with room ids and real building sides."""
-
 import gzip
 from random import Random
 from typing import Any
@@ -105,7 +103,6 @@ def generate_truth(
 
 
 def coastal_hotels(hotels: list[dict[str, str]]) -> set[str]:
-    """Hotels within 800 m of the real sea boundary, for fictional marketing claims."""
     with gzip.open(REGION / "sea.wkb.gz", "rt", encoding="ascii") as stream:
         sea = from_wkb(stream.read().strip())
     projection = LocalProjection(LonLat(39.9, 43.6))

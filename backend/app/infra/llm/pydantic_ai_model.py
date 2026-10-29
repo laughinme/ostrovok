@@ -1,9 +1,3 @@
-"""
-`LanguageModel` on PydanticAI (D-10): any OpenAI-compatible endpoint behind our port. Every
-failure — no key, provider error, timeout, schema mismatch, daily limit — becomes
-`LlmUnavailableError`, and the caller falls back to its rule-based twin.
-"""
-
 import asyncio
 import hashlib
 import json
@@ -36,24 +30,18 @@ Thinking = LlmThinking
 
 
 def model_settings(thinking: Thinking) -> ModelSettings:
-    """Reasoning effort via PydanticAI's unified `thinking` setting; "default" keeps the model's."""
     if thinking == "default":
         return ModelSettings()
     return ModelSettings(thinking=False if thinking == "off" else thinking)
 
 
-pydantic_ai.BANNER_ENABLED = False  # logs are ours: no first-run banner in stdout
+pydantic_ai.BANNER_ENABLED = False
 
 OPENAI_API = "api.openai.com"
 CACHE_VERSION = "provider-profiles-v2"
 
 
 def openai_compatible(base_url: str, api_key: str, model: str) -> Model:
-    """
-    OpenAI itself through the Responses API: there reasoning effort and function tools work
-    together (Chat Completions rejects the pair for gpt-5.4+). Every other OpenAI-compatible
-    endpoint (Gemini, OpenRouter, Yandex, Ollama) through Chat Completions.
-    """
     host = urlsplit(base_url).hostname if base_url else OPENAI_API
     headers: dict[str, Any] | None = (
         {"x-goog-api-key": api_key, "Authorization": ""}
@@ -70,8 +58,6 @@ def openai_compatible(base_url: str, api_key: str, model: str) -> Model:
     provider = OpenAIProvider(openai_client=client)
     if host == OPENAI_API:
         return OpenAIResponsesModel(model, provider=provider)
-    # Polza keeps the vendor prefix in its API IDs. The SDK's OpenAI profile matcher
-    # expects the bare name; otherwise unified `thinking` is silently ignored.
     profile = (
         openai_model_profile(model.removeprefix("openai/"))
         if host == "polza.ai" and model.startswith("openai/")
@@ -184,7 +170,6 @@ class PydanticAiLanguageModel:
         if self._cache is not None and (hit := await self._cache.get(key)):
             cached = output.model_validate(hit["output"], by_name=True)
             await self._log(task, "cached", prompt, output=hit["output"])
-            # What the answer cost when it was computed: nothing is spent now (`cached`).
             first = hit["usage"]
             return LlmResult(
                 cached,
@@ -225,7 +210,7 @@ class PydanticAiLanguageModel:
                 agent.run([prompt, image] if image is not None else prompt, usage_limits=limits),
                 timeout=min(self._timeout, budget.max_seconds),
             )
-        except Exception as exc:  # any provider, schema or limit failure means "use the rules"
+        except Exception as exc:
             error = type(exc).__name__ if image is not None else f"{type(exc).__name__}: {exc}"
             logger.warning("LLM task %s failed: %s", task, error)
             if not isinstance(

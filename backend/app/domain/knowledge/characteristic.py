@@ -9,8 +9,6 @@ from app.domain.knowledge.values import ValueType
 
 
 class Level(StrEnum):
-    """Where a characteristic's value lives (08 §9 `Characteristic.level`)."""
-
     HOTEL = "hotel"
     FACADE = "facade"
     FACADE_FLOOR = "facade_floor"
@@ -20,8 +18,6 @@ class Level(StrEnum):
 
 
 class MethodKind(StrEnum):
-    """The closed set of methods (09 §5.2). A new method is code; a new characteristic is data."""
-
     VIEW = "view"
     SUN_EVENT = "sun_event"
     NOISE = "noise"
@@ -47,8 +43,6 @@ class CharacteristicStatus(StrEnum):
 
 @dataclass(frozen=True, slots=True)
 class Characteristic:
-    """A registry entry: what the system can know and how to get it (09 §5.1)."""
-
     key: str
     title: str
     level: Level
@@ -75,5 +69,4 @@ class Characteristic:
 
     @property
     def gridded(self) -> bool:
-        """Facts of facade-level characteristics are reconciled cell by cell over the hotel grid."""
         return self.level in {Level.FACADE, Level.FACADE_FLOOR, Level.FACADE_FLOOR_MONTH}

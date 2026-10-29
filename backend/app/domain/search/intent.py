@@ -1,8 +1,3 @@
-"""
-The rule-based Intent agent (09 §7.1): text → chips, trip, hints. The LLM planner produces the
-same `Intent`; this one needs no key and is the fallback when the LLM is unavailable.
-"""
-
 import re
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass, field
@@ -80,8 +75,6 @@ class Intent:
 
 @dataclass(frozen=True, slots=True)
 class Vocabulary:
-    """What the rule parser knows: characteristic → title, checkability and phrases."""
-
     titles: Mapping[str, str]
     checkable: Mapping[str, Checkable]
     phrases: Mapping[str, tuple[str, ...]]
@@ -185,21 +178,16 @@ _STOPWORDS = frozenset(
 
 
 def stems(text: str) -> frozenset[str]:
-    """Snowball stems: «ночью» and «ночь», «закат» and «закатом», «тихий» and «тихо» meet."""
     words = re.findall(r"[а-яa-z0-9]+", text)
-    # «у моря» is about being near the sea, not just about the sea: keep the preposition's sense.
     near = {"у" + _stem(after) for before, after in pairwise(words) if before == "у"}
     return frozenset(_stem(w) for w in words if w not in _STOPWORDS) | near
 
 
 def covers(present: frozenset[str], phrase: frozenset[str]) -> bool:
-    """Every phrase stem occurs in the text; a long stem also matches a longer word form."""
     return all(any(_same(word, stem) for word in present) for stem in phrase)
 
 
 def _same(word: str, stem: str) -> bool:
-    # Snowball keeps some suffixes and fleeting vowels: «собак» ~ «собакен», «ступен» ~ «ступенек»,
-    # «стройплощадк» ~ «стройплощадок». Long stems may differ in their last two letters.
     if word == stem:
         return True
     common = next(
@@ -213,17 +201,11 @@ def _same(word: str, stem: str) -> bool:
 
 @lru_cache(maxsize=8192)
 def _stem(word: str) -> str:
-    # A fresh stemmer per new word: the Snowball object keeps state between calls.
     stem: str = snowballstemmer.stemmer("russian").stemWord(word)
     return stem
 
 
 def _match(norm: str, vocabulary: Vocabulary) -> list[str]:
-    """
-    A phrase matches when all its word stems occur in the sentence, in any order.
-    The most specific phrase per characteristic wins, and a characteristic whose match is a
-    strict part of another one's («тихо» inside «тихо днём») is dropped.
-    """
     present = stems(norm)
     best: dict[str, frozenset[str]] = {}
     for key, phrases in vocabulary.stems.items():
@@ -241,7 +223,6 @@ def _match(norm: str, vocabulary: Vocabulary) -> list[str]:
 
 
 def _fuzzy(norm: str, vocabulary: Vocabulary) -> list[tuple[int, str]]:
-    """Typos like «вид на морэ»: only multi-word phrases, to keep false matches out."""
     best: list[tuple[int, str]] = []
     for key, phrases in vocabulary.phrases.items():
         score = max(
@@ -260,10 +241,6 @@ def _fuzzy(norm: str, vocabulary: Vocabulary) -> list[tuple[int, str]]:
 
 
 def _declined(key: str, clauses: Sequence[str], vocabulary: Vocabulary) -> bool:
-    """
-    «Вид на море не нужен», «парковка — всё равно»: the wish is dropped when a refusal stands
-    within three words of it in every clause that names it.
-    """
     absence = {
         "pets_policy": r"\bбез (?:собак|животн|питомц)",
         "parking": r"\bбез машин",
@@ -298,7 +275,6 @@ def _declined(key: str, clauses: Sequence[str], vocabulary: Vocabulary) -> bool:
 def _clause_importance(
     key: str, clauses: Sequence[str], vocabulary: Vocabulary
 ) -> Importance | None:
-    """«Обязательно тихо, желательно вид на море»: each wish takes the cue of its own clause."""
     for clause in clauses:
         present = stems(clause)
         if any(phrase and covers(present, phrase) for phrase in vocabulary.stems[key]):
@@ -351,7 +327,6 @@ def _params_for(key: str, params: Mapping[str, Any]) -> dict[str, Any]:
 def _unknown(
     norm: str, importance: Importance, params: Mapping[str, Any], *, start: int
 ) -> list[Chip]:
-    """A wish we have no characteristic for: the Curator may learn it (09 §3.2)."""
     match = _POI_CUE.search(norm)
     if match is None:
         return []

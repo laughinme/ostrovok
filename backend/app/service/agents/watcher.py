@@ -1,9 +1,3 @@
-"""
-The Watcher (09 §3.3): a change of the world → hotels whose facts depend on it → recomputation
-→ new fact versions with the change as the reason → notifications and the change feed.
-Deterministic: no LLM, it reacts to events by rules.
-"""
-
 from collections.abc import Awaitable, Callable, Sequence
 from uuid import UUID
 
@@ -20,7 +14,6 @@ from app.service.ports import EventBus
 
 CHANGES_CHANNEL = "changes"
 Notify = Callable[[UUID, str, str], Awaitable[None]]
-"""(hotel id, title, body) → notifications for the hotel and its guests with bookings."""
 
 
 class Watcher:
@@ -44,7 +37,7 @@ class Watcher:
     async def react(self, run_id: UUID, change_id: UUID) -> None:
         async def body(tracer: Tracer) -> None:
             if self._invalidate is not None:
-                self._invalidate()  # cached skylines are from the old world
+                self._invalidate()
             change, nearby = await self._affected(change_id)
             await tracer.tool(
                 "world.affected",

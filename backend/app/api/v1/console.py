@@ -1,5 +1,3 @@
-"""Ostrovok's knowledge console: registry, agents, conflicts, changes of the world (09 §9)."""
-
 from datetime import datetime
 from typing import Annotated
 from uuid import UUID

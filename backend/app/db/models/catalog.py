@@ -14,8 +14,6 @@ POINT = Geometry(geometry_type="POINT", srid=4326, spatial_index=True)
 
 
 class Hotel(UuidPkMixin, TimestampMixin, Base):
-    """A real hotel from OSM. Everything commercial about it (rooms, prices, rating) is demo."""
-
     __tablename__ = "hotels"
 
     osm_id: Mapped[str] = mapped_column(String(32), unique=True)
@@ -38,8 +36,6 @@ class Hotel(UuidPkMixin, TimestampMixin, Base):
 
 
 class Building(Base):
-    """Buildings within 2 km of hotels; demo world changes add and remove some at runtime."""
-
     __tablename__ = "buildings"
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
@@ -68,8 +64,6 @@ class OsmFeature(Base):
 
 
 class RoomType(Base):
-    """A demo room category with demo rates (08 §9 `RoomType`)."""
-
     __tablename__ = "room_types"
 
     id: Mapped[str] = mapped_column(String(64), primary_key=True)
@@ -83,8 +77,6 @@ class RoomType(Base):
 
 
 class FacadeRoom(UuidPkMixin, Base):
-    """The hotel's markup: which room category faces which side on which floors."""
-
     __tablename__ = "facade_rooms"
 
     hotel_id: Mapped[UUID] = mapped_column(ForeignKey("hotels.id", ondelete="CASCADE"), index=True)
@@ -97,8 +89,6 @@ class FacadeRoom(UuidPkMixin, Base):
 
 
 class WorldChange(UuidPkMixin, Base):
-    """«Построили дом» and other changes of the world that make facts stale (09 §3.3)."""
-
     __tablename__ = "world_changes"
 
     kind: Mapped[str] = mapped_column(String(32))

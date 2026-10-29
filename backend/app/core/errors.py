@@ -3,8 +3,6 @@ from typing import Any, ClassVar
 
 
 class ErrorCode(StrEnum):
-    """Closed list of machine-readable codes. Clients switch on these, never on `detail` text."""
-
     BAD_REQUEST = "BAD_REQUEST"
     REQUEST_VALIDATION_ERROR = "REQUEST_VALIDATION_ERROR"
     INVALID_CURSOR = "INVALID_CURSOR"
@@ -45,13 +43,6 @@ class ErrorCode(StrEnum):
 
 
 class DomainError(Exception):
-    """
-    Base for every expected error. The API layer turns it into an RFC 7807 problem response.
-
-    `keep_changes` marks the rare error that must not roll back the transaction:
-    e.g. revoking a session after refresh-token reuse, and still answering 401.
-    """
-
     status_code: ClassVar[int] = 400
     error_code: ClassVar[ErrorCode] = ErrorCode.BAD_REQUEST
     default_detail: ClassVar[str] = "Bad request"

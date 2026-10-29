@@ -1,5 +1,3 @@
-"""Runtime switches the operator can flip in the console (LLM mode for the demo)."""
-
 from typing import Literal
 
 from sqlalchemy.dialects.postgresql import insert
