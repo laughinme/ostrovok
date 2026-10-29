@@ -85,7 +85,7 @@ class Researcher:
         changed = 0
         for characteristic in characteristics:
             changed += await self._one(hotel, characteristic, tracer)
-        await tracer.decide(f"Готово: изменилось фактов — {changed}")
+        await tracer.decide(f"Готово: изменилось фактов - {changed}")
         return changed
 
     async def _one(self, hotel: HotelGeo, characteristic: Characteristic, tracer: Tracer) -> int:
@@ -101,7 +101,7 @@ class Researcher:
         try:
             findings = await executor.collect(call, self._env)
         except NoDataError as exc:
-            await tracer.decide(f"{characteristic.title}: {exc} — оставляем «не знаем»")
+            await tracer.decide(f"{characteristic.title}: {exc} - оставляем «не знаем»")
             return 0
         observations = [
             to_observation(f, hotel, characteristic, self._env, tracer.run_id) for f in findings

@@ -9,10 +9,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "О!кно — AI-поиск идеального отеля" },
+      { title: "О!кно - AI-поиск идеального отеля" },
       {
         name: "description",
-        content: "Опишите идеальный отель своими словами — AI-агенты найдут его.",
+        content: "Опишите идеальный отель своими словами - AI-агенты найдут его.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

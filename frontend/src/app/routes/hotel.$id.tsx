@@ -64,15 +64,15 @@ export const Route = createFileRoute("/hotel/$id")({
   head: ({ loaderData }) => ({
     meta: loaderData
       ? [
-          { title: `${loaderData.hotel.name} — О!кно` },
+          { title: `${loaderData.hotel.name} - О!кно` },
           { name: "description", content: loaderData.hotel.tagline },
-          { property: "og:title", content: `${loaderData.hotel.name} — О!кно` },
+          { property: "og:title", content: `${loaderData.hotel.name} - О!кно` },
           { property: "og:description", content: loaderData.hotel.tagline },
           { property: "og:image", content: loaderData.hotel.image },
           { name: "twitter:card", content: "summary_large_image" },
           { name: "twitter:image", content: loaderData.hotel.image },
         ]
-      : [{ title: "Отель не найден — О!кно" }, { name: "robots", content: "noindex" }],
+      : [{ title: "Отель не найден - О!кно" }, { name: "robots", content: "noindex" }],
   }),
   notFoundComponent: () => (
     <div className="p-20 text-center">

@@ -148,7 +148,7 @@ export default function MapCanvas({
         </button>
       </div>
       <span className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-card/85 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-muted-foreground shadow-soft backdrop-blur">
-        {scrollZoom ? "тяните · колесо приближает" : "масштаб — кнопками + и −"}
+        {scrollZoom ? "тяните · колесо приближает" : "масштаб - кнопками + и −"}
       </span>
     </>
   );

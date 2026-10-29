@@ -28,7 +28,7 @@ export function Settings() {
                   [
                     "auto",
                     "Автоматически",
-                    "Используем LLM, если модель доступна. Иначе — правила.",
+                    "Используем LLM, если модель доступна. Иначе - правила.",
                   ],
                   ["off", "Только правила", "Без вызовов языковых моделей."],
                 ] as const
@@ -56,7 +56,7 @@ export function Settings() {
           <p className="text-sm">
             {query.data.llmAvailable
               ? "LLM подключена"
-              : "LLM недоступна — агенты работают по правилам"}
+              : "LLM недоступна - агенты работают по правилам"}
           </p>
           <dl className="space-y-4 border-t pt-5">
             <div>

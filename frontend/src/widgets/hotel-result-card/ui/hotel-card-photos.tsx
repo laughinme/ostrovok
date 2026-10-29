@@ -74,7 +74,7 @@ export function HotelCardPhotos({
           src={photos[current]}
           alt={
             photoInfo(photos[current])?.alt ??
-            `${hotel.name} — фото ${current + 1} из ${photos.length}`
+            `${hotel.name} - фото ${current + 1} из ${photos.length}`
           }
           loading="lazy"
           width={1024}
@@ -106,7 +106,7 @@ export function HotelCardPhotos({
         size="icon"
         onClick={toggle}
         aria-pressed={selected}
-        aria-label={`${selected ? "Убрать из избранного" : "В избранное"} — ${hotel.name}`}
+        aria-label={`${selected ? "Убрать из избранного" : "В избранное"} - ${hotel.name}`}
         title={selected ? "Убрать из избранного" : "В избранное"}
         className="absolute right-3 top-3 h-8 w-8 bg-card/95 text-card-foreground"
       >
@@ -127,7 +127,7 @@ export function HotelCardPhotos({
                 size="icon"
                 className="h-8 w-8 bg-card/95 text-card-foreground"
                 onClick={() => go(-1)}
-                aria-label={`Предыдущее фото — ${hotel.name}`}
+                aria-label={`Предыдущее фото - ${hotel.name}`}
                 title="Предыдущее фото"
               >
                 <ChevronLeft />
@@ -137,7 +137,7 @@ export function HotelCardPhotos({
                 size="icon"
                 className="h-8 w-8 bg-card/95 text-card-foreground"
                 onClick={() => go(1)}
-                aria-label={`Следующее фото — ${hotel.name}`}
+                aria-label={`Следующее фото - ${hotel.name}`}
                 title="Следующее фото"
               >
                 <ChevronRight />

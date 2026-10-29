@@ -90,7 +90,7 @@ export function WhyPanel({ fact: summary, hotel }: { fact: Fact; hotel: HotelDet
           "Уверенность не указана"
         ) : (
           <>
-            <b className="num">{p}</b> из 100 — уверенность в факте.
+            <b className="num">{p}</b> из 100 - уверенность в факте.
           </>
         )}
       </p>

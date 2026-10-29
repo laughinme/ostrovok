@@ -1,6 +1,6 @@
 import re
 
-_PUNCT = re.compile(r"[^\w\s₽%°\-–—/.]+", re.UNICODE)
+_PUNCT = re.compile(r"[^\w\s₽%°\-–\u2014/.]+", re.UNICODE)
 _DECIMAL = re.compile(r"(\d)[.,](\d)")
 _SPACES = re.compile(r"\s+")
 

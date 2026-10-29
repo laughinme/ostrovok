@@ -82,7 +82,7 @@ export function BookingCalendar({
         </div>
       </div>
       <p className="sr-only">
-        Выберите заезд, затем выезд. Стрелки перемещают по дням, Page Up и Page Down — по месяцам.
+        Выберите заезд, затем выезд. Стрелки перемещают по дням, Page Up и Page Down - по месяцам.
       </p>
       <div className="booking-months">
         {[month, bookingMonth(month, 1)].map((current, monthIndex) => {

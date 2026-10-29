@@ -26,7 +26,7 @@ def provenance() -> list[str]:
     requests = sorted(CACHE.glob("*.request.json"))
     stamps = [p.stat().st_mtime for p in [*sources, *requests]]
     dates = (
-        " — ".join(datetime.fromtimestamp(t, UTC).isoformat() for t in [min(stamps), max(stamps)])
+        " - ".join(datetime.fromtimestamp(t, UTC).isoformat() for t in [min(stamps), max(stamps)])
         if stamps
         else "нет локального кэша"
     )
@@ -42,7 +42,7 @@ def provenance() -> list[str]:
         "",
         "Исходный каталог hotels.csv.gz выбран через Overpass и сохранён в репозитории; "
         "геослои получены из снимков Geofabrik. Грузия дополняет берег и вершины у границы.",
-        "DEM и климат: точные URL, периоды и полнота — в dem.json и climate.json.",
+        "DEM и климат: точные URL, периоды и полнота - в dem.json и climate.json.",
         "",
     ]
     return lines

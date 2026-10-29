@@ -165,7 +165,7 @@ def _walk_to_sea(description: str, norm: str) -> RecipeDraft:
             "no_steps": no_steps,
         },
         yes=title,
-        no=f"{title} — не получится",
+        no=f"{title} - не получится",
         synonyms=(normalize(description),),
     )
 
@@ -182,8 +182,8 @@ def _ask(description: str) -> RecipeDraft:
             "question": f"Подскажите, пожалуйста: {text[:1].lower() + text[1:]}?",
             "answer_kind": "free_text",
         },
-        yes=text[:1].upper() + text[1:] + " — да",
-        no=text[:1].upper() + text[1:] + " — нет",
+        yes=text[:1].upper() + text[1:] + " - да",
+        no=text[:1].upper() + text[1:] + " - нет",
         synonyms=(normalize(description),),
         question=f"Подскажите, пожалуйста: {text[:1].lower() + text[1:]}?",
     )

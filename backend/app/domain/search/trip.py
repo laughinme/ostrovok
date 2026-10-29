@@ -18,10 +18,10 @@ AREAS = {
 
 _MONTH_WORD = "|".join(MONTHS_GENITIVE)
 _RANGE_SAME_MONTH = re.compile(
-    rf"(?:с\s+)?(\d{{1,2}})\s*(?:-|–|—|по|до)\s*(\d{{1,2}})\s+({_MONTH_WORD})(?:\s+(\d{{4}}))?"
+    rf"(?:с\s+)?(\d{{1,2}})\s*(?:-|–|\u2014|по|до)\s*(\d{{1,2}})\s+({_MONTH_WORD})(?:\s+(\d{{4}}))?"
 )
 _RANGE_TWO_MONTHS = re.compile(
-    rf"(?:с\s+)?(\d{{1,2}})\s+({_MONTH_WORD})\s*(?:-|–|—|по|до)\s*"
+    rf"(?:с\s+)?(\d{{1,2}})\s+({_MONTH_WORD})\s*(?:-|–|\u2014|по|до)\s*"
     rf"(\d{{1,2}})\s+({_MONTH_WORD})(?:\s+(\d{{4}}))?"
 )
 _SINGLE_DAY = re.compile(rf"(\d{{1,2}})\s+({_MONTH_WORD})(?:\s+(\d{{4}}))?")
@@ -70,7 +70,7 @@ def _year(month: int, explicit: str | None, today: date) -> int:
 def _dates(norm: str, today: date) -> TripDraft:
     numeric = re.search(
         r"(\d{4}-\d{2}-\d{2}|\d{1,2}\.\d{1,2}\.\d{4})"
-        r"(?:\s*[-–—]\s*(\d{4}-\d{2}-\d{2}|\d{1,2}\.\d{1,2}\.\d{4}))?",
+        r"(?:\s*[-–\u2014]\s*(\d{4}-\d{2}-\d{2}|\d{1,2}\.\d{1,2}\.\d{4}))?",
         norm,
     )
     if numeric:

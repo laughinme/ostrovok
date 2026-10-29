@@ -218,7 +218,7 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
 
         <section className="sec-h2">
           <h2>Как это будет</h2>
-          <p>Ваш номер в ваши даты: вид, ночь, утро и погода — с доказательствами</p>
+          <p>Ваш номер в ваши даты: вид, ночь, утро и погода - с доказательствами</p>
         </section>
 
         <WindowSection hotel={hotel} detail={h} />
@@ -261,7 +261,7 @@ export function HotelPage({ hotel, query: q }: { hotel: Hotel; query?: string | 
         {h.unknowns.length > 0 && (
           <section className="sec-h2">
             <h2>Осталось уточнить</h2>
-            <p>Спросим отель — обычно отвечают за день</p>
+            <p>Спросим отель - обычно отвечают за день</p>
           </section>
         )}
         <div className="asks">

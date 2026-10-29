@@ -96,8 +96,8 @@ export function LlmJournal() {
                   <span className="ml-2 break-all text-muted-foreground">{call.model}</span>
                   <span className="mt-2 block text-xs text-muted-foreground">
                     {dateTime(call.createdAt)} ·{" "}
-                    {String(call.usage["inputTokens"] ?? call.usage["input_tokens"] ?? "—")} →{" "}
-                    {String(call.usage["outputTokens"] ?? call.usage["output_tokens"] ?? "—")}{" "}
+                    {String(call.usage["inputTokens"] ?? call.usage["input_tokens"] ?? "-")} →{" "}
+                    {String(call.usage["outputTokens"] ?? call.usage["output_tokens"] ?? "-")}{" "}
                     токенов · {call.latencyMs} мс
                   </span>
                 </span>

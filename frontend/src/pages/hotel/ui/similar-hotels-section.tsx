@@ -54,7 +54,7 @@ export function SimilarHotelsSection({
         </div>
         <p className="similar-hint">
           {change
-            ? "Похожие варианты — ниже. Можно выбрать другое пожелание."
+            ? "Похожие варианты - ниже. Можно выбрать другое пожелание."
             : "Выберите, что улучшить. Сравним по фактам об отелях и номерах."}
         </p>
       </section>
@@ -127,7 +127,7 @@ function SimilarResults({
     );
   return (
     <>
-      <p className="similar-hint">Вариантов: {matches.length}. Сходство и компромиссы — ниже.</p>
+      <p className="similar-hint">Вариантов: {matches.length}. Сходство и компромиссы - ниже.</p>
       <ul className="similar-list">
         {matches.slice(0, count).map((match) => {
           const improvement = match.perChip.find((item) => item.chipId === "improve");

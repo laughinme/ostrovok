@@ -92,7 +92,7 @@ class WorldEditor:
             self._uow,
             self._clock,
             agent=AgentKind.WATCHER,
-            goal=f"Изменение мира — {title}: найти затронутые отели и пересчитать",
+            goal=f"Изменение мира - {title}: найти затронутые отели и пересчитать",
             planner=Planner.RULES,
             job=JobKind.WORLD_CHANGED,
             payload={"change_id": str(change_id)},

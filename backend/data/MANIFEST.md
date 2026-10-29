@@ -14,13 +14,13 @@ CSV: UTF-8, gzip, WKB hex. Синтетические свойства поме�
 | [Copernicus DEM](https://registry.opendata.aws/copernicus-dem/) | Copernicus Digital Elevation Model, © DLR e.V. 2010–2014, © Airbus Defence and Space GmbH 2014–2018; provided under the Copernicus DEM licence |
 | [Open-Meteo](https://open-meteo.com/en/licence) | CC BY 4.0; weather data by Open-Meteo and its model providers |
 
-Дата получения источников (UTC): 2026-10-27T23:23:29.618355+00:00 — 2026-10-27T23:53:16.572812+00:00
+Дата получения источников (UTC): 2026-10-27T23:23:29.618355+00:00 - 2026-10-27T23:53:16.572812+00:00
 
 - Geofabrik [georgia-261026.osm.pbf](https://download.geofabrik.de/europe/georgia-261026.osm.pbf): 102,505,236 байт в сыром PBF, MD5 `c09f042055855fd6d408a05def79936e` (проверен при загрузке).
 - Geofabrik [south-fed-district-261026.osm.pbf](https://download.geofabrik.de/russia/south-fed-district-261026.osm.pbf): 316,654,474 байт в сыром PBF, MD5 `0d9fd34db68cf7f2e03b0df1e34008bd` (проверен при загрузке).
 
 Исходный каталог hotels.csv.gz выбран через Overpass и сохранён в репозитории; геослои получены из снимков Geofabrik. Грузия дополняет берег и вершины у границы.
-DEM и климат: точные URL, периоды и полнота — в dem.json и climate.json.
+DEM и климат: точные URL, периоды и полнота - в dem.json и climate.json.
 
 ## Объекты
 

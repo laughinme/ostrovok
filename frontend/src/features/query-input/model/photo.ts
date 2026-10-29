@@ -1,5 +1,5 @@
 export const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
-export const PHOTO_UNAVAILABLE = "Чтобы понять фото, нужен ключ LLM — опишите словами";
+export const PHOTO_UNAVAILABLE = "Чтобы понять фото, нужен ключ LLM - опишите словами";
 const PHOTO_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
 export function validatePhoto(file: Pick<File, "type" | "size">): string | undefined {

@@ -6,7 +6,7 @@ export const Route = createFileRoute("/trips_/$id")({
   beforeLoad: ({ params }) => {
     if (params.id === "mayak") throw redirect({ to: "/trips", replace: true });
   },
-  head: () => ({ meta: [{ title: "Детали брони — О!кно" }] }),
+  head: () => ({ meta: [{ title: "Детали брони - О!кно" }] }),
   component: BookingTripPage,
 });
 

@@ -60,7 +60,7 @@ export function HotelTravelOptions({
                   />
                 ) : option.minutes === null ? (
                   <>
-                    <span>{external ? "Уточнить" : "—"}</span>
+                    <span>{external ? "Уточнить" : "-"}</span>
                     {external && <ArrowUpRight size={14} />}
                   </>
                 ) : (
@@ -79,7 +79,7 @@ export function HotelTravelOptions({
                   href={yandexDirections(origin, destination!, option.mode)}
                   target="_blank"
                   rel="noreferrer"
-                  aria-label={`${labels[option.mode]} — открыть маршрут в Яндекс Картах`}
+                  aria-label={`${labels[option.mode]} - открыть маршрут в Яндекс Картах`}
                 >
                   {content}
                 </a>

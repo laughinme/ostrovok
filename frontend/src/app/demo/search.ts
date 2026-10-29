@@ -82,7 +82,7 @@ export function demoMatch(hotel: ApiHotel, intent: ApiIntent): ApiMatch {
     thumbnail: { kind: "facades", params: {} },
     priceFromDemo: hotel.priceFromDemo ?? null,
     tradeoff: perChip.some((chip) => chip.verdict === "no")
-      ? "Есть компромиссы по части пожеланий — сравните варианты"
+      ? "Есть компромиссы по части пожеланий - сравните варианты"
       : "Демонстрационный подбор для проверки интерфейса",
     recommendation: {
       roomTypeId: hotel.rooms[0]!.id,

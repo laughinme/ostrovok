@@ -84,7 +84,7 @@ export function Quality() {
             </table>
           </div>
           <p className="text-xs text-muted-foreground">
-            LLM: {report.llmStatus}. «—» означает, что измерения нет.
+            LLM: {report.llmStatus}. «-» означает, что измерения нет.
           </p>
           <section className="console-panel p-5">
             <h3 className="text-lg">Подбор отелей</h3>
@@ -92,7 +92,7 @@ export function Quality() {
               <div>
                 <dt className="text-sm text-muted-foreground">nDCG@10</dt>
                 <dd className="mt-1 text-2xl font-semibold">
-                  {report.ndcg10 == null ? "—" : report.ndcg10.toFixed(3)}
+                  {report.ndcg10 == null ? "-" : report.ndcg10.toFixed(3)}
                 </dd>
               </div>
               <div>
@@ -120,7 +120,7 @@ export function Quality() {
                     <dd className="mt-1 text-2xl font-semibold">
                       {typeof data["agree"] === "number" && typeof data["checked"] === "number"
                         ? `${data["agree"]} / ${data["checked"]}`
-                        : "—"}
+                        : "-"}
                     </dd>
                   </div>
                 );

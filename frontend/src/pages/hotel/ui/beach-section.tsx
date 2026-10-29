@@ -54,7 +54,7 @@ export function BeachSection({ hotel }: { hotel: Hotel }) {
                     пляж
                   </text>
                 </svg>
-                <p className="sub">Высота над уровнем моря; разрывы — нет данных</p>
+                <p className="sub">Высота над уровнем моря; разрывы - нет данных</p>
               </>
             ) : (
               <p className="geo-status">Нет данных профиля высоты</p>

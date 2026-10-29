@@ -2,17 +2,17 @@ import type { ApiRun } from "@/entities/agent-run";
 import type { Schema } from "../api/console";
 
 export function money(value: number | null | undefined): string {
-  return value == null ? "—" : `$${value.toFixed(value < 0.01 ? 4 : 2)}`;
+  return value == null ? "-" : `$${value.toFixed(value < 0.01 ? 4 : 2)}`;
 }
 
 export function percent(value: unknown): string {
-  return typeof value === "number" && Number.isFinite(value) ? `${Math.round(value * 100)}%` : "—";
+  return typeof value === "number" && Number.isFinite(value) ? `${Math.round(value * 100)}%` : "-";
 }
 
 export function dateTime(value: string): string {
   const date = new Date(value);
   return Number.isNaN(date.getTime())
-    ? "—"
+    ? "-"
     : date.toLocaleString("ru-RU", {
         day: "numeric",
         month: "short",

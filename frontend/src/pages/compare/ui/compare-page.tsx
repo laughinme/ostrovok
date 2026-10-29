@@ -100,7 +100,7 @@ export function ComparePage() {
                 {ids.includes(h.id) && (
                   <button
                     onClick={() => toggle(h.id)}
-                    aria-label={`Убрать из сравнения — ${h.name}`}
+                    aria-label={`Убрать из сравнения - ${h.name}`}
                     className="glass absolute right-3 top-3 rounded-full p-1.5"
                   >
                     <X className="h-4 w-4" />

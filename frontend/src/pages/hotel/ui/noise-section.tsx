@@ -177,7 +177,7 @@ export function NoiseSection({ hotel }: { hotel: Hotel }) {
             <span>{selected ? NOISE_FACADE_NAMES[selected.facade] : "Нет размеченных сторон"}</span>
             <div>
               <strong style={{ color: known ? selected?.color : undefined }}>
-                {known ? selected?.text : "—"}
+                {known ? selected?.text : "-"}
               </strong>
               <span>{noiseIndexLabel(selected?.level?.indexDb)}</span>
             </div>

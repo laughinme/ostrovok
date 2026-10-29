@@ -37,7 +37,7 @@ describe("live hotel onboarding", () => {
       ["noise", 0],
     ]);
     expect(confidenceRange(rows[0]!.facts)).toBe("70–90%");
-    expect(confidenceRange(rows[1]!.facts)).toBe("—");
+    expect(confidenceRange(rows[1]!.facts)).toBe("-");
   });
 
   it("does not present hotelier answers or demo facts as agent computations", () => {
@@ -51,7 +51,7 @@ describe("live hotel onboarding", () => {
     );
     expect(rows[0]!.facts).toEqual([]);
     expect(confidenceRange(rows[1]!.facts)).toBe("85%");
-    expect(confidenceRange([fact("invalid", NaN)])).toBe("—");
+    expect(confidenceRange([fact("invalid", NaN)])).toBe("-");
   });
 
   it("shows the actual final questions, preserving their text and reason", () => {

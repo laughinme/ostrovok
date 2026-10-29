@@ -16,11 +16,11 @@ describe("console formatting", () => {
   it("preserves small costs and missing measurements", () => {
     expect(money(0.0012)).toBe("$0.0012");
     expect(money(2)).toBe("$2.00");
-    expect(money(null)).toBe("—");
+    expect(money(null)).toBe("-");
     expect(percent(0.827)).toBe("83%");
-    expect(percent(null)).toBe("—");
-    expect(percent(NaN)).toBe("—");
-    expect(dateTime("invalid")).toBe("—");
+    expect(percent(null)).toBe("-");
+    expect(percent(NaN)).toBe("-");
+    expect(dateTime("invalid")).toBe("-");
     expect(dateTime(run.createdAt)).toContain("29");
     expect(record(null)).toEqual({});
     expect(record([])).toEqual({});

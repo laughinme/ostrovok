@@ -167,7 +167,7 @@ export function PartnerPage() {
             <section className="partner-conflicts" role="status">
               <Info size={21} />
               <div>
-                <h2>Есть расхождения — нужна ваша проверка</h2>
+                <h2>Есть расхождения - нужна ваша проверка</h2>
                 {profile.conflicts.map((conflict) => (
                   <p key={conflict.id}>{conflict.resolution || conflict.rule}</p>
                 ))}
@@ -213,14 +213,14 @@ export function PartnerPage() {
                 <History size={23} />
                 <div>
                   <h3>Пока без изменений</h3>
-                  <p>Ответьте на вопрос или подтвердите факт — действие появится здесь.</p>
+                  <p>Ответьте на вопрос или подтвердите факт - действие появится здесь.</p>
                 </div>
               </div>
             )}
           </section>
           <p className="partner-footer">
             <ShieldCheck size={15} />
-            Точные детали сегодня — довольные гости после поездки.
+            Точные детали сегодня - довольные гости после поездки.
           </p>
         </div>
       </div>
@@ -530,7 +530,7 @@ function PartnerFacts({ profile }: { profile: Profile }) {
               <p>
                 {query
                   ? "Попробуйте другое слово или выберите фильтр «Все»."
-                  : "Подтвердите информацию об отеле — она появится в этой категории."}
+                  : "Подтвердите информацию об отеле - она появится в этой категории."}
               </p>
             </div>
             {(query || filter !== "all") && (

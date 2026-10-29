@@ -44,7 +44,7 @@ export const EXAMPLES: Example[] = [
   {
     id: "characteristics",
     title: "Реестр характеристик",
-    what: "Каждая характеристика — данные: метод, срок годности, вопрос отелю",
+    what: "Каждая характеристика - данные: метод, срок годности, вопрос отелю",
     method: "GET",
     path: "/characteristics",
   },

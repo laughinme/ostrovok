@@ -22,7 +22,7 @@ async def with_fallback[T](
             if tracer is not None:
                 await tracer.decide(f"LLM недоступна ({exc}), работаю по правилам")
     elif tracer is not None:
-        await tracer.reason("LLM не подключена — план строят правила")
+        await tracer.reason("LLM не подключена - план строят правила")
     if tracer is not None:
         await tracer.set_planner(Planner.RULES)
     return await fallback(), Planner.RULES

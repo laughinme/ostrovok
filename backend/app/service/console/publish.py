@@ -71,6 +71,6 @@ class ConsoleAgents:
             changed = 0
             for hotel in hotels:
                 changed += await self._researcher.study(hotel, [characteristic], tracer)
-            await tracer.decide(f"Опубликовано: изменилось фактов — {changed}")
+            await tracer.decide(f"Опубликовано: изменилось фактов - {changed}")
 
         await self._runner.run(run_id, body)

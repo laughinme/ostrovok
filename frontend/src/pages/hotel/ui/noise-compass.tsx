@@ -163,7 +163,7 @@ export function NoiseCompass({
           <circle cx="150" cy="150" r="23" className="noise-compass-hub" />
           <circle cx="150" cy="140" r="2" className="noise-compass-hub-dot" />
           <text x="150" y="157" textAnchor="middle" className="noise-compass-bearing">
-            {selected ? `${bearing}°` : "—"}
+            {selected ? `${bearing}°` : "-"}
           </text>
         </svg>
         {directions.map((facade) => {
@@ -198,7 +198,7 @@ export function NoiseCompass({
               {showValues && (
                 <span>
                   <i />
-                  {side.known ? side.text : "—"}
+                  {side.known ? side.text : "-"}
                 </span>
               )}
             </button>

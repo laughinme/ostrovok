@@ -255,7 +255,7 @@ export function DevelopersPage() {
         <p className="mt-2 text-sm text-muted-foreground">
           {getApiMode() === "demo"
             ? "В режиме «Демо» ответы локальные. Чтобы проверить настоящий API, переключитесь в режим «Гость»."
-            : "Запросы уходят в настоящий бэкенд. Без ключа LLM разбор делают правила, с ключом — модель."}
+            : "Запросы уходят в настоящий бэкенд. Без ключа LLM разбор делают правила, с ключом - модель."}
         </p>
         <div className="mt-6 grid items-start gap-4 lg:grid-cols-2">
           {EXAMPLES.map((example) => (

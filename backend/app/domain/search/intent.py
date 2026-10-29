@@ -367,7 +367,7 @@ def _hints(text: str, chips: Sequence[Chip], trip: TripDraft) -> tuple[str, ...]
         and trip.month is None
         and any(c.characteristic in {"sunset_over_sea", "sunrise", "climate"} for c in chips)
     ):
-        hints.append("Укажите даты — посчитаем закат и погоду именно на них")
+        hints.append("Укажите даты - посчитаем закат и погоду именно на них")
     elif not chips and not subjective:
         hints.append("Опишите, что важно: вид, тишина, дорога до моря, что рядом")
     return tuple(hints)

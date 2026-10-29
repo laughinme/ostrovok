@@ -97,7 +97,7 @@ def generate_truth(
     return {
         "isDemo": True,
         "seed": seed,
-        "description": "Скрытая правда симулятора — демо, не подтверждённые свойства отелей",
+        "description": "Скрытая правда симулятора - демо, не подтверждённые свойства отелей",
         "hotels": truth,
     }
 

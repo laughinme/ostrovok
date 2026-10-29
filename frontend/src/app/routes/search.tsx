@@ -6,12 +6,12 @@ export const Route = createFileRoute("/search")({
   }),
   head: () => ({
     meta: [
-      { title: "Подбираем ваш отдых — О!кно" },
+      { title: "Подбираем ваш отдых - О!кно" },
       {
         name: "description",
         content: "Подбираем отели с учётом ваших пожеланий.",
       },
-      { property: "og:title", content: "Подбираем ваш отдых — О!кно" },
+      { property: "og:title", content: "Подбираем ваш отдых - О!кно" },
       { property: "og:description", content: "Подбираем отели с учётом ваших пожеланий." },
     ],
   }),

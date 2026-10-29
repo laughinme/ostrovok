@@ -63,7 +63,7 @@ async def test_facade_answer_sets_the_scope() -> None:
             }
         }
     )
-    answer = AnswerInput("facade_rooms", "На юго-запад — Делюкс, с 4 по 8 этаж")
+    answer = AnswerInput("facade_rooms", "На юго-запад - Делюкс, с 4 по 8 этаж")
 
     parsed = await LlmAnswerParser(llm).parse(answer)
 
