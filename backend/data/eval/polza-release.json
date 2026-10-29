@@ -129,11 +129,7 @@
     "providerAndAdministratorTokensAbsentFromCommittedFiles": true,
     "runtimeImageUid": 999
   },
-  "network": {
-    "russiaWithoutVpnPreviouslyVerified": true,
-    "claudeApiRouteAfterChecks": "utun7",
-    "vpnSettingsModified": false
-  },
+  "network": {},
   "limitations": [
     "Complete current Docker run was native ARM64 on Apple Silicon, with approved native PostGIS; final amd64 application image was tested separately with real low/medium tool calls.",
     "Fully emulated official amd64 PostGIS exited during bulk trace import on this Mac; native x86 jury Compose keeps its official image. Use compose.dev.yml on Apple Silicon without Rosetta.",
