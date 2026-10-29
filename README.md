@@ -65,7 +65,10 @@ docker compose up --build
 docker compose -f docker-compose.yml -f compose.dev.yml up --build
 ```
 
-Нужно около 4 ГБ свободной памяти и 5 ГБ диска под образы.
+Ресурсы: 2 ядра CPU и больше, около 4 ГБ свободной памяти и 5 ГБ диска под образы. Всё, что нужно,
+поднимает Compose: PostgreSQL 17 с PostGIS (db), Redis (redis), API и воркер агентов (backend, worker),
+интерфейс (frontend) и шлюз nginx на порту 8080 (gateway). Логи всех сервисов пишутся в stdout,
+смотреть их можно командой docker compose logs.
 
 ### С ключом LLM
 
