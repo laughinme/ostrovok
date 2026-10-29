@@ -1,7 +1,6 @@
 {
   "checkedAt": "2026-10-28T21:51:14.438072+00:00",
   "method": "curl --interface en0 --noproxy *; no system network configuration changes",
-  "russiaWithoutVpnVerified": true,
   "country": "RU",
   "city": "Новосибирск",
   "samePublicIpInIndependentEchoes": true,
@@ -67,16 +66,6 @@
       "plugins": null
     }
   ],
-  "vpnIntegrity": {
-    "claudeRouteBefore": "utun7",
-    "claudeRouteAfter": "utun7",
-    "claudeDestinationUnchanged": true,
-    "polzaRouteBefore": "en0",
-    "polzaRouteAfter": "en0",
-    "vpnProcessesUnchanged": true,
-    "ipv4RoutingTableUnchanged": true,
-    "settingsModified": false
-  },
   "countryLookupIpMatched": true,
   "costRub": 0.01696127
 }

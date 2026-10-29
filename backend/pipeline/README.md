@@ -1,98 +1,98 @@
 # Данные региона
 
-Запуск из корня: `make data`. Отдельные этапы:
-`cd backend && uv run --group pipeline python -m pipeline <pbf|osm|dem|climate|hotels|graph|window_profiles|manifest|all>`.
-`all` выполняет pbf → osm → dem → climate → hotels → graph → window_profiles → manifest.
-`pbf` скачивает закреплённые снимки, проверяет MD5 и обрезает их в региональные GPKG;
-OSM-экспорт и граф читают этот общий кэш. Остальные сырые ответы - в `.cache/pipeline/`
-по SHA-256 запроса, GeoTIFF - в `.cache/spike/`. При удалении кэша исходники получаются повторно;
+Запуск из корня: make data. Отдельные этапы:
+cd backend && uv run --group pipeline python -m pipeline <pbf|osm|dem|climate|hotels|graph|window_profiles|manifest|all>.
+all выполняет pbf → osm → dem → climate → hotels → graph → window_profiles → manifest.
+pbf скачивает закреплённые снимки, проверяет MD5 и обрезает их в региональные GPKG;
+OSM-экспорт и граф читают этот общий кэш. Остальные сырые ответы - в .cache/pipeline/
+по SHA-256 запроса, GeoTIFF - в .cache/spike/. При удалении кэша исходники получаются повторно;
 OSM закреплён датой. CSV.gz пишутся с фиксированным gzip mtime. API LLM не используется.
 
-Проверки: `cd backend && uv run ruff check pipeline`; тесты пайплайна запускаются отдельно от приложения.
+Проверки: cd backend && uv run ruff check pipeline; тесты пайплайна запускаются отдельно от приложения.
 MANIFEST формируется из реально существующих файлов; превышение бюджета приводит к ошибке.
 
 OSM: пять явно заданных областей отбора (это демонстрационные районы, не административные границы).
-Внутри района сортировка по `osm_id`, одна гостиница на здание, узел обязан попадать в контур здания;
+Внутри района сортировка по osm_id, одна гостиница на здание, узел обязан попадать в контур здания;
 ближайшее здание через дорогу не подставляется. Части зданий в отношениях не дублируются.
-Высота: `height` → `building:levels × 3 м` → 9 м; `height_source` сохраняет происхождение.
+Высота: height → building:levels × 3 м → 9 м; height_source сохраняет происхождение.
 OSM читается pyogrio/GDAL из фиксированных снимков Geofabrik за 26.10.2026:
-`russia/south-fed-district-261026.osm.pbf` и `europe/georgia-261026.osm.pbf`.
+russia/south-fed-district-261026.osm.pbf и europe/georgia-261026.osm.pbf.
 Соседний снимок нужен для замыкания берега и дальних вершин у границы (D-39).
 Загрузка атомарная, проверяется MD5 издателя; незавершённый сторонний download отвергается.
-В `backend/.cache/osm/` лежат PBF, метаданные источников и региональные GeoPackage.
+В backend/.cache/osm/ лежат PBF, метаданные источников и региональные GeoPackage.
 GDAL читает каждый слой один раз с bbox региона + 40 км; дальше этапы используют кэш.
-`osmconf.ini` сохраняет все теги, включая `ele`, `opening_hours`, `building:levels` и `step_count`,
+osmconf.ini сохраняет все теги, включая ele, opening_hours, building:levels и step_count,
 в JSON; родные OSM ID различают node/way/relation, дубли двух снимков удаляются.
-Уже выбранный `hotels.csv.gz` - неизменяемый входной снимок репозитория, OSM-этап его не пересобирает.
-Его `osm_timestamp` относится к исходному выбору через Overpass, остальные геослои - к Geofabrik.
+Уже выбранный hotels.csv.gz - неизменяемый входной снимок репозитория, OSM-этап его не пересобирает.
+Его osm_timestamp относится к исходному выбору через Overpass, остальные геослои - к Geofabrik.
 Здания отбираются в 2 км, дороги и ж/д - в 1,5 км, POI - в 2,5 км от отелей;
-пляжи и ВПП - по региону, вершины с `ele` - с запасом 40 км.
-`sea.wkb.gz` содержит ASCII WKB hex MultiPolygon; море справа от направленной линии OSM.
+пляжи и ВПП - по региону, вершины с ele - с запасом 40 км.
+sea.wkb.gz содержит ASCII WKB hex MultiPolygon; море справа от направленной линии OSM.
 
-Тесты без сети: `cd backend && uv run --group pipeline pytest tests/pipeline -q`.
+Тесты без сети: cd backend && uv run --group pipeline pytest tests/pipeline -q.
 
-DEM: `python -m pipeline dem` берёт Copernicus GLO-30 по охвату всех отелей +40,2 км.
-Кэш B1.0 в `.cache/spike/` переиспользуется; недостающие тайлы загружаются с публичного S3.
+DEM: python -m pipeline dem берёт Copernicus GLO-30 по охвату всех отелей +40,2 км.
+Кэш B1.0 в .cache/spike/ переиспользуется; недостающие тайлы загружаются с публичного S3.
 Четыре тайла N43E039/N43E040/N44E039/N44E040 усредняются до 2″ и округляются в int16.
-`dem.json` содержит pixel-corner Affine `[a,b,c,d,e,f]`, nodata и URL источников.
+dem.json содержит pixel-corner Affine [a,b,c,d,e,f], nodata и URL источников.
 DEM - поверхность с деревьями/крышами (DSM), не модель голого рельефа; неизвестное не равно морю.
 
-Климат: `python -m pipeline climate` получает ERA5 daily за 2016–2025 и Marine SST за 2023–2025.
+Климат: python -m pipeline climate получает ERA5 daily за 2016–2025 и Marine SST за 2023–2025.
 Нормы имеют равный вес каждого года. Единицы: °C, ч/день, дождливых дней (≥1 мм жидких осадков)/месяц.
 SST в ERA5-Ocean недоступна; Marine best_match содержит пропуски, поэтому неполные месяцы исключены.
-Реальные периоды, число лет воды по месяцам и ячейки API записаны в `climate.json`.
-`years` у побережья - консервативный минимум 2, у Поляны - 10; вода Поляны всегда null.
+Реальные периоды, число лет воды по месяцам и ячейки API записаны в climate.json.
+years у побережья - консервативный минимум 2, у Поляны - 10; вода Поляны всегда null.
 
-Демо: `python -m pipeline hotels` читает реальные osm_id/контуры и sea.wkb.gz, пишет
-`data/demo/room_types.yaml`, `hidden_truth.yaml`, `history.yaml`; существующий users.yaml не меняет.
-Карточки и скрытые профили индексируются как `hotels: {osm_id: ...}`, история - `guests.guest_anna`.
+Демо: python -m pipeline hotels читает реальные osm_id/контуры и sea.wkb.gz, пишет
+data/demo/room_types.yaml, hidden_truth.yaml, history.yaml; существующий users.yaml не меняет.
+Карточки и скрытые профили индексируются как hotels: {osm_id: ...}, история - guests.guest_anna.
 Генератор использует seed 20261028 и независимые потоки SHA256 на отель; диапазоны R6 лежат
-в `pipeline/demo_reference.yaml` (для отелей без звёзд берём диапазоны 3★, звёзды не назначаем).
+в pipeline/demo_reference.yaml (для отелей без звёзд берём диапазоны 3★, звёзды не назначаем).
 Цены - демо за номер/ночь для ноября 2026; рейтинг, оснащение, правила и вся история - синтетика.
 Фасады берутся из building_facades, этажи ограничены реальной/оценённой этажностью OSM.
 Маркетинговые claims добавляются только части отелей в 800 м от береговой линии, не как физический факт.
-`RoomTypesLoader` в `app.init` уже читает карточки; скрытые профили и историю используют следующие этапы.
+RoomTypesLoader в app.init уже читает карточки; скрытые профили и историю используют следующие этапы.
 
-Пешеходный граф: `python -m pipeline graph` читает несокращённые линии из того же кэша в 2 км
-от отелей и высоты из `dem_int16.npy` через NpyTerrain. `foot=no/private`, закрытые дороги и
-закрытые шлюзы исключены; автомобильный `oneway` не ограничивает пеший ход, `oneway:foot` учитывается.
+Пешеходный граф: python -m pipeline graph читает несокращённые линии из того же кэша в 2 км
+от отелей и высоты из dem_int16.npy через NpyTerrain. foot=no/private, закрытые дороги и
+закрытые шлюзы исключены; автомобильный oneway не ограничивает пеший ход, oneway:foot учитывается.
 Сохраняются промежуточные вершины, явные направления, bridge/tunnel/layer. Граф собирается по
 совпадению исходных координат; GDAL не отдаёт ID узлов внутри way, поэтому редкие разные узлы
 с одинаковой координатой и уровнем неразличимы. Высоты - DSM, без отдельной модели настила моста.
-`step_count` сохраняет сумму по way; при отсутствии оценивается по длине / 0,3 м с `uncertain=true`.
+step_count сохраняет сумму по way; при отсутствии оценивается по длине / 0,3 м с uncertain=true.
 Число crossings - пересечённые оси крупных дорог и железнодорожных путей, не объединённые
 переходы: пересечение двух путей может дать 2. Неотмеченные пересечения снижают определённость.
 Профили коляски/кресла используют ограничения потребителя D-38; артефакт не гарантирует доступность.
-NPZ проверяется через `WalkGraph.from_file`, три реальных маршрута - через `ScipyRouter` перед записью.
+NPZ проверяется через WalkGraph.from_file, три реальных маршрута - через ScipyRouter перед записью.
 Точки пляжей - representative_point OSM, подходы к графу приблизительные, входы на местности не проверены.
 
-Проверка маршрутов без сети: `uv run --group pipeline python -m pipeline.graph_validation`.
-Карты и высотные профили: `uv run --group pipeline python -m pipeline.graph_plot`.
-Результаты - `.cache/osm/walk-validation.json` и `.cache/osm/walk-validation.png`, в git не попадают.
+Проверка маршрутов без сети: uv run --group pipeline python -m pipeline.graph_validation.
+Карты и высотные профили: uv run --group pipeline python -m pipeline.graph_plot.
+Результаты - .cache/osm/walk-validation.json и .cache/osm/walk-validation.png, в git не попадают.
 
 ## Профили окна
 
-После DEM и геослоёв: `uv run python -m pipeline window_profiles` (из `backend/`).
-Этап входит в `all`; без сети, PostGIS и LLM. Создаёт `region/window_profiles.zip`: номинальный
+После DEM и геослоёв: uv run python -m pipeline window_profiles (из backend/).
+Этап входит в all; без сети, PostGIS и LLM. Создаёт region/window_profiles.zip: номинальный
 горизонт среднего окна каждого фасада на каждом этаже всех 200 отелей, видимые вершины,
 минимальный этаж с морем по трём положениям окна. Путь солнца считается API на запрошенную дату.
 
-Внутри ZIP: `manifest.json` (version=1, SHA-256 шести исходных файлов) и `{osm_id}.json`
-(signature контура/этажности/высоты, profiles с ключом `SW/5`). Каждый профиль содержит rays
-`[azimuthDeg,angleDeg,kind,seaLowDeg,seaHighDeg]`, peaks, minimumSeaFloor, eyeM. Углы в градусах,
-eyeM - абсолютные метры; null для бесконечных/неизвестных углов, kind по `Obstacle` (0…4).
+Внутри ZIP: manifest.json (version=1, SHA-256 шести исходных файлов) и {osm_id}.json
+(signature контура/этажности/высоты, profiles с ключом SW/5). Каждый профиль содержит rays
+[azimuthDeg,angleDeg,kind,seaLowDeg,seaHighDeg], peaks, minimumSeaFloor, eyeM. Углы в градусах,
+eyeM - абсолютные метры; null для бесконечных/неизвестных углов, kind по Obstacle (0…4).
 Источник и версия не совпали - API готовит живую сцену. При изменениях соседних зданий вызывайте
-`WindowQueries.invalidate()`: сбрасывает ответы, сцены и использование предрасчёта в этом процессе.
+WindowQueries.invalidate(): сбрасывает ответы, сцены и использование предрасчёта в этом процессе.
 
-Контрольные точки - `.cache/window_profiles/<hash>/`; прерванный этап продолжает готовые отели.
+Контрольные точки - .cache/window_profiles/<hash>/; прерванный этап продолжает готовые отели.
 Архив заменяется атомарно после завершения. Это номинальные доказательства, не результаты МК;
-исполнители `view` и `sun_event` по-прежнему считают независимые возмущённые горизонты.
+исполнители view и sun_event по-прежнему считают независимые возмущённые горизонты.
 
 ## Резерв для нового отеля вживую
 
-`uv run --group pipeline python -m pipeline.reserve_hotels` выбирает 15–20 реальных отелей
-из кэша Geofabrik в `region/reserve_hotels.csv.gz` с колонками основного каталога.
+uv run --group pipeline python -m pipeline.reserve_hotels выбирает 15–20 реальных отелей
+из кэша Geofabrik в region/reserve_hotels.csv.gz с колонками основного каталога.
 Исключены названия и здания основных 200 отелей; контуры и высоты берутся из
-существующего `buildings.csv.gz`. Полные буферы 1,5/2/2,5 км должны лежать внутри
+существующего buildings.csv.gz. Полные буферы 1,5/2/2,5 км должны лежать внутри
 выгруженных зон шума/зданий/POI. Скрипт не меняет основной каталог и окружение.
 В текущем снимке 17 отелей: 4/1/4/4/4 по пяти районам.
