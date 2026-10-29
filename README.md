@@ -23,6 +23,16 @@
 
 Демо-видео: ссылка появится перед сдачей.
 
+Попробовать без установки: [ostrovok-okno.vercel.app](https://ostrovok-okno.vercel.app).
+
+![Главная: желание своими словами](assets/readme/landing.jpg)
+
+| Выдача: какой номер просить и почему | Страница отеля: окно, ночь, маршрут |
+|---|---|
+| ![Выдача](assets/readme/results.jpg) | ![Страница отеля](assets/readme/hotel.jpg) |
+| **Консоль знаний: агенты за работой** | **Кабинет отельера: только то, что нельзя посчитать** |
+| ![Консоль](assets/readme/console.jpg) | ![Кабинет отельера](assets/readme/partner.jpg) |
+
 ## Запуск
 
 Нужен только Docker с Compose v2.
@@ -34,7 +44,7 @@ cp .env.example .env
 docker compose up --build
 ```
 
-Приложение откроется на http://localhost:8080. Первая сборка занимает от двух до шести минут, на чистой
+Приложение откроется на [localhost:8080](http://localhost:8080). Первая сборка занимает от двух до шести минут, на чистой
 четырёхъядерной x86-машине без кэша около 100 секунд. Миграции, ключи и демо-данные сервис init загружает
 сам, руками ничего делать не нужно.
 
@@ -60,7 +70,7 @@ docker compose -f docker-compose.yml -f compose.dev.yml up --build
 ### С ключом LLM
 
 Для проверки подготовлен отдельный ключ Polza.ai с моделью openai/gpt-5.6-luna и лимитом 100 рублей.
-Он лежит в secrets.env.age, зашифрованный публичным ключом организаторов. Расшифровать и запустить
+Он лежит в [secrets.env.age](secrets.env.age), зашифрованный публичным ключом организаторов. Расшифровать и запустить
 из корня репозитория:
 
 ```sh
@@ -81,7 +91,7 @@ LLM_MODEL=openai/gpt-5.6-luna
 
 Модель выбрана по прогону на наших размеченных наборах (make eval-llm). На отложенной выборке разбор
 пожеланий гостя дал F1 0,96, разбор ответов отельеров 0,96, выбор метода Куратором 0,93, медиана разбора
-запроса около 3 секунд. Подробности в backend/data/eval/README.md. Каждый вызов модели с запросом,
+запроса около 3 секунд. Подробности в [backend/data/eval/README.md](backend/data/eval/README.md). Каждый вызов модели с запросом,
 ответом, токенами, ценой и временем виден в консоли оператора. Если провайдер недоступен, вернул ошибку
 или упёрся в лимит, агенты продолжают работать по правилам. LLM можно выключить и вручную в консоли.
 
@@ -133,7 +143,7 @@ docker compose exec ollama ollama pull qwen2.5:3b
 
 ## Как устроено
 
-Подробно в backend/ARCHITECTURE.md.
+Подробно в [backend/ARCHITECTURE.md](backend/ARCHITECTURE.md).
 
 ```text
 gateway (nginx, :8080) ─┬─ /            → frontend (TanStack Start)
@@ -159,9 +169,9 @@ LLM в системе только переводит и компилирует:
 
 ## API и MCP
 
-Публичный MCP-сервер: https://okno-api.fly.dev/mcp, без авторизации. Локально после запуска он доступен
+Публичный MCP-сервер: [okno-api.fly.dev/mcp](https://okno-api.fly.dev/mcp), без авторизации. Локально после запуска он доступен
 на http://localhost:8080/mcp, но облачным ассистентам нужен публичный адрес. Описание REST API:
-https://okno-api.fly.dev/api/docs, примеры запросов на странице «API и MCP» в приложении.
+[okno-api.fly.dev/api/docs](https://okno-api.fly.dev/api/docs), примеры запросов на странице «API и MCP» в приложении.
 
 Подключить к Claude: Customize → Connectors → Add custom connector, имя «О!кно», адрес сервера выше,
 без входа. Потом включить его в чате через «+» → Connectors.
@@ -181,7 +191,7 @@ https://okno-api.fly.dev/api/docs, примеры запросов на стра
 ## Данные
 
 Демо-данные лежат в репозитории (backend/data, около 30 МБ) и загружаются автоматически. Как они получены,
-описано в backend/data/MANIFEST.md. Повторить сбор: make data, затем make collect и make export-seed.
+описано в [backend/data/MANIFEST.md](backend/data/MANIFEST.md). Повторить сбор: make data, затем make collect и make export-seed.
 
 | Данные | Источник | Лицензия |
 |---|---|---|
@@ -192,12 +202,12 @@ https://okno-api.fly.dev/api/docs, примеры запросов на стра
 
 Фотографии отелей взяты из Wikimedia Commons, с авторами и лицензиями. Где снимков нет или их мало,
 галереи дополнены ИИ-иллюстрациями, и на каждой из них это написано. Такие иллюстрации не показывают
-настоящий интерьер или вид из номера. Как подбирались фото, описано в tools/hotel-photos/README.md.
+настоящий интерьер или вид из номера. Как подбирались фото, описано в [tools/hotel-photos/README.md](tools/hotel-photos/README.md).
 Чужих отзывов и данных Островка в проекте нет.
 
 ## Настройки
 
-Все переменные с безопасными значениями по умолчанию перечислены в .env.example.
+Все переменные с безопасными значениями по умолчанию перечислены в [.env.example](.env.example).
 
 | Переменная | По умолчанию | Зачем |
 |---|---|---|
@@ -214,10 +224,10 @@ https://okno-api.fly.dev/api/docs, примеры запросов на стра
 
 ## Разработка
 
-Бэкенд: backend/README.md. Основные команды: make dev, make test, make check (ruff, mypy, import-linter,
+Бэкенд: [backend/README.md](backend/README.md). Основные команды: make dev, make test, make check (ruff, mypy, import-linter,
 тесты), make openapi.
 
-Фронтенд: frontend/README.md. React, TypeScript, TanStack Start, Tailwind CSS, Zustand, MapLibre,
+Фронтенд: [frontend/README.md](frontend/README.md), архитектура в [frontend/ARCHITECTURE.md](frontend/ARCHITECTURE.md). React, TypeScript, TanStack Start, Tailwind CSS, Zustand, MapLibre,
 структура Feature-Sliced Design. Нужны Node.js 22.12+ и npm:
 
 ```sh
