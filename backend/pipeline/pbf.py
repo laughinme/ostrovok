@@ -1,5 +1,3 @@
-"""Pinned Geofabrik snapshot → compact regional GeoPackage, used by every OSM stage."""
-
 import hashlib
 import json
 from pathlib import Path
@@ -42,7 +40,6 @@ def checksum(path: Path) -> str:
 
 
 def snapshot(url: str = SOURCE) -> Path:
-    """Download atomically and verify upstream MD5; reject an in-flight/partial download."""
     OSM_CACHE.mkdir(parents=True, exist_ok=True)
     path = OSM_CACHE / Path(urlsplit(url).path).name
     stamp = path.with_suffix(".source.json")
@@ -74,7 +71,6 @@ def snapshot(url: str = SOURCE) -> Path:
 
 
 def regional_cache(source: Path | None = None) -> Path:
-    """Cache tagged points/ways/polygons intersecting the region + 40 km for peaks."""
     source = source or snapshot()
     digest = hashlib.sha256(CONFIG.read_bytes() + str(REGION_BOUNDS).encode()).hexdigest()[:12]
     target = OSM_CACHE / f"{source.stem}-{digest}.gpkg"
@@ -110,7 +106,6 @@ def regional_cache(source: Path | None = None) -> Path:
 
 
 def records(cache: Path, layer: str, *, where: str | None = None) -> list[dict[str, Any]]:
-    """Return geometries with complete JSON tags and typed node/way/relation OSM refs."""
     frame = pyogrio.read_dataframe(cache, layer=layer, where=where)
     result = []
     for row in frame.to_dict("records"):
@@ -130,7 +125,6 @@ def records(cache: Path, layer: str, *, where: str | None = None) -> list[dict[s
 
 
 def regional_records(layer: str, *, where: str | None = None) -> list[dict[str, Any]]:
-    """Merge neighbouring snapshots by native OSM ref; the Russian snapshot wins ties."""
     result = {}
     for url in (SOURCE, COAST_SOURCE):
         cache = regional_cache(snapshot(url))

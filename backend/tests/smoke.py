@@ -1,10 +1,4 @@
-"""
-Smoke test of a running stack through the gateway: `uv run python tests/smoke.py [base_url]`.
-Walks the main scenario (health → hotels → search → hotel page → «почему» → roles → console)
-and fails loudly on the first broken step. Used for the from-scratch check before submission.
-"""
-
-# ruff: noqa: T201 - a command-line check prints its progress
+# ruff: noqa: T201
 
 import sys
 import time

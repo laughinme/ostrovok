@@ -25,7 +25,6 @@ def problem_response(
     details: Any = None,
     headers: list[tuple[str, str]] | None = None,
 ) -> JSONResponse:
-    """RFC 7807 body plus `error_code` and `request_id`: one error shape for the whole API."""
     body: dict[str, Any] = {
         "type": "about:blank",
         "title": HTTPStatus(status).phrase,

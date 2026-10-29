@@ -21,7 +21,6 @@ EVAL_CALL_LIMIT = 5000
 
 
 def eval_settings(settings: Settings, overrides: dict[str, Any]) -> Settings:
-    """Model, endpoint and key for one comparison run; the key comes from a named env variable."""
     update = {k: v for k, v in overrides.items() if v and k != "key_env"}
     if key_env := overrides.get("key_env"):
         values = {k: v for path in ENV_FILES for k, v in dotenv_values(path).items()}
@@ -58,10 +57,9 @@ async def evaluate_quality(
     try:
         llm_report = None
         if use_llm:
-            # Without Redis: the evaluation counts its calls locally, not against the app's day.
             fast = build_language_model(settings, db, None, cache_only=cache_only)
             strong = build_language_model(settings, db, None, strong=True, cache_only=cache_only)
-            assert fast is not None  # noqa: S101 - llm_enabled checked above
+            assert fast is not None  # noqa: S101
             assert strong is not None  # noqa: S101
 
             def make_curator(llm: LanguageModel) -> Curator:

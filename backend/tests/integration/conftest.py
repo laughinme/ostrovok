@@ -12,7 +12,7 @@ from redis.asyncio import Redis
 from sqlalchemy import text
 
 from app.core.config import Settings
-from app.db import models  # noqa: F401 - registers every table
+from app.db import models  # noqa: F401
 from app.db.base import Base
 from app.db.database import Database
 from app.main import create_app
@@ -32,12 +32,10 @@ def alembic_config(database_url: str = TEST_DATABASE_URL) -> Config:
 
 @pytest.fixture(scope="session", autouse=True)
 def _migrated_database() -> None:
-    """Schema comes from the real migrations, so tests also prove the migrations work."""
     command.upgrade(alembic_config(), "head")
 
 
 async def _reset_state() -> None:
-    # Always the default test services, even when a test overrides URLs to simulate an outage.
     settings = build_settings()
     db = Database(settings)
     try:
@@ -55,7 +53,6 @@ async def _reset_state() -> None:
 
 @asynccontextmanager
 async def running_app(settings: Settings) -> AsyncIterator[tuple[FastAPI, AsyncClient]]:
-    """Clean database and Redis, then the real app with its lifespan, plus an in-process client."""
     await _reset_state()
     app = create_app(settings)
     async with app.router.lifespan_context(app):
@@ -69,7 +66,6 @@ AppFactory = Callable[..., AbstractAsyncContextManager[tuple[FastAPI, AsyncClien
 
 @pytest.fixture
 def app_factory() -> AppFactory:
-    """For tests that need non-default settings: `async with app_factory(x=1) as (app, client)`."""
 
     def factory(**overrides: Any) -> AbstractAsyncContextManager[tuple[FastAPI, AsyncClient]]:
         return running_app(build_settings(**overrides))
@@ -90,13 +86,11 @@ def app(_running: tuple[FastAPI, AsyncClient]) -> FastAPI:
 
 @pytest.fixture
 def client(_running: tuple[FastAPI, AsyncClient]) -> AsyncClient:
-    """httpx client talking to the app in-process (no network, lifespan already running)."""
     return _running[1]
 
 
 @pytest.fixture
 def db(app: FastAPI) -> Database:
-    """The app's own Database: assert on rows or run the worker code directly."""
     database: Database = app.state.db
     return database
 

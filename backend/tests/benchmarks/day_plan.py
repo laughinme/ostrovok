@@ -1,8 +1,3 @@
-"""Render actual OSM day plans without a database, network or LLM.
-
-uv run --group pipeline python -m tests.benchmarks.day_plan
-"""
-
 import asyncio
 import json
 import textwrap
@@ -46,7 +41,6 @@ def draw_map(axis, hotel, env, plan: DayPlan) -> None:
     axis.set_aspect("equal")
     axis.grid(alpha=0.2)
     axis.set_title(hotel.name)
-    # OSM outlines show streets and railways independently of the calculated walk.
     circle = reader._circle(hotel.location, 2600)
     for index in reader.feature_tree.query(circle, predicate="intersects"):
         feature = reader.features[int(index)]

@@ -1,5 +1,3 @@
-"""Fictional Anna history with explicit evidence for quietness and gentle walks."""
-
 from typing import Any
 
 
@@ -63,7 +61,6 @@ def _rejections(hotels: list[dict[str, str]]) -> list[dict[str, Any]]:
 
 
 def generate_history(hotels: list[dict[str, str]], cards: dict[str, Any]) -> dict[str, Any]:
-    """Stable real hotel/room references; preferences are fictional guest actions."""
     ordered = sorted(hotels, key=lambda row: row["osm_id"])
     by_district = {
         d: [h for h in ordered if h["district"] == d] for d in {h["district"] for h in ordered}

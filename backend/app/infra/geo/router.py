@@ -1,5 +1,3 @@
-"""In-memory adapter for the Router port, with separate directed searches both ways."""
-
 from collections.abc import Sequence
 from dataclasses import dataclass
 from itertools import pairwise
@@ -185,5 +183,4 @@ def _connector_minutes(snap: Snap, profile: WalkProfile) -> float:
 
 
 def _connector_edges(snap: Snap) -> list[WalkEdge]:
-    # Off-graph connectors have unknown surface/crossings and always lower confidence.
     return [WalkEdge(snap.distance_m, 0, uncertain=True)] if snap.distance_m else []

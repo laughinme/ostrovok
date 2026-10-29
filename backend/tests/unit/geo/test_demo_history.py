@@ -1,5 +1,3 @@
-"""All history references resolve and the actions support the intended taste profile."""
-
 from datetime import date, datetime
 from pathlib import Path
 

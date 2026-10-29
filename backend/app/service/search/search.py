@@ -1,6 +1,3 @@
-"""Search (09 §7): intent → candidates → ranking. Searches are stored as intents and
-re-ranked on every read, so a result reread after live research shows the new facts."""
-
 import asyncio
 from collections.abc import Sequence
 from dataclasses import dataclass, replace
@@ -58,13 +55,11 @@ TOP_REMEMBERED = 20
 
 
 def top_hotels(row: SearchRow) -> list[str] | None:
-    """Hotels the guest saw at the top when the search was last ranked; None for old searches."""
     top = row.result.get("top")
     return list(top) if isinstance(top, list) else None
 
 
 def _remember_top(row: SearchRow, ranking: Ranking) -> None:
-    # Hotelier demand reads it later instead of re-ranking every search of the week.
     top = [str(m.hotel.id) for m in ranking.matches[:TOP_REMEMBERED]]
     row.result = {**row.result, "top": top}
 
@@ -109,7 +104,6 @@ class SearchService:
         return SearchView(search_id, intent, await explain(ranking, self._llm))
 
     async def intent(self, search_id: UUID) -> Intent:
-        """The guest's wishes with their taste applied, without ranking every hotel."""
         row = await self._uow.session.get(SearchRow, search_id)
         if row is None:
             raise SearchNotFoundError()
@@ -152,13 +146,11 @@ class SearchService:
         facts = await load_facts(self._uow, [h.id for h in hotels], keys)
         guests = (intent.trip.adults or 0) + (intent.trip.children or 0) or None
         filters = Filters(budget_per_night=intent.trip.budget_per_night, guests=guests)
-        # Scoring every hotel is CPU work: off the event loop so other requests keep flowing.
         return await asyncio.to_thread(
             rank, intent.chips, hotels, facts, trip_window(intent), filters
         )
 
     async def _count_demand(self, intent: Intent) -> None:
-        """What guests look for, per district and day: the Liaison's «спрос» (09 §4.4)."""
         day = self._clock.now().date()
         for chip in intent.chips:
             if not chip.characteristic:

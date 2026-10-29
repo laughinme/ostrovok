@@ -51,7 +51,6 @@ class AuthService:
         try:
             await self._uow.flush()
         except IntegrityError as exc:
-            # Two registrations raced past the check above; the unique index decided.
             raise EmailTakenError() from exc
 
         return await self._open_session(user, client, user_agent)
@@ -78,7 +77,6 @@ class AuthService:
     async def demo_login(
         self, persona: str, *, client: ClientKind, user_agent: str | None
     ) -> IssuedTokens:
-        """Sign in as a seeded persona (guest, hotelier, operator) for the role switcher."""
         user = await self._uow.users.get_by_persona(persona)
         if user is None:
             raise UnknownPersonaError()
@@ -108,7 +106,6 @@ class AuthService:
         return self._issue(user, rotated, now)
 
     async def logout(self, raw_token: str) -> None:
-        """Idempotent: an unknown or already revoked token is not an error."""
         token = RefreshToken.parse(raw_token)
         session = await self._uow.sessions.get_for_update(token.session_id)
         if session is not None and session.revoked_at is None and token.matches(session.token_hash):
@@ -157,7 +154,6 @@ class AuthService:
 
 
 async def resolve_current_user(uow: UnitOfWork, claims: AccessClaims) -> CurrentUser:
-    """One primary-key lookup per request: catches bans, role changes and logout-everywhere."""
     user = await uow.users.get(claims.user_id)
     if user is None or user.auth_version != claims.auth_version:
         raise SessionRevokedError()

@@ -1,5 +1,3 @@
-"""Regression tests for OSM topology and provenance; no network."""
-
 import pytest
 from shapely import Point
 

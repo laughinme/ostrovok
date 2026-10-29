@@ -1,5 +1,3 @@
-"""Journal of LLM calls (`llm_calls`): what was asked, what came back, tokens and price."""
-
 import logging
 from collections.abc import Sequence
 from decimal import Decimal
@@ -17,13 +15,10 @@ from app.service.ports import Usage
 logger = logging.getLogger(__name__)
 
 PROMPT_MAX = 4000
-# $ per 1M tokens (input, cached input, output) for models genai-prices does not know yet;
-# from the providers' price pages, 28.10.2026 (docs/backend/research/R9-llm-providers.md).
 PRICES = {"gpt-6.1-terra": (1.00, 0.05, 5.00)}
 
 
 def price_usd(model: str, input_tokens: int, cached_tokens: int, output_tokens: int) -> float:
-    """Best-effort USD price by genai-prices; OpenRouter ids (`openai/gpt-…`) by their last part."""
     usage = PriceUsage(
         input_tokens=input_tokens, cache_read_tokens=cached_tokens, output_tokens=output_tokens
     )
@@ -46,7 +41,6 @@ def run_cost(model: str, reported: Decimal | None, usage: Usage) -> float:
 
 
 def tool_calls(messages: Sequence[ModelMessage], names: set[str]) -> list[dict[str, Any]]:
-    """The agent's own tool calls with their results, in order (the output tool is left out)."""
     calls: dict[str, dict[str, Any]] = {}
     for message in messages:
         for part in message.parts:
@@ -100,5 +94,5 @@ class LlmJournal:
                         error=error[:1000] if error else None,
                     )
                 )
-        except Exception:  # the journal must never break the call it describes
+        except Exception:
             logger.warning("LLM journal write failed", exc_info=True)

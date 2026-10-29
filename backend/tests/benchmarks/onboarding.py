@@ -1,9 +1,3 @@
-"""Real OSM onboarding on a small isolated scene; never loads the full knowledge seed.
-
-TEST_DATABASE_URL=.../okno_onboard_test TEST_REDIS_URL=redis://localhost:6380/14 \
-  caffeinate -i uv run python -m tests.benchmarks.onboarding [reserve OSM id]
-"""
-
 import asyncio
 import csv
 import gzip

@@ -1,5 +1,3 @@
-"""Cost and failure guards around the LLM (D-26): a daily call limit and a circuit breaker."""
-
 import logging
 import time
 from datetime import UTC, datetime
@@ -14,8 +12,6 @@ logger = logging.getLogger(__name__)
 
 
 class CircuitBreaker:
-    """After a provider failure, skip the LLM for a while instead of waiting for a timeout."""
-
     def __init__(self, cooldown_sec: float = 60.0) -> None:
         self._cooldown = cooldown_sec
         self._open_until = 0.0
@@ -33,8 +29,6 @@ class CircuitBreaker:
 
 
 class DailyLimit:
-    """At most `limit` paid calls per UTC day across all processes (Redis counter)."""
-
     def __init__(self, redis: Redis | None, limit: int) -> None:
         self._redis = redis
         self._limit = limit
@@ -56,8 +50,6 @@ class DailyLimit:
 
 
 class ModeSwitch:
-    """The console's LLM on/off switch, read from the database at most every few seconds."""
-
     def __init__(self, db: Database, *, ttl_sec: float = 5.0) -> None:
         self._db = db
         self._ttl = ttl_sec

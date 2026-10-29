@@ -10,7 +10,6 @@ _ANGLE_EPSILON = 1e-8
 def roof_events(
     scene: Scene, eyes_m: FloatArray, roofs_m: FloatArray
 ) -> tuple[IntArray, FloatArray, FloatArray]:
-    """Roof angle extrema at interval ends and internal tangent; arrays (runs, 3*hits)."""
     hits = scene.hits
     stationary = np.sqrt(np.maximum(eyes_m[:, None] - roofs_m, 0) / CURVATURE)
     stationary = np.clip(stationary, hits.near_m, hits.far_m)
@@ -30,7 +29,6 @@ def batch_horizon(
     roofs_m: FloatArray | None = None,
     terrain_bias_m: FloatArray | None = None,
 ) -> Horizon:
-    """Vectorized (runs,rays) profiles; absolute eyes/roofs and correlated DEM bias per run."""
     eyes = np.asarray(eyes_m, dtype=np.float64)
     if eyes.ndim != 1 or not len(eyes) or not np.all(np.isfinite(eyes)):
         raise ValueError("Expected a nonempty finite 1D array of eye elevations")
@@ -87,5 +85,4 @@ def _roof_grid(
 
 
 def evaluate_horizon(scene: Scene, eye_m: float) -> Horizon:
-    """Nominal profile for one fixed window; all elevations absolute in metres."""
     return batch_horizon(scene, np.array([eye_m], dtype=np.float64)).row(0)

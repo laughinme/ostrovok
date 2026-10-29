@@ -18,8 +18,6 @@ class FactStatus(StrEnum):
 
 @dataclass(frozen=True, slots=True)
 class Fact:
-    """What the system believes now for (hotel, characteristic, scope); built by the Reconciler."""
-
     hotel_id: UUID
     characteristic: str
     scope: Scope
@@ -48,8 +46,6 @@ class Fact:
 
 @dataclass(frozen=True, slots=True)
 class FactChange:
-    """One entry of a fact's history: «2 сентября: не уверены → 12 октября: скорее да»."""
-
     at: datetime
     statement: str
     confidence: float

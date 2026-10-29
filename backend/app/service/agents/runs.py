@@ -1,5 +1,3 @@
-"""Read side of agent runs: the trace for the console and the live feed for the guest."""
-
 import asyncio
 from collections.abc import AsyncIterator, Sequence
 from contextlib import suppress
@@ -34,11 +32,6 @@ class RunQueries:
 
 
 class RunStream:
-    """
-    SSE for one run: subscribe first, replay the steps already in the database, then forward
-    live steps, skipping any seq already sent; ends with `run.finished`.
-    """
-
     def __init__(self, db: Database, events: EventBus) -> None:
         self._db = db
         self._events = events
@@ -59,7 +52,7 @@ class RunStream:
                 try:
                     event = await asyncio.wait_for(queue.get(), timeout=_HEARTBEAT_SEC)
                 except TimeoutError:
-                    yield None  # heartbeat keeps proxies from closing the stream
+                    yield None
                     continue
                 if event.get("type") == "run.step":
                     if event["step"]["seq"] <= sent:

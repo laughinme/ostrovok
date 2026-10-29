@@ -1,5 +1,3 @@
-"""Live research asks hotels about one characteristic (09 §3.2, «с собакой 30 кг»)."""
-
 from collections.abc import Sequence
 from uuid import UUID, uuid4
 
@@ -13,7 +11,6 @@ from app.service.knowledge.registry import Registry
 from app.service.partner.simulation import schedule_simulation
 from app.service.ports import Clock
 
-# A guest is waiting for this answer: it outranks questions picked by weekly demand.
 LIVE_QUESTION_VALUE = 10.0
 
 

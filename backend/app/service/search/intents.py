@@ -1,5 +1,3 @@
-"""The Intent agent (09 §4.2): the LLM planner when available, rules otherwise — same `Intent`."""
-
 from dataclasses import asdict, replace
 from datetime import date
 from functools import cache
@@ -43,7 +41,7 @@ class LlmTrip(BaseModel):
     month: int | None = Field(None, ge=1, le=12)
     adults: int | None = Field(None, ge=1, le=10)
     children: int | None = Field(None, ge=0, le=10)
-    budgetPerNight: int | None = Field(None, ge=0, le=200_000)  # noqa: N815 - the contract's field name
+    budgetPerNight: int | None = Field(None, ge=0, le=200_000)  # noqa: N815
     area: Literal["center", "khosta", "adler", "sirius", "krasnaya_polyana"] | None = None
 
     @model_validator(mode="after")
@@ -73,7 +71,6 @@ class IntentParser:
         )
 
     async def parse(self, text: str, *, today: date, llm: bool = True) -> Intent:
-        """`llm=False` is the instant rules answer, for chips while the guest is still typing."""
         registry = await Registry(self._uow).all()
         vocabulary = await self.vocabulary(registry)
 

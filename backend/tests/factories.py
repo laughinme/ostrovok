@@ -85,8 +85,6 @@ async def promote(db: Database, email: str, role: Role = Role.OPERATOR) -> None:
 
 
 class FakeClock:
-    """Time that moves only when a test says so."""
-
     def __init__(self, now: datetime | None = None) -> None:
         self._now = now or datetime(2026, 11, 12, 12, 0, tzinfo=UTC)
 
@@ -98,8 +96,6 @@ class FakeClock:
 
 
 class FakeLanguageModel:
-    """Scripted LLM for tests: returns `outputs[task]` or raises when told the provider is down."""
-
     def __init__(self, outputs: dict[str, Any] | None = None, *, down: bool = False) -> None:
         self.outputs = outputs or {}
         self.down = down

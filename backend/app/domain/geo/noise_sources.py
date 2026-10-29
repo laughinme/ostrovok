@@ -1,5 +1,3 @@
-"""OSM source selection; conditional powers come from 04 §4.2, gaps from R5."""
-
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 
@@ -26,14 +24,12 @@ class NoiseFeature:
     geometry: BaseGeometry
     tags: Mapping[str, str]
     late_open: bool | None = None
-    """Known opening after 23:00; None means unknown, never a claim of silence."""
 
 
 @dataclass(frozen=True, slots=True)
 class NoiseSources:
     sources: tuple[NoiseSource, ...]
     unmodelled_refs: tuple[str, ...]
-    """Potential sources with unknown power or hours, to lower source completeness."""
 
     @property
     def completeness(self) -> float:
@@ -77,11 +73,6 @@ def noise_sources(
     aircraft_power_db: float | None = None,
     rail_activity_share: float = 1.0,
 ) -> NoiseSources:
-    """Select unique OSM sources in local metres; rail share is time fraction in [0, 1].
-
-    Default rail output is an event index (train passing), not an average per hour.
-    R5 establishes neither current train duty nor aircraft power: callers must supply them.
-    """
     if not 0 <= rail_activity_share <= 1:
         raise ValueError("Rail activity share must be in [0, 1]")
     sources: list[NoiseSource] = []

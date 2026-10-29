@@ -19,7 +19,6 @@ class Permission(StrEnum):
     CONSOLE_WRITE = "console:write"
 
 
-# Roles are code, not data: a role is a named set of permissions, checked without a DB query.
 ROLE_PERMISSIONS: Mapping[Role, frozenset[Permission]] = {
     Role.GUEST: frozenset({Permission.TRIPS}),
     Role.HOTELIER: frozenset({Permission.PARTNER_CABINET}),
@@ -29,8 +28,6 @@ ROLE_PERMISSIONS: Mapping[Role, frozenset[Permission]] = {
 
 @dataclass(frozen=True, slots=True)
 class CurrentUser:
-    """Who is calling. The only user object the API layer ever sees."""
-
     id: UUID
     role: Role
     session_id: UUID

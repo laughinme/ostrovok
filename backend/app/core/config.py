@@ -6,25 +6,17 @@ from pydantic import SecretStr, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BASE_DIR = Path(__file__).resolve().parents[2]
-# Compose reads the root `.env`; local runs from `backend/` read the same file, then `backend/.env`.
 ENV_FILES = (BASE_DIR.parent / ".env", BASE_DIR / ".env")
 
 DEV_CSRF_KEY = "change-me"
 
 
-# Reasoning effort; "default" leaves it to the model, "off" asks for none.
 LlmThinking = Literal["default", "off", "minimal", "low", "medium", "high"]
 
 
 class Settings(BaseSettings):
-    """
-    Application settings. Read once at startup from the environment and `.env`,
-    then passed down explicitly: nothing in the app calls `Settings()` on import.
-    """
-
     model_config = SettingsConfigDict(env_file=ENV_FILES, extra="ignore")
 
-    # Stage and diagnostics
     app_stage: Literal["dev", "test", "prod"] = "dev"
     debug: bool = False
     log_level: str = "INFO"
@@ -32,21 +24,17 @@ class Settings(BaseSettings):
     sql_echo: bool = False
     api_docs_enabled: bool = True
 
-    # HTTP
     cors_allow_origins: str = ""
-    # Public hosts of a deployed API, comma-separated: MCP's DNS-rebinding guard accepts them
     mcp_public_hosts: str = ""
     rate_limit_enabled: bool = True
     auth_rate_limit_per_minute: int = 10
     llm_rate_limit_per_minute: int = 30
 
-    # Postgres and Redis
     database_url: str
     db_pool_size: int = 10
     db_max_overflow: int = 10
     redis_url: str
 
-    # Auth
     jwt_private_key: SecretStr | None = None
     jwt_public_key: str | None = None
     jwt_private_key_path: Path | None = None
@@ -56,12 +44,10 @@ class Settings(BaseSettings):
     refresh_ttl: int = 30 * 24 * 60 * 60
     csrf_hmac_key: SecretStr = SecretStr(DEV_CSRF_KEY)
 
-    # Cookies
     cookie_secure: bool = False
     cookie_samesite: Literal["lax", "strict", "none"] = "lax"
     cookie_domain: str | None = None
 
-    # LLM: any OpenAI-compatible endpoint; without a key every LLM port falls back to rules
     llm_base_url: str = ""
     llm_api_key: SecretStr = SecretStr("")
     llm_model: str = "gpt-5.6-luna"
@@ -72,7 +58,6 @@ class Settings(BaseSettings):
     llm_mode: Literal["auto", "off"] = "auto"
     llm_daily_call_limit: int = 300
 
-    # Demo hotelier simulator
     hotelier_simulator: Literal["on", "off"] = "on"
     simulator_delay_sec: str = "5-30"
 
@@ -81,10 +66,8 @@ class Settings(BaseSettings):
         "OknoTravel/1.0 (https://github.com/ostrovok-hackathon-2026/chupapis)"
     )
 
-    # Region data, registry and seed shipped with the image
     data_dir: Path = BASE_DIR / "data"
 
-    # Background worker
     jobs_batch_size: int = 4
     jobs_poll_interval_sec: float = 0.5
     jobs_lease_sec: int = 120
@@ -156,8 +139,6 @@ def _resolve(path: Path) -> Path:
 
 
 class MigrationSettings(BaseSettings):
-    """Alembic and the seed loader need only the database URL, not JWT keys and the rest."""
-
     model_config = SettingsConfigDict(env_file=ENV_FILES, extra="ignore")
 
     database_url: str
@@ -166,5 +147,4 @@ class MigrationSettings(BaseSettings):
 
 @lru_cache
 def get_settings() -> Settings:
-    """Entrypoints only (app factory, worker, CLI, alembic); everything else receives settings."""
     return Settings()

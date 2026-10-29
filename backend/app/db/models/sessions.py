@@ -9,8 +9,6 @@ from app.domain.auth import ClientKind
 
 
 class AuthSession(UuidPkMixin, Base):
-    """One signed-in device. Holds the hash of its current refresh token."""
-
     __tablename__ = "auth_sessions"
 
     user_id: Mapped[UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)

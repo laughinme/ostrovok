@@ -20,7 +20,6 @@ class VisibilityProbability:
 def height_perturbations(
     buildings: Sequence[Building], runs: int, rng: np.random.Generator
 ) -> FloatArray:
-    """Uniform height errors: measured ±1.5 m, levels ±1 floor, default ±2 floors."""
     sources = np.array([b.height_source for b in buildings])
     offsets: FloatArray = rng.uniform(-1.5, 1.5, size=(runs, len(buildings)))
     for source, floors in [("osm_levels", 1), ("default", 2)]:
@@ -42,7 +41,6 @@ class SampledWindow:
 def sampled_horizons(
     scenes: Sequence[Scene], eye_m: float | FloatArray, *, runs: int = 16, seed: int = 0
 ) -> tuple[SampledWindow, ...]:
-    """One perturbed horizon per run, grouped by prepared window; all heights in metres."""
     if not scenes or runs < 1:
         raise ValueError("Expected prepared windows and positive runs")
     refs = tuple(b.ref for b in scenes[0].buildings)
@@ -80,7 +78,6 @@ def monte_carlo(
     seed: int = 0,
     target: Literal["sea", "mountains"] = "sea",
 ) -> VisibilityProbability:
-    """P(target fraction ≥ threshold), sampling prepared windows and uncertain heights."""
     if not 0 < min_fraction <= 1:
         raise ValueError("Expected threshold within (0,1]")
     fractions = np.empty(runs)

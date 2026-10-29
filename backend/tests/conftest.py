@@ -13,7 +13,6 @@ from app.core.config import Settings
 
 INTEGRATION_DIR = Path(__file__).parent / "integration"
 
-# Defaults match docker-compose.test.yml; override with env vars to point tests elsewhere.
 TEST_DATABASE_URL = os.environ.get(
     "TEST_DATABASE_URL", "postgresql+asyncpg://okno:okno@localhost:5439/okno_test"
 )
@@ -21,7 +20,6 @@ TEST_REDIS_URL = os.environ.get("TEST_REDIS_URL", "redis://localhost:6380/0")
 
 
 def pytest_collection_modifyitems(items: list[pytest.Item]) -> None:
-    """Everything under tests/integration is marked automatically: `pytest -m "not integration"`."""
     for item in items:
         if INTEGRATION_DIR in Path(item.fspath).parents:
             item.add_marker(pytest.mark.integration)
@@ -44,7 +42,6 @@ def rsa_key_pair() -> tuple[str, str]:
 
 
 def build_settings(**overrides: Any) -> Settings:
-    """Settings for tests: never reads backend/.env, keys are generated once per run."""
     private_pem, public_pem = rsa_key_pair()
     values: dict[str, Any] = {
         "app_stage": "test",

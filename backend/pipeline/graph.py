@@ -1,5 +1,3 @@
-"""Prepare the contracted walking NPZ using cached OSM lines and the published DEM."""
-
 from pathlib import Path
 
 import numpy as np
@@ -15,7 +13,6 @@ from pipeline.walk_topology import build_graph, extract_network
 
 
 def save_graph(graph: WalkGraph, path: Path) -> None:
-    """Archive numeric arrays and Unicode refs; never pickle or simplify intermediate nodes."""
     temporary = path.with_name(path.stem + ".part.npz")
     np.savez_compressed(
         temporary,

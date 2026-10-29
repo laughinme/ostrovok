@@ -1,5 +1,3 @@
-"""Validated, directed, unsimplified graph archive shared with the offline pipeline."""
-
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -25,9 +23,7 @@ LAT_LIMIT = 90
 @dataclass(frozen=True, slots=True)
 class WalkGraph:
     nodes: FloatArray
-    """(n, 3): WGS84 longitude, latitude, elevation in metres."""
     edges: IntArray
-    """(m, 2): directed zero-based node indices; each reverse arc must be explicit."""
     length_m: FloatArray
     steps: IntArray
     crossings: IntArray
@@ -63,7 +59,6 @@ class WalkGraph:
 
     @classmethod
     def from_file(cls, path: Path) -> Self:
-        """Read numeric/string NPZ arrays without pickle, rejecting fractional indices."""
         with np.load(path, allow_pickle=False) as data:
             edges = _integers(data["edges"])
             steps = _integers(data["steps"])
@@ -116,7 +111,6 @@ class ProfileGraph:
             key = (int(start), int(end))
             if isfinite(minutes) and (key not in best or minutes < best[key][0]):
                 best[key] = (minutes, index)
-        # CSR sums duplicate arcs; choose the cheapest parallel arc before constructing it.
         keys = list(best)
         rows = np.array([key[0] for key in keys], dtype=np.int32)
         cols = np.array([key[1] for key in keys], dtype=np.int32)

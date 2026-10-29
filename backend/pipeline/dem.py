@@ -1,5 +1,3 @@
-"""Compact Copernicus DSM mosaic with 40 km coverage around the hotel catalog."""
-
 from contextlib import ExitStack
 from math import ceil, cos, floor, radians
 from pathlib import Path
@@ -12,14 +10,13 @@ from rasterio.merge import merge
 from pipeline.storage import REGION, ROOT, download, read_csv, write_json
 
 NODATA = -32768
-RESOLUTION = 2 / 3600  # About 45 x 62 m at Sochi's latitude.
-BUFFER_M = 40_200  # Include bilinear neighbours at the end of a 40 km ray.
+RESOLUTION = 2 / 3600
+BUFFER_M = 40_200
 BASE_URL = "https://copernicus-dem-30m.s3.amazonaws.com"
 type Bounds = tuple[float, float, float, float]
 
 
 def buffered_bounds(hotels: list[dict[str, str]]) -> Bounds:
-    """WGS84 bounds enclosing a 40 km circle around every catalog hotel."""
     if not hotels:
         raise ValueError("Cannot build DEM without hotels")
     dlat = BUFFER_M / 111_000
@@ -44,7 +41,6 @@ def tile_names(bounds: Bounds) -> list[str]:
 
 
 def build_dem(paths: list[Path], bounds: Bounds, output: Path) -> None:
-    """Average to two arcseconds, round metres to int16; preserve holes as nodata."""
     with ExitStack() as stack:
         sources = [stack.enter_context(rasterio.open(path)) for path in paths]
         grid, transform = merge(

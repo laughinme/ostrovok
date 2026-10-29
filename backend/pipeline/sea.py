@@ -1,5 +1,3 @@
-"""Build a sea mask from directed OSM coastlines (land on the left)."""
-
 import gzip
 from typing import Any
 
@@ -42,7 +40,6 @@ def run(coastlines: list[Any] | None = None) -> None:
 
 
 def coastal_lines(shapes: list[Any]) -> list[Any]:
-    """Keep directed open ways; orient closed island boundaries with land on the left."""
     result = []
     for shape in shapes:
         if shape.geom_type == "LineString":

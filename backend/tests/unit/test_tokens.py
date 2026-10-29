@@ -57,7 +57,6 @@ def test_token_signed_with_another_key_is_rejected(codec: TokenCodec) -> None:
 
 
 def test_hs256_token_is_rejected(codec: TokenCodec) -> None:
-    # Classic algorithm-confusion attack: we only accept the configured algorithm.
     token = jwt.encode(_claims(), "s" * 32, algorithm="HS256")
     with pytest.raises(InvalidTokenError):
         codec.decode_access(token)

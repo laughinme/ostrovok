@@ -46,7 +46,7 @@ async def test_expiring_facts_are_queued_for_a_recheck(db: Database, tmp_path: P
     assert await FreshnessScan(db, clock).run() == 0
     clock.advance(timedelta(days=80))
     assert await FreshnessScan(db, clock).run() == 1
-    assert await FreshnessScan(db, clock).run() == 0  # deduplicated while the first one waits
+    assert await FreshnessScan(db, clock).run() == 0
 
     async with db.unit_of_work() as uow:
         payload = await uow.session.scalar(

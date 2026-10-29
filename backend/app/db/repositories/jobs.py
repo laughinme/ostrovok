@@ -14,7 +14,6 @@ class JobRepository:
         self._session = session
 
     async def enqueue(self, job: NewJob, *, now: datetime) -> bool:
-        """Insert unless an unfinished job with the same dedupe key exists. True if inserted."""
         stmt = (
             insert(Job)
             .values(
@@ -36,8 +35,6 @@ class JobRepository:
     async def claim(
         self, *, limit: int, now: datetime, lease: timedelta, worker: str
     ) -> Sequence[Job]:
-        # SKIP LOCKED lets several workers run side by side without taking the same job;
-        # a running job whose lease expired belongs to a dead worker and is taken over.
         stmt = (
             select(Job)
             .where(

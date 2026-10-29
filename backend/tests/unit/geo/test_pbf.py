@@ -1,5 +1,3 @@
-"""Offline GDAL integration: native OSM IDs, complete tags and cached geometry."""
-
 import json
 
 import httpx

@@ -1,5 +1,3 @@
-"""Opt-in synthetic 100k-node routing benchmark, run as a module (no network)."""
-
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from time import perf_counter

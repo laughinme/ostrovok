@@ -1,5 +1,3 @@
-"""Read the published region without PostGIS; no network or LLM calls."""
-
 import csv
 import gzip
 import json

@@ -24,9 +24,6 @@ from app.service.ports import Clock, EventBus, LanguageModel, VisionLanguageMode
 from app.service.search.intents import IntentParser
 from app.service.search.search import SearchService
 
-# Everything long-lived is created once in the app factory and read from app.state here,
-# so tests can build an app with their own settings and fakes.
-
 
 def _settings(request: Request) -> Settings:
     settings: Settings = request.app.state.settings
@@ -59,8 +56,6 @@ async def _unit_of_work(db: DatabaseDep) -> AsyncIterator[UnitOfWork]:
         yield uow
 
 
-# scope="function": the commit runs before the response is sent, so a failed commit
-# becomes a 500 instead of a 200 for data that was never saved.
 UowDep = Annotated[UnitOfWork, Depends(_unit_of_work, scope="function")]
 
 _bearer = HTTPBearer(auto_error=False, description="Access token from /auth/login or /auth/refresh")
@@ -89,7 +84,6 @@ def require(permission: Permission) -> Callable[[CurrentUser], Awaitable[Current
 
 
 def rate_limit(bucket: str) -> Callable[[Request, RedisDep, SettingsDep], Awaitable[None]]:
-    """Per client IP. Behind a proxy run uvicorn with --proxy-headers so the IP is the real one."""
 
     async def dependency(request: Request, redis: RedisDep, settings: SettingsDep) -> None:
         if not settings.rate_limit_enabled:

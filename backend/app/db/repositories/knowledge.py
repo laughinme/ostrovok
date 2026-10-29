@@ -91,17 +91,12 @@ class KnowledgeRepository:
         self._session = session
 
     async def lock_pair(self, hotel_id: UUID, characteristic: str) -> None:
-        """Serializes reconciliation of one (hotel, characteristic) until the transaction ends."""
         await self._session.execute(
             text("SELECT pg_advisory_xact_lock(hashtextextended(:key, 0))"),
             {"key": f"{hotel_id}:{characteristic}"},
         )
 
     async def try_lock_pair(self, hotel_id: UUID, key: str, *, wait_s: float = 3.0) -> bool:
-        """
-        The same lock without queueing forever: polls `pg_try_advisory_xact_lock` for a few
-        seconds and gives up, so a request never waits behind a stuck transaction.
-        """
         deadline = time.monotonic() + wait_s
         while True:
             locked = await self._session.scalar(
@@ -123,7 +118,6 @@ class KnowledgeRepository:
         return Grid(facades=tuple(Facade(f) for f in row.facades), floors=row.floors)
 
     async def add_observation(self, o: Observation, *, now: datetime) -> None:
-        # The newer claim of the same source about the same scope replaces the older one.
         await self._session.execute(
             update(ObservationRow)
             .where(
@@ -191,7 +185,6 @@ class KnowledgeRepository:
         return [fact_from_row(r) for r in rows]
 
     async def headlines(self, hotel_ids: Sequence[UUID]) -> list[Fact]:
-        """One fact per (hotel, characteristic): the surest «yes», else the surest answer."""
         is_yes = FactRow.value == cast(True, JSONB)
         stmt = (
             select(FactRow)

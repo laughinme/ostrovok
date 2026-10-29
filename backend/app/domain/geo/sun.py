@@ -30,7 +30,6 @@ class SunEvents:
 
 
 def sun_position(location: LonLat, at: datetime) -> SunPosition:
-    """Apparent solar centre, degrees clockwise from north / above horizontal; aware time."""
     if at.tzinfo is None or at.utcoffset() is None:
         raise ValueError("Solar position requires a timezone-aware datetime")
     observer = Observer(latitude=location.lat, longitude=location.lon)
@@ -40,7 +39,6 @@ def sun_position(location: LonLat, at: datetime) -> SunPosition:
 
 
 def sun_events(location: LonLat, day: date, *, eye_elevation_m: float = 0) -> SunEvents:
-    """Astronomical events in Moscow time; eye elevation in metres above sea level."""
     observer = Observer(latitude=location.lat, longitude=location.lon, elevation=eye_elevation_m)
     return SunEvents(
         sun_position(location, sunrise(observer, date=day, tzinfo=MOSCOW)),
@@ -49,7 +47,6 @@ def sun_events(location: LonLat, day: date, *, eye_elevation_m: float = 0) -> Su
 
 
 def sun_path(location: LonLat, day: date, *, step_minutes: int = 10) -> tuple[SunPosition, ...]:
-    """One local civil day, including midnight at its end, sampled at the requested step."""
     if step_minutes < 1:
         raise ValueError("Sun path step must be positive")
     start = datetime.combine(day, time.min, MOSCOW)
@@ -60,7 +57,6 @@ def sun_path(location: LonLat, day: date, *, step_minutes: int = 10) -> tuple[Su
 
 
 def horizon_at(azimuth_deg: float, azimuths: FloatArray, angles: FloatArray) -> float:
-    """Interpolate a contiguous sector, including north wrap; NaN outside the measured FOV."""
     if azimuths.ndim != 1 or len(azimuths) == 0 or angles.shape != azimuths.shape:
         raise ValueError("Expected equal nonempty 1D horizon arrays")
     unwrapped = np.degrees(np.unwrap(np.radians(azimuths)))
@@ -79,7 +75,6 @@ def disappearance(
     *,
     eye_elevation_m: float = 0,
 ) -> SunPosition | None:
-    """Last visible upper solar limb after local noon; None when never visible in this FOV."""
     end = sun_events(location, day, eye_elevation_m=eye_elevation_m).sunset.at
     start = datetime.combine(day, time(12), MOSCOW)
     if end <= start:
@@ -117,7 +112,6 @@ def sunset_over_sea_months(
     *,
     eye_elevation_m: float = 0,
 ) -> dict[int, float]:
-    """Month → fraction of days with open sea in the sunset bin and horizon below 0.5°."""
     if sea_visible.shape != azimuths.shape:
         raise ValueError("Sea visibility must match horizon azimuths")
     result = {}

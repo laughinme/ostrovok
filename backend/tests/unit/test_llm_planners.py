@@ -1,5 +1,3 @@
-"""The Liaison's LLM parser and the Curator's typed draft: the rules' fields, a safe fallback."""
-
 import pytest
 from pydantic import ValidationError
 
@@ -110,7 +108,6 @@ def test_curator_draft_recipe_is_typed() -> None:
 @pytest.mark.parametrize(
     "raw",
     [
-        # both radii: the recipe's own validator rejects it, PydanticAI asks the model again
         {
             "decision": "compute",
             "key": "x",
@@ -122,7 +119,6 @@ def test_curator_draft_recipe_is_typed() -> None:
                 "within_minutes": 5,
             },
         },
-        # asking the hotel needs the ask_hotelier recipe
         {
             "decision": "ask_hotelier",
             "key": "x",

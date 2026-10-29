@@ -1,11 +1,3 @@
-"""
-The Reconciler (09 §5.5): observations → per-cell beliefs → conflicts → facts.
-
-Pure and deterministic. Facade characteristics are decided cell by cell over the hotel grid,
-so «вид на море из всех номеров» (whole hotel) and «только ЮЗ с 4-го этажа» (computed)
-are compared on the same cells; the answer is compressed back into a few scopes.
-"""
-
 from collections import defaultdict
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass, field
@@ -24,7 +16,7 @@ CONFIDENT_YES = 0.7
 CONFIDENT_NO = 0.3
 NUMBER_DISAGREEMENT = 0.5
 GUESTS_NEEDED = 5
-_BUCKET = 20  # facts group cells whose confidence differs by less than 0.05
+_BUCKET = 20
 
 _PHYSICAL = frozenset({SourceKind.COMPUTED, SourceKind.OPEN_DATA})
 
@@ -99,9 +91,6 @@ def reconcile(
             return _reconcile_grid(characteristic, grid, observations, now)
         return _reconcile_groups(characteristic, observations, now, _probability_group)
     return _reconcile_groups(characteristic, observations, now, _winner_group)
-
-
-# ── probability over the grid ────────────────────────────────────────────
 
 
 def _reconcile_grid(
@@ -211,9 +200,6 @@ def _draft(scope: Scope, cells: Sequence[_CellBelief]) -> FactDraft:
     )
 
 
-# ── everything else: grouped by the scope each source spoke about ───────
-
-
 def _reconcile_groups(
     characteristic: Characteristic,
     observations: Sequence[Observation],
@@ -291,7 +277,6 @@ def _disagree(a: Any, b: Any) -> bool:
 
 
 def _headline(value: Any) -> Any:
-    """The number a person would compare: minutes for routes, the value itself otherwise."""
     if isinstance(value, Mapping):
         for name in ("minutes", "value", "allowed"):
             if name in value:

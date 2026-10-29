@@ -11,11 +11,6 @@ from app.domain.jobs import JobStatus
 
 
 class Job(UuidPkMixin, Base):
-    """
-    A unit of background work, written in the same transaction as the command that caused it.
-    Workers lease jobs with SKIP LOCKED; an expired lease means the worker died: the job is retried.
-    """
-
     __tablename__ = "jobs"
 
     kind: Mapped[str] = mapped_column(String(64))

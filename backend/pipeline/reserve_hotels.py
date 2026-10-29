@@ -1,5 +1,3 @@
-"""Select live-onboarding hotels inside the existing catalog's complete OSM buffers."""
-
 from typing import Any
 
 from shapely import Point, STRtree, box, from_wkb

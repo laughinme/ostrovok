@@ -1,5 +1,3 @@
-"""Visibility findings by real facade and floor band, with sampled room positions."""
-
 import asyncio
 from math import ceil
 from typing import ClassVar
@@ -28,7 +26,6 @@ VIEW_CAVEATS = (
 
 
 def floor_bands(floors: int) -> tuple[tuple[int, int], ...]:
-    """At most four bands; findings describe a uniformly selected room floor in each band."""
     width = ceil(floors / 4)
     return tuple((low, min(low + width - 1, floors)) for low in range(1, floors + 1, width))
 

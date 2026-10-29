@@ -1,5 +1,3 @@
-"""Crossing counts over OSM railways/major roads; unknown at-grade crossings stay uncertain."""
-
 from dataclasses import replace
 from typing import Any
 
@@ -41,7 +39,6 @@ def annotate_crossings(
         if p["tags"].get("highway") == "crossing"
         or p["tags"].get("railway") in {"crossing", "level_crossing"}
     }
-    # Intersect in the source CRS: separately projected chords can miss a shared OSM vertex.
     geometry = linestrings(np.array([[s.start, s.end] for s in network.segments]))
     segments = tuple(
         _annotate(s, line, obstacles, shapes, tree, explicit=explicit)

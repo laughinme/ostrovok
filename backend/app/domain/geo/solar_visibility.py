@@ -1,5 +1,3 @@
-"""Sun/horizon intersections in a facade field of view, in Moscow civil time."""
-
 from dataclasses import dataclass
 from datetime import date, datetime, time, timedelta
 from typing import Literal, Protocol
@@ -33,7 +31,6 @@ class SolarIntersection:
 def event_visible(
     position: SunPosition, scene: AzimuthSector, horizon: Horizon, *, over_sea: bool
 ) -> bool:
-    """Astronomical event visible at <0.5° obstruction, optionally with a sea skyline."""
     angle = horizon_at(position.azimuth_deg, scene.azimuths_deg, horizon.angle_deg)
     ray = int(np.argmin(np.abs((scene.azimuths_deg - position.azimuth_deg + 180) % 360 - 180)))
     sea = horizon.sea_visible[ray] and horizon.kind[ray] == Obstacle.SEA
@@ -46,11 +43,6 @@ RISE_WINDOW_MIN = 90
 def rises_into_view(
     location: LonLat, sunrise: SunPosition, scene: AzimuthSector, horizon: Horizon
 ) -> bool:
-    """
-    Morning sun over any skyline: in Sochi the east is mountains, so the sun is never seen at
-    the astronomical sunrise but climbs over the ridge minutes later. Visible if it clears the
-    window's skyline within the first 90 minutes.
-    """
     return any(
         _above(location, sunrise.at + timedelta(minutes=m), scene, horizon)
         for m in range(0, RISE_WINDOW_MIN + 1, 10)
@@ -66,7 +58,6 @@ def solar_intersection(
     event: Literal["sunset", "sunrise"],
     eye_m: float = 0,
 ) -> SolarIntersection | None:
-    """Last evening / first morning upper-limb visibility, refined to one second."""
     events = sun_events(location, day, eye_elevation_m=max(0, eye_m))
     noon = datetime.combine(day, time(12), MOSCOW)
     start, end = (noon, events.sunset.at) if event == "sunset" else (events.sunrise.at, noon)

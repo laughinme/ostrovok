@@ -1,5 +1,3 @@
-"""Sampling is stable and cannot associate a hotel with a courtyard or duplicate building."""
-
 from pipeline import catalog
 
 

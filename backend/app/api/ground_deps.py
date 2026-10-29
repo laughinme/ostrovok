@@ -19,7 +19,6 @@ _ENVIRONMENT_LOCK = Lock()
 
 
 def load_ground(app: FastAPI, db: Database, settings: Settings) -> GroundQueries:
-    """Loads the walk graph, terrain and climate once; blocking, so call it from a thread."""
     with _ENVIRONMENT_LOCK:
         if not hasattr(app.state, "ground_queries"):
             env = build_environment(db, SystemClock(), settings.data_dir)
@@ -29,7 +28,6 @@ def load_ground(app: FastAPI, db: Database, settings: Settings) -> GroundQueries
 
 
 def warm_ground(app: FastAPI, db: Database, settings: Settings) -> None:
-    """Startup warm-up: the first guest request should not pay for building the graph."""
     try:
         load_ground(app, db, settings)
     except Exception:
@@ -37,7 +35,6 @@ def warm_ground(app: FastAPI, db: Database, settings: Settings) -> None:
 
 
 def ground_queries(request: Request, db: DatabaseDep, settings: SettingsDep) -> GroundQueries:
-    # A sync dependency runs in the thread pool: waiting for the warm-up never blocks the loop.
     return load_ground(request.app, db, settings)
 
 

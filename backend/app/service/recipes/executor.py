@@ -1,9 +1,3 @@
-"""
-Method executors (09 §5.2): each method turns a recipe into findings for one hotel and writes
-its tool chain into the trace. Geo adapters are optional: without the walk graph the
-executors fall back to straight-line estimates and say so in the trace and in the confidence.
-"""
-
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
 from typing import Any, ClassVar, Protocol
@@ -23,8 +17,6 @@ from app.service.recipes.models import Recipe, TagFilter
 
 @dataclass(frozen=True, slots=True)
 class Finding:
-    """An observation before bookkeeping: the Researcher adds hotel, times and run id."""
-
     scope: Scope
     value: Any
     confidence: float
@@ -37,12 +29,10 @@ class Finding:
 
 
 class NoDataError(Exception):
-    """The method cannot answer for this hotel; the Researcher tries the fallback branch."""
+    pass
 
 
 class GeoReader:
-    """Read-only spatial queries for executors, each in its own short transaction."""
-
     def __init__(self, db: Database) -> None:
         self._db = db
 
@@ -91,7 +81,6 @@ class Environment:
     terrain: TerrainModel | None = None
     climate: Any = None
     sea: Any = None
-    """Prepared sea polygon (WGS84) when `sea.wkb.gz` is present."""
     extras: dict[str, Any] = field(default_factory=dict)
 
 

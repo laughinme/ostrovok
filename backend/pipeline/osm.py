@@ -1,5 +1,3 @@
-"""Export contracted WGS84 CSV files from the regional Geofabrik cache."""
-
 import json
 from typing import Any
 

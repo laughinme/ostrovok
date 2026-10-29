@@ -1,5 +1,3 @@
-"""Deterministic fictional room categories and rates, based on the R6 ranges."""
-
 import hashlib
 from pathlib import Path
 from random import Random
@@ -36,9 +34,8 @@ TAGLINES = {
 
 
 def hotel_random(osm_id: str, seed: int = SEED, *, stream: str = "cards") -> Random:
-    """Independent per-hotel streams keep existing cards stable when the catalog grows."""
     digest = hashlib.sha256(f"{seed}:{stream}:{osm_id}".encode()).digest()
-    return Random(int.from_bytes(digest))  # noqa: S311 - reproducible fictional data, not secrets
+    return Random(int.from_bytes(digest))  # noqa: S311
 
 
 def template_type(hotel: dict[str, str]) -> str:

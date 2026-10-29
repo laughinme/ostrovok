@@ -1,5 +1,3 @@
-"""«Рядом стройка»: the hotel hears about a change of the world that moved its facts."""
-
 from uuid import UUID
 
 from app.db.database import Database

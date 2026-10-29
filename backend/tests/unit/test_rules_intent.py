@@ -1,5 +1,3 @@
-"""The rules planner on the phrases guests actually type on the landing, with no LLM key."""
-
 from datetime import date
 from pathlib import Path
 
@@ -35,7 +33,6 @@ def _keys(text: str, vocabulary: Vocabulary) -> set[str]:
     ("text", "keys"),
     [
         ("Тихий отель у моря", {"night_noise", "beach_walk"}),
-        # word forms: «закатом», «видом на горы», «парковкой»
         ("Тихий номер с закатом над морем", {"night_noise", "sunset_over_sea"}),
         ("отель с видом на горы и парковкой", {"mountain_view", "parking"}),
         (

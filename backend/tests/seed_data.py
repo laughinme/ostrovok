@@ -1,5 +1,3 @@
-"""A tiny region for tests: two hotels with real-looking footprints and the demo personas."""
-
 import csv
 import gzip
 import json
@@ -8,13 +6,11 @@ from pathlib import Path
 from shapely import Point, Polygon
 
 HOTELS = [
-    # osm_id, name, district, lon, lat, levels
     ("way/1", "Маяк", "center", 39.7200, 43.5800, 9),
     ("way/2", "Тихий двор", "khosta", 39.8500, 43.5150, 4),
 ]
 
 FEATURES = [
-    # 300 m east of «Маяк»: a khinkali place found only by its name
     (
         "node/10",
         "poi",

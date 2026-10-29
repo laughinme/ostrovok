@@ -1,6 +1,3 @@
-"""OSM tag filters from the registry and the place vocabulary (R4): OR between alternatives,
-AND inside one, `*` for "the tag is present", values split on «;», optional name pattern."""
-
 import re
 from collections.abc import Mapping, Sequence
 
@@ -43,7 +40,6 @@ def tags_match(
 def keys_of(
     any_tag: Mapping[str, Sequence[str]] | None, any_of: Sequence[Mapping[str, Sequence[str]]]
 ) -> list[str]:
-    """Keys to prefilter in the database before the exact match in Python."""
     keys = set(any_tag or {})
     for alt in any_of:
         keys.update(k for k in alt if k != "name")

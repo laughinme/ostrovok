@@ -1,5 +1,3 @@
-"""«Построили дом» (09 §3.3): the operator changes the world, the Watcher reacts."""
-
 from dataclasses import dataclass
 from math import cos, radians
 from uuid import UUID, uuid4

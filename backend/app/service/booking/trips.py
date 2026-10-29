@@ -47,7 +47,6 @@ class TripSummary:
 
 
 async def guest_trips(uow: UnitOfWork, user_id: UUID, limit: int) -> list[TripSummary]:
-    """The guest's requests, newest first: the list behind «Мои поездки»."""
     rows = await uow.session.execute(
         select(BookingRow, Hotel.name, Hotel.district)
         .join(Hotel, Hotel.id == BookingRow.hotel_id)

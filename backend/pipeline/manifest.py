@@ -1,5 +1,3 @@
-"""Attribution, provenance, object counts and enforced decimal-MB size budget."""
-
 from datetime import UTC, datetime
 
 from pipeline.inventory import FILE_LIMIT, TOTAL_LIMIT, object_counts, provenance, size_inventory

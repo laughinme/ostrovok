@@ -1,4 +1,3 @@
-"""Offline analytical scenes; run pytest on this directory, no external data required."""
 
 
 # ruff: noqa: S101

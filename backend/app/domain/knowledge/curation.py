@@ -1,9 +1,3 @@
-"""
-The Curator's rule planner (09 §4.3): a description in words → a recipe draft from the closed
-set of methods, or "ask the hotel", or "cannot be checked". Templates of phrases plus the
-place vocabulary «слово → теги OSM»; the LLM planner produces the same `RecipeDraft`.
-"""
-
 import re
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
@@ -61,7 +55,6 @@ class RecipeDraft:
 
 
 def place_terms(raw: Mapping[str, Any]) -> list[PlaceTerm]:
-    """The R4 vocabulary file → terms; scalar tag values become one-element lists."""
     terms = []
     for name, entry in raw.items():
         alternatives = tuple(

@@ -1,5 +1,3 @@
-"""Strategy with a fallback (09 §4.6): the LLM planner first, its rule-based twin on any failure."""
-
 from collections.abc import Awaitable, Callable
 
 from app.domain.agents import Planner

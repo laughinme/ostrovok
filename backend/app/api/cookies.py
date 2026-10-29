@@ -7,7 +7,6 @@ from app.domain.auth import IssuedTokens
 
 REFRESH_COOKIE = "refresh_token"
 CSRF_COOKIE = "csrf_token"
-# The refresh token is only ever needed by /auth endpoints, so the browser sends it nowhere else.
 REFRESH_COOKIE_PATH = "/api/v1/auth"
 
 
@@ -28,7 +27,6 @@ def set_auth_cookies(response: Response, tokens: IssuedTokens, settings: Setting
         path=REFRESH_COOKIE_PATH,
         **_common(settings),
     )
-    # Readable by JS on purpose: the SPA echoes it in X-CSRF-Token (double-submit cookie).
     response.set_cookie(
         CSRF_COOKIE,
         tokens.csrf_token,
@@ -47,7 +45,6 @@ def clear_auth_cookies(response: Response, settings: Settings) -> None:
 
 
 def clearing_headers(settings: Settings) -> list[tuple[str, str]]:
-    """Set-Cookie headers that drop both cookies, for attaching to an error response."""
     response = Response()
     clear_auth_cookies(response, settings)
     return [("set-cookie", value) for key, value in response.headers.items() if key == "set-cookie"]

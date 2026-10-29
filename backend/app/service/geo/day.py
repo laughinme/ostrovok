@@ -1,5 +1,3 @@
-"""A deterministic day around one hotel, with independently measured return walks."""
-
 from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import date, datetime, time, timedelta

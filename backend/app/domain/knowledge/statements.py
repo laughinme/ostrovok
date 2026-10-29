@@ -1,5 +1,3 @@
-"""Human wording of facts: «Море видно из окон · ЮЗ и З, этаж 4 и выше · октябрь–март»."""
-
 import string
 from collections.abc import Mapping
 from dataclasses import dataclass
@@ -35,8 +33,6 @@ MONTH_NAMES = (
 
 @dataclass(frozen=True, slots=True)
 class StatementTemplate:
-    """Either yes/no phrases (probability values) or a `{field}` template over a record."""
-
     yes: str | None = None
     no: str | None = None
     template: str | None = None
@@ -63,7 +59,6 @@ def _pretty(value: Any) -> str:
 
 
 def scope_text(scope: Scope) -> str:
-    """«ЮЗ и З, этаж 4 и выше · октябрь–март»; «весь отель» when the scope is everything."""
     parts = []
     if scope.facades:
         names = [FACADE_SHORT[f] for f in Facade if f in scope.facades]
@@ -93,7 +88,6 @@ def _floors_text(floor_from: int | None, floor_to: int | None) -> str:
 
 
 def months_text(months: frozenset[int]) -> str:
-    """Contiguous runs, wrapping over the new year: {10, 11, 12, 1, 2, 3} → «октябрь–март»."""
     if set(months) == set(MONTHS):
         return "круглый год"
     ordered = sorted(months)

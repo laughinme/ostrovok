@@ -1,10 +1,3 @@
-"""
-Matching (09 §7): for every bookable variant of a hotel (room category with facade markup, or
-facade × floor band), the probability that each wish comes true on the trip dates, the score,
-the risk of disappointment and the lines that explain it. The best variant wins, not the best
-single wish: a sunset room over the railway can lose to a quiet room facing the courtyard.
-"""
-
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
 from enum import StrEnum
@@ -108,7 +101,6 @@ def floor_bands(floors: int) -> list[tuple[int, int]]:
 
 
 def default_variants(facades: Sequence[Facade], floors: int, price: int | None) -> list[Variant]:
-    """Without the hotel's markup we can still recommend a side and a floor band to ask for."""
     return [
         Variant(Scope(facades=frozenset({f}), floor_from=a, floor_to=b), price=price)
         for f in facades
@@ -178,7 +170,7 @@ def _record(
             weight is None or value.get("max_kg") is None or weight <= value["max_kg"]
         )
         return (fact.confidence if ok else 1 - fact.confidence), fact
-    return fact.confidence, fact  # informational records (climate): known, shown as a line
+    return fact.confidence, fact
 
 
 def _month_overlap(fact: Fact, trip: TripWindow) -> int:
@@ -268,7 +260,6 @@ def best_match(
 
 
 def request_text(variant: Variant) -> str:
-    """What to ask the hotel for: «ЮЗ-сторона · этаж ≥ 4»."""
     parts = []
     if variant.scope.facades:
         parts.append(

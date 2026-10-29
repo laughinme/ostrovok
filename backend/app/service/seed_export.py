@@ -1,8 +1,3 @@
-"""
-Collected knowledge travels with the repo (09 §3.1, §13): `export-seed` dumps the knowledge and
-trace tables to JSONL.gz; the seed loader puts them back with one generic statement per batch.
-"""
-
 import gzip
 from collections.abc import Sequence
 from pathlib import Path
@@ -12,7 +7,6 @@ from sqlalchemy import text
 from app.db.database import Database
 from app.db.uow import UnitOfWork
 
-# Parents first: loading respects foreign keys.
 KNOWLEDGE_TABLES = (
     "agent_runs",
     "agent_steps",
@@ -28,7 +22,7 @@ _BATCH = 2000
 async def export_tables(
     db: Database, out_dir: Path, tables: Sequence[str] = KNOWLEDGE_TABLES
 ) -> dict[str, int]:
-    out_dir.mkdir(parents=True, exist_ok=True)  # noqa: ASYNC240 - CLI, nothing else runs
+    out_dir.mkdir(parents=True, exist_ok=True)  # noqa: ASYNC240
     counts = {}
     async with db.raw_session() as session:
         for table in tables:
@@ -59,8 +53,6 @@ async def import_table(uow: UnitOfWork, path: Path, table: str) -> int:
 
 
 class KnowledgeSeedLoader:
-    """Loads `data/seed/*.jsonl.gz` written by `make collect` (knowledge and agent traces)."""
-
     name = "knowledge"
 
     def sources(self, data_dir: Path) -> Sequence[Path]:

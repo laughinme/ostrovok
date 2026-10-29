@@ -1,5 +1,3 @@
-"""Read-only real-data check: uv run python -m tests.benchmarks.view_methods (no LLM)."""
-
 import asyncio
 import json
 from datetime import date

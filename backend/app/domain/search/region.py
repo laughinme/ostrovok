@@ -1,5 +1,3 @@
-"""Coverage of the regional demo; departure cities are not destinations."""
-
 import re
 
 from app.domain.search.text import normalize

@@ -33,8 +33,6 @@ class Building:
 
 @dataclass(frozen=True, slots=True)
 class RoofHits:
-    """Connected roof intervals per ray; roof elevation absolute, indices into Scene.buildings."""
-
     ray: IntArray
     near_m: FloatArray
     far_m: FloatArray
@@ -54,8 +52,6 @@ class RoofHits:
 
 @dataclass(frozen=True, slots=True)
 class Scene:
-    """Prepared geometry for one fixed window; arrays (rays, samples), local metres/degrees."""
-
     azimuths_deg: FloatArray
     distances_m: FloatArray
     terrain_m: FloatArray
@@ -78,8 +74,6 @@ class Scene:
 
 @dataclass(frozen=True, slots=True)
 class Horizon:
-    """Per-ray arrays, or (runs,rays) from batch evaluation; angles in degrees."""
-
     angle_deg: FloatArray
     kind: NDArray[np.int8]
     building_deg: FloatArray
@@ -90,7 +84,6 @@ class Horizon:
 
     @property
     def sea_fraction(self) -> float:
-        """Horizontal angular fraction with any visible water, not image area or probability."""
         return float(np.mean(self.sea_visible))
 
     def row(self, index: int) -> "Horizon":
@@ -106,7 +99,6 @@ class Horizon:
 
 
 def sector_azimuths(normal_deg: float) -> FloatArray:
-    """141 rays, normal ±70°, one-degree bins, increasing and intentionally unwrapped."""
     return normal_deg + np.arange(-70.0, 71.0)
 
 

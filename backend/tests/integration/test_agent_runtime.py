@@ -80,7 +80,6 @@ async def test_run_records_the_selected_planner(db: Database, provider_down: boo
         return "rules plan"
 
     tracer = Tracer(db, bus, clock, run_id)  # type: ignore[arg-type]
-    # A later outage must also replace an earlier LLM label with the rules actually used.
     if provider_down:
         await tracer.set_planner(Planner.LLM)
     result, planner = await with_fallback(FakeLanguageModel(), primary, fallback, tracer=tracer)

@@ -1,5 +1,3 @@
-"""Reading a hotel's own words about the beach and comparing them with our measurements."""
-
 import pytest
 
 from app.service.quality.claims import claimed_distance, distance_agrees

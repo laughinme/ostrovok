@@ -1,9 +1,3 @@
-"""
-LLM against rules on the same sets (B3.3, D-30): intents, hotelier answers, the Curator and the
-Explainer, on the development sets and on the hold-out sets written without looking at the
-rules. Every call is metered: latency, tokens, cache hits, price.
-"""
-
 import asyncio
 import statistics
 from collections.abc import Awaitable, Callable, Sequence
@@ -59,8 +53,6 @@ class Call:
 
 @dataclass
 class MeteredModel:
-    """`LanguageModel` that remembers every call it passes through."""
-
     inner: LanguageModel
     calls: list[Call] = field(default_factory=list)
     failures: dict[str, int] = field(default_factory=dict)
@@ -114,7 +106,6 @@ class MeteredModel:
 
 
 def _task_summary(calls: list[Call]) -> dict[str, Any]:
-    """Speed and price per call from every answer, cached ones included (their first run)."""
     latencies = sorted(c.latency_ms for c in calls if c.latency_ms)
     first = sum((c.usage for c in calls), Usage())
     spent = sum((c.usage for c in calls if not c.cached), Usage())
@@ -135,8 +126,6 @@ def _task_summary(calls: list[Call]) -> dict[str, Any]:
 
 
 class SilentTracer(Tracer):
-    """A tracer that keeps nothing: the evaluation must not fill the console with runs."""
-
     def __init__(self, db: Database, clock: Clock) -> None:
         super().__init__(db, RecordingEventBus(), clock, uuid4())
         self.used_llm = False
@@ -151,7 +140,6 @@ class SilentTracer(Tracer):
 async def _prefetch[T](
     inputs: Sequence[str], fn: Callable[[str], Awaitable[T]]
 ) -> Callable[[str], Awaitable[T]]:
-    """Run `fn` over all inputs with bounded concurrency; return a lookup with the same shape."""
     gate = asyncio.Semaphore(CONCURRENCY)
 
     async def one(text: str) -> T:
@@ -228,7 +216,6 @@ async def evaluate_llm(
 async def _explain(
     db: Database, clock: Clock, data_dir: Path, llm: LanguageModel
 ) -> dict[str, Any]:
-    """How often the LLM's wording of a trade-off passes the code's faithfulness check."""
     cases = (await read_yaml(data_dir / "eval/intents.yaml"))[:EXPLAIN_QUERIES]
     attempted = accepted = 0
     examples: list[dict[str, str | None]] = []

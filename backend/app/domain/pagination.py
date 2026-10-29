@@ -15,8 +15,6 @@ class InvalidCursorError(DomainError):
 
 @dataclass(frozen=True, slots=True)
 class Cursor:
-    """Keyset position `(created_at, id)`; opaque to clients so we can change it later."""
-
     created_at: datetime
     id: UUID
 

@@ -1,5 +1,3 @@
-"""Offline budget: uv run python -m tests.benchmarks.view_budget (no network or region data)."""
-
 import json
 from time import perf_counter
 

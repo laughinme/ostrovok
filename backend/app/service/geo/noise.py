@@ -1,5 +1,3 @@
-"""One noise scene for both the evidence API and the research method."""
-
 import asyncio
 from collections.abc import Sequence
 from dataclasses import dataclass
@@ -20,7 +18,6 @@ SOURCE_KINDS = {
 }
 RADIUS_M = 600
 SCREEN_RADIUS_M = 250
-# Conditional take-off power at 1 m, rather than a measurement or an R5 calibration.
 AIRCRAFT_POWER_DB = 95.0
 
 
@@ -58,7 +55,6 @@ def _estimate(
     buildings: Sequence[BuildingShape],
     roads: int,
 ) -> HotelNoise:
-    """The CPU part, off the event loop: projection, sources and per-facade propagation."""
     local = [NoiseFeature(f.osm_id, frame.to_local(f.geometry), f.tags) for f in features]
     sources = noise_sources(local, aircraft_power_db=AIRCRAFT_POWER_DB)
     screens = [frame.footprint, *frame.many_to_local([b.geometry for b in buildings])]

@@ -1,5 +1,3 @@
-"""Offline smoke checks become active when codex-pipeline publishes region files."""
-
 from datetime import date
 from pathlib import Path
 

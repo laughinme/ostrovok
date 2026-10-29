@@ -4,7 +4,6 @@ from app.db.database import Database
 
 
 async def test_postgis_answers_distance_queries(db: Database) -> None:
-    """Two points about 70 m apart in Sochi: within 100 m, not within 50 m."""
     async with db.raw_session() as session:
         within = await session.scalar(
             text(

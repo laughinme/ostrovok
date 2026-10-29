@@ -1,5 +1,3 @@
-"""Saved wishes: count hotels with a compatible variant that satisfies every chip."""
-
 import json
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass

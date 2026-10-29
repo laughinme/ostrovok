@@ -1,5 +1,3 @@
-"""File boundary for monthly normals; domain calculations never read JSON."""
-
 import json
 from dataclasses import dataclass
 from datetime import date
@@ -29,7 +27,6 @@ class ClimateCatalog:
 
     @classmethod
     def from_file(cls, path: Path) -> Self:
-        """Load stations[{id,lon,lat,years,months:{'1':{metric:value|null},...}}]."""
         raw = _mapping(json.loads(path.read_text(encoding="utf-8")))
         rows = raw.get("stations")
         if not isinstance(rows, list) or not rows:
@@ -40,7 +37,6 @@ class ClimateCatalog:
         return cls(stations, str(raw.get("source", "")), str(raw.get("period", "")))
 
     def nearest(self, location: LonLat) -> ClimateStation:
-        """Choose the closest sample point, not an interpolated weather forecast."""
         if not self.stations:
             raise ValueError("Empty climate catalog")
         points = np.array(

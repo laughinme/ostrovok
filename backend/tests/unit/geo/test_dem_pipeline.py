@@ -1,5 +1,3 @@
-"""Real DEM contract, control elevations and complete 40 km ray coverage."""
-
 from pathlib import Path
 
 import numpy as np
@@ -32,9 +30,9 @@ def test_real_dem_elevations_and_coverage() -> None:
 
 def test_dem_mosaic_preserves_nodata(tmp_path: Path) -> None:
     rasterio = pytest.importorskip("rasterio")
-    from rasterio.transform import from_origin  # noqa: PLC0415 - optional pipeline dependency
+    from rasterio.transform import from_origin  # noqa: PLC0415
 
-    from pipeline.dem import RESOLUTION, build_dem  # noqa: PLC0415 - optional pipeline dependency
+    from pipeline.dem import RESOLUTION, build_dem  # noqa: PLC0415
 
     path = tmp_path / "tile.tif"
     with rasterio.open(

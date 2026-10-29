@@ -29,7 +29,7 @@ class TokenPair(BaseModel):
 
     access_token: str
     refresh_token: str | None = None
-    token_type: Literal["bearer"] = "bearer"  # noqa: S105 - OAuth2 token type, not a secret
+    token_type: Literal["bearer"] = "bearer"  # noqa: S105
     expires_in: int = Field(..., description="Access token lifetime in seconds")
 
 

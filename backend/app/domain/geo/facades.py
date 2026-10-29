@@ -14,8 +14,6 @@ _RIGHT_ANGLE_DEG = 90
 
 @dataclass(frozen=True, slots=True)
 class Wall:
-    """One contiguous exterior facade in local metres; azimuth clockwise from north."""
-
     start: XY
     end: XY
     azimuth_deg: float
@@ -56,7 +54,6 @@ class Window:
 
 
 def extract_facades(footprint: Polygon, *, tolerance_deg: float = 5.0) -> tuple[Wall, ...]:
-    """Exterior footprint in local metres → contiguous walls; courtyards are excluded."""
     if footprint.is_empty or not footprint.is_valid or footprint.area <= 0:
         raise ValueError("Expected a valid nonempty building polygon")
     if not 0 <= tolerance_deg < _RIGHT_ANGLE_DEG:
@@ -103,7 +100,6 @@ def window_points(
     fractions: tuple[float, ...] = (0.25, 0.5, 0.75),
     floor_height_m: float = FLOOR_HEIGHT_M,
 ) -> tuple[Window, ...]:
-    """Windows on each wall/floor, absolute eye elevation = base + (floor − 0.5) × 3 m."""
     if floors < 1 or floor_height_m <= 0:
         raise ValueError("Floor count and floor height must be positive")
     return tuple(

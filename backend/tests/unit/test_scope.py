@@ -77,7 +77,6 @@ def test_sea_from_fourth_floor_on_one_side() -> None:
 @settings(max_examples=60, deadline=None)
 @given(st.data())
 def test_compression_is_exact(data: st.DataObject) -> None:
-    """Every cell keeps its value after compression, and scopes never overlap."""
     floors = data.draw(st.integers(1, 5))
     grid = Grid(facades=(Facade.N, Facade.S, Facade.W), floors=floors)
     split_floor = data.draw(st.integers(1, floors))

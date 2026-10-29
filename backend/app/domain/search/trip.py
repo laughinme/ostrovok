@@ -1,5 +1,3 @@
-"""Dates, guests, budget and district from free text (09 §7.1), without an LLM."""
-
 import re
 from dataclasses import dataclass, replace
 from datetime import date, datetime, timedelta

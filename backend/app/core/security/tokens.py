@@ -22,11 +22,6 @@ class AccessClaims:
 
 
 class TokenCodec:
-    """
-    Signs and checks short-lived JWT access tokens and derives CSRF tokens.
-    Refresh tokens are opaque (see `RefreshToken`) and live in the `auth_sessions` table.
-    """
-
     def __init__(
         self,
         *,
@@ -108,8 +103,6 @@ class TokenCodec:
 
 @dataclass(frozen=True, slots=True)
 class RefreshToken:
-    """`<session id>.<random secret>`; only a SHA-256 of the secret is stored."""
-
     session_id: UUID
     secret: str
 

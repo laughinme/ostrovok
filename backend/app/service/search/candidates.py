@@ -1,5 +1,3 @@
-"""Hotels as search candidates: bookable variants and the facts the chips need."""
-
 from collections import defaultdict
 from collections.abc import Sequence
 from dataclasses import replace

@@ -129,7 +129,6 @@ class HotelOut(ApiModel):
 
     @classmethod
     def from_view(cls, h: HotelView, *, compact: bool = False) -> Self:
-        """`compact` for lists: facts without heavy map geometry (the card loads it per fact)."""
         return cls(
             id=str(h.geo.id),
             osm_id=h.geo.osm_id,

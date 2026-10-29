@@ -22,15 +22,10 @@ from app.db.database import Database
 from app.infra.events import RedisEventBus
 from app.service.ports import SystemClock
 
-# Agents run in the worker with no limit; the API answers people and must not hang on the DB.
 API_STATEMENT_TIMEOUT_MS = 30_000
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
-    """
-    App factory: `uvicorn app.main:create_app --factory`.
-    Tests call it with their own settings; nothing is created at import time.
-    """
     settings = settings or get_settings()
     configure_logging(settings.log_level, as_json=settings.log_json)
 
@@ -41,7 +36,6 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         app.state.events = RedisEventBus(app.state.redis)
         app.state.llm = build_language_model(settings, app.state.db, app.state.redis)
         if settings.app_stage != "test":
-            # Health answers at once; the walk graph loads in the background.
             app.state.ground_warmup = asyncio.create_task(
                 asyncio.to_thread(warm_ground, app, app.state.db, settings)
             )
@@ -73,7 +67,6 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             allow_methods=["*"],
             allow_headers=["*"],
         )
-    # Added last = outermost: every response, including CORS preflights and errors, gets an id.
     app.add_middleware(RequestContextMiddleware)
     register_exception_handlers(app, debug=settings.debug)
     app.include_router(health_router)
@@ -85,6 +78,5 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         stateless_http=True,
         transport_security=transport_security(settings),
     )
-    # An exact ASGI route keeps the endpoint at /mcp without intercepting unrelated 404s.
     app.router.routes.append(Route("/mcp", transport, methods=["GET", "POST", "DELETE"]))
     return app

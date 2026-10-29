@@ -1,5 +1,3 @@
-"""Offline regional scenes for reproducible day-plan tests and visual diagnostics."""
-
 import csv
 import gzip
 import json

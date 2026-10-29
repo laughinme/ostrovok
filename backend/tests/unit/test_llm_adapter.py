@@ -166,7 +166,7 @@ async def test_polza_keeps_model_id_and_sends_reasoning_effort(
         )
 
     monkeypatch.setattr(pydantic_ai_model, "AsyncOpenAI", client)
-    monkeypatch.setattr(models, "ALLOW_MODEL_REQUESTS", True)  # MockTransport only, no network
+    monkeypatch.setattr(models, "ALLOW_MODEL_REQUESTS", True)
     model = openai_compatible("https://polza.ai/api/v1", "mock-key", "openai/gpt-5.6-luna")
     llm = PydanticAiLanguageModel(
         model,

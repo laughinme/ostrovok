@@ -1,5 +1,3 @@
-"""The console's view of the registry: coverage, average confidence and freshness (09 §9)."""
-
 from dataclasses import dataclass
 from datetime import datetime
 

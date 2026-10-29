@@ -1,5 +1,3 @@
-"""Read-only timing on the seeded catalog: caffeinate -i uv run python -m tests.benchmarks.moods."""
-
 import asyncio
 import json
 import sys

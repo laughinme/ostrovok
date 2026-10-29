@@ -1,5 +1,3 @@
-"""Research a newly inserted hotel, then let the Liaison ask about its unknowns."""
-
 from uuid import UUID
 
 from app.domain.agents import RunStatus

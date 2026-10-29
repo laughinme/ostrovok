@@ -10,8 +10,6 @@ from app.service.recipes.models import DerivedRecipe
 
 
 class DerivedExecutor:
-    """`derived`: combines other characteristics' facts; the best scope of each one counts."""
-
     method: ClassVar[MethodKind] = MethodKind.DERIVED
 
     async def collect(self, call: MethodCall, env: Environment) -> list[Finding]:

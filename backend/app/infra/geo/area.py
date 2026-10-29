@@ -12,7 +12,6 @@ class GraphAreaSlopes:
         self.graph = graph
 
     def within(self, origin: LonLat, radius_m: float) -> SlopeStat | None:
-        """Physical segments intersecting the metric circle; reverse arcs count once."""
         projection = LocalProjection(origin)
         xy = projection.forward(self.graph.nodes[:, :2])
         starts, ends = xy[self.graph.edges[:, 0]], xy[self.graph.edges[:, 1]]

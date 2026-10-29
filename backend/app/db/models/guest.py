@@ -61,8 +61,6 @@ class TasteProfileRow(Base):
 
 
 class UserEventRow(UuidPkMixin, Base):
-    """Demo guest history: bookings, saved and dismissed hotels, chip edits (all «демо»)."""
-
     __tablename__ = "user_events"
 
     user_id: Mapped[UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)

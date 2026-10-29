@@ -44,7 +44,6 @@ def _summary_rows(report: Mapping[str, Any]) -> list[tuple[str, str]]:
 
 
 def _claims_rows(claims: Mapping[str, Any]) -> list[tuple[str, str]]:
-    """R7: hotels' own sites against our facts."""
     if "views" not in claims:
         return []
     views, beach = claims["views"], claims["beach"]
@@ -107,7 +106,6 @@ def _set_rows(name: str, result: Mapping[str, Any]) -> list[str]:
 
 
 def llm_table(report: Mapping[str, Any]) -> str:
-    """Rules → LLM on each set, then what the calls cost and how long they took."""
     lines = [
         f"LLM {report['model']} ({report['thinking']}), Куратор {report['strongModel']} "
         f"({report['thinkingStrong']})",
@@ -146,7 +144,6 @@ def _metric(run: Mapping[str, Any], name: str, path: tuple[str, ...]) -> str:
 
 
 def comparison_table(runs: list[Mapping[str, Any]]) -> str:
-    """One row per model run: quality on both sets, speed and price (D-30)."""
     header = (
         "Модель (рассуждения) | F1 намерений dev/hold | ответы dev/hold | переспросы hold | "
         "Куратор метод dev/hold | объяснения | p50 намерений, с | p50 Куратора, с | "

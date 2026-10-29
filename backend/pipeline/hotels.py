@@ -1,5 +1,3 @@
-"""Build synthetic cards and hidden hotelier answers for the real OSM catalog."""
-
 from typing import Any
 
 import yaml

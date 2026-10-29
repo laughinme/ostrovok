@@ -1,5 +1,3 @@
-"""Walking access, explicit pedestrian directionality and conserved step counts."""
-
 import numpy as np
 from numpy.typing import NDArray
 
@@ -32,7 +30,6 @@ MAJOR_ROADS = frozenset({"trunk", "trunk_link", "primary", "primary_link", "seco
 
 
 def walkable(tags: dict[str, str]) -> bool:
-    """Vehicle one-way streets remain walkable both ways unless oneway:foot is explicit."""
     foot = tags.get("foot")
     if foot in DENY_ACCESS:
         return False
@@ -50,7 +47,6 @@ def directions(tags: dict[str, str]) -> tuple[bool, bool]:
 
 
 def grade(tags: dict[str, str]) -> str:
-    """Do not join coincident interior vertices of bridges, tunnels and ground ways."""
     if "layer" in tags:
         return tags["layer"]
     if tags.get("bridge", "no") != "no":
@@ -61,7 +57,6 @@ def grade(tags: dict[str, str]) -> str:
 
 
 def step_counts(tags: dict[str, str], lengths: NDArray[np.float64]) -> NDArray[np.int64]:
-    """Allocate a whole-way count across unsimplified segments without multiplying it."""
     if tags.get("highway") != "steps":
         return np.zeros(len(lengths), dtype=np.int64)
     value = tags.get("step_count", "")

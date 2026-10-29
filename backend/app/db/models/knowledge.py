@@ -10,8 +10,6 @@ from app.db.base import Base, UuidPkMixin, utcnow
 
 
 class CharacteristicRow(Base):
-    """Registry entry; `definition` holds the full `Characteristic` including its recipe."""
-
     __tablename__ = "characteristics"
 
     key: Mapped[str] = mapped_column(String(64), primary_key=True)
@@ -23,8 +21,6 @@ class CharacteristicRow(Base):
 
 
 class ObservationRow(Base):
-    """Append-only: who claimed what. Superseded rows stay for history."""
-
     __tablename__ = "observations"
 
     id: Mapped[UUID] = mapped_column(primary_key=True)
@@ -50,8 +46,6 @@ class ObservationRow(Base):
 
 
 class FactRow(Base):
-    """Projection the read path uses: what we believe for (hotel, characteristic, scope)."""
-
     __tablename__ = "facts"
 
     id: Mapped[UUID] = mapped_column(primary_key=True)
@@ -81,8 +75,6 @@ class FactRow(Base):
 
 
 class FactVersionRow(UuidPkMixin, Base):
-    """Each change of a fact with its reason; survives even when the scope disappears."""
-
     __tablename__ = "fact_versions"
 
     fact_id: Mapped[UUID] = mapped_column(index=True)

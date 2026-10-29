@@ -1,5 +1,3 @@
-"""Read side of the knowledge layer (CQRS-lite, 09 §3.4): facts, «почему мы так думаем»."""
-
 from collections.abc import Sequence
 from dataclasses import dataclass
 from uuid import UUID
@@ -24,7 +22,6 @@ class FactDetail:
 
 
 def breadth(fact: Fact) -> int:
-    """How much of the hotel a fact covers, roughly: sides × floors × months."""
     scope = fact.scope
     sides = len(scope.facades) if scope.facades else 8
     floors = (scope.floor_to or 30) - (scope.floor_from or 1) + 1
@@ -33,8 +30,6 @@ def breadth(fact: Fact) -> int:
 
 
 def headline(facts: Sequence[Fact]) -> Fact:
-    """The one fact a summary shows: the best «yes» if there is one, else the surest answer;
-    among equally sure ones, the one that covers more of the hotel."""
     positive = [f for f in facts if f.value is True]
     pool = positive or list(facts)
     return max(pool, key=lambda f: (round(f.confidence, 2), breadth(f)))

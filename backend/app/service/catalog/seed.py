@@ -1,5 +1,3 @@
-"""Seed loaders for the region catalog: real hotels, buildings and OSM features, demo rooms."""
-
 import csv
 import gzip
 from collections.abc import Iterator, Sequence
@@ -155,8 +153,6 @@ class OsmFeaturesLoader:
 
 
 class RoomTypesLoader:
-    """Demo rooms, rates, rating and tagline (`data/demo/room_types.yaml`), all marked «демо»."""
-
     name = "room_types"
 
     def sources(self, data_dir: Path) -> Sequence[Path]:

@@ -19,8 +19,6 @@ _SEARCH_RADIUS_M = 3000
 
 
 class WalkToExecutor:
-    """`walk_to`: `route.snap → route.walk → route.profile`; there and back differ on a slope."""
-
     method: ClassVar[MethodKind] = MethodKind.WALK_TO
 
     async def collect(self, call: MethodCall, env: Environment) -> list[Finding]:

@@ -16,8 +16,6 @@ _DSM_CORRECTION_RANGE_M = 2050
 
 
 class ViewSceneBuilder:
-    """Sample the terrain port once per window; callers retain scenes across floor/MC requests."""
-
     def __init__(
         self,
         terrain: TerrainModel,
@@ -31,7 +29,6 @@ class ViewSceneBuilder:
         self._distances = sample_distances(step_m=step_m, max_km=max_km)
 
     def buildings_with_bases(self, buildings: Sequence[Building]) -> tuple[Building, ...]:
-        """Estimate DSM bases once; use the same ground estimate for hotel eye elevations."""
         xy = ground_probe_points(buildings)
         heights = self._sample(xy)
         return estimate_bases(buildings, heights)
@@ -43,7 +40,6 @@ class ViewSceneBuilder:
         buildings: Sequence[Building],
         sea: BaseGeometry,
     ) -> Scene:
-        """Local metres for origin/buildings/sea; includes self-occlusion and DSM correction."""
         azimuths = sector_azimuths(normal_deg)
         xy = ray_coordinates(np.array(origin_xy), azimuths, self._distances)
         terrain = self._sample(xy)

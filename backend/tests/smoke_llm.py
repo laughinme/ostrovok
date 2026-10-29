@@ -3,7 +3,7 @@
 Run explicitly: `make smoke-llm`. Never collected by pytest; no keys are passed to this script.
 """
 
-# ruff: noqa: T201 - CLI progress, never credentials
+# ruff: noqa: T201
 
 import argparse
 import json
@@ -40,7 +40,6 @@ def wait_run(http: httpx.Client, run_id: str) -> dict[str, Any]:
 
 
 def verify_intent(http: httpx.Client, auth: dict[str, str]) -> dict[str, Any]:
-    # A varying valid budget avoids falsely passing on an old response from the LLM cache.
     budget = 9000 + uuid4().int % 10000
     query = (
         "Нужна тишина ночью и вид на море в центре Сочи, двое взрослых, "

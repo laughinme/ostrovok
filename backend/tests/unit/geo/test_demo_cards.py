@@ -1,5 +1,3 @@
-"""Demo cards must remain reproducible and satisfy the actual seed contract."""
-
 from pathlib import Path
 
 import yaml

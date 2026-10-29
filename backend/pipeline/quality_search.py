@@ -1,5 +1,3 @@
-"""Freeze fact-based relevance judgments. This is a regression set, not independent gold."""
-
 import asyncio
 from collections import defaultdict
 from datetime import UTC, datetime
@@ -85,7 +83,7 @@ def _satisfies(fact: FactRow, chip: dict[str, Any]) -> bool:
     if key == "steep_streets":
         return value.get("share", 1) <= 0.2
     if key == "climate":
-        return True  # The query asks for information, not a minimum temperature.
+        return True
     return bool(value.get("allowed") or value.get("available"))
 
 

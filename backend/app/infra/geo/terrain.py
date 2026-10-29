@@ -19,8 +19,6 @@ type HorizonKey = tuple[float, float, float, bytes, float]
 
 
 class NpyTerrain:
-    """WGS84 DEM adapter; pixel-corner Affine [a,b,c,d,e,f], sample at pixel centres."""
-
     def __init__(self, directory: Path, *, step_m: float = 60, cache_size: int = 128) -> None:
         if not _MIN_STEP_M <= step_m <= _MAX_STEP_M or cache_size < 1:
             raise ValueError("DEM step must be 30..90 m and cache size positive")
@@ -48,7 +46,6 @@ class NpyTerrain:
         self._nodata: int | None = metadata.get("nodata")
 
     def elevation(self, points: FloatArray) -> FloatArray:
-        """Bilinear elevation for (n,2) lon/lat; NaN outside DEM or across no-data cells."""
         coordinates = points_array(points)
         if coordinates.ndim != _GRID_DIMENSIONS:
             raise ValueError("Expected (n, 2) WGS84 points")
@@ -77,7 +74,6 @@ class NpyTerrain:
     def far_horizon(
         self, origin: LonLat, eye_height_m: float, azimuths: FloatArray, max_km: float = 40
     ) -> tuple[FloatArray, FloatArray]:
-        """Max terrain angle (degrees), distance (m); eye_height_m is absolute, not AGL."""
         angles = np.asarray(azimuths, dtype=np.float64)
         if angles.ndim != 1 or not np.all(np.isfinite(angles)) or max_km <= 0:
             raise ValueError("Expected finite 1D azimuths and positive range")
@@ -105,7 +101,6 @@ class NpyTerrain:
         indices = np.argmax(np.where(valid, angles, -np.inf), axis=1)
         horizon = np.take_along_axis(angles, indices[:, None], axis=1)[:, 0]
         horizon_distances = distances[indices]
-        # Missing coverage is unknown, never an artificial clear horizon.
         missing = ~np.all(valid, axis=1)
         horizon[missing] = np.nan
         horizon_distances[missing] = np.nan

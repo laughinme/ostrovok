@@ -1,9 +1,3 @@
-"""
-Agent runtime (09 §4.5): a run and its job are created in one transaction; the worker executes
-the agent; every step is its own short transaction and wakes SSE listeners through the bus.
-The database is the source of truth, the bus only says "look again".
-"""
-
 import logging
 import time
 from collections.abc import AsyncIterator, Awaitable, Callable
@@ -46,8 +40,6 @@ def step_event(run_id: UUID, step: Step) -> dict[str, Any]:
 
 
 class Tracer:
-    """Writes the trace of one run. Implements `StepSink` for tools."""
-
     def __init__(self, db: Database, events: EventBus, clock: Clock, run_id: UUID) -> None:
         self._db = db
         self._events = events
@@ -77,7 +69,6 @@ class Tracer:
 
     @asynccontextmanager
     async def timed(self, name: str, args: Any = None) -> AsyncIterator[dict[str, Any]]:
-        """`async with tracer.timed("geo.horizon", args) as step: step["summary"] = …`."""
         started = time.perf_counter()
         step: dict[str, Any] = {"summary": name, "output": None}
         yield step
@@ -93,13 +84,11 @@ class Tracer:
         self.usage += usage
 
     async def set_planner(self, planner: Planner) -> None:
-        """A queued run starts with rules; record the planner actually selected at runtime."""
         async with self._db.unit_of_work() as uow:
             if row := await uow.agents.run_row(self.run_id):
                 row.planner = planner.value
 
     async def llm(self, task: str, result: LlmResult[Any]) -> None:
-        """One LLM call as a trace step: model, tokens, time and price."""
         self.add_usage(result.spent)
         u = result.usage
         summary = (
@@ -160,7 +149,6 @@ async def create_run(
     subject: dict[str, Any] | None = None,
     parent_run_id: UUID | None = None,
 ) -> UUID:
-    """A queued run without a job: for the CLI and for agents started inside another run."""
     run_id = uuid4()
     uow.agents.add_run(
         run_id=run_id,
@@ -188,7 +176,6 @@ async def launch(
     dedupe_key: str | None = None,
     parent_run_id: UUID | None = None,
 ) -> UUID:
-    """Create a queued run and its job in the caller's transaction (transactional outbox)."""
     run_id = await create_run(
         uow,
         clock,
@@ -209,8 +196,6 @@ AgentBody = Callable[[Tracer], Awaitable[None]]
 
 
 class AgentRunner:
-    """Moves a run through running → done | failed around the agent's body."""
-
     def __init__(self, db: Database, events: EventBus, clock: Clock) -> None:
         self._db = db
         self._events = events
@@ -230,7 +215,7 @@ class AgentRunner:
         error: str | None = None
         try:
             await body(tracer)
-        except Exception as exc:  # the run is marked failed and the trace says why
+        except Exception as exc:
             logger.exception("agent run %s failed", run_id)
             status, error = RunStatus.FAILED, repr(exc)
             await tracer.error(f"Запуск прерван: {type(exc).__name__}")

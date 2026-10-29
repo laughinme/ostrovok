@@ -1,4 +1,3 @@
-"""Deterministic geometry preparation and pure NumPy horizon evaluation (metres/degrees)."""
 
 from __future__ import annotations
 
@@ -43,7 +42,6 @@ class Horizon:
 
     @property
     def sea_fraction(self) -> float:
-        """Horizontal FOV fraction: share of azimuth bins with any visible water."""
         return float(np.mean(self.sea_visible))
 
 
@@ -52,7 +50,6 @@ def elevation_angle(height: FloatArray, distance: FloatArray, eye: float) -> Flo
 
 
 def facade_windows(polygon: Any, sea_bearing: float) -> list[tuple[str, FloatArray, float]]:
-    """Choose real edges with outward normals nearest to sea/opposite bearings."""
     if polygon.geom_type != "Polygon":
         polygon = max(polygon.geoms, key=lambda part: part.area)
     coords = np.asarray(orient(polygon, sign=1).exterior.coords)
@@ -80,7 +77,6 @@ def ray_coordinates(origin: FloatArray, azimuths: FloatArray, distances: FloatAr
 def building_intersections(
     origin: FloatArray, azimuths: FloatArray, polygons: list[Any], roofs: FloatArray
 ) -> Hits:
-    """Keep each connected roof interval, including courtyards and concave buildings."""
     endpoints = ray_coordinates(origin, azimuths, np.array([2000.0]))[:, 0]
     tree = STRtree(polygons)
     observer = Point(origin)
@@ -102,7 +98,6 @@ def building_intersections(
 
 
 def roof_events(hits: Hits, eye: float) -> tuple[NDArray[np.int64], FloatArray, FloatArray]:
-    """The maximum roof angle can occur inside an interval when the eye is above it."""
     stationary = np.sqrt(np.maximum(eye - hits.roof, 0) / CURVATURE)
     stationary = np.clip(stationary, hits.near, hits.far)
     distances = np.concatenate((hits.near, hits.far, stationary))
@@ -112,7 +107,6 @@ def roof_events(hits: Hits, eye: float) -> tuple[NDArray[np.int64], FloatArray, 
 
 
 def evaluate_horizon(scene: Scene, eye: float) -> Horizon:
-    """Evaluate ordered occlusion, allowing foreground sea below a distant land horizon."""
     angles = elevation_angle(np.where(scene.sea, 0, scene.terrain), scene.distances, eye)
     land = np.where(scene.sea, -np.inf, angles)
     prefix_land = np.maximum.accumulate(land, axis=1)

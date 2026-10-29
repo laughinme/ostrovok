@@ -9,13 +9,10 @@ from app.db.uow import UnitOfWork
 from app.domain.catalog import hotel_id
 from app.domain.users import Role
 
-# Persona accounts never sign in with a password: argon2 rejects this value as a hash.
-NO_PASSWORD = "!persona"  # noqa: S105 - not a password, an impossible hash
+NO_PASSWORD = "!persona"  # noqa: S105
 
 
 class DemoUsersLoader:
-    """Personas for the role switcher (`data/demo/users.yaml`) and their hotel memberships."""
-
     name = "demo_users"
 
     def sources(self, data_dir: Path) -> Sequence[Path]:

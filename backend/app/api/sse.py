@@ -8,7 +8,6 @@ SSE_HEADERS = {"Cache-Control": "no-cache", "X-Accel-Buffering": "no", "Connecti
 
 
 def sse_response(events: AsyncIterator[dict[str, Any] | None]) -> StreamingResponse:
-    """`event: <type>` + `data: <json>` per event; `None` becomes a comment heartbeat."""
 
     async def body() -> AsyncIterator[str]:
         yield "retry: 2000\n\n"

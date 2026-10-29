@@ -1,5 +1,3 @@
-"""Contracted OSM filters, provenance and stable WGS84 exports; no network."""
-
 import json
 
 import pytest

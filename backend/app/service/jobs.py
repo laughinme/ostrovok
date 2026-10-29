@@ -19,8 +19,6 @@ _ERROR_TEXT_MAX = 2000
 
 
 class JobQueue:
-    """Enqueue from code that has no unit of work of its own (worker ticks, CLI)."""
-
     def __init__(self, db: Database, clock: Clock) -> None:
         self._db = db
         self._clock = clock
@@ -31,12 +29,6 @@ class JobQueue:
 
 
 class JobRunner:
-    """
-    Claims jobs with a lease, runs their handlers outside the claiming transaction
-    (agent runs take seconds to minutes) and records the outcome. Handlers must be idempotent:
-    a job whose worker died is run again after its lease expires.
-    """
-
     def __init__(
         self,
         db: Database,
@@ -79,7 +71,7 @@ class JobRunner:
         heartbeat = asyncio.create_task(self._keep_lease(job))
         try:
             await handler(job)
-        except Exception as exc:  # any handler failure is recorded and retried later
+        except Exception as exc:
             logger.warning("job %s (%s) failed", job.id, job.kind, exc_info=True)
             await self._finish(job, error=repr(exc), final=job.attempt >= self._max_attempts)
         else:
@@ -105,7 +97,7 @@ class JobRunner:
         async with self._db.unit_of_work() as uow:
             row = await uow.jobs.get(job.id, for_update=True)
             if row is None or row.locked_by != self._worker_id:
-                return  # the lease expired and another worker owns the job now
+                return
             row.lease_until = None
             row.locked_by = None
             if error is None:
