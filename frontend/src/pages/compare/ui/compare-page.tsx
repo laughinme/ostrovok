@@ -142,20 +142,20 @@ export function ComparePage() {
                     );
                   })}
                 </div>
-                <div className="mt-4 grid grid-cols-2 gap-x-4 text-sm">
-                  <ul aria-label="Плюсы" className="min-w-0 space-y-1">
+                <div className="mt-4 grid grid-cols-2 gap-x-3 text-xs leading-snug">
+                  <ul aria-label="Плюсы" className="min-w-0 space-y-1.5">
                     {h.pros.map((p) => (
-                      <li key={p} className="flex gap-2">
+                      <li key={p} className="flex gap-1.5">
                         <ThumbsUp className="mt-0.5 h-3.5 w-3.5 shrink-0 text-conf-high" />
-                        {p}
+                        <span>{p}</span>
                       </li>
                     ))}
                   </ul>
-                  <ul aria-label="Минусы" className="min-w-0 space-y-1">
+                  <ul aria-label="Минусы" className="min-w-0 space-y-1.5">
                     {h.cons.map((p) => (
-                      <li key={p} className="flex gap-2 text-muted-foreground">
+                      <li key={p} className="flex gap-1.5 text-muted-foreground">
                         <ThumbsDown className="mt-0.5 h-3.5 w-3.5 shrink-0 text-conf-low" />
-                        {p}
+                        <span>{p}</span>
                       </li>
                     ))}
                   </ul>
