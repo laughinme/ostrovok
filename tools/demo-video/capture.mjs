@@ -12,8 +12,17 @@ const part = process.env.CAPTURE_PART;
 const include = (name) => !part || part === name;
 const statePath = path.resolve('../../.private/video-production/run-state.json');
 const state = JSON.parse(await readFile(statePath, 'utf8').catch(() => '{}'));
+const signInAs = async (name, target) => {
+  await h.goto(target);
+  const button = page.getByRole('button', { name: new RegExp(`^Войти как ${name}`) });
+  if (await button.waitFor({ timeout: 20000 }).then(() => true, () => false)) {
+    await button.click();
+    await sleep(3000);
+  }
+};
 
 try {
+  if (include('guest') || include('hotel') || include('booking')) await signInAs('Анна', '/trips');
   if (include('guest')) {
   await h.goto('/');
   await scene('01-landing', 'Гость', 'Отдых начинается с вашего «хочу»', 'Большой Сочи · рабочий прототип О!кно', async () => {
@@ -33,11 +42,13 @@ try {
   const hotelUrl = await page.getByRole('link', { name: 'Подробнее' }).first().getAttribute('href');
   state.hotelUrl = hotelUrl;
   await writeFile(statePath, JSON.stringify(state));
+  await frame(page.getByRole('button', { name: /^Сравнить [—-] / }).first().locator('xpath=ancestor::article'), 92);
+  await sleep(1000);
   await scene('03-results', 'Гость', 'Видно, почему подходит каждый вариант', 'Совпадение с запросом, условия и честные компромиссы', async () => {
-    const card = page.getByRole('button', { name: /^Сравнить — / }).first().locator('xpath=ancestor::article');
+    const card = page.getByRole('button', { name: /^Сравнить [—-] / }).first().locator('xpath=ancestor::article');
     await focus(card, 'Соответствие вашим желаниям', 3.5, 1.13);
-    await tap(page.getByRole('button', { name: /^Сравнить — / }).nth(0));
-    await tap(page.getByRole('button', { name: /^Сравнить — / }).nth(1));
+    await tap(page.getByRole('button', { name: /^Сравнить [—-] / }).nth(0));
+    await tap(page.getByRole('button', { name: /^Сравнить [—-] / }).nth(1));
   });
   await tap(page.getByRole('link', { name: /^Сравнение/ }).first());
   await page.waitForURL('**/compare');
@@ -52,8 +63,8 @@ try {
   if (include('compare') && part) {
     await h.goto(`/results?q=${encodeURIComponent(query)}`);
     await page.getByRole('link', { name: 'Подробнее' }).first().waitFor({ timeout: 120000 });
-    await tap(page.getByRole('button', { name: /^Сравнить — / }).nth(0));
-    await tap(page.getByRole('button', { name: /^Сравнить — / }).nth(1));
+    await tap(page.getByRole('button', { name: /^Сравнить [—-] / }).nth(0));
+    await tap(page.getByRole('button', { name: /^Сравнить [—-] / }).nth(1));
     await tap(page.getByRole('link', { name: /^Сравнение/ }).first());
     await page.waitForURL('**/compare');
     await page.getByText('Cascade', { exact: true }).first().waitFor({ timeout: 60000 });
@@ -77,9 +88,9 @@ try {
   await sleep(2000);
   await scene('06-window', 'Доказательства', 'Загляните в своё окно до поездки', 'Рельеф, соседние здания и солнце в выбранные даты', async () => {
     await focus(page.locator('.w-stage, .window-frame').first(), 'Расчёт по открытым данным', 2.5, 1.08);
-    await tap(page.getByRole('group', { name: 'Сторона здания' }).getByRole('button', { name: /^СВ/ }));
+    await tap(page.getByRole('radiogroup', { name: 'Сторона окна на компасе' }).getByRole('radio', { name: /^Северо-восток/ }));
     await sleep(1300);
-    await tap(page.getByRole('group', { name: 'Сторона здания' }).getByRole('button', { name: /^ЮЗ/ }));
+    await tap(page.getByRole('radiogroup', { name: 'Сторона окна на компасе' }).getByRole('radio', { name: /^Юго-запад/ }));
     await sleep(1300);
     const slider = page.getByRole('slider', { name: 'Этаж', exact: true });
     await tap(slider);
@@ -99,10 +110,10 @@ try {
     await tap(page.locator('#night').getByRole('button', { name: 'Ночь', exact: true }));
     await sleep(1700);
   });
-  const route = page.locator('#morning');
+  const route = page.locator('#where');
   await frame(route, 110);
   await sleep(1800);
-  await scene('08-route', 'Доказательства', 'Проверяем и спуск, и путь обратно', 'До пляжа: время, рельеф и набор высоты', async () => {
+  await scene('08-route', 'Доказательства', 'Путь до моря и мест рядом', 'Пешком по графу улиц OSM с учётом рельефа', async () => {
     await sleep(2300);
     await glide(await page.evaluate(() => scrollY + 290), 2000);
     await sleep(2100);
@@ -110,13 +121,29 @@ try {
   }
   if (include('hotel') || include('source')) {
   const legacyWhy = page.getByRole('button', { name: /почему →/ }).first();
-  const why = await legacyWhy.count() ? legacyWhy : page.locator('#hotel-facts button').filter({ hasText: 'расчёт' }).first();
+  const computed = page.locator('button.hotel-fact-item').filter({ hasText: 'расчёт' }).first();
+  const why = await legacyWhy.count() ? legacyWhy : await computed.count() ? computed : page.locator('button.hotel-fact-item').first();
   await frame(why, 310);
   await scene('09-source', 'Доказательства', 'У каждого факта есть «почему»', 'Источник, метод, уверенность и ограничения оценки', async () => {
     await tap(why);
     await sleep(1500);
     await focus(page.getByRole('dialog').first(), 'Факт можно проверить', 4, 1.3);
-    await tap(page.getByRole('button', { name: 'Закрыть', exact: true }));
+    await page.keyboard.press('Escape');
+    await sleep(600);
+  });
+  }
+  if (include('hotel') || include('similar')) {
+  if (part === 'similar') await h.goto(state.hotelUrl);
+  const similar = page.locator('#similar');
+  await frame(similar, 110);
+  await sleep(1200);
+  await scene('09b-similar', 'Гость', 'Понравился отель? Найдём похожий, но…', 'Тише, ближе к морю или дешевле: сходство и улучшение на фактах', async () => {
+    await sleep(1200);
+    await tap(page.getByRole('group', { name: 'Что улучшить в похожем отеле' }).getByRole('button').first());
+    await page.getByRole('heading', { name: 'Похожие отели' }).waitFor({ timeout: 60000 });
+    await sleep(1500);
+    await glide(await page.evaluate(() => scrollY + 320), 2000);
+    await sleep(2600);
   });
   }
   if (include('hotel') || include('booking')) {
@@ -141,7 +168,7 @@ try {
   });
   }
   if (include('partner')) {
-  await h.goto('/partner');
+  await signInAs('Ирина', '/partner');
   await page.getByRole('heading', { name: 'Кабинет отельера', exact: true }).waitFor({ timeout: 60000 });
   await sleep(1600);
   await scene('12-partner', 'Отельер', 'Отель проверяет важные детали', 'Расчёт можно дополнить подтверждением отеля', async () => {
@@ -169,7 +196,7 @@ try {
   });
   }
   if (include('agents')) {
-  await h.goto('/console');
+  await signInAs('Оператор', '/console');
   await sleep(2000);
   await scene('14-agents', 'Агенты', 'Видно, как добываются знания', 'От вопроса до проверенного факта — в консоли', async () => {
     await sleep(2400);
@@ -190,13 +217,13 @@ try {
   }
   if (include('agents') || include('agents-result')) {
   if (part === 'agents-result') {
-    await h.goto('/console');
+    await signInAs('Оператор', '/console');
     await page.getByRole('combobox', { name: 'Агент', exact: true }).selectOption('curator');
-    await trace().locator('li').filter({ hasText: 'План (LLM)' }).first().waitFor({ timeout: 60000 });
+    await trace().locator('li').filter({ hasText: 'План' }).first().waitFor({ timeout: 60000 });
   }
   await frame(trace(), 120);
   await scene('16-learned', 'Агенты', 'Рецепт готов, ход исследования сохранён', 'Пробный прогон по OSM · ожидание между сценами сокращено', async () => {
-    await focus(trace().locator('li').filter({ hasText: 'План (LLM)' }).first(), 'Инструменты, данные и решение', 4.5, 1.15);
+    await focus(trace().locator('li').filter({ hasText: 'План' }).first(), 'Инструменты, данные и решение', 4.5, 1.15);
     await sleep(600);
   });
   await glide(0);
@@ -206,6 +233,26 @@ try {
     await sleep(2600);
     await glide(250, 1800);
     await sleep(1700);
+  });
+  }
+  if (include('agents') || include('onboarding')) {
+  if (part === 'onboarding') await signInAs('Оператор', '/console');
+  await glide(0);
+  await tap(page.getByRole('navigation', { name: 'Разделы консоли' }).getByRole('button', { name: /Новый отель/ }));
+  await sleep(2000);
+  await scene('17b-onboarding', 'Агенты', 'Новый отель — агенты изучают его сами', 'Реальный отель из OSM: расчёты, доказательства, вопросы отельеру', async () => {
+    await sleep(1500);
+    await tap(page.getByRole('button', { name: /^Изучить «/ }).first());
+    await trace().waitFor({ timeout: 60000 });
+    await sleep(5000);
+  });
+  await page.getByRole('heading', { name: 'Отель изучен' }).waitFor({ timeout: 180000 });
+  await sleep(1500);
+  await frame(page.getByRole('heading', { name: 'Отель изучен' }), 140);
+  await scene('17c-onboarded', 'Агенты', 'За полминуты — десятки фактов с источниками', 'Отельеру остаются только вопросы, которые нельзя посчитать · ожидание сокращено', async () => {
+    await sleep(2500);
+    await glide(await page.evaluate(() => scrollY + 360), 2200);
+    await sleep(2800);
   });
   }
   if (include('platform')) {
