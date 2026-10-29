@@ -254,3 +254,29 @@
     top: calc(100% + 22px);
   }
 }
+.site-header .site-header__account {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  margin-left: auto;
+  color: #0b1533;
+}
+.site-header--blue .site-header__account .session-open:not(.session-open--primary),
+.site-header--blue .site-header__account .session-menu summary {
+  color: white;
+}
+@media (max-width: 720px) {
+  .site-header .site-header__account .session-menu > div {
+    position: absolute;
+    box-shadow: 0 16px 48px #0b15331a;
+    margin-top: 0;
+  }
+  .site-header .site-header__account .session-name {
+    max-width: 96px;
+  }
+}
+@media (max-width: 480px) {
+  .site-header .site-header__account .session-open--primary {
+    display: none;
+  }
+}

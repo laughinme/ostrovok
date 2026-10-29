@@ -2,7 +2,7 @@ import { Fragment, useEffect, useRef, useState, type FormEvent, type ReactNode }
 import { Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { X } from "lucide-react";
-import { api, getApiMode, type components } from "@/shared/api";
+import { api, getApiMode, setApiMode, type components } from "@/shared/api";
 import {
   restoreSession,
   signIn,
@@ -14,21 +14,87 @@ import {
 import { RequestState } from "@/shared/ui";
 import "./session-controls.css";
 
+const ROLE_LABEL = { guest: "Гость", hotelier: "Отельер", operator: "Оператор Островка" } as const;
+
+function exitDemo() {
+  setApiMode("live");
+  window.location.assign("/");
+}
+
+async function leave(client: ReturnType<typeof useQueryClient>) {
+  await client.cancelQueries();
+  await signOut();
+  client.clear();
+  window.location.assign("/");
+}
+
 export function SessionControls() {
   const { account, open } = useSession();
   const client = useQueryClient();
+  const menu = useRef<HTMLDetailsElement>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-  if (getApiMode() === "demo") return null;
-  return account ? (
-    <details className="session-menu">
+  if (getApiMode() === "demo")
+    return (
+      <button className="session-open" type="button" onClick={exitDemo}>
+        Демо-режим · выйти
+      </button>
+    );
+  if (!account)
+    return (
+      <div className="session-actions">
+        <button className="session-open" type="button" onClick={() => open("login")}>
+          Войти
+        </button>
+        <button
+          className="session-open session-open--primary"
+          type="button"
+          onClick={() => open("register")}
+        >
+          Регистрация
+        </button>
+      </div>
+    );
+  const name = account.username || account.email;
+  const hide = () => menu.current?.removeAttribute("open");
+  return (
+    <details className="session-menu" ref={menu}>
       <summary>
-        {account.username || account.email}
-        {account.persona ? " · тест" : ""}
+        <span className="session-avatar" aria-hidden="true">
+          {name.slice(0, 1).toUpperCase()}
+        </span>
+        <span className="session-name">{name}</span>
       </summary>
       <div>
+        <b>{name}</b>
+        <span>
+          {ROLE_LABEL[account.role]}
+          {account.persona ? " · тестовый аккаунт" : ""}
+        </span>
         <span>{account.email}</span>
-        {account.role === "guest" && <Link to="/profile">Профиль вкуса</Link>}
+        {account.role === "guest" && (
+          <>
+            <Link to="/profile" onClick={hide}>
+              Профиль и предпочтения
+            </Link>
+            <Link to="/trips" onClick={hide}>
+              Мои поездки
+            </Link>
+          </>
+        )}
+        {account.role === "hotelier" && (
+          <Link to="/partner" onClick={hide}>
+            Кабинет отеля
+          </Link>
+        )}
+        {account.role === "operator" && (
+          <Link to="/console" onClick={hide}>
+            Консоль знаний
+          </Link>
+        )}
+        <button type="button" onClick={() => open("login")}>
+          Сменить аккаунт
+        </button>
         <button
           type="button"
           disabled={busy}
@@ -36,10 +102,7 @@ export function SessionControls() {
             setBusy(true);
             setError(null);
             try {
-              await client.cancelQueries();
-              await signOut();
-              client.clear();
-              window.location.assign("/");
+              await leave(client);
             } catch (cause) {
               setError(cause instanceof Error ? cause.message : "Не удалось выйти");
               setBusy(false);
@@ -51,15 +114,11 @@ export function SessionControls() {
         {error && <p role="alert">{error}</p>}
       </div>
     </details>
-  ) : (
-    <button className="session-open" type="button" onClick={open}>
-      Войти
-    </button>
   );
 }
 
 export function SessionDialog() {
-  const { dialog: open, close } = useSession();
+  const { dialog: open, close, intent } = useSession();
   const client = useQueryClient();
   const ref = useRef<HTMLDialogElement>(null);
   const [mode, setMode] = useState<"login" | "register">("login");
@@ -77,9 +136,12 @@ export function SessionDialog() {
     void restoreSession().catch(() => undefined);
   }, []);
   useEffect(() => {
-    if (open) ref.current?.showModal();
-    else ref.current?.close();
-  }, [open]);
+    if (open) {
+      setMode(intent);
+      setError(null);
+      ref.current?.showModal();
+    } else ref.current?.close();
+  }, [open, intent]);
   async function authenticate(action: () => Promise<unknown>) {
     if (busy) return;
     setBusy(true);
@@ -192,6 +254,60 @@ export function SessionDialog() {
   );
 }
 
+function QuickPersonas({ role }: { role?: "guest" | "hotelier" | "operator" | undefined }) {
+  const client = useQueryClient();
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const personas = useQuery({
+    queryKey: ["auth", "personas"],
+    queryFn: ({ signal }) =>
+      api<components["schemas"]["PersonaOut"][]>("/auth/personas", { signal }),
+  });
+  const list = (personas.data ?? []).filter((persona) => !role || persona.role === role);
+  if (!personas.isPending && list.length === 0) return null;
+  return (
+    <section className="session-quick" aria-label="Тестовые аккаунты">
+      <h2>Проверить без регистрации</h2>
+      <p>Тестовый аккаунт, вход в один клик, пароль не нужен.</p>
+      <RequestState
+        pending={personas.isPending}
+        error={personas.error}
+        retry={() => void personas.refetch()}
+      />
+      <div>
+        {list.map((persona) => (
+          <button
+            type="button"
+            key={persona.key}
+            disabled={busy}
+            onClick={async () => {
+              setBusy(true);
+              setError(null);
+              try {
+                await client.cancelQueries();
+                await signInPersona(persona.key);
+                await client.resetQueries();
+              } catch (cause) {
+                setError(cause instanceof Error ? cause.message : "Не удалось войти");
+              } finally {
+                setBusy(false);
+              }
+            }}
+          >
+            <b>Войти как {persona.name}</b>
+            <span>{persona.title}</span>
+          </button>
+        ))}
+      </div>
+      {error && (
+        <p role="alert" className="session-error">
+          {error}
+        </p>
+      )}
+    </section>
+  );
+}
+
 export function SessionGate({
   role,
   children,
@@ -210,12 +326,20 @@ export function SessionGate({
       <h1>{mismatch ? "Для этого раздела нужен другой аккаунт" : "Войдите в свой аккаунт"}</h1>
       <p>
         {mismatch
-          ? `Раздел доступен для роли «${{ guest: "Гость", hotelier: "Отельер", operator: "Оператор" }[role!]}».`
+          ? `Раздел доступен для роли «${{ guest: "Гость", hotelier: "Отельер", operator: "Оператор" }[role!]}». Сейчас вы вошли как ${account.username || account.email}.`
           : "Поиск и страницы отелей открыты всем. Поездки, предпочтения и рабочий кабинет доступны после входа."}
       </p>
-      <button type="button" className="session-primary" onClick={open}>
-        {mismatch ? "Выбрать аккаунт" : "Войти или зарегистрироваться"}
-      </button>
+      <QuickPersonas role={role} />
+      <div className="session-gate__actions">
+        <button type="button" className="session-primary" onClick={() => open("login")}>
+          {mismatch ? "Войти другим аккаунтом" : "Войти по почте"}
+        </button>
+        {!mismatch && (
+          <button type="button" className="session-text" onClick={() => open("register")}>
+            Создать аккаунт
+          </button>
+        )}
+      </div>
       <Link to="/">На главную</Link>
     </main>
   );

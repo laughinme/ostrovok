@@ -9,7 +9,8 @@ interface SessionState {
   expiresAt: number;
   ready: boolean;
   dialog: boolean;
-  open: () => void;
+  intent: "login" | "register";
+  open: (intent?: "login" | "register") => void;
   close: () => void;
 }
 
@@ -19,6 +20,7 @@ export const useSession = create<SessionState>((set) => ({
   expiresAt: 0,
   ready: false,
   dialog: false,
-  open: () => set({ dialog: true }),
+  intent: "login",
+  open: (intent = "login") => set({ dialog: true, intent }),
   close: () => set({ dialog: false }),
 }));
