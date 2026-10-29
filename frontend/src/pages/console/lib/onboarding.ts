@@ -26,7 +26,7 @@ export function computedCharacteristics(registry: RegistryEntry[], facts: Schema
 
 export function confidenceRange(facts: Schema["FactOut"][]): string {
   const values = facts.map((fact) => fact.confidence).filter(Number.isFinite);
-  if (!values.length) return "—";
+  if (!values.length) return "-";
   const low = Math.round(Math.min(...values) * 100);
   const high = Math.round(Math.max(...values) * 100);
   return low === high ? `${low}%` : `${low}–${high}%`;

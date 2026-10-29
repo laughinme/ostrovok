@@ -140,7 +140,7 @@ def _metric(run: Mapping[str, Any], name: str, path: tuple[str, ...]) -> str:
     value: Any = run["sets"].get(name)
     for key in path:
         value = value.get(key) if isinstance(value, Mapping) else None
-    return "—" if value is None else f"{value:.2f}"
+    return "-" if value is None else f"{value:.2f}"
 
 
 def comparison_table(runs: list[Mapping[str, Any]]) -> str:
@@ -177,9 +177,9 @@ def comparison_table(runs: list[Mapping[str, Any]]) -> str:
                         for s in ("main", "holdout")
                     ),
                     f"{run['explain']['accepted']}/{run['explain']['attempted']}",
-                    f"{fast['p50Ms'] / 1000:.1f}" if fast.get("p50Ms") else "—",
-                    f"{strong['p50Ms'] / 1000:.1f}" if strong.get("p50Ms") else "—",
-                    f"{per_call * 1000:.2f}" if per_call else "—",
+                    f"{fast['p50Ms'] / 1000:.1f}" if fast.get("p50Ms") else "-",
+                    f"{strong['p50Ms'] / 1000:.1f}" if strong.get("p50Ms") else "-",
+                    f"{per_call * 1000:.2f}" if per_call else "-",
                     str(run["costUsd"]),
                     _coverage(run),
                 ]

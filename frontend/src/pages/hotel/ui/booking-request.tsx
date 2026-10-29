@@ -172,7 +172,7 @@ export function BookingRequest({
               <span>
                 {nights ? `Итого за ${bookingNightLabel(nights)}` : "Сначала выберите период"}
               </span>
-              <b>{nights ? rub(rate.price * nights) : "—"}</b>
+              <b>{nights ? rub(rate.price * nights) : "-"}</b>
             </div>
             <button
               className="booking-submit"

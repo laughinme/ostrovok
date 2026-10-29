@@ -46,7 +46,7 @@ export function ConsolePage() {
         <div>
           <h1 className="text-3xl sm:text-4xl">Консоль знаний</h1>
           <p className="mt-3 text-muted-foreground">
-            Как мы узнаём об отелях — от вопроса до проверенного факта.
+            Как мы узнаём об отелях - от вопроса до проверенного факта.
           </p>
         </div>
         <span className="console-badge">Оператор · демо</span>

@@ -123,17 +123,17 @@ export function TripTicket({
         <div className="ticket-room-grid">
           <div>
             <span>Номер</span>
-            <b>{item.room ?? "—"}</b>
+            <b>{item.room ?? "-"}</b>
           </div>
           <div>
             <span>Этаж</span>
-            <b>{item.floor ? String(item.floor).padStart(2, "0") : "—"}</b>
+            <b>{item.floor ? String(item.floor).padStart(2, "0") : "-"}</b>
           </div>
           <div>
             <span>Сторона</span>
             <b>
               {item.status === "requested" || !item.hotel.bestFacade
-                ? "—"
+                ? "-"
                 : FACADES[item.hotel.bestFacade]}
             </b>
           </div>

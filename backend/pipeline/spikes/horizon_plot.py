@@ -132,7 +132,7 @@ def plot_context(
     axis.set_aspect("equal")
     axis.set_xlabel("Восток, м")
     axis.set_ylabel("Север, м")
-    rail_label = "ж/д не загружена" if railways is None else "чёрный — ж/д"
+    rail_label = "ж/д не загружена" if railways is None else "чёрный - ж/д"
     axis.set_title(
         f"{hotel['name']} · здания в 2 км\nСиний → к морю; красный → от моря; {rail_label}"
     )

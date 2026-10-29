@@ -74,7 +74,7 @@ def main() -> None:
         )
         args.out.parent.mkdir(parents=True, exist_ok=True)
         args.out.write_text(json.dumps(rows, ensure_ascii=False, indent=2) + "\n")
-        print(index, intent["status"], search["status"] if search else "—", flush=True)  # noqa: T201
+        print(index, intent["status"], search["status"] if search else "-", flush=True)  # noqa: T201
         time.sleep(7 if args.public else 0.1)
 
 

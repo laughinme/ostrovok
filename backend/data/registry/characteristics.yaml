@@ -1,8 +1,8 @@
 # Starter registry (09 §5.1). A characteristic is data: a key, how to say it, where it lives,
 # and a recipe from the closed set of methods. New ones arrive from the Curator at runtime.
 #
-# statement: for probability values — `yes` / `no` phrases; the scope is appended as text.
-#            for records and numbers — a template over the value's fields.
+# statement: for probability values - `yes` / `no` phrases; the scope is appended as text.
+#            for records and numbers - a template over the value's fields.
 characteristics:
   - key: sea_view
     title: Море из окна
@@ -207,7 +207,7 @@ characteristics:
     value_type: probability
     recipe:
       kind: ask_hotelier
-      question: Какие окна в номерах на шумную сторону — есть ли шумоизоляция?
+      question: Какие окна в номерах на шумную сторону - есть ли шумоизоляция?
       answer_kind: yes_no
     ttl_days: 180
     authority: hotelier
@@ -286,4 +286,4 @@ characteristics:
     recipe: {kind: derived, op: all, keys: [day_noise]}
     ttl_days: 180
     authority: physics
-    statement: {yes: Тихо днём — можно спокойно поработать, no: Днём шумно для работы}
+    statement: {yes: Тихо днём - можно спокойно поработать, no: Днём шумно для работы}

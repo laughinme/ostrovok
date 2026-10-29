@@ -63,7 +63,7 @@ def test_refusal_far_from_a_wish_keeps_it(vocabulary: Vocabulary) -> None:
     assert "parking" in _keys(text, vocabulary)
 
 
-@pytest.mark.parametrize("text", ["Сочи", "море", "бассейн", "2026-11-12 — 2026-11-15"])
+@pytest.mark.parametrize("text", ["Сочи", "море", "бассейн", "2026-11-12 \u2014 2026-11-15"])
 def test_short_input_has_no_fuzzy_inventions(text: str, vocabulary: Vocabulary) -> None:
     assert not _keys(text, vocabulary)
 

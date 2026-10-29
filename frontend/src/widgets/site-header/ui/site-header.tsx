@@ -22,7 +22,7 @@ export function Logo({ className, onClick }: { className?: string; onClick?: () 
     <Link
       to="/"
       className={cn("site-brand", className)}
-      aria-label="О!кно — на главную"
+      aria-label="О!кно - на главную"
       onClick={onClick}
     >
       О<b>!</b>кно

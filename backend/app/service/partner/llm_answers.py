@@ -52,10 +52,10 @@ def _prompt(answer: AnswerInput) -> str:
     if answer.value_type == "number":
         fields = f"number (в {answer.unit or 'единицах вопроса'})"
     elif answer.value_type == "category":
-        fields = f"option — одно из: {', '.join(answer.options)}"
+        fields = f"option - одно из: {', '.join(answer.options)}"
     rooms = ", ".join(answer.room_names) or "неизвестны"
     return (
-        f"Характеристика: {answer.characteristic}\nВопрос отелю: {answer.question or '—'}\n"
+        f"Характеристика: {answer.characteristic}\nВопрос отелю: {answer.question or '-'}\n"
         f"Категории номеров отеля: {rooms}\nКакие поля заполнить: {fields}, clear\n\n"
         f"Ответ отельера:\n{answer.text}"
     )

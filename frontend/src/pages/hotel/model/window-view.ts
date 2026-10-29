@@ -219,7 +219,7 @@ export function windowViewSummary(scene: WindowView, seaShare: number | null) {
     return {
       title: "Море видно частично",
       description: scene.buildings.length
-        ? "Море видно за соседними домами. Доля открытого горизонта — ниже."
+        ? "Море видно за соседними домами. Доля открытого горизонта - ниже."
         : "Море занимает часть вида с выбранной стороны.",
     };
   if (scene.mountains.length)
@@ -227,7 +227,7 @@ export function windowViewSummary(scene: WindowView, seaShare: number | null) {
       title: "Вид на горы",
       description: scene.buildings.length
         ? "Горы видны за соседними зданиями."
-        : "В поле зрения — горный горизонт.",
+        : "В поле зрения - горный горизонт.",
     };
   if (scene.buildings.length)
     return {

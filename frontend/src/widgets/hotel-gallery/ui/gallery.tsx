@@ -35,7 +35,7 @@ export function Gallery({ images, name }: { images: string[]; name: string }) {
     <div className="relative overflow-hidden rounded-3xl bg-muted" {...swipe}>
       <img
         src={images[idx]}
-        alt={`${name} — фото ${idx + 1}`}
+        alt={`${name} - фото ${idx + 1}`}
         width={1024}
         height={768}
         className="h-full w-full object-cover"
@@ -113,7 +113,7 @@ export function Gallery({ images, name }: { images: string[]; name: string }) {
           <div className="relative mt-4 flex min-h-0 flex-1 items-center justify-center" {...swipe}>
             <img
               src={images[idx]}
-              alt={`${name} — фото ${idx + 1}`}
+              alt={`${name} - фото ${idx + 1}`}
               className="max-h-full max-w-full rounded-2xl object-contain"
             />
             {n > 1 && (

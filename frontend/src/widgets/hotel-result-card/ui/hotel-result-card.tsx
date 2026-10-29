@@ -206,7 +206,7 @@ export function HotelResultCard({
               variant={selected ? "secondary" : "outline"}
               onClick={onCompare}
               aria-pressed={selected}
-              aria-label={`${selected ? "Убрать из сравнения" : "Сравнить"} — ${r.hotel.name}`}
+              aria-label={`${selected ? "Убрать из сравнения" : "Сравнить"} - ${r.hotel.name}`}
               title={selected ? "Убрать из сравнения" : "Добавить в сравнение"}
               className={cn(
                 "hotel-card-footer-control",

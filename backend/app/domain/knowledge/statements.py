@@ -52,7 +52,7 @@ def _format(template: str, value: Any) -> str:
 
 def _pretty(value: Any) -> str:
     if value is None:
-        return "—"
+        return "-"
     if isinstance(value, float):
         return f"{value:.0f}" if abs(value) >= 10 else f"{value:.1f}".replace(".", ",")
     return str(value)

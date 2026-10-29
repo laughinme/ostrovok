@@ -348,7 +348,7 @@ export function HotelDirections({ hotel }: { hotel: Hotel }) {
                           strokeWidth="3"
                         />
                       </svg>
-                      <small>Высота над уровнем моря; разрывы — нет данных</small>
+                      <small>Высота над уровнем моря; разрывы - нет данных</small>
                     </div>
                   )}
                   <dl>

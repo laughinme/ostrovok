@@ -14,7 +14,7 @@ export const Route = createFileRoute("/console")({
     runId: typeof search["runId"] === "string" ? search["runId"] : undefined,
     hotelId: typeof search["hotelId"] === "string" ? search["hotelId"] : undefined,
   }),
-  head: () => ({ meta: [{ title: "Консоль знаний — О!кно" }] }),
+  head: () => ({ meta: [{ title: "Консоль знаний - О!кно" }] }),
   component: () => (
     <SessionGate role="operator">
       <ConsolePage />

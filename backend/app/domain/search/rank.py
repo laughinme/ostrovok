@@ -43,7 +43,7 @@ def result_hints(intent: Intent, ranking: Ranking) -> tuple[str, ...]:
         hints.append(NO_MATCHES_HINT)
     if intent.trip.budget_per_night and any(m.hotel.price_from is None for m in ranking.matches):
         hints.append(
-            "У части вариантов цена уточняется. Соответствие бюджету не подтверждено — "
+            "У части вариантов цена уточняется. Соответствие бюджету не подтверждено - "
             "уточните цену у отеля."
         )
     return tuple(dict.fromkeys(hints))

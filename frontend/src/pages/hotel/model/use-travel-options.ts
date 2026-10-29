@@ -84,7 +84,7 @@ export function useTravelOptions({
           minutes: null,
           distanceM: null,
           pending: demo && pending,
-          note: "Время и рейсы — в Яндекс Картах",
+          note: "Время и рейсы - в Яндекс Картах",
         };
   return { options: sortTravelOptions([walk, drive, transit]), car, foot };
 }

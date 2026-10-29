@@ -244,7 +244,7 @@ function HotelDemo() {
       <div className="stage-bottom showcase-container">
         <span>Иллюстрация принципа. Реальные условия зависят от отеля и дат.</span>
         <span>
-          Прокрутите — сменится ракурс <ArrowDown size={14} />
+          Прокрутите - сменится ракурс <ArrowDown size={14} />
         </span>
       </div>
     </section>
@@ -383,7 +383,7 @@ function DayPreview() {
         </h2>
         <p>
           Загляните в вечер, ночь и утро.
-          <br />У каждого момента — своя проверка.
+          <br />У каждого момента - своя проверка.
         </p>
       </div>
       <div className="mood-windows">
@@ -466,10 +466,10 @@ export function LandingShowcase({ onMood, moods }: { onMood(mood: Mood): void; m
           <h2>
             Отель один.
             <br />
-            Впечатления — разные.
+            Впечатления - разные.
           </h2>
           <p>
-            «Вид на море» бывает видом на соседний балкон. А «пять минут до пляжа» — дорогой
+            «Вид на море» бывает видом на соседний балкон. А «пять минут до пляжа» - дорогой
             по&nbsp;ступеням.
             <br />
             <br />
@@ -505,7 +505,7 @@ export function LandingShowcase({ onMood, moods }: { onMood(mood: Mood): void; m
           <div className="arrival-icon" aria-hidden="true">
             <TravelAirplane />
           </div>
-          <span className="arrival-label">Следующая остановка — ваш отдых</span>
+          <span className="arrival-label">Следующая остановка - ваш отдых</span>
           <h2>
             Всё начинается
             <br />с вашего «хочу».

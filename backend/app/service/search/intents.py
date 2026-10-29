@@ -116,7 +116,7 @@ class IntentParser:
 async def _llm_intent(
     llm: LanguageModel, text: str, registry: list[Characteristic], today: date
 ) -> Intent:
-    catalog = "\n".join(f"- {c.key} — {c.title}" for c in registry)
+    catalog = "\n".join(f"- {c.key} - {c.title}" for c in registry)
     system = (
         (PROMPTS / "intent.md")
         .read_text(encoding="utf-8")

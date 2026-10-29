@@ -55,7 +55,7 @@ class HotelAsker:
                     await schedule_simulation(uow, self._clock, hotel_id, self._delay)
         await tracer.tool(
             "hotelier.ask",
-            summary=f"вопрос «{text or characteristic.title}» — {sent} отелям",
+            summary=f"вопрос «{text or characteristic.title}» - {sent} отелям",
             args={"characteristic": key, "hotels": len(hotel_ids)},
         )
         return sent

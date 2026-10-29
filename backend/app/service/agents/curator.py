@@ -108,7 +108,7 @@ class Curator:
         try:
             recipe = validate_recipe(draft.recipe)
         except InvalidRecipeError:
-            await tracer.error("Рецепт не прошёл проверку схемы — беру план на правилах")
+            await tracer.error("Рецепт не прошёл проверку схемы - беру план на правилах")
             draft = propose(description, _places(self._data_dir))
             recipe = validate_recipe(draft.recipe)
         await tracer.tool(
@@ -141,7 +141,7 @@ class Curator:
         async def by_llm(llm: LanguageModel) -> RecipeDraft:
             async with self._db.unit_of_work() as uow:
                 registry = await Registry(uow).all()
-            catalog = "\n".join(f"- {c.key} — {c.title}" for c in registry)
+            catalog = "\n".join(f"- {c.key} - {c.title}" for c in registry)
             result = await llm.run_tools(
                 task="curator",
                 system=(PROMPTS / "curator.md")
@@ -162,7 +162,7 @@ class Curator:
                 title=out.title,
                 recipe=recipe,
                 yes=out.yes or out.title,
-                no=out.no or f"{out.title} — нет",
+                no=out.no or f"{out.title} - нет",
                 synonyms=tuple(out.synonyms),
                 question=recipe.get("question"),
             )
@@ -262,7 +262,7 @@ class Curator:
         await tracer.tool(
             "recipe.dry_run",
             summary=f"пробный прогон на {len(hotels)} отелях: "
-            + ", ".join(f"{name} — {result}" for name, result in outcomes),
+            + ", ".join(f"{name} - {result}" for name, result in outcomes),
         )
         return tuple(outcomes)
 

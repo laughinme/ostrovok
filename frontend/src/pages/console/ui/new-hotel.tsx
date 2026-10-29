@@ -37,7 +37,7 @@ export function NewHotel({ active }: { active: boolean }) {
       <div className="console-section-heading">
         <div>
           <h2>Новый отель</h2>
-          <p>Добавьте отель — агенты соберут знания, отельер уточнит остальное.</p>
+          <p>Добавьте отель - агенты соберут знания, отельер уточнит остальное.</p>
         </div>
         {runId && finished && (
           <button

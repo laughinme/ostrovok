@@ -22,7 +22,7 @@ personas:
   - key: hotelier_imeretinsky
     role: hotelier
     name: Светлана
-    title: Отельер · Имеретинский — Прибрежный квартал
+    title: Отельер · Имеретинский - Прибрежный квартал
     hotels: [node/2178886260]
   - key: operator
     role: operator

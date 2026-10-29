@@ -59,7 +59,7 @@ export function hotelFromApi(raw: ApiHotel, match?: ApiMatch, intent?: ApiIntent
         .slice(0, 3)
         .map((fact) => fact.statement)
         .join(". ") ||
-      `${raw.area}. Сведения о расположении — из OpenStreetMap. Условия размещения уточняются.`;
+      `${raw.area}. Сведения о расположении - из OpenStreetMap. Условия размещения уточняются.`;
   const gallery = preview?.gallery ?? hotelPhotos(raw.osmId);
   const scores = {} as Record<Criterion, number>;
   const unknownCriteria: Criterion[] = [];

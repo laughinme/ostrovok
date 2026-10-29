@@ -46,7 +46,7 @@ describe("design demo transport", () => {
   });
   it("restores criteria and dates from a search ID without server state", () => {
     const search = demoSearch({
-      text: "Море, 2026-12-01 — 2026-12-06",
+      text: "Море, 2026-12-01 - 2026-12-06",
       trip: { adults: 3, budgetPerNight: 15000 },
       useProfile: false,
     });

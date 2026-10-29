@@ -223,7 +223,7 @@ def _result(chip: Chip, p: float | None, fact: Fact | None) -> ChipResult:
     v = verdict(p)
     if fact is None:
         line = f"? {chip.label.lower()}: пока не знаем" + (
-            "" if chip.characteristic else " — можно узнать вживую"
+            "" if chip.characteristic else " - можно узнать вживую"
         )
     else:
         statement = fact.statement[0].lower() + fact.statement[1:] if fact.statement else ""
