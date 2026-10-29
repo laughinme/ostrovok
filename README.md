@@ -265,7 +265,7 @@ Workflow `.github/workflows/deploy-frontend.yml` продолжает испол
 Для Vercel настроен Nitro preset `vercel` при `VERCEL=1`; локально используется
 `node-server`. Настройки окружения Vercel остаются в секретах GitHub.
 
-Исследование, дизайн-система и прототип: `docs/research/`, `DESIGN.md`, `design/prototype/`.
+Продукт, дизайн-система и прототип: `PRODUCT.md`, `DESIGN.md`, `design/prototype/`.
 
 ## Разработка
 
