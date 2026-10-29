@@ -26,37 +26,47 @@ export function SimilarHotelsSection({
   const [change, setChange] = useState<Improvement | null>(null);
   const result = useQuery(similarQuery(hotel, change));
   return (
-    <section className="hotel-similar" id="similar" aria-labelledby="similar-heading">
-      <header>
-        <h2 id="similar-heading">Найти похожий, но…</h2>
-        <p>
-          Что хочется изменить в «{hotel.name}»?
-          {hotel.searchContext && " Учтём ваши пожелания, даты, гостей и бюджет из поиска."}
-        </p>
-      </header>
-      <div className="similar-modifiers" role="group" aria-label="Что улучшить в похожем отеле">
-        {IMPROVEMENTS.map(({ value, label }) => {
-          const Icon = ICONS[value];
-          return (
-            <button
-              type="button"
-              key={value}
-              aria-pressed={change === value}
-              aria-controls="similar-results"
-              onClick={() => setChange(value)}
-            >
-              <Icon size={17} aria-hidden="true" />
-              {label}
-            </button>
-          );
-        })}
-      </div>
-      <div id="similar-results" aria-live="polite" aria-busy={result.isFetching}>
-        {!change && (
-          <p className="similar-hint">
-            Выберите, что улучшить. Сравним по фактам об отелях и номерах.
+    <>
+      <section className="hotel-similar" id="similar" aria-labelledby="similar-heading">
+        <header>
+          <h2 id="similar-heading">Найти похожий, но…</h2>
+          <p>
+            Что хочется изменить в «{hotel.name}»?
+            {hotel.searchContext && " Учтём ваши пожелания, даты, гостей и бюджет из поиска."}
           </p>
-        )}
+        </header>
+        <div className="similar-modifiers" role="group" aria-label="Что улучшить в похожем отеле">
+          {IMPROVEMENTS.map(({ value, label }) => {
+            const Icon = ICONS[value];
+            return (
+              <button
+                type="button"
+                key={value}
+                aria-pressed={change === value}
+                aria-controls="similar-results"
+                onClick={() => setChange(value)}
+              >
+                <Icon size={17} aria-hidden="true" />
+                {label}
+              </button>
+            );
+          })}
+        </div>
+        <p className="similar-hint">
+          {change
+            ? "Похожие варианты — ниже. Можно выбрать другое пожелание."
+            : "Выберите, что улучшить. Сравним по фактам об отелях и номерах."}
+        </p>
+      </section>
+      <section
+        id="similar-results"
+        className="hotel-similar-results"
+        aria-labelledby="similar-results-heading"
+        aria-live="polite"
+        aria-busy={result.isFetching}
+        hidden={!change}
+      >
+        <h2 id="similar-results-heading">Похожие отели</h2>
         {change && result.isPending && !result.isError && (
           <p className="similar-state" role="status">
             Ищем похожие отели с выбранным улучшением…
@@ -86,8 +96,8 @@ export function SimilarHotelsSection({
             />
           </>
         )}
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
 
