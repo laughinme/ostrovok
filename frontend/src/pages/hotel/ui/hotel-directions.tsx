@@ -158,7 +158,7 @@ export function HotelDirections({ hotel }: { hotel: Hotel }) {
         <span>Маршруты от вашего отеля</span>
       </header>
       <div className="directions-layout">
-        <aside className="directions-panel" aria-label="Построение маршрута">
+        <aside className="directions-panel" aria-label="Построение маршрута" tabIndex={0}>
           <div className="directions-origin">
             <span className="directions-point">А</span>
             <div>
@@ -294,7 +294,7 @@ export function HotelDirections({ hotel }: { hotel: Hotel }) {
                 }}
               />
             )}
-            {route && !routeQuery.error && travelMode === "walk" ? (
+            {route && !routeQuery.error && travelMode === "walk" && (
               <>
                 <div className="directions-result-heading">
                   <h3>{route.targetName ?? target?.name}</h3>
@@ -379,12 +379,6 @@ export function HotelDirections({ hotel }: { hotel: Hotel }) {
                   <GeoNotes caveats={route.caveats} attribution={route.attribution} />
                 </details>
               </>
-            ) : (
-              !target && (
-                <p className="directions-empty">
-                  Куда отправимся? Выберите место рядом, найдите адрес или поставьте точку на карте.
-                </p>
-              )
             )}
             {target && (travelMode !== "walk" || !route) && selectedOption.drawing && (
               <>
