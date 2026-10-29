@@ -1,11 +1,10 @@
 import { useCompare } from "@/features/compare-hotels";
 import { useSearchSession } from "@/features/hotel-search";
 import { cn } from "@/shared/lib";
-import { getApiMode, setApiMode, type ApiMode } from "@/shared/api";
-import { useQueryClient } from "@tanstack/react-query";
+import { SessionControls } from "@/features/authenticate";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
-import { useEffect, useId, useRef, useState, type MouseEvent } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import "./site-header.css";
 
 const ITEMS = [
@@ -13,6 +12,7 @@ const ITEMS = [
   { to: "/compare", label: "Сравнение" },
   { to: "/favorites", label: "Избранное" },
   { to: "/trips", label: "Мои поездки" },
+  { to: "/partner", label: "Отельерам" },
   { to: "/console", label: "Консоль" },
   { to: "/developers", label: "API и MCP" },
 ] as const;
@@ -43,24 +43,10 @@ export function Header({
   const [menuOpen, setMenuOpen] = useState(false);
   const menuButton = useRef<HTMLButtonElement>(null);
   const navigationId = useId();
-  const partner = path.startsWith("/partner");
-  const demo = getApiMode() === "demo";
-  const client = useQueryClient();
   useEffect(() => {
     void useCompare.persist.rehydrate();
   }, []);
   const closeMenu = () => setMenuOpen(false);
-  const selectRole = (event: MouseEvent<HTMLAnchorElement>, mode: ApiMode, destination: string) => {
-    closeMenu();
-    if (getApiMode() === mode) return;
-    event.preventDefault();
-    setApiMode(mode);
-    void client.cancelQueries().finally(() => {
-      client.clear();
-      window.location.assign(destination);
-    });
-  };
-
   return (
     <header
       className={cn("site-header", "site-header--" + tone, embedded && "site-header--embedded")}
@@ -111,30 +97,8 @@ export function Header({
             );
           })}
         </nav>
-        <div className="site-header__roles" role="group" aria-label="Роль">
-          <Link
-            to="/"
-            data-active={!partner && !demo}
-            onClick={(event) => selectRole(event, "live", "/")}
-          >
-            Гость
-          </Link>
-          <Link
-            to="/partner"
-            data-active={partner}
-            onClick={(event) => selectRole(event, demo ? "demo" : "live", "/partner")}
-          >
-            Отельер
-          </Link>
-          <Link
-            to="/"
-            data-active={demo && !partner}
-            aria-current={demo && !partner ? "true" : undefined}
-            title="Тестовый режим: локальные ответы, без API и расходов LLM"
-            onClick={(event) => selectRole(event, "demo", "/")}
-          >
-            Демо
-          </Link>
+        <div className="site-header__account">
+          <SessionControls />
         </div>
       </div>
       {tone === "blue" && (

@@ -5,6 +5,7 @@ import { characteristicLabel, CRITERIA, criterionKeys, type Criterion } from "@/
 import { sessionApi } from "@/entities/session";
 import type { components } from "@/shared/api";
 import { RequestState } from "@/shared/ui";
+import { AccountCard } from "./account-card";
 
 type Profile = components["schemas"]["TasteProfileOut"];
 type Patch = components["schemas"]["TastePatch"];
@@ -87,7 +88,8 @@ export function ProfilePage() {
   ];
   return (
     <main className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
-      <h1 className="text-3xl sm:text-4xl">Ваш профиль вкуса</h1>
+      <AccountCard />
+      <h1 className="mt-10 text-3xl sm:text-4xl">Ваш профиль вкуса</h1>
       <p className="mt-4 text-muted-foreground">
         Предпочтения из ваших поисков и ответов. Их можно изменить или удалить. Явные пожелания в
         новом запросе всегда важнее профиля.
