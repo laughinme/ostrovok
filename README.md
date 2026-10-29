@@ -21,7 +21,7 @@
 - Всё работает без ключа LLM. С ключом система лучше понимает свободный текст, без ключа ту же работу
   делают правила, и в ходе агента видно, что сработало.
 
-Демо-видео: ссылка появится перед сдачей.
+Демо-видео: [смотреть на Google Drive](https://drive.google.com/file/d/1CpJqB94Zq_3jM0eTI2mJ-tYtdcpiQAoN/view?usp=sharing).
 
 Попробовать без установки: [ostrovok-okno.vercel.app](https://ostrovok-okno.vercel.app).
 
