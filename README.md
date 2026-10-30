@@ -23,6 +23,8 @@
 
 Демо-видео: [смотреть на Google Drive](https://drive.google.com/file/d/1CpJqB94Zq_3jM0eTI2mJ-tYtdcpiQAoN/view?usp=sharing).
 
+Презентация: [смотреть на Google Drive](https://drive.google.com/file/d/1t61Ov_OwW4gzXfKq4MS8SH0gsQk3hDd8/view?usp=sharing), PDF также лежит в репозитории: [assets/presentation/okno.pdf](assets/presentation/okno.pdf).
+
 Попробовать без установки: [ostrovok-okno.vercel.app](https://ostrovok-okno.vercel.app).
 
 ![Главная: желание своими словами](assets/readme/landing.jpg)
