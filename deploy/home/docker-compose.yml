@@ -1,12 +1,11 @@
-# Production stack for the home server (Coolify, Docker Compose build pack, images only).
-#
-# Images are built by .github/workflows/deploy-home.yml and pulled from GHCR, so the server
-# never compiles anything. One public domain: Coolify attaches it to `gateway` (nginx, port 8080),
-# which serves the app at / and the API and MCP at /api and /mcp, the same single origin as the
-# organizers' compose. Cookies stay SameSite=lax, no CORS.
-#
-# Coolify generates POSTGRES and CSRF secrets (SERVICE_PASSWORD_*). Set PUBLIC_HOST (domain
-# without scheme) and, optionally, LLM_API_KEY in the application's environment variables.
+# О!кно on the home server: a Coolify *service* (raw compose stored in Coolify, no git clone).
+# Copy of sara-hosting/deploy/ostrovok/docker-compose.yml (the one stored in Coolify): keep both in sync.
+# Apply a change with the Coolify API (PATCH /services/{uuid}) and redeploy.
+# Images come from .github/workflows/deploy-home.yml of laughinme/ostrovok.
+# Coolify generates the PostgreSQL password and the CSRF key (SERVICE_PASSWORD_*).
+# Environment variables set on the service: PUBLIC_HOST (domain without scheme), IMAGE_TAG (set by sara-deploy),
+# optionally LLM_API_KEY. One public domain: Coolify attaches it to `gateway` (nginx, port 8080), which serves
+# the app at / and the API and MCP at /api and /mcp.
 x-backend: &backend
   image: ghcr.io/laughinme/ostrovok-backend:${IMAGE_TAG:-latest}
   restart: unless-stopped
@@ -123,6 +122,8 @@ services:
     image: ghcr.io/laughinme/ostrovok-gateway:${IMAGE_TAG:-latest}
     restart: unless-stopped
     mem_limit: 128m
+    environment:
+      - SERVICE_FQDN_GATEWAY_8080
     depends_on:
       backend:
         condition: service_healthy
