@@ -1,0 +1,163 @@
+# Production stack for the home server (Coolify, Docker Compose build pack, images only).
+#
+# Images are built by .github/workflows/deploy-home.yml and pulled from GHCR, so the server
+# never compiles anything. One public domain: Coolify attaches it to `gateway` (nginx, port 8080),
+# which serves the app at / and the API and MCP at /api and /mcp, the same single origin as the
+# organizers' compose. Cookies stay SameSite=lax, no CORS.
+#
+# Coolify generates POSTGRES and CSRF secrets (SERVICE_PASSWORD_*). Set PUBLIC_HOST (domain
+# without scheme) and, optionally, LLM_API_KEY in the application's environment variables.
+x-backend: &backend
+  image: ghcr.io/laughinme/ostrovok-backend:${IMAGE_TAG:-latest}
+  restart: unless-stopped
+  environment:
+    DATABASE_URL: postgresql+asyncpg://okno:${SERVICE_PASSWORD_POSTGRES}@db:5432/okno
+    REDIS_URL: redis://redis:6379/0
+    JWT_PRIVATE_KEY_PATH: /keys/jwt_private_key.pem
+    JWT_PUBLIC_KEY_PATH: /keys/jwt_public_key.pem
+    APP_STAGE: prod
+    LOG_JSON: "true"
+    API_DOCS_ENABLED: ${API_DOCS_ENABLED:-true}
+    COOKIE_SECURE: "true"
+    COOKIE_SAMESITE: lax
+    CSRF_HMAC_KEY: ${SERVICE_PASSWORD_64_CSRF}
+    MCP_PUBLIC_HOSTS: ${PUBLIC_HOST:-}
+    HOTELIER_SIMULATOR: ${HOTELIER_SIMULATOR:-on}
+    LLM_BASE_URL: ${LLM_BASE_URL:-https://polza.ai/api/v1}
+    LLM_API_KEY: ${LLM_API_KEY:-}
+    LLM_MODEL: ${LLM_MODEL:-openai/gpt-5.6-luna}
+    LLM_MODEL_STRONG: ${LLM_MODEL_STRONG:-}
+    LLM_MODE: ${LLM_MODE:-auto}
+    LLM_DAILY_CALL_LIMIT: ${LLM_DAILY_CALL_LIMIT:-300}
+  volumes:
+    - jwt-keys:/keys
+
+services:
+  db:
+    image: postgis/postgis:17-3.5
+    restart: unless-stopped
+    mem_limit: 2g
+    environment:
+      POSTGRES_USER: okno
+      POSTGRES_DB: okno
+      POSTGRES_PASSWORD: ${SERVICE_PASSWORD_POSTGRES}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      # The temporary initdb server only accepts Unix sockets; wait for the final TCP server.
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U okno -d okno"]
+      interval: 5s
+      timeout: 3s
+      retries: 40
+
+  redis:
+    image: redis:8.2.2-alpine3.22
+    restart: unless-stopped
+    mem_limit: 256m
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  # Migrations, JWT keys and the idempotent seed (python -m app.init) run once per deploy,
+  # before the API and the worker start.
+  init:
+    <<: *backend
+    command: ["python", "-m", "app.init"]
+    restart: "no"
+    mem_limit: 2g
+    exclude_from_hc: true
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      disable: true
+
+  backend:
+    <<: *backend
+    mem_limit: 1536m
+    depends_on:
+      init:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+
+  worker:
+    <<: *backend
+    command: ["python", "-m", "app.worker"]
+    mem_limit: 2g
+    depends_on:
+      init:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import os, sys, tempfile, time; p = os.path.join(tempfile.gettempdir(), 'okno-worker-alive'); sys.exit(time.time() - os.path.getmtime(p) > 60)"]
+      interval: 15s
+      timeout: 5s
+      retries: 6
+      # The worker loads the route graph before its first heartbeat.
+      start_period: 180s
+
+  frontend:
+    image: ghcr.io/laughinme/ostrovok-frontend:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+    mem_limit: 512m
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 15s
+
+  # Public entry point. Coolify maps the domain to this service on port 8080.
+  gateway:
+    image: ghcr.io/laughinme/ostrovok-gateway:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+    mem_limit: 128m
+    depends_on:
+      backend:
+        condition: service_healthy
+      frontend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8080/health | grep -q ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+
+  # Nightly pg_dump into /srv/projects/ostrovok/backups (7 daily, 4 weekly, 3 monthly).
+  db-backup:
+    image: prodrigestivill/postgres-backup-local:17-alpine
+    restart: unless-stopped
+    mem_limit: 128m
+    exclude_from_hc: true
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_DB: okno
+      POSTGRES_USER: okno
+      POSTGRES_PASSWORD: ${SERVICE_PASSWORD_POSTGRES}
+      SCHEDULE: "@daily"
+      BACKUP_KEEP_DAYS: 7
+      BACKUP_KEEP_WEEKS: 4
+      BACKUP_KEEP_MONTHS: 3
+      TZ: Asia/Novosibirsk
+    volumes:
+      - /srv/projects/ostrovok/backups:/backups
+    healthcheck:
+      disable: true
+
+volumes:
+  pgdata:
+  jwt-keys:
