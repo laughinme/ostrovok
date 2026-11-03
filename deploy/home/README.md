@@ -2,7 +2,7 @@
 
 Внутренний файл (не часть сдачи: сдача запускается через корневой `docker-compose.yml`).
 
-Весь стек (db, redis, backend, worker, frontend, gateway) работает на домашнем сервере под Coolify на одном домене. Fly.io и Vercel остаются как есть, пока владелец сам не переключит адрес.
+Весь стек (db, redis, backend, worker, frontend, gateway) работает на домашнем сервере под Coolify на одном домене: **https://okno.prooood.ru** (приложение, `/health`, `/api/docs`, `/mcp`). Это актуальный адрес демо. Старые размещения на Fly.io и Vercel больше не считаются основными.
 
 - `docker-compose.yml` — прод-стек из готовых образов GHCR (`ghcr.io/laughinme/ostrovok-{backend,frontend,gateway}`), тег задаёт переменная `IMAGE_TAG`.
 - `../../.github/workflows/deploy-home.yml` — сборка образов, вход в Tailscale, деплой на сервер, проверка `/health`.

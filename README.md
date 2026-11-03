@@ -25,7 +25,7 @@
 
 Презентация: [смотреть на Google Drive](https://drive.google.com/file/d/1t61Ov_OwW4gzXfKq4MS8SH0gsQk3hDd8/view?usp=sharing), PDF также лежит в репозитории: [assets/presentation/okno.pdf](assets/presentation/okno.pdf).
 
-Попробовать без установки: [ostrovok-okno.vercel.app](https://ostrovok-okno.vercel.app).
+Попробовать без установки: [okno.prooood.ru](https://okno.prooood.ru). Приложение, API и MCP работают на домашнем сервере под Coolify, обновляются автоматически при пуше в `main` (см. [deploy/home](deploy/home)).
 
 ![Главная: желание своими словами](assets/readme/landing.jpg)
 
@@ -174,9 +174,9 @@ LLM в системе только переводит и компилирует:
 
 ## API и MCP
 
-Публичный MCP-сервер: [okno-api.fly.dev/mcp](https://okno-api.fly.dev/mcp), без авторизации. Локально после запуска он доступен
+Публичный MCP-сервер: [okno.prooood.ru/mcp](https://okno.prooood.ru/mcp), без авторизации. Локально после запуска он доступен
 на http://localhost:8080/mcp, но облачным ассистентам нужен публичный адрес. Описание REST API:
-[okno-api.fly.dev/api/docs](https://okno-api.fly.dev/api/docs), примеры запросов на странице «API и MCP» в приложении.
+[okno.prooood.ru/api/docs](https://okno.prooood.ru/api/docs), примеры запросов на странице «API и MCP» в приложении.
 
 Подключить к Claude: Customize → Connectors → Add custom connector, имя «О!кно», адрес сервера выше,
 без входа. Потом включить его в чате через «+» → Connectors.
